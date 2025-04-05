@@ -123,8 +123,7 @@
     </div>
 
     <script>
-        const API_KEY = "9505fd1df737e20152fbd78cdb289b6a";
-        // const API_KEY = "5de15b7804e0078404a629b6de093fb2";
+        
         const form = document.getElementById("weatherForm");
         const cityInput = document.getElementById("cityInput");
         const provinceInput = document.getElementById("provinceInput");
