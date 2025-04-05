@@ -123,7 +123,7 @@
     </div>
 
     <script>
-        
+        const API_KEY = "{{ $OPEN_WEATHERMAP_KEY1 }}";
         const form = document.getElementById("weatherForm");
         const cityInput = document.getElementById("cityInput");
         const provinceInput = document.getElementById("provinceInput");
