@@ -1,0 +1,118 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Program;
+use App\Models\VolunteerAttendance;
+use Carbon\Carbon;
+
+class VolunteerAttendanceController extends Controller
+{
+    public function show(Program $program)
+    {
+        $user = Auth::user();
+
+        // Check if the user is assigned to this program
+        $isAssigned = $program->volunteers()->where('user_id', $user->id)->exists();
+
+        // Get volunteer attendance
+        $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id ?? null)
+            ->where('program_id', $program->id)
+            ->latest()
+            ->first();
+
+        // Calculate total hours, minutes, and seconds if clocked out
+        if ($attendance && $attendance->clock_in && $attendance->clock_out) {
+            $clock_in = Carbon::parse($attendance->clock_in);
+            $clock_out = Carbon::parse($attendance->clock_out);
+
+            // Calculate the total time in seconds
+            $diffInSeconds = $clock_in->diffInSeconds($clock_out);
+
+            // Convert seconds to hours, minutes, and seconds
+            $hours = floor($diffInSeconds / 3600); // 1 hour = 3600 seconds
+            $minutes = floor(($diffInSeconds % 3600) / 60); // 1 minute = 60 seconds
+            $seconds = $diffInSeconds % 60; // Remaining seconds
+
+            // Format total time as hours:minutes:seconds
+            $formattedTime = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+
+            $attendance->formatted_time = $formattedTime; // Save formatted time
+        }
+
+        return view('programs.view-program', compact('program', 'attendance', 'isAssigned'));
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+
+
+    public function clockIn(Program $program)
+    {
+        $user = Auth::user();
+
+        $existingClockIn = VolunteerAttendance::where('volunteer_id', $user->volunteer->id)
+            ->where('program_id', $program->id)
+            ->whereNull('clock_out')
+            ->exists();
+
+        if ($existingClockIn) {
+            return redirect()->back()->with('error', 'You are already clocked in.');
+        }
+
+        VolunteerAttendance::create([
+            'volunteer_id' => $user->volunteer->id,
+            'program_id' => $program->id,
+            'clock_in' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Clocked in successfully.');
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+
+
+    public function clockOut(Program $program)
+    {
+        $user = Auth::user();
+
+        $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id)
+            ->where('program_id', $program->id)
+            ->whereNull('clock_out')
+            ->latest()
+            ->first();
+
+        if (!$attendance) {
+            return redirect()->back()->with('error', 'You need to clock in first.');
+        }
+
+        // Set the clock-out time and calculate total time using Carbon
+        $clock_in = Carbon::parse($attendance->clock_in);
+        $clock_out = Carbon::now();
+
+        $total_seconds = $clock_in->diffInSeconds($clock_out);
+
+        // Calculate hours, minutes, and seconds
+        $hours = floor($total_seconds / 3600);
+        $minutes = floor(($total_seconds % 3600) / 60);
+        $seconds = $total_seconds % 60;
+
+        // Store the calculated time
+        $attendance->update([
+            'clock_out' => $clock_out,
+            'hours_logged' => $total_seconds / 3600, // Store the time in hours (decimal)
+            'formatted_time' => sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds), // Store formatted time
+        ]);
+
+        return redirect()->back()->with('success', 'Clocked out successfully.');
+    }
+}
