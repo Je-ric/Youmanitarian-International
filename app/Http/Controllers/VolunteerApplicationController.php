@@ -17,10 +17,11 @@ class VolunteerApplicationController extends Controller
     {
         return view('volunteers.form');
     }
-    
-    
+
+
     public function store(Request $request)
     {
+        // Validate the request data
         $request->validate([
             'why_volunteer' => 'required|string|max:500',
             'interested_programs' => 'required|string|max:255',
@@ -35,21 +36,18 @@ class VolunteerApplicationController extends Controller
             'short_bio' => 'nullable|string|max:500',
         ]);
 
-        // Check if the user already has a volunteer profile
-        // In volunter table
+        // Get the volunteer or create a new volunteer if it doesn't exist
         $volunteer = Auth::user()->volunteer;
 
         if (!$volunteer) {
-            // Create a new volunteer record if not present
-            // In volunter table
             $volunteer = new Volunteer();
             $volunteer->user_id = Auth::id();
             $volunteer->save();
         }
 
-        $volunteerId = $volunteer->id;  
+        // Store the application data in the VolunteerApplication table
+        $volunteerId = $volunteer->id;
 
-        // Store application data
         VolunteerApplication::create([
             'volunteer_id' => $volunteerId,
             'why_volunteer' => $request->input('why_volunteer'),
@@ -68,51 +66,57 @@ class VolunteerApplicationController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        
-        return redirect()->route('programs.index')->with('success', 'Your application has been submitted successfully and your role is now Volunteer!');
+
+        // Assign Volunteer role to the user if they don't already have it
+        $volunteerRole = Role::where('role_name', 'Volunteer')->first();
+        if ($volunteerRole && !UserRole::where('user_id', Auth::id())->where('role_id', $volunteerRole->id)->exists()) {
+            UserRole::create([
+                'user_id' => Auth::id(),
+                'role_id' => $volunteerRole->id,
+                'assigned_by' => Auth::id(),
+            ]);
+        }
+
+        // Redirect back with success message
+        return redirect()->route('programs.index')->with('success', 'Your application has been submitted successfully, and your role is now Volunteer!');
     }
 
 
 
 
-    public function apply(Program $program)
-{
-    $volunteer = Auth::user()->volunteer;
 
-    if (!$volunteer) {
-        session()->flash('toast', ['message' => 'You need to submit a volunteer application first.', 'type' => 'error']);
-        return redirect()->route('volunteer.application.form');
+    public function proceedApplication(Program $program)
+    {
+        $volunteer = Auth::user()->volunteer;
+
+        if (!$volunteer) {
+            session()->flash('toast', ['message' => 'You need to submit a volunteer application first.', 'type' => 'error']);
+            return redirect()->route('volunteer.application.form');
+        }
+
+        if ($program->volunteers->contains($volunteer->id)) {
+            session()->flash('toast', ['message' => 'You are already enrolled in this program', 'type' => 'error']);
+            return redirect()->back();
+        }
+
+        $program->volunteers()->attach($volunteer->id);
+
+        session()->flash('toast', ['message' => 'You have successfully applied to the program', 'type' => 'success']);
+        return redirect()->route('programs.index');
     }
 
-    if ($program->volunteers->contains($volunteer->id)) {
-        session()->flash('toast', ['message' => 'You are already enrolled in this program', 'type' => 'error']);
-        return redirect()->back();
-    }
 
-    $program->volunteers()->attach($volunteer->id);
-
-    session()->flash('toast', ['message' => 'You have successfully applied to the program', 'type' => 'success']);
-    return redirect()->route('programs.index');
-}
-
-    
     public function cancelApplication(Program $program)
     {
         $volunteer = Auth::user()->volunteer;
-    
+
         if (!$volunteer) {
             return redirect()->route('volunteer.application.form')
-                            ->with('error', 'You need to submit a volunteer application first.');
+                ->with('error', 'You need to submit a volunteer application first.');
         }
-    
+
         $program->volunteers()->detach($volunteer->id);
-    
+
         return redirect()->route('programs.index')->with('success', 'Your application to the program has been canceled.');
     }
-    
-
-
-
-
-
 }

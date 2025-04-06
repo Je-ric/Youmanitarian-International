@@ -41,20 +41,19 @@
             </div>
         </div>
 
-        <!-- 7-Day Forecast -->
         <h3 class="text-xl font-semibold mb-4"><i class='bx bx-calendar'></i> 7-Day Forecast</h3>
         <div class="grid grid-cols-2 md:grid-cols-6 gap-3" id="weeklyForecast"></div>
 
         <h2 class="text-xl font-bold text-center mt-4"><i class='bx bx-calendar'></i> Hourly Forecast</h2>
         <div class="flex overflow-x-auto space-x-4 p-4"  id="hourlyForecast"></div>
-        <!-- Pinned Locations -->
+
         <div class="bg-white/90 p-6 rounded-xl shadow-lg mt-6 max-w-md mx-auto">
             <h3 class="text-2xl font-bold text-green-800 flex items-center space-x-2">
                 <i class="bx bx-pin text-xl"></i>
                 <span>Pinned Locations</span>
             </h3>
             <div id="pinnedLocations" class="mt-4 space-y-4">
-                <!-- JS Display -->
+                {{-- Display --}}
             </div>
         </div>
 

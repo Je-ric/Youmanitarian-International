@@ -78,35 +78,33 @@ class WebsiteController extends Controller
 
     public function news()
     {
-        return view('website.news'); // News Page
+        return view('website.news'); // News 
     }
 
     public function programs()
     {
-        return view('website.programs'); // Programs Page
+        return view('website.programs'); // Programs 
     }
 
     public function sponsors()
     {
-        return view('website.sponsors'); // Sponsors & Partnership Page
+        return view('website.sponsors'); // Sponsors & Partnership 
     }
 
     public function about()
 {
-        return view('website.about'); // About Us Page
+        return view('website.about'); // About Us 
     }
 
     public function team()
     {
-        return view('website.team'); // Meet the Team Page
+        return view('website.team'); // Meet the Team 
     }
 
     public function forecast()
     {
         $OPEN_WEATHERMAP_KEY1 = env('OPEN_WEATHERMAP_KEY1');
         return view('weather-forecast.index', compact('OPEN_WEATHERMAP_KEY1'));
-
-        // return view('weather-forecast.index'); 
     }
 
     public function chatbot()

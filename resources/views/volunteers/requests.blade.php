@@ -1,4 +1,4 @@
-{{-- @extends('layouts.sidebar')
+@extends('layouts.sidebar')
 
 @section('content')
 <div class="container mx-auto p-6">
@@ -17,8 +17,9 @@
                 <tr class="bg-gray-100">
                     <th class="p-3 text-left">Name</th>
                     <th class="p-3 text-left">Email</th>
-                    <th class="p-3 text-left">Status</th>
-                    <th class="p-3 text-left">Action</th>
+                    <th class="p-3 text-left">View Contributions</th>
+                    {{-- <th class="p-3 text-left">Status</th>
+                    <th class="p-3 text-left">Action</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -26,7 +27,8 @@
                     <tr class="border-t">
                         <td class="p-3">{{ $volunteer->user->name }}</td>
                         <td class="p-3">{{ $volunteer->user->email }}</td>
-                        <td>
+                        <td class="p-3"></td>
+                        {{-- <td>
                             <x-status-indicator status="{{ $volunteer->status }}" variant="outline" />
                         </td>
                         <td class="p-3">
@@ -54,11 +56,11 @@
                             @else
                                 <span class="text-gray-500">No actions available</span>
                             @endif
-                        </td>
+                        </td> --}}
                     </tr>
                 @endforeach
             </tbody>
         </table>
     @endif
 </div>
-@endsection --}}
+@endsection

@@ -128,7 +128,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/volunteer-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
 Route::post('/volunteer-application', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
-Route::post('/program/{program}/apply', [VolunteerApplicationController::class, 'apply'])->name('programs.apply');
+Route::post('/program/{program}/apply', [VolunteerApplicationController::class, 'proceedApplication'])->name('programs.proceed_application');
 Route::delete('/program/{program}/cancel', [VolunteerApplicationController::class, 'cancelApplication'])->name('programs.cancel_application');// View and Manage Volunteer 
 
 
@@ -151,5 +151,11 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+
+Route::get('/volunteers/requests', [VolunteerController::class, 'allVolunteers'])->name('volunteers.requests');
+Route::post('/volunteers/apply', [VolunteerController::class, 'apply'])->name('volunteers.apply');
+Route::post('/volunteers/{user}/approve', [VolunteerController::class, 'approve'])->name('volunteers.approve');
+Route::post('/volunteers/{user}/remove', [VolunteerController::class, 'remove'])->name('volunteers.remove');
+Route::post('/volunteers/{user}/restore', [VolunteerController::class, 'restore'])->name('volunteers.restore');
 
 

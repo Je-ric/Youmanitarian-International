@@ -44,39 +44,17 @@
                     
                     <td class="px-6 py-4 text-sm text-[#1a2235]">{{ $program->creator->name }}</td> 
                     <td class="px-6 py-4 text-sm flex gap-2">
-                        <button onclick="openModal({{ $program }})" class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                        <button onclick="document.getElementById('modal_{{ $program->id }}').showModal();" class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
                             View Details
                         </button>
                     
-                        @if(Auth::user()->volunteer) 
-                            @php
-                                $isEnrolled = $program->volunteers->contains(Auth::user()->volunteer->id);
-                            @endphp
-                    
-                            @if($isEnrolled)
-                                <form action="{{ route('programs.cancel_application', $program) }}" method="POST" class="inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600">
-                                        Cancel Application
-                                    </button>
-                                </form>
-                            @else
-                                <form action="{{ route('programs.apply', $program) }}" method="POST" class="inline-block">
-                                    @csrf
-                                    <button type="submit" 
-                                            onclick="my_modal_2.showModal()"
-                                            class="btn px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600">
-                                        Apply as Volunteer
-                                    </button>
-                                </form>
-                            @endif
-                    
+                        {{-- @if(Auth::user()->volunteer)  --}}
+                        @if(Auth::user()->hasRole('Volunteer'))
                             <a href="{{ route('programs.view', $program) }}" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600">
                                 View Log
                             </a>
                         @else
-                            @if(Auth::user()->hasRole('Admin'))
+                            @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator'))
                                 <a href="{{ route('programs.edit', $program) }}" class="px-3 py-1 bg-[#ffb51b] text-[#1a2235] rounded-lg hover:bg-[#e6a017] transition-colors">
                                     Edit
                                 </a>
@@ -92,28 +70,71 @@
                             @endif
                         @endif
                     </td>
-
-                    {{-- <td class="px-6 py-4 text-sm flex gap-2">
-                        <button onclick="document.getElementById('my_modal_2').showModal();" class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                          View Details
-                        </button>
-                      
-                        <dialog id="my_modal_2" class="modal">
-                          <div class="modal-box">
+                    
+                    </tr>
+                    
+                    <dialog id="modal_{{ $program->id }}" class="modal">
+                        <div class="modal-box mx-auto p-6 space-y-4">
                             <h3 class="text-lg font-bold">{{ $program->title }}</h3>
-                            <p class="py-4">Description: {{ $program->description }}</p>
+                            <p class="py-2">{{ $program->description }}</p>
                             <p><strong>Location:</strong> {{ $program->location }}</p>
-                            <p><strong>Start Date:</strong> {{ $program->start_date }}</p>
-                            <p><strong>End Date:</strong> {{ $program->end_date ?? 'N/A' }}</p>
+                    
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <p><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($program->start_date)->format('M d, Y') }}</p>
+                                    <p><strong>Start Time:</strong> {{ \Carbon\Carbon::parse($program->start_time)->format('h:i A') }}</p>
+                                </div>
+                    
+                                <div class="space-y-1">
+                                    <p><strong>End Date:</strong> {{ \Carbon\Carbon::parse($program->end_date)->format('M d, Y') ?? 'N/A' }}</p>
+                                    <p><strong>End Time:</strong> {{ \Carbon\Carbon::parse($program->end_time)->format('h:i A') ?? 'N/A' }}</p>
+                                </div>
+                            </div>
+                    
+                            <div class="border-t border-gray-300 my-4"></div>
+                    
                             <p><strong>Progress:</strong> {{ ucfirst($program->progress) }}</p>
-                          </div>
-                          <form method="dialog" class="modal-backdrop">
-                            <button>Close</button>
-                          </form>
-                        </dialog>
-                        </td> --}}
+                    
+                            @if(Auth::user()->hasRole('Volunteer'))
+                                @php
+                                    $isEnrolled = $program->volunteers->contains(Auth::user()->volunteer->id); 
+                                    // $isApproved = $isEnrolled && Auth::user()->volunteer->status === 'approved';
+                                @endphp
+                    
+                                @if($isEnrolled)
+                                    <div class="text-green-500 font-semibold">
+                                        You have successfully applied to this program. We’re excited to have you on board. Your interest in this program is truly appreciated. The program coordinator will review your application shortly. Stay tuned, and we’re looking forward to working together!
+                                    </div>
+                                    <form action="{{ route('programs.cancel_application', $program) }}" method="POST" class="mt-4">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 w-full">
+                                            Cancel Application
+                                        </button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('programs.proceed_application', $program) }}" method="POST" class="mt-4">
+                                        @csrf
+                                        <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 w-full">
+                                            Apply as Volunteer
+                                        </button>
+                                    </form>
+                                @endif
+                            @endif
+                    
+                            <!-- Close Button -->
+                            <form method="dialog" class="modal-backdrop">
+                                <button class="w-full py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+                                    Close
+                                </button>
+                            </form>
+                        </div>
+                    </dialog>
+                    
 
                 </tr>
+
+                    
                 @endforeach
             </tbody>
         </table>
@@ -125,18 +146,9 @@
 </div>
 
 
-<dialog id="my_modal_2" class="modal">
-    <div class="modal-box">
-      <h3 class="text-lg font-bold">Hello!</h3>
-      <p class="py-4">Press ESC key or click outside to close</p>
-    </div>
-    <form method="dialog" class="modal-backdrop">
-      <button>close</button>
-    </form>
-  </dialog>
 
 
-<dialog id="programDetailsModal" class="modal">
+{{-- <dialog id="programDetailsModal" class="modal">
     <div class="modal-box bg-white p-6 rounded-lg shadow-lg">
         <h2 class="text-xl font-bold text-[#1a2235]" id="modalTitle"></h2>
         <p class="text-gray-700 mt-2"><strong>Description:</strong> <span id="modalDescription"></span></p>
@@ -149,10 +161,10 @@
             <button class="btn bg-red-500 text-white hover:bg-red-600 px-4 py-2 rounded-lg" onclick="closeModal()">Close</button>
         </div>
     </div>
-</dialog>
+</dialog> --}}
 
 
-<script>
+{{-- <script>
     function formatTime(time) {
         if (!time) return "N/A";
         const [hour, minute] = time.split(":");
@@ -188,7 +200,7 @@
     function closeModal() {
         document.getElementById("programDetailsModal").close();
     }
-</script>
+</script> --}}
 
 
 @endsection
