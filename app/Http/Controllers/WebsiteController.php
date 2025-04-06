@@ -103,8 +103,9 @@ class WebsiteController extends Controller
 
     public function forecast()
     {
-        $apiKey = env('OPEN_WEATHERMAP_KEY1');
-        return view('weather-forecast.index', compact('apiKey'));
+        $OPEN_WEATHERMAP_KEY1 = env('OPEN_WEATHERMAP_KEY1');
+        return view('weather-forecast.index', compact('OPEN_WEATHERMAP_KEY1'));
+
         // return view('weather-forecast.index'); 
     }
 

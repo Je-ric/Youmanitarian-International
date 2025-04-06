@@ -12,7 +12,6 @@
 <body class="bg-gradient-to-r from-green-100 to-green-200 text-green-800 p-5 min-h-screen">
     <div class="container mx-auto max-w-6xl">
         <h1 class="text-3xl font-bold text-center mb-8 text-green-900"><i class='bx bx-leaf'></i> Weather App</h1>
-
         <!-- Weather Form -->
         <div class="bg-white/90 p-6 rounded-xl shadow-lg mb-6">
             <form id="weatherForm" class="flex flex-col md:flex-row gap-3 mb-4">
@@ -122,8 +121,9 @@
         
     </div>
 
+    {{-- <pre>{{ dd($OPEN_WEATHERMAP_KEY1) }}</pre> --}}
     <script>
-        const API_KEY = "";
+        const API_KEY = "{{ $OPEN_WEATHERMAP_KEY1 }}";
         const form = document.getElementById("weatherForm");
         const cityInput = document.getElementById("cityInput");
         const provinceInput = document.getElementById("provinceInput");

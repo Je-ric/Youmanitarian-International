@@ -123,4 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'openweathermap_key1' => env('OPEN_WEATHERMAP_KEY1'),
+
+
 ];
