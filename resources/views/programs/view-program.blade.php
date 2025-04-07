@@ -36,12 +36,10 @@
                 <div class="flex items-center gap-2">
                     <span class="font-semibold">Status:</span>
                     @php
-                        $today = now()->setTimezone('Asia/Manila');
-                        $endDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $program->end_date . ' ' . $program->end_time);
-
+                        $today = now();
                         if ($program->start_date > $today) {
                             echo '<span class="text-blue-500">Incoming</span>';
-                        } elseif ($endDateTime && $endDateTime < $today) {
+                        } elseif ($program->end_date && $program->end_date < $today) {
                             echo '<span class="text-gray-500">Done</span>';
                         } else {
                             echo '<span class="text-green-500">Ongoing</span>';
