@@ -1,24 +1,21 @@
 @extends('layouts.sidebar')
 
 @section('content')
-<div class="container mx-auto p-6">
 
-    @if(session('success'))
+<h1 class="text-3xl font-bold text-[#1a2235] mb-6">Contents</h1>
+
+@if(session('success'))
     <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-4">
         {{ session('success') }}
     </div>
 @endif
 
-    <a href="{{ route('content.create') }}" 
-    class="flex items-center gap-3 px-4 py-2 rounded-lg bg-[#ffb51b] text-[#1a2235] hover:bg-[#e6a017] transition-colors">
-     <i class='bx bx-plus text-xl'></i>
-     <span>Create Content</span>
- </a>
-    <!-- Content -->
+<div class="container mx-auto p-6">
+
+    <x-button href="{{ route('content.create') }}" variant="add-create" class="mb-6">
+        <i class='bx bx-plus-circle mr-2'></i> Add Content
+    </x-button>
     <div>
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-semibold text-[#1a2235]">Content</h2>
-        </div>
         <div class="overflow-x-auto bg-white rounded-lg border border-gray-200">
             <table class="min-w-full">
                 <thead class="bg-gray-50">
@@ -42,17 +39,20 @@
                         </td>
                         <td class="py-3 px-4 text-sm text-[#1a2235]">{{ $content->updated_at->setTimezone('Asia/Manila')->format('M d, Y h:i A') }}</td>
                         <td class="py-3 px-4 flex items-center space-x-2">
-                            <x-button href="{{ route('content.edit', $content->id) }}" variant="primary">
+                            <x-button href="{{ route('content.edit', $content->id) }}" 
+                                    variant="primary" class="tooltip" data-tip="Edit">
                                 <i class='bx bx-edit'></i>
                             </x-button>
                         
-                            <x-button href="{{ route('content.archive', $content->id) }}" variant="secondary">
+                            <x-button href="{{ route('content.archive', $content->id) }}" 
+                                    variant="secondary" class="tooltip" data-tip="Archive">
                                 <i class='bx bx-archive'></i>
                             </x-button>
                         
                             <form action="{{ route('content.destroy', $content->id) }}" method="POST" class="inline">
                                 @csrf @method('DELETE')
-                                <x-button type="submit" variant="danger" onclick="return confirm('Are you sure?')">
+                                <x-button type="submit" variant="danger" onclick="return confirm('Are you sure?')"
+                                        class="tooltip" data-tip="Delete">
                                     <i class='bx bx-trash'></i> 
                                 </x-button>
                             </form>
@@ -66,17 +66,4 @@
 </div>
 
 
-
-
-{{-- <script>
-    function openModal(modalId) {
-        document.getElementById(modalId).showModal();
-    }
-    </script> --}}
-    
-
-<!-- Include Boxicons & DaisyUI -->
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/daisyui@2.51.5"></script>
 @endsection

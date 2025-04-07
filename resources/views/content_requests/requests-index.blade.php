@@ -1,16 +1,16 @@
 @extends('layouts.sidebar')
 
 @section('content')
-<a href="{{ route('content_requests.create') }}" 
-                   class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#ffb51b] hover:text-[#1a2235] transition-colors">
-                    <i class='bx bx-edit text-xl'></i>
-                    <span>Create Request</span>
-                </a>
+
+<h1 class="text-3xl font-bold text-[#1a2235] mb-6">Content Requests</h1>
+
+
                 
-<div class="mb-12">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-semibold text-[#1a2235]">Content Requests</h2>
-    </div>
+<div class="container mx-auto p-6">
+    <x-button href="{{ route('content_requests.create') }}" variant="add-create" class="mb-6">
+        <i class='bx bx-plus-circle mr-2'></i> Add Content
+    </x-button>
+
     <div class="overflow-x-auto bg-white rounded-lg border border-gray-200">
         <table class="min-w-full">
             <thead class="bg-gray-50">

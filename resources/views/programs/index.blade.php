@@ -1,7 +1,6 @@
 @extends('layouts.sidebar')
 
 @section('content')
-<div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold text-[#1a2235] mb-6">Programs</h1>
 
     @if (session('toast'))
@@ -9,10 +8,15 @@
 @endif
 
 
+<div class="container mx-auto p-6">
+
     @if(Auth::user()->hasRole('Admin'))
-        <a href="{{ route('programs.create') }}" class="inline-block px-4 py-2 bg-[#ffb51b] text-[#1a2235] rounded-lg hover:bg-[#e6a017] transition-colors mb-6">
-            Create Program
-        </a>
+        <div class="flex justify-between">
+            <x-button href="{{ route('programs.create') }}" variant="add-create" class="mb-6">
+                <i class='bx bx-plus-circle mr-2'></i> Add Program
+            </x-button>
+
+        </div>
     @endif
 
     <div class="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -44,7 +48,8 @@
                     
                     <td class="px-6 py-4 text-sm text-[#1a2235]">{{ $program->creator->name }}</td> 
                     <td class="px-6 py-4 text-sm flex gap-2">
-                        <x-button onclick="document.getElementById('modal_{{ $program->id }}').showModal();" variant="info">
+                        <x-button onclick="document.getElementById('modal_{{ $program->id }}').showModal();" 
+                                variant="info" class="tooltip" data-tip="View Details">
                             <i class='bx bx-show'></i>
                         </x-button>
 
@@ -55,17 +60,20 @@
                             </x-button>
                         @else
                             @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator'))
-                                <x-button href="{{ route('programs.manage_volunteers', $program) }}" variant="manage">
+                                <x-button href="{{ route('programs.manage_volunteers', $program) }}" 
+                                        variant="manage" class="tooltip" data-tip="Manage Volunteers">
                                     <i class='bx bx-group'></i>
                                 </x-button>
                                 
-                                <x-button href="{{ route('programs.edit', $program) }}" variant="warning">
+                                <x-button href="{{ route('programs.edit', $program) }}" 
+                                        variant="warning" class="tooltip" data-tip="Edit">
                                     <i class='bx bx-edit-alt'></i>
                                 </x-button>
                                 
                                 <form action="{{ route('programs.destroy', $program) }}" method="POST" class="inline-block">
                                     @csrf @method('DELETE')
-                                    <x-button type="submit" variant="danger" onclick="return confirm('Delete this program?')">
+                                    <x-button type="submit" variant="danger" onclick="return confirm('Delete this program?')"
+                                            class="tooltip" data-tip="Delete">
                                         <i class='bx bx-trash'></i>
                                     </x-button>
                                 </form>
