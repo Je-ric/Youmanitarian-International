@@ -44,29 +44,32 @@
                     
                     <td class="px-6 py-4 text-sm text-[#1a2235]">{{ $program->creator->name }}</td> 
                     <td class="px-6 py-4 text-sm flex gap-2">
-                        <button onclick="document.getElementById('modal_{{ $program->id }}').showModal();" class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                            View Details
-                        </button>
-                    
+                        <x-button onclick="document.getElementById('modal_{{ $program->id }}').showModal();" variant="info">
+                            <i class='bx bx-show'></i>
+                        </x-button>
+
                         {{-- @if(Auth::user()->volunteer)  --}}
                         @if(Auth::user()->hasRole('Volunteer'))
-                            <a href="{{ route('programs.view', $program) }}" class="px-3 py-1 bg-green-500 text-white rounded-lg hover:bg-green-600">
-                                View Log
-                            </a>
+                            <x-button href="{{ route('programs.view', $program) }}" variant="success">
+                                <i class='bx bx-show'></i>View Log
+                            </x-button>
                         @else
                             @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator'))
-                                <a href="{{ route('programs.edit', $program) }}" class="px-3 py-1 bg-[#ffb51b] text-[#1a2235] rounded-lg hover:bg-[#e6a017] transition-colors">
-                                    Edit
-                                </a>
-                                <a href="{{ route('programs.manage_volunteers', $program) }}" class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
-                                    Manage Volunteers
-                                </a>
+                                <x-button href="{{ route('programs.manage_volunteers', $program) }}" variant="manage">
+                                    <i class='bx bx-group'></i>
+                                </x-button>
+                                
+                                <x-button href="{{ route('programs.edit', $program) }}" variant="warning">
+                                    <i class='bx bx-edit-alt'></i>
+                                </x-button>
+                                
                                 <form action="{{ route('programs.destroy', $program) }}" method="POST" class="inline-block">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors" onclick="return confirm('Delete this program?')">
-                                        Delete
-                                    </button>
+                                    <x-button type="submit" variant="danger" onclick="return confirm('Delete this program?')">
+                                        <i class='bx bx-trash'></i>
+                                    </x-button>
                                 </form>
+                            
                             @endif
                         @endif
                     </td>

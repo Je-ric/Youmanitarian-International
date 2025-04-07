@@ -41,25 +41,22 @@
                             <x-status-indicator status="{{ $content->status }}" variant="outline" />
                         </td>
                         <td class="py-3 px-4 text-sm text-[#1a2235]">{{ $content->updated_at->setTimezone('Asia/Manila')->format('M d, Y h:i A') }}</td>
-                       
                         <td class="py-3 px-4 flex items-center space-x-2">
-                            <a href="{{ route('content.edit', $content->id) }}" 
-                               class="px-3 py-1.5 text-sm bg-[#ffb51b] text-white rounded hover:bg-[#e6a017] transition-colors flex items-center">
-                                <i class='bx bx-edit mr-2'></i> Edit
-                            </a>
-                            <a href="{{ route('content.archive', $content->id) }}" 
-                               class="px-3 py-1.5 text-sm bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors flex items-center">
-                                <i class='bx bx-archive mr-2'></i> Archive
-                            </a>
+                            <x-button href="{{ route('content.edit', $content->id) }}" variant="primary">
+                                <i class='bx bx-edit'></i>
+                            </x-button>
+                        
+                            <x-button href="{{ route('content.archive', $content->id) }}" variant="secondary">
+                                <i class='bx bx-archive'></i>
+                            </x-button>
+                        
                             <form action="{{ route('content.destroy', $content->id) }}" method="POST" class="inline">
                                 @csrf @method('DELETE')
-                                <button type="submit" 
-                                        class="px-3 py-1.5 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors flex items-center" 
-                                        onclick="return confirm('Are you sure?')">
-                                    <i class='bx bx-trash mr-2'></i> Delete
-                                </button>
+                                <x-button type="submit" variant="danger" onclick="return confirm('Are you sure?')">
+                                    <i class='bx bx-trash'></i> 
+                                </x-button>
                             </form>
-                        </td>
+                        </td>                        
                     </tr>
                     @endforeach
                 </tbody>

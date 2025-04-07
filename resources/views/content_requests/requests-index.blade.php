@@ -33,12 +33,10 @@
                     <td class="py-3 px-4 text-sm text-[#1a2235]">{{ $request->created_at->setTimezone('Asia/Manila')->format('M d, Y h:i A') }}</td>
                     
                     <td class="py-3 px-4"> 
-                        <button onclick="document.getElementById('modal-{{ $request->id }}').showModal()" 
-                            class="px-3 py-1.5 text-sm bg-[#ffb51b] text-white rounded hover:bg-[#e6a017] transition-colors">
-                        View
-                        </button>
-        
-                        
+                        <x-button onclick="document.getElementById('modal-{{ $request->id }}').showModal()" variant="info">
+                            <i class='bx bx-show' ></i>
+                        </x-button>
+
                         <!-- Modal -->
                         <dialog id="modal-{{ $request->id }}" class="modal">
                             <div class="modal-box w-11/12 max-w-7xl p-8 bg-white rounded-lg">

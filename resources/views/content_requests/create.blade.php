@@ -1,38 +1,5 @@
-{{-- @extends('layouts.sidebar')
-
-@section('content')
-<div class="container">
-    <h1>Create Content Request</h1>
-    
-    <form action="{{ route('content_requests.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" name="title" id="title" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea name="description" id="description" class="form-control" required></textarea>
-        </div>
-
-        <div class="mb-3">
-            <label for="notes" class="form-label">Notes</label>
-            <textarea name="notes" id="notes" class="form-control"></textarea>
-        </div>
-
-        <div class="mb-3">
-            <label for="images" class="form-label">Upload Images</label>
-            <input type="file" name="images[]" id="images" class="form-control" accept="image/*" multiple>
-        </div>
-
-        <button type="submit" class="btn btn-success">Submit Request</button>
-    </form>
-</div>
-@endsection --}}
-
 @extends('layouts.sidebar')  
+
 @section('content') 
 <div class="container mx-auto p-6">
     <div class="w-full bg-white rounded-lg">
