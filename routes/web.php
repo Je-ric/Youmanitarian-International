@@ -150,7 +150,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/programs/{program}/clock-out', [VolunteerAttendanceController::class, 'clockOut'])->name('programs.clock-out');
 });
 
-
+Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'showDetails'])->name('volunteers.details');
 
 Route::get('/volunteers/requests', [VolunteerController::class, 'allVolunteers'])->name('volunteers.requests');
 Route::post('/volunteers/apply', [VolunteerController::class, 'apply'])->name('volunteers.apply');

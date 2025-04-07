@@ -32,7 +32,7 @@ class User extends Authenticatable
         'google_id',
         'profile_pic'
     ];
-    
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -95,19 +95,17 @@ class User extends Authenticatable
     }
 
     public function hasRole($roleName)
-{
-    return $this->roles()->where('role_name', $roleName)->exists();
-}
+    {
+        return $this->roles()->where('role_name', $roleName)->exists();
+    }
 
-public function volunteer()
-{
-    return $this->hasOne(Volunteer::class);
-}
+    public function volunteer()
+    {
+        return $this->hasOne(Volunteer::class);
+    }
 
-public function isVolunteer()
-{
-    return $this->volunteer && $this->volunteer->status === 'active';
-}
-
-
+    public function isVolunteer()
+    {
+        return $this->volunteer && $this->volunteer->status === 'active';
+    }
 }

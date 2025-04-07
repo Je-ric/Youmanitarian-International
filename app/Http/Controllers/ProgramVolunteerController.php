@@ -29,15 +29,15 @@ class ProgramVolunteerController extends Controller
     // ═══════════════════════════════════════════════════════════════════════════════
 
 
-    public function getVolunteerLogs(Program $program, Volunteer $volunteer)
-    {
-        $logs = $program->volunteerAttendances()
-            ->where('volunteer_id', $volunteer->id)
-            ->orderBy('clock_in', 'desc')
-            ->get(['clock_in', 'clock_out']);
+    // public function getVolunteerLogs(Program $program, Volunteer $volunteer)
+    // {
+    //     $logs = $program->volunteerAttendances()
+    //         ->where('volunteer_id', $volunteer->id)
+    //         ->orderBy('clock_in', 'desc')
+    //         ->get(['clock_in', 'clock_out']);
     
-        return response()->json(['logs' => $logs]);
-    }
+    //     return response()->json(['logs' => $logs]);
+    // }
 
 
 

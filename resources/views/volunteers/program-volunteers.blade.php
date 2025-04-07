@@ -11,7 +11,7 @@
 
     <div class="text-end">
         <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example">
-        Assign Volunteers to the {{ $program->title}}
+        Assign Volunteers
         </button>
      </div>
 
@@ -161,6 +161,11 @@
                     </div>
     
                     <div class="flex gap-2">
+                        <x-button href="{{ route('volunteers.details', $volunteer->id) }}"
+                            variant="info" class="tooltip" data-tip="View Details">
+                            <i class='bx bx-show'></i> View
+                        </x-button>
+
                         @if($volunteer->pivot->status === 'pending')
                             @if($program->volunteers->count() < $program->volunteer_count)
                                 <form action="{{ route('programs.approve_volunteer', [$program, $volunteer]) }}" method="POST" class="inline-block">

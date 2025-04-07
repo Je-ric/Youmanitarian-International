@@ -11,4 +11,16 @@ class VolunteerAttendance extends Model
 
     protected $table = 'volunteer_attendance';
     protected $fillable = ['volunteer_id', 'program_id', 'clock_in', 'clock_out', 'hours_logged'];
+
+    public function volunteer()
+    {
+        return $this->belongsTo(Volunteer::class, 'volunteer_id');
+    }
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class, 'program_id');
+    }
+
+    
 }

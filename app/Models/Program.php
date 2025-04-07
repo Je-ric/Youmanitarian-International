@@ -9,12 +9,24 @@ class Program extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'description', 
-                            'start_date', 'end_date', 
-                            'start_time', 'end_time',
-                            'location', 'created_by',
-                            'progress', 'volunteer_count'];
+    protected $fillable = [
+        'title',
+        'description',
+        'start_date',
+        'end_date',
+        'start_time',
+        'end_time',
+        'location',
+        'created_by',
+        'progress',
+        'volunteer_count'
+    ];
 
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+    ];
+    
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -24,8 +36,11 @@ class Program extends Model
     {
         // return $this->belongsToMany(Volunteer::class, 'program_volunteers')->withTimestamps();
 
-        return $this->belongsToMany(Volunteer::class, 'program_volunteers')
-            ->withPivot('status', 'created_at', 'updated_at');
+        // return $this->belongsToMany(Volunteer::class, 'program_volunteers')
+        //     ->withPivot('status', 'created_at', 'updated_at');
+        
+        return $this->belongsToMany(Volunteer::class, 'program_volunteers', 'program_id', 'volunteer_id')
+        ->withPivot('status', 'created_at', 'updated_at');
     }
 
     public function tasks()
@@ -33,11 +48,7 @@ class Program extends Model
         return $this->hasMany(ProgramTask::class);
     }
     public function volunteerAttendances()
-{
-    return $this->hasMany(VolunteerAttendance::class);
-}
-
-
-
-    
+    {
+        return $this->hasMany(VolunteerAttendance::class);
+    }
 }
