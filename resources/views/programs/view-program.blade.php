@@ -3,7 +3,6 @@
 @section('content')
 <div class="container mx-auto p-6">
     <h1 class="text-4xl font-bold text-[#1a2235] mb-8">{{ $program->title }}</h1>
-
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {{-- Program Details Card --}}
@@ -32,18 +31,20 @@
                 </p>
 
                 <p><span class="font-semibold">Location:</span> {{ $program->location ?? 'N/A' }}</p>
-                <p><span class="font-semibold">Participants:</span> {{ $program->volunteers->count() }} Volunteers</p>
+                <p><span class="font-semibold">Volunteers:</span> {{ $program->volunteers->count() }}</p>
 
                 <div class="flex items-center gap-2">
                     <span class="font-semibold">Status:</span>
                     @php
-                        $today = now();
+                        $today = now()->setTimezone('Asia/Manila');
+                        $endDateTime = \DateTime::createFromFormat('Y-m-d H:i:s', $program->end_date . ' ' . $program->end_time);
+
                         if ($program->start_date > $today) {
-                            echo '<span class="badge badge-info">Incoming</span>';
-                        } elseif ($program->end_date && $program->end_date < $today) {
-                            echo '<span class="badge badge-neutral">Done</span>';
+                            echo '<span class="text-blue-500">Incoming</span>';
+                        } elseif ($endDateTime && $endDateTime < $today) {
+                            echo '<span class="text-gray-500">Done</span>';
                         } else {
-                            echo '<span class="badge badge-success">Ongoing</span>';
+                            echo '<span class="text-green-500">Ongoing</span>';
                         }
                     @endphp
                 </div>
@@ -67,21 +68,37 @@
                     </div>
                 @endif
 
+                @php
+                    $today = now()->setTimezone('Asia/Manila');
+                    $isUpcoming = $program->start_date > $today;
+                @endphp
+            
                 {{-- Attendance Buttons --}}
-                @if($isAssigned)
+                @if($isUpcoming)
+                    <div class="alert alert-warning">
+                        <span>This program hasn’t started yet. Clock-in will be available on <strong>{{ \Carbon\Carbon::parse($program->start_date)->format('F j, Y') }}</strong> at <strong>{{ \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}</strong>. We’re excited to see you there!</span>
+                    </div>
+                @elseif($isAssigned)
                     @if($attendance && $attendance->clock_in && !$attendance->clock_out)
-                        <p class="text-green-600">Clocked in at: <strong>{{ \Carbon\Carbon::parse($attendance->clock_in)->format('g:ia') }}</strong></p>
-
+                        <p class="text-green-600">Clocked in at: <strong>{{ \Carbon\Carbon::parse($attendance->clock_in)->setTimezone('Asia/Manila')->format('g:ia') }}</strong></p>
+                
                         <form action="{{ route('programs.clock-out', $program) }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-error w-full">Clock Out</button>
                         </form>
-
+                
                     @elseif($attendance && $attendance->clock_out)
+                        @php
+                            $clockInTime = \Carbon\Carbon::parse($attendance->clock_in)->setTimezone('Asia/Manila');
+                            $clockOutTime = \Carbon\Carbon::parse($attendance->clock_out)->setTimezone('Asia/Manila');
+                            $duration = $clockInTime->diff($clockOutTime);
+                            $formatted = sprintf('%02d hr %02d min %02d sec', $duration->h, $duration->i, $duration->s);
+                        @endphp
+                        
                         <div class="space-y-1">
-                            <p class="text-green-600">Clocked in at: <strong>{{ \Carbon\Carbon::parse($attendance->clock_in)->format('g:ia') }}</strong></p>
-                            <p class="text-red-600">Clocked out at: <strong>{{ \Carbon\Carbon::parse($attendance->clock_out)->format('g:ia') }}</strong></p>
-                            <p class="text-blue-600">Total Time Worked: <strong>{{ $attendance->formatted_time }}</strong></p>
+                            <p class="text-green-600">Clocked in at: <strong>{{ $clockInTime->format('g:ia') }}</strong></p>
+                            <p class="text-red-600">Clocked out at: <strong>{{ $clockOutTime->format('g:ia') }}</strong></p>
+                            <p class="text-blue-600">Total Time Worked: <strong>{{ $formatted }}</strong></p>
                         </div>
                     @else
                         <form action="{{ route('programs.clock-in', $program) }}" method="POST">

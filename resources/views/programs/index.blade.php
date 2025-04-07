@@ -98,15 +98,10 @@
                             @if(Auth::user()->hasRole('Volunteer'))
                                 @php
                                     $isEnrolled = $program->volunteers->contains(Auth::user()->volunteer->id); 
-                                    // $isApproved = $isEnrolled && Auth::user()->volunteer->status === 'approved';
+                                    $volunteerStatus = $program->volunteers->find(Auth::user()->volunteer->id)?->pivot->status;
                                 @endphp
                     
                                 @if($isEnrolled)
-                                    @php
-                                        $volunteerStatus = $program->volunteers->find(Auth::user()->volunteer->id)?->pivot->status;
-
-                                    @endphp
-
                                     @if($volunteerStatus === 'pending')     
                                         <div class="text-green-500 font-semibold">
                                             You have successfully applied to this program. We’re excited to have you on board. Your interest in this program is truly appreciated. The program coordinator will review your application shortly. Stay tuned, and we’re looking forward to working together!
