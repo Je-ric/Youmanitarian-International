@@ -102,16 +102,31 @@
                                 @endphp
                     
                                 @if($isEnrolled)
-                                    <div class="text-green-500 font-semibold">
-                                        You have successfully applied to this program. We’re excited to have you on board. Your interest in this program is truly appreciated. The program coordinator will review your application shortly. Stay tuned, and we’re looking forward to working together!
-                                    </div>
-                                    <form action="{{ route('programs.cancel_application', $program) }}" method="POST" class="mt-4">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 w-full">
-                                            Cancel Application
-                                        </button>
-                                    </form>
+                                    @php
+                                        $volunteerStatus = $program->volunteers->find(Auth::user()->volunteer->id)?->pivot->status;
+
+                                    @endphp
+
+                                    @if($volunteerStatus === 'pending')     
+                                        <div class="text-green-500 font-semibold">
+                                            You have successfully applied to this program. We’re excited to have you on board. Your interest in this program is truly appreciated. The program coordinator will review your application shortly. Stay tuned, and we’re looking forward to working together!
+                                        </div>
+                                        <form action="{{ route('programs.cancel_application', $program) }}" method="POST" class="mt-4">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 w-full">
+                                                Cancel Application
+                                            </button>
+                                        </form>
+                                    @elseif($volunteerStatus === 'approved')
+                                        <div class="text-green-500 font-semibold">
+                                            Congratulations! Your application has been approved. You are now an official volunteer for this program. (Additional message or notification between volunteer and coordinator)
+                                        </div>
+                                    @elseif($volunteerStatus === 'denied')
+                                        <div class="text-red-500 font-semibold">
+                                            Unfortunately, your application to this program has been denied. Thank you for your interest. You're still welcome to participate to this program and apply in other programs.
+                                        </div>
+                                    @endif
                                 @else
                                     <form action="{{ route('programs.proceed_application', $program) }}" method="POST" class="mt-4">
                                         @csrf
@@ -122,7 +137,6 @@
                                 @endif
                             @endif
                     
-                            <!-- Close Button -->
                             <form method="dialog" class="modal-backdrop">
                                 <button class="w-full py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
                                     Close
@@ -146,61 +160,6 @@
 </div>
 
 
-
-
-{{-- <dialog id="programDetailsModal" class="modal">
-    <div class="modal-box bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-xl font-bold text-[#1a2235]" id="modalTitle"></h2>
-        <p class="text-gray-700 mt-2"><strong>Description:</strong> <span id="modalDescription"></span></p>
-        <p class="text-gray-700 mt-2"><strong>Date:</strong> <span id="modalDate"></span></p>
-        <p class="text-gray-700 mt-2"><strong>Time:</strong> <span id="modalTime"></span></p>
-        <p class="text-gray-700 mt-2"><strong>Location:</strong> <span id="modalLocation"></span></p>
-        <p class="text-gray-700 mt-2"><strong>Created By:</strong> <span id="modalCreator"></span></p>
-
-        <div class="modal-action">
-            <button class="btn bg-red-500 text-white hover:bg-red-600 px-4 py-2 rounded-lg" onclick="closeModal()">Close</button>
-        </div>
-    </div>
-</dialog> --}}
-
-
-{{-- <script>
-    function formatTime(time) {
-        if (!time) return "N/A";
-        const [hour, minute] = time.split(":");
-        let h = parseInt(hour);
-        const suffix = h >= 12 ? "pm" : "am";
-        h = h % 12 || 12; // Convert 24-hour to 12-hour format
-        return `${h}:${minute}${suffix}`;
-    }
-
-    function openModal(program) {
-        document.getElementById("modalTitle").textContent = program.title;
-        document.getElementById("modalDescription").textContent = program.description;
-        document.getElementById("modalLocation").textContent = program.location ? program.location : "N/A";
-        document.getElementById("modalCreator").textContent = program.creator.name;
-
-        // Format date (without time)
-        let startDate = new Date(program.start_date).toLocaleDateString("en-US", {
-            month: "long", day: "numeric", year: "numeric"
-        });
-        let endDate = program.end_date ? new Date(program.end_date).toLocaleDateString("en-US", {
-            month: "long", day: "numeric", year: "numeric"
-        }) : null;
-        document.getElementById("modalDate").textContent = endDate ? `${startDate} - ${endDate}` : startDate;
-
-        // Format time range
-        let startTime = formatTime(program.start_time);
-        let endTime = program.end_time ? formatTime(program.end_time) : null;
-        document.getElementById("modalTime").textContent = endTime ? `${startTime} - ${endTime}` : startTime;
-
-        document.getElementById("programDetailsModal").showModal();
-    }
-
-    function closeModal() {
-        document.getElementById("programDetailsModal").close();
-    }
-</script> --}}
 
 
 @endsection
