@@ -18,9 +18,32 @@ class ProgramVolunteerController extends Controller
 
         $approvedCount = $approvedVolunteers->count();
         $isFull = $approvedCount >= $program->volunteer_count;
-        $logs = $program->volunteerAttendances()->get();
 
-        return view('volunteers.program-volunteers', compact('program', 'approvedVolunteers', 'pendingVolunteers', 'approvedCount', 'isFull'));
+        // Attendance logs
+        $logs = [];
+        foreach ($approvedVolunteers as $volunteer) {
+            $volunteerLogs = $program->volunteerAttendances()
+                ->where('volunteer_id', $volunteer->id)
+                ->orderBy('clock_in', 'desc')
+                ->get();
+
+            $totalTime = 0;
+            foreach ($volunteerLogs as $log) {
+                if ($log->clock_out) {
+                    $diff = \Carbon\Carbon::parse($log->clock_in)->diff(\Carbon\Carbon::parse($log->clock_out));
+                    $totalTime += $diff->h * 3600 + $diff->i * 60 + $diff->s;
+                }
+            }
+            $totalTimeInHours = gmdate("H:i:s", $totalTime);
+
+            // Add logs and total time for each volunteer
+            $logs[$volunteer->id] = [
+                'logs' => $volunteerLogs,
+                'totalTime' => $totalTimeInHours
+            ];
+        }
+
+        return view('volunteers.program-volunteers', compact('program', 'approvedVolunteers', 'pendingVolunteers', 'approvedCount', 'isFull', 'logs'));
     }
 
 
@@ -28,16 +51,6 @@ class ProgramVolunteerController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-
-    // public function getVolunteerLogs(Program $program, Volunteer $volunteer)
-    // {
-    //     $logs = $program->volunteerAttendances()
-    //         ->where('volunteer_id', $volunteer->id)
-    //         ->orderBy('clock_in', 'desc')
-    //         ->get(['clock_in', 'clock_out']);
-    
-    //     return response()->json(['logs' => $logs]);
-    // }
 
 
 
@@ -64,10 +77,10 @@ class ProgramVolunteerController extends Controller
             'message' => 'Volunteer approved successfully.',
             'type' => 'success',
         ]);
-        
+
         return redirect()->back();
     }
-    
+
 
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -80,28 +93,26 @@ class ProgramVolunteerController extends Controller
     {
         // $program->volunteers()->detach($volunteer->id);
         $program->volunteers()->updateExistingPivot($volunteer->id, ['status' => 'denied']);
-        
+
         session()->flash('toast', [
             'message' => 'Volunteer denied and removed from the program.',
             'type' => 'error',
         ]);
-        
+
         return redirect()->back();
     }
 
 
     public function restoreVolunteer(Program $program, Volunteer $volunteer)
-{
-    
-    $program->volunteers()->updateExistingPivot($volunteer->id, ['status' => 'pending']);
+    {
 
-    session()->flash('toast', [
-        'message' => 'Volunteer has been restored to pending.',
-        'type' => 'info',
-    ]);
+        $program->volunteers()->updateExistingPivot($volunteer->id, ['status' => 'pending']);
 
-    return redirect()->back();
-}
+        session()->flash('toast', [
+            'message' => 'Volunteer has been restored to pending.',
+            'type' => 'info',
+        ]);
 
-
+        return redirect()->back();
+    }
 }

@@ -63,7 +63,7 @@
                 <a href="{{ route('volunteers.requests') }}" 
                    class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#ffb51b] hover:text-[#1a2235] transition-colors">
                     <i class='bx bx-user-check text-xl'></i>
-                    <span>Volunteer Requests</span>
+                    <span>Volunteers</span>
                 </a>
             </li>
 
