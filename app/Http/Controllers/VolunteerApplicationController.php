@@ -21,7 +21,6 @@ class VolunteerApplicationController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the request data
         $request->validate([
             'why_volunteer' => 'required|string|max:500',
             'interested_programs' => 'required|string|max:255',
@@ -45,7 +44,7 @@ class VolunteerApplicationController extends Controller
             $volunteer->save();
         }
 
-        // Store the application data in the VolunteerApplication table
+        // Store data in the VolunteerApplication table
         $volunteerId = $volunteer->id;
 
         VolunteerApplication::create([
@@ -80,10 +79,6 @@ class VolunteerApplicationController extends Controller
         // Redirect back with success message
         return redirect()->route('programs.index')->with('success', 'Your application has been submitted successfully, and your role is now Volunteer!');
     }
-
-
-
-
 
     public function proceedApplication(Program $program)
     {

@@ -62,7 +62,7 @@ Route::middleware(['auth'])->group(function () {
     // Archive content
     Route::get('/content/archive/{content}', [ContentViewController::class, 'archiveContent'])->name('content.archive');
 
-    // Content &  Requests List
+    // List
     Route::get('/content', [ContentViewController::class, 'content_index'])->name('content.content_view');
     Route::get('/content-requests', [ContentViewController::class, 'requests_index'])->name('content_requests.requests_view');
 
@@ -126,20 +126,27 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::get('/volunteer-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
-Route::post('/volunteer-application', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
-Route::post('/program/{program}/apply', [VolunteerApplicationController::class, 'proceedApplication'])->name('programs.proceed_application');
-Route::delete('/program/{program}/cancel', [VolunteerApplicationController::class, 'cancelApplication'])->name('programs.cancel_application');// View and Manage Volunteer 
 
 
 
 Route::middleware(['auth'])->group(function () {
+    // 
     Route::post('programs/{program}/approve_volunteer/{volunteer}', [ProgramVolunteerController::class, 'approveVolunteer'])->name('programs.approve_volunteer');
     Route::delete('programs/{program}/deny_volunteer/{volunteer}', [ProgramVolunteerController::class, 'denyVolunteer'])->name('programs.deny_volunteer');
     Route::post('/programs/{program}/volunteers/{volunteer}/restore', [ProgramVolunteerController::class, 'restoreVolunteer'])->name('programs.restore_volunteer');
-
     Route::get('/programs/{program}/volunteers/manage', [ProgramVolunteerController::class, 'manageVolunteers'])->name('programs.manage_volunteers');
     Route::get('/programs/{program}/volunteers/{volunteer}/logs', [ProgramVolunteerController::class, 'getVolunteerLogs'])->name('programs.volunteer_logs');
+
+    //  
+    Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'showDetails'])->name('volunteers.details');
+    Route::get('/volunteers/requests', [VolunteerController::class, 'allVolunteers'])->name('volunteers.requests');
+    Route::post('/volunteers/apply', [VolunteerController::class, 'apply'])->name('volunteers.apply');
+
+    // 
+    Route::get('/volunteer-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
+    Route::post('/volunteer-application', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
+    Route::post('/program/{program}/apply', [VolunteerApplicationController::class, 'proceedApplication'])->name('programs.proceed_application');
+    Route::delete('/program/{program}/cancel', [VolunteerApplicationController::class, 'cancelApplication'])->name('programs.cancel_application');
 });
 
 
@@ -149,13 +156,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/programs/{program}/clock-in', [VolunteerAttendanceController::class, 'clockIn'])->name('programs.clock-in');
     Route::post('/programs/{program}/clock-out', [VolunteerAttendanceController::class, 'clockOut'])->name('programs.clock-out');
 });
-
-Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'showDetails'])->name('volunteers.details');
-
-Route::get('/volunteers/requests', [VolunteerController::class, 'allVolunteers'])->name('volunteers.requests');
-Route::post('/volunteers/apply', [VolunteerController::class, 'apply'])->name('volunteers.apply');
-Route::post('/volunteers/{user}/approve', [VolunteerController::class, 'approve'])->name('volunteers.approve');
-Route::post('/volunteers/{user}/remove', [VolunteerController::class, 'remove'])->name('volunteers.remove');
-Route::post('/volunteers/{user}/restore', [VolunteerController::class, 'restore'])->name('volunteers.restore');
 
 

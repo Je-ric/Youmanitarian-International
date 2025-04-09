@@ -8,7 +8,6 @@
         <x-toast :message="session('toast')['message']" :type="session('toast')['type']" />
     @endif
     
-
     @if($volunteers->isEmpty())
         <p class="text-gray-600">No volunteer applications found.</p>
     @else
