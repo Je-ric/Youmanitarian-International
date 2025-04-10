@@ -1,3 +1,4 @@
+{{-- Created a component href along with button --}}
 @php
     $styles = [
         'primary' => 'text-blue-500 hover:underline',

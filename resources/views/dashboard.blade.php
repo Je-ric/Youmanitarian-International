@@ -59,24 +59,6 @@
             <x-button variant="close">Close</x-button>
             <x-button variant="delete">Delete</x-button>
         </div>
-        
-        <div class="mb-6">
-            <x-link href="/dashboard">Go to Dashboard</x-link>
-            <x-link href="/profile" variant="secondary">Profile</x-link>
-            <x-link href="/success" variant="success">Success Page</x-link>
-            <x-link href="/edit" variant="outline">Edit Details</x-link>
-        </div>
-
-        <div class="mb-6">
-            <x-link href="/settings" icon="fas fa-cog">Settings</x-link>
-            <x-link href="/logout" variant="danger" icon="fas fa-sign-out-alt">Logout</x-link>
-        </div>
-
-        <div class="mb-6">
-            <x-link href="/small" size="sm">Small Link</x-link>
-            <x-link href="/large" size="lg">Large Link</x-link>
-        </div>
-
     
        <div class="flex justify-between">
             <div class="mb-6 flex gap-2">
