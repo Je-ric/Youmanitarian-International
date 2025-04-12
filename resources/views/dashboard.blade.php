@@ -67,8 +67,6 @@
                 <x-status-indicator status="warning" variant="solid" />
                 <x-status-indicator status="neutral" variant="solid" />
                 <x-status-indicator status="danger" variant="solid" />
-
-                
                 <x-status-indicator status="news" variant="solid" />
                 <x-status-indicator status="program" variant="solid" />
             </div>
@@ -79,7 +77,6 @@
                 <x-status-indicator status="warning" variant="outline" />
                 <x-status-indicator status="neutral" variant="outline" />
                 <x-status-indicator status="danger" variant="outline" />
-
                 <x-status-indicator status="news" variant="outline" />
                 <x-status-indicator status="program" variant="outline" />
             </div>
