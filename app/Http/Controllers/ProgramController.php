@@ -76,6 +76,15 @@ class ProgramController extends Controller {
         // } else {
         //     $progress = 'done'; 
         // }
+
+        // if ($totalHours === 0) {
+        //     $volunteer->progress = 'not_started';
+        // } elseif ($lastAttendance && is_null($lastAttendance->time_out)) {
+        //     $volunteer->progress = 'in_progress';
+        // } else {
+        //     $volunteer->progress = 'completed';
+        // }
+
     
         Program::create([
             'title' => $request->title,
