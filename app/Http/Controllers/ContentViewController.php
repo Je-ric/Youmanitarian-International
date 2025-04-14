@@ -10,7 +10,10 @@ use Illuminate\Support\Facades\Storage;
 class ContentViewController extends Controller {
 
     public function content_index() {
-        $contents = Content::latest()->get();
+        // $contents = Content::latest()->get();
+        $contents = Content::latest()->paginate(perPage: 5);
+        // $contents = Content::latest()->simplePaginate(1);
+
         return view('content.index', compact('contents'));
     }
 
