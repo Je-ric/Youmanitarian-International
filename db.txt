@@ -1,0 +1,391 @@
+CREATE DATABASE youmanitarian;
+USE youmanitarian;
+
+-- Users Table
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    approved_by INT NULL,
+    google_id VARCHAR(255) UNIQUE NULL,
+    profile_pic VARCHAR(255) NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (approved_by) REFERENCES users(id) ON DELETE SET NULL
+    ALTER TABLE users ADD last_seen TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE users ADD COLUMN is_typing TINYINT(1) DEFAULT 0;
+
+);
+
+Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('role_name')->unique();
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
+
+
+         Schema::create('user_roles', function (Blueprint $table) {
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('role_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('assigned_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('assigned_at')->default(now());
+            $table->primary(['user_id', 'role_id']);
+            $table->timestamps();
+        });
+
+        Schema::create('content', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('body');
+            $table->string('image_content')->nullable();
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
+            $table->enum('type', ['news', 'program'])->default('news');
+            $table->integer('views')->default(0);
+            $table->string('slug')->unique();
+            $table->foreignId('locked_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('locked_at')->nullable();
+            $table->timestamps();
+        });
+
+        $table->unsignedBigInteger('request_id')->nullable()->after('created_by');
+        $table->foreign('request_id')->references('id')->on('content_requests')->onDelete('set null');
+
+         Schema::create('content_images', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('content_id')->constrained('content')->onDelete('cascade');
+            $table->string('image_path');
+            $table->timestamp('uploaded_at')->useCurrent();
+        });
+
+        Schema::create('content_requests', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('description');
+            $table->foreignId('requested_by')->constrained('users')->onDelete('cascade');
+            $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
+            $table->text('notes')->nullable();
+            $table->timestamps();
+        });
+
+$table->date('expected_publication_date')->nullable()->after('description');
+
+        Schema::create('content_request_images', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('request_id')->constrained('content_requests')->onDelete('cascade');
+            $table->string('image_url');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable()->after('created_at');
+        });
+
+         Schema::create('heart_reacts', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('content_id')->constrained('content')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->timestamps();
+
+            $table->unique(['content_id', 'user_id']);
+        });
+
+
+        Schema::create('content_comments', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('content_id');
+            $table->unsignedBigInteger('user_id');
+            $table->text('comment');
+            $table->timestamps();
+
+            // Foreign Keys
+            $table->foreign('content_id')->references('id')->on('content')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+
+        Schema::create('programs', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->dateTime('start_date');
+            $table->dateTime('end_date')->nullable();
+            $table->time('start_time')->nullable(); 
+            $table->time('end_time')->nullable();
+            $table->string('location')->nullable(); 
+            $table->enum('progress', ['incoming', 'ongoing', 'done'])->default('incoming');
+            $table->integer('volunteer_count')->default(0);
+
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade'); 
+            $table->timestamps();
+        });
+$table->string('date')->nullable(); --remove the start/end date then use this only
+$table->enum('duration_type', ['single', 'multiple'])->default('single');
+$table->enum('attendance_mode', ['volunteer', 'coordinator', 'both'])->default('coordinator');
+$table->enum('approval_mode', ['auto', 'manual'])->default('manual');
+
+        Schema::create('volunteers', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id')->unique();
+            $table->integer('total_hours')->default(0);
+            $table->enum('status', ['pending', 'approved', 'denied'])->default('pending');
+            $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+
+Schema::create('program_days', function (Blueprint $table) {
+    $table->id();
+    $table->unsignedBigInteger('program_id');
+    $table->date('date');
+    $table->time('start_time')->nullable();
+    $table->time('end_time')->nullable();
+    $table->timestamps();
+
+    $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+});
+
+        Schema::create('program_volunteers', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('program_id');
+            $table->unsignedBigInteger('volunteer_id');
+            $table->enum('status', ['pending', 'approved', 'denied'])->default('pending');
+            $table->timestamps();
+
+            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+            $table->foreign('volunteer_id')->references('id')->on('volunteers')->onDelete('cascade');
+        });
+
+        Schema::create('program_tasks', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('program_id');
+            $table->text('task_description');
+            $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
+            $table->timestamps();
+
+            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+        });
+
+        Schema::create('task_assignments', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('task_id');
+            $table->unsignedBigInteger('volunteer_id');
+            $table->unsignedBigInteger('assigned_by');
+            $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
+            $table->timestamps();
+
+            $table->foreign('task_id')->references('id')->on('program_tasks')->onDelete('cascade');
+            $table->foreign('volunteer_id')->references('id')->on('volunteers')->onDelete('cascade');
+            $table->foreign('assigned_by')->references('id')->on('users')->onDelete('cascade');
+        });
+
+        Schema::create('volunteer_attendance', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('volunteer_id');
+            $table->unsignedBigInteger('program_id');
+            $table->dateTime('clock_in')->nullable();
+            $table->dateTime('clock_out')->nullable();
+            $table->integer('hours_logged')->default(0);
+            $table->timestamps();
+
+            $table->foreign('volunteer_id')->references('id')->on('volunteers')->onDelete('cascade');
+            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+        });
+
+$table->unsignedBigInteger('program_day_id')->nullable()->after('program_id');
+$table->foreign('program_day_id')->references('id')->on('program_days')->onDelete('cascade');
+
+$table->enum('logged_by', ['volunteer', 'coordinator'])->default('volunteer');
+$table->enum('approval_status', ['pending', 'approved', 'rejected'])->default('pending');
+$table->unsignedBigInteger('approved_by')->nullable();
+$table->foreign('approved_by')->references('id')->on('users')->nullOnDelete();
+
+
+        Schema::create('volunteer_application', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('volunteer_id'); 
+        
+            $table->string('why_volunteer', 500)->nullable(); 
+            $table->string('interested_programs', 255)->nullable();
+            $table->string('skills_experience', 255)->nullable();
+            $table->string('availability', 255)->nullable();
+            $table->string('commitment_hours', 255)->nullable();
+            $table->string('physical_limitations', 255)->nullable();
+            $table->string('emergency_contact', 255)->nullable();
+            $table->enum('contact_consent', ['yes', 'no']);
+            $table->enum('volunteered_before', ['yes', 'no']);
+            $table->enum('outdoor_ok', ['yes', 'no', 'depends']);
+            $table->string('short_bio', 500)->nullable();
+        
+            $table->boolean('is_active')->default(true); 
+            $table->timestamp('submitted_at')->nullable(); 
+        
+            $table->foreign('volunteer_id')->references('id')->on('volunteers')->onDelete('cascade');
+            $table->timestamps();
+        });    
+
+Schema::create('membership_payments', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('user_id')->constrained('users'); 
+    $table->decimal('amount', 10, 2);
+    $table->timestamp('payment_date'); 
+    $table->enum('payment_status', ['Paid', 'Pending', 'Overdue']); 
+    $table->string('receipt_url')->nullable(); 
+    $table->timestamps(); 
+});
+
+Schema::create('donations', function (Blueprint $table) {
+    $table->id();  
+    $table->string('donor_name')->nullable();  
+    $table->string('donor_email')->nullable();  
+    $table->decimal('amount', 10, 2);  
+    $table->timestamp('donation_date')->useCurrent();  
+    $table->enum('payment_platform', ['PayPal', 'Bank Transfer', 'Cash', 'GCash', 'Other'])->default('OtherPayment platform (with default)
+    $table->string('receipt_url')->nullable();  
+    $table->enum('status', ['Confirmed', 'Pending'])->default('Pending');
+    $table->timestamps();  
+});
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+
+
+
+CREATE TABLE website_content (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    topic VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL
+);
+
+Website/Page Manager
+Testimonials (Table)
+Members (Table)
+Programs Feedback
+
+Admin - full 
+Content Manager -cms
+Program Coordinator - Volunteer Manager -
+
+Volunteer
+User 
+
+Positions: Founder, Senior Member, Member 
+
+Admin first before publication
+TinyMCE
+
+trial - zctnfzjfl8blcadzgdm4gwxy3986m39amafpx9zq9xbe5dk8
+personal - vuvcfajzp5h0glvobgw3o47ynzsgadyfyccgj2jtjbz69s7i
+education - dsijy7g7d2wigiwzr3bck9117e0uwpg9n2bmdb3oi4pk8n22
+
+openweather - API_Password
+5de15b7804e0078404a629b6de093fb2
+
+gemini - AIzaSyBjdnPJ_PMje7x24CNeEKMrlYnIS5ebyrE 
+
+togetherAI -  24666691328fe191f6172c03846bc3333ec4da7f46a2bec3c7641124ebf4ee4a
+
+openAI
+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
+
+
+GET: Display data or a page.
+POST: Submit data (e.g., from a form).
+PUT: Update existing data.
+DELETE: Remove data.
+Resource: Automatically create routes for all CRUD operations (a quick way to create multiple routes for handling standard operations like adding, viewing, editing, and deleting data).
+
+
+1️⃣ User clicks on a content row → Locks it immediately.
+2️⃣ Other users see a "Locked by [User]" message in real-time.
+3️⃣ If inactive for 10 minutes → Auto-unlock runs via AJAX.
+4️⃣ If user closes tab/navigates away → Auto-unlock triggers.
+5️⃣ If another user needs access → They can "Request Unlock" from the editor.
+6️⃣ Admins have a "Force Unlock" option in case of issues.
+
+
+
+
+user request view
+
+admin - view lang (walang connect)
+content manager - crud, comment, locking mechanism
+program coordinator - view, comment, ready to published
+
+problems to fix:
+    ckeditor format (ang pangit eh) (apply preview if possible)
+    image from computer
+    remove progress- just use logic in that status about time
+
+Features to add:
+    scheduled posting
+    if a volunteer doesnt have account (proceed with manual add of program coordinator) (insert in volunteer table)
+        - manual log of program coordinator
+    content request - expected published date
+     preview posts before publishing?
+    
+
+apply as volunteer (public - program page)
+    volunteer count in specific program (available slot)
+    offcanvas view details of the volunteer
+volunteer applications inside a specific program
+
+
+apply as volunteer (public - program page)
+direct to login/create acc
+    - if new account proceed to the form for volunteers
+    - if existing acc and done with the form proceed to the program
+calendar view (view and apply to every program)
+    - as a program coordinator, it will view the form details.
+    - had a chance to approve or deny the volunteer.
+as a volunteer theres a page to view its own program contributions and logs.
+
+
+//emoji library (comment purposes)
+// notification
+//input field (login) use email not username to prevent dummy accounts
+//heart?
+Download Content? pdf?
+//remove account approval
+Program Coordinator can set dates to view in a calendar?
+Calendar to Upcoming Events
+//Multiple Image in a content (separate table)
+Upload Documents (viewing for members)
+Top/Popular Post: 1-5?
+//News is Different to Programs (single content editor)
+//Add if for what purpose: news/programs
+Forum/Discussion? Messenger? 
+Anyone with email can signup. But only member can engage, share ideas, etc.
+Apply to being a member
+//Different Form for volunteers.
+GC for Volunteers/Volunteer Manager
+//(Next - Previous Website)
+(Filter By date?) (Search)
+tooltip buttons
+comment inside content creation 
+    (ready to published by admin) then notif
+    for example "ayusin mo toh (checkbox)" 
+
+
+User Roles: (Website/CMS related) each user can have multiple roles.
+    - Admin
+    - Content Manager
+    - Program Coordinator
+    - Volunteer
+
+Positions:
+    - Senior Executive Director
+    - Executive Director
+    - Corporate Secretary
+    - Chief Finance Officer
+    - Auditor
+    - Director for Information Technology and Multimedia 
+    - Director for Agriculture and Rural Development 
+    - Director for Biodiversity and Conservation
+    - Director for Membership and Ethics
+    - Member
+    - Volunteer
+
+
+
+
+
+

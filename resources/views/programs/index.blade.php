@@ -13,7 +13,7 @@
     @if(Auth::user()->hasRole('Admin'))
         <div class="flex justify-between">
             <x-button href="{{ route('programs.create') }}" variant="add-create" class="mb-6">
-                <i class='bx bx-plus-circle mr-2'></i> Add Program
+                <i class='bx bx-plus-circle mr-2'></i> Create Program
             </x-button>
 
         </div>
@@ -150,11 +150,7 @@
                             </form>
                         </div>
                     </dialog>
-                    
-
                 </tr>
-
-                    
                 @endforeach
             </tbody>
         </table>
@@ -164,8 +160,6 @@
         {{ $programs->links() }}
     </div>
 </div>
-
-
 
 
 @endsection
