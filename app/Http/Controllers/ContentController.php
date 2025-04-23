@@ -60,6 +60,7 @@ class ContentController extends Controller
 
     public function store(Request $request)
     {
+        // $request_id = $request->input('request_id');
         $image_max_size = 51200; // 50mb
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -69,6 +70,7 @@ class ContentController extends Controller
             'image' => "nullable|image|mimes:jpeg,png,jpg,gif|max:$image_max_size",
             'gallery_images' => 'nullable|array',
             'gallery_images.*' => "nullable|image|mimes:jpeg,png,jpg,gif|max:$image_max_size",
+            // 'request_id' => $request_id,
         ]);
 
         $user_id = Auth::id();
