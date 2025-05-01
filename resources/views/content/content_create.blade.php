@@ -216,6 +216,7 @@
             </div>
         </div>
         
+        {{-- CKEDITOR di na gumagana, kapangit mo kabonding --}}
 
         {{-- <div class="form-control mb-6">
             <label class="label">
