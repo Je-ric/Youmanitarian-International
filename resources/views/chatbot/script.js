@@ -8,8 +8,8 @@
 // const inputInitHeight = chatInput.scrollHeight;
 
 // // ✅ API Keys (Store securely in backend for production!)
-// const OPENAI_API_KEY = "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"; 
-// const TOGETHER_AI_API_KEY = "24666691328fe191f6172c03846bc3333ec4da7f46a2bec3c7641124ebf4ee4a"; 
+// const OPENAI_API_KEY = ""; 
+// const TOGETHER_AI_API_KEY = ""; 
 
 // // ✅ API URLs
 // const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
@@ -191,7 +191,7 @@ const sendChatBtn = document.querySelector(".chat-input span");
 let userMessage = null; // Variable to store user's message
 const inputInitHeight = chatInput.scrollHeight;
 // API configuration
-const API_KEY = "AIzaSyBjdnPJ_PMje7x24CNeEKMrlYnIS5ebyrE"; // Your API key here
+const API_KEY = ""; // Your API key here
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 const createChatLi = (message, className) => {
   // Create a chat <li> element with passed message and className
