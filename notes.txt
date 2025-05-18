@@ -1,0 +1,148 @@
+ a content row → Locks it immediately.
+2️⃣ Other users see a "Locked by [User]" message in real-time.
+3️⃣ If inactive for 10 minutes → Auto-unlock runs via AJAX.
+4️⃣ If user closes tab/navigates away → Auto-unlock triggers.
+5️⃣ If another user needs access → They can "Request Unlock" from the editor.
+6️⃣ Admins have a "Force Unlock" option in case of issues.
+
+
+user request view
+
+admin - view lang (walang connect)
+content manager - crud, comment, locking mechanism
+program coordinator - view, comment, ready to published
+
+problems to fix:
+    ckeditor format (ang pangit eh) (apply preview if possible)
+    image from computer
+    remove progress- just use logic in that status about time
+
+Features to add:
+    scheduled posting
+    if a volunteer doesnt have account (proceed with manual add of program coordinator) (insert in volunteer table)
+        - manual log of program coordinator
+    content request - expected published date
+     preview posts before publishing?
+    
+
+apply as volunteer (public - program page)
+    volunteer count in specific program (available slot)
+    offcanvas view details of the volunteer
+volunteer applications inside a specific program
+
+
+apply as volunteer (public - program page)
+direct to login/create acc
+    - if new account proceed to the form for volunteers
+    - if existing acc and done with the form proceed to the program
+calendar view (view and apply to every program)
+    - as a program coordinator, it will view the form details.
+    - had a chance to approve or deny the volunteer.
+as a volunteer theres a page to view its own program contributions and logs.
+
+
+//emoji library (comment purposes)
+// notification
+//input field (login) use email not username to prevent dummy accounts
+//heart?
+Download Content? pdf?
+//remove account approval
+Program Coordinator can set dates to view in a calendar?
+Calendar to Upcoming Events
+//Multiple Image in a content (separate table)
+Upload Documents (viewing for members)
+Top/Popular Post: 1-5?
+//News is Different to Programs (single content editor)
+//Add if for what purpose: news/programs
+Forum/Discussion? Messenger? 
+Anyone with email can signup. But only member can engage, share ideas, etc.
+Apply to being a member
+//Different Form for volunteers.
+GC for Volunteers/Volunteer Manager
+//(Next - Previous Website)
+(Filter By date?) (Search)
+tooltip buttons
+comment inside content creation 
+    (ready to published by admin) then notif
+    for example "ayusin mo toh (checkbox)" 
+
+
+User Roles: (Website/CMS related) each user can have multiple roles.
+    - Administrator
+    - Content Manager
+    - Program Coordinator
+    - Finance Facilitator
+    - Member
+    - Volunteer
+
+Positions:
+    - Senior Executive Director
+    - Executive Director
+    - Corporate Secretary
+    - Chief Finance Officer
+    - Auditor
+    - Director for Information Technology and Multimedia 
+    - Director for Agriculture and Rural Development 
+    - Director for Biodiversity and Conservation
+    - Director for Membership and Ethics
+    - Member
+    - Volunteer
+
+
+
+Volunteer - Approved (different page for user form answers, then contributions)
+        - invite modal confirmation
+
+Volunteer Application (different page for user form answers)
+
+In applying as a volunteer, do you reject or deny?
+In membership payment does everytime pay 500 or it can be partial like 200 later will be the rest?
+Note: In Programs Joined, use as basis the attendance of the volunteer.
+
+If Attendance is NOT Approved - You need to save a status in the database.
+    Pending (default after clock-in/out)
+    Approved (after coordinator approves)
+    Rejected (after coordinator denies)
+    - if approved status its recorded as joined programs
+    - if auto approved its always be recorded as approved status 
+
+why status is needed in member
+    pending – invited, but hasn’t accepted or completed requirements.
+    active – full member with benefits.
+    inactive – stopped participating or didn't renew payment
+
+
+
+
+Highest Educational Attainment (dropdown or text)
+Field of Study (text)
+Current Occupation /Student
+Skills / Expertise
+Have you volunteered before? (yes/no radio)
+    If yes, briefly describe your past volunteer work (textarea)
+Preferred Days (checkboxes: Monday to Sunday)
+Preferred Time (text or dropdown: Morning, Afternoon, Evening, Flexible)
+Why do you want to volunteer with us? (textarea)
+Which areas are you most interested in? (checkboxes or multi-select)
+    Disaster Relief
+    Environmental Programs
+    Education and Literacy
+    Health and Wellness
+    Community Development
+    Others (please specify)
+
+
+
+
+1. Group Chat per Program
+    - Everyone who joins a program (ex, Tree Planting) is added automatically to a group chat.
+    - This allows collaboration, coordination, asking questions openly.
+    - All volunteers in the program + Program Coordinator are in this chat.
+
+2. 1-on-1 Consultation (Outside of Program) – for specialized advice
+    - 1-on-1 consultation system based on available volunteers with specialization.
+    - This is where users can seek private, specific guidance (ex. farming advice, legal questions, education).
+    - This is not tied to programs, but programs can promote these consultations.
+    - Consultations are displayed after joining a program, inshort program is the way to have consultation.
+
+Program - Join (Auto join sa gc) - list of volunteers, list of available consultants - option to choose or select consultants to chat on 1-on-1 consultation
