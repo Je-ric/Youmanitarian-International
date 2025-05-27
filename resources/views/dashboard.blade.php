@@ -83,6 +83,29 @@
 
         </div>
 
+        <table class="w-full text-left text-gray-700 font-['Poppins']">
+  <thead class="bg-gray-800 text-white">
+    <tr>
+      <th class="p-3.5 w-20">✔</th>
+      <th class="p-3.5">Title</th>
+      <th class="p-3.5 w-36">Type</th>
+      <th class="p-3.5 w-44">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="bg-white">
+      <td class="p-3.5"><input type="checkbox" class="rounded-md border-2.5 border-neutral-300" /></td>
+      <td class="p-3.5">Tree Planting Initiative for Environmental Conservation</td>
+      <td class="p-3.5">Program</td>
+      <td class="p-3.5">
+        <span class="px-3 py-1 bg-green-100 rounded-md">Approved</span>
+      </td>
+    </tr>
+    <!-- More rows... -->
+  </tbody>
+</table>
+
+
     </div>
 
     </div>
