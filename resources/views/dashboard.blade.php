@@ -72,23 +72,12 @@
 
             <div class="flex justify-between">
 
-                <div class="mb-6 flex gap-2">
+                <div class="mb-6 flex gap-2 flex-wrap">
                     <x-status-indicator status="success" />
                     <x-status-indicator status="info" />
                     <x-status-indicator status="warning" />
                     <x-status-indicator status="neutral" />
                     <x-status-indicator status="danger" />
-
-                    <x-status-indicator status="approved" />
-                    <x-status-indicator status="denied" />
-                    <x-status-indicator status="completed" />
-                    <x-status-indicator status="in_progress" />
-                    <x-status-indicator status="pending" />
-                    <x-status-indicator status="archived" />
-                    <x-status-indicator status="published" />
-                    <x-status-indicator status="draft" />
-                    <x-status-indicator status="news" />
-                    <x-status-indicator status="program" />
                 </div>
             </div>
 
