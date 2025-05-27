@@ -48,17 +48,32 @@
         </form>
     </div>
 
+
+<div class="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 py-4 px-4">
+    <div class="flex flex-col">
+        <h2 class="text-black text-2xl font-semibold tracking-tight">Contents</h2>
+        <p class="text-black text-base md:text-lg font-light tracking-tight">
+            Manage and view your content. You can add new content or modify existing entries.
+        </p>
+    </div>
+    <x-button variant="primary">Create New</x-button>
+</div>
+
+
     <div class="mt-12">
-        <div class="mb-6 flex gap-2">
-            <x-button variant="primary">Primary #ffb51b</x-button>
-            <x-button variant="secondary">Secondary #1a2235</x-button>
-            <x-button variant="success">Delete</x-button>
-            <x-button variant="danger">Delete</x-button>
-            <x-button variant="warning">Update</x-button>
-            <x-button variant="info">Edit</x-button>
-            <x-button variant="close">Close</x-button>
-            <x-button variant="delete">Delete</x-button>
-        </div>
+       <div class="mb-6 flex gap-2 flex-wrap">
+    <x-button variant="primary">Primary</x-button>
+    <x-button variant="secondary">Secondary</x-button>
+    <x-button variant="success">Success</x-button>
+    <x-button variant="danger">Danger</x-button>
+    <x-button variant="warning">Warning</x-button>
+    <x-button variant="info">Info</x-button>
+    <x-button variant="manage">Manage</x-button>
+    <x-button variant="restore">Restore</x-button>
+    <x-button variant="approve">Approve</x-button>
+    <x-button variant="delete">Delete</x-button>
+    <x-button variant="close">Close</x-button>
+</div>
     
        <div class="flex justify-between">
             <div class="mb-6 flex gap-2">
