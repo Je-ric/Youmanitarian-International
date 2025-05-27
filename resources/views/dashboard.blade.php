@@ -48,16 +48,11 @@
         </form>
     </div>
 
-
-<div class="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 py-4 px-4">
-    <div class="flex flex-col">
-        <h2 class="text-black text-2xl font-semibold tracking-tight">Contents</h2>
-        <p class="text-black text-base md:text-lg font-light tracking-tight">
-            Manage and view your content. You can add new content or modify existing entries.
-        </p>
-    </div>
-    <x-button variant="primary">Create New</x-button>
-</div>
+<x-header-with-button
+    title="Contents"
+    description="Manage and view your content. You can add new content or modify existing entries."
+    buttonText="Add New"
+/>
 
 
     <div class="mt-12">
