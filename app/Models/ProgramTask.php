@@ -20,4 +20,5 @@ class ProgramTask extends Model
     {
         return $this->hasMany(TaskAssignment::class);
     }
+
 }

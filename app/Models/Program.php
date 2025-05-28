@@ -60,6 +60,14 @@ class Program extends Model
         return $this->hasMany(VolunteerAttendance::class);
     }
 
+public function chats()
+    {
+        return $this->hasMany(ProgramChat::class);
+    }
 
+    public function feedback()
+    {
+        return $this->hasMany(ProgramFeedback::class);
+    }
 
 }

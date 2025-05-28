@@ -6,21 +6,35 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 class VolunteerApplication extends Model
 {
-    use HasFactory;
-    protected $table = 'volunteer_application';
+     use HasFactory;
+
     protected $fillable = [
         'volunteer_id',
-        'form_data',
-        'created_at',
-        'updated_at',
+        'why_volunteer',
+        'interested_programs',
+        'skills_experience',
+        'availability',
+        'commitment_hours',
+        'physical_limitations',
+        'emergency_contact',
+        'contact_consent',
+        'volunteered_before',
+        'outdoor_ok',
+        'short_bio',
+        'is_active',
+        'submitted_at',
     ];
 
     protected $casts = [
-        'form_data' => 'array',
+        'is_active' => 'boolean',
+        'submitted_at' => 'datetime',
     ];
 
+    // Relationship: an application belongs to one volunteer
     public function volunteer()
     {
         return $this->belongsTo(Volunteer::class);
     }
+
+    
 }
