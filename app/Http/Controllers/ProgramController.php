@@ -16,10 +16,10 @@ class ProgramController extends Controller {
         // $programs = Program::sortable()->orderBy('created_at', 'desc')->paginate(10);
         // $programs = Program::sortable(['title' => 'desc'])->paginate(10); 
         $programs = Program::sortable([
-    'title' => 'asc',
-    'start_date' => 'desc'
-])->paginate(10);
-        
+            'title' => 'asc',
+            'start_date' => 'desc'
+        ])->paginate(10);
+                
         return view('programs.index', compact('programs'));
     }
 
@@ -62,8 +62,7 @@ class ProgramController extends Controller {
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'location' => 'nullable|string|max:255',
@@ -95,8 +94,7 @@ class ProgramController extends Controller {
         Program::create([
             'title' => $request->title,
             'description' => $request->description,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
+            'date' => $request->date,
             'start_time' => $request->start_time, 
             'end_time' => $request->end_time, 
             'location' => $request->location,
@@ -119,8 +117,7 @@ class ProgramController extends Controller {
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'location' => 'nullable|string|max:255',

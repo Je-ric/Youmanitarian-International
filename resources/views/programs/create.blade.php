@@ -19,13 +19,8 @@
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
             <div>
-                <label class="block text-sm font-medium text-[#1a2235] mb-1">Start Date</label>
-                <input type="date" name="start_date" class="w-full p-3 border border-gray-300 rounded-lg focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b] transition-colors" required>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-[#1a2235] mb-1">End Date (Optional)</label>
-                <input type="date" name="end_date" class="w-full p-3 border border-gray-300 rounded-lg focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b] transition-colors">
+                <label class="block text-sm font-medium text-[#1a2235] mb-1">Date</label>
+                <input type="date" name="date" class="w-full p-3 border border-gray-300 rounded-lg focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b] transition-colors" required>
             </div>
 
               <div>

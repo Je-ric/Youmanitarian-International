@@ -28,19 +28,12 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <!-- Start Date -->
             <div>
-                <label class="block text-sm font-medium text-[#1a2235] mb-1">Start Date</label>
-                <input type="date" name="start_date" 
+                <label class="block text-sm font-medium text-[#1a2235] mb-1">Date</label>
+                <input type="date" name="date" 
                     class="w-full p-3 border border-gray-300 rounded-lg focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b] transition-colors" 
-                    value="{{ old('start_date', \Carbon\Carbon::parse($program->start_date)->format('Y-m-d')) }}" required>
+                    value="{{ old('date', \Carbon\Carbon::parse($program->date)->format('Y-m-d')) }}" required>
             </div>
 
-            <!-- End Date -->
-            <div>
-                <label class="block text-sm font-medium text-[#1a2235] mb-1">End Date (Optional)</label>
-                <input type="date" name="end_date" 
-                    class="w-full p-3 border border-gray-300 rounded-lg focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b] transition-colors" 
-                    value="{{ old('end_date', $program->end_date ? \Carbon\Carbon::parse($program->end_date)->format('Y-m-d') : '') }}">
-            </div>
 
             
         </div>

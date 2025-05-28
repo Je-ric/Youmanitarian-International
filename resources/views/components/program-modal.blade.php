@@ -38,7 +38,7 @@
                                 <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
                             </div>
                             <div>
-                                <div class="text-lg font-semibold text-[#1a2235]">Jozen Agustin</div>
+                                <div class="text-lg font-semibold text-[#1a2235]">{{ $program->creator->name }}</div>
                                 <div class="text-gray-600 text-sm flex items-center gap-1">
                                     <i class='bx bx-check-circle text-green-500'></i>
                                     Program Coordinator
@@ -57,8 +57,8 @@
 
                     @php
                         $details = [
-                            ['icon' => 'calendar', 'label' => 'Date', 'value' => \Carbon\Carbon::parse($program->start_date)->format('M d, Y')],
-                            ['icon' => 'time', 'label' => 'Time', 'value' => \Carbon\Carbon::parse($program->start_time)->format('h:i A')],
+                            ['icon' => 'calendar', 'label' => 'Date', 'value' => \Carbon\Carbon::parse($program->date)->format('M d, Y')],
+                            ['icon' => 'time', 'label' => 'Time', 'value' => \Carbon\Carbon::parse($program->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($program->end_time)->format('h:i A')],
                             ['icon' => 'map-pin', 'label' => 'Location', 'value' => $program->location],
                             ['icon' => 'group', 'label' => 'Volunteers Needed', 'value' => $program->volunteer_count],
                             ['icon' => 'trending-up', 'label' => 'Progress', 'value' => ucfirst($program->progress)],

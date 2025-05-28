@@ -1,4 +1,7 @@
 @extends('layouts.sidebar')
+@php
+use Carbon\Carbon;
+@endphp
 
 @section('content')
     <h1 class="text-3xl font-bold text-[#1a2235] mb-6">Programs</h1>
@@ -70,16 +73,29 @@
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4 text-sm text-[#1a2235]">{{ $program->title }}</td>
                             <td class="px-6 py-4 text-sm font-semibold">
-                                @php
-                                    $today = now();
-                                    if ($program->start_date > $today) {
-                                        echo '<span class="text-blue-500">Incoming</span>';
-                                    } elseif ($program->end_date && $program->end_date < $today) {
-                                        echo '<span class="text-gray-500">Done</span>';
-                                    } else {
-                                        echo '<span class="text-green-500">Ongoing</span>';
-                                    }
-                                @endphp
+                             {{-- @php
+                                $now = Carbon::now();
+
+                                $startDateTime = $program->start_date 
+                                    ? Carbon::parse($program->start_date . ' ' . ($program->start_time ?? '00:00:00'))
+                                    : null;
+
+                                $endDateTime = $program->end_date 
+                                    ? Carbon::parse($program->end_date . ' ' . ($program->end_time ?? '23:59:59'))
+                                    : null;
+                            @endphp
+
+                            @if ($startDateTime && $now->lt($startDateTime))
+                                <span class="text-blue-500">Incoming</span>
+                            @elseif ($startDateTime && (!$endDateTime || $now->between($startDateTime, $endDateTime)))
+                                <span class="text-green-500">Ongoing</span>
+                            @elseif ($endDateTime && $now->gt($endDateTime))
+                                <span class="text-gray-500">Done</span>
+                            @else
+                                <span class="text-gray-500">Status Unknown</span>
+                            @endif --}}
+
+
                             </td>
 
                             <td class="px-6 py-4 text-sm text-[#1a2235]">{{ $program->creator->name }}</td>

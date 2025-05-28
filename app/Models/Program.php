@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Kyslik\ColumnSortable\Sortable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Program extends Model
 {
@@ -14,8 +15,7 @@ class Program extends Model
     protected $fillable = [
         'title',
         'description',
-        'start_date',
-        'end_date',
+        'date',
         'start_time',
         'end_time',
         'location',
@@ -26,15 +26,13 @@ class Program extends Model
 
     public $sortable = [
         'title',
-        'start_date',
-        'end_date',
+        'date',
         'created_at',
         'updated_at',
     ];
 
     protected $casts = [
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
+        'date' => 'datetime'
     ];
     
     public function creator()
@@ -61,4 +59,7 @@ class Program extends Model
     {
         return $this->hasMany(VolunteerAttendance::class);
     }
+
+
+
 }
