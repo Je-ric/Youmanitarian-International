@@ -133,17 +133,15 @@ Schema::create('content_review_comments', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
-        Schema::create('programs', function (Blueprint $table) {
+     
+//$table->enum('attendance_mode', ['volunteer', 'coordinator', 'both'])->default('coordinator');
+//$table->enum('approval_mode', ['auto', 'manual'])->default('manual');
+        //single days - because volunteers may/ may not only apply to specific dates.
+Schema::create('programs', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-
-$table->string('date')->nullable(); --remove the start/end date then use this only
-//$table->enum('attendance_mode', ['volunteer', 'coordinator', 'both'])->default('coordinator');
-//$table->enum('approval_mode', ['auto', 'manual'])->default('manual');
-
-            $table->dateTime('start_date');
-            $table->dateTime('end_date')->nullable();
+            $table->date('date')->nullable(); 
             $table->time('start_time')->nullable(); 
             $table->time('end_time')->nullable();
             $table->string('location')->nullable(); 
@@ -153,17 +151,16 @@ $table->string('date')->nullable(); --remove the start/end date then use this on
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade'); 
             $table->timestamps();
         });
-        //single days - because volunteers may/ may not only apply to specific dates.
 
-Schema::create('program_feedback', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('program_id')->constrained()->onDelete('cascade');
-    $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
-    $table->text('feedback');
-    $table->tinyInteger('rating')->nullable(); // 1 to 5 stars, optional
-    $table->boolean('is_active')->default(false); 
-    $table->timestamps();
-});
+        Schema::create('program_feedback', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('program_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->text('feedback');
+            $table->tinyInteger('rating')->nullable(); // 1 to 5 stars, optional
+            $table->boolean('is_active')->default(false); 
+            $table->timestamps();
+        });
 
         Schema::create('volunteers', function (Blueprint $table) {
             $table->id();
@@ -218,10 +215,10 @@ Schema::create('program_feedback', function (Blueprint $table) {
             $table->dateTime('clock_out')->nullable();
             $table->integer('hours_logged')->default(0);
 
-$table->enum('approval_status', ['pending', 'approved', 'rejected'])->default('pending');
-$table->unsignedBigInteger('approved_by')->nullable();
-$table->foreign('approved_by')->references('id')->on('users')->nullOnDelete();
-$table->text('notes')->nullable(); -- for volunteer who forgot clockout or attendance at all
+            $table->enum('approval_status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->unsignedBigInteger('approved_by')->nullable();
+            $table->foreign('approved_by')->references('id')->on('users')->nullOnDelete();
+            $table->text('notes')->nullable(); -- for volunteer who forgot clockout or attendance at all
 
             $table->timestamps();
 
@@ -251,6 +248,19 @@ $table->text('notes')->nullable(); -- for volunteer who forgot clockout or atten
             $table->foreign('volunteer_id')->references('id')->on('volunteers')->onDelete('cascade');
             $table->timestamps();
         });    
+
+        Schema::create('program_chats', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('program_id');
+            $table->unsignedBigInteger('sender_id'); // user sending the message
+            $table->text('message');
+            $table->timestamp('sent_at')->useCurrent();
+            $table->timestamps();
+
+            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
+        });
+
 
 
 Schema::create('membership_payments', function (Blueprint $table) {
@@ -326,17 +336,7 @@ Schema::create('consultation_hours', function (Blueprint $table) {
     $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 });
 
-Schema::create('program_chats', function (Blueprint $table) {
-    $table->id();
-    $table->unsignedBigInteger('program_id');
-    $table->unsignedBigInteger('sender_id'); // user sending the message
-    $table->text('message');
-    $table->timestamp('sent_at')->useCurrent();
-    $table->timestamps();
 
-    $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
-    $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
-});
 
 Schema::create('consultation_chats', function (Blueprint $table) {
     $table->id();
