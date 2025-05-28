@@ -203,94 +203,77 @@
                         -------------------------------------------------------------------------------------------------------------------
                         --}}
 
-                        <dialog id="modal_{{ $program->id }}" class="modal">
-                            <div class="modal-box w-11/12 max-w-7xl p-0 overflow-hidden rounded-2xl bg-white shadow-lg">
-                                <section class="relative bg-white rounded-2xl overflow-hidden w-full max-h-[90vh]">
+                     <dialog id="modal_{{ $program->id }}" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-{{ $program->id }}">
+    <div class="modal-box w-11/12 max-w-7xl p-0 overflow-hidden rounded-2xl bg-white shadow-2xl border border-gray-200 transition-all">
 
-                                    <header class="px-6 py-4 border-b border-gray-300">
-                                        <h2
-                                            class="text-2xl font-bold text-gray-800 tracking-tight [text-shadow:_0px_4px_4px_rgb(255_181_27_/_1.00)]">
-                                            {{ $program->title }}
-                                        </h2>
-                                    </header>
+        <section class="relative bg-white rounded-2xl overflow-hidden w-full max-h-[90vh]">
 
-                                    <div class="flex flex-col lg:flex-row">
-                                        <div class="lg:w-9/12 w-full p-6 space-y-6">
-                                            <article>
-                                                <h3 class="text-lg font-semibold text-gray-800 mb-2">Description</h3>
-                                                <p
-                                                    class="bg-neutral-50 p-4 rounded-xl border border-gray-100 text-gray-800 leading-relaxed text-base">
-                                                    {{ $program->description }}
-                                                </p>
-                                            </article>
+            <header class="px-6 py-4 border-b border-gray-200 relative bg-[#fff7e5]">
+                <x-x-button />
+                <h2 id="modal-title-{{ $program->id }}"
+                    class="text-3xl font-extrabold text-[#1a2235] tracking-tight [text-shadow:_0px_2px_1px_rgb(255_181_27_/_0.7)]">
+                    {{ $program->title }}
+                </h2>
+            </header>
 
-                                            <div class="pt-4">
-                                                <h4 class="text-lg font-semibold text-gray-800 mb-2">Program Coordinator</h4>
-                                                <div class="flex items-center space-x-4">
-                                                    <img src="https://placehold.co/60x60" alt="Coordinator"
-                                                        class="rounded-full w-14 h-14 object-cover" />
-                                                    <div>
-                                                        <div class="text-xl font-semibold text-gray-800">Jozen Agustin</div>
-                                                        <div class="text-gray-500 text-sm">Coordinator</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+            <div class="flex flex-col lg:flex-row">
+                <!-- Left Content -->
+                <div class="lg:w-9/12 w-full p-6 space-y-6 bg-white">
+                    <article>
+                        <h3 class="text-xl font-semibold text-[#1a2235] mb-3">📖 Description</h3>
+                        <p class="bg-neutral-100 p-4 rounded-xl border border-gray-200 text-gray-700 leading-relaxed text-base shadow-sm transition-all hover:bg-neutral-50">
+                            {{ $program->description }}
+                        </p>
+                    </article>
 
-                                        <aside
-                                            class="lg:w-3/12 w-full bg-zinc-100 p-6 space-y-4 rounded-br-2xl border-l border-gray-300">
-                                            <h3 class="text-lg font-semibold text-gray-800">Program Details</h3>
-
-                                            <div class="flex flex-col items-start gap-1">
-                                                <div class="flex items-center gap-2">
-                                                    <i class="fi fi-rr-calendar text-zinc-500 text-sm"></i>
-                                                    <p class="text-zinc-500 text-sm">Date</p>
-                                                </div>
-                                                <p class="text-gray-800 font-medium pl-6">
-                                                    {{ \Carbon\Carbon::parse($program->start_date)->format('M d, Y') }}</p>
-                                            </div>
-
-                                            <div class="flex flex-col items-start gap-1">
-                                                <div class="flex items-center gap-2">
-                                                    <i class="fi fi-rr-clock-three text-zinc-500 text-sm"></i>
-                                                    <p class="text-zinc-500 text-sm">Time</p>
-                                                </div>
-                                                <p class="text-gray-800 font-medium pl-6">
-                                                    {{ \Carbon\Carbon::parse($program->start_time)->format('h:i A') }}</p>
-                                            </div>
-
-                                            <div class="flex flex-col items-start gap-1">
-                                                <div class="flex items-center gap-2">
-                                                    <i class="fi fi-rs-marker text-zinc-500 text-sm"></i>
-                                                    <p class="text-zinc-500 text-sm">Location</p>
-                                                </div>
-                                                <p class="text-gray-800 font-medium pl-6">{{ $program->location }}</p>
-                                            </div>
-
-                                            <div class="flex flex-col items-start gap-1">
-                                                <div class="flex items-center gap-2">
-                                                    <i class="fi fi-rr-users-alt text-zinc-500 text-sm"></i>
-                                                    <p class="text-zinc-500 text-sm">Volunteers Needed</p>
-                                                </div>
-                                                <p class="text-gray-800 font-medium pl-6">25</p>
-                                            </div>
-
-                                            <div class="flex flex-col items-start gap-1">
-                                                <div class="flex items-center gap-2">
-                                                    <i class="fi fi-rr-arrow-progress-alt text-zinc-500 text-sm"></i>
-                                                    <p class="text-zinc-500 text-sm">Progress</p>
-                                                </div>
-                                                <p class="text-gray-800 font-medium pl-6">{{ ucfirst($program->progress) }}</p>
-                                            </div>
-                                        </aside>
-                                    </div>
-
-                                    <form method="dialog" class="modal-backdrop">
-                                        <button class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Close 1</button>
-                                    </form>
-                                </section>
+                    <div class="pt-4">
+                        <h4 class="text-xl font-semibold text-[#1a2235] mb-3">🧭 Program Coordinator</h4>
+                        <div class="flex items-center space-x-4">
+                            <img src="https://placehold.co/60x60" alt="Coordinator"
+                                class="rounded-full w-16 h-16 object-cover border-2 border-[#ffb51b]" />
+                            <div>
+                                <div class="text-lg font-semibold text-gray-800">Jozen Agustin</div>
+                                <div class="text-gray-500 text-sm">Coordinator</div>
                             </div>
-                        </dialog>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Details -->
+                <aside class="lg:w-3/12 w-full bg-[#fef9eb] p-6 space-y-5 rounded-br-2xl border-l border-gray-200 shadow-inner">
+                    <h3 class="text-lg font-bold text-[#1a2235]">📝 Program Details</h3>
+
+                    @php
+                        $details = [
+                            ['icon' => 'calendar', 'label' => 'Date', 'value' => \Carbon\Carbon::parse($program->start_date)->format('M d, Y')],
+                            ['icon' => 'clock-three', 'label' => 'Time', 'value' => \Carbon\Carbon::parse($program->start_time)->format('h:i A')],
+                            ['icon' => 'marker', 'label' => 'Location', 'value' => $program->location],
+                            ['icon' => 'users-alt', 'label' => 'Volunteers Needed', 'value' => $program->volunteer_count],
+                            ['icon' => 'arrow-progress-alt', 'label' => 'Progress', 'value' => ucfirst($program->progress)],
+                        ];
+                    @endphp
+
+                    @foreach ($details as $detail)
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2 text-[#ffb51b] font-medium">
+                                <i class="fi fi-rr-{{ $detail['icon'] }} text-sm"></i>
+                                <span class="text-sm text-zinc-600">{{ $detail['label'] }}</span>
+                            </div>
+                            <p class="text-gray-800 font-semibold pl-6 text-[15px]">{{ $detail['value'] }}</p>
+                        </div>
+                    @endforeach
+                </aside>
+            </div>
+
+            <form method="dialog" class="modal-backdrop flex justify-end px-6 py-4 bg-white border-t border-gray-200">
+                <button class="py-2.5 px-6 text-sm font-semibold text-white bg-[#ffb51b] hover:bg-[#e6a600] rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-[#ffb51b]/50">
+                    Close
+                </button>
+            </form>
+        </section>
+    </div>
+</dialog>
+
 
                         </tr>
                     @endforeach
