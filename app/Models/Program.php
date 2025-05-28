@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class Program extends Model
 {
     use HasFactory;
+    use Sortable;
 
     protected $fillable = [
         'title',
@@ -20,6 +22,14 @@ class Program extends Model
         'created_by',
         'progress',
         'volunteer_count'
+    ];
+
+    public $sortable = [
+        'title',
+        'start_date',
+        'end_date',
+        'created_at',
+        'updated_at',
     ];
 
     protected $casts = [

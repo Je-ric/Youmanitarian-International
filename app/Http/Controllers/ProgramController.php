@@ -13,7 +13,13 @@ class ProgramController extends Controller {
     use AuthorizesRequests;
     
     public function index() {
-        $programs = Program::orderBy('created_at', 'desc')->paginate(10);
+        // $programs = Program::sortable()->orderBy('created_at', 'desc')->paginate(10);
+        // $programs = Program::sortable(['title' => 'desc'])->paginate(10); 
+        $programs = Program::sortable([
+    'title' => 'asc',
+    'start_date' => 'desc'
+])->paginate(10);
+        
         return view('programs.index', compact('programs'));
     }
 

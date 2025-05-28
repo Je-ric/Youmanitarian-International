@@ -23,10 +23,46 @@
         <table class="min-w-full">
             <thead class="bg-[#1a2235] text-white">
                 <tr>
-                    <th class="px-6 py-3 text-left text-sm font-semibold">Title</th>
+                    {{-- <th class="px-6 py-3 text-left text-sm font-semibold">Title</th>
                     <th class="px-6 py-3 text-left text-sm font-semibold">Status</th>
                     <th class="px-6 py-3 text-left text-sm font-semibold">Created By</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold">Actions</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold">Actions</th> --}}
+                   <th class="px-6 py-3 text-left text-sm font-semibold cursor-pointer select-none">
+    @php
+        $sortField = request('sort');      // e.g. 'title'
+        $sortDirection = request('direction'); // 'asc' or 'desc'
+        $column = 'title';
+    @endphp
+
+    <a href="{{ request()->fullUrlWithQuery(['sort' => $column, 'direction' => ($sortField === $column && $sortDirection === 'asc') ? 'desc' : 'asc']) }}"
+       class="flex items-center gap-1">
+
+        Title
+
+        @if ($sortField === $column)
+            @if ($sortDirection === 'asc')
+                <i class='bx bx-sort-up text-yellow-400'></i>
+            @else
+                <i class='bx bx-sort-down text-yellow-400'></i>
+            @endif
+        @else
+            <i class='bx bx-sort text-gray-400'></i>
+        @endif
+
+    </a>
+</th>
+
+                    <th class="px-6 py-3 text-left text-sm font-semibold">
+                        Status
+                    </th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold">
+                        @sortablelink('created_by', 'Created By')
+                    </th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold">
+                        Actions
+                    </th>
+                    
+
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -161,7 +197,9 @@
 
 
     <div class="mt-6">
-        {{ $programs->links() }}
+        {{-- {{ $programs->links() }} --}}
+        {{ $programs->appends(Request::except('page'))->links() }}
+
     </div>
 </div>
 
