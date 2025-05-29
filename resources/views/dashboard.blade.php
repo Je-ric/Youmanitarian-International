@@ -51,9 +51,10 @@
             </form>
         </div>
 
-        <x-header-with-button title="Contents"
-            description="Manage and view your content. You can add new content or modify existing entries."
-            buttonText="Add New" />
+        <x-header-with-button title="Any Title" description="Description that match with the shown content.">
+            
+        </x-header-with-button>
+
 
         <div class="mt-12">
             <div class="mb-6 flex gap-2 flex-wrap">

@@ -125,6 +125,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/program/{program}', [ProgramController::class, 'showDetailsModal'])->name('programs.show');
 });
 
+// Route::middleware('auth')->prefix('programs')->name('programs.')->group(function () {
+//     Route::get('/', [ProgramController::class, 'index'])->name('index');
+//     Route::get('/create', [ProgramController::class, 'create'])->name('create');
+//     Route::post('/', [ProgramController::class, 'store'])->name('store');
+//     Route::get('/{program}/edit', [ProgramController::class, 'edit'])->name('edit');
+//     Route::put('/{program}', [ProgramController::class, 'update'])->name('update');
+//     Route::delete('/{program}', [ProgramController::class, 'destroy'])->name('destroy');
+//     Route::get('/view/{program}', [ProgramController::class, 'showDetailsModal'])->name('show');
+// });
+
+
 
 
 

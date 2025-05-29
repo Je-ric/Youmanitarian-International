@@ -70,25 +70,17 @@ class ProgramController extends Controller {
             
         ]);
 
-        // $currentDateTime = now();
-        // $startDateTime = $request->start_date . ' ' . $request->start_time;
-        // $endDateTime = $request->end_date ? $request->end_date . ' ' . $request->end_time : null;
+        $start = Carbon::parse($request->date . ' ' . $request->start_time);
+        $end = Carbon::parse($request->date . ' ' . $request->end_time);
 
-        // if (Carbon::parse($startDateTime)->isFuture()) {
-        //     $progress = 'incoming'; 
-        // } elseif ($currentDateTime->between(Carbon::parse($startDateTime), Carbon::parse($endDateTime))) {
-        //     $progress = 'ongoing';
-        // } else {
-        //     $progress = 'done'; 
-        // }
+        if (now()->lt($start)) {
+            $progress = 'incoming';
+        } elseif (now()->between($start, $end)) {
+            $progress = 'ongoing';
+        } else {
+            $progress = 'done';
+        }
 
-        // if ($totalHours === 0) {
-        //     $volunteer->progress = 'not_started';
-        // } elseif ($lastAttendance && is_null($lastAttendance->time_out)) {
-        //     $volunteer->progress = 'in_progress';
-        // } else {
-        //     $volunteer->progress = 'completed';
-        // }
 
     
         Program::create([
@@ -121,9 +113,20 @@ class ProgramController extends Controller {
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'location' => 'nullable|string|max:255',
+            'volunteer_count' => 'nullable|integer|min:0',
         ]);
     
-        $program->update($request->all());
+        // $program->update($request->all()); //risky
+        $program->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'date' => $request->date,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'location' => $request->location,
+            'volunteer_count' => $request->volunteer_count ?? 0,
+        ]);
+
     
         return redirect()->route('programs.index')->with('success', 'Program updated successfully.');
     }

@@ -75,71 +75,132 @@
         </a>
         @endif
     </div>
-</form> --}}
+</form>  --}}
+
+
+
+
 
 @props(['program' => null, 'route', 'method'])
 
-<form action="{{ $route }}" method="POST">
+<form action="{{ $route }}" method="POST" class="mx-auto">
     @csrf
     @method($method)
 
-    <!-- Program Title -->
-    <div class="mb-4">
-        <label for="title" class="block font-semibold">Program Title</label>
-        <input type="text" name="title" id="title"
+    <x-header-with-button title="Add New Program" description="Create a new program by filling out the information below.">
+        <x-button
+            variant="primary"
+            type="submit">
+            {{ $method == 'POST' ? 'Create Program' : 'Update Program' }}
+        </x-button>
+    </x-header-with-button>
+
+    <!-- Program Name -->
+    <div class="mb-6">
+        <label for="program" class="block text-gray-700 font-semibold mb-2">Program</label>
+        <input
+            type="text"
+            name="title"
+            id="title"
+            placeholder="Enter program name"
             value="{{ old('title', $program->title ?? '') }}"
-            class="w-full border rounded px-3 py-2" required>
+            class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
+            required
+        >
     </div>
 
-    <!-- Date, Start Time, End Time -->
-    <div class="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-            <label for="date" class="block font-semibold">Date</label>
-            <input type="date" name="date" id="date"
-                value="{{ old('date', $program->date ?? '') }}"
-                class="w-full border rounded px-3 py-2" required>
+    <!-- Date, Start Time, End Time Row -->
+    <div class="flex flex-col md:flex-row md:space-x-6 mb-6">
+        <div class="flex-1 mb-4 md:mb-0">
+            <label for="date" class="block text-gray-700 font-semibold mb-2">Date</label>
+            <input
+                type="date"
+                name="date"
+                id="date"
+                placeholder="Select date"
+                value="{{ old('date', isset($program->date) ? $program->date->format('Y-m-d') : '') }}"
+                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
+                required
+            >
         </div>
-        <div>
-            <label for="start_time" class="block font-semibold">Start Time</label>
-            <input type="time" name="start_time" id="start_time"
+        <div class="flex-1 mb-4 md:mb-0">
+            <label for="start_time" class="block text-gray-700 font-semibold mb-2">Start Time</label>
+            <input
+                type="time"
+                name="start_time"
+                id="start_time"
+                placeholder="Start time"
                 value="{{ old('start_time', $program->start_time ?? '') }}"
-                class="w-full border rounded px-3 py-2" required>
+                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
+                required
+            >
         </div>
-        <div>
-            <label for="end_time" class="block font-semibold">End Time</label>
-            <input type="time" name="end_time" id="end_time"
+        <div class="flex-1">
+            <label for="end_time" class="block text-gray-700 font-semibold mb-2">End Time</label>
+            <input
+                type="time"
+                name="end_time"
+                id="end_time"
+                placeholder="End time"
                 value="{{ old('end_time', $program->end_time ?? '') }}"
-                class="w-full border rounded px-3 py-2" required>
+                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
+                required
+            >
         </div>
     </div>
 
-    <!-- Location and Volunteers Needed -->
-    <div class="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-            <label for="location" class="block font-semibold">Location</label>
-            <input type="text" name="location" id="location"
+    <!-- Location, Volunteers Needed Row -->
+    <div class="flex flex-col md:flex-row md:space-x-6 mb-6">
+        <div class="flex-1 mb-4 md:mb-0">
+            <label for="location" class="block text-gray-700 font-semibold mb-2">Location</label>
+            <input
+                type="text"
+                name="location"
+                id="location"
+                placeholder="Enter location"
                 value="{{ old('location', $program->location ?? '') }}"
-                class="w-full border rounded px-3 py-2" required>
+                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
+                required
+            >
         </div>
-        <div>
-            <label for="volunteers_needed" class="block font-semibold">Volunteers Needed</label>
-            <input type="number" name="volunteers_needed" id="volunteers_needed" min="1"
-                value="{{ old('volunteers_needed', $program->volunteers_needed ?? '') }}"
-                class="w-full border rounded px-3 py-2" required>
-        </div>
+        <div class="flex-1">
+    <label for="volunteer_count" class="block text-gray-700 font-semibold mb-2">
+        Volunteers Count
+    </label>
+    <input
+        type="number"
+        name="volunteer_count"
+        id="volunteer_count"
+        placeholder="Number of volunteers"
+        min="1"
+        value="{{ old('volunteer_count', $program->volunteer_count ?? '') }}"
+        class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
+        required
+    >
+</div>
+
     </div>
 
     <!-- Description -->
-    <div class="mb-4">
-        <label for="description" class="block font-semibold">Description</label>
-        <textarea name="description" id="description" rows="4"
-            class="w-full border rounded px-3 py-2" required>{{ old('description', $program->description ?? '') }}</textarea>
+    <div class="mb-6">
+        <label for="description" class="block text-gray-700 font-semibold mb-2">Description</label>
+        <textarea
+            name="description"
+            id="description"
+            rows="5"
+            placeholder="Enter program description"
+            class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition resize-none"
+            required
+        >{{ old('description', $program->description ?? '') }}</textarea>
     </div>
 
     <!-- Submit Button -->
     <div class="text-right">
-        <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700">
-            {{ $method === 'POST' ? 'Create' : 'Update' }} Program
+        <button
+            type="submit"
+            class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-8 rounded-md shadow-md transition"
+        >
+            {{ $method == 'POST' ? 'Create Program' : 'Update Program' }}
         </button>
     </div>
 </form>
