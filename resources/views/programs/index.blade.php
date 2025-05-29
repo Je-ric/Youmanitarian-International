@@ -122,13 +122,28 @@ use Carbon\Carbon;
                                             <i class='bx bx-edit-alt'></i>
                                         </x-button>
 
-                                        <form action="{{ route('programs.destroy', $program) }}" method="POST" class="inline-block">
-                                            @csrf @method('DELETE')
-                                            <x-button type="submit" variant="danger" onclick="return confirm('Delete this program?')"
-                                                class="tooltip" data-tip="Delete">
-                                                <i class='bx bx-trash'></i>
-                                            </x-button>
-                                        </form>
+                                        <form action="{{ route('programs.destroy', $program) }}" method="POST" id="delete-form-{{ $program->id }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <x-button
+                                                    type="button"
+                                                    variant="danger"
+                                                    onclick="document.getElementById('confirm-dialog-{{ $program->id }}').showModal()"
+                                                    class="tooltip"
+                                                    data-tip="Delete"
+                                                >
+                                                    <i class='bx bx-trash'></i>
+                                                </x-button>
+                                            </form>
+
+                                            <x-delete-confirmation
+                                                id="confirm-dialog-{{ $program->id }}"
+                                                formId="delete-form-{{ $program->id }}"
+                                                title="Delete this Program?"
+                                                message="This will permanently remove the program and all its related data. This action cannot be undone. Are you sure you want to proceed?"
+                                                confirmText="Delete"
+                                                cancelText="Cancel"
+                                            />
 
                                     @endif
                                 @endif

@@ -117,6 +117,7 @@ class ProgramController extends Controller {
         ]);
     
         // $program->update($request->all()); //risky
+        
         $program->update([
             'title' => $request->title,
             'description' => $request->description,

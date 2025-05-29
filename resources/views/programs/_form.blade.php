@@ -56,7 +56,7 @@
                 value="{{ old('location', $program->location ?? '') }}">
         </div>
         <div class="md:col-span-2">
-            <label class="block text-sm font-medium text-[#1a2235] mb-1">Volunteer Needed</label>
+            <label class="block text-sm font-medium text-[#1a2235] mb-1">Volunteer Count</label>
             <input type="number" name="volunteer_count"
                 class="w-full p-3 border border-gray-300 rounded-lg focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b] transition-colors"
                 value="{{ old('volunteer_count', $program->volunteer_count ?? '') }}">
@@ -77,130 +77,133 @@
     </div>
 </form>  --}}
 
-
-
-
-
 @props(['program' => null, 'route', 'method'])
 
-<form action="{{ $route }}" method="POST" class="mx-auto">
+<form action="{{ $route }}" method="POST" class="mx-auto bg-white min-h-screen flex flex-col justify-center">
     @csrf
-    @method($method)
+    @if ($method === 'PUT')
+        @method('PUT')
+    @endif
 
-    <x-header-with-button title="Add New Program" description="Create a new program by filling out the information below.">
-        <x-button
-            variant="primary"
-            type="submit">
-            {{ $method == 'POST' ? 'Create Program' : 'Update Program' }}
-        </x-button>
+    <x-header-with-button title="Any Title" description="Description that match with the shown content.">
+            <x-button variant="primary" type="submit">
+                {{ $method === 'PUT' ? 'Update Program' : 'Create Program' }}
+            </x-button>
     </x-header-with-button>
-
-    <!-- Program Name -->
-    <div class="mb-6">
-        <label for="program" class="block text-gray-700 font-semibold mb-2">Program</label>
+    
+    <!-- Program Title -->
+    <div class="mb-8">
+        <label for="title" class="block text-lg font-semibold text-[#1a2235] mb-2">Program Title</label>
         <input
             type="text"
-            name="title"
             id="title"
-            placeholder="Enter program name"
+            name="title"
+            placeholder="Enter program title"
+            class="w-full p-4 border border-gray-300 rounded-xl text-[#1a2235] placeholder-gray-400 focus:border-[#ffb51b] focus:ring-4 focus:ring-[#ffb51b]/40 transition"
             value="{{ old('title', $program->title ?? '') }}"
-            class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
             required
         >
     </div>
 
-    <!-- Date, Start Time, End Time Row -->
-    <div class="flex flex-col md:flex-row md:space-x-6 mb-6">
-        <div class="flex-1 mb-4 md:mb-0">
-            <label for="date" class="block text-gray-700 font-semibold mb-2">Date</label>
+    <!-- Date, Start Time, End Time -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+        <div>
+            <label for="date" class="block text-lg font-semibold text-[#1a2235] mb-2">Date</label>
             <input
                 type="date"
-                name="date"
                 id="date"
+                name="date"
                 placeholder="Select date"
-                value="{{ old('date', isset($program->date) ? $program->date->format('Y-m-d') : '') }}"
-                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
+                class="w-full p-4 border border-gray-300 rounded-xl text-[#1a2235] placeholder-gray-400 focus:border-[#ffb51b] focus:ring-4 focus:ring-[#ffb51b]/40 transition"
+                value="{{ old('date', isset($program) ? \Carbon\Carbon::parse($program->date)->format('Y-m-d') : '') }}"
                 required
             >
         </div>
-        <div class="flex-1 mb-4 md:mb-0">
-            <label for="start_time" class="block text-gray-700 font-semibold mb-2">Start Time</label>
+
+        <div>
+            <label for="start_time" class="block text-lg font-semibold text-[#1a2235] mb-2">Start Time</label>
             <input
                 type="time"
-                name="start_time"
                 id="start_time"
+                name="start_time"
                 placeholder="Start time"
-                value="{{ old('start_time', $program->start_time ?? '') }}"
-                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
+                class="w-full p-4 border border-gray-300 rounded-xl text-[#1a2235] placeholder-gray-400 focus:border-[#ffb51b] focus:ring-4 focus:ring-[#ffb51b]/40 transition"
+                value="{{ old('start_time', isset($program) ? \Carbon\Carbon::parse($program->start_time)->format('H:i') : '') }}"
                 required
             >
         </div>
-        <div class="flex-1">
-            <label for="end_time" class="block text-gray-700 font-semibold mb-2">End Time</label>
+
+        <div>
+            <label for="end_time" class="block text-lg font-semibold text-[#1a2235] mb-2">End Time</label>
             <input
                 type="time"
-                name="end_time"
                 id="end_time"
+                name="end_time"
                 placeholder="End time"
-                value="{{ old('end_time', $program->end_time ?? '') }}"
-                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
+                class="w-full p-4 border border-gray-300 rounded-xl text-[#1a2235] placeholder-gray-400 focus:border-[#ffb51b] focus:ring-4 focus:ring-[#ffb51b]/40 transition"
+                value="{{ old('end_time', isset($program) ? \Carbon\Carbon::parse($program->end_time)->format('H:i') : '') }}"
                 required
             >
         </div>
     </div>
 
-    <!-- Location, Volunteers Needed Row -->
-    <div class="flex flex-col md:flex-row md:space-x-6 mb-6">
-        <div class="flex-1 mb-4 md:mb-0">
-            <label for="location" class="block text-gray-700 font-semibold mb-2">Location</label>
+    <!-- Location & Volunteer Count -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+        <div>
+            <label for="location" class="block text-lg font-semibold text-[#1a2235] mb-2">Location (Optional)</label>
             <input
                 type="text"
-                name="location"
                 id="location"
+                name="location"
                 placeholder="Enter location"
+                class="w-full p-4 border border-gray-300 rounded-xl text-[#1a2235] placeholder-gray-400 focus:border-[#ffb51b] focus:ring-4 focus:ring-[#ffb51b]/40 transition"
                 value="{{ old('location', $program->location ?? '') }}"
-                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
-                required
             >
         </div>
-        <div class="flex-1">
-    <label for="volunteer_count" class="block text-gray-700 font-semibold mb-2">
-        Volunteers Count
-    </label>
-    <input
-        type="number"
-        name="volunteer_count"
-        id="volunteer_count"
-        placeholder="Number of volunteers"
-        min="1"
-        value="{{ old('volunteer_count', $program->volunteer_count ?? '') }}"
-        class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
-        required
-    >
-</div>
 
+        <div>
+            <label for="volunteer_count" class="block text-lg font-semibold text-[#1a2235] mb-2">Volunteers Needed</label>
+            <input
+                type="number"
+                id="volunteer_count"
+                name="volunteer_count"
+                placeholder="Number of volunteers"
+                min="0"
+                class="w-full p-4 border border-gray-300 rounded-xl text-[#1a2235] placeholder-gray-400 focus:border-[#ffb51b] focus:ring-4 focus:ring-[#ffb51b]/40 transition"
+                value="{{ old('volunteer_count', $program->volunteer_count ?? '') }}"
+            >
+        </div>
     </div>
 
     <!-- Description -->
-    <div class="mb-6">
-        <label for="description" class="block text-gray-700 font-semibold mb-2">Description</label>
+    <div class="mb-10">
+        <label for="description" class="block text-lg font-semibold text-[#1a2235] mb-2">Description</label>
         <textarea
-            name="description"
             id="description"
-            rows="5"
-            placeholder="Enter program description"
-            class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition resize-none"
+            name="description"
+            placeholder="Write a detailed description of the program"
+            rows="6"
+            class="w-full p-4 border border-gray-300 rounded-xl text-[#1a2235] placeholder-gray-400 resize-y focus:border-[#ffb51b] focus:ring-4 focus:ring-[#ffb51b]/40 transition"
             required
         >{{ old('description', $program->description ?? '') }}</textarea>
     </div>
 
-    <!-- Submit Button -->
-    <div class="text-right">
+    <!-- Buttons -->
+    <div class="flex flex-wrap gap-4 justify-start">
         <button
             type="submit"
-            class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 px-8 rounded-md shadow-md transition"
+            class="px-8 py-3 bg-[#ffb51b] text-[#1a2235] font-semibold rounded-xl hover:bg-[#e6a017] transition"
         >
-            {{ $method == 'POST' ? 'Create Program' : 'Update Program' }}
+            {{ $method === 'PUT' ? 'Update Program' : 'Create Program' }}
         </button>
+
+        @if($method === 'PUT')
+        <a
+            href="{{ route('programs.index') }}"
+            class="px-8 py-3 bg-gray-500 text-white font-semibold rounded-xl hover:bg-gray-600 transition"
+        >
+            Cancel
+        </a>
+        @endif
     </div>
 </form>
