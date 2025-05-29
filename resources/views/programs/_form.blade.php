@@ -79,7 +79,7 @@
 
 @props(['program' => null, 'route', 'method'])
 
-<form action="{{ $route }}" method="POST" class="mx-auto bg-white min-h-screen flex flex-col justify-center">
+<form action="{{ $route }}" method="POST" class="mx-auto min-h-screen flex flex-col justify-center">
     @csrf
     @if ($method === 'PUT')
         @method('PUT')
@@ -91,7 +91,6 @@
             </x-button>
     </x-header-with-button>
     
-    <!-- Program Title -->
     <div class="mb-8">
         <label for="title" class="block text-lg font-semibold text-[#1a2235] mb-2">Program Title</label>
         <input
@@ -105,7 +104,6 @@
         >
     </div>
 
-    <!-- Date, Start Time, End Time -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
         <div>
             <label for="date" class="block text-lg font-semibold text-[#1a2235] mb-2">Date</label>
@@ -147,7 +145,6 @@
         </div>
     </div>
 
-    <!-- Location & Volunteer Count -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
         <div>
             <label for="location" class="block text-lg font-semibold text-[#1a2235] mb-2">Location (Optional)</label>
@@ -175,7 +172,6 @@
         </div>
     </div>
 
-    <!-- Description -->
     <div class="mb-10">
         <label for="description" class="block text-lg font-semibold text-[#1a2235] mb-2">Description</label>
         <textarea
@@ -188,22 +184,21 @@
         >{{ old('description', $program->description ?? '') }}</textarea>
     </div>
 
-    <!-- Buttons -->
     <div class="flex flex-wrap gap-4 justify-start">
-        <button
+        {{-- <button
             type="submit"
             class="px-8 py-3 bg-[#ffb51b] text-[#1a2235] font-semibold rounded-xl hover:bg-[#e6a017] transition"
         >
             {{ $method === 'PUT' ? 'Update Program' : 'Create Program' }}
-        </button>
+        </button> --}}
 
         @if($method === 'PUT')
-        <a
-            href="{{ route('programs.index') }}"
-            class="px-8 py-3 bg-gray-500 text-white font-semibold rounded-xl hover:bg-gray-600 transition"
-        >
-            Cancel
-        </a>
+            <x-button variant="close"
+                href="{{ route('programs.index') }}"
+                {{-- class="px-8 py-3 bg-gray-500 text-white font-semibold rounded-xl hover:bg-gray-600 transition" --}}
+            >
+                Cancel
+            </x-button>
         @endif
     </div>
 </form>

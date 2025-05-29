@@ -20,18 +20,18 @@
         }
     }
 
-  // Close dialog on Escape key (for accessibility)
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      document.querySelectorAll('dialog[open]').forEach(dialog => dialog.close());
-    }
-  });
+    // Close dialog on Escape key (for accessibility)
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+        document.querySelectorAll('dialog[open]').forEach(dialog => dialog.close());
+        }
+    });
 </script>
 @endpush
 
 <dialog
     id="{{ $id }}"
-    class="w-full max-w-lg rounded-2xl bg-white p-6 relative shadow-lg outline-none"
+    class="w-full max-w-xl rounded-2xl bg-white p-6 relative shadow-lg outline-none"
     {{-- No inline display:none; rely on dialog behavior --}}
     @if($show)
         x-init="() => $nextTick(() => document.getElementById('{{ $id }}').showModal())"
@@ -46,27 +46,27 @@
         onclick="document.getElementById('{{ $id }}').close()">
     </x-x-button>
 
-    {{-- Title --}}
-    <h2 id="{{ $id }}-title" class="text-left font-poppins text-2xl font-bold text-[#d13434] leading-tight mb-4">
+    <h2 id="{{ $id }}-title" class="text-left text-2xl font-extrabold text-[#d13434] leading-tight mb-4">
         {{ $title }}
     </h2>
 
-    {{-- Divider --}}
     <hr class="border-neutral-300 mb-6">
 
+    <div class="flex justify-center">
+        <span class="w-15 h-15 sm:w-[60px] sm:h-[60px] bg-[#dc26262b] text-[#DC2626] flex items-center justify-center rounded-2xl text-2xl sm:text-4xl">
+            <i class='bx bxs-trash'></i>
+        </span>
+    </div>
 
-
-    {{-- Message --}}
-    <p id="{{ $id }}-message" class="text-center text-zinc-600 font-poppins text-lg leading-relaxed mb-8 px-4 whitespace-pre-line">
+    <p id="{{ $id }}-message" class="text-center text-[#858585] text-lg leading-relaxed mb-8 px-4 whitespace-pre-line">
         {!! e($message) !!}
     </p>
 
-    {{-- Buttons --}}
     <div class="flex justify-center gap-6 flex-wrap px-4">
         <button
             type="button"
             onclick="document.getElementById('{{ $id }}').close()"
-            class="w-40 py-3 rounded-lg border border-stone-300 text-black/80 font-poppins font-medium hover:bg-stone-100 transition"
+            class="w-40 py-3 rounded-lg border border-stone-300 text-black/80 font-medium hover:bg-stone-100 transition"
         >
             {{ $cancelText }}
         </button>
@@ -75,7 +75,7 @@
             <button
                 type="submit"
                 form="{{ $formId }}"
-                class="w-40 py-3 rounded-lg bg-red-600 text-white font-poppins font-bold shadow-md hover:bg-red-700 transition"
+                class="w-40 py-3 rounded-lg bg-red-600 text-white font-bold shadow-md hover:bg-red-700 transition"
             >
                 {{ $confirmText }}
             </button>
@@ -83,7 +83,7 @@
             <button
                 type="button"
                 onclick="document.getElementById('{{ $id }}').close()"
-                class="w-40 py-3 rounded-lg bg-red-600 text-white font-poppins font-bold shadow-md hover:bg-red-700 transition"
+                class="w-40 py-3 rounded-lg bg-red-600 text-white font-bold shadow-md hover:bg-red-700 transition"
             >
                 {{ $confirmText }}
             </button>

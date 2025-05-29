@@ -140,10 +140,9 @@ use Carbon\Carbon;
                                                 id="confirm-dialog-{{ $program->id }}"
                                                 formId="delete-form-{{ $program->id }}"
                                                 title="Delete this Program?"
-                                                message="This will permanently remove the program and all its related data. This action cannot be undone. Are you sure you want to proceed?"
+                                                message='"This will permanently remove the program and all its related data. This action cannot be undone. Are you sure you want to proceed?"' 
                                                 confirmText="Delete"
-                                                cancelText="Cancel"
-                                            />
+                                                cancelText="Cancel"/>
 
                                     @endif
                                 @endif
@@ -151,7 +150,7 @@ use Carbon\Carbon;
 
                         </tr>
             
-                        <x-program-modal :program="$program" />
+                        <x-program-modal :program="$program" /> 
 
                         </tr>
                     @endforeach
