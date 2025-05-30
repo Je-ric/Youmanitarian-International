@@ -21,7 +21,7 @@
 
 
             <div>
-                @if(Auth::user()->volunteer) <!-- Check if user has a volunteer record -->
+                @if(Auth::user()->volunteer)
                     <a href="{{ route('volunteers.form') }}" class="hidden">Go to Volunteer Form</a>
                 @else
                     <a href="{{ route('volunteers.form') }}">Go to Volunteer Form</a>
@@ -30,7 +30,6 @@
 
             <div class="mt-6">
                 @if(Auth::user()->hasRole('Volunteer') && Auth::user()->volunteer)
-                    <!-- Check if user has volunteer role AND a volunteer record -->
                     <h2 class="text-xl font-semibold text-green-600">You are a Volunteer! 🎉</h2>
                     <p class="text-gray-600">You can now join programs and contribute!</p>
 
@@ -44,7 +43,6 @@
             </div>
 
 
-            <!-- Logout Button -->
             <form action="{{ route('logout') }}" method="POST" class="mt-6">
                 @csrf
                 <button type="submit" class="btn btn-error w-full">Logout</button>
