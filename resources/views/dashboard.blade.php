@@ -12,7 +12,7 @@
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard Overview</h1>
                 <p class="text-gray-600">Welcome back! Here's what's happening with your organization today.</p>
             </div>
-            
+
         <div class="bg-white p-6 rounded-lg shadow-lg text-center w-full max-w-md mx-auto">
             <h1 class="text-2xl font-bold text-black">Hello, {{ Auth::user()->name }}!</h1>
             <p class="text-gray-600">{{ Auth::user()->email }}</p>
@@ -111,23 +111,30 @@
             </tbody>
         </table>
 
-        <x-table 
-            :headers="['Name', 'Email', 'Role']" 
-            variant="striped" 
-            containerClass="my-4" 
-            tableClass="w-full text-sm" 
-        >
-            <tr>
-                <td class="px-6 py-4">John Doe</td>
-                <td class="px-6 py-4">john@example.com</td>
-                <td class="px-6 py-4">Admin</td>
-            </tr>
-            <tr>
-                <td class="px-6 py-4">Jane Smith</td>
-                <td class="px-6 py-4">jane@example.com</td>
-                <td class="px-6 py-4">User</td>
-            </tr>
-        </x-table>
+        
+        <x-table :headers="[
+    ['label' => 'Name'],
+    ['label' => 'Position'],
+    ['label' => 'Department'],
+    ['label' => 'Salary'],
+    ['label' => 'Start Date'],
+    ['label' => 'Status', 'hideOnSmall' => true],
+]" variant="striped">
+    <tr>
+        <td class="px-6 py-4 font-medium">
+            John Doe
+        </td>
+        <td class="px-6 py-4">Software Engineer</td>
+        <td class="px-6 py-4">Engineering</td>
+        <td class="px-6 py-4 font-mono">$85,000</td>
+        <td class="px-6 py-4">2023-01-15</td>
+        <td class="px-6 py-4 hidden sm:table-cell">
+            <span class="badge badge-success">Active</span>
+        </td>
+    </tr>
+    {{-- More rows... --}}
+</x-table>
+
 
 
 

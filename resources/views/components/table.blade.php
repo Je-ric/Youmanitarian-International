@@ -13,26 +13,30 @@
             'container' => 'bg-white rounded-lg shadow-lg overflow-hidden',
             'table' => 'min-w-full',
             'thead' => 'bg-[#1a2235] text-white',
-            'tbody' => 'divide-y divide-gray-200'
+            'tbody' => 'divide-y divide-gray-200',
         ],
         'bordered' => [
             'container' => 'bg-white rounded-lg border border-gray-200 overflow-hidden',
             'table' => 'min-w-full',
             'thead' => 'bg-gray-50',
-            'tbody' => 'divide-y divide-gray-200'
+            'tbody' => 'divide-y divide-gray-200',
         ],
         'striped' => [
             'container' => 'bg-white rounded-lg shadow-lg overflow-hidden',
             'table' => 'min-w-full',
             'thead' => 'bg-[#1a2235] text-white',
-            'tbody' => 'divide-y divide-gray-200 [&>tr:nth-child(even)]:bg-gray-50'
-        ]
+            'tbody' => 'divide-y divide-gray-200 [&>tr:nth-child(even)]:bg-gray-50',
+        ],
     ];
 
     $selectedVariant = $variants[$variant] ?? $variants['default'];
 
-    $containerClasses = $containerClass ?: $selectedVariant['container'];
-    $tableClasses = $tableClass ?: $selectedVariant['table'];
+    // Add responsive overflow-x-auto to container for mobile horizontal scroll
+    $containerClasses = ($containerClass ?: $selectedVariant['container']) . ' overflow-x-auto';
+
+    // Add responsive font size to table
+    $tableClasses = ($tableClass ?: $selectedVariant['table']) . ' text-sm md:text-base lg:text-lg';
+
     $theadClasses = $theadClass ?: $selectedVariant['thead'];
     $tbodyClasses = $tbodyClass ?: $selectedVariant['tbody'];
 @endphp
@@ -42,8 +46,25 @@
         <thead class="{{ $theadClasses }}">
             <tr>
                 @foreach($headers as $header)
-                    <th class="px-6 py-3 text-left text-sm font-semibold">
-                        {{ $header }}
+                    {{-- 
+                        If you want to hide some columns on small screens,
+                        you can pass headers as an array with keys:
+                        [
+                          ['label' => 'Name', 'hideOnSmall' => false],
+                          ['label' => 'Status', 'hideOnSmall' => true],
+                        ]
+                        For simplicity, if header is string, show all columns
+                    --}}
+                    @php
+                        $label = is_array($header) ? $header['label'] : $header;
+                        $hideOnSmall = is_array($header) && ($header['hideOnSmall'] ?? false);
+                        $thClasses = 'px-6 py-3 text-left font-semibold';
+                        if ($hideOnSmall) {
+                            $thClasses .= ' hidden sm:table-cell';
+                        }
+                    @endphp
+                    <th class="{{ $thClasses }}">
+                        {{ $label }}
                     </th>
                 @endforeach
             </tr>

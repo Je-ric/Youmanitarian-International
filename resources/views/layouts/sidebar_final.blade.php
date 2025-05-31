@@ -256,7 +256,7 @@
     </nav>
 
     <!-- Main Content -->
-    <div id="mainContent" class="main-content pt-16 w-full max-w-screen overflow-x-hidden">
+    <div id="mainContent" class="main-content pt-16">
         @yield('content')
     </div>
 
