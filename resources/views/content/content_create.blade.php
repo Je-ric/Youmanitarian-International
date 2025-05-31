@@ -1,4 +1,4 @@
-@extends('layouts.sidebar')
+@extends('layouts.sidebar_final')
 
 @section('content')
 <div class="w-full bg-white p-8 rounded-lg">

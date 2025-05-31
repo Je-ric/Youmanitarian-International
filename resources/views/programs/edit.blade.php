@@ -1,5 +1,5 @@
 {{-- edit.blade.php --}}
-@extends('layouts.sidebar')
+@extends('layouts.sidebar_final')
 
 @section('content')
 <div class="container mx-auto p-6">

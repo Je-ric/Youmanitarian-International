@@ -1,4 +1,4 @@
-@extends('layouts.sidebar')
+@extends('layouts.sidebar_final')
 
 @section('content')
 
@@ -7,10 +7,12 @@
     </head>
 
     <div class="container mx-auto p-6">
-        <h1 class="text-3xl font-bold text-[#1a2235] mb-6">Welcome to Your Dashboard</h1>
-
-        <input type="checkbox" value="synthwave" class="toggle theme-controller" />
-
+        
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard Overview</h1>
+                <p class="text-gray-600">Welcome back! Here's what's happening with your organization today.</p>
+            </div>
+            
         <div class="bg-white p-6 rounded-lg shadow-lg text-center w-full max-w-md mx-auto">
             <h1 class="text-2xl font-bold text-black">Hello, {{ Auth::user()->name }}!</h1>
             <p class="text-gray-600">{{ Auth::user()->email }}</p>
