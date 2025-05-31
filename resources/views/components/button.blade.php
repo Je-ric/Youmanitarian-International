@@ -9,7 +9,7 @@
 @php
     $variant = strval($variant);
     $styles = [
-        'primary' => 'w-full max-w-[180px] px-3 py-3 rounded-md bg-[#ffb51b] hover:bg-[#ffc449] text-white text-base md:text-lg font-semibold shadow-[0px_5.28px_13.2px_0px_rgba(255,225,164,1.00)] active:scale-95 transition-transform duration-200',
+        'primary' => 'w-full max-w-[150px] px-2 py-2 rounded-md bg-[#ffb51b] hover:bg-[#ffc449] text-white text-base md:text-lg font-semibold shadow-[0px_5.28px_13.2px_0px_rgba(255,225,164,1.00)] active:scale-95 transition-transform duration-200',
         'secondary' => 'btn bg-[#1a2235] hover:bg-[#e6a011] text-white active:scale-95 transition-transform duration-200',
 
         'success'   => 'btn btn-success text-white hover:bg-green-600 active:scale-95 transition-transform duration-200',

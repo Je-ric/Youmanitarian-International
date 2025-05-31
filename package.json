@@ -26,6 +26,7 @@
         "@tiptap/starter-kit": "^2.11.7",
         "alpinejs": "^3.14.9",
         "ckeditor5": "^44.3.0",
+        "flatpickr": "^4.6.13",
         "flowbite": "^3.1.2",
         "flowbite-typography": "^1.0.5"
     }

@@ -109,6 +109,23 @@
             </tbody>
         </table>
 
+        <x-table 
+            :headers="['Name', 'Email', 'Role']" 
+            variant="striped" 
+            containerClass="my-4" 
+            tableClass="w-full text-sm" 
+        >
+            <tr>
+                <td class="px-6 py-4">John Doe</td>
+                <td class="px-6 py-4">john@example.com</td>
+                <td class="px-6 py-4">Admin</td>
+            </tr>
+            <tr>
+                <td class="px-6 py-4">Jane Smith</td>
+                <td class="px-6 py-4">jane@example.com</td>
+                <td class="px-6 py-4">User</td>
+            </tr>
+        </x-table>
 
 
 
