@@ -4,212 +4,201 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professional Sidebar Component</title>
-    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js']) 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-straight/css/uicons-regular-straight.css'>
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/3.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    animation: {
-                        'slide-in': 'slideIn 0.3s ease-out',
-                        'slide-out': 'slideOut 0.3s ease-in',
-                        'fade-in': 'fadeIn 0.3s ease-out',
-                        'fade-out': 'fadeOut 0.3s ease-in'
-                    },
-                    keyframes: {
-                        slideIn: {
-                            '0%': { transform: 'translateX(-100%)' },
-                            '100%': { transform: 'translateX(0)' }
-                        },
-                        slideOut: {
-                            '0%': { transform: 'translateX(0)' },
-                            '100%': { transform: 'translateX(-100%)' }
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' }
-                        },
-                        fadeOut: {
-                            '0%': { opacity: '1' },
-                            '100%': { opacity: '0' }
-                        }
+                    colors: {
+                        'primary': '#1a2235',
+                        'accent': '#ffb51b'
                     }
                 }
             }
         }
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 font-sans">
     <!-- Sidebar Overlay (Mobile) -->
     <div 
         id="sidebarOverlay" 
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden"
+        class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden transition-opacity duration-300"
         aria-hidden="true"
     ></div>
 
-    <!-- Sidebar -->
-    <aside 
-        id="sidebar" 
-        class="fixed top-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out transform -translate-x-full lg:translate-x-0 bg-white border-r border-gray-200 shadow-lg sidebar-expanded"
-        aria-label="Sidebar"
-    >
-        <div class="h-full overflow-y-auto bg-white">
-            <!-- Sidebar Header -->
-            <div class="flex items-center p-4 border-b border-gray-200">
-                <div class="sidebar-content">
-                    <h1 class="text-xl font-bold text-gray-900">Admin Panel</h1>
-                </div>
-            </div>
-
-            <div class="px-3 py-4">
-                <!-- User Profile Section -->
-                <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100 sidebar-profile">
-                    @if(Auth::user()->profile_pic)
-                        <img src="{{ Auth::user()->profile_pic }}" alt="Profile" class="w-14 h-14 rounded-full object-cover flex-shrink-0">
-                    @else
-                        <div class="w-14 h-14 bg-gray-700 rounded-full flex items-center justify-center text-white text-xl flex-shrink-0">
-                            {{ substr(Auth::user()->name, 0, 1) }}
-                        </div>
-                    @endif
-
-                    <div class="flex flex-col justify-center">
-                        <p class="text-sm font-semibold text-gray-900">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-gray-600">{{ Auth::user()->email }}</p>
-                    </div>
-                </div>
-
-
-                <!-- Navigation Menu -->
-                <ul class="space-y-2 font-medium">
-                    <!-- Dashboard -->
-                    <li>
-                        <a href="{{ route('dashboard') }}" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group sidebar-item" data-tooltip="Contents">
-                            <i class="fas fa-tachometer-alt text-gray-500 group-hover:text-blue-700 w-5 text-center"></i>
-                            <span class="ml-3 sidebar-content">Dashboard</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Contents -->
-                    <li>
-                        <a href="{{ route('content.content_view') }}" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group sidebar-item" data-tooltip="Contents">
-                            <i class="fas fa-file-alt text-gray-500 group-hover:text-blue-700 w-5 text-center"></i>
-                            <span class="ml-3 sidebar-content">Contents</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Programs -->
-                    <li>
-                        <a href="{{ route('programs.index') }}" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group sidebar-item" data-tooltip="Programs">
-                            <i class="fas fa-calendar-alt text-gray-500 group-hover:text-blue-700 w-5 text-center"></i>
-                            <span class="ml-3 sidebar-content">Programs</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Volunteers -->
-                    <li>
-                        <a href="#" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group sidebar-item" data-tooltip="Volunteers">
-                            <i class="fas fa-hands-helping text-gray-500 group-hover:text-blue-700 w-5 text-center"></i>
-                            <span class="ml-3 sidebar-content">Volunteers</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Volunteer Applications -->
-                    <li>
-                        <a href="{{ route('volunteers.requests') }}" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group sidebar-item" data-tooltip="Volunteer Applications">
-                            <i class="fas fa-user-plus text-gray-500 group-hover:text-blue-700 w-5 text-center"></i>
-                            <span class="ml-3 sidebar-content">Volunteer Applications</span>
-                            <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-orange-800 bg-orange-100 rounded-full sidebar-content">12</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Content Requests -->
-                    <li>
-                        <a href="{{ route('content_requests.requests_view') }}" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group sidebar-item" data-tooltip="Content Requests">
-                            <i class="fas fa-clipboard-list text-gray-500 group-hover:text-blue-700 w-5 text-center"></i>
-                            <span class="ml-3 sidebar-content">Content Requests</span>
-                            <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-red-800 bg-red-100 rounded-full sidebar-content">5</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Members -->
-                    <li>
-                        <a href="#" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group sidebar-item" data-tooltip="Members">
-                            <i class="fas fa-users text-gray-500 group-hover:text-blue-700 w-5 text-center"></i>
-                            <span class="ml-3 sidebar-content">Members</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Donations -->
-                    <li>
-                        <a href="#" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group sidebar-item" data-tooltip="Donations">
-                            <i class="fas fa-heart text-gray-500 group-hover:text-blue-700 w-5 text-center"></i>
-                            <span class="ml-3 sidebar-content">Donations</span>
-                        </a>
-                    </li>
-                    
-                    <!-- Membership Payments -->
-                    <li>
-                        <a href="#" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group sidebar-item" data-tooltip="Membership Payments">
-                            <i class="fas fa-credit-card text-gray-500 group-hover:text-blue-700 w-5 text-center"></i>
-                            <span class="ml-3 sidebar-content">Membership Payments</span>
-                        </a>
-                    </li>
-                    
-                    <!-- User Roles -->
-                    <li>
-                        <a href="#" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group sidebar-item" data-tooltip="User Roles">
-                            <i class="fas fa-user-shield text-gray-500 group-hover:text-blue-700 w-5 text-center"></i>
-                            <span class="ml-3 sidebar-content">User Roles</span>
-                        </a>
-                    </li>
-                </ul>
-
-                <!-- Divider -->
-                <hr class="my-6 border-gray-200 sidebar-content">
-
-                <!-- Settings Section -->
-                <ul class="space-y-2 font-medium">
-                    <li>
-                        <a href="#" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group sidebar-item" data-tooltip="Settings">
-                            <i class="fas fa-cog text-gray-500 group-hover:text-blue-700 w-5 text-center"></i>
-                            <span class="ml-3 sidebar-content">Settings</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center p-3 text-gray-900 rounded-lg hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group sidebar-item" data-tooltip="Help & Support">
-                            <i class="fas fa-question-circle text-gray-500 group-hover:text-blue-700 w-5 text-center"></i>
-                            <span class="ml-3 sidebar-content">Help & Support</span>
-                        </a>
-                    </li>
-                    <li>
-                        <form action="{{ route('logout') }}" method="POST" class="flex items-center p-3 text-red-600 rounded-lg hover:bg-red-50 transition-all duration-200 group sidebar-item" data-tooltip="Sign Out">
-                            @csrf
-                            <button type="submit" 
-                                class="flex items-center gap-3 w-full px-4 py-2 text-red-600 hover:bg-red-600 hover:text-white rounded-lg transition-colors sidebar-item group"
-                                data-tooltip="Sign Out">
-                                <i class="fas fa-sign-out-alt text-red-500 w-5 text-center"></i>
-                                <span class="ml-3 sidebar-content">Sign Out</span>
-                            </button>
-                        </form>
-                    </li>
-
-                </ul>
+  <!-- Sidebar -->
+<!-- Sidebar -->
+<aside 
+    id="sidebar" 
+    class="fixed top-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out transform -translate-x-full lg:translate-x-0 bg-white border-r border-gray-200 shadow-lg sidebar-expanded"
+    aria-label="Sidebar"
+>
+    <div class="h-full overflow-y-auto bg-white">
+        <!-- Sidebar Header -->
+        <div class="flex items-center p-4 border-b border-gray-200">
+            <div class="sidebar-content">
+                <h1 class="text-lg font-bold text-primary">Admin Panel</h1>
             </div>
         </div>
-    </aside>
+
+        <div class="px-3 py-4">
+            <!-- Navigation Menu -->
+            <ul class="space-y-1 font-medium">
+                <!-- Dashboard -->
+                <li>
+                    <a href="{{ route('dashboard') }}" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}" 
+                       data-tooltip="Dashboard">
+                        <i class="bx bxs-dashboard w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- Contents -->
+                <li>
+                    <a href="{{ route('content.content_view') }}" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('content.*') ? 'active' : '' }}" 
+                       data-tooltip="Contents">
+                        <i class="bx bx-file w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Contents</span>
+                    </a>
+                </li>
+
+                <!-- Programs -->
+                <li>
+                    <a href="{{ route('programs.index') }}" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('programs.*') ? 'active' : '' }}" 
+                       data-tooltip="Programs">
+                        <i class="bx bx-calendar w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Programs</span>
+                    </a>
+                </li>
+
+                <!-- Volunteers -->
+                <li>
+                    <a href="#" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                       data-tooltip="Volunteers">
+                        <i class="bx bx-helping-hand w-5 text-center flex-shrink-0"></i> <!-- no exact match, bx-helping-hand is example -->
+                        <span class="ml-3 sidebar-content text-sm">Volunteers</span>
+                    </a>
+                </li>
+
+                <!-- Volunteer Applications -->
+                <li>
+                    <a href="{{ route('volunteers.requests') }}" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('volunteers.*') ? 'active' : '' }}" 
+                       data-tooltip="Volunteer Applications">
+                        <i class="bx bx-user-plus w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Volunteer Applications</span>
+                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-orange-800 bg-orange-100 rounded-full sidebar-content">12</span>
+                    </a>
+                </li>
+
+                <!-- Content Requests -->
+                <li>
+                    <a href="{{ route('content_requests.requests_view') }}" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('content_requests.*') ? 'active' : '' }}" 
+                       data-tooltip="Content Requests">
+                        <i class="bx bx-clipboard w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Content Requests</span>
+                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-red-800 bg-red-100 rounded-full sidebar-content">5</span>
+                    </a>
+                </li>
+
+                <!-- Members -->
+                <li>
+                    <a href="#" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                       data-tooltip="Members">
+                        <i class="bx bx-group w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Members</span>
+                    </a>
+                </li>
+
+                <!-- Donations -->
+                <li>
+                    <a href="#" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                       data-tooltip="Donations">
+                        <i class="bx bx-heart w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Donations</span>
+                    </a>
+                </li>
+
+                <!-- Membership Payments -->
+                <li>
+                    <a href="#" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                       data-tooltip="Membership Payments">
+                        <i class="bx bx-credit-card w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Membership Payments</span>
+                    </a>
+                </li>
+
+                <!-- User Roles -->
+                <li>
+                    <a href="#" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                       data-tooltip="User Roles">
+                        <i class="bx bx-shield-quarter w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">User Roles</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Divider -->
+            <hr class="my-6 border-gray-200 sidebar-content">
+
+            <!-- Settings Section -->
+            <ul class="space-y-1 font-medium">
+                <li>
+                    <a href="#" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                       data-tooltip="Settings">
+                        <i class="bx bx-cog w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                       data-tooltip="Help & Support">
+                        <i class="bx bx-help-circle w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Help & Support</span>
+                    </a>
+                </li>
+                <li>
+                    <form action="{{ route('logout') }}" method="POST" class="w-full">
+                        @csrf
+                        <button type="submit" 
+                            class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item w-full text-left text-red-600 hover:bg-red-50"
+                            data-tooltip="Sign Out">
+                            <i class="bx bx-log-out text-red-500 w-5 text-center flex-shrink-0"></i>
+                            <span class="ml-3 sidebar-content text-sm">Sign Out</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</aside>
+
 
     <!-- Navbar -->
-    <nav id="navbar" class="bg-white shadow-lg border-b border-gray-200 fixed w-full top-0 z-40 transition-all duration-300 ease-in-out">
-        <div class="navbar-container transition-all duration-300 ease-in-out">
-            <div class="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
+<nav id="navbar" class="bg-white shadow-lg border-b border-gray-200 fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out overflow-x-hidden">
+  <div class="navbar-container w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out">
+    <div class="flex justify-between items-center h-16 w-full">
                 <!-- Left side with hamburger and logo -->
                 <div class="flex items-center space-x-4">
                     <!-- Universal Hamburger Menu Button -->
@@ -219,35 +208,27 @@
                         aria-label="Toggle sidebar"
                         aria-expanded="false"
                     >
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="hamburgerIcon">
+                        <svg class="h-6 w-6 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="hamburgerIcon">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
-                        <svg class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="closeIcon">
+                        <svg class="h-6 w-6 hidden transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="closeIcon">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                     
                     <!-- Logo (visible when sidebar is collapsed or on mobile) -->
                     <div id="navbarLogo" class="navbar-logo">
-                        <h1 class="text-xl font-bold text-gray-900">Admin Panel</h1>
+                        <h1 class="text-xl font-bold text-primary">Admin Panel</h1>
                     </div>
                 </div>
 
                 <!-- Right side navigation -->
-                <div class="flex items-center space-x-4">
-                    <!-- Search -->
-                    <div class="hidden md:block">
-                        <div class="relative">
-                            <input 
-                                type="text" 
-                                placeholder="Search..." 
-                                class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-search text-gray-400"></i>
-                            </div>
-                        </div>
-                    </div>
+                <div class="flex items-center space-x-2 sm:space-x-4 flex-wrap max-w-full">
+                    
+                    <!-- Mobile Search Button -->
+                    <button class="sm:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+                        <i class="fas fa-search text-lg"></i>
+                    </button>
                     
                     <!-- Notifications -->
                     <button class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200 relative">
@@ -258,9 +239,15 @@
                     <!-- Profile -->
                     <div class="relative">
                         <button class="flex items-center space-x-2 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
-                            <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Profile">
-                            <span class="hidden md:block text-sm font-medium">John Doe</span>
-                            <i class="fas fa-chevron-down text-xs hidden md:block"></i>
+                            @if(Auth::user()->profile_pic)
+                                <img src="{{ Auth::user()->profile_pic }}" alt="Profile" class="h-8 w-8 rounded-full object-cover">
+                            @else
+                                <div class="h-8 w-8 bg-primary rounded-full flex items-center justify-center text-white text-sm">
+                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                </div>
+                            @endif
+                            <span class="hidden lg:block text-sm font-medium max-w-24 truncate">{{ Auth::user()->name }}</span>
+                            <i class="fas fa-chevron-down text-xs hidden lg:block"></i>
                         </button>
                     </div>
                 </div>
@@ -269,12 +256,7 @@
     </nav>
 
     <!-- Main Content -->
-    <div id="mainContent" class="main-content transition-all duration-300 ease-in-out pt-16">
-        <div class="p-6">
-            
-        </div>
-
-        
+    <div id="mainContent" class="main-content pt-16 w-full max-w-screen overflow-x-hidden">
         @yield('content')
     </div>
 
@@ -282,6 +264,12 @@
     <div id="tooltip" class="absolute bg-gray-900 text-white text-sm rounded py-1 px-2 z-50 opacity-0 pointer-events-none transition-opacity duration-200"></div>
 
     <style>
+        /* Custom colors */
+        :root {
+            --primary-color: #1a2235;
+            --accent-color: #ffb51b;
+        }
+
         /* Sidebar states */
         .sidebar-expanded {
             width: 16rem;
@@ -301,12 +289,11 @@
             justify-content: center;
         }
         
-        .sidebar-collapsed .sidebar-profile img {
-            width: 2rem;
-            height: 2rem;
+        .sidebar-collapsed .sidebar-profile > div:last-child {
+            display: none;
         }
-        
-        /* Navbar adjustments */
+
+        /* Navbar adjustments - NO ANIMATIONS ON LAYOUT CHANGES */
         .navbar-expanded {
             margin-left: 16rem;
         }
@@ -315,13 +302,18 @@
             margin-left: 4rem;
         }
         
-        /* Main content adjustments */
+        /* Main content adjustments - NO ANIMATIONS ON LAYOUT CHANGES */
         .content-expanded {
             margin-left: 16rem;
         }
         
         .content-collapsed {
             margin-left: 4rem;
+        }
+        
+        /* Remove transitions from layout elements to prevent page switch animations */
+        #navbar, #mainContent {
+            transition: margin-left 0.3s ease-in-out;
         }
         
         /* Logo visibility */
@@ -332,7 +324,33 @@
         .navbar-logo.show {
             display: block;
         }
-        
+
+        /* Sidebar link styles */
+        .sidebar-link {
+            color: #6b7280;
+        }
+
+        .sidebar-link:hover {
+            background-color: #f3f4f6;
+            color: var(--primary-color);
+        }
+
+        .sidebar-link:hover i {
+            color: var(--accent-color) !important;
+        }
+
+        .sidebar-link.active {
+            background-color: #f0f9ff;
+            color: var(--primary-color);
+            border-left: 4px solid var(--accent-color);
+            font-weight: 600;
+        }
+
+        .sidebar-link.active i {
+            color: var(--accent-color) !important;
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 1023px) {
             .navbar-expanded,
             .navbar-collapsed,
@@ -344,6 +362,22 @@
             .navbar-logo {
                 display: block;
             }
+        }
+
+        /* Smooth transitions only for user interactions */
+        .sidebar-item {
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Remove any unwanted animations from content area */
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        /* Ensure responsive navbar elements don't overflow */
+        .navbar-container {
+            max-width: 100%;
+            overflow: hidden;
         }
     </style>
 
@@ -388,19 +422,19 @@
                 // Set initial state
                 this.handleResize();
                 this.updateLayout();
+                
+                // Set active state based on current URL
+                this.setActiveState();
             }
             
             handleToggle() {
                 if (this.isDesktop) {
                     if (this.isCollapsed) {
-                        // Expand sidebar
                         this.expandSidebar();
                     } else {
-                        // Collapse sidebar
                         this.collapseSidebar();
                     }
                 } else {
-                    // Mobile behavior
                     this.toggleMobile();
                 }
             }
@@ -432,7 +466,6 @@
                 
                 if (!this.isDesktop) {
                     this.overlay.classList.remove('hidden');
-                    this.overlay.classList.add('animate-fade-in');
                     document.body.style.overflow = 'hidden';
                 }
                 
@@ -446,7 +479,6 @@
                 this.sidebar.classList.add('-translate-x-full');
                 this.sidebar.classList.remove('translate-x-0');
                 this.overlay.classList.add('hidden');
-                this.overlay.classList.remove('animate-fade-in');
                 this.hamburgerIcon.classList.remove('hidden');
                 this.closeIcon.classList.add('hidden');
                 this.sidebarToggle.setAttribute('aria-expanded', 'false');
@@ -467,7 +499,7 @@
             updateLayout() {
                 if (!this.isDesktop) return;
                 
-                // Update navbar
+                // Update navbar and content without animations during page loads
                 this.navbar.classList.remove('navbar-expanded', 'navbar-collapsed');
                 this.mainContent.classList.remove('content-expanded', 'content-collapsed');
                 
@@ -487,14 +519,12 @@
                 this.isDesktop = window.innerWidth >= 1024;
                 
                 if (this.isDesktop && !wasDesktop) {
-                    // Switched to desktop
                     this.closeMobile();
                     this.sidebar.classList.remove('-translate-x-full');
                     this.sidebar.classList.add('translate-x-0');
                     this.isOpen = true;
                     this.updateLayout();
                 } else if (!this.isDesktop && wasDesktop) {
-                    // Switched to mobile
                     this.sidebar.classList.add('-translate-x-full');
                     this.sidebar.classList.remove('translate-x-0');
                     this.isOpen = false;
@@ -506,13 +536,18 @@
                 }
             }
             
+            setActiveState() {
+                // This will be handled by Laravel's route checking in the blade template
+                // No JavaScript needed for active state since it's server-side rendered
+            }
+            
             initTooltips() {
                 const sidebarItems = document.querySelectorAll('.sidebar-item[data-tooltip]');
                 
                 sidebarItems.forEach(item => {
                     item.addEventListener('mouseenter', (e) => {
                         if (this.isCollapsed && this.isDesktop) {
-                            this.showTooltip(e.target, e.target.getAttribute('data-tooltip'));
+                            this.showTooltip(e.target.closest('.sidebar-item'), e.target.closest('.sidebar-item').getAttribute('data-tooltip'));
                         }
                     });
                     
@@ -540,26 +575,6 @@
         // Initialize sidebar when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             new SidebarManager();
-        });
-        
-        // Add active state management
-        const sidebarLinks = document.querySelectorAll('aside a');
-        sidebarLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                // e.preventDefault();
-                
-                // Remove active class from all links
-                sidebarLinks.forEach(l => {
-                    l.classList.remove('bg-blue-100', 'text-blue-700');
-                    l.querySelector('i').classList.remove('text-blue-700');
-                    l.querySelector('i').classList.add('text-gray-500', 'group-hover:text-blue-700');
-                });
-                
-                // Add active class to clicked link
-                this.classList.add('bg-blue-100', 'text-blue-700');
-                this.querySelector('i').classList.remove('text-gray-500', 'group-hover:text-blue-700');
-                this.querySelector('i').classList.add('text-blue-700');
-            });
         });
     </script>
 </body>

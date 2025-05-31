@@ -17,7 +17,7 @@ class ProgramController extends Controller {
         // $programs = Program::sortable(['title' => 'desc'])->paginate(10); 
         $programs = Program::sortable([
             'title' => 'asc',
-            'start_date' => 'desc'
+            'date' => 'desc'
         ])->paginate(10);
                 
         return view('programs.index', compact('programs'));
