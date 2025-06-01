@@ -7,15 +7,15 @@ use Illuminate\Http\Request;
 
 class VolunteerApprovalController extends Controller
 {
-    /**
+    /*
      * Approved a volunteer application
      */
-     public function approve($id)
+    public function approve($id)
     {
         $volunteer = Volunteer::findOrFail($id);
 
         $volunteer->application_status = 'approved';
-        $volunteer->joined_at = now();  
+        $volunteer->joined_at = now();
         $volunteer->save();
 
         return redirect()->back()->with('toast', [

@@ -9,19 +9,25 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 
-class ProgramController extends Controller {
+class ProgramController extends Controller
+{
     use AuthorizesRequests;
-    
-    public function index() {
+
+    public function index()
+    {
         // $programs = Program::sortable()->orderBy('created_at', 'desc')->paginate(10);
         // $programs = Program::sortable(['title' => 'desc'])->paginate(10); 
         $programs = Program::sortable([
             'title' => 'asc',
             'date' => 'desc'
         ])->paginate(10);
-                
+
         return view('programs.index', compact('programs'));
     }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // ═══════════════════════════════════════════════════════════════════════════════
 
     public function showDetailsModal(Program $program)
     {
@@ -34,9 +40,10 @@ class ProgramController extends Controller {
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    
 
-    public function create() {
+
+    public function create()
+    {
         return view('programs.create');
     }
 
@@ -45,9 +52,10 @@ class ProgramController extends Controller {
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    
 
-    public function edit(Program $program) {
+
+    public function edit(Program $program)
+    {
         return view('programs.edit', compact('program'));
     }
 
@@ -56,9 +64,10 @@ class ProgramController extends Controller {
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    
 
-    public function store(Request $request) {
+
+    public function store(Request $request)
+    {
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required',
@@ -67,7 +76,7 @@ class ProgramController extends Controller {
             'end_time' => 'required|date_format:H:i|after:start_time',
             'location' => 'nullable|string|max:255',
             'volunteer_count' => 'nullable|integer|min:0',
-            
+
         ]);
 
         $start = Carbon::parse($request->date . ' ' . $request->start_time);
@@ -81,20 +90,18 @@ class ProgramController extends Controller {
             $progress = 'done';
         }
 
-
-    
         Program::create([
             'title' => $request->title,
             'description' => $request->description,
             'date' => $request->date,
-            'start_time' => $request->start_time, 
-            'end_time' => $request->end_time, 
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
             'location' => $request->location,
             'created_by' => Auth::id(),
             // 'progress' => $progress,
             'volunteer_count' => $request->volunteer_count ?? 0,
         ]);
-    
+
         return redirect()->route('programs.index')->with('success', 'Program created successfully.');
     }
 
@@ -103,9 +110,10 @@ class ProgramController extends Controller {
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    
-    public function update(Request $request, Program $program) {
-        
+
+    public function update(Request $request, Program $program)
+    {
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required',
@@ -115,9 +123,9 @@ class ProgramController extends Controller {
             'location' => 'nullable|string|max:255',
             'volunteer_count' => 'nullable|integer|min:0',
         ]);
-    
+
         // $program->update($request->all()); //risky
-        
+
         $program->update([
             'title' => $request->title,
             'description' => $request->description,
@@ -128,7 +136,7 @@ class ProgramController extends Controller {
             'volunteer_count' => $request->volunteer_count ?? 0,
         ]);
 
-    
+
         return redirect()->route('programs.index')->with('success', 'Program updated successfully.');
     }
 
@@ -137,12 +145,12 @@ class ProgramController extends Controller {
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    
 
-    public function destroy(Program $program) {
+
+    public function destroy(Program $program)
+    {
         $program->delete();
-    
+
         return redirect()->route('programs.index')->with('success', 'Program deleted.');
     }
-    
 }
