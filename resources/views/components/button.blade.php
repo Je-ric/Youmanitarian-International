@@ -40,7 +40,7 @@
     </button>
 @endif
 
-
+{{-- 
 
 <div class="flex flex-col sm:flex-row gap-3 w-full max-w-md">
   <!-- Log Attendance Button -->
@@ -60,4 +60,4 @@
     <i class='bx bx-user-plus text-xl'></i>
     <span class="text-sm sm:text-base font-medium">Participate</span>
   </button>
-</div>
+</div> --}}

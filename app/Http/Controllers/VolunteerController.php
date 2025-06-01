@@ -12,28 +12,28 @@ use App\Models\Volunteer;
 class VolunteerController extends Controller
 {
 
-    public function apply()
-    {
-        $user = Auth::user();
-        $pendingRequest = Volunteer::where('user_id', $user->id)->exists();
+    // public function apply()
+    // {
+    //     $user = Auth::user();
+    //     $pendingRequest = Volunteer::where('user_id', $user->id)->exists();
 
-        if ($pendingRequest) {
-            session()->flash('toast', [
-                'message' => 'Your volunteer application is already pending or approved.',
-                'type' => 'info'
-            ]);
-            return redirect()->back();
-        }
+    //     if ($pendingRequest) {
+    //         session()->flash('toast', [
+    //             'message' => 'Your volunteer application is already pending or approved.',
+    //             'type' => 'info'
+    //         ]);
+    //         return redirect()->back();
+    //     }
 
-        Volunteer::create([
-            'user_id' => $user->id,
-            'total_hours' => 0,
-            'status' => 'pending',
-        ]);
+    //     Volunteer::create([
+    //         'user_id' => $user->id,
+    //         'total_hours' => 0,
+    //         'status' => 'pending',
+    //     ]);
 
-        session()->flash('toast', ['message' => 'Your application has been submitted for approval.', 'type' => 'success']);
-        return redirect()->back();
-    }
+    //     session()->flash('toast', ['message' => 'Your application has been submitted for approval.', 'type' => 'success']);
+    //     return redirect()->back();
+    // }
 
 
     // ═══════════════════════════════════════════════════════════════════════════════

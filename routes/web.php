@@ -14,6 +14,7 @@ use App\Http\Controllers\ContentViewController;
 use App\Http\Controllers\ContentCommentController;
 use App\Http\Controllers\ContentRequestController;
 use App\Http\Controllers\ProgramVolunteerController;
+use App\Http\Controllers\VolunteerApprovalController;
 use App\Http\Controllers\VolunteerAttendanceController;
 use App\Http\Controllers\VolunteerApplicationController;
 
@@ -158,5 +159,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/programs/{program}/clock-out', [VolunteerAttendanceController::class, 'clockOut'])->name('programs.clock-out');
 });
 
+
+// Route::middleware(['auth', 'role:Admin|Program Coordinator'])->group(function () {}
+Route::middleware(['auth'])->group(function () {
+    Route::post('/volunteers/{id}/approve', [VolunteerApprovalController::class, 'approve'])->name('volunteers.approve');
+    Route::post('/volunteers/{id}/deny', [VolunteerApprovalController::class, 'deny'])->name('volunteers.deny');
+    Route::post('/volunteers/{id}/restore', [VolunteerApprovalController::class, 'restore'])->name('volunteers.restore');
+});
 
 

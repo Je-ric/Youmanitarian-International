@@ -56,7 +56,7 @@
                         @if(!$alreadyJoined)
                             <form action="{{ route('programs.join', $program->id) }}" method="POST" class="mt-4">
                                 @csrf
-                                <x-button type="submit" variant="add-create" class="w-full">
+                                <x-button type="submit" variant="success" class="w-full">
                                     <i class='bx bx-user-plus mr-2'></i> Join Program
                                 </x-button>
                             </form>

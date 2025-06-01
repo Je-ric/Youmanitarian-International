@@ -19,10 +19,9 @@ class VolunteerApplicationController extends Controller
     }
 
 
-    public function store(Request $request)
+public function store(Request $request)
 {
-    // Validate the incoming request data
-    $validated = $request->validate([
+    $request->validate([
         'why_volunteer' => 'nullable|string|max:500',
         'interested_programs' => 'nullable|string|max:255',
         'skills_experience' => 'nullable|string|max:255',
@@ -36,35 +35,48 @@ class VolunteerApplicationController extends Controller
         'short_bio' => 'nullable|string|max:500',
     ]);
 
-    // Ensure the authenticated user has a Volunteer profile
     $user = Auth::user();
     $volunteer = $user->volunteer;
+    
+    $volunteer = Volunteer::updateOrCreate(
+        ['user_id' => $user->id],
+        [
+            'application_status' => 'pending',
+            'joined_at' => null,
+        ]
+    );
 
-    if (!$volunteer) {
+      if (!$volunteer) {
         $volunteer = new Volunteer();
         $volunteer->user_id = $user->id;
         $volunteer->save();
     }
 
-    // Create the volunteer application
-    VolunteerApplication::create([
-        'volunteer_id' => $volunteer->id,
-        'why_volunteer' => $validated['why_volunteer'] ?? null,
-        'interested_programs' => $validated['interested_programs'] ?? null,
-        'skills_experience' => $validated['skills_experience'] ?? null,
-        'availability' => $validated['availability'] ?? null,
-        'commitment_hours' => $validated['commitment_hours'] ?? null,
-        'physical_limitations' => $validated['physical_limitations'] ?? null,
-        'emergency_contact' => $validated['emergency_contact'] ?? null,
-        'contact_consent' => $validated['contact_consent'],
-        'volunteered_before' => $validated['volunteered_before'],
-        'outdoor_ok' => $validated['outdoor_ok'],
-        'short_bio' => $validated['short_bio'] ?? null,
-        'submitted_at' => now(),
-        'is_active' => true,
-    ]);
+    // Create or update the application details
+    $volunteer->application()->updateOrCreate(
+        ['volunteer_id' => $volunteer->id],
+        array_merge(
+            $request->only([
+                'why_volunteer',
+                'interested_programs',
+                'skills_experience',
+                'availability',
+                'commitment_hours',
+                'physical_limitations',
+                'emergency_contact',
+                'contact_consent',
+                'volunteered_before',
+                'outdoor_ok',
+                'short_bio',
+            ]),
+            [
+                'submitted_at' => now(),
+                'is_active' => true,
+            ]
+        )
+    );
 
-    // Assign the "Volunteer" role to the user if not already assigned
+        // Assign the "Volunteer" role to the user if not already assigned
     $volunteerRole = Role::where('role_name', 'Volunteer')->first();
     if ($volunteerRole && !UserRole::where('user_id', $user->id)->where('role_id', $volunteerRole->id)->exists()) {
         UserRole::create([
@@ -74,7 +86,8 @@ class VolunteerApplicationController extends Controller
         ]);
     }
 
-    return redirect()->route('programs.index')->with('success', 'Application submitted successfully! Wait for the confirmation.');
+    return redirect()->route('dashboard')->with('success', 'Your application has been submitted and is pending review.');
 }
+
 
 }
