@@ -83,10 +83,15 @@
                                     <i class='bx bx-show'></i>
                                 </x-button>
 
+                                
                                 {{-- @if(Auth::user()->volunteer) --}}
-                                @if(Auth::user()->hasRole('Volunteer'))
+                                {{-- @if(Auth::user()->hasRole('Volunteer'))
                                     <x-button href="{{ route('programs.view', $program) }}" variant="success">
                                         <i class='bx bx-show'></i>View Log
+                                    </x-button> --}}
+                                @if(Auth::user()->hasRole('Volunteer') && $program->volunteers->contains(Auth::user()->volunteer))
+                                    <x-button href="{{ route('programs.view', $program) }}" variant="success">
+                                        <i class='bx bx-show'></i> View Log
                                     </x-button>
                                 @else
                                     @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator'))

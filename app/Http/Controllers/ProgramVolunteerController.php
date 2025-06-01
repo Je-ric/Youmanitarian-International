@@ -51,6 +51,50 @@ class ProgramVolunteerController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
+public function join(Program $program)
+{
+    $user = Auth::user();
+    $volunteer = $user->volunteer;
+
+    if (!$volunteer) {
+        return redirect()->back()->with('error', 'Only volunteers can join programs.');
+    }
+
+    // Avoid duplicate entry
+    if (!$program->volunteers->contains($volunteer->id)) {
+        $program->volunteers()->attach($volunteer->id, ['status' => 'approved']);
+    }
+
+    return redirect()->back()->with('success', 'You have successfully joined the program.');
+}
+
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+
+    // public function approveVolunteer(Program $program, Volunteer $volunteer)
+    // {
+    //     $approvedCount = $program->volunteers()->wherePivot('status', 'approved')->count();
+
+    //     if ($approvedCount >= $program->volunteer_count) {
+    //         session()->flash('toast', [
+    //             'message' => 'This program has already reached the maximum number of volunteers.',
+    //             'type' => 'warning',
+    //         ]);
+    //         return redirect()->back();
+    //     }
+
+    //     $program->volunteers()->updateExistingPivot($volunteer->id, ['status' => 'approved']);
+
+    //     session()->flash('toast', [
+    //         'message' => 'Volunteer approved successfully.',
+    //         'type' => 'success',
+    //     ]);
+
+    //     return redirect()->back();
+    // }
 
 
 
@@ -59,60 +103,31 @@ class ProgramVolunteerController extends Controller
     // ═══════════════════════════════════════════════════════════════════════════════
 
 
-    public function approveVolunteer(Program $program, Volunteer $volunteer)
-    {
-        $approvedCount = $program->volunteers()->wherePivot('status', 'approved')->count();
 
-        if ($approvedCount >= $program->volunteer_count) {
-            session()->flash('toast', [
-                'message' => 'This program has already reached the maximum number of volunteers.',
-                'type' => 'warning',
-            ]);
-            return redirect()->back();
-        }
+    // public function denyVolunteer(Program $program, Volunteer $volunteer)
+    // {
+    //     // $program->volunteers()->detach($volunteer->id);
+    //     $program->volunteers()->updateExistingPivot($volunteer->id, ['status' => 'denied']);
 
-        $program->volunteers()->updateExistingPivot($volunteer->id, ['status' => 'approved']);
+    //     session()->flash('toast', [
+    //         'message' => 'Volunteer denied and removed from the program.',
+    //         'type' => 'error',
+    //     ]);
 
-        session()->flash('toast', [
-            'message' => 'Volunteer approved successfully.',
-            'type' => 'success',
-        ]);
-
-        return redirect()->back();
-    }
+    //     return redirect()->back();
+    // }
 
 
+    // public function restoreVolunteer(Program $program, Volunteer $volunteer)
+    // {
 
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
+    //     $program->volunteers()->updateExistingPivot($volunteer->id, ['status' => 'pending']);
 
+    //     session()->flash('toast', [
+    //         'message' => 'Volunteer has been restored to pending.',
+    //         'type' => 'info',
+    //     ]);
 
-
-    public function denyVolunteer(Program $program, Volunteer $volunteer)
-    {
-        // $program->volunteers()->detach($volunteer->id);
-        $program->volunteers()->updateExistingPivot($volunteer->id, ['status' => 'denied']);
-
-        session()->flash('toast', [
-            'message' => 'Volunteer denied and removed from the program.',
-            'type' => 'error',
-        ]);
-
-        return redirect()->back();
-    }
-
-
-    public function restoreVolunteer(Program $program, Volunteer $volunteer)
-    {
-
-        $program->volunteers()->updateExistingPivot($volunteer->id, ['status' => 'pending']);
-
-        session()->flash('toast', [
-            'message' => 'Volunteer has been restored to pending.',
-            'type' => 'info',
-        ]);
-
-        return redirect()->back();
-    }
+    //     return redirect()->back();
+    // }
 }

@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 class VolunteerApplication extends Model
 {
-     use HasFactory;
+    use HasFactory;
+    protected $table = 'volunteer_application';
 
     protected $fillable = [
         'volunteer_id',

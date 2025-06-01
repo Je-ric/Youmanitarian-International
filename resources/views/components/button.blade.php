@@ -39,3 +39,25 @@
         {{ $slot }}
     </button>
 @endif
+
+
+
+<div class="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+  <!-- Log Attendance Button -->
+  <button
+    class="flex items-center justify-center gap-2 px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-800 
+           hover:bg-gray-100 hover:border-gray-400 active:bg-gray-200 active:scale-[.98] cursor-pointer 
+           shadow-sm transition-all duration-150 ease-in-out flex-1">
+    <i class='bx bx-time text-xl'></i>
+    <span class="text-sm sm:text-base font-medium">Log Attendance</span>
+  </button>
+
+  <!-- Participate Button -->
+  <button
+    class="flex items-center justify-center gap-2 px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-800 
+           hover:bg-gray-100 hover:border-gray-400 active:bg-gray-200 active:scale-[.98] cursor-pointer 
+           shadow-sm transition-all duration-150 ease-in-out flex-1">
+    <i class='bx bx-user-plus text-xl'></i>
+    <span class="text-sm sm:text-base font-medium">Participate</span>
+  </button>
+</div>

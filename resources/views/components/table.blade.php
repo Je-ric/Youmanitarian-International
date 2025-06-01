@@ -46,15 +46,7 @@
         <thead class="{{ $theadClasses }}">
             <tr>
                 @foreach($headers as $header)
-                    {{-- 
-                        If you want to hide some columns on small screens,
-                        you can pass headers as an array with keys:
-                        [
-                          ['label' => 'Name', 'hideOnSmall' => false],
-                          ['label' => 'Status', 'hideOnSmall' => true],
-                        ]
-                        For simplicity, if header is string, show all columns
-                    --}}
+                
                     @php
                         $label = is_array($header) ? $header['label'] : $header;
                         $hideOnSmall = is_array($header) && ($header['hideOnSmall'] ?? false);

@@ -46,6 +46,27 @@
                             </div>
                         </div>
                     </div>
+
+                    @if(Auth::user()->hasRole('Volunteer'))
+                        @php
+                            $volunteer = Auth::user()->volunteer;
+                            $alreadyJoined = $program->volunteers->contains($volunteer?->id ?? 0);
+                        @endphp
+
+                        @if(!$alreadyJoined)
+                            <form action="{{ route('programs.join', $program->id) }}" method="POST" class="mt-4">
+                                @csrf
+                                <x-button type="submit" variant="add-create" class="w-full">
+                                    <i class='bx bx-user-plus mr-2'></i> Join Program
+                                </x-button>
+                            </form>
+                        @else
+                            <div class="mt-4 text-green-600 font-semibold text-sm flex items-center gap-2">
+                                <i class='bx bx-check-circle'></i> You are already joined in this program.
+                            </div>
+                        @endif
+                    @endif
+
                 </div>
 
                 <!-- Right Details -->

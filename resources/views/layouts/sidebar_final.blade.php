@@ -199,9 +199,8 @@
 <nav id="navbar" class="bg-white shadow-lg border-b border-gray-200 fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out overflow-x-hidden">
   <div class="navbar-container w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out">
     <div class="flex justify-between items-center h-16 w-full">
-                <!-- Left side with hamburger and logo -->
+        
                 <div class="flex items-center space-x-4">
-                    <!-- Universal Hamburger Menu Button -->
                     <button 
                         id="sidebarToggle" 
                         class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
@@ -216,27 +215,23 @@
                         </svg>
                     </button>
                     
-                    <!-- Logo (visible when sidebar is collapsed or on mobile) -->
                     <div id="navbarLogo" class="navbar-logo">
                         <h1 class="text-xl font-bold text-primary">Admin Panel</h1>
                     </div>
                 </div>
 
-                <!-- Right side navigation -->
+                <!-- Right side  -->
                 <div class="flex items-center space-x-2 sm:space-x-4 flex-wrap max-w-full">
                     
-                    <!-- Mobile Search Button -->
                     <button class="sm:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
                         <i class="fas fa-search text-lg"></i>
                     </button>
                     
-                    <!-- Notifications -->
                     <button class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200 relative">
                         <i class="fas fa-bell text-lg"></i>
                         <span class="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
                     </button>
                     
-                    <!-- Profile -->
                     <div class="relative">
                         <button class="flex items-center space-x-2 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
                             @if(Auth::user()->profile_pic)

@@ -85,10 +85,10 @@
                                         <i class='bx bx-show'></i> View
                                     </x-button>
 
-                                    <form action="{{ route('programs.restore_volunteer', [$program, $volunteer]) }}" method="POST">
+                                    {{-- <form action="{{ route('programs.restore_volunteer', [$program, $volunteer]) }}" method="POST">
                                         @csrf
                                         <x-button type="submit" variant="restore">Restore</x-button>
-                                    </form>
+                                    </form> --}}
                                 </td>
                             </tr>
                         @endif
@@ -132,7 +132,7 @@
                 @endif
             </div>
 
-            <div class="bg-white rounded-lg p-6 border border-gray-200">
+            {{-- <div class="bg-white rounded-lg p-6 border border-gray-200">
                 @foreach($program->volunteers as $volunteer)
                     @if($volunteer->pivot->status === 'pending' || $volunteer->pivot->status === 'denied')
                         <div class="flex items-center justify-between py-4 border-b border-gray-300">
@@ -174,7 +174,7 @@
                         </div>
                     @endif
                 @endforeach
-            </div>
+            </div> --}}
         </div>
 
     </div>
