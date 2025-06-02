@@ -11,7 +11,6 @@
                 ->first();
         @endphp
 
-
         <x-header-with-button title="Any Title" description="">
             <x-button variant="secondary"
                 onclick="document.getElementById('feedbackModal_{{ $program->id }}').showModal();">Rate & Review</x-button>
