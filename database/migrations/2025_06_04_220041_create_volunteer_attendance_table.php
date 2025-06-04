@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('approved_by')->nullable();
             $table->foreign('approved_by')->references('id')->on('users')->nullOnDelete();
             $table->text('notes')->nullable(); //for volunteer who forgot clockout or attendance at all
+            $table->string('proof_image')->nullable(); // for proof of attendance, if applicable
 
             $table->timestamps();
 

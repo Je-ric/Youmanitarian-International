@@ -155,6 +155,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/programs/{program}/view', [VolunteerAttendanceController::class, 'show'])->name('programs.view');
     Route::post('/programs/{program}/clock-in', [VolunteerAttendanceController::class, 'clockIn'])->name('programs.clock-in');
     Route::post('/programs/{program}/clock-out', [VolunteerAttendanceController::class, 'clockOut'])->name('programs.clock-out');
+    Route::post('/programs/{program}/attendance/upload-proof', [VolunteerAttendanceController::class, 'uploadProof'])->name('attendance.uploadProof');
 });
 
 

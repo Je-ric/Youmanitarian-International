@@ -109,4 +109,36 @@ class VolunteerAttendanceController extends Controller
 
         return redirect()->back()->with('success', 'Clocked out successfully.');
     }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    //Volunteer uploads proof of attendance
+    public function uploadProof(Request $request, $programId)
+    {
+        $user = Auth::user();
+        $volunteer = $user->volunteer;
+
+        $request->validate([
+            'proof_image' => 'required|image|max:10240', // max 10mb
+        ]);
+
+        // Find attendance record for volunteer & program
+        $attendance = VolunteerAttendance::where('volunteer_id', $volunteer->id)
+            ->where('program_id', $programId)
+            ->first();
+
+        if (!$attendance) {
+            return redirect()->back()->with('error', 'Attendance record not found.');
+        }
+
+        $path = $request->file('proof_image')->store('uploads/attendance_proof', 'public');
+
+        $attendance->proof_image = $path;
+        $attendance->approval_status = 'pending'; 
+        $attendance->save();
+
+        return redirect()->back()->with('success', 'Proof of attendance uploaded successfully.');
+    }
 }
