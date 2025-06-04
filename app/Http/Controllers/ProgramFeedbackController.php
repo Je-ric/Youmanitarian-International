@@ -51,4 +51,17 @@ class ProgramFeedbackController extends Controller
             'type' => 'success',
         ]);
     }
+
+    public function viewAll(Program $program)
+    {
+        $feedbacks = ProgramFeedback::with('volunteer.user')
+            ->where('program_id', $program->id)
+            ->latest('submitted_at')
+            ->get();
+
+        return view('programs.view_feedbacks', [
+            'program' => $program,
+            'feedbacks' => $feedbacks
+        ]);
+    }
 }
