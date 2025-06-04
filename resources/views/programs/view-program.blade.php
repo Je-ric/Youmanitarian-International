@@ -233,6 +233,7 @@
                 It serves as official documentation of your participation and will be used as one of the primary bases for
                 recognizing your contribution to the program.
             </p>
+            <p>Remember that you have to take an clock in first before making the upload of proof possible?</p>
         </section>
 
     </div>

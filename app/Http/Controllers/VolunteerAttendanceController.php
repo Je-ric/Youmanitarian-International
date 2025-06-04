@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Program;
-use App\Models\VolunteerAttendance;
 use Carbon\Carbon;
+use App\Models\Program;
+use App\Models\Volunteer;
+use Illuminate\Http\Request;
+use App\Models\VolunteerAttendance;
+use Illuminate\Support\Facades\Auth;
 
 class VolunteerAttendanceController extends Controller
 {
@@ -28,8 +29,8 @@ class VolunteerAttendanceController extends Controller
             $diffInSeconds = $clock_in->diffInSeconds($clock_out);
 
             $hours = floor($diffInSeconds / 3600);
-            $minutes = floor(($diffInSeconds % 3600) / 60); 
-            $seconds = $diffInSeconds % 60; 
+            $minutes = floor(($diffInSeconds % 3600) / 60);
+            $seconds = $diffInSeconds % 60;
 
             $formattedTime = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
 
@@ -104,7 +105,7 @@ class VolunteerAttendanceController extends Controller
         $attendance->update([
             'clock_out' => $clock_out,
             'hours_logged' => $total_seconds / 3600, // decimal
-            'formatted_time' => sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds), 
+            'formatted_time' => sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds),
         ]);
 
         return redirect()->back()->with('success', 'Clocked out successfully.');
@@ -136,9 +137,57 @@ class VolunteerAttendanceController extends Controller
         $path = $request->file('proof_image')->store('uploads/attendance_proof', 'public');
 
         $attendance->proof_image = $path;
-        $attendance->approval_status = 'pending'; 
+        $attendance->approval_status = 'pending';
         $attendance->save();
 
         return redirect()->back()->with('success', 'Proof of attendance uploaded successfully.');
+    }
+
+  public function programVolunteers(Program $program)
+    {
+        // Get volunteers with attendance logs grouped by volunteer
+        $logs = [];
+
+        foreach ($program->volunteers as $volunteer) {
+            $volunteerLogs = VolunteerAttendance::where('program_id', $program->id)
+                ->where('volunteer_id', $volunteer->id)
+                ->get();
+
+            $totalTime = 0;
+            foreach ($volunteerLogs as $log) {
+                $totalTime += $log->hours_logged;
+            }
+
+            $logs[$volunteer->id] = [
+                'logs' => $volunteerLogs,
+                'totalTime' => $totalTime . ' hours',
+            ];
+        }
+
+        return view('volunteers.program-volunteers', compact('program', 'logs'));
+    }
+
+    // Approve attendance
+    public function approveAttendance(Request $request, $attendanceId)
+    {
+        $attendance = VolunteerAttendance::findOrFail($attendanceId);
+        $attendance->approval_status = 'approved';
+        $attendance->approved_by = auth()->id();
+        $attendance->notes = $request->input('notes', $attendance->notes);
+        $attendance->save();
+
+        return back()->with('toast', ['message' => 'Attendance approved!', 'type' => 'success']);
+    }
+
+    // Reject attendance
+    public function rejectAttendance(Request $request, $attendanceId)
+    {
+        $attendance = VolunteerAttendance::findOrFail($attendanceId);
+        $attendance->approval_status = 'rejected';
+        $attendance->approved_by = auth()->id();
+        $attendance->notes = $request->input('notes', $attendance->notes);
+        $attendance->save();
+
+        return back()->with('toast', ['message' => 'Attendance rejected!', 'type' => 'error']);
     }
 }
