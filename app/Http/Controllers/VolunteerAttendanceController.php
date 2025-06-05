@@ -36,7 +36,7 @@ class VolunteerAttendanceController extends Controller
 
             $formattedTime = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
 
-            $attendance->formatted_time = $formattedTime; // Save formatted time
+            $attendance->formatted_time = $formattedTime;
         }
 
         return view('programs.attendance', compact('program', 'attendance', 'isAssigned'));
@@ -149,6 +149,11 @@ class VolunteerAttendanceController extends Controller
 
         return back()->with('toast', ['message' => 'Proof of attendance uploaded successfully!', 'type' => 'success']);
     }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // ═══════════════════════════════════════════════════════════════════════════════
+
 
     public function programVolunteers(Program $program)
     {

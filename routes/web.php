@@ -153,7 +153,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/programs/{program}/clock-out', [VolunteerAttendanceController::class, 'clockOut'])->name('programs.clock-out');
     Route::post('/programs/{program}/attendance/upload-proof', [VolunteerAttendanceController::class, 'uploadProof'])->name('attendance.uploadProof');
     Route::get('/programs/{program}/volunteers', [VolunteerAttendanceController::class, 'programVolunteers'])->name('programs.volunteers');
-
     Route::post('/attendance/{attendance}/approve', [VolunteerAttendanceController::class, 'approveAttendance'])->name('attendance.approve');
     Route::post('/attendance/{attendance}/reject', [VolunteerAttendanceController::class, 'rejectAttendance'])->name('attendance.reject');
 });

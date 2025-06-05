@@ -1,5 +1,4 @@
 <?php
-// Hindi nagagamit ngayon, along with volunteer.requests for in general volunteer management
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
