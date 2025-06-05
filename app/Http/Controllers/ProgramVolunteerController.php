@@ -51,23 +51,38 @@ class ProgramVolunteerController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    public function join(Program $program)
-    {
-        $user = Auth::user();
-        $volunteer = $user->volunteer;
+    // public function join(Program $program)
+    // {
+    //     $user = Auth::user();
+    //     $volunteer = $user->volunteer;
 
-        if (!$volunteer) {
-            return redirect()->back()->with('error', 'Only volunteers can join programs.');
-        }
+    //     if (!$volunteer) {
+    //         return redirect()->back()->with('error', 'Only volunteers can join programs.');
+    //     }
 
-        // Avoid duplicate entry
-        if (!$program->volunteers->contains($volunteer->id)) {
-            $program->volunteers()->attach($volunteer->id, ['status' => 'approved']);
-        } //pero di na kailangan cause sa pag-join ng volunteer, automatic na siya magjo-join sa program
+    //     // Avoid duplicate entry
+    //     if (!$program->volunteers->contains($volunteer->id)) {
+    //         $program->volunteers()->attach($volunteer->id, ['status' => 'approved']);
+    //     } //pero di na kailangan cause sa pag-join ng volunteer, automatic na siya magjo-join sa program
 
-        return redirect()->back()->with('success', 'You have successfully joined the program.');
+    //     return redirect()->back()->with('success', 'You have successfully joined the program.');
+    // }
+public function join(Program $program)
+{
+    $user = Auth::user();
+    $volunteer = $user->volunteer;
+
+    if (!$volunteer) {
+        return redirect()->back()->with('error', 'Only volunteers can join programs.');
     }
 
+    // Avoid duplicate entry
+    if (!$program->volunteers->contains($volunteer->id)) {
+        $program->volunteers()->attach($volunteer->id); // No extra data, just attach the ID
+    }
+
+    return redirect()->back()->with('success', 'You have successfully joined the program.');
+}
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
