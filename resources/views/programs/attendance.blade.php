@@ -16,15 +16,25 @@
         <div class="mb-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
                 <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">Volunteer Attendance - Clock In / Clock Out</h1>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">
+                        Volunteer Attendance - Clock In / Clock Out
+                    </h1>
                 </div>
                 <div class="flex flex-wrap gap-2 w-full sm:w-auto">
-                    <x-button variant="secondary" class="w-full sm:w-auto" onclick="document.getElementById('uploadProofModal').showModal();">
-                        <i class='bx bx-upload mr-1'></i> Upload Proof
-                    </x-button>
-                    <x-button variant="secondary" class="w-full sm:w-auto" onclick="document.getElementById('feedbackModal_{{ $program->id }}').showModal();">
-                        <i class='bx bx-star mr-1'></i> Rate & Review
-                    </x-button>
+                    {{-- Pag nag clock in, tsaka palang makakapag upload --}}
+                    @if($attendance && $attendance->clock_in)
+                        <x-button variant="secondary" class="w-full sm:w-auto"
+                            onclick="document.getElementById('uploadProofModal').showModal();">
+                            <i class='bx bx-upload mr-1'></i> Upload Proof
+                        </x-button>
+                    @endif
+                    {{-- Pag tapos complete attendance, tsaka palang makakapag rate and review --}}
+                    @if($attendance && $attendance->clock_in && $attendance->clock_out)
+                        <x-button variant="secondary" class="w-full sm:w-auto"
+                            onclick="document.getElementById('feedbackModal_{{ $program->id }}').showModal();">
+                            <i class='bx bx-star mr-1'></i> Rate & Review
+                        </x-button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -62,14 +72,16 @@
                     <h3 class="text-black text-base font-medium tracking-tight mb-1">
                         Description
                     </h3>
-                    <p class="text-gray-800 text-base sm:text-lg font-normal leading-relaxed sm:leading-loose">
+                    <p
+                        class="text-gray-800 text-xs sm:text-base font-normal leading-relaxed sm:leading-loose text-justify indent-6">
                         {{ $program->description }}
                     </p>
+
                 </section>
 
                 <!-- Details -->
                 <section class="flex flex-col gap-3 sm:gap-4">
-                    <div class="flex flex-col sm:flex-row flex-wrap justify-between gap-3 sm:gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-4">
                         <!-- Date -->
                         <div class="flex items-center gap-2 min-w-[16rem]">
                             <i class='bx bx-calendar text-lg text-gray-700'></i>
@@ -90,19 +102,15 @@
                                 {{ $program->location ?? 'N/A' }}
                             </span>
                         </div>
-                    </div>
 
-                    <div class="flex flex-col sm:flex-row flex-wrap justify-between gap-3 sm:gap-4">
                         <!-- Time -->
-                        @php
-                            $startTime = \Carbon\Carbon::parse($program->start_time)->format('g:ia');
-                            $endTime = $program->end_time ? \Carbon\Carbon::parse($program->end_time)->format('g:ia') : null;
-                        @endphp
                         <div class="flex items-center gap-2 min-w-[16rem]">
                             <i class='bx bx-time text-lg text-gray-700'></i>
                             <strong class="text-black text-sm sm:text-base font-medium tracking-tight">Time:</strong>
                             <span class="text-black text-sm sm:text-base font-normal tracking-tight">
-                                {{ $endTime ? "$startTime - $endTime" : $startTime }}
+                                {{ $program->end_time
+        ? \Carbon\Carbon::parse($program->start_time)->format('g:ia') . ' - ' . \Carbon\Carbon::parse($program->end_time)->format('g:ia')
+        : \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}
                             </span>
                         </div>
 
@@ -115,13 +123,14 @@
                             </span>
                         </div>
                     </div>
+
                 </section>
             </section>
 
             {{-- Clock In/Out Card --}}
             <div class="col-span-1 card bg-base-100 shadow-lg rounded-2xl">
                 <div class="card-body p-4 sm:p-6 space-y-3 sm:space-y-4">
-                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1a2235] mb-4 sm:mb-8">Your Attendance</h2>
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 leading-tight sm:leading-[50px] tracking-tight">Your Attendance</h2>
 
                     {{-- Flash Messages --}}
                     @if(session('success'))
@@ -242,10 +251,12 @@
             </div>
         </div>
 
-        <section class="max-w-7xl mx-auto p-4 sm:p-6 bg-yellow-50 rounded-2xl border-2 border-amber-400 mt-4 sm:mt-6 flex flex-col gap-4 sm:gap-8">
+        <section
+            class="max-w-7xl mx-auto p-4 sm:p-6 bg-yellow-50 rounded-2xl border-2 border-amber-400 mt-4 sm:mt-6 flex flex-col gap-4 sm:gap-8">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <article class="w-full lg:w-1/2">
-                    <h2 id="reminders-title" class="text-gray-800 text-base sm:text-lg font-bold leading-relaxed sm:leading-loose flex items-center">
+                    <h2 id="reminders-title"
+                        class="text-gray-800 text-base sm:text-lg font-bold leading-relaxed sm:leading-loose flex items-center">
                         <i class='bx bx-bell text-amber-500 mr-1'></i> Reminders:
                     </h2>
                     <p class="text-gray-800 text-sm sm:text-base lg:text-lg font-normal leading-relaxed sm:leading-loose">
@@ -257,7 +268,8 @@
                 </article>
 
                 <article class="w-full lg:w-1/2">
-                    <h2 class="text-gray-800 text-base sm:text-lg font-bold leading-relaxed sm:leading-loose flex items-center">
+                    <h2
+                        class="text-gray-800 text-base sm:text-lg font-bold leading-relaxed sm:leading-loose flex items-center">
                         <i class='bx bx-error-circle text-amber-500 mr-1'></i> Missing Attendance:
                     </h2>
                     <p class="text-gray-800 text-sm sm:text-base lg:text-lg font-normal leading-relaxed sm:leading-loose">
@@ -275,6 +287,9 @@
             </p>
             <p class="text-center text-gray-800 text-sm sm:text-base lg:text-lg leading-relaxed sm:leading-loose">
                 <strong>Note:</strong> You must clock in first before you're allowed to upload attendance proof.
+            </p>
+            <p class="text-center text-gray-800 text-sm sm:text-base lg:text-lg leading-relaxed sm:leading-loose">
+                <strong>Note:</strong> You must complete your attendance (clock in and clock out) before you can submit a rating and review. or "You can only submit a rating and review after the program has ended."
             </p>
         </section>
     </div>
