@@ -238,48 +238,58 @@
 
     </div>
 
-   <dialog id="uploadProofModal" class="modal">
-    <form method="POST" action="{{ route('attendance.uploadProof', $program->id) }}" enctype="multipart/form-data" class="modal-box">
-        @csrf
-        <h3 class="font-bold text-lg mb-4">Upload Proof of Attendance</h3>
+    @php
+        $volunteerId = auth()->user()?->volunteer?->id;
 
-        @php
-            // Use $log->proof_image directly if available
-            $proofPath = $log->proof_image ?? null;
-        @endphp
-            
-        @if ($proofPath)
-            <div class="mb-4">
-                <p class="mb-2 text-sm text-gray-600 font-['Poppins']">Existing proof of attendance:</p>
-                
-                <img src="{{ asset('storage/' . $attendance->proof_image) }}" />
-                {{-- Download/View link --}}
-                <a href="{{ asset('storage/' . $proofPath) }}"
-                   target="_blank"
-                   class="underline text-blue-600 hover:text-blue-800 font-['Poppins']">
-                    View Uploaded Proof
-                </a>
-            </div>
-        @else
-            {{-- Upload input only if no image is uploaded yet --}}
-            <input type="file" name="proof_image" accept="image/*" required
-                   class="file-input file-input-bordered w-full mb-4" />
+        // Get current volunteer's attendance record for this program
+        $volunteerAttendance = \App\Models\VolunteerAttendance::where('program_id', $program->id)
+            ->where('volunteer_id', $volunteerId)
+            ->first();
 
-            @error('proof_image')
-                <p class="text-red-600">{{ $message }}</p>
-            @enderror
-        @endif
+        $proofPath = $volunteerAttendance?->proof_image;
+    @endphp
 
-        <div class="modal-action">
-            @if (!$proofPath)
-                <button type="submit" class="btn btn-primary">Upload</button>
+    <dialog id="uploadProofModal" class="modal">
+        <form method="POST" action="{{ route('attendance.uploadProof', $program->id) }}" enctype="multipart/form-data"
+            class="modal-box max-w-lg p-6 rounded-lg bg-white">
+            @csrf
+
+            <h3 class="text-xl font-bold mb-4">Upload Proof of Attendance</h3>
+
+            @if ($proofPath)
+                <div class="mb-4">
+                    <p class="mb-2 text-sm text-gray-600 font-semibold font-['Poppins']">Your uploaded proof:</p>
+
+                    <img src="{{ asset('storage/' . $proofPath) }}" alt="Proof of Attendance"
+                        class="w-full max-w-xs rounded shadow border mb-2">
+
+                    <a href="{{ asset('storage/' . $proofPath) }}" target="_blank"
+                        class="text-blue-600 hover:text-blue-800 underline font-['Poppins'] text-sm">
+                        View Full Size
+                    </a>
+                </div>
+            @else
+                <div class="mb-4">
+                    <label for="proof_image" class="block text-sm font-semibold text-gray-700 mb-2">Upload Image:</label>
+                    <input type="file" name="proof_image" id="proof_image" accept="image/*" required
+                        class="file-input file-input-bordered w-full">
+                    @error('proof_image')
+                        <p class="text-red-600 mt-1 text-sm">{{ $message }}</p>
+                    @enderror
+                </div>
             @endif
-            <button type="button" onclick="document.getElementById('uploadProofModal').close();" class="btn">
-                {{ $proofPath ? 'Close' : 'Cancel' }}
-            </button>
-        </div>
-    </form>
-</dialog>
+
+            <div class="modal-action flex justify-end gap-3">
+                @if (!$proofPath)
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                @endif
+                <button type="button" onclick="document.getElementById('uploadProofModal').close();" class="btn">
+                    {{ $proofPath ? 'Close' : 'Cancel' }}
+                </button>
+            </div>
+        </form>
+    </dialog>
+
 
 
 @endsection

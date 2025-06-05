@@ -25,7 +25,7 @@
                             <td class="p-3">{{ $volunteer->user->name }}</td>
                             <td class="p-3">{{ $volunteer->user->email }}</td>
                             <td class="p-3">
-                                <x-button href="{{ route('volunteers.details', $volunteer->id) }}" variant="info" class="tooltip"
+                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="info" class="tooltip"
                                     data-tip="View Details">
                                     <i class='bx bx-show'></i> View
                                 </x-button>

@@ -117,44 +117,76 @@ class VolunteerAttendanceController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
+    // public function uploadProof(Request $request, $programId)
+    // {
+    //     $user = Auth::user();
+    //     $volunteer = $user->volunteer;
+
+    //     $request->validate([
+    //         'proof_image' => 'required|image|max:10240', // 10MB
+    //     ]);
+
+    //     // Get attendance record
+    //     $attendance = VolunteerAttendance::where('volunteer_id', $volunteer->id)
+    //         ->where('program_id', $programId)
+    //         ->first();
+
+    //     if (!$attendance) {
+    //         return redirect()->back()->with('error', 'Attendance record not found.');
+    //     }
+
+    //     $program = Program::findOrFail($programId);
+
+    //     // Sanitize file name parts
+    //     $volunteerName = preg_replace('/[^A-Za-z0-9]/', '', $volunteer->name);
+    //     $programName = preg_replace('/[^A-Za-z0-9]/', '', $program->title); // or name/slug depending on your DB
+
+    //     $extension = $request->file('proof_image')->getClientOriginalExtension();
+    //     $filename = "{$programName}_{$volunteerName}." . $extension;
+
+    //     $path = $request->file('proof_image')->storeAs(
+    //         'uploads/attendance_proof',
+    //         $filename,
+    //         'public'
+    //     );
+
+    //     $attendance->proof_image = $path;
+    //     $attendance->save();
+
+    //     return redirect()->back()->with('success', 'Proof of attendance uploaded successfully.');
+    // }
+
     public function uploadProof(Request $request, $programId)
-    {
-        $user = Auth::user();
-        $volunteer = $user->volunteer;
+{
+    $volunteerId = auth()->user()?->volunteer?->id;
 
-        $request->validate([
-            'proof_image' => 'required|image|max:10240', // 10MB
-        ]);
-
-        // Get attendance record
-        $attendance = VolunteerAttendance::where('volunteer_id', $volunteer->id)
-            ->where('program_id', $programId)
-            ->first();
-
-        if (!$attendance) {
-            return redirect()->back()->with('error', 'Attendance record not found.');
-        }
-
-        $program = Program::findOrFail($programId);
-
-        // Sanitize file name parts
-        $volunteerName = preg_replace('/[^A-Za-z0-9]/', '', $volunteer->name);
-        $programName = preg_replace('/[^A-Za-z0-9]/', '', $program->title); // or name/slug depending on your DB
-
-        $extension = $request->file('proof_image')->getClientOriginalExtension();
-        $filename = "{$programName}_{$volunteerName}." . $extension;
-
-        $path = $request->file('proof_image')->storeAs(
-            'uploads/attendance_proof',
-            $filename,
-            'public'
-        );
-
-        $attendance->proof_image = $path;
-        $attendance->save();
-
-        return redirect()->back()->with('success', 'Proof of attendance uploaded successfully.');
+    if (!$volunteerId) {
+        return back()->with('toast', ['message' => 'You must be logged in as a volunteer.', 'type' => 'error']);
     }
+
+    $request->validate([
+        'proof_image' => 'required|image|max:2048', // 2MB max
+    ]);
+
+    $attendance = VolunteerAttendance::where('program_id', $programId)
+        ->where('volunteer_id', $volunteerId)
+        ->firstOrFail();
+
+    // Create filename: ProgramName-VolunteerName.extension
+    $program = Program::findOrFail($programId);
+    $volunteer = Volunteer::findOrFail($volunteerId);
+    $volunteerName = preg_replace('/\s+/', '', $volunteer->user->name);
+    $programName = preg_replace('/\s+/', '', $program->title);
+
+    $file = $request->file('proof_image');
+    $filename = $programName . '_' . $volunteerName . '.' . $file->getClientOriginalExtension();
+    $path = $file->storeAs('uploads/attendance_proof', $filename, 'public');
+
+    $attendance->proof_image = $path;
+    $attendance->save();
+
+    return back()->with('toast', ['message' => 'Proof of attendance uploaded successfully!', 'type' => 'success']);
+}
 
     public function programVolunteers(Program $program)
     {
