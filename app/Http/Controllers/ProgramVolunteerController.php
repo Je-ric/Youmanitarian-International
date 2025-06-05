@@ -67,22 +67,22 @@ class ProgramVolunteerController extends Controller
 
     //     return redirect()->back()->with('success', 'You have successfully joined the program.');
     // }
-public function join(Program $program)
-{
-    $user = Auth::user();
-    $volunteer = $user->volunteer;
+    public function join(Program $program)
+    {
+        $user = Auth::user();
+        $volunteer = $user->volunteer;
 
-    if (!$volunteer) {
-        return redirect()->back()->with('error', 'Only volunteers can join programs.');
+        if (!$volunteer) {
+            return redirect()->back()->with('error', 'Only volunteers can join programs.');
+        }
+
+        // Avoid duplicate entry
+        if (!$program->volunteers->contains($volunteer->id)) {
+            $program->volunteers()->attach($volunteer->id); 
+        }
+
+        return redirect()->back()->with('success', 'You have successfully joined the program.');
     }
-
-    // Avoid duplicate entry
-    if (!$program->volunteers->contains($volunteer->id)) {
-        $program->volunteers()->attach($volunteer->id); // No extra data, just attach the ID
-    }
-
-    return redirect()->back()->with('success', 'You have successfully joined the program.');
-}
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨

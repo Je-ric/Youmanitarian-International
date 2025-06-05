@@ -19,7 +19,7 @@ class VolunteerController extends Controller
     public function allVolunteers()
     {
         $volunteers = Volunteer::with('user')->get();
-        return view('volunteers.requests', compact('volunteers'));
+        return view('volunteers.applications', compact('volunteers'));
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
