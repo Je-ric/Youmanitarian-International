@@ -32,7 +32,7 @@ class VolunteerController extends Controller
         //  volunteer with associated programs
         $volunteer = Volunteer::with('programs')->findOrFail($id);
 
-        return view('volunteers.details', compact('volunteer'));
+        return view('volunteers.viewUser_details', compact('volunteer'));
     }
 
     // Standby   

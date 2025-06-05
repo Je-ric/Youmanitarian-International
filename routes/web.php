@@ -132,15 +132,11 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::middleware(['auth'])->group(function () {
-    // 
-    // Route::post('programs/{program}/approve_volunteer/{volunteer}', [ProgramVolunteerController::class, 'approveVolunteer'])->name('programs.approve_volunteer');
-    // Route::delete('programs/{program}/deny_volunteer/{volunteer}', [ProgramVolunteerController::class, 'denyVolunteer'])->name('programs.deny_volunteer');
-    // Route::post('/programs/{program}/volunteers/{volunteer}/restore', [ProgramVolunteerController::class, 'restoreVolunteer'])->name('programs.restore_volunteer');
     Route::get('/programs/{program}/volunteers/manage', [ProgramVolunteerController::class, 'manageVolunteers'])->name('programs.manage_volunteers');
     Route::get('/programs/{program}/volunteers/{volunteer}/logs', [ProgramVolunteerController::class, 'getVolunteerLogs'])->name('programs.volunteer_logs');
 
     //  
-    Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'showDetails'])->name('volunteers.details');
+    Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'showDetails'])->name('volunteers.viewUser_details');
     Route::get('/volunteers/requests', [VolunteerController::class, 'allVolunteers'])->name('volunteers.requests');
 
     // 
@@ -156,12 +152,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/programs/{program}/clock-in', [VolunteerAttendanceController::class, 'clockIn'])->name('programs.clock-in');
     Route::post('/programs/{program}/clock-out', [VolunteerAttendanceController::class, 'clockOut'])->name('programs.clock-out');
     Route::post('/programs/{program}/attendance/upload-proof', [VolunteerAttendanceController::class, 'uploadProof'])->name('attendance.uploadProof');
-    Route::get('/programs/{program}/volunteers/{volunteer}/attendance-review', [VolunteerAttendanceController::class, 'showReviewModal'])->name('attendance.review');
-    Route::post('/programs/{program}/volunteers/{volunteer}/attendance-review', [VolunteerAttendanceController::class, 'approveOrReject'])->name('attendance.approve.reject');
-Route::get('/programs/{program}/volunteers', [VolunteerAttendanceController::class, 'programVolunteers'])->name('programs.volunteers');
+    Route::get('/programs/{program}/volunteers', [VolunteerAttendanceController::class, 'programVolunteers'])->name('programs.volunteers');
 
-Route::post('/attendance/{attendance}/approve', [VolunteerAttendanceController::class, 'approveAttendance'])->name('attendance.approve');
-Route::post('/attendance/{attendance}/reject', [VolunteerAttendanceController::class, 'rejectAttendance'])->name('attendance.reject');
+    Route::post('/attendance/{attendance}/approve', [VolunteerAttendanceController::class, 'approveAttendance'])->name('attendance.approve');
+    Route::post('/attendance/{attendance}/reject', [VolunteerAttendanceController::class, 'rejectAttendance'])->name('attendance.reject');
 });
 
 

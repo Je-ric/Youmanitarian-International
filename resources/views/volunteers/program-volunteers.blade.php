@@ -85,7 +85,7 @@
                                 </td>
 
                                 <td class="p-4 flex items-center gap-2">
-                                    <x-button href="{{ route('volunteers.details', $volunteer->id) }}" variant="info">
+                                    <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="info">
                                         <i class='bx bx-show'></i> View
                                     </x-button>
 

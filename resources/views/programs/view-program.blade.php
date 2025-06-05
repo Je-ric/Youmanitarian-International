@@ -238,27 +238,52 @@
 
     </div>
 
-    <dialog id="uploadProofModal" class="modal">
-        <form method="POST" action="{{ route('attendance.uploadProof', $program->id) }}" enctype="multipart/form-data"
-            class="modal-box">
-            @csrf
-            <h3 class="font-bold text-lg mb-4">Upload Proof of Attendance</h3>
+   <dialog id="uploadProofModal" class="modal">
+    <form method="POST" action="{{ route('attendance.uploadProof', $program->id) }}" enctype="multipart/form-data" class="modal-box">
+        @csrf
+        <h3 class="font-bold text-lg mb-4">Upload Proof of Attendance</h3>
 
+        @php
+            // Use $log->proof_image directly if available
+            $proofPath = $log->proof_image ?? null;
+        @endphp
+
+        @if ($proofPath)
+            <div class="mb-4">
+                <p class="mb-2 text-sm text-gray-600 font-['Poppins']">Existing proof of attendance:</p>
+                
+                {{-- Display the uploaded image --}}
+                <img src="{{ asset('storage/' . $proofPath) }}"
+                     alt="Proof of Attendance"
+                     class="w-64 h-auto border rounded shadow mb-2" />
+
+                {{-- Download/View link --}}
+                <a href="{{ asset('storage/' . $proofPath) }}"
+                   target="_blank"
+                   class="underline text-blue-600 hover:text-blue-800 font-['Poppins']">
+                    View Uploaded Proof
+                </a>
+            </div>
+        @else
+            {{-- Upload input only if no image is uploaded yet --}}
             <input type="file" name="proof_image" accept="image/*" required
-                class="file-input file-input-bordered w-full mb-4" />
+                   class="file-input file-input-bordered w-full mb-4" />
 
             @error('proof_image')
                 <p class="text-red-600">{{ $message }}</p>
             @enderror
+        @endif
 
-            <div class="modal-action">
+        <div class="modal-action">
+            @if (!$proofPath)
                 <button type="submit" class="btn btn-primary">Upload</button>
-                <button type="button" onclick="document.getElementById('uploadProofModal').close();"
-                    class="btn">Cancel</button>
-            </div>
-        </form>
-    </dialog>
-
+            @endif
+            <button type="button" onclick="document.getElementById('uploadProofModal').close();" class="btn">
+                {{ $proofPath ? 'Close' : 'Cancel' }}
+            </button>
+        </div>
+    </form>
+</dialog>
 
 
 @endsection
