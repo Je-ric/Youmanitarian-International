@@ -106,7 +106,7 @@ class VolunteerAttendanceController extends Controller
         // Store 
         $attendance->update([
             'clock_out' => $clock_out,
-            'hours_logged' => $total_seconds / 3600, // decimal
+            'hours_logged' => $total_seconds / 3600, 
             'formatted_time' => sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds),
         ]);
 
@@ -117,71 +117,44 @@ class VolunteerAttendanceController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-  public function uploadProof(Request $request, $programId)
-{
-    $user = Auth::user();
-    $volunteer = $user->volunteer;
+    public function uploadProof(Request $request, $programId)
+    {
+        $user = Auth::user();
+        $volunteer = $user->volunteer;
 
-    $request->validate([
-        'proof_image' => 'required|image|max:10240', // 10MB
-    ]);
+        $request->validate([
+            'proof_image' => 'required|image|max:10240', // 10MB
+        ]);
 
-    // Get attendance record
-    $attendance = VolunteerAttendance::where('volunteer_id', $volunteer->id)
-        ->where('program_id', $programId)
-        ->first();
+        // Get attendance record
+        $attendance = VolunteerAttendance::where('volunteer_id', $volunteer->id)
+            ->where('program_id', $programId)
+            ->first();
 
-    if (!$attendance) {
-        return redirect()->back()->with('error', 'Attendance record not found.');
+        if (!$attendance) {
+            return redirect()->back()->with('error', 'Attendance record not found.');
+        }
+
+        $program = Program::findOrFail($programId);
+
+        // Sanitize file name parts
+        $volunteerName = preg_replace('/[^A-Za-z0-9]/', '', $volunteer->name);
+        $programName = preg_replace('/[^A-Za-z0-9]/', '', $program->title); // or name/slug depending on your DB
+
+        $extension = $request->file('proof_image')->getClientOriginalExtension();
+        $filename = "{$programName}_{$volunteerName}." . $extension;
+
+        $path = $request->file('proof_image')->storeAs(
+            'uploads/attendance_proof',
+            $filename,
+            'public'
+        );
+
+        $attendance->proof_image = $path;
+        $attendance->save();
+
+        return redirect()->back()->with('success', 'Proof of attendance uploaded successfully.');
     }
-
-    $program = Program::findOrFail($programId);
-
-    // Sanitize file name parts
-    $volunteerName = preg_replace('/[^A-Za-z0-9]/', '', $volunteer->name);
-    $programName = preg_replace('/[^A-Za-z0-9]/', '', $program->title); // or name/slug depending on your DB
-
-    $extension = $request->file('proof_image')->getClientOriginalExtension();
-    $filename = "{$programName}_{$volunteerName}." . $extension;
-
-    $path = $request->file('proof_image')->storeAs(
-        'uploads/attendance_proof',
-        $filename,
-        'public'
-    );
-
-    $attendance->proof_image = $path;
-    $attendance->save();
-
-    return redirect()->back()->with('success', 'Proof of attendance uploaded successfully.');
-}
-    // public function uploadProof(Request $request, $programId)
-    // {
-    //     $user = Auth::user();
-    //     $volunteer = $user->volunteer;
-
-    //     $request->validate([
-    //         'proof_image' => 'required|image|max:10240', // 10MB max
-    //     ]);
-
-    //     // Find attendance record for this program
-    //     $attendance = VolunteerAttendance::where('volunteer_id', $volunteer->id)
-    //         ->where('program_id', $programId)
-    //         ->first();
-
-    //     if (!$attendance) {
-    //         return redirect()->back()->with('error', 'Attendance record not found.');
-    //     }
-
-    //     // Save the file and update DB
-    //     $path = $request->file('proof_image')->store('uploads/attendance_proof', 'public');
-
-    //     $attendance->proof_image = $path; // Store just the relative path
-    //     $attendance->approval_status = 'pending';
-    //     $attendance->save();
-
-    //     return redirect()->back()->with('success', 'Proof of attendance uploaded successfully.');
-    // }
 
     public function programVolunteers(Program $program)
     {
@@ -234,26 +207,4 @@ class VolunteerAttendanceController extends Controller
 
         return back()->with('toast', ['message' => 'Attendance rejected!', 'type' => 'error']);
     }
-
-    // public function updateAttendanceStatus(Request $request, $attendanceId)
-    // {
-    //     $request->validate([
-    //         'status' => 'required|in:approved,rejected',
-    //         'notes' => 'nullable|string',
-    //     ]);
-
-    //     $attendance = VolunteerAttendance::findOrFail($attendanceId);
-    //     $user = Auth::user();
-
-    //     $attendance->approval_status = $request->input('status');
-    //     $attendance->approved_by = $user->volunteer ? $user->volunteer->id : null;
-    //     $attendance->notes = $request->input('notes', $attendance->notes);
-    //     $attendance->save();
-
-    //     $statusMessage = $request->input('status') === 'approved'
-    //         ? 'Attendance approved!'
-    //         : 'Attendance rejected!';
-
-    //     return back()->with('toast', ['message' => $statusMessage, 'type' => $request->input('status') === 'approved' ? 'success' : 'error']);
-    // }
 }

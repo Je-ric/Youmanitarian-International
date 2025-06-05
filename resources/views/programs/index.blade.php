@@ -78,10 +78,15 @@
 
                             <td class="px-6 py-4 text-sm text-[#1a2235]">{{ $program->creator->name }}</td>
                             <td class="px-6 py-4 text-sm flex gap-2">
-                                <x-button onclick="document.getElementById('modal_{{ $program->id }}').showModal();"
+                                {{-- <x-button onclick="document.getElementById('modal_{{ $program->id }}').showModal();"
                                     variant="info" class="tooltip" data-tip="View Details">
                                     <i class='bx bx-show'></i>
-                                </x-button>
+                                </x-button> --}}
+                                <button onclick="document.getElementById('modal_{{ $program->id }}').showModal();"
+                                        class="btn btn-info tooltip" data-tip="View Details">
+                                    <i class='bx bx-show'></i>
+                                </button>
+
 
                                 
                                 {{-- @if(Auth::user()->volunteer) --}}
@@ -127,7 +132,8 @@
 
                         </tr>
 
-                        <x-program-modal :program="$program" />
+                        {{-- <x-program-modal :program="$program" /> --}}
+                        @include('programs.modals.program-modal', ['program' => $program])
                         {{-- show modal --}}
                         </tr>
                     @endforeach

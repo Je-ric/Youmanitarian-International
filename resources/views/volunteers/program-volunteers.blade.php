@@ -230,14 +230,21 @@
 
                 <div class="flex justify-between items-center flex-wrap gap-4">
                     <div>
-                        @if($log->proof_image_path)
-                            <a href="{{ asset('storage/uploads/attendance_proof/' . $log->proof_image_path) }}" target="_blank" class="underline text-blue-600 hover:text-blue-800 font-['Poppins']">
-                                View Proof Image
+                        @if ($log->proof_image)
+                            <img src="{{ asset('storage/' . $log->proof_image) }}"
+                                alt="Proof of Attendance"
+                                class="w-64 h-auto border rounded shadow mb-2" />
+
+                            <a href="{{ asset('storage/' . $log->proof_image) }}"
+                            target="_blank"
+                            class="underline text-blue-600 hover:text-blue-800 font-['Poppins']">
+                                View Full Size
                             </a>
                         @else
                             <p class="text-gray-500 font-['Poppins']">No proof image uploaded</p>
                         @endif
                     </div>
+
 
                     <div class="flex gap-4 flex-wrap">
                         <button

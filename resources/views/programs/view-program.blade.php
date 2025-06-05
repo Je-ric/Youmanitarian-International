@@ -247,16 +247,12 @@
             // Use $log->proof_image directly if available
             $proofPath = $log->proof_image ?? null;
         @endphp
-
+            
         @if ($proofPath)
             <div class="mb-4">
                 <p class="mb-2 text-sm text-gray-600 font-['Poppins']">Existing proof of attendance:</p>
                 
-                {{-- Display the uploaded image --}}
-                <img src="{{ asset('storage/' . $proofPath) }}"
-                     alt="Proof of Attendance"
-                     class="w-64 h-auto border rounded shadow mb-2" />
-
+                <img src="{{ asset('storage/' . $attendance->proof_image) }}" />
                 {{-- Download/View link --}}
                 <a href="{{ asset('storage/' . $proofPath) }}"
                    target="_blank"
