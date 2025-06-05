@@ -1,5 +1,15 @@
 @extends('layouts.sidebar_final')
 
+@php
+    $volunteerId = auth()->user()?->volunteer?->id;
+
+    $volunteerAttendance = \App\Models\VolunteerAttendance::where('program_id', $program->id)
+        ->where('volunteer_id', $volunteerId)
+        ->first();
+
+    $proofPath = $volunteerAttendance?->proof_image;
+@endphp
+
 @section('content')
     <div class="container mx-auto p-6">
 
@@ -13,6 +23,7 @@
         </x-header-with-button>
 
         @include('programs.modals.feedbackModal', ['program' => $program, 'userFeedback' => $program->userFeedback])
+        @include('programs.modals.proofModal', ['program' => $program,'volunteerAttendance' => $volunteerAttendance,])
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
@@ -20,7 +31,6 @@
                 <div class="card-body space-y-3">
                     <div class="flex justify-between">
                         <h2 class="card-title text-xl">{{ $program->title }}</h2>
-
                         <x-status-indicator status="success" />
                     </div>
 
@@ -193,57 +203,6 @@
 
     </div>
 
-    @php
-        $volunteerId = auth()->user()?->volunteer?->id;
-
-        $volunteerAttendance = \App\Models\VolunteerAttendance::where('program_id', $program->id)
-            ->where('volunteer_id', $volunteerId)
-            ->first();
-
-        $proofPath = $volunteerAttendance?->proof_image;
-    @endphp
-
-    <dialog id="uploadProofModal" class="modal">
-        <form method="POST" action="{{ route('attendance.uploadProof', $program->id) }}" enctype="multipart/form-data"
-            class="modal-box max-w-lg p-6 rounded-lg bg-white">
-            @csrf
-
-            <h3 class="text-xl font-bold mb-4">Upload Proof of Attendance</h3>
-
-            @if ($proofPath)
-                <div class="mb-4">
-                    <p class="mb-2 text-sm text-gray-600 font-semibold font-['Poppins']">Your uploaded proof:</p>
-
-                    <img src="{{ asset('storage/' . $proofPath) }}" alt="Proof of Attendance"
-                        class="w-full max-w-xs rounded shadow border mb-2">
-
-                    <a href="{{ asset('storage/' . $proofPath) }}" target="_blank"
-                        class="text-blue-600 hover:text-blue-800 underline font-['Poppins'] text-sm">
-                        View Full Size
-                    </a>
-                </div>
-            @else
-                <div class="mb-4">
-                    <label for="proof_image" class="block text-sm font-semibold text-gray-700 mb-2">Upload Image:</label>
-                    <input type="file" name="proof_image" id="proof_image" accept="image/*" required
-                        class="file-input file-input-bordered w-full">
-                    @error('proof_image')
-                        <p class="text-red-600 mt-1 text-sm">{{ $message }}</p>
-                    @enderror
-                </div>
-            @endif
-
-            <div class="modal-action flex justify-end gap-3">
-                @if (!$proofPath)
-                    <button type="submit" class="btn btn-primary">Upload</button>
-                @endif
-                <button type="button" onclick="document.getElementById('uploadProofModal').close();" class="btn">
-                    {{ $proofPath ? 'Close' : 'Cancel' }}
-                </button>
-            </div>
-        </form>
-    </dialog>
-
-
+   
 
 @endsection

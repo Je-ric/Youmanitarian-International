@@ -13,12 +13,13 @@ use Illuminate\Support\Facades\Auth;
 class VolunteerApplicationController extends Controller
 {
 
+    // form.blade.php
     public function volunteerForm()
     {
         return view('volunteers.form');
     }
 
-
+    // form.blade.php
     public function store(Request $request)
     {
         $request->validate([

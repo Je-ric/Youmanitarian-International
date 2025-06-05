@@ -77,7 +77,7 @@ class VolunteerAttendanceController extends Controller
     // ═══════════════════════════════════════════════════════════════════════════════
 
 
-
+    // attendance.blade.php 
     public function clockOut(Program $program)
     {
         $user = Auth::user();
@@ -118,6 +118,7 @@ class VolunteerAttendanceController extends Controller
     // ═══════════════════════════════════════════════════════════════════════════════
 
 
+    // attendance.blade.php 
     public function uploadProof(Request $request, $programId)
     {
         $volunteerId = auth()->user()?->volunteer?->id;

@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 
 class VolunteerApprovalController extends Controller
 {
-    /*
-     * Approved a volunteer application
-     */
+    // application.blade.php
     public function approve($id)
     {
         $volunteer = Volunteer::findOrFail($id);
@@ -24,9 +22,7 @@ class VolunteerApprovalController extends Controller
         ]);
     }
 
-    /*
-     * Deny a volunteer application
-     */
+    // application.blade.php
     public function deny($id)
     {
         $volunteer = Volunteer::findOrFail($id);
@@ -40,9 +36,7 @@ class VolunteerApprovalController extends Controller
         ]);
     }
 
-    /**
-     * Restore a denied volunteer application back to pending
-     */
+    // application.blade.php
     public function restore($id)
     {
         $volunteer = Volunteer::findOrFail($id);

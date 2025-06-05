@@ -19,7 +19,6 @@ class ProgramVolunteerController extends Controller
         $approvedCount = $approvedVolunteers->count();
         $isFull = $approvedCount >= $program->volunteer_count;
 
-        // Attendance logs
         $logs = [];
         foreach ($approvedVolunteers as $volunteer) {
             $volunteerLogs = $program->volunteerAttendances()
@@ -36,7 +35,6 @@ class ProgramVolunteerController extends Controller
             }
             $totalTimeInHours = gmdate("H:i:s", $totalTime);
 
-            // Add logs and total time for each volunteer
             $logs[$volunteer->id] = [
                 'logs' => $volunteerLogs,
                 'totalTime' => $totalTimeInHours
@@ -67,6 +65,9 @@ class ProgramVolunteerController extends Controller
 
     //     return redirect()->back()->with('success', 'You have successfully joined the program.');
     // }
+
+    // index.blade.php (main)
+    // view-modal.blade.php (component)
     public function join(Program $program)
     {
         $user = Auth::user();
@@ -78,7 +79,7 @@ class ProgramVolunteerController extends Controller
 
         // Avoid duplicate entry
         if (!$program->volunteers->contains($volunteer->id)) {
-            $program->volunteers()->attach($volunteer->id); 
+            $program->volunteers()->attach($volunteer->id);
         }
 
         return redirect()->back()->with('success', 'You have successfully joined the program.');
