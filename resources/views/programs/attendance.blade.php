@@ -3,61 +3,16 @@
 @section('content')
     <div class="container mx-auto p-6">
 
-        @php
-            $volunteerId = auth()->user()?->volunteer?->id;
-
-            $userFeedback = \App\Models\ProgramFeedback::where('program_id', $program->id)
-                ->where('volunteer_id', $volunteerId)
-                ->first();
-        @endphp
-
-        <x-header-with-button title="Any Title" description="">
-            <x-button variant="secondary" onclick="document.getElementById('uploadProofModal').showModal();">
-                Upload Proof
+        <x-header-with-button title="Volunteer Attendance - Clock In / Clock Out" description="">
+            <x-button variant="secondary" 
+                onclick="document.getElementById('uploadProofModal').showModal();">Upload Proof
             </x-button>
             <x-button variant="secondary"
-                onclick="document.getElementById('feedbackModal_{{ $program->id }}').showModal();">Rate & Review</x-button>
+                onclick="document.getElementById('feedbackModal_{{ $program->id }}').showModal();">Rate & Review
+            </x-button>
         </x-header-with-button>
 
-        <dialog id="feedbackModal_{{ $program->id }}" class="modal">
-            <form method="POST" action="{{ route('programs.feedback.submit', $program->id) }}" class="modal-box"
-                onsubmit="return {{ $userFeedback ? 'false' : 'true' }};">
-                @csrf
-                <h3 class="font-bold text-lg mb-4">Rate & Review Program</h3>
-
-                <label class="block mb-2 font-semibold">Rating</label>
-                <select name="rating" {{ $userFeedback ? 'disabled' : '' }} required
-                    class="select select-bordered w-full mb-4">
-                    <option value="">Choose Rating</option>
-                    @for($i = 5; $i >= 1; $i--)
-                        <option value="{{ $i }}" {{ $userFeedback && $userFeedback->rating == $i ? 'selected' : '' }}>
-                            {{ $i }} Star{{ $i > 1 ? 's' : '' }}
-                        </option>
-                    @endfor
-                </select>
-
-                <label class="block mb-2 font-semibold">Your Feedback</label>
-                <textarea name="feedback" rows="4" class="textarea textarea-bordered w-full mb-4" {{ $userFeedback ? 'readonly' : '' }}
-                    placeholder="Share your thoughts...">{{ $userFeedback ? $userFeedback->feedback : '' }}</textarea>
-
-                @if($userFeedback)
-                    <input type="hidden" name="rating" value="{{ $userFeedback->rating }}">
-                    <input type="hidden" name="feedback" value="{{ $userFeedback->feedback }}">
-                @endif
-
-                <div class="modal-action">
-                    @if(!$userFeedback)
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    @else
-                        <button type="button" class="btn btn-disabled" disabled>Feedback Submitted</button>
-                    @endif
-                    <button type="button" onclick="document.getElementById('feedbackModal_{{ $program->id }}').close();"
-                        class="btn">Close</button>
-                </div>
-            </form>
-        </dialog>
-
-
+        @include('programs.modals.feedbackModal', ['program' => $program, 'userFeedback' => $program->userFeedback])
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
@@ -241,7 +196,6 @@
     @php
         $volunteerId = auth()->user()?->volunteer?->id;
 
-        // Get current volunteer's attendance record for this program
         $volunteerAttendance = \App\Models\VolunteerAttendance::where('program_id', $program->id)
             ->where('volunteer_id', $volunteerId)
             ->first();

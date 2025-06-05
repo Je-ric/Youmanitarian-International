@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class ProgramFeedbackController extends Controller
 {
+    
+    // attendance.blade.php (main)
+    // feedbackModal.blade.php (partial)
     public function submitFeedback(Request $request, Program $program)
     {
         $request->validate([
@@ -36,8 +39,7 @@ class ProgramFeedbackController extends Controller
                 'type' => 'info',
             ]);
         }
-
-        // Store feedback
+        
         ProgramFeedback::create([
             'program_id' => $program->id,
             'volunteer_id' => $volunteer->id,
@@ -52,7 +54,9 @@ class ProgramFeedbackController extends Controller
         ]);
     }
 
-    public function viewAll(Program $program)
+
+    // view_feedbacks.blade.php
+        public function viewAll(Program $program)
     {
         $feedbacks = ProgramFeedback::with('volunteer.user')
             ->where('program_id', $program->id)
