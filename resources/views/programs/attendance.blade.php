@@ -11,81 +11,128 @@
 @endphp
 
 @section('content')
-    <div class="container mx-auto p-6">
+    <div class="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
 
-        <x-header-with-button title="Volunteer Attendance - Clock In / Clock Out" description="">
-            <x-button variant="secondary" 
-                onclick="document.getElementById('uploadProofModal').showModal();">Upload Proof
-            </x-button>
-            <x-button variant="secondary"
-                onclick="document.getElementById('feedbackModal_{{ $program->id }}').showModal();">Rate & Review
-            </x-button>
-        </x-header-with-button>
+        <div class="mb-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">Volunteer Attendance - Clock In / Clock Out</h1>
+                </div>
+                <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+                    <x-button variant="secondary" class="w-full sm:w-auto" onclick="document.getElementById('uploadProofModal').showModal();">
+                        <i class='bx bx-upload mr-1'></i> Upload Proof
+                    </x-button>
+                    <x-button variant="secondary" class="w-full sm:w-auto" onclick="document.getElementById('feedbackModal_{{ $program->id }}').showModal();">
+                        <i class='bx bx-star mr-1'></i> Rate & Review
+                    </x-button>
+                </div>
+            </div>
+        </div>
 
         @include('programs.modals.feedbackModal', ['program' => $program, 'userFeedback' => $program->userFeedback])
-        @include('programs.modals.proofModal', ['program' => $program,'volunteerAttendance' => $volunteerAttendance,])
+        @include('programs.modals.proofModal', ['program' => $program, 'volunteerAttendance' => $volunteerAttendance,])
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
 
-            <div class="card bg-base-100 shadow-lg">
-                <div class="card-body space-y-3">
-                    <div class="flex justify-between">
-                        <h2 class="card-title text-xl">{{ $program->title }}</h2>
-                        <x-status-indicator status="success" />
+            <section
+                class="col-span-1 lg:col-span-2 w-full p-4 sm:p-5 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200 flex flex-col gap-4 sm:gap-7 shadow-lg">
+
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 leading-tight sm:leading-[50px] tracking-tight">
+                        {{ $program->title }}
+                    </h2>
+                    <x-status-indicator status="success" />
+                    @php
+                        $today = now();
+                        if ($program->start_date > $today) {
+                            $statusLabel = 'Incoming';
+                            $statusClass = 'text-blue-500';
+                        } elseif ($program->end_date && $program->end_date < $today) {
+                            $statusLabel = 'Done';
+                            $statusClass = 'text-gray-500';
+                        } else {
+                            $statusLabel = 'Ongoing';
+                            $statusClass = 'text-green-500';
+                        }
+                    @endphp
+                </div>
+
+                <!-- Description -->
+                <section>
+                    <h3 class="text-black text-base font-medium tracking-tight mb-1">
+                        Description
+                    </h3>
+                    <p class="text-gray-800 text-base sm:text-lg font-normal leading-relaxed sm:leading-loose">
+                        {{ $program->description }}
+                    </p>
+                </section>
+
+                <!-- Details -->
+                <section class="flex flex-col gap-3 sm:gap-4">
+                    <div class="flex flex-col sm:flex-row flex-wrap justify-between gap-3 sm:gap-4">
+                        <!-- Date -->
+                        <div class="flex items-center gap-2 min-w-[16rem]">
+                            <i class='bx bx-calendar text-lg text-gray-700'></i>
+                            <strong class="text-black text-sm sm:text-base font-medium tracking-tight">Date:</strong>
+                            <span class="text-black text-sm sm:text-base font-normal tracking-tight">
+                                {{ \Carbon\Carbon::parse($program->start_date)->format('F j, Y') }}
+                                @if($program->end_date)
+                                    - {{ \Carbon\Carbon::parse($program->end_date)->format('F j, Y') }}
+                                @endif
+                            </span>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="flex items-center gap-2">
+                            <i class='bx bx-map text-lg text-gray-700'></i>
+                            <strong class="text-black text-sm sm:text-base font-medium tracking-tight">Location:</strong>
+                            <span class="text-black text-sm sm:text-base font-normal tracking-tight">
+                                {{ $program->location ?? 'N/A' }}
+                            </span>
+                        </div>
                     </div>
 
-                    <p><span class="font-semibold">Description:</span> {{ $program->description }}</p>
-                    <p><span class="font-semibold">Organizer:</span> {{ $program->creator->name }}</p>
-
-                    <p>
-                        <span class="font-semibold">Date:</span>
-                        {{ \Carbon\Carbon::parse($program->start_date)->format('F j, Y') }}
-                        @if($program->end_date)
-                            - {{ \Carbon\Carbon::parse($program->end_date)->format('F j, Y') }}
-                        @endif
-                    </p>
-
-                    <p>
-                        <span class="font-semibold">Time:</span>
+                    <div class="flex flex-col sm:flex-row flex-wrap justify-between gap-3 sm:gap-4">
+                        <!-- Time -->
                         @php
                             $startTime = \Carbon\Carbon::parse($program->start_time)->format('g:ia');
                             $endTime = $program->end_time ? \Carbon\Carbon::parse($program->end_time)->format('g:ia') : null;
                         @endphp
-                        {{ $endTime ? "$startTime - $endTime" : $startTime }}
-                    </p>
+                        <div class="flex items-center gap-2 min-w-[16rem]">
+                            <i class='bx bx-time text-lg text-gray-700'></i>
+                            <strong class="text-black text-sm sm:text-base font-medium tracking-tight">Time:</strong>
+                            <span class="text-black text-sm sm:text-base font-normal tracking-tight">
+                                {{ $endTime ? "$startTime - $endTime" : $startTime }}
+                            </span>
+                        </div>
 
-                    <p><span class="font-semibold">Location:</span> {{ $program->location ?? 'N/A' }}</p>
-                    <p><span class="font-semibold">Volunteers:</span> {{ $program->volunteers->count() }}</p>
-
-                    <div class="flex items-center gap-2">
-                        <span class="font-semibold">Status:</span>
-                        @php
-                            $today = now();
-                            if ($program->start_date > $today) {
-                                echo '<span class="text-blue-500">Incoming</span>';
-                            } elseif ($program->end_date && $program->end_date < $today) {
-                                echo '<span class="text-gray-500">Done</span>';
-                            } else {
-                                echo '<span class="text-green-500">Ongoing</span>';
-                            }
-                        @endphp
+                        <!-- Coordinator -->
+                        <div class="flex items-center gap-2 min-w-[12rem]">
+                            <i class='bx bx-user text-lg text-gray-700'></i>
+                            <strong class="text-black text-sm sm:text-base font-medium tracking-tight">Coordinator:</strong>
+                            <span class="text-black text-sm sm:text-base font-normal tracking-tight">
+                                {{ $program->creator->name }}
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </section>
+            </section>
 
             {{-- Clock In/Out Card --}}
-            <div class="card bg-base-100 shadow-lg">
-                <div class="card-body space-y-4">
-                    <h2 class="text-4xl font-bold text-[#1a2235] mb-8">Your Attendance</h2>
+            <div class="col-span-1 card bg-base-100 shadow-lg rounded-2xl">
+                <div class="card-body p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1a2235] mb-4 sm:mb-8">Your Attendance</h2>
 
                     {{-- Flash Messages --}}
                     @if(session('success'))
-                        <div class="alert alert-success shadow-lg">
+                        <div class="alert alert-success shadow-lg text-sm sm:text-base">
+                            <i class='bx bx-check-circle'></i>
                             <span>{{ session('success') }}</span>
                         </div>
                     @endif
                     @if(session('error'))
-                        <div class="alert alert-error shadow-lg">
+                        <div class="alert alert-error shadow-lg text-sm sm:text-base">
+                            <i class='bx bx-error-circle'></i>
                             <span>{{ session('error') }}</span>
                         </div>
                     @endif
@@ -96,17 +143,23 @@
                     @endphp
 
                     {{-- Attendance Status Header --}}
-                    <p class="text-sm font-semibold">Current Status:</p>
+                    <p class="text-xs sm:text-sm font-semibold">Current Status:</p>
 
                     @if($attendance && $attendance->clock_in)
                         @php
                             $clockInTime = \Carbon\Carbon::parse($attendance->clock_in)->setTimezone('Asia/Manila');
                         @endphp
-                        <h3 class="text-sm font-bold text-[#1a2235] mb-4">Clocked In</h3>
-                        <div class="flex gap-2"><strong>Time In:</strong> <span>{{ $clockInTime->format('g:ia') }}</span></div>
+                        <h3 class="text-sm font-bold text-[#1a2235] mb-2 sm:mb-4">
+                            <i class='bx bx-check-circle text-green-500'></i> Clocked In
+                        </h3>
+                        <div class="flex gap-2 text-sm sm:text-base">
+                            <strong>Time In:</strong> <span>{{ $clockInTime->format('g:ia') }}</span>
+                        </div>
                     @else
-                        <h3 class="text-sm font-bold text-[#1a2235] mb-4">Not Yet Clocked In</h3>
-                        <div class="flex gap-2"><strong>Time In:</strong> <span>--:--</span></div>
+                        <h3 class="text-sm font-bold text-[#1a2235] mb-2 sm:mb-4">
+                            <i class='bx bx-time text-yellow-500'></i> Not Yet Clocked In
+                        </h3>
+                        <div class="flex gap-2 text-sm sm:text-base"><strong>Time In:</strong> <span>--:--</span></div>
                     @endif
 
                     @if($attendance && $attendance->clock_out)
@@ -115,67 +168,87 @@
                             $duration = $clockInTime->diff($clockOutTime);
                             $formatted = sprintf('%02d hr %02d min %02d sec', $duration->h, $duration->i, $duration->s);
                         @endphp
-                        <div class="flex gap-2"><strong>Time Out:</strong> <span>{{ $clockOutTime->format('g:ia') }}</span>
+                        <div class="flex gap-2 text-sm sm:text-base">
+                            <strong>Time Out:</strong> <span>{{ $clockOutTime->format('g:ia') }}</span>
                         </div>
-                        <div class="flex gap-2"><strong>Total Worked:</strong> <span>{{ $formatted }}</span></div>
+                        <div class="flex gap-2 text-sm sm:text-base">
+                            <strong>Total Worked:</strong> <span>{{ $formatted }}</span>
+                        </div>
                     @else
-                        <div class="flex gap-2"><strong>Time Out:</strong> <span>--:--</span></div>
+                        <div class="flex gap-2 text-sm sm:text-base"><strong>Time Out:</strong> <span>--:--</span></div>
                     @endif
 
                     {{-- Attendance Buttons --}}
                     @if($isUpcoming)
-                        <div class="alert alert-warning mt-4">
-                            <span>This program hasn’t started yet. Clock-in will be available on
+                        <div class="alert alert-warning mt-3 sm:mt-4 text-xs sm:text-sm">
+                            <i class='bx bx-calendar-exclamation'></i>
+                            <span>This program hasn't started yet. Clock-in will be available on
                                 <strong>{{ \Carbon\Carbon::parse($program->start_date)->format('F j, Y') }}</strong> at
                                 <strong>{{ \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}</strong>.
                             </span>
                         </div>
 
-                        <button class="btn btn-primary w-full mt-2" disabled>Clock In (Unavailable)</button>
-                        <button class="btn btn-error w-full mt-2" disabled>Clock Out (Unavailable)</button>
+                        <button class="btn btn-primary w-full mt-2 text-sm sm:text-base" disabled>
+                            <i class='bx bx-log-in-circle'></i> Clock In (Unavailable)
+                        </button>
+                        <button class="btn btn-error w-full mt-2 text-sm sm:text-base" disabled>
+                            <i class='bx bx-log-out-circle'></i> Clock Out (Unavailable)
+                        </button>
 
                     @elseif($isAssigned)
                         @if($attendance && $attendance->clock_in && !$attendance->clock_out)
                             {{-- Clocked In Only --}}
-                            <form action="{{ route('programs.clock-out', $program) }}" method="POST" class="mt-4">
+                            <form action="{{ route('programs.clock-out', $program) }}" method="POST" class="mt-3 sm:mt-4">
                                 @csrf
-                                <button type="submit" class="btn btn-error w-full">Clock Out</button>
+                                <button type="submit" class="btn btn-error w-full text-sm sm:text-base">
+                                    <i class='bx bx-log-out-circle'></i> Clock Out
+                                </button>
                             </form>
 
-                            <button class="btn btn-primary w-full mt-2" disabled>Clock In (Already Done)</button>
+                            <button class="btn btn-primary w-full mt-2 text-sm sm:text-base" disabled>
+                                <i class='bx bx-check-circle'></i> Clock In (Already Done)
+                            </button>
 
                         @elseif($attendance && $attendance->clock_out)
                             {{-- Both Clocked In and Out --}}
-                            <button class="btn btn-primary w-full mt-4" disabled>Clock In (Completed)</button>
-                            <button class="btn btn-error w-full mt-2" disabled>Clock Out (Completed)</button>
+                            <button class="btn btn-primary w-full mt-3 sm:mt-4 text-sm sm:text-base" disabled>
+                                <i class='bx bx-check-circle'></i> Clock In (Completed)
+                            </button>
+                            <button class="btn btn-error w-full mt-2 text-sm sm:text-base" disabled>
+                                <i class='bx bx-check-circle'></i> Clock Out (Completed)
+                            </button>
 
                         @else
                             {{-- Not Yet Clocked In --}}
-                            <form action="{{ route('programs.clock-in', $program) }}" method="POST" class="mt-4">
+                            <form action="{{ route('programs.clock-in', $program) }}" method="POST" class="mt-3 sm:mt-4">
                                 @csrf
-                                <button type="submit" class="btn btn-primary w-full">Clock In</button>
+                                <button type="submit" class="btn btn-primary w-full text-sm sm:text-base">
+                                    <i class='bx bx-log-in-circle'></i> Clock In
+                                </button>
                             </form>
 
-                            <button class="btn btn-error w-full mt-2" disabled>Clock Out (Clock In First)</button>
+                            <button class="btn btn-error w-full mt-2 text-sm sm:text-base" disabled>
+                                <i class='bx bx-log-out-circle'></i> Clock Out (Clock In First)
+                            </button>
                         @endif
 
                     @else
-                        <div class="alert alert-info mt-4">
+                        <div class="alert alert-info mt-3 sm:mt-4 text-xs sm:text-sm">
+                            <i class='bx bx-info-circle'></i>
                             <span>You are not assigned to this program.</span>
                         </div>
                     @endif
-
-
                 </div>
             </div>
         </div>
 
-        <section class="max-w-7xl mx-auto p-6 bg-yellow-50 rounded-2xl border-2 border-amber-400 mt-6 flex flex-col gap-8">
-            <div class="flex justify-between items-center">
-                <article>
-                    <h2 id="reminders-title" class="text-gray-800 text-lg font-bold leading-loose">Reminders:
+        <section class="max-w-7xl mx-auto p-4 sm:p-6 bg-yellow-50 rounded-2xl border-2 border-amber-400 mt-4 sm:mt-6 flex flex-col gap-4 sm:gap-8">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                <article class="w-full lg:w-1/2">
+                    <h2 id="reminders-title" class="text-gray-800 text-base sm:text-lg font-bold leading-relaxed sm:leading-loose flex items-center">
+                        <i class='bx bx-bell text-amber-500 mr-1'></i> Reminders:
                     </h2>
-                    <p class="text-gray-800 text-lg font-normal leading-loose">
+                    <p class="text-gray-800 text-sm sm:text-base lg:text-lg font-normal leading-relaxed sm:leading-loose">
                         Volunteers can only Clock In once and Clock Out once per program.<br>
                         Attendance will only be accessible once the program has started.<br>
                         After Clock In, Clock In button becomes disabled.<br>
@@ -183,9 +256,11 @@
                     </p>
                 </article>
 
-                <article>
-                    <h2 class="text-gray-800 text-lg font-bold leading-loose">Missing Attendance:</h2>
-                    <p class="text-gray-800 text-lg font-normal leading-loose">
+                <article class="w-full lg:w-1/2">
+                    <h2 class="text-gray-800 text-base sm:text-lg font-bold leading-relaxed sm:leading-loose flex items-center">
+                        <i class='bx bx-error-circle text-amber-500 mr-1'></i> Missing Attendance:
+                    </h2>
+                    <p class="text-gray-800 text-sm sm:text-base lg:text-lg font-normal leading-relaxed sm:leading-loose">
                         If you missed Clocking In or Clocking Out, please contact your program coordinator.<br>
                         The coordinator can manually enter the missing attendance record for you.<br>
                         Be sure to provide a reason for the missed attendance when requesting manual entry.
@@ -193,16 +268,14 @@
                 </article>
             </div>
 
-            <p class="text-center text-gray-800 text-lg leading-loose">
+            <p class="text-center text-gray-800 text-sm sm:text-base lg:text-lg leading-relaxed sm:leading-loose">
                 <strong>Please be reminded that attendance is taken seriously.</strong>
                 It serves as official documentation of your participation and will be used as one of the primary bases for
                 recognizing your contribution to the program.
             </p>
-            <p>Remember that you have to take an clock in first before making the upload of proof possible?</p>
+            <p class="text-center text-gray-800 text-sm sm:text-base lg:text-lg leading-relaxed sm:leading-loose">
+                <strong>Note:</strong> You must clock in first before you're allowed to upload attendance proof.
+            </p>
         </section>
-
     </div>
-
-   
-
 @endsection
