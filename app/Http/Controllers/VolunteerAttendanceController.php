@@ -15,9 +15,38 @@ use Illuminate\Support\Facades\Validator;
 class VolunteerAttendanceController extends Controller
 {
     // attendance.blade.php
+    // public function show(Program $program)
+    // {
+    //     $user = Auth::user();
+
+    //     $isAssigned = $program->volunteers()->where('user_id', $user->id)->exists();
+
+    //     $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id ?? null)
+    //         ->where('program_id', $program->id)
+    //         ->latest()
+    //         ->first();
+
+    //     if ($attendance && $attendance->clock_in && $attendance->clock_out) {
+    //         $clock_in = Carbon::parse($attendance->clock_in);
+    //         $clock_out = Carbon::parse($attendance->clock_out);
+
+    //         $diffInSeconds = $clock_in->diffInSeconds($clock_out);
+
+    //         $hours = floor($diffInSeconds / 3600);
+    //         $minutes = floor(($diffInSeconds % 3600) / 60);
+    //         $seconds = $diffInSeconds % 60;
+
+    //         $formattedTime = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+
+    //         $attendance->formatted_time = $formattedTime;
+    //     }
+
+    //     return view('programs.attendance', compact('program', 'attendance', 'isAssigned'));
+    // }
     public function show(Program $program)
     {
         $user = Auth::user();
+        $now = now()->setTimezone('Asia/Manila');
 
         $isAssigned = $program->volunteers()->where('user_id', $user->id)->exists();
 
@@ -26,22 +55,38 @@ class VolunteerAttendanceController extends Controller
             ->latest()
             ->first();
 
-        if ($attendance && $attendance->clock_in && $attendance->clock_out) {
-            $clock_in = Carbon::parse($attendance->clock_in);
-            $clock_out = Carbon::parse($attendance->clock_out);
+        $clockInTime = $attendance?->clock_in ? Carbon::parse($attendance->clock_in)->setTimezone('Asia/Manila') : null;
+        $clockOutTime = $attendance?->clock_out ? Carbon::parse($attendance->clock_out)->setTimezone('Asia/Manila') : null;
 
-            $diffInSeconds = $clock_in->diffInSeconds($clock_out);
-
+        $formattedWorkedTime = null;
+        if ($clockInTime && $clockOutTime) {
+            $diffInSeconds = $clockInTime->diffInSeconds($clockOutTime);
             $hours = floor($diffInSeconds / 3600);
             $minutes = floor(($diffInSeconds % 3600) / 60);
             $seconds = $diffInSeconds % 60;
-
-            $formattedTime = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-
-            $attendance->formatted_time = $formattedTime;
+            $formattedWorkedTime = sprintf('%02d hr %02d min %02d sec', $hours, $minutes, $seconds);
         }
 
-        return view('programs.attendance', compact('program', 'attendance', 'isAssigned'));
+        $status = match (true) {
+            $program->date > $now => 'upcoming',
+            $program->date < $now && $program->end_time < $now => 'done',
+            default => 'ongoing'
+        };
+
+        $canClockIn = $status === 'ongoing' && $isAssigned && !$attendance?->clock_in;
+        $canClockOut = $status === 'ongoing' && $isAssigned && $attendance?->clock_in && !$attendance?->clock_out;
+
+        return view('programs.attendance', compact(
+            'program',
+            'attendance',
+            'isAssigned',
+            'clockInTime',
+            'clockOutTime',
+            'formattedWorkedTime',
+            'status',
+            'canClockIn',
+            'canClockOut'
+        ));
     }
 
 

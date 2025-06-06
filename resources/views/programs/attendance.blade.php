@@ -116,111 +116,82 @@
                 </section>
             </section>
 
-            {{-- Clock In/Out Card --}}
+           
             <div
                 class="col-span-1 card bg-base-100 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200">
                 <div class="card-body p-4 sm:p-6 space-y-3 sm:space-y-4">
                     <h2 class="text-xl sm:text-2xl font-bold text-gray-800 leading-tight sm:leading-[50px] tracking-tight">
-                        Your Attendance</h2>
-
-                    @php
-                        $today = now()->setTimezone('Asia/Manila');
-                        $isUpcoming = $program->date > $today;
-                        $isDone = $program->date < $today && $program->end_time < $today;
-                    @endphp
+                        Your Attendance
+                    </h2>
 
                     <p class="text-xs sm:text-sm font-semibold">Current Status:</p>
 
-                    @if($attendance && $attendance->clock_in)
-                        @php
-                            $clockInTime = \Carbon\Carbon::parse($attendance->clock_in)->setTimezone('Asia/Manila');
-                        @endphp
-                        <h3 class="text-sm font-bold text-[#1a2235] mb-2 sm:mb-4">
+                    <h3 class="text-sm font-bold text-[#1a2235] mb-2 sm:mb-4">
+                        @if($clockInTime && $clockOutTime && $status === 'done')
+                            <i class='bx bx-check-double text-green-600'></i> Attendance Complete
+                        @elseif($clockInTime && !$clockOutTime && $status === 'done')
+                            <i class='bx bx-error-circle text-orange-500'></i> Missed Clock Out
+                        @elseif(!$clockInTime && !$clockOutTime && $status === 'done')
+                            <i class='bx bx-x-circle text-red-500'></i> No Attendance Recorded
+                        @elseif($clockInTime)
                             <i class='bx bx-check-circle text-green-500'></i> Clocked In
-                        </h3>
-                        <div class="flex gap-2 text-sm sm:text-base">
-                            <strong>Time In:</strong> <span>{{ $clockInTime->format('g:ia') }}</span>
-                        </div>
-                    @else
-                        <h3 class="text-sm font-bold text-[#1a2235] mb-2 sm:mb-4">
+                        @else
                             <i class='bx bx-time text-yellow-500'></i> Not Yet Clocked In
-                        </h3>
-                        <div class="flex gap-2 text-sm sm:text-base"><strong>Time In:</strong> <span>--:--</span></div>
+                        @endif
+                    </h3>
+
+                    <div class="flex gap-2 text-sm sm:text-base">
+                        <strong>Time In:</strong> <span>{{ $clockInTime ? $clockInTime->format('g:ia') : '--:--' }}</span>
+                    </div>
+
+                    <div class="flex gap-2 text-sm sm:text-base">
+                        <strong>Time Out:</strong>
+                        <span>{{ $clockOutTime ? $clockOutTime->format('g:ia') : '--:--' }}</span>
+                    </div>
+
+                    @if($formattedWorkedTime)
+                        <div class="flex gap-2 text-sm sm:text-base">
+                            <strong>Total Worked:</strong> <span>{{ $formattedWorkedTime }}</span>
+                        </div>
                     @endif
 
-                    @if($attendance && $attendance->clock_out)
-                        @php
-                            $clockOutTime = \Carbon\Carbon::parse($attendance->clock_out)->setTimezone('Asia/Manila');
-                            $duration = $clockInTime->diff($clockOutTime);
-                            $formatted = sprintf('%02d hr %02d min %02d sec', $duration->h, $duration->i, $duration->s);
-                        @endphp
-                        <div class="flex gap-2 text-sm sm:text-base">
-                            <strong>Time Out:</strong> <span>{{ $clockOutTime->format('g:ia') }}</span>
-                        </div>
-                        <div class="flex gap-2 text-sm sm:text-base">
-                            <strong>Total Worked:</strong> <span>{{ $formatted }}</span>
-                        </div>
-                    @else
-                        <div class="flex gap-2 text-sm sm:text-base"><strong>Time Out:</strong> <span>--:--</span></div>
-                    @endif
-
-                    {{-- Attendance Buttons --}}
-                    @if($isUpcoming)
+                    {{-- Attendance Buttons & Notices --}}
+                    @if($status === 'upcoming')
                         <div class="alert alert-warning mt-3 sm:mt-4 text-xs sm:text-sm">
                             <i class='bx bx-calendar-exclamation'></i>
-                            <span>This program hasn't started yet. Clock-in will be available on
+                            <span>
+                                This program hasn't started yet. Clock-in will be available on
                                 <strong>{{ \Carbon\Carbon::parse($program->start_date)->format('F j, Y') }}</strong> at
                                 <strong>{{ \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}</strong>.
                             </span>
                         </div>
 
-
                         <x-button variant="disabled" disabled>
                             <i class='bx bx-log-in-circle'></i> Clock In (Unavailable)
                         </x-button>
-                        
+
                         <x-button variant="disabled" disabled>
                             <i class='bx bx-log-out-circle'></i> Clock Out (Unavailable)
                         </x-button>
-                    @elseif($isDone)
+
+                    @elseif($status === 'done')
                         <div class="alert alert-warning mt-3 sm:mt-4 text-xs sm:text-sm">
                             <i class='bx bx-calendar-exclamation'></i>
-                            <span>This program concluded on {{ $program->date->format('F j, Y') }}. Attendance is no longer available.
-                            </span>
+                            <span>This program concluded on 
+                                <strong>{{ $program->date->format('F j, Y') }}</strong>. Attendance is no longer
+                                available.</span>
                         </div>
 
-                        <button class="btn btn-primary w-full mt-2 text-sm sm:text-base" disabled>
-                            <i class='bx bx-log-in-circle'></i> Clock In (Unavailable)
-                        </button>
-                        <button class="btn btn-error w-full mt-2 text-sm sm:text-base" disabled>
-                            <i class='bx bx-log-out-circle'></i> Clock Out (Unavailable)
-                        </button>
+                        <x-button variant="disabled" disabled>
+                            <i class='bx bx-log-in-circle'></i> Clock In (Completed)
+                        </x-button>
+
+                        <x-button variant="disabled" disabled>
+                            <i class='bx bx-log-out-circle'></i> Clock Out (Completed)
+                        </x-button>
 
                     @elseif($isAssigned)
-                        @if($attendance && $attendance->clock_in && !$attendance->clock_out)
-                            {{-- Clocked In Only --}}
-                            <form action="{{ route('programs.clock-out', $program) }}" method="POST" class="mt-3 sm:mt-4">
-                                @csrf
-                                <button type="submit" class="btn btn-error w-full text-sm sm:text-base">
-                                    <i class='bx bx-log-out-circle'></i> Clock Out
-                                </button>
-                            </form>
-
-                            <button class="btn btn-primary w-full mt-2 text-sm sm:text-base" disabled>
-                                <i class='bx bx-check-circle'></i> Clock In (Already Done)
-                            </button>
-
-                        @elseif($attendance && $attendance->clock_out)
-                            {{-- Both Clocked In and Out --}}
-                            <button class="btn btn-primary w-full mt-3 sm:mt-4 text-sm sm:text-base" disabled>
-                                <i class='bx bx-check-circle'></i> Clock In (Completed)
-                            </button>
-                            <button class="btn btn-error w-full mt-2 text-sm sm:text-base" disabled>
-                                <i class='bx bx-check-circle'></i> Clock Out (Completed)
-                            </button>
-
-                        @else
-                            {{-- Not Yet Clocked In --}}
+                        @if($canClockIn)
                             <form action="{{ route('programs.clock-in', $program) }}" method="POST" class="mt-3 sm:mt-4">
                                 @csrf
                                 <x-button type="submit" variant="clock_in">
@@ -228,9 +199,30 @@
                                 </x-button>
                             </form>
 
-                            <button class="btn btn-error w-full mt-2 text-sm sm:text-base" disabled>
+                            <x-button variant="disabled" disabled>
                                 <i class='bx bx-log-out-circle'></i> Clock Out (Clock In First)
-                            </button>
+                            </x-button>
+
+                        @elseif($canClockOut)
+                            <form action="{{ route('programs.clock-out', $program) }}" method="POST" class="mt-3 sm:mt-4">
+                                @csrf
+                                <x-button type="submit" variant="clock_in" class="w-full text-sm sm:text-base">
+                                    <i class='bx bx-log-out-circle'></i> Clock Out
+                                </x-button>
+                            </form>
+
+                            <x-button variant="disabled" disabled>
+                                <i class='bx bx-check-circle'></i> Clock In (Already Done)
+                            </x-button>
+
+                        @else
+                            {{-- Both Clocked In and Out --}}
+                            <x-button variant="disabled" disabled>
+                                <i class='bx bx-check-circle'></i> Clock In (Completed)
+                            </x-button>
+                            <x-button variant="disabled" disabled>
+                                <i class='bx bx-check-circle'></i> Clock Out (Completed)
+                            </x-button>
                         @endif
 
                     @else
@@ -241,10 +233,12 @@
                     @endif
                 </div>
             </div>
+
         </div>
 
         {{-- Partial --}}
         @include('programs.partials.attendanceReminders')
 
     </div>
+    
 @endsection
