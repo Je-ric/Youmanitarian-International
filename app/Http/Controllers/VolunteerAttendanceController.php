@@ -10,6 +10,7 @@ use App\Models\VolunteerAttendance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class VolunteerAttendanceController extends Controller
 {
@@ -59,7 +60,10 @@ class VolunteerAttendanceController extends Controller
             ->exists();
 
         if ($existingClockIn) {
-            return redirect()->back()->with('error', 'You are already clocked in.');
+            return redirect()->back()->with('toast', [
+                'message' => 'You are already clocked in.',
+                'type' => 'error',
+            ]);
         }
 
         VolunteerAttendance::create([
@@ -68,7 +72,10 @@ class VolunteerAttendanceController extends Controller
             'clock_in' => now(),
         ]);
 
-        return redirect()->back()->with('success', 'Clocked in successfully.');
+        return redirect()->back()->with('toast', [
+            'message' => 'Clocked in successfully.',
+            'type' => 'success',
+        ]);
     }
 
 
@@ -89,7 +96,10 @@ class VolunteerAttendanceController extends Controller
             ->first();
 
         if (!$attendance) {
-            return redirect()->back()->with('error', 'You need to clock in first.');
+            return redirect()->back()->with('toast', [
+                'message' => 'You need to clock in first.',
+                'type' => 'error',
+            ]);
         }
 
         // Set the clock-out time and calculate total time using Carbon
@@ -110,7 +120,10 @@ class VolunteerAttendanceController extends Controller
             'formatted_time' => sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds),
         ]);
 
-        return redirect()->back()->with('success', 'Clocked out successfully.');
+        return redirect()->back()->with('toast', [
+            'message' => 'Clocked out successfully.',
+            'type' => 'success',
+        ]);
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -127,9 +140,21 @@ class VolunteerAttendanceController extends Controller
             return back()->with('toast', ['message' => 'You must be logged in as a volunteer.', 'type' => 'error']);
         }
 
-        $request->validate([
-            'proof_image' => 'required|image|max:2048', // 2MB max
+        // $request->validate([
+        //     'proof_image' => 'required|image|max:10048', // 10mb max
+        // ]);
+
+        $validator = Validator::make($request->all(), [
+            'proof_image' => 'required|image|max:10048', // max 10MB
         ]);
+
+        if ($validator->fails()) {
+            // Redirect back with the first validation error in toast format
+            return redirect()->back()->with('toast', [
+                'message' => $validator->errors()->first('proof_image'),
+                'type' => 'error',
+            ]);
+        }
 
         $attendance = VolunteerAttendance::where('program_id', $programId)
             ->where('volunteer_id', $volunteerId)

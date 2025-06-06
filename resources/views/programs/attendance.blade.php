@@ -45,7 +45,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
 
             <section
-                class="col-span-1 lg:col-span-2 w-full p-4 sm:p-5 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200 flex flex-col gap-4 sm:gap-7 shadow-lg">
+                class="col-span-1 lg:col-span-2 w-full p-4 sm:p-5 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200 flex flex-col gap-4 sm:gap-7">
 
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <h2 class="text-xl sm:text-2xl font-bold text-gray-800 leading-tight sm:leading-[50px] tracking-tight">
@@ -128,22 +128,13 @@
             </section>
 
             {{-- Clock In/Out Card --}}
-            <div class="col-span-1 card bg-base-100 shadow-lg rounded-2xl">
+            <div class="col-span-1 card bg-base-100 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200">
                 <div class="card-body p-4 sm:p-6 space-y-3 sm:space-y-4">
                     <h2 class="text-xl sm:text-2xl font-bold text-gray-800 leading-tight sm:leading-[50px] tracking-tight">Your Attendance</h2>
 
-                    {{-- Flash Messages --}}
-                    @if(session('success'))
-                        <div class="alert alert-success shadow-lg text-sm sm:text-base">
-                            <i class='bx bx-check-circle'></i>
-                            <span>{{ session('success') }}</span>
-                        </div>
-                    @endif
-                    @if(session('error'))
-                        <div class="alert alert-error shadow-lg text-sm sm:text-base">
-                            <i class='bx bx-error-circle'></i>
-                            <span>{{ session('error') }}</span>
-                        </div>
+                
+                    @if (session('toast'))
+                        <x-toast :message="session('toast')['message']" :type="session('toast')['type']" />
                     @endif
 
                     @php
@@ -251,15 +242,14 @@
             </div>
         </div>
 
-        <section
-            class="max-w-7xl mx-auto p-4 sm:p-6 bg-yellow-50 rounded-2xl border-2 border-amber-400 mt-4 sm:mt-6 flex flex-col gap-4 sm:gap-8">
-            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <section class="max-w-7xl mx-auto p-4 sm:p-6 bg-yellow-50 rounded-2xl border-2 border-amber-400 mt-4 sm:mt-6 flex flex-col gap-4 sm:gap-8">
+            <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
                 <article class="w-full lg:w-1/2">
                     <h2 id="reminders-title"
                         class="text-gray-800 text-base sm:text-lg font-bold leading-relaxed sm:leading-loose flex items-center">
                         <i class='bx bx-bell text-amber-500 mr-1'></i> Reminders:
                     </h2>
-                    <p class="text-gray-800 text-sm sm:text-base lg:text-lg font-normal leading-relaxed sm:leading-loose">
+                    <p class="text-gray-800 text-sm sm:text-base lg:text-base font-normal leading-relaxed sm:leading-loose">
                         Volunteers can only Clock In once and Clock Out once per program.<br>
                         Attendance will only be accessible once the program has started.<br>
                         After Clock In, Clock In button becomes disabled.<br>
@@ -272,7 +262,7 @@
                         class="text-gray-800 text-base sm:text-lg font-bold leading-relaxed sm:leading-loose flex items-center">
                         <i class='bx bx-error-circle text-amber-500 mr-1'></i> Missing Attendance:
                     </h2>
-                    <p class="text-gray-800 text-sm sm:text-base lg:text-lg font-normal leading-relaxed sm:leading-loose">
+                    <p class="text-gray-800 text-sm sm:text-base lg:text-base font-normal leading-relaxed sm:leading-loose">
                         If you missed Clocking In or Clocking Out, please contact your program coordinator.<br>
                         The coordinator can manually enter the missing attendance record for you.<br>
                         Be sure to provide a reason for the missed attendance when requesting manual entry.
@@ -280,16 +270,18 @@
                 </article>
             </div>
 
-            <p class="text-center text-gray-800 text-sm sm:text-base lg:text-lg leading-relaxed sm:leading-loose">
+            <p class="text-start text-gray-800 text-sm sm:text-base lg:text-base leading-relaxed sm:leading-loose">
+                <strong>Note:</strong> 
+                    You must clock in first before you're allowed to upload attendance proof.
+                    <br>
+                <strong>Note:</strong>    
+                You can only submit a rating and review after the program has ended.
+            </p>
+
+            <p class="text-center text-gray-800 text-sm sm:text-base lg:text-base leading-relaxed sm:leading-loose">
                 <strong>Please be reminded that attendance is taken seriously.</strong>
                 It serves as official documentation of your participation and will be used as one of the primary bases for
                 recognizing your contribution to the program.
-            </p>
-            <p class="text-center text-gray-800 text-sm sm:text-base lg:text-lg leading-relaxed sm:leading-loose">
-                <strong>Note:</strong> You must clock in first before you're allowed to upload attendance proof.
-            </p>
-            <p class="text-center text-gray-800 text-sm sm:text-base lg:text-lg leading-relaxed sm:leading-loose">
-                <strong>Note:</strong> You must complete your attendance (clock in and clock out) before you can submit a rating and review. or "You can only submit a rating and review after the program has ended."
             </p>
         </section>
     </div>

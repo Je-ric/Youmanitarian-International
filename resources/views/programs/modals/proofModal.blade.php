@@ -32,9 +32,9 @@
                 <label for="proof_image" class="block text-sm font-semibold text-gray-700 mb-2">Upload Image:</label>
                 <input type="file" name="proof_image" id="proof_image" accept="image/*" required
                     class="file-input file-input-bordered w-full rounded-md border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                @error('proof_image')
+                {{-- @error('proof_image')
                     <p class="text-red-600 mt-2 text-sm">{{ $message }}</p>
-                @enderror
+                @enderror --}}
             </div>
         @endif
 
