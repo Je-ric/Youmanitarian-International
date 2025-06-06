@@ -7,20 +7,28 @@
 
 <dialog id="feedbackModal_{{ $program->id }}" class="modal">
     <div class="modal-box relative w-[95%] max-w-xl sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl p-6 sm:p-8">
-        <!-- ❌ Close Button Top-Right -->
-        <button type="button" onclick="document.getElementById('feedbackModal_{{ $program->id }}').close();"
+        {{-- <button type="button" onclick="document.getElementById('feedbackModal_{{ $program->id }}').close();"
             class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4">
             ✕
-        </button>
+        </button> --}}
+        <x-x-button>
+            
+        </x-x-button>
 
         <h2 class="text-2xl font-bold mb-1">Program Feedback</h2>
-        <p class="mb-6 text-sm text-gray-500">Please rate your experience and share your feedback.</p>
+        <p class="mb-4 text-sm text-gray-500">Please rate your experience and share your feedback.</p>
+        <div class="border-b border-gray-300 mb-4"></div>
+
+        @if($userFeedback)
+            <div class="alert alert-success alert-dash text-sm mb-6">
+                💛 <span>Thank you for your feedback! We truly appreciate your contribution.</span>
+            </div>
+        @endif
 
         <form method="POST" action="{{ route('programs.feedback.submit', $program->id) }}"
             onsubmit="return {{ $userFeedback ? 'false' : 'true' }};">
             @csrf
 
-            <!-- ⭐ Rating -->
             <label class="block mb-2 font-semibold text-sm sm:text-base text-center">Rating</label>
             <div class="rating mb-6 flex justify-center">
                 @for ($i = 1; $i <= 5; $i++)
@@ -30,7 +38,6 @@
                 @endfor
             </div>
 
-            <!-- 📝 Feedback -->
             <label class="block mb-2 font-semibold text-sm sm:text-base">Your Feedback</label>
             <textarea name="feedback" rows="4"
                 class="textarea textarea-bordered w-full mb-6 resize-none text-sm sm:text-base"
@@ -41,8 +48,7 @@
                 <input type="hidden" name="feedback" value="{{ $userFeedback->feedback }}">
             @endif
 
-            <!-- 🔘 Modal Action Buttons -->
-            <div class="modal-action flex justify-between items-center">
+            <div class="border-t border-gray-300 mt-6 pt-4 modal-action flex justify-between items-center">
                 <button type="button" onclick="document.getElementById('feedbackModal_{{ $program->id }}').close();"
                     class="btn">Cancel</button>
 
