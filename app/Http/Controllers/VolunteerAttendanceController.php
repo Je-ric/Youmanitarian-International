@@ -102,18 +102,15 @@ class VolunteerAttendanceController extends Controller
             ]);
         }
 
-        // Set the clock-out time and calculate total time using Carbon
         $clock_in = Carbon::parse($attendance->clock_in);
         $clock_out = Carbon::now();
 
         $total_seconds = $clock_in->diffInSeconds($clock_out);
 
-        // Calculate 
         $hours = floor($total_seconds / 3600);
         $minutes = floor(($total_seconds % 3600) / 60);
         $seconds = $total_seconds % 60;
 
-        // Store 
         $attendance->update([
             'clock_out' => $clock_out,
             'hours_logged' => $total_seconds / 3600,
@@ -149,7 +146,6 @@ class VolunteerAttendanceController extends Controller
         ]);
 
         if ($validator->fails()) {
-            // Redirect back with the first validation error in toast format
             return redirect()->back()->with('toast', [
                 'message' => $validator->errors()->first('proof_image'),
                 'type' => 'error',
@@ -160,7 +156,7 @@ class VolunteerAttendanceController extends Controller
             ->where('volunteer_id', $volunteerId)
             ->firstOrFail();
 
-        // Create filename: ProgramName-VolunteerName.extension
+        // Filename: ProgramName-VolunteerName.extension
         $program = Program::findOrFail($programId);
         $volunteer = Volunteer::findOrFail($volunteerId);
         $volunteerName = preg_replace('/\s+/', '', $volunteer->user->name);
@@ -183,7 +179,6 @@ class VolunteerAttendanceController extends Controller
 
     public function programVolunteers(Program $program)
     {
-        // Get volunteers with attendance logs grouped by volunteer
         $logs = [];
 
         foreach ($program->volunteers as $volunteer) {
