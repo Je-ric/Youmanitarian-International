@@ -58,29 +58,6 @@
                     </h2>
                     {{-- component --}}
                     <x-programProgress :program="$program" />
-
-                    {{-- @php
-                    use Carbon\Carbon;
-                    $today = now();
-
-                    $programDate = Carbon::parse($program->date)->format('Y-m-d');
-
-                    $startDateTime = Carbon::parse($programDate . ' ' . $program->start_time);
-                    $endDateTime = Carbon::parse($programDate . ' ' . $program->end_time);
-
-                    if ($today->lt($startDateTime)) {
-                    $statusLabel = 'Incoming';
-                    $variant = 'info';
-                    } elseif ($today->between($startDateTime, $endDateTime)) {
-                    $statusLabel = 'Ongoing';
-                    $variant = 'success';
-                    } else {
-                    $statusLabel = 'Done';
-                    $variant = 'neutral';
-                    }
-                    @endphp
-                    <x-status-indicator status="{{ strtolower($variant) }}" label="{{ $statusLabel }}" /> --}}
-
                 </div>
 
                 <!-- Description -->

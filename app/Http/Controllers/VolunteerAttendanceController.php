@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 
 class VolunteerAttendanceController extends Controller
 {
+    // attendance.blade.php
     public function show(Program $program)
     {
         $user = Auth::user();
