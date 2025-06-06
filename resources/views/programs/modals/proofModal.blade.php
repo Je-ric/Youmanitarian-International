@@ -69,10 +69,11 @@
         <header class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex-shrink-0">
             <div class="flex items-center justify-between">
                 <h3 class="text-2xl font-bold text-slate-900 tracking-tight">Upload Proof of Attendance</h3>
-                <button onclick="document.getElementById('uploadProofModal').close()" 
+                {{-- <button onclick="document.getElementById('uploadProofModal').close()" 
                         class="p-2 hover:bg-slate-200 rounded-lg transition-colors duration-200">
                     <i class='bx bx-x text-slate-500 text-xl'></i>
-                </button>
+                </button> --}}
+                <x-x-button></x-x-button>
             </div>
         </header>
 
