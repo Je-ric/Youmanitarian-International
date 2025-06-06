@@ -11,8 +11,6 @@
                     class="text-3xl font-extrabold text-[#1a2235] tracking-tight [text-shadow:_0px_2px_1px_rgb(255_181_27_/_0.7)]">
                     {{ $program->title }}
                 </h2>
-                
-        <h1> Partial ITo</h1>
             </header>
 
             <div class="flex flex-col lg:flex-row">
@@ -79,14 +77,17 @@
                     </h3>
 
                     @php
+                        $progressComponent = view('components.programProgress', ['program' => $program])->render();
+
                         $details = [
                             ['icon' => 'calendar', 'label' => 'Date', 'value' => \Carbon\Carbon::parse($program->date)->format('M d, Y')],
                             ['icon' => 'time', 'label' => 'Time', 'value' => \Carbon\Carbon::parse($program->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($program->end_time)->format('h:i A')],
                             ['icon' => 'map-pin', 'label' => 'Location', 'value' => $program->location],
                             ['icon' => 'group', 'label' => 'Volunteers Needed', 'value' => $program->volunteer_count],
-                            ['icon' => 'trending-up', 'label' => 'Progress', 'value' => ucfirst($program->progress)],
+                            ['icon' => 'trending-up', 'label' => 'Progress', 'value' => $progressComponent]
                         ];
                     @endphp
+
 
                     @foreach ($details as $detail)
                         <div class="space-y-1.5 bg-white p-3 rounded-lg border border-gray-100 transition-all hover:border-[#1a2235]/20">
@@ -94,7 +95,8 @@
                                 <i class='bx bx-{{ $detail['icon'] }} text-[#2a3449]'></i>
                                 <span class="text-sm text-gray-600">{{ $detail['label'] }}</span>
                             </div>
-                            <p class="text-[#1a2235] font-semibold pl-6 text-[15px]">{{ $detail['value'] }}</p>
+                            {{-- <p class="text-[#1a2235] font-semibold pl-6 text-[15px]">{{ $detail['value'] }}</p> --}}
+                            <p class="text-[#1a2235] font-semibold pl-6 text-[15px]">{!! $detail['value'] !!}</p>
                         </div>
                     @endforeach
                 </aside>

@@ -51,20 +51,30 @@
                     <h2 class="text-xl sm:text-2xl font-bold text-gray-800 leading-tight sm:leading-[50px] tracking-tight">
                         {{ $program->title }}
                     </h2>
-                    <x-status-indicator status="success" />
-                    @php
+                    <x-programProgress :program="$program" />
+
+                    {{-- @php
+                        use Carbon\Carbon;
                         $today = now();
-                        if ($program->start_date > $today) {
+
+                        $programDate = Carbon::parse($program->date)->format('Y-m-d');
+
+                        $startDateTime = Carbon::parse($programDate . ' ' . $program->start_time);
+                        $endDateTime = Carbon::parse($programDate . ' ' . $program->end_time);
+
+                        if ($today->lt($startDateTime)) {
                             $statusLabel = 'Incoming';
-                            $statusClass = 'text-blue-500';
-                        } elseif ($program->end_date && $program->end_date < $today) {
-                            $statusLabel = 'Done';
-                            $statusClass = 'text-gray-500';
-                        } else {
+                            $variant = 'info';
+                        } elseif ($today->between($startDateTime, $endDateTime)) {
                             $statusLabel = 'Ongoing';
-                            $statusClass = 'text-green-500';
+                            $variant = 'success';
+                        } else {
+                            $statusLabel = 'Done';
+                            $variant = 'neutral';
                         }
                     @endphp
+                    <x-status-indicator status="{{ strtolower($variant) }}" label="{{ $statusLabel }}" /> --}}
+
                 </div>
 
                 <!-- Description -->
@@ -79,7 +89,6 @@
 
                 </section>
 
-                <!-- Details -->
                 <section class="flex flex-col gap-3 sm:gap-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-4">
                         <!-- Date -->
@@ -87,10 +96,7 @@
                             <i class='bx bx-calendar text-lg text-gray-700'></i>
                             <strong class="text-black text-sm sm:text-base font-medium tracking-tight">Date:</strong>
                             <span class="text-black text-sm sm:text-base font-normal tracking-tight">
-                                {{ \Carbon\Carbon::parse($program->start_date)->format('F j, Y') }}
-                                @if($program->end_date)
-                                    - {{ \Carbon\Carbon::parse($program->end_date)->format('F j, Y') }}
-                                @endif
+                                {{ \Carbon\Carbon::parse($program->date)->format('F j, Y') }}
                             </span>
                         </div>
 
@@ -128,11 +134,13 @@
             </section>
 
             {{-- Clock In/Out Card --}}
-            <div class="col-span-1 card bg-base-100 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200">
+            <div
+                class="col-span-1 card bg-base-100 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200">
                 <div class="card-body p-4 sm:p-6 space-y-3 sm:space-y-4">
-                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 leading-tight sm:leading-[50px] tracking-tight">Your Attendance</h2>
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 leading-tight sm:leading-[50px] tracking-tight">
+                        Your Attendance</h2>
 
-                
+
                     @if (session('toast'))
                         <x-toast :message="session('toast')['message']" :type="session('toast')['type']" />
                     @endif
@@ -242,7 +250,9 @@
             </div>
         </div>
 
-        <section class="max-w-7xl mx-auto p-4 sm:p-6 bg-yellow-50 rounded-2xl border-2 border-amber-400 mt-4 sm:mt-6 flex flex-col gap-4 sm:gap-8">
+        {{-- Component? --}}
+        <section
+            class="max-w-7xl mx-auto p-4 sm:p-6 bg-yellow-50 rounded-2xl border-2 border-amber-400 mt-4 sm:mt-6 flex flex-col gap-4 sm:gap-8">
             <div class="flex flex-col lg:flex-row justify-between items-start gap-4">
                 <article class="w-full lg:w-1/2">
                     <h2 id="reminders-title"
@@ -271,10 +281,10 @@
             </div>
 
             <p class="text-start text-gray-800 text-sm sm:text-base lg:text-base leading-relaxed sm:leading-loose">
-                <strong>Note:</strong> 
-                    You must clock in first before you're allowed to upload attendance proof.
-                    <br>
-                <strong>Note:</strong>    
+                <strong>Note:</strong>
+                You must clock in first before you're allowed to upload attendance proof.
+                <br>
+                <strong>Note:</strong>
                 You can only submit a rating and review after the program has ended.
             </p>
 

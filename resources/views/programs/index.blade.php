@@ -73,7 +73,7 @@
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4 text-sm text-[#1a2235]">{{ $program->title }}</td>
                             <td class="px-6 py-4 text-sm font-semibold">
-
+                                <x-programProgress :program="$program" />
                             </td>
 
                             <td class="px-6 py-4 text-sm text-[#1a2235]">{{ $program->creator->name }}</td>
@@ -132,8 +132,8 @@
 
                         </tr>
 
-                        <x-program-modal :program="$program" />
-                        {{-- @include('programs.modals.program-modal', ['program' => $program]) --}}
+                        {{-- <x-program-modal :program="$program" /> --}}
+                        @include('programs.modals.program-modal', ['program' => $program])
                         {{-- show modal --}}
                         </tr>
                     @endforeach
