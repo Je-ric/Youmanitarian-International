@@ -122,10 +122,6 @@
                     class="text-2xl font-bold text-slate-900 tracking-tight">
                     {{ $program->title }}
                 </h2>
-                {{-- <button onclick="document.getElementById('modal_{{ $program->id }}').close()" 
-                        class="p-2 hover:bg-slate-200 rounded-lg transition-colors duration-200">
-                    <i class='bx bx-x text-slate-500 text-xl'></i>
-                </button> --}}
                 <x-x-button></x-x-button>
             </div>
         </header>

@@ -75,7 +75,7 @@ class VolunteerAttendanceController extends Controller
 
         $canClockIn = $status === 'ongoing' && $isAssigned && !$attendance?->clock_in;
         $canClockOut = $status === 'ongoing' && $isAssigned && $attendance?->clock_in && !$attendance?->clock_out;
-
+        
         return view('programs.attendance', compact(
             'program',
             'attendance',

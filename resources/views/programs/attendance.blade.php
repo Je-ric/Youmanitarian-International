@@ -116,7 +116,7 @@
                 </section>
             </section>
 
-           
+
             <div
                 class="col-span-1 card bg-base-100 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200">
                 <div class="card-body p-4 sm:p-6 space-y-3 sm:space-y-4">
@@ -124,21 +124,23 @@
                         Your Attendance
                     </h2>
 
-                    <p class="text-xs sm:text-sm font-semibold">Current Status:</p>
+                    <div class="text-xs sm:text-sm font-semibold">
+                        <span>Current Status:</span>
+                        <span class="block text-sm font-bold text-[#1a2235] sm:text-base mt-0.5">
+                            @if($clockInTime && $clockOutTime && $status === 'done')
+                                <i class='bx bx-check-double text-green-600'></i> Attendance Complete
+                            @elseif($clockInTime && !$clockOutTime && $status === 'done')
+                                <i class='bx bx-error-circle text-orange-500'></i> Missed Clock Out
+                            @elseif(!$clockInTime && !$clockOutTime && $status === 'done')
+                                <i class='bx bx-x-circle text-red-500'></i> No Attendance Recorded
+                            @elseif($clockInTime)
+                                <i class='bx bx-check-circle text-green-500'></i> Clocked In
+                            @else
+                                <i class='bx bx-time text-yellow-500'></i> Not Yet Clocked In
+                            @endif
+                        </span>
+                    </div>
 
-                    <h3 class="text-sm font-bold text-[#1a2235] mb-2 sm:mb-4">
-                        @if($clockInTime && $clockOutTime && $status === 'done')
-                            <i class='bx bx-check-double text-green-600'></i> Attendance Complete
-                        @elseif($clockInTime && !$clockOutTime && $status === 'done')
-                            <i class='bx bx-error-circle text-orange-500'></i> Missed Clock Out
-                        @elseif(!$clockInTime && !$clockOutTime && $status === 'done')
-                            <i class='bx bx-x-circle text-red-500'></i> No Attendance Recorded
-                        @elseif($clockInTime)
-                            <i class='bx bx-check-circle text-green-500'></i> Clocked In
-                        @else
-                            <i class='bx bx-time text-yellow-500'></i> Not Yet Clocked In
-                        @endif
-                    </h3>
 
                     <div class="flex gap-2 text-sm sm:text-base">
                         <strong>Time In:</strong> <span>{{ $clockInTime ? $clockInTime->format('g:ia') : '--:--' }}</span>
@@ -177,7 +179,7 @@
                     @elseif($status === 'done')
                         <div class="alert alert-warning mt-3 sm:mt-4 text-xs sm:text-sm">
                             <i class='bx bx-calendar-exclamation'></i>
-                            <span>This program concluded on 
+                            <span>This program concluded on
                                 <strong>{{ $program->date->format('F j, Y') }}</strong>. Attendance is no longer
                                 available.</span>
                         </div>
@@ -240,5 +242,5 @@
         @include('programs.partials.attendanceReminders')
 
     </div>
-    
+
 @endsection
