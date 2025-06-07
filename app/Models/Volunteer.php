@@ -23,7 +23,8 @@ class Volunteer extends Model
 
         // return $this->belongsToMany(Program::class, 'program_volunteers', 'volunteer_id', 'program_id')
         // ->withPivot('status')->withTimestamps(); 
-        return $this->belongsToMany(Program::class, 'program_volunteers', 'volunteer_id', 'program_id')->withTimestamps(); 
+        return $this->belongsToMany(Program::class, 'program_volunteers', 'volunteer_id', 'program_id')
+        ->withPivot('status')->withTimestamps(); 
     }
 
     public function application()
