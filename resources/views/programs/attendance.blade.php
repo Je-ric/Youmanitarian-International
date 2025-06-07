@@ -116,7 +116,6 @@
                 </section>
             </section>
 
-
             <div
                 class="col-span-1 card bg-base-100 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200">
                 <div class="card-body p-4 sm:p-6 space-y-3 sm:space-y-4">
@@ -156,7 +155,6 @@
                         </div>
                     @endif
 
-                    {{-- Attendance Buttons & Notices --}}
                     @if($status === 'upcoming')
                         <div class="alert alert-warning mt-3 sm:mt-4 text-xs sm:text-sm">
                             <i class='bx bx-calendar-exclamation'></i>
