@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ProgramFeedbackController extends Controller
 {
-    
+
     // attendance.blade.php (main)
     // feedbackModal.blade.php (partial)
     public function submitFeedback(Request $request, Program $program)
@@ -39,7 +39,7 @@ class ProgramFeedbackController extends Controller
                 'type' => 'info',
             ]);
         }
-        
+
         ProgramFeedback::create([
             'program_id' => $program->id,
             'volunteer_id' => $volunteer->id,
@@ -55,30 +55,29 @@ class ProgramFeedbackController extends Controller
     }
 
 
-    // view_feedbacks.blade.php
-     public function viewAll(Program $program)
-{
-    $feedbacks = ProgramFeedback::with('volunteer.user')
-        ->where('program_id', $program->id)
-        ->latest('submitted_at')
-        ->get();
+    // view_feedbacks.blade.php (main)
+    // feedbackItem.blade.php (partial)
+    public function viewAll(Program $program)
+    {
+        $feedbacks = ProgramFeedback::with('volunteer.user')
+            ->where('program_id', $program->id)
+            ->latest('submitted_at')
+            ->get();
 
-    $totalFeedbacks = $feedbacks->count();
-    $averageRating = $totalFeedbacks > 0 ? round($feedbacks->avg('rating'), 1) : 0;
+        $totalFeedbacks = $feedbacks->count();
+        $averageRating = $totalFeedbacks > 0 ? round($feedbacks->avg('rating'), 1) : 0;
 
-    // Count per star rating
-    $ratingCounts = [];
-    for ($i = 1; $i <= 5; $i++) {
-        $ratingCounts[$i] = $feedbacks->where('rating', $i)->count();
+        $ratingCounts = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $ratingCounts[$i] = $feedbacks->where('rating', $i)->count();
+        }
+
+        return view('programs.view_feedbacks', [
+            'program' => $program,
+            'feedbacks' => $feedbacks,
+            'totalFeedbacks' => $totalFeedbacks,
+            'averageRating' => $averageRating,
+            'ratingCounts' => $ratingCounts,
+        ]);
     }
-
-    return view('programs.view_feedbacks', [
-        'program' => $program,
-        'feedbacks' => $feedbacks,
-        'totalFeedbacks' => $totalFeedbacks,
-        'averageRating' => $averageRating,
-        'ratingCounts' => $ratingCounts,
-    ]);
-}
-
 }
