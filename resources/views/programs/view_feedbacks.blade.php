@@ -1,140 +1,166 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-    <div class="max-w-7xl mx-auto mt-8 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-2xl sm:text-3xl font-bold mb-6 sm:text-left">
-            Feedback for "{{ $program->title }}"
-        </h1>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">
+                Feedback for "{{ $program->title }}"
+            </h1>
+            <p class="text-gray-600">Review and analyze participant feedback for this program</p>
+        </div>
 
-        <div class="md:flex md:space-x-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {{-- Left: Summary Card --}}
-            <div class="md:w-1/3 bg-white p-6 rounded-lg shadow-md mb-8 md:mb-0">
-                <h3 class="text-xl font-semibold mb-4">Feedback Summary</h3>
+            <div class="lg:col-span-1">
+                <div class="bg-white border border-gray-200 rounded-xl p-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-0.5">Feedback Summary</h2>
+                    <p class="text-gray-500 text-sm mb-2">Overall program rating</p>
 
-                <p class="text-gray-700 mb-1">Overall program rating</p>
-                <div class="flex items-center space-x-2 mb-2">
-                    @php
-                        $fullStars = floor($averageRating);
-                        $halfStar = $averageRating - $fullStars >= 0.5;
-                        $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
-                    @endphp
+                    <!-- Overall Rating -->
+                    <div class="text-center mb-6 pb-6 border-b border-gray-100">
+                        <div class="text-4xl font-bold text-gray-900 mb-2">{{ number_format($averageRating, 1) }}</div>
+                        <div class="flex items-center justify-center space-x-1 mb-2">
+                            @php
+                                $fullStars = floor($averageRating);
+                                $halfStar = $averageRating - $fullStars >= 0.5;
+                                $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
+                            @endphp
 
-                    {{-- Full stars --}}
-                    @for ($i = 0; $i < $fullStars; $i++)
-                        <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.165c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.363-1.118L2.034 9.384c-.783-.57-.38-1.81.588-1.81h4.165a1 1 0 00.95-.69l1.286-3.957z" />
-                        </svg>
-                    @endfor
+                            {{-- Full stars --}}
+                            @for ($i = 0; $i < $fullStars; $i++)
+                                <i class='bx bxs-star text-yellow-400 text-xl'></i>
+                            @endfor
 
-                    {{-- Half star --}}
-                    @if ($halfStar)
-                        <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                            <defs>
-                                <linearGradient id="half-grad">
-                                    <stop offset="50%" stop-color="currentColor" />
-                                    <stop offset="50%" stop-color="transparent" />
-                                </linearGradient>
-                            </defs>
-                            <path fill="url(#half-grad)"
-                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.165c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.363-1.118L2.034 9.384c-.783-.57-.38-1.81.588-1.81h4.165a1 1 0 00.95-.69l1.286-3.957z" />
-                        </svg>
-                    @endif
+                            {{-- Half star --}}
+                            @if ($halfStar)
+                                <i class='bx bxs-star-half text-yellow-400 text-xl'></i>
+                            @endif
 
-                    {{-- Empty stars --}}
-                    @for ($i = 0; $i < $emptyStars; $i++)
-                        <svg class="w-6 h-6 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.165c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.176 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.363-1.118L2.034 9.384c-.783-.57-.38-1.81.588-1.81h4.165a1 1 0 00.95-.69l1.286-3.957z" />
-                        </svg>
-                    @endfor
-                </div>
-
-                <p class="text-gray-900 font-semibold mb-2">Average rating ({{ $averageRating }})</p>
-                <p class="text-gray-700 mb-4">{{ $totalFeedbacks }} review{{ $totalFeedbacks !== 1 ? 's' : '' }}</p>
-
-                <div class="space-y-2">
-                    @foreach(array_reverse($ratingCounts, true) as $stars => $count)
-                        @php
-                            $percent = $totalFeedbacks ? round(($count / $totalFeedbacks) * 100) : 0;
-                        @endphp
-                        <div class="flex items-center space-x-2">
-                            <span class="inline-flex items-center space-x-1"
-                                aria-label="{{ $stars }} star{{ $stars > 1 ? 's' : '' }}">
-                                <span class="text-sm font-medium text-gray-800">{{ $stars }}</span>
-                                <span class="mask mask-star w-6 h-6 bg-yellow-400" aria-hidden="true"></span>
-                            </span>
-                            <div class="flex-grow h-4 bg-gray-200 rounded-full overflow-hidden">
-                                <div class="h-4 bg-yellow-400 rounded-full" style="width: {{ $percent }}%"></div>
-                            </div>
-                            <span class="w-8 text-sm text-gray-600 text-right">{{ $count }}</span>
+                            {{-- Empty stars --}}
+                            @for ($i = 0; $i < $emptyStars; $i++)
+                                <i class='bx bx-star text-gray-300 text-xl'></i>
+                            @endfor
                         </div>
-                    @endforeach
+                        <p class="text-sm text-gray-600">Based on {{ $totalFeedbacks }}
+                            review{{ $totalFeedbacks !== 1 ? 's' : '' }}</p>
+                    </div>
+
+                    <!-- Rating Breakdown -->
+                    <div class="space-y-3">
+                        @foreach(array_reverse($ratingCounts, true) as $stars => $count)
+                            @php
+                                $percent = $totalFeedbacks ? round(($count / $totalFeedbacks) * 100) : 0;
+                            @endphp
+                            <div class="flex items-center space-x-3">
+                                <div class="flex items-center space-x-1 w-12">
+                                    <span class="text-sm font-medium text-gray-700">{{ $stars }}</span>
+                                    <i class='bx bxs-star text-yellow-400 text-sm'></i>
+                                </div>
+                                <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="h-full bg-yellow-400 rounded-full transition-all duration-300"
+                                        style="width: {{ $percent }}%"></div>
+                                </div>
+                                <span class="text-sm text-gray-600 w-8 text-right">{{ $count }}</span>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 
             {{-- Right: Feedback list with tabs --}}
-            <div class="md:w-2/3" x-data="{ tab: 'all' }">
+            <div class="lg:col-span-2" x-data="{ activeTab: 'all' }">
+                <!-- Tab Navigation -->
+                <div class="mb-6">
+                    <div class="bg-gray-50 p-1 rounded-lg inline-flex space-x-1">
+                        <button @click="activeTab = 'all'" :class="activeTab === 'all' ? 'bg-white text-gray-900 border border-gray-200' : 'text-gray-600 hover:text-gray-900'"
+                            class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap">
+                            <i class='bx bx-list-ul mr-1'></i>
+                            All ({{ $totalFeedbacks }})
+                        </button>
 
-                <nav class="flex space-x-4 mb-6 border-b border-gray-200">
-                    <button :class="tab === 'all' ? 'border-b-2 border-yellow-500 font-semibold text-yellow-600' : 'text-gray-600 hover:text-yellow-500'" @click="tab = 'all'">
-                        All Feedbacks ({{ $totalFeedbacks }})
-                    </button>
+                        <button @click="activeTab = 'positive'" :class="activeTab === 'positive' ? 'bg-white text-gray-900 border border-gray-200' : 'text-gray-600 hover:text-gray-900'"
+                            class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap">
+                            <i class='bx bx-smile mr-1'></i>
+                            Positive
+                        </button>
 
-                    <button :class="tab === 'positive' ? 'border-b-2 border-yellow-500 font-semibold text-yellow-600' : 'text-gray-600 hover:text-yellow-500'" @click="tab = 'positive'">
-                        Positive (4-5 stars)
-                    </button>
+                        <button @click="activeTab = 'neutral'" :class="activeTab === 'neutral' ? 'bg-white text-gray-900 border border-gray-200' : 'text-gray-600 hover:text-gray-900'"
+                            class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap">
+                            <i class='bx bx-meh mr-1'></i>
+                            Neutral
+                        </button>
 
-                    <button :class="tab === 'neutral' ? 'border-b-2 border-yellow-500 font-semibold text-yellow-600' : 'text-gray-600 hover:text-yellow-500'" @click="tab = 'neutral'">
-                        Neutral (3 stars)
-                    </button>
+                        <button @click="activeTab = 'needs_improvement'" :class="activeTab === 'needs_improvement' ? 'bg-white text-gray-900 border border-gray-200' : 'text-gray-600 hover:text-gray-900'"
+                            class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap">
+                            <i class='bx bx-sad mr-1'></i>
+                            Needs Improvement
+                        </button>
+                    </div>
+                </div>
 
-                    <button :class="tab === 'needs_improvement' ? 'border-b-2 border-yellow-500 font-semibold text-yellow-600' : 'text-gray-600 hover:text-yellow-500'" @click="tab = 'needs_improvement'">
-                        Needs Improvement (1-2 stars)
-                    </button>
-                </nav>
-
-                <div class="space-y-6">
-
+                <!-- Feedback Content -->
+                <div class="space-y-4">
                     @if($feedbacks->isEmpty())
-                        <p class="text-gray-500 text-center md:text-left">No feedback submitted for this program yet.</p>
+                        <div class="text-center py-12">
+                            <i class='bx bx-message-dots text-4xl text-gray-300 mb-4'></i>
+                            <p class="text-gray-500 text-lg">No feedback submitted for this program yet.</p>
+                            <p class="text-gray-400 text-sm mt-2">Feedback will appear here once participants submit their
+                                reviews.</p>
+                        </div>
                     @endif
 
-                    <template x-if="tab === 'all'">
-                        <div>
-                            @foreach($feedbacks as $feedback)
-                                @include('programs.partials.feedbackItem', ['feedback' => $feedback])
-                            @endforeach
-                        </div>
-                    </template>
+                    <!-- All Feedbacks -->
+                    <div x-show="activeTab === 'all'" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                        @foreach($feedbacks as $feedback)
+                            @include('programs.partials.feedbackItem', ['feedback' => $feedback])
+                        @endforeach
+                    </div>
 
-                    <template x-if="tab === 'positive'">
-                        <div>
-                            @foreach($feedbacks->whereIn('rating', [4, 5]) as $feedback)
-                                @include('programs.partials.feedbackItem', ['feedback' => $feedback])
-                            @endforeach
-                        </div>
-                    </template>
+                    <!-- Positive Feedbacks -->
+                    <div x-show="activeTab === 'positive'" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                        @foreach($feedbacks->whereIn('rating', [4, 5]) as $feedback)
+                            @include('programs.partials.feedbackItem', ['feedback' => $feedback])
+                        @endforeach
+                        @if($feedbacks->whereIn('rating', [4, 5])->isEmpty())
+                            <div class="text-center py-8">
+                                <i class='bx bx-smile text-3xl text-gray-300 mb-2'></i>
+                                <p class="text-gray-500">No positive feedback yet.</p>
+                            </div>
+                        @endif
+                    </div>
 
-                    <template x-if="tab === 'neutral'">
-                        <div>
-                            @foreach($feedbacks->where('rating', 3) as $feedback)
-                                @include('programs.partials.feedbackItem', ['feedback' => $feedback])
-                            @endforeach
-                        </div>
-                    </template>
+                    <!-- Neutral Feedbacks -->
+                    <div x-show="activeTab === 'neutral'" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                        @foreach($feedbacks->where('rating', 3) as $feedback)
+                            @include('programs.partials.feedbackItem', ['feedback' => $feedback])
+                        @endforeach
+                        @if($feedbacks->where('rating', 3)->isEmpty())
+                            <div class="text-center py-8">
+                                <i class='bx bx-meh text-3xl text-gray-300 mb-2'></i>
+                                <p class="text-gray-500">No neutral feedback yet.</p>
+                            </div>
+                        @endif
+                    </div>
 
-                    <template x-if="tab === 'needs_improvement'">
-                        <div>
-                            @foreach($feedbacks->whereIn('rating', [1, 2]) as $feedback)
-                                {{-- <x-feedback-item :feedback="$feedback" /> --}}
-                                @include('programs.partials.feedbackItem', ['feedback' => $feedback])
-                            @endforeach
-                        </div>
-                    </template>
-
+                    <!-- Needs Improvement Feedbacks -->
+                    <div x-show="activeTab === 'needs_improvement'" x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                        @foreach($feedbacks->whereIn('rating', [1, 2]) as $feedback)
+                            @include('programs.partials.feedbackItem', ['feedback' => $feedback])
+                        @endforeach
+                        @if($feedbacks->whereIn('rating', [1, 2])->isEmpty())
+                            <div class="text-center py-8">
+                                <i class='bx bx-sad text-3xl text-gray-300 mb-2'></i>
+                                <p class="text-gray-500">No critical feedback yet.</p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
-
         </div>
+    </div>
 @endsection
