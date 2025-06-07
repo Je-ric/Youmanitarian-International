@@ -11,6 +11,7 @@ use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\HeartReactController;
 use App\Http\Controllers\ContentViewController;
+use App\Http\Controllers\ProgramTasksController;
 use App\Http\Controllers\ContentCommentController;
 use App\Http\Controllers\ContentRequestController;
 use App\Http\Controllers\ProgramFeedbackController;
@@ -169,4 +170,12 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
    Route::post('/programs/{program}/feedback', [ProgramFeedbackController::class, 'submitFeedback'])->name('programs.feedback.submit');
    Route::get('/programs/{program}/viewAll_feedbacks', [ProgramFeedbackController::class, 'viewAll'])->name('programs.feedback.view');
+
+});
+
+Route::prefix('programs/{program}/tasks')->name('programs.tasks.')->group(function () {
+    Route::get('/', [ProgramTasksController::class, 'index'])->name('index');
+    Route::post('/', [ProgramTasksController::class, 'store'])->name('store');
+    Route::delete('{task}', [ProgramTasksController::class, 'destroy'])->name('destroy');
+    Route::put('{task}', [ProgramTasksController::class, 'update'])->name('update'); // Optional
 });

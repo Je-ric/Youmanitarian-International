@@ -55,6 +55,7 @@ class Program extends Model
     {
         return $this->hasMany(ProgramTask::class);
     }
+    
     public function volunteerAttendances()
     {
         return $this->hasMany(VolunteerAttendance::class);

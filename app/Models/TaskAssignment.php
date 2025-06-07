@@ -20,4 +20,11 @@ class TaskAssignment extends Model
     {
         return $this->belongsTo(Volunteer::class);
     }
+
+
+public function assignedByUser()
+{
+    return $this->belongsTo(User::class, 'assigned_by');
+}
+
 }

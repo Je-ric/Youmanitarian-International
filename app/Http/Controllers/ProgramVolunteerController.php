@@ -12,37 +12,79 @@ class ProgramVolunteerController extends Controller
 {
 
     public function manageVolunteers(Program $program)
-    {
-        $approvedVolunteers = $program->volunteers()->where('program_volunteers.status', 'approved')->get();
-        $pendingVolunteers = $program->volunteers()->where('program_volunteers.status', 'pending')->get();
+{
+    $approvedVolunteers = $program->volunteers()->where('program_volunteers.status', 'approved')->get();
+    $pendingVolunteers = $program->volunteers()->where('program_volunteers.status', 'pending')->get();
+    $approvedCount = $approvedVolunteers->count();
+    $isFull = $approvedCount >= $program->volunteer_count;
 
-        $approvedCount = $approvedVolunteers->count();
-        $isFull = $approvedCount >= $program->volunteer_count;
+    $logs = [];
+    foreach ($approvedVolunteers as $volunteer) {
+        $volunteerLogs = $program->volunteerAttendances()
+            ->where('volunteer_id', $volunteer->id)
+            ->orderBy('clock_in', 'desc')
+            ->get();
 
-        $logs = [];
-        foreach ($approvedVolunteers as $volunteer) {
-            $volunteerLogs = $program->volunteerAttendances()
-                ->where('volunteer_id', $volunteer->id)
-                ->orderBy('clock_in', 'desc')
-                ->get();
-
-            $totalTime = 0;
-            foreach ($volunteerLogs as $log) {
-                if ($log->clock_out) {
-                    $diff = \Carbon\Carbon::parse($log->clock_in)->diff(\Carbon\Carbon::parse($log->clock_out));
-                    $totalTime += $diff->h * 3600 + $diff->i * 60 + $diff->s;
-                }
+        $totalTime = 0;
+        foreach ($volunteerLogs as $log) {
+            if ($log->clock_out) {
+                $diff = \Carbon\Carbon::parse($log->clock_in)->diff(\Carbon\Carbon::parse($log->clock_out));
+                $totalTime += $diff->h * 3600 + $diff->i * 60 + $diff->s;
             }
-            $totalTimeInHours = gmdate("H:i:s", $totalTime);
-
-            $logs[$volunteer->id] = [
-                'logs' => $volunteerLogs,
-                'totalTime' => $totalTimeInHours
-            ];
         }
+        $totalTimeInHours = gmdate("H:i:s", $totalTime);
 
-        return view('volunteers.program-volunteers', compact('program', 'approvedVolunteers', 'pendingVolunteers', 'approvedCount', 'isFull', 'logs'));
+        $logs[$volunteer->id] = [
+            'logs' => $volunteerLogs,
+            'totalTime' => $totalTimeInHours
+        ];
     }
+
+    $tasks = $program->tasks()->orderBy('created_at', 'desc')->get();
+
+    return view('volunteers.program-volunteers', compact(
+        'program',
+        'approvedVolunteers',
+        'pendingVolunteers',
+        'approvedCount',
+        'isFull',
+        'logs',
+        'tasks'
+    ));
+}
+
+    // public function manageVolunteers(Program $program)
+    // {
+    //     $approvedVolunteers = $program->volunteers()->where('program_volunteers.status', 'approved')->get();
+    //     $pendingVolunteers = $program->volunteers()->where('program_volunteers.status', 'pending')->get();
+
+    //     $approvedCount = $approvedVolunteers->count();
+    //     $isFull = $approvedCount >= $program->volunteer_count;
+
+    //     $logs = [];
+    //     foreach ($approvedVolunteers as $volunteer) {
+    //         $volunteerLogs = $program->volunteerAttendances()
+    //             ->where('volunteer_id', $volunteer->id)
+    //             ->orderBy('clock_in', 'desc')
+    //             ->get();
+
+    //         $totalTime = 0;
+    //         foreach ($volunteerLogs as $log) {
+    //             if ($log->clock_out) {
+    //                 $diff = \Carbon\Carbon::parse($log->clock_in)->diff(\Carbon\Carbon::parse($log->clock_out));
+    //                 $totalTime += $diff->h * 3600 + $diff->i * 60 + $diff->s;
+    //             }
+    //         }
+    //         $totalTimeInHours = gmdate("H:i:s", $totalTime);
+
+    //         $logs[$volunteer->id] = [
+    //             'logs' => $volunteerLogs,
+    //             'totalTime' => $totalTimeInHours
+    //         ];
+    //     }
+
+    //     return view('volunteers.program-volunteers', compact('program', 'approvedVolunteers', 'pendingVolunteers', 'approvedCount', 'isFull', 'logs'));
+    // }
 
 
     // ═══════════════════════════════════════════════════════════════════════════════
