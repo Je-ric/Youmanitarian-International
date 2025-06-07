@@ -1,6 +1,6 @@
-{{-- 
-<div id="modal-overlay-{{ $program->id }}"
-    class="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm hidden z-40"></div>
+{{--
+<div id="modal-overlay-{{ $program->id }}" class="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm hidden z-40">
+</div>
 
 <dialog id="modal_{{ $program->id }}" class="modal" role="dialog" aria-modal="true"
     aria-labelledby="modal-title-{{ $program->id }}">
@@ -153,7 +153,7 @@
                     <div
                         class="bg-slate-50 border border-slate-200 rounded-lg p-4 max-h-36 overflow-y-auto custom-scrollbar">
                         <p class="text-slate-700 leading-relaxed">
-                            {{ $program->description }} 
+                            {{ $program->description }}
                         </p>
                     </div>
                 </article>
@@ -191,7 +191,19 @@
                     @endphp
 
                     <div class="border-t border-slate-200 pt-6">
-                        @if(!$alreadyJoined)
+                        @if($program->progress == 'done')
+                            <div
+                                class="text-green-600 font-medium text-sm flex items-center gap-2 justify-center py-3 px-4 bg-green-50 border border-green-200 rounded-lg">
+                                <i class='bx bx-check-circle'></i>
+                                This program is already done.
+                            </div>
+                        @elseif($alreadyJoined)
+                            <div
+                                class="text-green-600 font-medium text-sm flex items-center gap-2 justify-center py-3 px-4 bg-green-50 border border-green-200 rounded-lg">
+                                <i class='bx bx-check-circle'></i>
+                                You are already joined in this program.
+                            </div>
+                        @else
                             <form action="{{ route('programs.join', $program->id) }}" method="POST">
                                 @csrf
                                 <button type="submit"
@@ -200,15 +212,10 @@
                                     Join Program
                                 </button>
                             </form>
-                        @else
-                            <div
-                                class="text-green-600 font-medium text-sm flex items-center gap-2 justify-center py-3 px-4 bg-green-50 border border-green-200 rounded-lg">
-                                <i class='bx bx-check-circle'></i>
-                                You are already joined in this program.
-                            </div>
                         @endif
                     </div>
                 @endif
+
 
             </div>
 
@@ -234,16 +241,16 @@
                             'icon' => 'group',
                             'label' => 'Volunteers Needed',
                             'value' => new \Illuminate\Support\HtmlString('
-                            <div class="space-y-2">
-                                <div class="flex justify-between text-sm">
-                                    <span class="text-slate-700">' . $currentVolunteers . ' / ' . $program->volunteer_count . ' volunteers</span>
-                                    <span class="text-slate-600">' . round($progressPercentage) . '%</span>
-                                </div>
-                                <div class="w-full bg-slate-200 rounded-full h-2">
-                                    <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: ' . min($progressPercentage, 100) . '%"></div>
-                                </div>
-                            </div>
-                        ')
+                                                <div class="space-y-2">
+                                                    <div class="flex justify-between text-sm">
+                                                        <span class="text-slate-700">' . $currentVolunteers . ' / ' . $program->volunteer_count . ' volunteers</span>
+                                                        <span class="text-slate-600">' . round($progressPercentage) . '%</span>
+                                                    </div>
+                                                    <div class="w-full bg-slate-200 rounded-full h-2">
+                                                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: ' . min($progressPercentage, 100) . '%"></div>
+                                                    </div>
+                                                </div>
+                                            ')
                         ],
 
                         ['icon' => 'trending-up', 'label' => 'Progress', 'value' => $progressComponent]

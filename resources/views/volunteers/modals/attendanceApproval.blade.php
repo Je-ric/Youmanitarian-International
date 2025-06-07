@@ -67,21 +67,23 @@
                                         </div>
                                     </div>
                                     
-                                    @if($log->clock_in && $log->clock_out)
-                                        @php
-                                            $clockIn = \Carbon\Carbon::parse($log->clock_in);
-                                            $clockOut = \Carbon\Carbon::parse($log->clock_out);
-                                            $duration = $clockIn->diff($clockOut);
-                                            $hours = $duration->h + ($duration->days * 24);
-                                            $minutes = $duration->i;
-                                        @endphp
-                                        <div class="flex items-center">
-                                            <div class="w-24 flex-shrink-0 text-gray-500 text-sm">Duration:</div>
-                                            <div class="font-medium">
-                                                {{ $hours }}h {{ $minutes }}m
-                                            </div>
-                                        </div>
-                                    @endif
+                                 @if($log->clock_in && $log->clock_out)
+    @php
+        $clockIn = \Carbon\Carbon::parse($log->clock_in);
+        $clockOut = \Carbon\Carbon::parse($log->clock_out);
+        $duration = $clockIn->diff($clockOut);
+        $hours = $duration->h + ($duration->days * 24);
+        $minutes = $duration->i;
+        $seconds = $duration->s;
+    @endphp
+    <div class="flex items-center">
+        <div class="w-24 flex-shrink-0 text-gray-500 text-sm">Duration:</div>
+        <div class="font-medium">
+            {{ $hours }}h {{ $minutes }}m {{ $seconds }}s
+        </div>
+    </div>
+@endif
+
                                 </div>
 
                                 <!-- Notes -->

@@ -85,14 +85,39 @@
                                 </td>
 
                                 <td class="p-4 flex items-center gap-2">
-                                    <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="info">
-                                        <i class='bx bx-show'></i> View
-                                    </x-button>
+                                    @php
+    $volunteerLogs = $logs[$volunteer->id]['logs'];
+    $hasLogs = !$volunteerLogs->isEmpty();
+    $allReviewed = $hasLogs && $volunteerLogs->every(function ($log) {
+        return in_array($log->approval_status, ['approved', 'rejected']);
+    });
+@endphp
 
-                                    <button class="btn btn-info"
+{{-- Always show view --}}
+<x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="info">
+    <i class='bx bx-show'></i> View
+</x-button>
+
+@if ($allReviewed)
+    <button class="btn btn-outline text-green-600 border-green-300 hover:bg-green-50"
+        title="Attendance already reviewed"
+        onclick="document.getElementById('attendanceModal_{{ $volunteer->id }}').showModal()">
+        <i class='bx bx-check-double'></i> Reviewed
+    </button>
+@else
+    <button class="btn btn-info"
+        onclick="document.getElementById('attendanceModal_{{ $volunteer->id }}').showModal()">
+        <i class='bx bx-show'></i> Review Attendance
+    </button>
+@endif
+
+
+
+                                    {{-- <button class="btn btn-info"
                                         onclick="document.getElementById('attendanceModal_{{ $volunteer->id }}').showModal()">
                                         <i class='bx bx-show'></i> Review Attendance
-                                    </button>
+                                    </button> --}}
+
                                     @include('volunteers.modals.attendanceApproval', ['volunteer' => $volunteer, 'volunteerLogs' => $logs[$volunteer->id]['logs']])
 
                                     {{-- <form action="{{ route('programs.restore_volunteer', [$program, $volunteer]) }}" method="POST">
