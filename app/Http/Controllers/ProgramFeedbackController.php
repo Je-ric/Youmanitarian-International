@@ -56,16 +56,29 @@ class ProgramFeedbackController extends Controller
 
 
     // view_feedbacks.blade.php
-        public function viewAll(Program $program)
-    {
-        $feedbacks = ProgramFeedback::with('volunteer.user')
-            ->where('program_id', $program->id)
-            ->latest('submitted_at')
-            ->get();
+     public function viewAll(Program $program)
+{
+    $feedbacks = ProgramFeedback::with('volunteer.user')
+        ->where('program_id', $program->id)
+        ->latest('submitted_at')
+        ->get();
 
-        return view('programs.view_feedbacks', [
-            'program' => $program,
-            'feedbacks' => $feedbacks
-        ]);
+    $totalFeedbacks = $feedbacks->count();
+    $averageRating = $totalFeedbacks > 0 ? round($feedbacks->avg('rating'), 1) : 0;
+
+    // Count per star rating
+    $ratingCounts = [];
+    for ($i = 1; $i <= 5; $i++) {
+        $ratingCounts[$i] = $feedbacks->where('rating', $i)->count();
     }
+
+    return view('programs.view_feedbacks', [
+        'program' => $program,
+        'feedbacks' => $feedbacks,
+        'totalFeedbacks' => $totalFeedbacks,
+        'averageRating' => $averageRating,
+        'ratingCounts' => $ratingCounts,
+    ]);
+}
+
 }
