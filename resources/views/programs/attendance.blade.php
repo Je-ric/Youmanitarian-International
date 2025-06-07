@@ -141,7 +141,6 @@
                         </span>
                     </div>
 
-
                     <div class="flex gap-2 text-sm sm:text-base">
                         <strong>Time In:</strong> <span>{{ $clockInTime ? $clockInTime->format('g:ia') : '--:--' }}</span>
                     </div>
@@ -218,7 +217,6 @@
                             </x-button>
 
                         @else
-                            {{-- Both Clocked In and Out --}}
                             <x-button variant="disabled" disabled>
                                 <i class='bx bx-check-circle'></i> Clock In (Completed)
                             </x-button>

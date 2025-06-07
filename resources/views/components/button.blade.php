@@ -9,8 +9,12 @@
 @php
     $variant = strval($variant);
     $styles = [
-        'primary' => 'w-full max-w-[150px] px-2 py-2 rounded-md bg-[#ffb51b] hover:bg-[#ffc449] text-white text-base md:text-lg font-semibold shadow-[0px_5.28px_13.2px_0px_rgba(255,225,164,1.00)] active:scale-95 transition-transform duration-200',
-        'secondary' => 'btn bg-[#1a2235] hover:bg-[#e6a011] text-white active:scale-95 transition-transform duration-200',
+        'primary' => 'btn px-4 py-2 rounded-md text-white text-sm md:text-sm font-semibold 
+                shadow-[0px_5.28px_13.2px_rgba(255,225,164,1)] active:scale-95 transition-transform duration-200 
+                bg-[#ffb51b] hover:bg-[#ffc449] border-0 outline-none focus:outline-none focus:ring-2 focus:ring-yellow-400/70',
+        'secondary' => 'btn px-4 py-2 rounded-md text-white text-sm md:text-sm font-semibold 
+                shadow-[0px_5px_13px_rgba(15,21,36,0.8)] active:scale-95 transition-transform duration-200 
+                bg-[#1a2235] hover:bg-[#0F1524] border-0 outline-none focus:outline-none focus:ring-2 focus:ring-yellow-700/70',
 
         'success'   => 'btn btn-success text-white hover:bg-green-600 active:scale-95 transition-transform duration-200',
         'danger'    => 'btn bg-red-600 text-white hover:bg-red-400 active:scale-95 transition-transform duration-200',

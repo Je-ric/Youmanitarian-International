@@ -150,9 +150,9 @@
                         Description
                     </h3>
                     <div
-                        class="bg-slate-50 border border-slate-200 rounded-lg p-4 max-h-48 overflow-y-auto custom-scrollbar">
+                        class="bg-slate-50 border border-slate-200 rounded-lg p-4 max-h-36 overflow-y-auto custom-scrollbar">
                         <p class="text-slate-700 leading-relaxed">
-                            {{ $program->description }}
+                            {{ $program->description }} 
                         </p>
                     </div>
                 </article>

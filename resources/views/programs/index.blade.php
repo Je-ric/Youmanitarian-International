@@ -1,4 +1,3 @@
-
 @extends('layouts.sidebar_final')
 
 @php
@@ -7,8 +6,7 @@
 
 @section('content')
 
-    {{-- <x-header-with-button>
-        <x-header-with-button/> --}}
+
 
     @if (session('toast'))
         <x-toast :message="session('toast')['message']" :type="session('toast')['type']" />
@@ -16,13 +14,15 @@
 
     <div class="container mx-auto p-4 sm:p-6">
 
-        @if(Auth::user()->hasRole('Admin', 'Program Coordinator'))
-            <div class="flex justify-end mb-4">
-                <x-button href="{{ route('programs.create') }}" variant="add-create" class="inline-flex items-center">
-                    <i class='bx bx-plus-circle mr-2'></i> Create Program
-                </x-button>
-            </div>
-        @endif
+        <x-header-with-button title="Any Title" description="Description that match with the shown content.">
+            @if(Auth::user()->hasRole(['Admin', 'Program Coordinator']))
+                <div class="flex justify-end mb-4">
+                    <x-button href="{{ route('programs.create') }}" variant="primary">
+                        <i class='bx bx-plus-circle mr-2'></i> Create Program
+                    </x-button>
+                </div>
+            @endif
+        </x-header-with-button>
 
         <div class="bg-white rounded-lg border border-gray-200 p-4 mb-6">
             <div class="flex flex-col lg:flex-row gap-4">
@@ -30,30 +30,32 @@
                 <div class="flex-1">
                     <div class="relative">
                         <i class='bx bx-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400'></i>
-                        <input type="text" id="searchInput" placeholder="Search programs..." 
-                               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <input type="text" id="searchInput" placeholder="Search programs..."
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
                 </div>
-                
+
                 <!-- Status Filter -->
                 <div class="w-full lg:w-48">
-                    <select id="statusFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <select id="statusFilter"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <option value="">All Status</option>
                         <option value="incoming">Incoming</option>
                         <option value="ongoing">Ongoing</option>
                         <option value="done">Done</option>
                     </select>
                 </div>
-                
+
                 <!-- Date Filter -->
                 <div class="w-full lg:w-48">
                     <select id="sortFilter" class="hidden"></select>
-                    <input type="date" id="dateFilter" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input type="date" id="dateFilter"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
-                
+
                 <!-- Clear Filters -->
-                <button id="clearFilters" class="px-4 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                <button id="clearFilters"
+                    class="px-4 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                     <i class='bx bx-x'></i> Clear
                 </button>
             </div>
@@ -65,26 +67,31 @@
                     <tr>
                         <th scope="col" class="px-4 py-3 text-left text-sm font-semibold">#</th>
                         {{-- <th scope="col" class="px-4 py-3 text-left text-sm font-semibold">Title</th> --}}
-                        <th scope="col" class="px-4 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-[#2a3245] transition-colors" onclick="sortTable('title')">
-                                <div class="flex items-center gap-1">
-                                    Title <i class='bx bx-sort text-xs'></i>
-                                </div>
-                            </th>
+                        <th scope="col"
+                            class="px-4 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-[#2a3245] transition-colors"
+                            onclick="sortTable('title')">
+                            <div class="flex items-center gap-1">
+                                Title <i class='bx bx-sort text-xs'></i>
+                            </div>
+                        </th>
                         <th scope="col" class="px-4 py-3 text-left text-sm font-semibold">Location</th>
                         <th scope="col" class="px-4 py-3 text-left text-sm font-semibold">Status</th>
                         {{-- <th scope="col" class="px-4 py-3 text-left text-sm font-semibold">Date</th> --}}
-                         <th scope="col" class="px-4 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-[#2a3245] transition-colors" onclick="sortTable('date')">
-                                <div class="flex items-center gap-1">
-                                    Date <i class='bx bx-sort text-xs'></i>
-                                </div>
-                            </th>
+                        <th scope="col"
+                            class="px-4 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-[#2a3245] transition-colors"
+                            onclick="sortTable('date')">
+                            <div class="flex items-center gap-1">
+                                Date <i class='bx bx-sort text-xs'></i>
+                            </div>
+                        </th>
                         <th scope="col" class="px-4 py-3 text-left text-sm font-semibold">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-100" id="programsTableBody">
                     @foreach($programs as $program)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3 text-sm text-gray-800">{{ $loop->iteration + ($programs->currentPage() - 1) * $programs->perPage() }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-800">
+                                {{ $loop->iteration + ($programs->currentPage() - 1) * $programs->perPage() }}</td>
                             <td class="px-4 py-3 text-sm text-gray-800 font-medium">{{ $program->title }}</td>
                             <td class="px-4 py-3 text-sm text-gray-700">{{ $program->location ?? 'N/A' }}</td>
                             <td class="px-4 py-3 text-sm">
@@ -95,22 +102,21 @@
                             </td>
                             <td class="px-4 py-3 text-sm flex flex-wrap gap-2">
 
-                                <x-button
-                                    onclick="document.getElementById('modal_{{ $program->id }}').showModal();"
-                                    variant="info"
-                                    class="tooltip"
-                                    data-tip="View Details"
+                                <x-button onclick="document.getElementById('modal_{{ $program->id }}').showModal();"
+                                    variant="info" class="tooltip" data-tip="View Details"
                                     aria-label="View Details for {{ $program->title }}">
                                     <i class='bx bx-show'></i>
                                 </x-button>
 
                                 @if(Auth::user()->hasRole('Volunteer') && $program->volunteers->contains(Auth::user()->volunteer))
-                                    <x-button href="{{ route('programs.view', $program) }}" variant="success" aria-label="View Log for {{ $program->title }}">
+                                    <x-button href="{{ route('programs.view', $program) }}" variant="success"
+                                        aria-label="View Log for {{ $program->title }}">
                                         <i class='bx bx-show'></i> View Log
                                     </x-button>
                                 @elseif(Auth::user()->hasRole(['Admin', 'Program Coordinator']))
                                     <x-button href="{{ route('programs.manage_volunteers', $program) }}" variant="manage"
-                                        class="tooltip" data-tip="Manage Volunteers" aria-label="Manage Volunteers for {{ $program->title }}">
+                                        class="tooltip" data-tip="Manage Volunteers"
+                                        aria-label="Manage Volunteers for {{ $program->title }}">
                                         <i class='bx bx-group'></i>
                                     </x-button>
 
@@ -149,75 +155,75 @@
         </div>
     </div>
 
-     <script>
-    function filterPrograms() {
-        const searchInput = document.getElementById('searchInput');
-        const statusFilter = document.getElementById('statusFilter');
-        const dateFilter = document.getElementById('dateFilter');
+    <script>
+        function filterPrograms() {
+            const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
+            const dateFilter = document.getElementById('dateFilter');
 
-        const searchTerm = searchInput.value.toLowerCase();
-        const statusValue = statusFilter.value.toLowerCase();
-        const dateValue = dateFilter.value;
+            const searchTerm = searchInput.value.toLowerCase();
+            const statusValue = statusFilter.value.toLowerCase();
+            const dateValue = dateFilter.value;
 
-        const tableRows = document.querySelectorAll('#programsTableBody tr');
-        const cardItems = document.querySelectorAll('#programsCardContainer > div');
+            const tableRows = document.querySelectorAll('#programsTableBody tr');
+            const cardItems = document.querySelectorAll('#programsCardContainer > div');
 
-        tableRows.forEach(row => {
-            const title = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-            const location = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            const status = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
-            const dateText = row.querySelector('td:nth-child(5)').textContent.trim();
-            const dateObj = new Date(dateText);
-            const filterDate = dateValue ? new Date(dateValue) : null;
+            tableRows.forEach(row => {
+                const title = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const location = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const status = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+                const dateText = row.querySelector('td:nth-child(5)').textContent.trim();
+                const dateObj = new Date(dateText);
+                const filterDate = dateValue ? new Date(dateValue) : null;
 
-            const matchesSearch = title.includes(searchTerm) || location.includes(searchTerm);
-            const matchesStatus = !statusValue || status.includes(statusValue);
+                const matchesSearch = title.includes(searchTerm) || location.includes(searchTerm);
+                const matchesStatus = !statusValue || status.includes(statusValue);
 
-            let matchesDate = true;
-            if (filterDate) {
-                matchesDate = dateObj.toDateString() === filterDate.toDateString();
-            }
+                let matchesDate = true;
+                if (filterDate) {
+                    matchesDate = dateObj.toDateString() === filterDate.toDateString();
+                }
 
-            row.style.display = matchesSearch && matchesStatus && matchesDate ? '' : 'none';
+                row.style.display = matchesSearch && matchesStatus && matchesDate ? '' : 'none';
+            });
+
+            cardItems.forEach(card => {
+                const title = card.querySelector('h3')?.textContent.toLowerCase() ?? '';
+                const location = card.querySelector('.bx-map')?.nextElementSibling?.textContent.toLowerCase() ?? '';
+                const status = card.querySelector('[class*="badge"]')?.textContent.toLowerCase() ?? '';
+                const dateText = card.querySelector('.bx-calendar')?.nextElementSibling?.textContent.trim() ?? '';
+                const dateObj = new Date(dateText);
+                const filterDate = dateValue ? new Date(dateValue) : null;
+
+                const matchesSearch = title.includes(searchTerm) || location.includes(searchTerm);
+                const matchesStatus = !statusValue || status.includes(statusValue);
+
+                let matchesDate = true;
+                if (filterDate) {
+                    matchesDate = dateObj.toDateString() === filterDate.toDateString();
+                }
+
+                card.style.display = matchesSearch && matchesStatus && matchesDate ? '' : 'none';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
+            const dateFilter = document.getElementById('dateFilter');
+            const clearFilters = document.getElementById('clearFilters');
+
+            searchInput.addEventListener('input', filterPrograms);
+            statusFilter.addEventListener('change', filterPrograms);
+            dateFilter.addEventListener('change', filterPrograms);
+
+            clearFilters.addEventListener('click', function () {
+                searchInput.value = '';
+                statusFilter.value = '';
+                dateFilter.value = '';
+                filterPrograms();
+            });
         });
-
-        cardItems.forEach(card => {
-            const title = card.querySelector('h3')?.textContent.toLowerCase() ?? '';
-            const location = card.querySelector('.bx-map')?.nextElementSibling?.textContent.toLowerCase() ?? '';
-            const status = card.querySelector('[class*="badge"]')?.textContent.toLowerCase() ?? '';
-            const dateText = card.querySelector('.bx-calendar')?.nextElementSibling?.textContent.trim() ?? '';
-            const dateObj = new Date(dateText);
-            const filterDate = dateValue ? new Date(dateValue) : null;
-
-            const matchesSearch = title.includes(searchTerm) || location.includes(searchTerm);
-            const matchesStatus = !statusValue || status.includes(statusValue);
-
-            let matchesDate = true;
-            if (filterDate) {
-                matchesDate = dateObj.toDateString() === filterDate.toDateString();
-            }
-
-            card.style.display = matchesSearch && matchesStatus && matchesDate ? '' : 'none';
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const searchInput = document.getElementById('searchInput');
-        const statusFilter = document.getElementById('statusFilter');
-        const dateFilter = document.getElementById('dateFilter');
-        const clearFilters = document.getElementById('clearFilters');
-
-        searchInput.addEventListener('input', filterPrograms);
-        statusFilter.addEventListener('change', filterPrograms);
-        dateFilter.addEventListener('change', filterPrograms);
-
-        clearFilters.addEventListener('click', function () {
-            searchInput.value = '';
-            statusFilter.value = '';
-            dateFilter.value = '';
-            filterPrograms();
-        });
-    });
-</script>
+    </script>
 
 @endsection
