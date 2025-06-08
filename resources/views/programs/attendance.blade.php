@@ -119,41 +119,62 @@
             <div
                 class="col-span-1 card bg-base-100 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200">
                 <div class="card-body p-4 sm:p-6 space-y-3 sm:space-y-4">
-                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 leading-tight sm:leading-[50px] tracking-tight">
-                        Your Attendance
-                    </h2>
+                    
+                    <div class="mb-6">
+                        <h2 class="text-xl font-bold text-[#1a2235] mb-2">
+                            Your Attendance
+                        </h2>
 
-                    <div class="text-xs sm:text-sm font-semibold">
-                        <span>Current Status:</span>
-                        <span class="block text-sm font-bold text-[#1a2235] sm:text-base mt-0.5">
-                            @if($clockInTime && $clockOutTime && $status === 'done')
-                                <i class='bx bx-check-double text-green-600'></i> Attendance Complete
-                            @elseif($clockInTime && !$clockOutTime && $status === 'done')
-                                <i class='bx bx-error-circle text-orange-500'></i> Missed Clock Out
-                            @elseif(!$clockInTime && !$clockOutTime && $status === 'done')
-                                <i class='bx bx-x-circle text-red-500'></i> No Attendance Recorded
-                            @elseif($clockInTime)
-                                <i class='bx bx-check-circle text-green-500'></i> Clocked In
-                            @else
-                                <i class='bx bx-time text-yellow-500'></i> Not Yet Clocked In
-                            @endif
-                        </span>
-                    </div>
-
-                    <div class="flex gap-2 text-sm sm:text-base">
-                        <strong>Time In:</strong> <span>{{ $clockInTime ? $clockInTime->format('g:ia') : '--:--' }}</span>
-                    </div>
-
-                    <div class="flex gap-2 text-sm sm:text-base">
-                        <strong>Time Out:</strong>
-                        <span>{{ $clockOutTime ? $clockOutTime->format('g:ia') : '--:--' }}</span>
-                    </div>
-
-                    @if($formattedWorkedTime)
-                        <div class="flex gap-2 text-sm sm:text-base">
-                            <strong>Total Worked:</strong> <span>{{ $formattedWorkedTime }}</span>
+                        <!-- Status Indicator -->
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="text-sm text-gray-600">Status:</span>
+                            <div class="flex items-center gap-2">
+                                @if($clockInTime && $clockOutTime && $status === 'done')
+                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    <span class="text-sm font-medium text-green-700">Complete</span>
+                                @elseif($clockInTime && !$clockOutTime && $status === 'done')
+                                    <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
+                                    <span class="text-sm font-medium text-orange-700">Missed Clock Out</span>
+                                @elseif(!$clockInTime && !$clockOutTime && $status === 'done')
+                                    <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                                    <span class="text-sm font-medium text-red-700">No Record</span>
+                                @elseif($clockInTime)
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                    <span class="text-sm font-medium text-blue-700">Clocked In</span>
+                                @else
+                                    <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+                                    <span class="text-sm font-medium text-gray-600">Not Started</span>
+                                @endif
+                            </div>
                         </div>
-                    @endif
+                    </div>
+
+                    <!-- Time Information -->
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="text-gray-600">Time In</span>
+                            <span class="font-medium text-[#1a2235]">
+                                {{ $clockInTime ? $clockInTime->format('g:ia') : '--:--' }}
+                            </span>
+                        </div>
+
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="text-gray-600">Time Out</span>
+                            <span class="font-medium text-[#1a2235]">
+                                {{ $clockOutTime ? $clockOutTime->format('g:ia') : '--:--' }}
+                            </span>
+                        </div>
+
+                        @if($formattedWorkedTime)
+                            <div class="flex justify-between items-center py-2">
+                                <span class="text-gray-600">Total Worked</span>
+                                <span class="font-medium text-[#ffb51b]">
+                                    {{ $formattedWorkedTime }}
+                                </span>
+                            </div>
+                        @endif
+                    </div>
+                    
 
                     @if($status === 'upcoming')
                         <div class="alert alert-warning mt-3 sm:mt-4 text-xs sm:text-sm">

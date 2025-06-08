@@ -144,20 +144,31 @@
     <h1 class="font-bold text-[#1a2235] mb-6">Manage {{ $program->title }}</h1>
 
     <div class="flex space-x-4 border-b mb-6">
-        <button
-            :class="tab === 'volunteers' ? 'border-b-2 border-blue-600 font-semibold' : 'text-gray-600'"
-            @click="tab = 'volunteers'"
-            class="pb-2"
-        >
-            Volunteers
-        </button>
-        <button
-            :class="tab === 'tasks' ? 'border-b-2 border-blue-600 font-semibold' : 'text-gray-600'"
-            @click="tab = 'tasks'"
-            class="pb-2"
-        >
-            Tasks & Assignments
-        </button>
+<button
+    :class="tab === 'volunteers' ? 'border-b-2 border-blue-600 font-semibold' : 'text-gray-600'"
+    @click="tab = 'volunteers'"
+    class="pb-2"
+>
+    Volunteers
+</button>
+
+<button
+    :class="tab === 'tasks' ? 'border-b-2 border-blue-600 font-semibold' : 'text-gray-600'"
+    @click="tab = 'tasks'"
+    class="pb-2"
+>
+    Tasks & Assignments
+</button>
+
+<button
+    :class="tab === 'program' ? 'border-b-2 border-blue-600 font-semibold' : 'text-gray-600'"
+    @click="tab = 'program'"
+    class="pb-2"
+>
+    Program
+</button>
+
+
     </div>
 
     {{-- Volunteers Tab --}}
@@ -283,6 +294,14 @@
             'tasks' => $tasks
         ])
 
+        
+ 
+        
+    </div>
+
+    <div x-show="tab === 'program'" x-cloak>
+       
+ 
         
  
         
