@@ -50,83 +50,104 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
 
             <section
-                class="col-span-1 lg:col-span-2 w-full p-4 sm:p-5 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200 flex flex-col gap-4 sm:gap-7">
+                class="bg-white border-2 border-gray-200 col-span-1 lg:col-span-2 w-full p-4 sm:p-5 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200 flex flex-col gap-4 sm:gap-7">
 
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 leading-tight sm:leading-[50px] tracking-tight">
+                <div
+                    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-3 pb-3 border-b border-gray-100">
+                    <h2 class="text-xl lg:text-2xl font-bold text-[#1a2235]">
                         {{ $program->title }}
                     </h2>
-                    {{-- component --}}
                     <x-programProgress :program="$program" />
                 </div>
 
                 <!-- Description -->
-                <section>
-                    <h3 class="text-black text-base font-medium tracking-tight mb-1">
+                <div class="mb-8">
+                    <h3 class="text-[#1a2235] font-semibold mb-3 flex items-center">
+                        <i class='bx bx-file-blank mr-2 text-lg'></i>
                         Description
                     </h3>
-                    <p
-                        class="text-gray-800 text-xs sm:text-base font-normal leading-relaxed sm:leading-loose text-justify indent-6">
+                    <p class="text-gray-700 leading-relaxed text-justify">
                         {{ $program->description }}
                     </p>
+                </div>
 
-                </section>
+                <!-- Program Details Grid -->
+                <div class="space-y-4">
+                    <h3 class="text-[#1a2235] font-semibold mb-4 flex items-center">
+                        <i class='bx bx-info-circle mr-2 text-lg'></i>
+                        Program Details
+                    </h3>
 
-                <section class="flex flex-col gap-3 sm:gap-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Date -->
-                        <div class="flex items-center gap-2 min-w-[16rem]">
-                            <i class='bx bx-calendar text-lg text-gray-700'></i>
-                            <strong class="text-black text-sm sm:text-base font-medium tracking-tight">Date:</strong>
-                            <span class="text-black text-sm sm:text-base font-normal tracking-tight">
-                                {{ \Carbon\Carbon::parse($program->date)->format('F j, Y') }}
-                            </span>
-                        </div>
-
-                        <!-- Location -->
-                        <div class="flex items-center gap-2">
-                            <i class='bx bx-map text-lg text-gray-700'></i>
-                            <strong class="text-black text-sm sm:text-base font-medium tracking-tight">Location:</strong>
-                            <span class="text-black text-sm sm:text-base font-normal tracking-tight">
-                                {{ $program->location ?? 'N/A' }}
-                            </span>
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class='bx bx-calendar text-[#1a2235]'></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-[#1a2235] text-sm">Date</div>
+                                <div class="text-gray-700">
+                                    {{ \Carbon\Carbon::parse($program->date)->format('F j, Y') }}
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Time -->
-                        <div class="flex items-center gap-2 min-w-[16rem]">
-                            <i class='bx bx-time text-lg text-gray-700'></i>
-                            <strong class="text-black text-sm sm:text-base font-medium tracking-tight">Time:</strong>
-                            <span class="text-black text-sm sm:text-base font-normal tracking-tight">
-                                {{ $program->end_time
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class='bx bx-time text-[#1a2235]'></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-[#1a2235] text-sm">Time</div>
+                                <div class="text-gray-700">
+                                    {{ $program->end_time
         ? \Carbon\Carbon::parse($program->start_time)->format('g:ia') . ' - ' . \Carbon\Carbon::parse($program->end_time)->format('g:ia')
         : \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}
-                            </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class='bx bx-map text-[#1a2235]'></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-[#1a2235] text-sm">Location</div>
+                                <div class="text-gray-700">
+                                    {{ $program->location ?? 'N/A' }}
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Coordinator -->
-                        <div class="flex items-center gap-2 min-w-[12rem]">
-                            <i class='bx bx-user text-lg text-gray-700'></i>
-                            <strong class="text-black text-sm sm:text-base font-medium tracking-tight">Coordinator:</strong>
-                            <span class="text-black text-sm sm:text-base font-normal tracking-tight">
-                                {{ $program->creator->name }}
-                            </span>
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class='bx bx-user text-[#1a2235]'></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-[#1a2235] text-sm">Coordinator</div>
+                                <div class="text-gray-700">
+                                    {{ $program->creator->name }}
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                </section>
             </section>
 
             <div
                 class="col-span-1 card bg-base-100 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200">
                 <div class="card-body p-4 sm:p-6 space-y-3 sm:space-y-4">
-                    
-                    <div class="mb-6">
+
+                    <div class="mb-3">
                         <h2 class="text-xl font-bold text-[#1a2235] mb-2">
                             Your Attendance
                         </h2>
 
                         <!-- Status Indicator -->
-                        <div class="flex items-center gap-2 mb-4">
+                        <div class="flex items-center gap-2 mb-3">
                             <span class="text-sm text-gray-600">Status:</span>
                             <div class="flex items-center gap-2">
                                 @if($clockInTime && $clockOutTime && $status === 'done')
@@ -174,20 +195,20 @@
                             </div>
                         @endif
                     </div>
-                    
+
 
                     @if($status === 'upcoming')
-                           <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                                <div class="flex items-start gap-3">
-                                    <i class='bx bx-info-circle text-blue-500 mt-0.5'></i>
-                                    <div class="text-sm text-blue-700">
-                                        <strong>Program hasn't started yet.</strong><br>
-                                        Available on 
-                                        {{ \Carbon\Carbon::parse($program->start_date)->format('F j, Y') }} at 
-                                        {{ \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}
-                                    </div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                            <div class="flex items-start gap-3">
+                                <i class='bx bx-info-circle text-blue-500 mt-0.5'></i>
+                                <div class="text-sm text-blue-700">
+                                    <strong>Program hasn't started yet.</strong><br>
+                                    Available on
+                                    {{ \Carbon\Carbon::parse($program->start_date)->format('F j, Y') }} at
+                                    {{ \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}
                                 </div>
                             </div>
+                        </div>
 
                         <x-button variant="disabled" disabled>
                             <i class='bx bx-log-in-circle'></i> Clock In (Unavailable)
@@ -198,15 +219,15 @@
                         </x-button>
 
                     @elseif($status === 'done')
-                         <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
-                                <div class="flex items-start gap-3">
-                                    <i class='bx bx-check-circle text-gray-500 mt-0.5'></i>
-                                    <div class="text-sm text-gray-600">
-                                        <strong>Program concluded.</strong><br>
-                                        Attendance is no longer available.
-                                    </div>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+                            <div class="flex items-start gap-3">
+                                <i class='bx bx-check-circle text-gray-500 mt-0.5'></i>
+                                <div class="text-sm text-gray-600">
+                                    <strong>Program concluded.</strong><br>
+                                    Attendance is no longer available.
                                 </div>
                             </div>
+                        </div>
 
                         <x-button variant="disabled" disabled>
                             <i class='bx bx-log-in-circle'></i> Clock In (Completed)
@@ -252,22 +273,22 @@
 
                     @else
                         <div class="bg-red-50 border border-red-200 rounded-lg p-4">
-                                <div class="flex items-start gap-3">
-                                    <i class='bx bx-error-circle text-red-500 mt-0.5'></i>
-                                    <div class="text-sm text-red-700">
-                                        You are not assigned to this program.
-                                    </div>
+                            <div class="flex items-start gap-3">
+                                <i class='bx bx-error-circle text-red-500 mt-0.5'></i>
+                                <div class="text-sm text-red-700">
+                                    You are not assigned to this program.
                                 </div>
                             </div>
+                        </div>
                     @endif
                 </div>
             </div>
-
         </div>
 
         {{-- Partial --}}
         @include('programs.partials.attendanceReminders')
 
     </div>
+
 
 @endsection
