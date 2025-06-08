@@ -4,8 +4,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">
-                Feedback for "{{ $program->title }}"
+            <h1 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                "{{ $program->title }}"
             </h1>
             <p class="text-gray-600">Review and analyze participant feedback for this program</p>
         </div>
