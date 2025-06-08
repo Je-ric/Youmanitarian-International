@@ -177,14 +177,17 @@
                     
 
                     @if($status === 'upcoming')
-                        <div class="alert alert-warning mt-3 sm:mt-4 text-xs sm:text-sm">
-                            <i class='bx bx-calendar-exclamation'></i>
-                            <span>
-                                This program hasn't started yet. Clock-in will be available on
-                                <strong>{{ \Carbon\Carbon::parse($program->start_date)->format('F j, Y') }}</strong> at
-                                <strong>{{ \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}</strong>.
-                            </span>
-                        </div>
+                           <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                                <div class="flex items-start gap-3">
+                                    <i class='bx bx-info-circle text-blue-500 mt-0.5'></i>
+                                    <div class="text-sm text-blue-700">
+                                        <strong>Program hasn't started yet.</strong><br>
+                                        Available on 
+                                        {{ \Carbon\Carbon::parse($program->start_date)->format('F j, Y') }} at 
+                                        {{ \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}
+                                    </div>
+                                </div>
+                            </div>
 
                         <x-button variant="disabled" disabled>
                             <i class='bx bx-log-in-circle'></i> Clock In (Unavailable)
@@ -195,12 +198,15 @@
                         </x-button>
 
                     @elseif($status === 'done')
-                        <div class="alert alert-warning mt-3 sm:mt-4 text-xs sm:text-sm">
-                            <i class='bx bx-calendar-exclamation'></i>
-                            <span>This program concluded on
-                                <strong>{{ $program->date->format('F j, Y') }}</strong>. Attendance is no longer
-                                available.</span>
-                        </div>
+                         <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+                                <div class="flex items-start gap-3">
+                                    <i class='bx bx-check-circle text-gray-500 mt-0.5'></i>
+                                    <div class="text-sm text-gray-600">
+                                        <strong>Program concluded.</strong><br>
+                                        Attendance is no longer available.
+                                    </div>
+                                </div>
+                            </div>
 
                         <x-button variant="disabled" disabled>
                             <i class='bx bx-log-in-circle'></i> Clock In (Completed)
@@ -245,10 +251,14 @@
                         @endif
 
                     @else
-                        <div class="alert alert-info mt-3 sm:mt-4 text-xs sm:text-sm">
-                            <i class='bx bx-info-circle'></i>
-                            <span>You are not assigned to this program.</span>
-                        </div>
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                                <div class="flex items-start gap-3">
+                                    <i class='bx bx-error-circle text-red-500 mt-0.5'></i>
+                                    <div class="text-sm text-red-700">
+                                        You are not assigned to this program.
+                                    </div>
+                                </div>
+                            </div>
                     @endif
                 </div>
             </div>

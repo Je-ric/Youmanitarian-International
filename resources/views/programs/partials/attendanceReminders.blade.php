@@ -116,32 +116,10 @@
 
 
 
- <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
-                                <div class="flex items-start gap-3">
-                                    <i class='bx bx-check-circle text-gray-500 mt-0.5'></i>
-                                    <div class="text-sm text-gray-600">
-                                        <strong>Program concluded.</strong><br>
-                                        Attendance is no longer available.
-                                    </div>
-                                </div>
-                            </div>
 
 
-                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                                <div class="flex items-start gap-3">
-                                    <i class='bx bx-info-circle text-blue-500 mt-0.5'></i>
-                                    <div class="text-sm text-blue-700">
-                                        <strong>Program hasn't started yet.</strong><br>
-                                        Available on {{ \Carbon\Carbon::parse($program->start_date)->format('F j, Y') }} at {{ \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}
-                                    </div>
-                                </div>
-                            </div>
 
-                             <div class="bg-red-50 border border-red-200 rounded-lg p-4">
-                                <div class="flex items-start gap-3">
-                                    <i class='bx bx-error-circle text-red-500 mt-0.5'></i>
-                                    <div class="text-sm text-red-700">
-                                        You are not assigned to this program.
-                                    </div>
-                                </div>
-                            </div>
+                         
+
+                             
+
