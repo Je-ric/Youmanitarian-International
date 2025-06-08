@@ -15,7 +15,6 @@
         }
     }" class="container mx-auto px-4 sm:px-6 py-6">
 
-        <!-- Header -->
         <div class="mb-8">
             <h1 class="text-2xl sm:text-3xl font-bold text-[#1a2235] mb-2">
                 Manage Program
@@ -23,7 +22,6 @@
             <p class="text-gray-600">{{ $program->title }}</p>
         </div>
 
-        <!-- Tab Navigation -->
         <div class="mb-8">
             <div class="bg-gray-50 p-1 rounded-lg inline-flex space-x-1">
                 <button @click="setTab('volunteers')" :class="activeTab === 'volunteers' ? 'bg-white text-[#1a2235] border border-gray-200' : 'text-gray-600 hover:text-[#1a2235]'"
@@ -43,6 +41,7 @@
                     <i class='bx bx-cog mr-1'></i>
                     Program Settings
                 </button>
+
                 <button @click="setTab('feedbacks')" :class="activeTab === 'feedbacks' ? 'bg-white text-[#1a2235] border border-gray-200' : 'text-gray-600 hover:text-[#1a2235]'"
                     class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap">
                     <i class='bx bx-cog mr-1'></i>
@@ -69,9 +68,10 @@
             @if($program->volunteers->isEmpty())
                 <p class="text-gray-600 text-center py-4">No volunteers assigned to this program.</p>
             @else
-                <table class="min-w-full bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
+                <table class="min-w-full bg-white overflow-hidden border border-gray-200">
                     <thead class="bg-[#1a2235] text-white">
                         <tr>
+                            <th class="p-4 text-left text-sm font-medium">#</th>
                             <th class="p-4 text-left text-sm font-medium">Name</th>
                             <th class="p-4 text-left text-sm font-medium">Clock In</th>
                             <th class="p-4 text-left text-sm font-medium">Clock Out</th>
@@ -83,6 +83,7 @@
                         @foreach($program->volunteers as $volunteer)
                             @if($volunteer->pivot->status == 'approved')
                                 <tr class="border-t hover:bg-gray-50 transition-all duration-200">
+                                    <td class="p-4">{{ $loop->iteration }}</td>
                                     <td class="p-4 text-sm text-[#1a2235] font-semibold">
                                         {{ $volunteer->user->name }}
                                         <span class="text-gray-500">({{ $volunteer->user->email }})</span>
@@ -170,11 +171,17 @@
 
         </div>
 
+        
         <!-- Program Settings Tab -->
-        <divx-show="activeTab === 'program'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-            @include('programs._form', ['route' => route('programs.update', $program), 'method' => 'PUT', 'program' => $program])
+        <div x-show="activeTab === 'program'" x-transition:enter="transition ease-out duration-200" 
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+
+                @include('programs._form', ['route' => route('programs.update', $program), 'method' => 'PUT', 'program' => $program])
+        
         </div>
 
+
+        <!-- Program Feedbacks Tab -->
          <div x-show="activeTab === 'feedbacks'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
             <div class="text-center py-12">
                 <i class='bx bx-cog text-4xl text-gray-300 mb-4'></i>
@@ -184,11 +191,10 @@
         </div>
 
          <script>
-     // P   reserve tab state on page reload
-       document .addEventListener('DOMContentLoaded', fu nction() {
-            // Listen for form submissions and preserve tab state
-        document    .querySelectorAll('form').forEach(form => {
-              form  .addEventListener('submit', function() {
+        // Preserve tab state on page reload
+        document .addEventListener('DOMContentLoaded', fu nction() {
+            document    .querySelectorAll('form').forEach(form => {
+                form  .addEventListener('submit', function() {
                     const activeTab = Alpine.store ? Alpine.store.activeTab : 'volunteers';
                     const input = document.createElement('input');
                     input.type = 'hidden';
