@@ -16,9 +16,11 @@ class ProgramTask extends Model
         return $this->belongsTo(Program::class);
     }
 
+
     public function assignments()
     {
-        return $this->hasMany(TaskAssignment::class);
-    }
 
+        // return $this->hasMany(TaskAssignment::class);
+        return $this->hasMany(TaskAssignment::class, 'task_id');
+    }
 }

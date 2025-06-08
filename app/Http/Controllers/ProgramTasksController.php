@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Program;
 use App\Models\ProgramTask;
 use Illuminate\Http\Request;
+use App\Models\TaskAssignment;
+use Illuminate\Support\Facades\Auth;
 
 class ProgramTasksController extends Controller
 {
@@ -50,5 +52,35 @@ class ProgramTasksController extends Controller
         $task->update($request->only('task_description', 'status'));
 
         return redirect()->back()->with('success', 'Task updated successfully.');
+    }
+
+    // Assign a volunteer to a task
+    public function assignVolunteer(Request $request, Program $program, ProgramTask $task)
+    {
+        if ($task->program_id !== $program->id) {
+            abort(403);
+        }
+
+        $request->validate([
+            'volunteer_id' => 'required|exists:volunteers,id',
+        ]);
+
+        // Prevent duplicate assignment
+        $existing = TaskAssignment::where('task_id', $task->id)
+            ->where('volunteer_id', $request->volunteer_id)
+            ->first();
+
+        if ($existing) {
+            return redirect()->back()->with('success', 'Volunteer already assigned to this task.');
+        }
+
+        TaskAssignment::create([
+            'task_id' => $task->id,
+            'volunteer_id' => $request->volunteer_id,
+            'assigned_by' => optional(Auth::user())->id,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->back()->with('success', 'Volunteer assigned to task.');
     }
 }
