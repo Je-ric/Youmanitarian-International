@@ -52,16 +52,16 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/content/store', [ContentController::class, 'store'])->name('content.store');
     Route::get('/content/{content}/edit', [ContentController::class, 'edit'])->name('content.edit');
     Route::put('/content/{content}', [ContentController::class, 'update'])->name('content.update');
-    
+
     // Delete content - DELETE route should only be for content deletion
     Route::delete('/content/{content}', [ContentViewController::class, 'destroy'])->name('content.destroy');
-    
+
     // Gallery image delete (for deleting individual images, not content)
     Route::delete('/content_images/{id}', [ContentController::class, 'destroyImage'])->name('content_images.destroy');
 
     // Status Updates for Content Requests
     Route::post('/content/update-status', [ContentViewController::class, 'updateRequestStatus'])->name('content.updateStatus');
-    
+
     // Archive content
     Route::get('/content/archive/{content}', [ContentViewController::class, 'archiveContent'])->name('content.archive');
 
@@ -168,9 +168,8 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::middleware(['auth'])->group(function () {
-   Route::post('/programs/{program}/feedback', [ProgramFeedbackController::class, 'submitFeedback'])->name('programs.feedback.submit');
-   Route::get('/programs/{program}/viewAll_feedbacks', [ProgramFeedbackController::class, 'viewAll'])->name('programs.feedback.view');
-
+    Route::post('/programs/{program}/feedback', [ProgramFeedbackController::class, 'submitFeedback'])->name('programs.feedback.submit');
+    Route::get('/programs/{program}/viewAll_feedbacks', [ProgramFeedbackController::class, 'viewAll'])->name('programs.feedback.view');
 });
 
 Route::prefix('programs/{program}/tasks')->name('programs.tasks.')->group(function () {

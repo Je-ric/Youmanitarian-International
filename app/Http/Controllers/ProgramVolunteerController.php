@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Program;
 use App\Models\Volunteer;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\ProgramFeedback;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class ProgramVolunteerController extends Controller
 {
@@ -42,6 +43,19 @@ class ProgramVolunteerController extends Controller
 
     $tasks = $program->tasks()->orderBy('created_at', 'desc')->get();
 
+    $feedbacks = ProgramFeedback::with('volunteer.user')
+        ->where('program_id', $program->id)
+        ->latest('submitted_at')
+        ->get();
+
+    $totalFeedbacks = $feedbacks->count();
+    $averageRating = $totalFeedbacks > 0 ? round($feedbacks->avg('rating'), 1) : 0;
+
+    $ratingCounts = [];
+    for ($i = 1; $i <= 5; $i++) {
+        $ratingCounts[$i] = $feedbacks->where('rating', $i)->count();
+    }
+
     return view('volunteers.program-volunteers', compact(
         'program',
         'approvedVolunteers',
@@ -49,8 +63,13 @@ class ProgramVolunteerController extends Controller
         'approvedCount',
         'isFull',
         'logs',
-        'tasks'
+        'tasks',
+        'feedbacks',
+        'totalFeedbacks',
+        'averageRating',
+        'ratingCounts'
     ));
+    
 }
 
     // public function manageVolunteers(Program $program)

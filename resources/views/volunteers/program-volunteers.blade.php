@@ -54,17 +54,17 @@
         <div x-show="activeTab === 'volunteers'" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
 
-            <x-button href="{{ route('programs.feedback.view', $program->id) }}" variant="secondary" class="mb-6">
+            {{-- <x-button href="{{ route('programs.feedback.view', $program->id) }}" variant="secondary" class="mb-6">
                 View Feedbacks
-            </x-button>
-            <div class="text-end mb-4">
+            </x-button> --}}
+            {{-- <div class="text-end mb-4">
                 <button
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
                     type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example"
                     data-drawer-placement="right" aria-controls="drawer-right-example">
                     Assign Volunteers
                 </button>
-            </div>
+            </div> --}}
             @if($program->volunteers->isEmpty())
                 <p class="text-gray-600 text-center py-4">No volunteers assigned to this program.</p>
             @else
@@ -183,16 +183,25 @@
 
         <!-- Program Feedbacks Tab -->
          <div x-show="activeTab === 'feedbacks'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-            <div class="text-center py-12">
+            {{-- <div class="text-center py-12">
                 <i class='bx bx-cog text-4xl text-gray-300 mb-4'></i>
                 <p class="text-gray-500 text-lg">Program Feedbacks coming soon.</p>
-            </div>
+            </div> --}}
+
+              @include('programs.partials.viewFeedback', [
+            'program' => $program,
+            'feedbacks' => $feedbacks,
+            'totalFeedbacks' => $totalFeedbacks,
+            'averageRating' => $averageRating,
+            'ratingCounts' => $ratingCounts,
+        ])
+            
         </div>
         </div>
 
          <script>
         // Preserve tab state on page reload
-        document .addEventListener('DOMContentLoaded', fu nction() {
+        document .addEventListener('DOMContentLoaded', function() {
             document    .querySelectorAll('form').forEach(form => {
                 form  .addEventListener('submit', function() {
                     const activeTab = Alpine.store ? Alpine.store.activeTab : 'volunteers';
