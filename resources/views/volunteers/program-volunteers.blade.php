@@ -54,17 +54,12 @@
         <div x-show="activeTab === 'volunteers'" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
 
-            {{-- <x-button href="{{ route('programs.feedback.view', $program->id) }}" variant="secondary" class="mb-6">
-                View Feedbacks
-            </x-button> --}}
-            {{-- <div class="text-end mb-4">
-                <button
+                {{-- <button
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
                     type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example"
                     data-drawer-placement="right" aria-controls="drawer-right-example">
                     Assign Volunteers
-                </button>
-            </div> --}}
+                </button> --}}
             @if($program->volunteers->isEmpty())
                 <p class="text-gray-600 text-center py-4">No volunteers assigned to this program.</p>
             @else

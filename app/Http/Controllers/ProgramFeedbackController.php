@@ -57,7 +57,7 @@ class ProgramFeedbackController extends Controller
 
     // view_feedbacks.blade.php (main)
     // feedbackItem.blade.php (partial)
-    
+
     // public function viewAll(Program $program)
     // {
     //     $feedbacks = ProgramFeedback::with('volunteer.user')
@@ -82,4 +82,10 @@ class ProgramFeedbackController extends Controller
     //     ]);
     // }
     // Route::get('/programs/{program}/viewAll_feedbacks', [ProgramFeedbackController::class, 'viewAll'])->name('programs.feedback.view'); // kung separate page, magagamit
+
+    // {{-- <x-button href="{{ route('programs.feedback.view', $program->id) }}" variant="secondary" class="mb-6">
+    //             View Feedbacks
+    //         </x-button> --}}
+    //  {{-- <div class="text-end mb-4">
+
 }
