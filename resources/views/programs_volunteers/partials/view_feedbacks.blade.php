@@ -114,7 +114,7 @@
                     <div x-show="activeTab === 'all'" x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
                         @foreach($feedbacks as $feedback)
-                            @include('programs.partials.feedbackItem', ['feedback' => $feedback])
+                            @include('programs_volunteers.partials.feedbackItem', ['feedback' => $feedback])
                         @endforeach
                     </div>
 
@@ -136,7 +136,7 @@
                     <div x-show="activeTab === 'neutral'" x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
                         @foreach($feedbacks->where('rating', 3) as $feedback)
-                            @include('programs.partials.feedbackItem', ['feedback' => $feedback])
+                            @include('programs_volunteers.partials.feedbackItem', ['feedback' => $feedback])
                         @endforeach
                         @if($feedbacks->where('rating', 3)->isEmpty())
                             <div class="text-center py-8">

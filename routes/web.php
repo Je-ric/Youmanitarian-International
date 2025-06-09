@@ -159,7 +159,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-// Route::middleware(['auth', 'role:Admin|Program Coordinator'])->group(function () {}
 Route::middleware(['auth'])->group(function () {
     Route::post('/volunteers/{id}/approve', [VolunteerApprovalController::class, 'approve'])->name('volunteers.approve');
     Route::post('/volunteers/{id}/deny', [VolunteerApprovalController::class, 'deny'])->name('volunteers.deny');
@@ -177,7 +176,7 @@ Route::prefix('programs/{program}/tasks')->name('programs.tasks.')->group(functi
     Route::get('/', [ProgramTasksController::class, 'index'])->name('index');
     Route::post('/', [ProgramTasksController::class, 'store'])->name('store');
     Route::delete('{task}', [ProgramTasksController::class, 'destroy'])->name('destroy');
-    Route::put('{task}', [ProgramTasksController::class, 'update'])->name('update'); // Optional
+    Route::put('{task}', [ProgramTasksController::class, 'update'])->name('update'); 
 });
 
 Route::post('/programs/{program}/tasks/{task}/assign', [ProgramTasksController::class, 'assignVolunteer'])->name('programs.tasks.assign');

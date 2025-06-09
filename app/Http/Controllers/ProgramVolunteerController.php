@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Auth;
 class ProgramVolunteerController extends Controller
 {
 
+    // program-volunteers.blade.php (main)
+    // viewFeedback.blade.php (partial)
+    //      feedbackItem.blade.php (partial)
+    // _form.blade.php (partial) 
     public function manageVolunteers(Program $program)
     {
         $approvedVolunteers = $program->volunteers()->where('program_volunteers.status', 'approved')->get();
@@ -56,7 +60,7 @@ class ProgramVolunteerController extends Controller
             $ratingCounts[$i] = $feedbacks->where('rating', $i)->count();
         }
 
-        return view('volunteers.program-volunteers', compact(
+        return view('programs_volunteers.program-volunteers', compact(
             'program',
             'approvedVolunteers',
             'pendingVolunteers',

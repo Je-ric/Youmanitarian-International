@@ -39,14 +39,14 @@
             <div class="space-y-4">
                 @foreach($tasks as $task)
                     <div class="bg-white border border-gray-200 rounded-lg p-6 hover:border-gray-300 transition-colors">
-                        
+
                         <!-- Task Header -->
                         <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-4">
                             <div class="flex-1">
                                 <!-- Status Badge -->
                                 <div class="flex items-center gap-3 mb-3">
                                     @php
-                                        $statusConfig = match($task->status) {
+                                        $statusConfig = match ($task->status) {
                                             'completed' => ['bg-green-100', 'text-green-800', 'bx-check-circle', 'Completed'],
                                             'in_progress' => ['bg-blue-100', 'text-blue-800', 'bx-time', 'In Progress'],
                                             default => ['bg-gray-100', 'text-gray-800', 'bx-clock', 'Pending']
@@ -56,7 +56,7 @@
                                         <i class='bx {{ $statusConfig[2] }} mr-1'></i>
                                         {{ $statusConfig[3] }}
                                     </span>
-                                    
+
                                     <!-- Quick Status Update -->
                                     <form action="{{ route('programs.tasks.update', [$program, $task]) }}" method="POST" class="inline-flex">
                                         @csrf
@@ -113,19 +113,19 @@
                         <!-- Assignments Section -->
                         <div class="border-t border-gray-100 pt-4">
                             <div class="flex flex-col lg:flex-row gap-4">
-                                
+
                                 <!-- Current Assignments -->
                                 <div class="flex-1">
                                     <h4 class="text-sm font-medium text-gray-700 mb-2 flex items-center">
                                         <i class='bx bx-users mr-1'></i>
                                         Assigned Volunteers
                                     </h4>
-                                    
+
                                     @if($task->assignments->isNotEmpty())
                                         <div class="flex flex-wrap gap-2">
                                             @foreach($task->assignments as $assignment)
                                                 @php
-                                                    $assignmentStatusConfig = match($assignment->status) {
+                                                    $assignmentStatusConfig = match ($assignment->status) {
                                                         'completed' => ['bg-green-50', 'text-green-700', 'border-green-200'],
                                                         'in_progress' => ['bg-blue-50', 'text-blue-700', 'border-blue-200'],
                                                         default => ['bg-gray-50', 'text-gray-700', 'border-gray-200']
