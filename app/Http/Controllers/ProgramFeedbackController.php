@@ -57,27 +57,29 @@ class ProgramFeedbackController extends Controller
 
     // view_feedbacks.blade.php (main)
     // feedbackItem.blade.php (partial)
-    public function viewAll(Program $program)
-    {
-        $feedbacks = ProgramFeedback::with('volunteer.user')
-            ->where('program_id', $program->id)
-            ->latest('submitted_at')
-            ->get();
+    
+    // public function viewAll(Program $program)
+    // {
+    //     $feedbacks = ProgramFeedback::with('volunteer.user')
+    //         ->where('program_id', $program->id)
+    //         ->latest('submitted_at')
+    //         ->get();
 
-        $totalFeedbacks = $feedbacks->count();
-        $averageRating = $totalFeedbacks > 0 ? round($feedbacks->avg('rating'), 1) : 0;
+    //     $totalFeedbacks = $feedbacks->count();
+    //     $averageRating = $totalFeedbacks > 0 ? round($feedbacks->avg('rating'), 1) : 0;
 
-        $ratingCounts = [];
-        for ($i = 1; $i <= 5; $i++) {
-            $ratingCounts[$i] = $feedbacks->where('rating', $i)->count();
-        }
+    //     $ratingCounts = [];
+    //     for ($i = 1; $i <= 5; $i++) {
+    //         $ratingCounts[$i] = $feedbacks->where('rating', $i)->count();
+    //     }
 
-        return view('programs.view_feedbacks', [
-            'program' => $program,
-            'feedbacks' => $feedbacks,
-            'totalFeedbacks' => $totalFeedbacks,
-            'averageRating' => $averageRating,
-            'ratingCounts' => $ratingCounts,
-        ]);
-    }
+    //     return view('programs.view_feedbacks', [
+    //         'program' => $program,
+    //         'feedbacks' => $feedbacks,
+    //         'totalFeedbacks' => $totalFeedbacks,
+    //         'averageRating' => $averageRating,
+    //         'ratingCounts' => $ratingCounts,
+    //     ]);
+    // }
+    // Route::get('/programs/{program}/viewAll_feedbacks', [ProgramFeedbackController::class, 'viewAll'])->name('programs.feedback.view'); // kung separate page, magagamit
 }
