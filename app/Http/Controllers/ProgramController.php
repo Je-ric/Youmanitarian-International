@@ -13,11 +13,11 @@ class ProgramController extends Controller
 {
     use AuthorizesRequests;
 
-   public function index(Request $request)
-{
-    $programs = Program::orderBy('date', 'desc')->paginate(10); 
-    return view('programs.index', compact('programs'));
-}
+    public function index(Request $request)
+    {
+        $programs = Program::orderBy('date', 'desc')->paginate(10);
+        return view('programs.index', compact('programs'));
+    }
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -131,12 +131,9 @@ class ProgramController extends Controller
 
 
         // return redirect()->route('programs.index')->with('success', 'Program updated successfully.');
-        // return redirect()
-            // ->route('programs_volunteers.program-volunteers', $program->id)
-            // ->with('success', 'Program updated successfully.');
-            return redirect()
-    ->route('programs.manage_volunteers', $program->id)
-    ->with('success', 'Program updated successfully.');
+        return redirect()
+            ->route('programs.manage_volunteers', $program->id)
+            ->with('success', 'Program updated successfully.');
     }
 
 

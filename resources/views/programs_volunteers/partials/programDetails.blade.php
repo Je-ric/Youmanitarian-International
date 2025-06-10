@@ -21,14 +21,14 @@
                     <button
                         type="button"
                         id="discardBtn"
-                        class="hidden flex-1 lg:flex-none inline-flex items-center justify-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                        class="hidden flex-1 lg:flex-none items-center justify-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                     >
                         <i class='bx bx-x mr-2'></i> Discard
                     </button>
                     <button
                         type="submit"
                         id="saveBtn"
-                        class="hidden flex-1 lg:flex-none inline-flex items-center justify-center px-4 py-2 bg-[#ffb51b] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors font-medium"
+                        class="hidden flex-1 lg:flex-none items-center justify-center px-4 py-2 bg-[#ffb51b] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors font-medium"
                     >
                         <i class='bx bx-save mr-2'></i> Save Changes
                     </button>
