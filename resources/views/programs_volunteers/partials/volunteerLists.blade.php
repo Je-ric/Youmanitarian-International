@@ -19,7 +19,7 @@
                         <td class="p-4">{{ $loop->iteration }}</td>
                         <td class="p-4 text-sm text-[#1a2235] font-semibold">
                             {{ $volunteer->user->name }}
-                            <span class="text-gray-500">({{ $volunteer->user->email }})</span>
+                            {{-- <span class="text-gray-500">({{ $volunteer->user->email }})</span> --}}
                         </td>
                         <td class="p-4 text-sm">
                             @php
@@ -31,7 +31,8 @@
                                 @foreach ($volunteerLogs as $log)
                                     <div class="flex gap-2">
                                         <span class="text-sm text-gray-600">
-                                            {{ \Carbon\Carbon::parse($log->clock_in)->format('M d, Y h:i A') }}
+                                            {{-- {{ \Carbon\Carbon::parse($log->clock_in)->format('M d, Y h:i A') }} --}}
+                                            {{ \Carbon\Carbon::parse($log->clock_in)->format('h:i A') }}
                                         </span>
                                     </div>
                                 @endforeach
@@ -45,8 +46,9 @@
                                     <div class="flex gap-2">
                                         <span class="text-sm text-gray-600">
                                             @if ($log->clock_out)
-                                                {{ \Carbon\Carbon::parse($log->clock_out)->format('M d, Y h:i A') }}
-                                            @else
+                                                {{-- {{ \Carbon\Carbon::parse($log->clock_out)->format('M d, Y h:i A') }} --}}
+                                                    {{ \Carbon\Carbon::parse($log->clock_out)->format('h:i A') }}
+                                                @else
                                                 <span class="text-red-500">Still Clocked In</span>
                                             @endif
                                         </span>
