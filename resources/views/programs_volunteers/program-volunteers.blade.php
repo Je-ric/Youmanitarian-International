@@ -81,7 +81,7 @@
         <div x-show="activeTab === 'program'" x-transition:enter="transition ease-out duration-200" 
             x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
 
-                @include('programs._form', ['route' => route('programs.update', $program), 'method' => 'PUT', 'program' => $program])
+                @include('programs_volunteers.partials.programDetails', ['route' => route('programs.update', $program), 'method' => 'PUT', 'program' => $program])
         
         </div>
 

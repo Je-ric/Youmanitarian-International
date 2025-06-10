@@ -116,67 +116,83 @@ Route::get('/chatbot', [WebsiteController::class, 'chatbot'])->name('chatbot.ind
 
 // =================================================================
 
-// Program CRUD
-Route::middleware(['auth'])->group(function () {
-    Route::get('/programs-list', [ProgramController::class, 'index'])->name('programs.index'); // View all programs
-    Route::get('/programs/create', [ProgramController::class, 'create'])->name('programs.create'); // Form to create
-    Route::post('/programs', [ProgramController::class, 'store'])->name('programs.store'); // Save new program
-    Route::get('/programs/{program}/edit', [ProgramController::class, 'edit'])->name('programs.edit'); // Edit form
-    Route::put('/programs/{program}', [ProgramController::class, 'update'])->name('programs.update'); // Update program
-    Route::delete('/programs/{program}', [ProgramController::class, 'destroy'])->name('programs.destroy'); // Delete
 
+// =================== PROGRAM CRUD ===================
+
+Route::middleware(['auth'])->group(function () {
+    // List all programs (programs/index.blade.php)
+    Route::get('/programs-list', [ProgramController::class, 'index'])->name('programs.index');
+    // Create program form (programs/create.blade.php)
+    Route::get('/programs/create', [ProgramController::class, 'create'])->name('programs.create');
+    // Store new program (form submission)
+    Route::post('/programs', [ProgramController::class, 'store'])->name('programs.store');
+    // Edit program form (programs/edit.blade.php)
+    Route::get('/programs/{program}/edit', [ProgramController::class, 'edit'])->name('programs.edit');
+    // Update program (form submission)
+    Route::put('/programs/{program}', [ProgramController::class, 'update'])->name('programs.update');
+    // Delete program (action)
+    Route::delete('/programs/{program}', [ProgramController::class, 'destroy'])->name('programs.destroy');
+    // Show program details modal (AJAX/modal, not a full page)
     Route::get('/program/{program}', [ProgramController::class, 'showDetailsModal'])->name('programs.show');
 });
 
 
-
-
+// =================== PROGRAM VOLUNTEERS MANAGEMENT ===================
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/programs/{program}/volunteers/manage', [ProgramVolunteerController::class, 'manageVolunteers'])->name('programs.manage_volunteers');
+    // Manage volunteers for a program (programs_volunteers/program-volunteers.blade.php)
+    Route::get('/programs/{program}/volunteers/manage', [ProgramVolunteerController::class, 'manageVolunteers'])->name('programs_volunteers.program-volunteers');
+    // Get logs for a specific volunteer in a program (AJAX/modal)
     Route::get('/programs/{program}/volunteers/{volunteer}/logs', [ProgramVolunteerController::class, 'getVolunteerLogs'])->name('programs.volunteer_logs');
-
-    //  
+    // View volunteer details (volunteers/viewUser_details.blade.php)
     Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'showDetails'])->name('volunteers.viewUser_details');
+    // List all volunteer requests (volunteers/applications.blade.php)
     Route::get('/volunteers/requests', [VolunteerController::class, 'allVolunteers'])->name('volunteers.requests');
-
-    // 
+    // Volunteer application form (volunteers/form.blade.php)
     Route::get('/volunteer-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
+    // Submit volunteer application (form submission)
     Route::post('/volunteer-application', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
+    // Join a program as a volunteer (action)
     Route::post('/programs/{program}/join', [ProgramVolunteerController::class, 'join'])->name('programs.join');
 });
 
 
-// Volunteer Attendance
+// =================== VOLUNTEER ATTENDANCE ===================
+
 Route::middleware(['auth'])->group(function () {
-    Route::get('/programs/{program}/view', [VolunteerAttendanceController::class, 'show'])->name('programs.view');
-    Route::post('/programs/{program}/clock-in', [VolunteerAttendanceController::class, 'clockIn'])->name('programs.clock-in');
-    Route::post('/programs/{program}/clock-out', [VolunteerAttendanceController::class, 'clockOut'])->name('programs.clock-out');
-    Route::post('/programs/{program}/attendance/upload-proof', [VolunteerAttendanceController::class, 'uploadProof'])->name('attendance.uploadProof');
-    Route::get('/programs/{program}/volunteers', [VolunteerAttendanceController::class, 'programVolunteers'])->name('programs.volunteers');
-    Route::post('/attendance/{attendance}/approve', [VolunteerAttendanceController::class, 'approveAttendance'])->name('attendance.approve');
-    Route::post('/attendance/{attendance}/reject', [VolunteerAttendanceController::class, 'rejectAttendance'])->name('attendance.reject');
+    Route::get('/programs/{program}/view', [VolunteerAttendanceController::class, 'show'])->name('programs.view'); // View attendance page for a program (programs/attendance.blade.php)
+    Route::post('/programs/{program}/clock-in', [VolunteerAttendanceController::class, 'clockIn'])->name('programs.clock-in'); // Clock in (attendance action)
+    Route::post('/programs/{program}/clock-out', [VolunteerAttendanceController::class, 'clockOut'])->name('programs.clock-out'); // Clock out (attendance action)
+    Route::post('/programs/{program}/attendance/upload-proof', [VolunteerAttendanceController::class, 'uploadProof'])->name('attendance.uploadProof'); // Upload proof of attendance (modal/form)
+    Route::get('/programs/{program}/volunteers', [VolunteerAttendanceController::class, 'programVolunteers'])->name('programs.volunteers'); // List volunteers for a program (programs/volunteers.blade.php)
+    Route::post('/attendance/{attendance}/approve', [VolunteerAttendanceController::class, 'approveAttendance'])->name('attendance.approve'); // Approve attendance (action, modals/attendanceAppproval.blade.php)
+    Route::post('/attendance/{attendance}/reject', [VolunteerAttendanceController::class, 'rejectAttendance'])->name('attendance.reject'); // Reject attendance (action, modals/attendanceAppproval.blade.php)
 });
 
+// =================== VOLUNTEER APPLICATION APPROVAL ===================
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/volunteers/{id}/approve', [VolunteerApprovalController::class, 'approve'])->name('volunteers.approve');
-    Route::post('/volunteers/{id}/deny', [VolunteerApprovalController::class, 'deny'])->name('volunteers.deny');
-    Route::post('/volunteers/{id}/restore', [VolunteerApprovalController::class, 'restore'])->name('volunteers.restore');
+    Route::post('/volunteers/{id}/approve', [VolunteerApprovalController::class, 'approve'])->name('volunteers.approve'); // Approve volunteer (action)
+    Route::post('/volunteers/{id}/deny', [VolunteerApprovalController::class, 'deny'])->name('volunteers.deny'); // Deny volunteer (action)
+    Route::post('/volunteers/{id}/restore', [VolunteerApprovalController::class, 'restore'])->name('volunteers.restore'); // Restore volunteer (action)
 });
 
+// =================== PROGRAM FEEDBACK ===================
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/programs/{program}/feedback', [ProgramFeedbackController::class, 'submitFeedback'])->name('programs.feedback.submit');
+    Route::post('/programs/{program}/feedback', [ProgramFeedbackController::class, 'submitFeedback'])->name('programs.feedback.submit');  // Submit feedback for a program (modal/form)
 
     
 });
 
-Route::prefix('programs/{program}/tasks')->name('programs.tasks.')->group(function () {
-    Route::get('/', [ProgramTasksController::class, 'index'])->name('index');
-    Route::post('/', [ProgramTasksController::class, 'store'])->name('store');
-    Route::delete('{task}', [ProgramTasksController::class, 'destroy'])->name('destroy');
-    Route::put('{task}', [ProgramTasksController::class, 'update'])->name('update'); 
-});
+// =================== PROGRAM TASKS ===================
 
+// Program tasks CRUD (programs/tasks/index.blade.php, etc.)
+Route::prefix('programs/{program}/tasks')->name('programs.tasks.')->group(function () {
+    Route::get('/', [ProgramTasksController::class, 'index'])->name('index'); // List tasks for a program
+    Route::post('/', [ProgramTasksController::class, 'store'])->name('store'); // Store new task
+    Route::delete('{task}', [ProgramTasksController::class, 'destroy'])->name('destroy'); // Delete a task
+    Route::put('{task}', [ProgramTasksController::class, 'update'])->name('update');// Update a task
+});
+// Assign a volunteer to a task (action)
 Route::post('/programs/{program}/tasks/{task}/assign', [ProgramTasksController::class, 'assignVolunteer'])->name('programs.tasks.assign');
