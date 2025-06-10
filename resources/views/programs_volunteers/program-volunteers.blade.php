@@ -13,7 +13,7 @@
             url.searchParams.set('tab', tab);
             window.history.pushState({}, '', url);
         }
-    }" class="container mx-auto px-4 sm:px-6 py-6">
+    }" class="mx-auto px-4 sm:px-6 py-6">
 
         <div class="mb-8">
             <h1 class="text-2xl sm:text-3xl font-bold text-[#1a2235] mb-2">

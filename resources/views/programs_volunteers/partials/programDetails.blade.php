@@ -132,7 +132,7 @@
     });
 </script> --}}
 
-<div class="container mx-auto bg-white border border-gray-200 rounded-xl p-6 lg:p-8 mb-8 px-4 sm:px-6 py-6">
+<div class="container w-full bg-white border border-gray-200 rounded-xl p-6 lg:p-8 mb-8 px-4 sm:px-6 py-6">
     <form action="{{ route('programs.update', $program) }}" method="POST" id="programForm">
         @csrf
         @method('PUT')
@@ -466,3 +466,4 @@ document.addEventListener('DOMContentLoaded', function() {
     transition: all 0.3s ease-in-out;
 }
 </style>
+
