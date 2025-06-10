@@ -130,7 +130,10 @@ class ProgramController extends Controller
         ]);
 
 
-        return redirect()->route('programs.index')->with('success', 'Program updated successfully.');
+        // return redirect()->route('programs.index')->with('success', 'Program updated successfully.');
+        return redirect()
+            ->route('programs_volunteers.program-volunteers', $program->id)
+            ->with('success', 'Program updated successfully.');
     }
 
 
