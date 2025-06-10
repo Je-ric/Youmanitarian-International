@@ -116,43 +116,33 @@ Route::get('/chatbot', [WebsiteController::class, 'chatbot'])->name('chatbot.ind
 
 // =================================================================
 
-
-// =================== PROGRAM CRUD ===================
-
+// Program CRUD
 Route::middleware(['auth'])->group(function () {
-    // List all programs (programs/index.blade.php)
-    Route::get('/programs-list', [ProgramController::class, 'index'])->name('programs.index');
-    // Create program form (programs/create.blade.php)
-    Route::get('/programs/create', [ProgramController::class, 'create'])->name('programs.create');
-    // Store new program (form submission)
-    Route::post('/programs', [ProgramController::class, 'store'])->name('programs.store');
-    // Edit program form (programs/edit.blade.php)
-    Route::get('/programs/{program}/edit', [ProgramController::class, 'edit'])->name('programs.edit');
-    // Update program (form submission)
-    Route::put('/programs/{program}', [ProgramController::class, 'update'])->name('programs.update');
-    // Delete program (action)
-    Route::delete('/programs/{program}', [ProgramController::class, 'destroy'])->name('programs.destroy');
-    // Show program details modal (AJAX/modal, not a full page)
+    Route::get('/programs-list', [ProgramController::class, 'index'])->name('programs.index'); // View all programs
+    Route::get('/programs/create', [ProgramController::class, 'create'])->name('programs.create'); // Form to create
+    Route::post('/programs', [ProgramController::class, 'store'])->name('programs.store'); // Save new program
+    Route::get('/programs/{program}/edit', [ProgramController::class, 'edit'])->name('programs.edit'); // Open Edit form
+    Route::put('/programs/{program}', [ProgramController::class, 'update'])->name('programs.update'); // Update program
+    Route::delete('/programs/{program}', [ProgramController::class, 'destroy'])->name('programs.destroy'); // Delete
+    
     Route::get('/program/{program}', [ProgramController::class, 'showDetailsModal'])->name('programs.show');
 });
 
 
-// =================== PROGRAM VOLUNTEERS MANAGEMENT ===================
+
+
 
 Route::middleware(['auth'])->group(function () {
-    // Manage volunteers for a program (programs_volunteers/program-volunteers.blade.php)
-    Route::get('/programs/{program}/volunteers/manage', [ProgramVolunteerController::class, 'manageVolunteers'])->name('programs_volunteers.program-volunteers');
-    // Get logs for a specific volunteer in a program (AJAX/modal)
+    Route::get('/programs/{program}/volunteers/manage', [ProgramVolunteerController::class, 'manageVolunteers'])->name('programs.manage_volunteers');
     Route::get('/programs/{program}/volunteers/{volunteer}/logs', [ProgramVolunteerController::class, 'getVolunteerLogs'])->name('programs.volunteer_logs');
-    // View volunteer details (volunteers/viewUser_details.blade.php)
+
+    //  
     Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'showDetails'])->name('volunteers.viewUser_details');
-    // List all volunteer requests (volunteers/applications.blade.php)
     Route::get('/volunteers/requests', [VolunteerController::class, 'allVolunteers'])->name('volunteers.requests');
-    // Volunteer application form (volunteers/form.blade.php)
+
+    // 
     Route::get('/volunteer-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
-    // Submit volunteer application (form submission)
     Route::post('/volunteer-application', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
-    // Join a program as a volunteer (action)
     Route::post('/programs/{program}/join', [ProgramVolunteerController::class, 'join'])->name('programs.join');
 });
 
