@@ -154,6 +154,14 @@
                         <span class="ml-3 sidebar-content text-sm">User Roles</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('weather-forecast.index') }}" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                       data-tooltip="User Roles">
+                        <i class="bx bx-shield-quarter w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Weather Forecasts</span>
+                    </a>
+                </li>
             </ul>
 
             <!-- Divider -->
