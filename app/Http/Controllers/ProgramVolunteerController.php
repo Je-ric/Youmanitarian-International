@@ -142,7 +142,7 @@ class ProgramVolunteerController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    public function leave(\Illuminate\Http\Request $request, \App\Models\Program $program, \App\Models\Volunteer $volunteer)
+    public function leave(Request $request, Program $program, Volunteer $volunteer)
     {
         // Check if the volunteer has any task assignments for this program
         $hasTasks = $volunteer->taskAssignments()
