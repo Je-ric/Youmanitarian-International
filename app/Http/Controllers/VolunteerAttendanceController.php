@@ -177,7 +177,8 @@ class VolunteerAttendanceController extends Controller
     // attendance.blade.php 
     public function uploadProof(Request $request, $programId)
     {
-        $volunteerId = auth()->user()?->volunteer?->id;
+        // $volunteerId = auth()->user()?->volunteer?->id;
+        $volunteerId = Auth::user()?->volunteer?->id;
 
         if (!$volunteerId) {
             return back()->with('toast', ['message' => 'You must be logged in as a volunteer.', 'type' => 'error']);
