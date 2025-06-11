@@ -188,6 +188,7 @@
                     @php
                         $volunteer = Auth::user()->volunteer;
                         $alreadyJoined = $program->volunteers->contains($volunteer?->id ?? 0);
+                        $currentVolunteers = $program->volunteers->count();
                     @endphp
 
                     <div class="border-t border-slate-200 pt-6">
@@ -196,6 +197,12 @@
                                 class="text-green-600 font-medium text-sm flex items-center gap-2 justify-center py-3 px-4 bg-green-50 border border-green-200 rounded-lg">
                                 <i class='bx bx-check-circle'></i>
                                 This program is already done.
+                            </div>
+                        @elseif($currentVolunteers >= $program->volunteer_count)
+                            <div
+                                class="text-red-600 font-medium text-sm flex items-center gap-2 justify-center py-3 px-4 bg-red-50 border border-red-200 rounded-lg">
+                                <i class='bx bx-error-circle'></i>
+                                All volunteer slots are filled, but you’re welcome to join as a guest, viewer, or supporter!
                             </div>
                         @elseif($alreadyJoined)
                             <div
@@ -230,8 +237,10 @@
                     $progressComponent = view('components.programProgress', ['program' => $program])->render();
 
                     $currentVolunteers = $program->volunteers->count();
-                    $progressPercentage = ($currentVolunteers / $program->volunteer_count) * 100;
-
+                    // $progressPercentage = ($currentVolunteers / $program->volunteer_count) * 100;
+                    $progressPercentage = ($program->volunteer_count > 0)
+                    ? ($currentVolunteers / $program->volunteer_count) * 100
+                    : 0;
                     $details = [
                         ['icon' => 'calendar', 'label' => 'Date', 'value' => \Carbon\Carbon::parse($program->date)->format('M d, Y')],
                         ['icon' => 'time', 'label' => 'Time', 'value' => \Carbon\Carbon::parse($program->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($program->end_time)->format('h:i A')],
