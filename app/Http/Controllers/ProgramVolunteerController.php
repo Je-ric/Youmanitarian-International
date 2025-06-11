@@ -142,4 +142,32 @@ class ProgramVolunteerController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
+    public function leave(\Illuminate\Http\Request $request, \App\Models\Program $program, \App\Models\Volunteer $volunteer)
+    {
+        // Check if the volunteer has any task assignments for this program
+        $hasTasks = $volunteer->taskAssignments()
+            ->whereHas('task', function($query) use ($program) {
+                $query->where('program_id', $program->id);
+            })->exists();
+    
+        if (
+            now()->gte($program->start_time) ||
+            $program->progress === 'done' ||
+            $hasTasks
+        ) {
+            $message = $hasTasks
+                ? 'You cannot leave this program because you have assigned tasks.'
+                : ($program->progress === 'done'
+                    ? 'You cannot leave this program because it is already done.'
+                    : 'You cannot leave this program because it has already started.');
+    
+            return back()->with('error', $message);
+        }
+    
+        // Detach volunteer from program
+        $program->volunteers()->detach($volunteer->id);
+    
+        return back()->with('success', 'You have left the program.');
+    }
 }
+

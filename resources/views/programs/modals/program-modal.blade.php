@@ -202,7 +202,7 @@
                             <div
                                 class="text-red-600 font-medium text-sm flex items-center gap-2 justify-center py-3 px-4 bg-red-50 border border-red-200 rounded-lg">
                                 <i class='bx bx-error-circle'></i>
-                                All volunteer slots are filled, but you’re welcome to join as a guest, viewer, or supporter!
+                                All volunteer slots are filled, but you're welcome to join as a guest, viewer, or supporter!
                             </div>
                         @elseif($alreadyJoined)
                             <div
@@ -223,6 +223,53 @@
                     </div>
                 @endif
 
+                @if($alreadyJoined)
+                    @php
+                        // Check if the volunteer has any task assignments for this program
+                        $hasTasks = $volunteer->taskAssignments()
+                            ->whereHas('task', function ($query) use ($program) {
+                                $query->where('program_id', $program->id);
+                            })->exists();
+
+                        $canLeave = now()->lt(\Carbon\Carbon::parse($program->start_time))
+                            && $program->progress !== 'done'
+                            && !$hasTasks;
+                    @endphp
+
+                    @if($canLeave)
+                        <form action="{{ route('programs.leave', [$program->id, $volunteer->id]) }}" method="POST"
+                            onsubmit="return confirm('Are you sure you want to leave this program?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                <i class='bx bx-log-out'></i>
+                                Leave Program
+                            </button>
+                        </form>
+                    @else
+                        @if($hasTasks)
+                            <div
+                                class="text-red-600 text-sm flex items-center gap-2 justify-center py-3 px-4 bg-red-50 border border-red-200 rounded-lg">
+                                <i class='bx bx-task'></i>
+                                You cannot leave this program because you have assigned tasks.
+                            </div>
+                        @elseif($program->progress === 'done')
+                            <div
+                                class="text-gray-500 text-sm flex items-center gap-2 justify-center py-3 px-4 bg-gray-100 border border-gray-200 rounded-lg">
+                                <i class='bx bx-lock'></i>
+                                You cannot leave this program because it is already done.
+                            </div>
+                        @elseif(now()->gte(\Carbon\Carbon::parse($program->start_time)))
+                            <div
+                                class="text-gray-500 text-sm flex items-center gap-2 justify-center py-3 px-4 bg-gray-100 border border-gray-200 rounded-lg">
+                                <i class='bx bx-lock'></i>
+                                You cannot leave this program because it has already started.
+                            </div>
+                        @endif
+                    @endif
+                @endif
+
 
             </div>
 
@@ -239,8 +286,8 @@
                     $currentVolunteers = $program->volunteers->count();
                     // $progressPercentage = ($currentVolunteers / $program->volunteer_count) * 100;
                     $progressPercentage = ($program->volunteer_count > 0)
-                    ? ($currentVolunteers / $program->volunteer_count) * 100
-                    : 0;
+                        ? ($currentVolunteers / $program->volunteer_count) * 100
+                        : 0;
                     $details = [
                         ['icon' => 'calendar', 'label' => 'Date', 'value' => \Carbon\Carbon::parse($program->date)->format('M d, Y')],
                         ['icon' => 'time', 'label' => 'Time', 'value' => \Carbon\Carbon::parse($program->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($program->end_time)->format('h:i A')],
@@ -250,16 +297,16 @@
                             'icon' => 'group',
                             'label' => 'Volunteers Needed',
                             'value' => new \Illuminate\Support\HtmlString('
-                                                <div class="space-y-2">
-                                                    <div class="flex justify-between text-sm">
-                                                        <span class="text-slate-700">' . $currentVolunteers . ' / ' . $program->volunteer_count . ' volunteers</span>
-                                                        <span class="text-slate-600">' . round($progressPercentage) . '%</span>
-                                                    </div>
-                                                    <div class="w-full bg-slate-200 rounded-full h-2">
-                                                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: ' . min($progressPercentage, 100) . '%"></div>
-                                                    </div>
-                                                </div>
-                                            ')
+                                                                    <div class="space-y-2">
+                                                                        <div class="flex justify-between text-sm">
+                                                                            <span class="text-slate-700">' . $currentVolunteers . ' / ' . $program->volunteer_count . ' volunteers</span>
+                                                                            <span class="text-slate-600">' . round($progressPercentage) . '%</span>
+                                                                        </div>
+                                                                        <div class="w-full bg-slate-200 rounded-full h-2">
+                                                                            <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: ' . min($progressPercentage, 100) . '%"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                ')
                         ],
 
                         ['icon' => 'trending-up', 'label' => 'Progress', 'value' => $progressComponent]
