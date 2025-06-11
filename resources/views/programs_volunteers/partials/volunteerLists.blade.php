@@ -71,6 +71,22 @@
                             <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="info">
                                 <i class='bx bx-show'></i> View
                             </x-button>
+                             @php
+                                $hasLogs = !$volunteerLogs->isEmpty();
+                                $hasClockOut = $hasLogs && $volunteerLogs->first()->clock_out;
+                            @endphp
+                            @if (!$hasLogs || ($hasLogs && !$hasClockOut))
+    <button type="button"
+        class="btn btn-warning"
+        onclick="document.getElementById('manualAttendanceModal_{{ $volunteer->id }}').showModal()">
+        <i class='bx bx-edit'></i> Manual Entry
+    </button>
+    @include('programs_volunteers.modals.manualAttendanceModal', [
+        'program' => $program,
+        'volunteers' => $program->volunteers,
+        'selectedVolunteer' => $volunteer
+    ])
+@endif
                             @if ($allReviewed)
                                 <button class="btn btn-outline text-green-600 border-green-300 hover:bg-green-50"
                                     title="Attendance already reviewed"
@@ -83,7 +99,7 @@
                                     <i class='bx bx-show'></i> Review Attendance
                                 </button>
                             @endif
-                            @include('volunteers.modals.attendanceApproval', ['volunteer' => $volunteer, 'volunteerLogs' => $volunteerLogs])
+                            @include('programs_volunteers.modals.attendanceApproval', ['volunteer' => $volunteer, 'volunteerLogs' => $volunteerLogs])
                         </td>
                     </tr>
                 @endif

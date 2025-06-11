@@ -274,4 +274,36 @@ class VolunteerAttendanceController extends Controller
 
         return back()->with('toast', ['message' => 'Attendance rejected!', 'type' => 'error']);
     }
+
+public function showManualEntryForm(Request $request, Program $program)
+{
+    $volunteers = $program->volunteers()->with('user')->get();
+    $selectedVolunteerId = $request->query('volunteer_id');
+    return view('programs-volunteers.modals.manualAttendanceModal', compact('program', 'volunteers', 'selectedVolunteerId'));
+}
+public function manualEntry(Request $request, Program $program)
+{
+    $request->validate([
+        'volunteer_id' => 'required|exists:volunteers,id',
+        'clock_in' => 'required|date',
+        'clock_out' => 'nullable|date|after_or_equal:clock_in',
+    ]);
+
+    // Find or create the attendance record
+    $attendance = \App\Models\VolunteerAttendance::firstOrNew([
+        'program_id' => $program->id,
+        'volunteer_id' => $request->volunteer_id,
+    ]);
+
+    $attendance->clock_in = $request->clock_in;
+    $attendance->clock_out = $request->clock_out;
+    $attendance->status = 'present'; // or whatever status you use
+    $attendance->save();
+
+    return redirect()->back()->with('toast', [
+        'message' => 'Attendance record updated successfully!',
+        'type' => 'success',
+    ]);
+}
+
 }

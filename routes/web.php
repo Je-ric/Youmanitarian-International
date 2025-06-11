@@ -173,6 +173,14 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::post('/programs/{program}/feedback', [ProgramFeedbackController::class, 'submitFeedback'])->name('programs.feedback.submit');  // Submit feedback for a program (modal/form)
 });
+// Show the manual attendance modal/form
+Route::get('/programs/{program}/attendance/manual-entry', [VolunteerAttendanceController::class, 'showManualEntryForm'])
+    ->name('attendance.manualEntryForm');
+
+// Handle manual attendance entry submission
+Route::post('/programs/{program}/attendance/manual-entry', [VolunteerAttendanceController::class, 'manualEntry'])
+    ->name('attendance.manualEntry');
+
 
 Route::post('/programs/{program}/guest-feedback', [ProgramFeedbackController::class, 'submitGuestFeedback'])
     ->name('programs.feedback.guest.submit');
@@ -182,9 +190,9 @@ Route::post('/programs/{program}/guest-feedback', [ProgramFeedbackController::cl
 // Program tasks CRUD (programs/tasks/index.blade.php, etc.)
 Route::prefix('programs/{program}/tasks')->name('programs.tasks.')->group(function () {
     Route::get('/', [ProgramTasksController::class, 'index'])->name('index'); // List tasks for a program
-    Route::post('/', [ProgramTasksController::class, 'store'])->name('store'); // Store new task
-    Route::delete('{task}', [ProgramTasksController::class, 'destroy'])->name('destroy'); // Delete a task
-    Route::put('{task}', [ProgramTasksController::class, 'update'])->name('update');// Update a task
+    Route::post('/', [ProgramTasksController::class, 'store'])->name('store'); 
+    Route::delete('{task}', [ProgramTasksController::class, 'destroy'])->name('destroy'); 
+    Route::put('{task}', [ProgramTasksController::class, 'update'])->name('update');
 });
 // Assign a volunteer to a task (action)
 Route::post('/programs/{program}/tasks/{task}/assign', [ProgramTasksController::class, 'assignVolunteer'])->name('programs.tasks.assign');
