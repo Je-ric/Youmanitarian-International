@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Content;
+use App\Models\Program;
 use Illuminate\Support\Str;
 use App\Models\ContentImage;
 use Illuminate\Http\Request;
@@ -83,7 +84,9 @@ class WebsiteController extends Controller
 
     public function programs()
     {
-        return view('website.programs'); // Programs 
+        $programs = Program::orderBy('date', 'desc')->get();
+    return view('website.programs', compact('programs'));
+    
     }
 
     public function sponsors()

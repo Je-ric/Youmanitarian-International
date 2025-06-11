@@ -125,6 +125,11 @@ class ProgramVolunteerController extends Controller
             return redirect()->back()->with('error', 'Only volunteers can join programs.');
         }
 
+        // Check if the volunteer is approved
+        if ($volunteer->application_status !== 'approved') {
+            return redirect()->back()->with('error', 'Your volunteer application must be approved before joining a program.');
+        }
+
         // Avoid duplicate entry
         if (!$program->volunteers->contains($volunteer->id)) {
             $program->volunteers()->attach($volunteer->id, ['status' => 'approved']);

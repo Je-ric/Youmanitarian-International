@@ -10,7 +10,14 @@
             <!-- User Info -->
             <div>
                 <p class="font-medium text-gray-900">
-                    {{ $feedback->volunteer->user->name ?? 'Anonymous Volunteer' }}
+                    {{-- {{ $feedback->volunteer->user->name ?? 'Anonymous Volunteer' }} --}}
+                    @if($feedback->user_type === 'guest')
+                        {{ $feedback->guest_name ?? 'Guest' }} <span class="text-xs text-gray-500">(Guest)</span>
+                    @elseif(isset($feedback->volunteer->user->name))
+                        {{ $feedback->volunteer->user->name }}
+                    @else
+                        Anonymous Volunteer
+                    @endif
                 </p>
                 <p class="text-sm text-gray-500">
                     {{ \Carbon\Carbon::parse($feedback->submitted_at)->format('M j, Y \a\t g:i A') }}

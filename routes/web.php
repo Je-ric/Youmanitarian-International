@@ -143,8 +143,8 @@ Route::middleware(['auth'])->group(function () {
     // 
     Route::get('/volunteer-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
     Route::post('/volunteer-application', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
-    Route::post('/programs/{program}/join', [ProgramVolunteerController::class, 'join'])->name('programs.join');
-    Route::get('/volunteers/approved', [VolunteerController::class, 'approvedVolunteers'])->name('volunteers.approved');
+    Route::post('/programs/{program}/join', [ProgramVolunteerController::class, 'join'])->name('programs.join'); // Join a program (action/modal)
+    Route::get('/volunteers/approved', [VolunteerController::class, 'approvedVolunteers'])->name('volunteers.approved'); //volunteers/volunteers.blade.php
 });
 
 
@@ -172,9 +172,10 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/programs/{program}/feedback', [ProgramFeedbackController::class, 'submitFeedback'])->name('programs.feedback.submit');  // Submit feedback for a program (modal/form)
-
-    
 });
+
+Route::post('/programs/{program}/guest-feedback', [ProgramFeedbackController::class, 'submitGuestFeedback'])
+    ->name('programs.feedback.guest.submit');
 
 // =================== PROGRAM TASKS ===================
 
