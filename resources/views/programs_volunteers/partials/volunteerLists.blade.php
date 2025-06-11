@@ -81,11 +81,17 @@
         onclick="document.getElementById('manualAttendanceModal_{{ $volunteer->id }}').showModal()">
         <i class='bx bx-edit'></i> Manual Entry
     </button>
-    @include('programs_volunteers.modals.manualAttendanceModal', [
-        'program' => $program,
-        'volunteers' => $program->volunteers,
-        'selectedVolunteer' => $volunteer
-    ])
+    @php
+    $attendance = \App\Models\VolunteerAttendance::where('volunteer_id', $volunteer->id)
+        ->where('program_id', $program->id)
+        ->first();
+@endphp
+
+@include('programs_volunteers.modals.manualAttendanceModal', [
+    'program' => $program,
+    'selectedVolunteer' => $volunteer,
+    'attendance' => $attendance
+])
 @endif
                             @if ($allReviewed)
                                 <button class="btn btn-outline text-green-600 border-green-300 hover:bg-green-50"

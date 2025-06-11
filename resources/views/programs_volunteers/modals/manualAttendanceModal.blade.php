@@ -9,24 +9,52 @@
         </header>
         <form method="POST" action="{{ route('attendance.manualEntry', $program->id) }}" class="flex flex-col flex-1 min-h-0 p-6">
             @csrf
+            <input type="hidden" name="volunteer_id" value="{{ $selectedVolunteer->id }}">
             <div class="mb-4">
                 <label class="block font-semibold mb-1 text-gray-700">Volunteer</label>
-                <select name="volunteer_id" class="select select-bordered w-full" required>
-                    <option value="">Select Volunteer</option>
-                    @foreach($volunteers as $vol)
-                        <option value="{{ $vol->id }}" {{ $selectedVolunteer->id == $vol->id ? 'selected' : '' }}>
-                            {{ $vol->user->name ?? 'No Name' }}
-                        </option>
-                    @endforeach
-                </select>
+                <div class="px-4 py-2 bg-gray-100 rounded text-gray-800 font-medium">
+                    {{ $selectedVolunteer->user->name ?? 'No Name' }}
+                </div>
             </div>
             <div class="mb-4">
-                <label class="block font-semibold mb-1 text-gray-700">Clock In</label>
-                <input type="datetime-local" name="clock_in" class="input input-bordered w-full" required>
+                <label class="block font-semibold mb-1 text-gray-700">Date</label>
+                <div class="px-4 py-2 bg-gray-100 rounded text-gray-800 font-medium">
+                    {{ \Carbon\Carbon::parse($program->date)->format('F d, Y') }}
+                </div>
+                <input type="hidden" name="date" value="{{ \Carbon\Carbon::parse($program->date)->format('Y-m-d') }}">
+            </div>
+            @php
+                $clockIn = $attendance?->clock_in ? \Carbon\Carbon::parse($attendance->clock_in) : null;
+                $clockOut = $attendance?->clock_out ? \Carbon\Carbon::parse($attendance->clock_out) : null;
+            @endphp
+            <div class="mb-4">
+                <label class="block font-semibold mb-1 text-gray-700">Clock In Time</label>
+                <input
+                    type="time"
+                    name="clock_in"
+                    class="input input-bordered w-full"
+                    required
+                    value="{{ $clockIn ? $clockIn->format('H:i') : '' }}"
+                >
+                @if($clockIn)
+                    <div class="text-xs text-green-600 mt-1">Current: {{ $clockIn->format('g:i A') }}</div>
+                @endif
             </div>
             <div class="mb-4">
-                <label class="block font-semibold mb-1 text-gray-700">Clock Out (optional)</label>
-                <input type="datetime-local" name="clock_out" class="input input-bordered w-full">
+                <label class="block font-semibold mb-1 text-gray-700">Clock Out Time (optional)</label>
+                <input
+                    type="time"
+                    name="clock_out"
+                    class="input input-bordered w-full"
+                    value="{{ $clockOut ? $clockOut->format('H:i') : '' }}"
+                >
+                @if($clockOut)
+                    <div class="text-xs text-green-600 mt-1">Current: {{ $clockOut->format('g:i A') }}</div>
+                @endif
+            </div>
+            <div class="mb-4">
+                <label class="block font-semibold mb-1 text-gray-700">Reason / Notes <span class="text-red-500">*</span></label>
+                <textarea name="notes" class="textarea textarea-bordered w-full" rows="3" required placeholder="Enter reason or notes (e.g. forgot to clock out, late arrival, etc.)">{{ $attendance?->notes }}</textarea>
             </div>
             <div class="flex justify-end gap-2 mt-6">
                 <button type="button" class="btn btn-outline" onclick="document.getElementById('manualAttendanceModal_{{ $selectedVolunteer->id }}').close()">Cancel</button>

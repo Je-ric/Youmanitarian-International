@@ -207,7 +207,8 @@ class VolunteerAttendanceController extends Controller
         $volunteer = Volunteer::findOrFail($volunteerId);
         $volunteerName = preg_replace('/[^A-Za-z0-9\-]/', '', $volunteer->user->name);
         $programName = preg_replace('/[^A-Za-z0-9\-]/', '', $program->title);
-        // If $programName or $volunteerName contains special characters or spaces, it can cause issues. Kaya sinanitize para maging alphanumeric. 
+        // If $programName or $volunteerName contains special characters or spaces, it can cause issues. 
+        // Kaya sinanitize para maging alphanumeric. 
         
         $file = $request->file('proof_image');
         $filename = $programName . '_' . $volunteerName . '_' . time() . '.' . $file->getClientOriginalExtension();
@@ -281,23 +282,29 @@ public function showManualEntryForm(Request $request, Program $program)
     $selectedVolunteerId = $request->query('volunteer_id');
     return view('programs-volunteers.modals.manualAttendanceModal', compact('program', 'volunteers', 'selectedVolunteerId'));
 }
+
 public function manualEntry(Request $request, Program $program)
 {
     $request->validate([
         'volunteer_id' => 'required|exists:volunteers,id',
-        'clock_in' => 'required|date',
-        'clock_out' => 'nullable|date|after_or_equal:clock_in',
+        'date' => 'required|date',
+        'clock_in' => 'required',
+        'clock_out' => 'nullable',
+        'notes' => 'required|string|max:1000',
     ]);
 
-    // Find or create the attendance record
+    $clockIn = $request->date . ' ' . $request->clock_in;
+    $clockOut = $request->clock_out ? $request->date . ' ' . $request->clock_out : null;
+
     $attendance = \App\Models\VolunteerAttendance::firstOrNew([
         'program_id' => $program->id,
         'volunteer_id' => $request->volunteer_id,
     ]);
 
-    $attendance->clock_in = $request->clock_in;
-    $attendance->clock_out = $request->clock_out;
-    $attendance->status = 'present'; // or whatever status you use
+    $attendance->clock_in = $clockIn;
+    $attendance->clock_out = $clockOut;
+    $attendance->notes = $request->notes;
+    $attendance->approval_status = 'pending'; 
     $attendance->save();
 
     return redirect()->back()->with('toast', [
