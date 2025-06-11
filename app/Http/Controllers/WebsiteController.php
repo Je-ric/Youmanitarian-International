@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Content;
@@ -22,57 +23,57 @@ class WebsiteController extends Controller
         //     ->limit(6)
         //     ->get();
         $latestPosts = Content::where('status', 'published')
-                        ->where('id', '!=', $featuredPost->id) 
-                        ->orderBy('created_at', 'desc')
-                        ->limit(6)
-                        ->get();
-        
+            ->where('id', '!=', $featuredPost->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(6)
+            ->get();
+
         return view('website.index', compact('featuredPost', 'latestPosts'));
     }
-    
+
     public function viewContent($id)
     {
         $content = Content::where('id', $id)->where('status', 'published')->firstOrFail();
         $content->increment('views'); //views
-        
+
         // multiple images
         $galleryImages = ContentImage::where('content_id', $content->id)->get();
-        
+
         // navigation
         $prevContent = Content::where('id', '<', $id)->where('status', 'published')->orderBy('id', 'desc')->first();
         $nextContent = Content::where('id', '>', $id)->where('status', 'published')->orderBy('id', 'asc')->first();
-        
+
         // other contents
         $otherContents = Content::where('id', '!=', $id)->where('status', 'published')->orderBy('created_at', 'desc')->limit(10)->get();
-        
+
         $comments = ContentComment::where('content_id', $id)->with('user')->latest()->get();
 
         return view('website.view-content', compact('content', 'galleryImages', 'prevContent', 'nextContent', 'otherContents', 'comments'));
     }
-    
+
     // Helper function to get proper image URL
     public static function getImageUrl($imagePath)
     {
         if (empty($imagePath)) {
             return null;
         }
-    
+
         $filename = basename($imagePath);
         //check file name if where it is
         if (preg_match('/\d+_[^\/]+$/', $filename)) {
             if (file_exists(public_path('storage/uploads/content/' . $filename))) {
                 return asset('storage/uploads/content/' . $filename);
             }
-    
+
             if (file_exists(public_path('storage/uploads/content_gallery/' . $filename))) {
                 return asset('storage/uploads/content_gallery/' . $filename);
             }
         }
-    
+
         // Default storage directory
         return asset('storage/' . $filename);
     }
-    
+
 
 
 
@@ -85,8 +86,7 @@ class WebsiteController extends Controller
     public function programs()
     {
         $programs = Program::orderBy('date', 'desc')->get();
-    return view('website.programs', compact('programs'));
-    
+        return view('website.programs', compact('programs'));
     }
 
     public function sponsors()
@@ -95,7 +95,7 @@ class WebsiteController extends Controller
     }
 
     public function about()
-{
+    {
         return view('website.about'); // About Us 
     }
 
@@ -112,7 +112,6 @@ class WebsiteController extends Controller
 
     public function chatbot()
     {
-        return view('chatbot.index'); 
+        return view('chatbot.index');
     }
-
 }

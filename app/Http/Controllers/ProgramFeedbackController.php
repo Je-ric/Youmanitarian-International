@@ -99,7 +99,7 @@ public function submitGuestFeedback(Request $request, Program $program)
 
     // Optionally, prevent duplicate feedback by email/program
     $existing = ProgramFeedback::where('program_id', $program->id)
-        ->where('guest_email', $request->guest_email)
+        ->where('guest_email', $request->guest_email) //pwede din name?
         ->first();
 
     if ($existing) {

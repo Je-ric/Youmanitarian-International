@@ -205,11 +205,12 @@ class VolunteerAttendanceController extends Controller
         // Filename: ProgramName-VolunteerName.extension
         $program = Program::findOrFail($programId);
         $volunteer = Volunteer::findOrFail($volunteerId);
-        $volunteerName = preg_replace('/\s+/', '', $volunteer->user->name);
-        $programName = preg_replace('/\s+/', '', $program->title);
-
+        $volunteerName = preg_replace('/[^A-Za-z0-9\-]/', '', $volunteer->user->name);
+        $programName = preg_replace('/[^A-Za-z0-9\-]/', '', $program->title);
+        // If $programName or $volunteerName contains special characters or spaces, it can cause issues. Kaya sinanitize para maging alphanumeric. 
+        
         $file = $request->file('proof_image');
-        $filename = $programName . '_' . $volunteerName . '.' . $file->getClientOriginalExtension();
+        $filename = $programName . '_' . $volunteerName . '_' . time() . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('uploads/attendance_proof', $filename, 'public');
 
         $attendance->proof_image = $path;
