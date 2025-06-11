@@ -239,7 +239,7 @@
 
                     @elseif($isAssigned)
                         @if($canClockIn)
-                            <form action="{{ route('programs.clock-in', $program) }}" method="POST" class="mt-3 sm:mt-4">
+                            <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4">
                                 @csrf
                                 <x-button type="submit" variant="clock_in">
                                     <i class='bx bx-log-in-circle'></i> Clock In
@@ -251,7 +251,7 @@
                             </x-button>
 
                         @elseif($canClockOut)
-                            <form action="{{ route('programs.clock-out', $program) }}" method="POST" class="mt-3 sm:mt-4">
+                            <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4">
                                 @csrf
                                 <x-button type="submit" variant="clock_in" class="w-full text-sm sm:text-base">
                                     <i class='bx bx-log-out-circle'></i> Clock Out

@@ -96,32 +96,44 @@ class VolunteerAttendanceController extends Controller
 
 
 
-    public function clockIn(Program $program)
+    public function clockInOut(Program $program)
     {
         $user = Auth::user();
 
-        $existingClockIn = VolunteerAttendance::where('volunteer_id', $user->volunteer->id)
+        // Check for existing active attendance
+        $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id)
             ->where('program_id', $program->id)
             ->whereNull('clock_out')
-            ->exists();
+            ->latest()
+            ->first();
 
-        if ($existingClockIn) {
+        if (!$attendance) {
+            // No active attendance - perform clock in
+            VolunteerAttendance::create([
+                'volunteer_id' => $user->volunteer->id,
+                'program_id' => $program->id,
+                'clock_in' => now(),
+            ]);
+
             return redirect()->back()->with('toast', [
-                'message' => 'You are already clocked in.',
-                'type' => 'error',
+                'message' => 'Clocked in successfully.',
+                'type' => 'success',
+            ]);
+        } else {
+            // Active attendance exists - perform clock out
+            $clock_in = \Carbon\Carbon::parse($attendance->clock_in);
+            $clock_out = \Carbon\Carbon::now();
+
+            // Calculate hours_logged as decimal hours
+            $attendance->clock_out = $clock_out;
+            $attendance->hours_logged = round($clock_in->floatDiffInHours($clock_out), 2);
+            $attendance->save();
+
+            return redirect()->back()->with('toast', [
+                'message' => 'Clocked out successfully.',
+                'type' => 'success',
             ]);
         }
-
-        VolunteerAttendance::create([
-            'volunteer_id' => $user->volunteer->id,
-            'program_id' => $program->id,
-            'clock_in' => now(),
-        ]);
-
-        return redirect()->back()->with('toast', [
-            'message' => 'Clocked in successfully.',
-            'type' => 'success',
-        ]);
     }
 
 
@@ -168,41 +180,6 @@ class VolunteerAttendanceController extends Controller
     //         'type' => 'success',
     //     ]);
     // }
-
-    public function clockOut(Program $program)
-    {
-        $user = Auth::user();
-
-        $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id)
-            ->where('program_id', $program->id)
-            ->whereNull('clock_out')
-            ->latest()
-            ->first();
-
-        if (!$attendance) {
-            return redirect()->back()->with('toast', [
-                'message' => 'You need to clock in first.',
-                'type' => 'error',
-            ]);
-        }
-
-        $clock_in = \Carbon\Carbon::parse($attendance->clock_in);
-        $clock_out = \Carbon\Carbon::now();
-
-        // Calculate hours_logged as decimal hours
-        $attendance->clock_out = $clock_out;
-        $attendance->hours_logged = round($clock_in->floatDiffInHours($clock_out), 2);
-
-        // Remove this line:
-        // $attendance->formatted_time = sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds);
-
-        $attendance->save();
-
-        return redirect()->back()->with('toast', [
-            'message' => 'Clocked out successfully.',
-            'type' => 'success',
-        ]);
-    }
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
