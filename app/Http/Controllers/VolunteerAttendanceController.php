@@ -284,32 +284,24 @@ class VolunteerAttendanceController extends Controller
         return view('volunteers.program-volunteers', compact('program', 'logs'));
     }
 
-    // Approve attendance
-    public function approveAttendance(Request $request, $attendanceId)
+    // Combined function for approving and rejecting attendance
+    public function updateAttendanceStatus(Request $request, $attendanceId)
     {
+        $request->validate([
+            'status' => 'required|in:approved,rejected',
+            'notes' => 'nullable|string|max:1000'
+        ]);
+
         $attendance = VolunteerAttendance::findOrFail($attendanceId);
-        $attendance->approval_status = 'approved';
-        // $attendance->approved_by = auth()->id();
-        $user = Auth::user();
-        $attendance->approved_by = $user->volunteer ? $user->volunteer->id : null;
+        $attendance->approval_status = $request->status;
+        $attendance->approved_by = Auth::user()->volunteer?->id;
         $attendance->notes = $request->input('notes', $attendance->notes);
         $attendance->save();
 
-        return back()->with('toast', ['message' => 'Attendance approved!', 'type' => 'success']);
-    }
-
-    // Reject attendance
-    public function rejectAttendance(Request $request, $attendanceId)
-    {
-        $attendance = VolunteerAttendance::findOrFail($attendanceId);
-        $attendance->approval_status = 'rejected';
-        // $attendance->approved_by = auth()->id();
-        $user = Auth::user();
-        $attendance->approved_by = $user->volunteer ? $user->volunteer->id : null;
-        $attendance->notes = $request->input('notes', $attendance->notes);
-        $attendance->save();
-
-        return back()->with('toast', ['message' => 'Attendance rejected!', 'type' => 'error']);
+        return back()->with('toast', [
+            'message' => 'Attendance ' . ucfirst($request->status) . ' successfully!',
+            'type' => $request->status === 'approved' ? 'success' : 'error'
+        ]);
     }
 
     public function showManualEntryForm(Request $request, Program $program)

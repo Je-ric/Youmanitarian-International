@@ -156,8 +156,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/programs/{program}/clock-out', [VolunteerAttendanceController::class, 'clockOut'])->name('programs.clock-out'); // Clock out (attendance action)
     Route::post('/programs/{program}/attendance/upload-proof', [VolunteerAttendanceController::class, 'uploadProof'])->name('attendance.uploadProof'); // Upload proof of attendance (modal/form)
     Route::get('/programs/{program}/volunteers', [VolunteerAttendanceController::class, 'programVolunteers'])->name('programs.volunteers'); // List volunteers for a program (programs/volunteers.blade.php)
-    Route::post('/attendance/{attendance}/approve', [VolunteerAttendanceController::class, 'approveAttendance'])->name('attendance.approve'); // Approve attendance (action, modals/attendanceAppproval.blade.php)
-    Route::post('/attendance/{attendance}/reject', [VolunteerAttendanceController::class, 'rejectAttendance'])->name('attendance.reject'); // Reject attendance (action, modals/attendanceAppproval.blade.php)
+    Route::post('/attendance/{attendance}/status', [VolunteerAttendanceController::class, 'updateAttendanceStatus'])->name('attendance.status'); // Update attendance status
 });
 
 // =================== VOLUNTEER APPLICATION APPROVAL ===================
