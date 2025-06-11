@@ -85,7 +85,7 @@
 
                 <!-- Volunteers -->
                 <li>
-                    <a href="#" 
+                    <a href="{{ route('volunteers.approved') }}" 
                        class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
                        data-tooltip="Volunteers">
                         <i class="bx bx-helping-hand w-5 text-center flex-shrink-0"></i> <!-- no exact match, bx-helping-hand is example -->

@@ -144,6 +144,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/volunteer-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
     Route::post('/volunteer-application', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
     Route::post('/programs/{program}/join', [ProgramVolunteerController::class, 'join'])->name('programs.join');
+    Route::get('/volunteers/approved', [VolunteerController::class, 'approvedVolunteers'])->name('volunteers.approved');
 });
 
 

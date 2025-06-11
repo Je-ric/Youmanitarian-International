@@ -216,7 +216,7 @@
                     <button
                         type="button"
                         id="cancelBtn"
-                        class="hidden inline-flex items-center justify-center px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                        class="hidden items-center justify-center px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                     >
                         Cancel
                     </button>

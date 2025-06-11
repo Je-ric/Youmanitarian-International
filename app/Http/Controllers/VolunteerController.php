@@ -33,5 +33,10 @@ class VolunteerController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
+    public function approvedVolunteers()
+{
+    $volunteers = Volunteer::with('user')->where('application_status', 'approved')->get();
+    return view('volunteers.volunteers', compact('volunteers'));
+}
 
 }
