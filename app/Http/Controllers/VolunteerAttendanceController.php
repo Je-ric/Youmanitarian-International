@@ -75,7 +75,7 @@ class VolunteerAttendanceController extends Controller
 
         $canClockIn = $status === 'ongoing' && $isAssigned && !$attendance?->clock_in;
         $canClockOut = $status === 'ongoing' && $isAssigned && $attendance?->clock_in && !$attendance?->clock_out;
-        
+
         return view('programs.attendance', compact(
             'program',
             'attendance',
@@ -131,6 +131,44 @@ class VolunteerAttendanceController extends Controller
 
 
     // attendance.blade.php 
+    // public function clockOut(Program $program)
+    // {
+    //     $user = Auth::user();
+
+    //     $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id)
+    //         ->where('program_id', $program->id)
+    //         ->whereNull('clock_out')
+    //         ->latest()
+    //         ->first();
+
+    //     if (!$attendance) {
+    //         return redirect()->back()->with('toast', [
+    //             'message' => 'You need to clock in first.',
+    //             'type' => 'error',
+    //         ]);
+    //     }
+
+    //     $clock_in = Carbon::parse($attendance->clock_in);
+    //     $clock_out = Carbon::now();
+
+    //     $total_seconds = $clock_in->diffInSeconds($clock_out);
+
+    //     $hours = floor($total_seconds / 3600);
+    //     $minutes = floor(($total_seconds % 3600) / 60);
+    //     $seconds = $total_seconds % 60;
+
+    //     $attendance->update([
+    //         'clock_out' => $clock_out,
+    //         'hours_logged' => $total_seconds / 3600,
+    //         'formatted_time' => sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds),
+    //     ]);
+
+    //     return redirect()->back()->with('toast', [
+    //         'message' => 'Clocked out successfully.',
+    //         'type' => 'success',
+    //     ]);
+    // }
+
     public function clockOut(Program $program)
     {
         $user = Auth::user();
@@ -148,20 +186,17 @@ class VolunteerAttendanceController extends Controller
             ]);
         }
 
-        $clock_in = Carbon::parse($attendance->clock_in);
-        $clock_out = Carbon::now();
+        $clock_in = \Carbon\Carbon::parse($attendance->clock_in);
+        $clock_out = \Carbon\Carbon::now();
 
-        $total_seconds = $clock_in->diffInSeconds($clock_out);
+        // Calculate hours_logged as decimal hours
+        $attendance->clock_out = $clock_out;
+        $attendance->hours_logged = round($clock_in->floatDiffInHours($clock_out), 2);
 
-        $hours = floor($total_seconds / 3600);
-        $minutes = floor(($total_seconds % 3600) / 60);
-        $seconds = $total_seconds % 60;
+        // Remove this line:
+        // $attendance->formatted_time = sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds);
 
-        $attendance->update([
-            'clock_out' => $clock_out,
-            'hours_logged' => $total_seconds / 3600,
-            'formatted_time' => sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds),
-        ]);
+        $attendance->save();
 
         return redirect()->back()->with('toast', [
             'message' => 'Clocked out successfully.',
@@ -210,7 +245,7 @@ class VolunteerAttendanceController extends Controller
         $programName = preg_replace('/[^A-Za-z0-9\-]/', '', $program->title);
         // If $programName or $volunteerName contains special characters or spaces, it can cause issues. 
         // Kaya sinanitize para maging alphanumeric. 
-        
+
         $file = $request->file('proof_image');
         $filename = $programName . '_' . $volunteerName . '_' . time() . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('uploads/attendance_proof', $filename, 'public');
@@ -277,41 +312,49 @@ class VolunteerAttendanceController extends Controller
         return back()->with('toast', ['message' => 'Attendance rejected!', 'type' => 'error']);
     }
 
-public function showManualEntryForm(Request $request, Program $program)
-{
-    $volunteers = $program->volunteers()->with('user')->get();
-    $selectedVolunteerId = $request->query('volunteer_id');
-    return view('programs-volunteers.modals.manualAttendanceModal', compact('program', 'volunteers', 'selectedVolunteerId'));
-}
+    public function showManualEntryForm(Request $request, Program $program)
+    {
+        $volunteers = $program->volunteers()->with('user')->get();
+        $selectedVolunteerId = $request->query('volunteer_id');
+        return view('programs-volunteers.modals.manualAttendanceModal', compact('program', 'volunteers', 'selectedVolunteerId'));
+    }
 
-public function manualEntry(Request $request, Program $program)
-{
-    $request->validate([
-        'volunteer_id' => 'required|exists:volunteers,id',
-        'date' => 'required|date',
-        'clock_in' => 'required',
-        'clock_out' => 'nullable',
-        'notes' => 'required|string|max:1000',
-    ]);
+    public function manualEntry(Request $request, Program $program)
+    {
+        $request->validate([
+            'volunteer_id' => 'required|exists:volunteers,id',
+            'date' => 'required|date',
+            'clock_in' => 'required',
+            'clock_out' => 'nullable',
+            'notes' => 'required|string|max:1000',
+        ]);
 
-    $clockIn = $request->date . ' ' . $request->clock_in;
-    $clockOut = $request->clock_out ? $request->date . ' ' . $request->clock_out : null;
+        $clockIn = $request->date . ' ' . $request->clock_in;
+        $clockOut = $request->clock_out ? $request->date . ' ' . $request->clock_out : null;
 
-    $attendance = \App\Models\VolunteerAttendance::firstOrNew([
-        'program_id' => $program->id,
-        'volunteer_id' => $request->volunteer_id,
-    ]);
+        $attendance = \App\Models\VolunteerAttendance::firstOrNew([
+            'program_id' => $program->id,
+            'volunteer_id' => $request->volunteer_id,
+        ]);
 
-    $attendance->clock_in = $clockIn;
-    $attendance->clock_out = $clockOut;
-    $attendance->notes = $request->notes;
-    $attendance->approval_status = 'pending'; 
-    $attendance->save();
+        $attendance->clock_in = $clockIn;
+        $attendance->clock_out = $clockOut;
+        $attendance->notes = $request->notes;
 
-    return redirect()->back()->with('toast', [
-        'message' => 'Attendance record updated successfully!',
-        'type' => 'success',
-    ]);
-}
+        // Calculate hours_logged
+        if ($attendance->clock_in && $attendance->clock_out) {
+            $in = \Carbon\Carbon::parse($attendance->clock_in);
+            $out = \Carbon\Carbon::parse($attendance->clock_out);
+            $attendance->hours_logged = round($in->floatDiffInHours($out), 2);
+        } else {
+            $attendance->hours_logged = 0;
+        }
 
+        $attendance->save();
+
+        return redirect()->back()->with('toast', [
+            'message' => 'Attendance record updated successfully!',
+            'type' => 'success',
+        ]);
+    }
 }
