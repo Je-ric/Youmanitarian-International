@@ -139,23 +139,95 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Program Information -->
                     <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-                        <h3 class="text-lg font-semibold text-[#1a2235] mb-4">Program Information</h3>
-                        <div class="space-y-3">
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Start Date:</span>
-                                <span class="font-medium">{{ $program->start_date ? $program->start_date->format('M d, Y') : 'Not set' }}</span>
+                        <h3 class="text-lg font-semibold text-[#1a2235] mb-4">Attendance Overview</h3>
+                        <div class="space-y-4">
+                            @php
+                                $totalVolunteers = $program->volunteers()->where('program_volunteers.status', 'approved')->count();
+                                $totalAttendanceRecords = 0;
+                                $approvedCount = 0;
+                                $pendingCount = 0;
+                                $rejectedCount = 0;
+                                $noRecordsCount = 0;
+
+                                foreach ($program->volunteers()->where('program_volunteers.status', 'approved')->get() as $volunteer) {
+                                    $attendanceRecords = $volunteer->attendanceLogs()->where('program_id', $program->id)->get();
+                                    if ($attendanceRecords->isEmpty()) {
+                                        $noRecordsCount++;
+                                    } else {
+                                        $totalAttendanceRecords += $attendanceRecords->count();
+                                        foreach ($attendanceRecords as $record) {
+                                            switch ($record->approval_status) {
+                                                case 'approved':
+                                                    $approvedCount++;
+                                                    break;
+                                                case 'pending':
+                                                    $pendingCount++;
+                                                    break;
+                                                case 'rejected':
+                                                    $rejectedCount++;
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
+                            @endphp
+
+                            <!-- Total Attendance Records -->
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h4 class="text-sm font-medium text-blue-800">Total Attendance Records</h4>
+                                        <p class="text-2xl font-bold text-blue-900">{{ $totalAttendanceRecords }}</p>
+                                    </div>
+                                    <div class="bg-blue-100 p-3 rounded-full">
+                                        <i class='bx bx-time text-2xl text-blue-600'></i>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">End Date:</span>
-                                <span class="font-medium">{{ $program->end_date ? $program->end_date->format('M d, Y') : 'Not set' }}</span>
+
+                            <!-- Approval Status Breakdown -->
+                            <div class="space-y-3">
+                                <h4 class="text-sm font-medium text-gray-700">Approval Status Breakdown</h4>
+                                <div class="space-y-2">
+                                    <!-- Approved -->
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                                            <span class="text-sm text-gray-600">Approved</span>
+                                        </div>
+                                        <span class="text-sm font-medium">{{ $approvedCount }}</span>
+                                    </div>
+                                    <!-- Pending -->
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                                            <span class="text-sm text-gray-600">Pending</span>
+                                        </div>
+                                        <span class="text-sm font-medium">{{ $pendingCount }}</span>
+                                    </div>
+                                    <!-- Rejected -->
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                                            <span class="text-sm text-gray-600">Rejected</span>
+                                        </div>
+                                        <span class="text-sm font-medium">{{ $rejectedCount }}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Location:</span>
-                                <span class="font-medium">{{ $program->location ?? 'Not set' }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Status:</span>
-                                <span class="font-medium">{{ ucfirst($program->status ?? 'Not set') }}</span>
+
+                            <!-- Volunteers Without Records -->
+                            <div class="bg-yellow-50 p-4 rounded-lg">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h4 class="text-sm font-medium text-yellow-800">Volunteers Without Records</h4>
+                                        <p class="text-2xl font-bold text-yellow-900">{{ $noRecordsCount }}</p>
+                                        <p class="text-sm text-yellow-700">out of {{ $totalVolunteers }} volunteers</p>
+                                    </div>
+                                    <div class="bg-yellow-100 p-3 rounded-full">
+                                        <i class='bx bx-user-x text-2xl text-yellow-600'></i>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -163,47 +235,19 @@
                     <!-- Recent Activity -->
                     <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
                         <h3 class="text-lg font-semibold text-[#1a2235] mb-4">Recent Activity</h3>
-                        <div class="space-y-4">
+                        <div class="max-h-[400px] overflow-y-auto pr-2">
                             @php
-                                $recentActivities = collect();
-                                
-                                // Add recent volunteer joins
-                                $recentActivities = $recentActivities->concat(
-                                    $program->volunteers->map(function($volunteer) {
+                                $recentActivities = $program->volunteers()
+                                    ->where('program_volunteers.status', 'approved')
+                                    ->orderBy('program_volunteers.created_at', 'desc')
+                                    ->get()
+                                    ->map(function($volunteer) {
                                         return [
-                                            'type' => 'volunteer_join',
                                             'user' => $volunteer->user,
                                             'date' => $volunteer->pivot->created_at,
                                             'message' => 'joined the program'
                                         ];
-                                    })
-                                );
-
-                                // Add recent task completions
-                                $recentActivities = $recentActivities->concat(
-                                    $tasks->where('status', 'completed')->map(function($task) {
-                                        return [
-                                            'type' => 'task_complete',
-                                            'user' => $task->assigned_to ? $task->assignedTo->user : null,
-                                            'date' => $task->completed_at,
-                                            'message' => 'completed task: ' . $task->title
-                                        ];
-                                    })
-                                );
-
-                                // Add recent feedback
-                                $recentActivities = $recentActivities->concat(
-                                    $feedbacks->map(function($feedback) {
-                                        return [
-                                            'type' => 'feedback',
-                                            'user' => $feedback->user,
-                                            'date' => $feedback->created_at,
-                                            'message' => 'submitted feedback'
-                                        ];
-                                    })
-                                );
-
-                                $recentActivities = $recentActivities->sortByDesc('date')->take(5);
+                                    });
                             @endphp
 
                             @forelse($recentActivities as $activity)
@@ -213,12 +257,12 @@
                                             <i class='bx bx-user text-xl text-gray-500'></i>
                                         </div>
                                         <div>
-                                            <p class="font-medium text-[#1a2235]">{{ $activity['user']->name ?? 'System' }}</p>
+                                            <p class="font-medium text-[#1a2235]">{{ $activity['user']->name }}</p>
                                             <p class="text-sm text-gray-600">{{ $activity['message'] }}</p>
                                         </div>
                                     </div>
                                     <span class="text-sm text-gray-500">
-                                        {{ \Carbon\Carbon::parse($activity['date'])->diffForHumans() }}
+                                        {{ \Carbon\Carbon::parse($activity['date'])->format('M d, Y h:i A') }}
                                     </span>
                                 </div>
                             @empty
