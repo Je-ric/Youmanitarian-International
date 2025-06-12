@@ -10,10 +10,21 @@ use App\Models\Volunteer;
 
 class VolunteerController extends Controller
 {
-    public function allVolunteers()
+    public function index()
     {
-        $volunteers = Volunteer::with('user')->get();
-        return view('volunteers.applications', compact('volunteers'));
+        $applications = Volunteer::with('user')
+            ->where('application_status', 'pending')
+            ->get();
+            
+        $deniedApplications = Volunteer::with('user')
+            ->where('application_status', 'denied')
+            ->get();
+            
+        $approvedVolunteers = Volunteer::with('user')
+            ->where('application_status', 'approved')
+            ->get();
+            
+        return view('volunteers.index', compact('applications', 'deniedApplications', 'approvedVolunteers'));
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -32,11 +43,4 @@ class VolunteerController extends Controller
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
-
-    public function approvedVolunteers()
-{
-    $volunteers = Volunteer::with('user')->where('application_status', 'approved')->get();
-    return view('volunteers.volunteers', compact('volunteers'));
-}
-
 }

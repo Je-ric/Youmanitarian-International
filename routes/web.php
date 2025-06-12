@@ -136,16 +136,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/programs/{program}/volunteers/manage', [ProgramVolunteerController::class, 'manageVolunteers'])->name('programs.manage_volunteers');
     Route::get('/programs/{program}/volunteers/{volunteer}/logs', [ProgramVolunteerController::class, 'getVolunteerLogs'])->name('programs.volunteer_logs');
 
-    //  
+    // Combined volunteer management route
+    Route::get('/volunteers', [VolunteerController::class, 'index'])->name('volunteers.index');
     Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'showDetails'])->name('volunteers.viewUser_details');
-    Route::get('/volunteers/requests', [VolunteerController::class, 'allVolunteers'])->name('volunteers.requests');
 
-    // 
+    // Volunteer application routes
     Route::get('/volunteer-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
     Route::post('/volunteer-application', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
-    Route::post('/programs/{program}/join', [ProgramVolunteerController::class, 'join'])->name('programs.join'); // Join a program (action/modal)
+    Route::post('/programs/{program}/join', [ProgramVolunteerController::class, 'join'])->name('programs.join');
     Route::delete('/programs/{program}/leave/{volunteer}', [ProgramVolunteerController::class, 'leave'])->name('programs.leave');
-    Route::get('/volunteers/approved', [VolunteerController::class, 'approvedVolunteers'])->name('volunteers.approved'); //volunteers/volunteers.blade.php
 });
 
 

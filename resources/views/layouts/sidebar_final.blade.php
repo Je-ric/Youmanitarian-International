@@ -85,21 +85,11 @@
 
                 <!-- Volunteers -->
                 <li>
-                    <a href="{{ route('volunteers.approved') }}" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
-                       data-tooltip="Volunteers">
-                        <i class="bx bx-helping-hand w-5 text-center flex-shrink-0"></i> <!-- no exact match, bx-helping-hand is example -->
-                        <span class="ml-3 sidebar-content text-sm">Volunteers</span>
-                    </a>
-                </li>
-
-                <!-- Volunteer Applications -->
-                <li>
-                    <a href="{{ route('volunteers.requests') }}" 
+                    <a href="{{ route('volunteers.index') }}" 
                        class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('volunteers.*') ? 'active' : '' }}" 
-                       data-tooltip="Volunteer Applications">
-                        <i class="bx bx-user-plus w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Volunteer Applications</span>
+                       data-tooltip="Volunteers">
+                        <i class="bx bx-group w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Volunteers</span>
                         <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-orange-800 bg-orange-100 rounded-full sidebar-content">12</span>
                     </a>
                 </li>
