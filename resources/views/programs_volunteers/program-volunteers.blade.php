@@ -136,11 +136,11 @@
                 </div>
 
                 <!-- Program Details -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-6">
                     <!-- Program Information -->
-                    <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-                        <h3 class="text-lg font-semibold text-[#1a2235] mb-4">Attendance Overview</h3>
-                        <div class="space-y-4">
+                    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
+                        <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Attendance Overview</h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:space-y-4">
                             @php
                                 $totalVolunteers = $program->volunteers()->where('program_volunteers.status', 'approved')->count();
                                 $totalAttendanceRecords = 0;
@@ -173,59 +173,59 @@
                             @endphp
 
                             <!-- Total Attendance Records -->
-                            <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="bg-blue-50 p-2 sm:p-4 rounded-lg">
                                 <div class="flex justify-between items-center">
                                     <div>
-                                        <h4 class="text-sm font-medium text-blue-800">Total Attendance Records</h4>
-                                        <p class="text-2xl font-bold text-blue-900">{{ $totalAttendanceRecords }}</p>
+                                        <h4 class="text-xs sm:text-sm font-medium text-blue-800">Total Records</h4>
+                                        <p class="text-lg sm:text-2xl font-bold text-blue-900">{{ $totalAttendanceRecords }}</p>
                                     </div>
-                                    <div class="bg-blue-100 p-3 rounded-full">
-                                        <i class='bx bx-time text-2xl text-blue-600'></i>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Approval Status Breakdown -->
-                            <div class="space-y-3">
-                                <h4 class="text-sm font-medium text-gray-700">Approval Status Breakdown</h4>
-                                <div class="space-y-2">
-                                    <!-- Approved -->
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center gap-2">
-                                            <span class="w-3 h-3 rounded-full bg-green-500"></span>
-                                            <span class="text-sm text-gray-600">Approved</span>
-                                        </div>
-                                        <span class="text-sm font-medium">{{ $approvedCount }}</span>
-                                    </div>
-                                    <!-- Pending -->
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center gap-2">
-                                            <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
-                                            <span class="text-sm text-gray-600">Pending</span>
-                                        </div>
-                                        <span class="text-sm font-medium">{{ $pendingCount }}</span>
-                                    </div>
-                                    <!-- Rejected -->
-                                    <div class="flex justify-between items-center">
-                                        <div class="flex items-center gap-2">
-                                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
-                                            <span class="text-sm text-gray-600">Rejected</span>
-                                        </div>
-                                        <span class="text-sm font-medium">{{ $rejectedCount }}</span>
+                                    <div class="bg-blue-100 p-2 rounded-full">
+                                        <i class='bx bx-time text-lg sm:text-2xl text-blue-600'></i>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Volunteers Without Records -->
-                            <div class="bg-yellow-50 p-4 rounded-lg">
+                            <div class="bg-yellow-50 p-2 sm:p-4 rounded-lg">
                                 <div class="flex justify-between items-center">
                                     <div>
-                                        <h4 class="text-sm font-medium text-yellow-800">Volunteers Without Records</h4>
-                                        <p class="text-2xl font-bold text-yellow-900">{{ $noRecordsCount }}</p>
-                                        <p class="text-sm text-yellow-700">out of {{ $totalVolunteers }} volunteers</p>
+                                        <h4 class="text-xs sm:text-sm font-medium text-yellow-800">No Records</h4>
+                                        <p class="text-lg sm:text-2xl font-bold text-yellow-900">{{ $noRecordsCount }}</p>
+                                        <p class="text-xs text-yellow-700">of {{ $totalVolunteers }}</p>
                                     </div>
-                                    <div class="bg-yellow-100 p-3 rounded-full">
-                                        <i class='bx bx-user-x text-2xl text-yellow-600'></i>
+                                    <div class="bg-yellow-100 p-2 rounded-full">
+                                        <i class='bx bx-user-x text-lg sm:text-2xl text-yellow-600'></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Approval Status Breakdown -->
+                            <div class="col-span-2 sm:col-span-1">
+                                <h4 class="text-xs sm:text-sm font-medium text-gray-700 mb-2">Status Breakdown</h4>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <!-- Approved -->
+                                    <div class="bg-green-50 p-2 rounded-lg">
+                                        <div class="flex items-center gap-1 mb-1">
+                                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                            <span class="text-xs text-gray-600">Approved</span>
+                                        </div>
+                                        <span class="text-base font-semibold text-green-700">{{ $approvedCount }}</span>
+                                    </div>
+                                    <!-- Pending -->
+                                    <div class="bg-yellow-50 p-2 rounded-lg">
+                                        <div class="flex items-center gap-1 mb-1">
+                                            <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                                            <span class="text-xs text-gray-600">Pending</span>
+                                        </div>
+                                        <span class="text-base font-semibold text-yellow-700">{{ $pendingCount }}</span>
+                                    </div>
+                                    <!-- Rejected -->
+                                    <div class="bg-red-50 p-2 rounded-lg">
+                                        <div class="flex items-center gap-1 mb-1">
+                                            <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                            <span class="text-xs text-gray-600">Rejected</span>
+                                        </div>
+                                        <span class="text-base font-semibold text-red-700">{{ $rejectedCount }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -233,9 +233,9 @@
                     </div>
 
                     <!-- Recent Activity -->
-                    <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-                        <h3 class="text-lg font-semibold text-[#1a2235] mb-4">Recent Activity</h3>
-                        <div class="max-h-[400px] overflow-y-auto pr-2">
+                    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
+                        <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Recent Activity</h3>
+                        <div class="max-h-[300px] sm:max-h-[400px] overflow-y-auto pr-2">
                             @php
                                 $recentActivities = $program->volunteers()
                                     ->where('program_volunteers.status', 'approved')
@@ -251,17 +251,17 @@
                             @endphp
 
                             @forelse($recentActivities as $activity)
-                                <div class="flex items-center justify-between border-b pb-3 last:border-0">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-                                            <i class='bx bx-user text-xl text-gray-500'></i>
+                                <div class="flex items-center justify-between border-b pb-2 sm:pb-3 last:border-0">
+                                    <div class="flex items-center space-x-2 sm:space-x-3">
+                                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                                            <i class='bx bx-user text-lg sm:text-xl text-gray-500'></i>
                                         </div>
                                         <div>
-                                            <p class="font-medium text-[#1a2235]">{{ $activity['user']->name }}</p>
-                                            <p class="text-sm text-gray-600">{{ $activity['message'] }}</p>
+                                            <p class="text-sm sm:text-base font-medium text-[#1a2235]">{{ $activity['user']->name }}</p>
+                                            <p class="text-xs sm:text-sm text-gray-600">{{ $activity['message'] }}</p>
                                         </div>
                                     </div>
-                                    <span class="text-sm text-gray-500">
+                                    <span class="text-xs sm:text-sm text-gray-500 whitespace-nowrap">
                                         {{ \Carbon\Carbon::parse($activity['date'])->format('M d, Y h:i A') }}
                                     </span>
                                 </div>
