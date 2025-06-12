@@ -136,6 +136,25 @@
 </x-table>
 
 
+<x-alert 
+    type="error" 
+    icon="bx bx-task" 
+    message="You cannot leave this program because you have assigned tasks." 
+/>
+
+<x-alert 
+    type="info" 
+    icon="bx bx-lock" 
+    message="You cannot leave this program because it is already done." 
+/>
+
+<x-alert 
+    type="success" 
+    icon="bx bx-check-circle" 
+    message="You are already joined in this program." 
+/>
+
+
 
 
     </div>
