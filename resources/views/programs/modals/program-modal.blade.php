@@ -60,10 +60,16 @@
                 </div>
 
                 <!-- Join Button -->
+                @php
+                    $volunteer = Auth::user()->volunteer ?? null;
+                    $alreadyJoined = false;
+                    if(Auth::user()->hasRole('Volunteer') && $volunteer) {
+                        $alreadyJoined = $program->volunteers->contains($volunteer->id);
+                    }
+                @endphp
+
                 @if(Auth::user()->hasRole('Volunteer'))
                     @php
-                        $volunteer = Auth::user()->volunteer;
-                        $alreadyJoined = $program->volunteers->contains($volunteer?->id ?? 0);
                         $currentVolunteers = $program->volunteers->count();
                     @endphp
 
