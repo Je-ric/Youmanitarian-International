@@ -154,6 +154,18 @@
     message="You are already joined in this program." 
 />
 
+<x-alert 
+    type="warning" 
+    icon="bx bx-check-circle" 
+    message="You are already joined in this program." 
+/>
+
+<x-alert 
+    type="neutral" 
+    icon="bx bx-check-circle" 
+    message="You are already joined in this program." 
+/>
+
 
 
 
