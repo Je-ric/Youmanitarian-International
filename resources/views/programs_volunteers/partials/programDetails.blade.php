@@ -1,4 +1,4 @@
-<div class="w-full max-w-none px-6 py-8">
+<div class="w-full">
     <form action="{{ route('programs.update', $program) }}" method="POST" id="programForm">
         @csrf
         @method('PUT')
@@ -7,9 +7,10 @@
         <div class="mb-8">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div>
-                    <h1 class="text-2xl font-bold text-[#1a2235] mb-2">Program Details</h1>
+                    <h1 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">Program Details</h1>
                     <p class="text-gray-600">View and manage program information</p>
                 </div>
+                
                 <div class="flex gap-3 w-full lg:w-auto">
                     <button
                         type="button"

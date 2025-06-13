@@ -1,4 +1,4 @@
-<div class="w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<div class="w-full">
     <!-- Header -->
     <div class="mb-8">
         <h1 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">

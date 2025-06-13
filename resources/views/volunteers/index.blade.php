@@ -39,7 +39,7 @@
         @endif
 
         <!-- Responsive Tab Navigation -->
-        <div class="mb-6 sm:mb-8 overflow-x-auto pb-2 sm:pb-0">
+        <div class="mb-4 sm:mb-8 overflow-x-auto pb-2 sm:pb-0">
             <div class="bg-gray-50 p-1 rounded-lg inline-flex space-x-1 min-w-max">
                 <button @click="setTab('applications')" 
                     :class="activeTab === 'applications' ? 'bg-white text-[#1a2235] border border-gray-200 shadow-sm' : 'text-gray-600 hover:text-[#1a2235]'"

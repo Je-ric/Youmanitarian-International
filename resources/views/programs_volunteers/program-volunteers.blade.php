@@ -16,14 +16,17 @@
     }" class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
 
         <div class="mb-4 sm:mb-8">
-            <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-[#1a2235] mb-1 sm:mb-2">
-                Manage Program
+            <h1 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                "{{ $program->title }}"
             </h1>
-            <p class="text-sm sm:text-base text-gray-600">{{ $program->title }}</p>
+            {{-- <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-[#1a2235] mb-1 sm:mb-2">
+                Manage Program
+            </h1> --}}
+            {{-- <p class="text-sm sm:text-base text-gray-600">{{ $program->title }}</p> --}}
         </div>
 
         <!-- Responsive Tab Navigation -->
-        <div class="mb-6 sm:mb-8 overflow-x-auto pb-2 sm:pb-0">
+        <div class="mb-4 sm:mb-8 overflow-x-auto pb-2 sm:pb-0">
             <div class="bg-gray-50 p-1 rounded-lg inline-flex space-x-1 min-w-max">
                 <button @click="setTab('volunteers')" 
                     :class="activeTab === 'volunteers' ? 'bg-white text-[#1a2235] border border-gray-200 shadow-sm' : 'text-gray-600 hover:text-[#1a2235]'"
