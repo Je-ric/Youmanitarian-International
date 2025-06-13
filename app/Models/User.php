@@ -67,12 +67,13 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * Get the roles that belong to the user.
+     */
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'user_roles')->withTimestamps();
-        // return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
+        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
     }
-
 
     public function assignedRoles()
     {
@@ -94,6 +95,9 @@ class User extends Authenticatable
         return $this->hasMany(ContentRequest::class, 'requested_by');
     }
 
+    /**
+     * Check if the user has a specific role.
+     */
     public function hasRole($roleName)
     {
         return $this->roles()->where('role_name', $roleName)->exists();

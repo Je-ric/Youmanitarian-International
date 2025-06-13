@@ -133,7 +133,14 @@ class ProgramVolunteerController extends Controller
         // Avoid duplicate entry
         if (!$program->volunteers->contains($volunteer->id)) {
             $program->volunteers()->attach($volunteer->id, ['status' => 'approved']);
-        } //pero di na kailangan cause sa pag-join ng volunteer, automatic na siya magjo-join sa program
+
+            // Create a welcome message in the program chat
+            $program->chats()->create([
+                'sender_id' => Auth::id(),
+                'message' => "Welcome {$user->name} to the {$program->title} program! We're excited to have you join us.",
+                'message_type' => 'system'
+            ]);
+        }
 
         return redirect()->back()->with('success', 'You have successfully joined the program.');
     }

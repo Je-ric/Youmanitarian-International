@@ -69,7 +69,6 @@ class ProgramController extends Controller
             'end_time' => 'required|date_format:H:i|after:start_time',
             'location' => 'nullable|string|max:255',
             'volunteer_count' => 'nullable|integer|min:0',
-
         ]);
 
         $start = Carbon::parse($request->date . ' ' . $request->start_time);
@@ -83,7 +82,7 @@ class ProgramController extends Controller
             $progress = 'done';
         }
 
-        Program::create([
+        $program = Program::create([
             'title' => $request->title,
             'description' => $request->description,
             'date' => $request->date,
@@ -93,6 +92,14 @@ class ProgramController extends Controller
             'created_by' => Auth::id(),
             // 'progress' => $progress,
             'volunteer_count' => $request->volunteer_count ?? 0,
+        ]);
+
+        // Create a welcome message in the program chat
+        $program->chats()->create([
+            'sender_id' => Auth::id(),
+            'message' => "Welcome to the {$program->title} program chat! This is where volunteers and coordinators can communicate about the program.",
+            'message_type' => 'system',
+            'is_pinned' => true
         ]);
 
         return redirect()->route('programs.index')->with('success', 'Program created successfully.');

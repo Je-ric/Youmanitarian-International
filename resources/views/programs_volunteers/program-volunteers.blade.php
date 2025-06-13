@@ -16,13 +16,42 @@
     }" class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
 
         <div class="mb-4 sm:mb-8">
-            <h1 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">
-                "{{ $program->title }}"
-            </h1>
-            {{-- <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-[#1a2235] mb-1 sm:mb-2">
-                Manage Program
-            </h1> --}}
-            {{-- <p class="text-sm sm:text-base text-gray-600">{{ $program->title }}</p> --}}
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                        "{{ $program->title }}"
+                    </h1>
+                    <p class="text-gray-600">View and manage program information</p>
+                </div>
+                
+                <div class="flex gap-3 w-full lg:w-auto">
+                    <a href="{{ route('program.chats.index', $program) }}" 
+                       class="flex-1 lg:flex-none inline-flex items-center justify-center px-4 py-2 bg-[#ffb51b] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors font-medium">
+                        <i class='bx bx-message-square-dots mr-2'></i> Group Chat
+                    </a>
+                    <button
+                        type="button"
+                        id="editBtn"
+                        class="flex-1 lg:flex-none inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    >
+                        <i class='bx bx-edit mr-2'></i> Edit Program
+                    </button>
+                    <button
+                        type="button"
+                        id="discardBtn"
+                        class="hidden flex-1 lg:flex-none items-center justify-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                    >
+                        <i class='bx bx-x mr-2'></i> Discard
+                    </button>
+                    <button
+                        type="submit"
+                        id="saveBtn"
+                        class="hidden flex-1 lg:flex-none items-center justify-center px-4 py-2 bg-[#ffb51b] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors font-medium"
+                    >
+                        <i class='bx bx-save mr-2'></i> Save Changes
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Responsive Tab Navigation -->

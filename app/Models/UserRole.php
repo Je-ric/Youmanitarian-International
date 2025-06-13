@@ -17,5 +17,21 @@ class UserRole extends Pivot
     {
         return $this->belongsTo(User::class, 'assigned_by');
     }
+
+    /**
+     * Get the role that owns the user role.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Get the user that owns the user role.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
 

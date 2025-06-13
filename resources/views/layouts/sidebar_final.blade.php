@@ -83,6 +83,16 @@
                     </a>
                 </li>
 
+                <!-- Program Chats -->
+                <li>
+                    <a href="{{ route('program.chats.index', ['program' => request()->route('program')]) }}" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('program.chats.*') ? 'active' : '' }}" 
+                       data-tooltip="Program Chats">
+                        <i class="bx bx-message-square-dots w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Program Chats</span>
+                    </a>
+                </li>
+
                 <!-- Volunteers -->
                 <li>
                     <a href="{{ route('volunteers.index') }}" 

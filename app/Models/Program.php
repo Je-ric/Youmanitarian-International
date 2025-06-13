@@ -61,7 +61,10 @@ class Program extends Model
         return $this->hasMany(VolunteerAttendance::class);
     }
 
-public function chats()
+    /**
+     * Get the chats for the program.
+     */
+    public function chats()
     {
         return $this->hasMany(ProgramChat::class);
     }
@@ -71,4 +74,35 @@ public function chats()
         return $this->hasMany(ProgramFeedback::class);
     }
 
+    /**
+     * Get the roles associated with the program.
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id')
+            ->where('role_name', 'Program Coordinator');
+    }
+
+    /**
+     * Get the user roles associated with the program.
+     */
+    public function userRoles()
+    {
+        return $this->hasMany(UserRole::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get the program coordinators.
+     */
+    public function programCoordinators()
+    {
+        return $this->belongsToMany(User::class, 'user_roles', 'user_id', 'role_id')
+            ->whereHas('roles', function ($query) {
+                $query->where('role_name', 'Program Coordinator');
+            });
+    }
+
+    /**
+     * Get the volunteers for the program.
+     */
 }
