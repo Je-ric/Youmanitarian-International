@@ -81,55 +81,55 @@
                 class="space-y-6">
                 
                 <!-- Program Statistics -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     <!-- Total Volunteers -->
-                    <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+                    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-gray-600">Total Volunteers</p>
-                                <h3 class="text-2xl font-bold text-[#1a2235]">{{ $program->volunteers->count() }}</h3>
+                                <p class="text-xs sm:text-sm text-gray-600">Total Volunteers</p>
+                                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">{{ $program->volunteers->count() }}</h3>
                             </div>
-                            <div class="bg-blue-50 p-3 rounded-full">
-                                <i class='bx bx-group text-2xl text-blue-500'></i>
+                            <div class="bg-blue-50 p-2 sm:p-3 rounded-full">
+                                <i class='bx bx-group text-xl sm:text-2xl text-blue-500'></i>
                             </div>
                         </div>
                     </div>
 
                     <!-- Active Tasks -->
-                    <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+                    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-gray-600">Active Tasks</p>
-                                <h3 class="text-2xl font-bold text-[#1a2235]">{{ $tasks->where('status', 'active')->count() }}</h3>
+                                <p class="text-xs sm:text-sm text-gray-600">Active Tasks</p>
+                                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">{{ $tasks->where('status', 'active')->count() }}</h3>
                             </div>
-                            <div class="bg-yellow-50 p-3 rounded-full">
-                                <i class='bx bx-task text-2xl text-yellow-500'></i>
+                            <div class="bg-yellow-50 p-2 sm:p-3 rounded-full">
+                                <i class='bx bx-task text-xl sm:text-2xl text-yellow-500'></i>
                             </div>
                         </div>
                     </div>
 
                     <!-- Completed Tasks -->
-                    <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+                    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-gray-600">Completed Tasks</p>
-                                <h3 class="text-2xl font-bold text-[#1a2235]">{{ $tasks->where('status', 'completed')->count() }}</h3>
+                                <p class="text-xs sm:text-sm text-gray-600">Completed Tasks</p>
+                                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">{{ $tasks->where('status', 'completed')->count() }}</h3>
                             </div>
-                            <div class="bg-green-50 p-3 rounded-full">
-                                <i class='bx bx-check-circle text-2xl text-green-500'></i>
+                            <div class="bg-green-50 p-2 sm:p-3 rounded-full">
+                                <i class='bx bx-check-circle text-xl sm:text-2xl text-green-500'></i>
                             </div>
                         </div>
                     </div>
 
                     <!-- Average Rating -->
-                    <div class="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
+                    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm text-gray-600">Average Rating</p>
-                                <h3 class="text-2xl font-bold text-[#1a2235]">{{ number_format($averageRating, 1) }}/5</h3>
+                                <p class="text-xs sm:text-sm text-gray-600">Average Rating</p>
+                                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">{{ number_format($averageRating, 1) }}/5</h3>
                             </div>
-                            <div class="bg-purple-50 p-3 rounded-full">
-                                <i class='bx bx-star text-2xl text-purple-500'></i>
+                            <div class="bg-purple-50 p-2 sm:p-3 rounded-full">
+                                <i class='bx bx-star text-xl sm:text-2xl text-purple-500'></i>
                             </div>
                         </div>
                     </div>
