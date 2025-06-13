@@ -71,12 +71,8 @@ class VolunteerApplicationController extends Controller
 
         // Assign the "Volunteer" role if not already assigned
         $volunteerRole = Role::where('role_name', 'Volunteer')->first();
-        if ($volunteerRole && !UserRole::where('user_id', $user->id)->where('role_id', $volunteerRole->id)->exists()) {
-            UserRole::create([
-                'user_id' => $user->id,
-                'role_id' => $volunteerRole->id,
-                'assigned_by' => $user->id,
-            ]);
+        if ($volunteerRole && !$user->hasRole('Volunteer')) {
+            $user->assignRoles($volunteerRole->id);
         }
 
         return redirect()->route('dashboard')->with('toast', [

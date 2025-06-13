@@ -20,6 +20,7 @@ use App\Http\Controllers\VolunteerApprovalController;
 use App\Http\Controllers\VolunteerAttendanceController;
 use App\Http\Controllers\VolunteerApplicationController;
 use App\Http\Controllers\ProgramChatController;
+use App\Http\Controllers\RoleController;
 
 // Route::middleware([
 //     'auth:sanctum',
@@ -204,4 +205,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'destroy'])->name('program.chats.destroy');
     Route::post('/programs/{program}/chats/mark-read', [ProgramChatController::class, 'markAsRead'])->name('program.chats.mark-read');
     Route::post('/programs/{program}/chats/{chat}/toggle-pin', [ProgramChatController::class, 'togglePin'])->name('program.chats.toggle-pin');
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Role Management Routes
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+    Route::get('/roles/assign', [RoleController::class, 'showAssignForm'])->name('roles.assign.form');
+    Route::post('/roles/assign', [RoleController::class, 'assign'])->name('roles.assign');
 });

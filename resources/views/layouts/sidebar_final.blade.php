@@ -147,11 +147,11 @@
 
                 <!-- User Roles -->
                 <li>
-                    <a href="#" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
-                       data-tooltip="User Roles">
-                        <i class="bx bx-shield-quarter w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">User Roles</span>
+                    <a href="{{ route('roles.index') }}" 
+                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('roles.*') ? 'active' : '' }}" 
+                       data-tooltip="Assign Roles">
+                        <i class="bx bx-user-plus w-5 text-center flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-content text-sm">Assign Roles</span>
                     </a>
                 </li>
                 <li>

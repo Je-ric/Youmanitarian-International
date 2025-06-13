@@ -96,7 +96,7 @@ class Program extends Model
      */
     public function programCoordinators()
     {
-        return $this->belongsToMany(User::class, 'user_roles', 'user_id', 'role_id')
+        return $this->belongsToMany(User::class, 'user_roles', 'role_id', 'user_id')
             ->whereHas('roles', function ($query) {
                 $query->where('role_name', 'Program Coordinator');
             });
