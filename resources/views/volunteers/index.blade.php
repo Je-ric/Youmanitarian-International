@@ -262,7 +262,9 @@
 
                                                 <form action="{{ route('volunteers.restore', $volunteer->id) }}" method="POST" class="inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-info">Restore</button>
+                                                    <button type="submit" class="btn btn-info tooltip" data-tip="Restore to Pending">
+                                                        <i class='bx bx-reset'></i> Restore
+                                                    </button>
                                                 </form>
                                             </div>
                                         </td>
