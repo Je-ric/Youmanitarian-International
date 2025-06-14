@@ -1,174 +1,179 @@
 <!-- Role Assignment Modal -->
-<dialog id="assignRolesModal_{{ $user->id }}" class="modal backdrop:bg-black/50">
-    <div class="modal-box w-11/12 max-w-2xl p-0 overflow-hidden rounded-xl bg-white border border-slate-200 shadow-xl">
+<dialog id="assignRolesModal_{{ $user->id }}" class="modal">
+    <div class="modal-box max-w-2xl w-full p-0 rounded-lg bg-white">
+        
         <!-- Modal Header -->
-        <div class="px-6 py-4 border-b border-slate-200 bg-slate-50">
+        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
+                <div class="flex items-center gap-3">
+                    <!-- User Avatar -->
                     <div class="flex-shrink-0">
                         @if($user->profile_pic)
-                            <img class="h-10 w-10 rounded-full object-cover" src="{{ $user->profile_pic }}" alt="{{ $user->name }}">
+                            <img class="w-10 h-10 rounded-full object-cover border-2 border-white" 
+                                 src="{{ $user->profile_pic }}" 
+                                 alt="{{ $user->name }}">
                         @else
-                            <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                                <span class="text-indigo-800 font-medium">{{ substr($user->name, 0, 1) }}</span>
+                            <div class="w-10 h-10 rounded-full bg-[#1a2235] flex items-center justify-center">
+                                <span class="text-white font-medium text-sm">
+                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                </span>
                             </div>
                         @endif
                     </div>
+                    
+                    <!-- Header Text -->
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-900">
+                        <h3 class="text-lg font-semibold text-[#1a2235] flex items-center">
+                            <i class='bx bx-user-check mr-2 text-[#ffb51b]'></i>
                             Assign Roles
                         </h3>
-                        <p class="text-sm text-gray-500">{{ $user->name }}</p>
+                        <p class="text-sm text-gray-600">{{ $user->name }}</p>
                     </div>
                 </div>
-                <button onclick="document.getElementById('assignRolesModal_{{ $user->id }}').close()" 
-                        class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
+                
+                <!-- Close Button -->
+                <button 
+                    type="button"
+                    onclick="document.getElementById('assignRolesModal_{{ $user->id }}').close()" 
+                    class="text-gray-400 hover:text-gray-600 transition-colors p-1">
                     <i class='bx bx-x text-2xl'></i>
                 </button>
             </div>
         </div>
 
         <!-- Modal Body -->
-        <form method="POST" action="{{ route('roles.assign') }}" class="p-6">
-            @csrf
-            <input type="hidden" name="user_id" value="{{ $user->id }}">
-            
-            <!-- Current Roles Section -->
-            <div class="mb-6">
-                <h4 class="text-sm font-medium text-gray-700 mb-3">Current Roles</h4>
-                <div class="flex flex-wrap gap-2">
-                    @forelse($user->roles as $role)
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-                            {{ $role->role_name }}
-                        </span>
-                    @empty
-                        <span class="text-gray-500 text-sm">No roles assigned</span>
-                    @endforelse
-                </div>
-            </div>
-
-            <!-- Volunteer Role Section (Always Visible, Non-editable) -->
-            <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="flex-shrink-0">
-                            <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                                <i class='bx bx-user-check text-green-600'></i>
+        <div class="p-6 max-h-[70vh] overflow-y-auto">
+            <form method="POST" action="{{ route('roles.assign') }}" id="roleForm_{{ $user->id }}">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
+                
+                <!-- Current Roles Section -->
+                <div class="mb-6">
+                    <h4 class="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+                        <i class='bx bx-shield-check mr-2 text-[#ffb51b]'></i>
+                        Current Roles
+                    </h4>
+                    <div class="flex flex-wrap gap-2">
+                        @forelse($user->roles as $role)
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#1a2235] text-white">
+                                <i class='bx bx-check-circle mr-1 text-xs'></i>
+                                {{ $role->role_name }}
+                            </span>
+                        @empty
+                            <div class="flex items-center text-gray-500 text-sm bg-gray-50 px-3 py-2 rounded-lg">
+                                <i class='bx bx-info-circle mr-2'></i>
+                                No roles assigned
                             </div>
-                        </div>
-                        <div>
-                            <h4 class="text-sm font-medium text-gray-900">Volunteer</h4>
-                            <p class="text-xs text-gray-500">Base role for all volunteers</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            <i class='bx bx-lock-alt mr-1'></i>
-                            Always Assigned
-                        </span>
+                        @endforelse
                     </div>
                 </div>
-            </div>
 
-            <!-- Additional Roles Section -->
-            <div>
-                <h4 class="text-sm font-medium text-gray-700 mb-3">Additional Roles</h4>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    @foreach($roles->where('role_name', '!=', 'Volunteer') as $role)
-                        <div class="relative flex items-start p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-indigo-300 transition-colors duration-200">
-                            <div class="min-w-0 flex-1">
-                                <div class="flex items-center">
-                                    <input type="checkbox" name="roles[]" value="{{ $role->id }}" 
-                                           id="role_{{ $user->id }}_{{ $role->id }}"
-                                           {{ $user->roles->contains($role->id) ? 'checked' : '' }}
-                                           class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 transition-colors duration-200">
-                                    <label for="role_{{ $user->id }}_{{ $role->id }}" 
-                                           class="ml-3 block text-sm font-medium text-gray-900">
-                                        {{ $role->role_name }}
-                                    </label>
+                <!-- Divider -->
+                <div class="border-t border-gray-200 my-6"></div>
+
+                <!-- Base Role Section -->
+                <div class="mb-6">
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+                                    <i class='bx bx-user text-green-600'></i>
                                 </div>
-                                @if($role->description)
-                                    <p class="mt-1 text-xs text-gray-500">{{ $role->description }}</p>
-                                @endif
+                                <div>
+                                    <h4 class="text-sm font-semibold text-green-800">Volunteer</h4>
+                                    <p class="text-xs text-green-600">Base role for all users</p>
+                                </div>
                             </div>
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                <i class='bx bx-lock-alt mr-1'></i>
+                                Default
+                            </span>
                         </div>
-                    @endforeach
+                    </div>
                 </div>
-            </div>
 
-            <!-- Modal Footer -->
-            <div class="mt-6 flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3 space-y-3 space-y-reverse sm:space-y-0">
-                <button type="button" 
-                        onclick="document.getElementById('assignRolesModal_{{ $user->id }}').close()"
-                        class="inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                <!-- Additional Roles Section -->
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-700 mb-4 flex items-center">
+                        <i class='bx bx-user-plus mr-2 text-[#ffb51b]'></i>
+                        Additional Roles
+                    </h4>
+                    
+                    @php
+                        $additionalRoles = $roles->where('role_name', '!=', 'Volunteer');
+                    @endphp
+                    
+                    @if($additionalRoles->isEmpty())
+                        <div class="text-center py-8">
+                            <i class='bx bx-user-x text-3xl text-gray-300 mb-2'></i>
+                            <p class="text-gray-500 text-sm">No additional roles available</p>
+                        </div>
+                    @else
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            @foreach($additionalRoles as $role)
+                                <label for="role_{{ $user->id }}_{{ $role->id }}" 
+                                       class="relative flex items-start p-4 bg-white border border-gray-200 rounded-lg hover:border-[#ffb51b] hover:bg-gray-50 transition-all duration-200 cursor-pointer group">
+                                    
+                                    <!-- Checkbox -->
+                                    <div class="flex items-center h-5">
+                                        <input 
+                                            type="checkbox" 
+                                            name="roles[]" 
+                                            value="{{ $role->id }}" 
+                                            id="role_{{ $user->id }}_{{ $role->id }}"
+                                            {{ $user->roles->contains($role->id) ? 'checked' : '' }}
+                                            class="w-4 h-4 text-[#ffb51b] bg-white border-gray-300 rounded focus:ring-[#ffb51b] focus:ring-2 transition-colors">
+                                    </div>
+                                    
+                                    <!-- Role Info -->
+                                    <div class="ml-3 flex-1 min-w-0">
+                                        <div class="flex items-center gap-2">
+                                            @php
+                                                $roleIcon = match(strtolower($role->role_name)) {
+                                                    'admin' => 'bx-crown',
+                                                    'program coordinator' => 'bx-user-voice',
+                                                    'coordinator' => 'bx-user-voice',
+                                                    'manager' => 'bx-briefcase',
+                                                    default => 'bx-user-circle'
+                                                };
+                                            @endphp
+                                            <i class='bx {{ $roleIcon }} text-[#ffb51b] group-hover:text-[#e6a319] transition-colors'></i>
+                                            <span class="text-sm font-medium text-gray-900 group-hover:text-[#1a2235]">
+                                                {{ $role->role_name }}
+                                            </span>
+                                        </div>
+                                        @if($role->description)
+                                            <p class="mt-1 text-xs text-gray-500 leading-relaxed">
+                                                {{ $role->description }}
+                                            </p>
+                                        @endif
+                                    </div>
+                                </label>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+            </form>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+            <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
+                <button 
+                    type="button" 
+                    onclick="document.getElementById('assignRolesModal_{{ $user->id }}').close()"
+                    class="w-full sm:w-auto px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                    <i class='bx bx-x mr-2'></i>
                     Cancel
                 </button>
-                <button type="submit" 
-                        class="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                <button 
+                    type="submit" 
+                    form="roleForm_{{ $user->id }}"
+                    class="w-full sm:w-auto px-4 py-2 bg-[#ffb51b] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors font-medium">
                     <i class='bx bx-save mr-2'></i>
                     Save Changes
                 </button>
             </div>
-        </form>
+        </div>
     </div>
-    <form method="dialog" class="modal-backdrop">
-        <button>close</button>
-    </form>
 </dialog>
-
-<style>
-    /* Modal Animation */
-    .modal {
-        animation: modalFadeIn 0.2s ease-out;
-    }
-
-    @keyframes modalFadeIn {
-        from {
-            opacity: 0;
-            transform: scale(0.95);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-
-    /* Custom Scrollbar for Role List */
-    .modal-box {
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-
-    .modal-box::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    .modal-box::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 4px;
-    }
-
-    .modal-box::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 4px;
-    }
-
-    .modal-box::-webkit-scrollbar-thumb:hover {
-        background: #666;
-    }
-
-    /* Checkbox Animation */
-    input[type="checkbox"] {
-        transition: all 0.2s ease-in-out;
-    }
-
-    input[type="checkbox"]:checked {
-        animation: checkboxPop 0.2s ease-in-out;
-    }
-
-    @keyframes checkboxPop {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.2); }
-        100% { transform: scale(1); }
-    }
-</style> 
