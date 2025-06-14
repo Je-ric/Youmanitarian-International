@@ -8,15 +8,39 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-
 class ProgramController extends Controller
 {
     use AuthorizesRequests;
 
     public function index(Request $request)
     {
-        $programs = Program::orderBy('date', 'desc')->paginate(10);
-        return view('programs.index', compact('programs'));
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $tab = $request->get('tab', 'all');
+
+        // Base query for all programs
+        $allPrograms = Program::orderBy('date', 'desc')->paginate(10);
+
+        // Initialize other program collections with empty paginated collections
+        $joinedPrograms = Program::where('id', 0)->paginate(10); // Empty paginated collection
+        $myPrograms = Program::where('id', 0)->paginate(10); // Empty paginated collection
+
+        // Get joined programs for volunteers
+        if ($user->hasRole('Volunteer') && $user->volunteer) {
+            $joinedPrograms = Program::whereHas('volunteers', function ($query) use ($user) {
+                $query->where('volunteers.id', $user->volunteer->id)
+                    ->where('program_volunteers.status', 'approved');
+            })->orderBy('date', 'desc')->paginate(10);
+        }
+
+        // Get programs created by coordinators
+        if ($user->hasRole('Program Coordinator') || $user->hasRole('Admin')) {
+            $myPrograms = Program::where('created_by', $user->id)
+                ->orderBy('date', 'desc')
+                ->paginate(10);
+        }
+
+        return view('programs.index', compact('allPrograms', 'joinedPrograms', 'myPrograms'));
     }
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
@@ -107,7 +131,7 @@ class ProgramController extends Controller
 
 
     // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
 

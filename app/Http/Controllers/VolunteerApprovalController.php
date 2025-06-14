@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Volunteer;
 use Illuminate\Http\Request;
+use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class VolunteerApprovalController extends Controller
 {
@@ -11,10 +13,30 @@ class VolunteerApprovalController extends Controller
     public function approve($id)
     {
         $volunteer = Volunteer::findOrFail($id);
+        $user = $volunteer->user;
 
+        // Get the volunteer role
+        $volunteerRole = Role::where('role_name', 'Volunteer')->first();
+        
+        if (!$volunteerRole) {
+            return redirect()->back()->with('toast', [
+                'message' => 'Volunteer role not found in the system.',
+                'type' => 'error'
+            ]);
+        }
+
+        // Update volunteer status
         $volunteer->application_status = 'approved';
         $volunteer->joined_at = now();
         $volunteer->save();
+
+        // Assign the volunteer role if not already assigned
+        if (!$user->hasRole('Volunteer')) {
+            $user->roles()->attach($volunteerRole->id, [
+                'assigned_by' => Auth::id(),
+                'assigned_at' => now()
+            ]);
+        }
 
         return redirect()->back()->with('toast', [
             'message' => 'Volunteer application approved successfully.',

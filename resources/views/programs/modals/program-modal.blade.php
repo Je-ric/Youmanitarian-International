@@ -66,9 +66,10 @@
                     if(Auth::user()->hasRole('Volunteer') && $volunteer) {
                         $alreadyJoined = $program->volunteers->contains($volunteer->id);
                     }
+                    $isCoordinator = Auth::id() === $program->created_by;
                 @endphp
 
-                @if(Auth::user()->hasRole('Volunteer'))
+                @if(Auth::user()->hasRole('Volunteer') && !$isCoordinator)
                     @php
                         $currentVolunteers = $program->volunteers->count();
                     @endphp

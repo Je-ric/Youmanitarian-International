@@ -69,12 +69,6 @@ class VolunteerApplicationController extends Controller
             )
         );
 
-        // Assign the "Volunteer" role if not already assigned
-        $volunteerRole = Role::where('role_name', 'Volunteer')->first();
-        if ($volunteerRole && !$user->hasRole('Volunteer')) {
-            $user->assignRoles($volunteerRole->id);
-        }
-
         return redirect()->route('dashboard')->with('toast', [
             'type' => 'success',
             'message' => 'Your application has been submitted and is pending review.'
