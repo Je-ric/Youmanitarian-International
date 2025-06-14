@@ -1,171 +1,305 @@
 <dialog id="attendanceModal_{{ $volunteer->id }}" class="modal">
-    <div class="modal-box max-w-3xl w-full p-0 rounded-lg bg-white relative">
+    <div class="modal-box max-w-4xl w-full p-0 rounded-lg bg-white">
+
         <!-- Modal Header -->
-        <div class="p-6 border-b border-gray-100">
-            <div class="flex justify-between items-center">
-                <h3 class="text-gray-800 text-xl sm:text-2xl font-semibold">
-                    Review Attendance
-                </h3>
-                <button type="button"
-                    class="text-gray-400 hover:text-gray-600 transition-colors"
+        <div class="px-4 sm:px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg sm:text-xl font-semibold text-[#1a2235] flex items-center">
+                        <i class='bx bx-clipboard-check mr-2 text-[#ffb51b]'></i>
+                        Review Attendance
+                    </h3>
+                    <p class="text-sm text-gray-600 mt-1 flex items-center">
+                        <i class='bx bx-user mr-1'></i>
+                        {{ $volunteer->user->name }}
+                    </p>
+                </div>
+                <button type="button" class="text-gray-400 hover:text-gray-600 transition-colors p-1"
                     onclick="document.getElementById('attendanceModal_{{ $volunteer->id }}').close()">
                     <i class='bx bx-x text-2xl'></i>
                 </button>
             </div>
-            <p class="text-gray-600 mt-2 flex items-center">
-                <i class='bx bx-user mr-2'></i>
-                <span class="font-medium">{{ $volunteer->user->name }}</span>
-            </p>
         </div>
 
-        <div class="p-6 max-h-[70vh] overflow-y-auto">
+        <!-- Modal Body -->
+        <div class="p-4 sm:p-6 max-h-[75vh] overflow-y-auto">
             @forelse ($volunteerLogs as $log)
                 @php
-                    // If attendance is already approved or rejected, disable inputs.
                     $disabled = ($log->approval_status === 'approved' || $log->approval_status === 'rejected');
-                    
-                    // Status badge
-                    $statusBadge = match($log->approval_status ?? 'pending') {
-                        'approved' => '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"><i class="bx bx-check mr-1"></i>Approved</span>',
-                        'rejected' => '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"><i class="bx bx-x mr-1"></i>Rejected</span>',
-                        default => '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"><i class="bx bx-time mr-1"></i>Pending</span>',
+
+                    $statusConfig = match ($log->approval_status ?? 'pending') {
+                        'approved' => ['bg-green-100', 'text-green-800', 'bx-check', 'Approved'],
+                        'rejected' => ['bg-red-100', 'text-red-800', 'bx-x', 'Rejected'],
+                        default => ['bg-yellow-100', 'text-yellow-800', 'bx-time', 'Pending'],
                     };
                 @endphp
 
-                <!-- Attendance Record -->
-                <div class="mb-6 border border-gray-200 rounded-lg overflow-hidden">
-                    <!-- Status Header -->
-                    <div class="bg-gray-50 px-4 py-3 flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <span class="text-sm font-medium text-gray-700">Status:</span>
-                            {!! $statusBadge !!}
-                        </div>
-                        <div class="text-sm text-gray-500">
-                            {{ \Carbon\Carbon::parse($log->created_at)->format('M j, Y') }}
+                <!-- Attendance Record Card -->
+                <div class="mb-6 border border-gray-200 rounded-lg overflow-hidden bg-white">
+
+                    <!-- Card Header -->
+                    <div class="bg-gray-50 px-4 py-3 border-b border-gray-200">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-medium text-gray-700">Status:</span>
+                                <span
+                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $statusConfig[0] }} {{ $statusConfig[1] }}">
+                                    <i class="bx {{ $statusConfig[2] }} mr-1"></i>
+                                    {{ $statusConfig[3] }}
+                                </span>
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                {{ \Carbon\Carbon::parse($log->created_at)->format('M j, Y') }}
+                            </div>
                         </div>
                     </div>
-                    
+
+                    <!-- Card Content -->
                     <div class="p-4">
-                        <!-- Two-column layout for time and image -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Left column: Time info -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                            <!-- Left Column: Time & Notes -->
                             <div class="space-y-4">
-                                <!-- Clock In/Out Times -->
-                                <div class="space-y-3">
-                                    <div class="flex items-center">
-                                        <div class="w-24 flex-shrink-0 text-gray-500 text-sm">Time In:</div>
-                                        <div class="font-medium">
-                                            {{ $log->clock_in ? \Carbon\Carbon::parse($log->clock_in)->format('h:i A') : '--:--' }}
+                                <!-- Time Information -->
+                                <div>
+                                    <h4 class="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+                                        <i class='bx bx-time mr-1 text-[#ffb51b]'></i>
+                                        Time Information
+                                    </h4>
+                                    <div class="space-y-2 bg-gray-50 rounded-lg p-3">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm text-gray-600">Time In:</span>
+                                            <span class="font-medium text-[#1a2235]">
+                                                {{ $log->clock_in ? \Carbon\Carbon::parse($log->clock_in)->format('h:i A') : '--:--' }}
+                                            </span>
                                         </div>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <div class="w-24 flex-shrink-0 text-gray-500 text-sm">Time Out:</div>
-                                        <div class="font-medium">
-                                            {{ $log->clock_out ? \Carbon\Carbon::parse($log->clock_out)->format('h:i A') : '--:--' }}
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm text-gray-600">Time Out:</span>
+                                            <span class="font-medium text-[#1a2235]">
+                                                {{ $log->clock_out ? \Carbon\Carbon::parse($log->clock_out)->format('h:i A') : '--:--' }}
+                                            </span>
                                         </div>
+
+                                        @if($log->clock_in && $log->clock_out)
+                                            @php
+                                                $clockIn = \Carbon\Carbon::parse($log->clock_in);
+                                                $clockOut = \Carbon\Carbon::parse($log->clock_out);
+                                                $duration = $clockIn->diff($clockOut);
+                                                $hours = $duration->h + ($duration->days * 24);
+                                                $minutes = $duration->i;
+                                            @endphp
+                                            <div class="flex justify-between items-center pt-2 border-t border-gray-200">
+                                                <span class="text-sm text-gray-600">Duration:</span>
+                                                <span class="font-medium text-[#ffb51b]">
+                                                    {{ $hours }}h {{ $minutes }}m
+                                                </span>
+                                            </div>
+                                        @endif
                                     </div>
-                                    
-                                 @if($log->clock_in && $log->clock_out)
-                                    @php
-                                        $clockIn = \Carbon\Carbon::parse($log->clock_in);
-                                        $clockOut = \Carbon\Carbon::parse($log->clock_out);
-                                        $duration = $clockIn->diff($clockOut);
-                                        $hours = $duration->h + ($duration->days * 24);
-                                        $minutes = $duration->i;
-                                        $seconds = $duration->s;
-                                    @endphp
-                                    <div class="flex items-center">
-                                        <div class="w-24 flex-shrink-0 text-gray-500 text-sm">Duration:</div>
-                                        <div class="font-medium">
-                                            {{ $hours }}h {{ $minutes }}m {{ $seconds }}s
-                                        </div>
-                                    </div>
-                                @endif
                                 </div>
 
-                                <!-- Notes -->
+                                <!-- Notes Section -->
                                 <div>
-                                    <label for="notes_{{ $log->id }}" class="block text-gray-600 text-sm font-medium mb-1">
-                                        Notes:
+                                    <label for="notes_{{ $log->id }}"
+                                        class="block text-sm font-semibold text-gray-700 mb-2 items-center">
+                                        <i class='bx bx-note mr-1 text-[#ffb51b]'></i>
+                                        Notes
                                     </label>
                                     <textarea id="notes_{{ $log->id }}" name="notes" rows="3" @if($disabled) disabled @endif
-                                        class="w-full p-2 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 @if($disabled) bg-gray-50 text-gray-500 @endif"
+                                        class="w-full p-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] resize-none transition-colors @if($disabled) bg-gray-50 text-gray-500 cursor-not-allowed @endif"
                                         placeholder="Add any comments about this attendance record...">{{ old('notes', $log->notes) }}</textarea>
                                 </div>
                             </div>
-                            
-                            <!-- Right column: Proof image -->
-                            <div>
-                                <div class="text-gray-600 text-sm font-medium mb-2">Attendance Proof:</div>
-                                @if ($log->proof_image)
-                                    <div class="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
-                                        <div class="aspect-w-16 aspect-h-9 relative">
-                                            <img src="{{ asset('storage/' . $log->proof_image) }}" alt="Proof of Attendance"
-                                                class="object-contain w-full h-full" />
+
+                            <!-- Right Column: Proof & Tasks -->
+                            <div class="space-y-4">
+
+                                <!-- Proof Image -->
+                                <div>
+                                    <h4 class="text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                                        <i class='bx bx-image mr-1 text-[#ffb51b]'></i>
+                                        Attendance Proof
+                                    </h4>
+                                    @if ($log->proof_image)
+                                        <div class="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+                                            <div class="aspect-video relative">
+                                                <img src="{{ asset('storage/' . $log->proof_image) }}" alt="Proof of Attendance"
+                                                    class="object-contain w-full h-full" />
+                                            </div>
+                                            <div class="p-2 text-center bg-white">
+                                                <a href="{{ asset('storage/' . $log->proof_image) }}" target="_blank"
+                                                    class="text-blue-600 hover:text-blue-800 text-xs inline-flex items-center font-medium">
+                                                    <i class='bx bx-fullscreen mr-1'></i> View Full Size
+                                                </a>
+                                            </div>
                                         </div>
-                                        <div class="p-2 text-center">
-                                            <a href="{{ asset('storage/' . $log->proof_image) }}" target="_blank" 
-                                               class="text-blue-600 hover:text-blue-800 text-xs inline-flex items-center">
-                                                <i class='bx bx-fullscreen mr-1'></i> View Full Size
-                                            </a>
+                                    @else
+                                        <div
+                                            class="border border-gray-200 rounded-lg bg-gray-50 p-6 flex flex-col items-center justify-center text-gray-400">
+                                            <i class='bx bx-image text-3xl mb-2'></i>
+                                            <p class="text-sm">No proof image uploaded</p>
                                         </div>
-                                    </div>
-                                @else
-                                    <div class="border border-gray-200 rounded-lg bg-gray-50 p-8 flex flex-col items-center justify-center text-gray-400">
-                                        <i class='bx bx-image text-4xl mb-2'></i>
-                                        <p class="text-sm">No proof image uploaded</p>
-                                    </div>
-                                @endif
+                                    @endif
+                                </div>
+
+                                <!-- Assigned Tasks -->
+                                <div>
+                                    <h4 class="text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                                        <i class='bx bx-task mr-1 text-[#ffb51b]'></i>
+                                        Assigned Tasks
+                                    </h4>
+                                    @php
+                                        $volunteerTasks = $program->tasks()
+                                            ->whereHas('assignments', function ($query) use ($volunteer) {
+                                                $query->where('volunteer_id', $volunteer->id);
+                                            })
+                                            ->with([
+                                                'assignments' => function ($query) use ($volunteer) {
+                                                    $query->where('volunteer_id', $volunteer->id);
+                                                }
+                                            ])
+                                            ->get();
+                                    @endphp
+
+                                    @if($volunteerTasks->isNotEmpty())
+                                        <div class="space-y-2 max-h-40 overflow-y-auto">
+                                            @foreach($volunteerTasks as $task)
+                                                @php
+                                                    $assignment = $task->assignments->first();
+                                                    $taskStatusConfig = match ($assignment?->status ?? 'pending') {
+                                                        'completed' => ['bg-green-100', 'text-green-800', 'bx-check', 'Completed'],
+                                                        'in_progress' => ['bg-blue-100', 'text-blue-800', 'bx-time', 'In Progress'],
+                                                        default => ['bg-gray-100', 'text-gray-800', 'bx-hourglass', 'Pending'],
+                                                    };
+                                                @endphp
+                                                <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                                    <div class="flex items-start justify-between gap-2 mb-2">
+                                                        <p class="text-sm text-gray-700 line-clamp-2 flex-1">
+                                                            {{ $task->task_description }}
+                                                        </p>
+                                                        <span
+                                                            class="inline-flex items-center px-2 py-1 rounded text-xs font-medium {{ $taskStatusConfig[0] }} {{ $taskStatusConfig[1] }} flex-shrink-0">
+                                                            <i class="bx {{ $taskStatusConfig[2] }} mr-1"></i>
+                                                            {{ $taskStatusConfig[3] }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @else
+                                        <div
+                                            class="border border-gray-200 rounded-lg bg-gray-50 p-4 flex items-center justify-center text-gray-400">
+                                            <i class='bx bx-task text-xl mr-2'></i>
+                                            <p class="text-sm">No tasks assigned</p>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Action Buttons -->
-                    <div class="px-4 py-3 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row gap-2">
-                        <form action="{{ route('attendance.status', $log->id) }}" method="POST" class="flex-1">
-                            @csrf
-                            <input type="hidden" name="status" value="approved">
-                            <input type="hidden" name="notes" id="approve_notes_{{ $log->id }}">
-                            <button type="submit" @if($disabled) disabled @endif
-                                onclick="document.getElementById('approve_notes_{{ $log->id }}').value = document.getElementById('notes_{{ $log->id }}').value"
-                                class="w-full px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed">
-                                <i class='bx bx-check-circle mr-2'></i> Approve
-                            </button>
-                        </form>
-                        
-                        <form action="{{ route('attendance.status', $log->id) }}" method="POST" class="flex-1">
-                            @csrf
-                            <input type="hidden" name="status" value="rejected">
-                            <input type="hidden" name="notes" id="reject_notes_{{ $log->id }}">
-                            <button type="submit" @if($disabled) disabled @endif
-                                onclick="document.getElementById('reject_notes_{{ $log->id }}').value = document.getElementById('notes_{{ $log->id }}').value"
-                                class="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed">
-                                <i class='bx bx-x-circle mr-2'></i> Reject
-                            </button>
-                        </form>
-                    </div>
+                    @if(!$disabled)
+                        <div class="px-4 py-3 bg-gray-50 border-t border-gray-200">
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <form action="{{ route('attendance.status', $log->id) }}" method="POST" class="flex-1">
+                                    @csrf
+                                    <input type="hidden" name="status" value="approved">
+                                    <input type="hidden" name="notes" id="approve_notes_{{ $log->id }}">
+                                    <button type="submit"
+                                        onclick="document.getElementById('approve_notes_{{ $log->id }}').value = document.getElementById('notes_{{ $log->id }}').value"
+                                        class="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center justify-center">
+                                        <i class='bx bx-check-circle mr-2'></i> Approve Attendance
+                                    </button>
+                                </form>
+
+                                <form action="{{ route('attendance.status', $log->id) }}" method="POST" class="flex-1">
+                                    @csrf
+                                    <input type="hidden" name="status" value="rejected">
+                                    <input type="hidden" name="notes" id="reject_notes_{{ $log->id }}">
+                                    <button type="submit"
+                                        onclick="document.getElementById('reject_notes_{{ $log->id }}').value = document.getElementById('notes_{{ $log->id }}').value"
+                                        class="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center justify-center">
+                                        <i class='bx bx-x-circle mr-2'></i> Reject Attendance
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    @else
+                        <div class="px-4 py-3 bg-gray-50 border-t border-gray-200">
+                            <div class="text-center text-sm text-gray-600">
+                                <i class='bx bx-lock-alt mr-1'></i>
+                                This attendance record has already been reviewed
+                            </div>
+                        </div>
+                    @endif
                 </div>
             @empty
-                <!-- No Attendance Records -->
-                <div class="flex flex-col items-center justify-center py-12 text-center">
-                    <div class="bg-gray-100 rounded-full p-4 mb-4">
-                        <i class='bx bx-time text-3xl text-gray-400'></i>
+                <!-- Empty State -->
+                <div class="flex flex-col items-center justify-center py-16 text-center">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                        <i class='bx bx-time text-2xl text-gray-400'></i>
                     </div>
-                    <h4 class="text-lg font-medium text-gray-700 mb-2">No Attendance Records</h4>
-                    <p class="text-gray-500 max-w-md">
-                        This volunteer hasn't logged any attendance for this program yet. Records will appear here once they clock in.
+                    <h4 class="text-lg font-semibold text-gray-700 mb-2">No Attendance Records</h4>
+                    <p class="text-gray-500 max-w-sm text-sm leading-relaxed">
+                        This volunteer hasn't logged any attendance for this program yet. Records will appear here once they
+                        clock in.
                     </p>
                 </div>
             @endforelse
         </div>
-        
+
         <!-- Modal Footer -->
-        <div class="p-4 border-t border-gray-100 flex justify-end">
-            <button type="button" 
-                class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors"
-                onclick="document.getElementById('attendanceModal_{{ $volunteer->id }}').close()">
-                Close
-            </button>
+        <div class="px-4 sm:px-6 py-4 border-t border-gray-200 bg-gray-50">
+            <div class="flex justify-end">
+                <button type="button"
+                    class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    onclick="document.getElementById('attendanceModal_{{ $volunteer->id }}').close()">
+                    <i class='bx bx-x mr-2'></i> Close
+                </button>
+            </div>
         </div>
     </div>
 </dialog>
+
+<style>
+    /* Line clamp utility for task descriptions */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Responsive modal adjustments */
+    @media (max-width: 640px) {
+        .modal-box {
+            margin: 1rem;
+            max-height: 90vh;
+        }
+    }
+
+    /* Aspect ratio for images */
+    .aspect-video {
+        aspect-ratio: 16 / 9;
+    }
+
+    /* Custom scrollbar for tasks list */
+    .max-h-40::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .max-h-40::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 2px;
+    }
+
+    .max-h-40::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 2px;
+    }
+
+    .max-h-40::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+</style>
