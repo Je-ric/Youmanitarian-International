@@ -125,7 +125,7 @@
                                     </td>
                                 </tr>
 
-                                @include('roles.partials.assign_roles_modal')
+                                @include('roles.partials.assign_rolesModal')
                             @endforeach
                         </tbody>
                     </table>

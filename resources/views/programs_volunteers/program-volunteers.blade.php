@@ -21,7 +21,7 @@
                     <h1 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                         "{{ $program->title }}"
                     </h1>
-                    <p class="text-gray-600">View and manage program information</p>
+                    <p class="text-gray-600">View and manage program details and volunteer participation.</p>
                 </div>
                 
                 <div class="flex gap-3 w-full lg:w-auto">

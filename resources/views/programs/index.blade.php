@@ -120,10 +120,10 @@
                                         <i class='bx bx-group'></i>
                                     </x-button>
 
-                                    <x-button href="{{ route('programs.edit', $program) }}" variant="warning" class="tooltip"
+                                    {{-- <x-button href="{{ route('programs.edit', $program) }}" variant="warning" class="tooltip"
                                         data-tip="Edit" aria-label="Edit {{ $program->title }}">
                                         <i class='bx bx-edit-alt'></i>
-                                    </x-button>
+                                    </x-button> --}}
 
                                     <form action="{{ route('programs.destroy', $program) }}" method="POST"
                                         id="delete-form-{{ $program->id }}" class="inline-block">
