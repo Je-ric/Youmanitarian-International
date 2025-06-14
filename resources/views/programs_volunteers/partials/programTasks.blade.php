@@ -153,9 +153,36 @@
                                                 {{ $assignment->volunteer->user->name }}
                                             </span>
                                         </div>
-                                        <span class="text-xs {{ $assignmentStatusConfig[1] }} ml-2 flex-shrink-0">
-                                            {{ ucfirst($assignment->status) }}
-                                        </span>
+                                        <div class="flex items-center gap-2">
+                                            <!-- Status Dropdown -->
+                                            <form action="{{ route('programs.tasks.assignments.update-status', [$program, $task, $assignment]) }}" 
+                                                  method="POST" 
+                                                  class="inline-flex">
+                                                @csrf
+                                                @method('PUT')
+                                                <select 
+                                                    name="status" 
+                                                    onchange="this.form.submit()" 
+                                                    class="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-1 focus:ring-[#ffb51b] focus:border-[#ffb51b] bg-white"
+                                                >
+                                                    <option value="pending" {{ $assignment->status === 'pending' ? 'selected' : '' }}>Pending</option>
+                                                    <option value="in_progress" {{ $assignment->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                                                    <option value="completed" {{ $assignment->status === 'completed' ? 'selected' : '' }}>Completed</option>
+                                                </select>
+                                            </form>
+                                            <!-- Remove Button -->
+                                            <form action="{{ route('programs.tasks.assignments.destroy', [$program, $task, $assignment]) }}" 
+                                                  method="POST" 
+                                                  onsubmit="return confirm('Remove this volunteer from the task?')"
+                                                  class="inline-flex">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" 
+                                                        class="text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors">
+                                                    <i class='bx bx-x text-xs'></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>

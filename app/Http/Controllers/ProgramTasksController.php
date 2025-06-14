@@ -49,9 +49,59 @@ class ProgramTasksController extends Controller
             'status' => 'sometimes|in:pending,in_progress,completed',
         ]);
 
-        $task->update($request->only('task_description', 'status'));
+        // If status is being updated, update both task and assignments
+        if ($request->has('status')) {
+            $task->update(['status' => $request->status]);
+            
+            // Update all assignments to match the task status
+            $task->assignments()->update(['status' => $request->status]);
+        } else {
+            $task->update($request->only('task_description'));
+        }
 
         return redirect()->back()->with('success', 'Task updated successfully.');
+    }
+
+    // Update individual assignment status
+    public function updateAssignmentStatus(Request $request, Program $program, ProgramTask $task, TaskAssignment $assignment)
+    {
+        if ($task->program_id !== $program->id || $assignment->task_id !== $task->id) {
+            abort(403);
+        }
+
+        $request->validate([
+            'status' => 'required|in:pending,in_progress,completed',
+        ]);
+
+        $assignment->update(['status' => $request->status]);
+
+        // Update main task status based on assignment statuses
+        $this->updateMainTaskStatus($task);
+
+        return redirect()->back()->with('success', 'Assignment status updated successfully.');
+    }
+
+    // Helper method to update main task status based on assignment statuses
+    private function updateMainTaskStatus(ProgramTask $task)
+    {
+        $assignments = $task->assignments;
+        
+        if ($assignments->isEmpty()) {
+            return;
+        }
+
+        // If all assignments are completed, mark task as completed
+        if ($assignments->every(fn($assignment) => $assignment->status === 'completed')) {
+            $task->update(['status' => 'completed']);
+        }
+        // If any assignment is in progress, mark task as in progress
+        elseif ($assignments->contains(fn($assignment) => $assignment->status === 'in_progress')) {
+            $task->update(['status' => 'in_progress']);
+        }
+        // Otherwise, mark as pending
+        else {
+            $task->update(['status' => 'pending']);
+        }
     }
 
     // Assign a volunteer to a task
@@ -82,5 +132,20 @@ class ProgramTasksController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Volunteer assigned to task.');
+    }
+
+    // Remove a volunteer from a task
+    public function removeAssignment(Program $program, ProgramTask $task, TaskAssignment $assignment)
+    {
+        if ($task->program_id !== $program->id || $assignment->task_id !== $task->id) {
+            abort(403);
+        }
+
+        $assignment->delete();
+
+        // Update main task status after removing assignment
+        $this->updateMainTaskStatus($task);
+
+        return redirect()->back()->with('success', 'Volunteer removed from task successfully.');
     }
 }

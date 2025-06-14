@@ -191,6 +191,8 @@ Route::prefix('programs/{program}/tasks')->name('programs.tasks.')->group(functi
     Route::post('/', [ProgramTasksController::class, 'store'])->name('store'); 
     Route::delete('{task}', [ProgramTasksController::class, 'destroy'])->name('destroy'); 
     Route::put('{task}', [ProgramTasksController::class, 'update'])->name('update');
+    Route::put('{task}/assignments/{assignment}/status', [ProgramTasksController::class, 'updateAssignmentStatus'])->name('assignments.update-status');
+    Route::delete('{task}/assignments/{assignment}', [ProgramTasksController::class, 'removeAssignment'])->name('assignments.destroy');
 });
 // Assign a volunteer to a task (action)
 Route::post('/programs/{program}/tasks/{task}/assign', [ProgramTasksController::class, 'assignVolunteer'])->name('programs.tasks.assign');
