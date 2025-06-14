@@ -6,6 +6,7 @@ use App\Models\Volunteer;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class VolunteerApprovalController extends Controller
 {
@@ -25,23 +26,40 @@ class VolunteerApprovalController extends Controller
             ]);
         }
 
-        // Update volunteer status
-        $volunteer->application_status = 'approved';
-        $volunteer->joined_at = now();
-        $volunteer->save();
+        try {
+            DB::beginTransaction();
 
-        // Assign the volunteer role if not already assigned
-        if (!$user->hasRole('Volunteer')) {
-            $user->roles()->attach($volunteerRole->id, [
-                'assigned_by' => Auth::id(),
-                'assigned_at' => now()
+            // Update volunteer status
+            $volunteer->application_status = 'approved';
+            $volunteer->joined_at = now();
+            $volunteer->save();
+
+            // Assign the volunteer role if not already assigned
+            if (!$user->hasRole('Volunteer')) {
+                // Create the role assignment in user_roles table
+                DB::table('user_roles')->insert([
+                    'user_id' => $user->id,
+                    'role_id' => $volunteerRole->id,
+                    'assigned_by' => Auth::id(),
+                    'assigned_at' => now(),
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with('toast', [
+                'message' => 'Volunteer application approved successfully.',
+                'type' => 'success'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('toast', [
+                'message' => 'Failed to approve volunteer application. Please try again.',
+                'type' => 'error'
             ]);
         }
-
-        return redirect()->back()->with('toast', [
-            'message' => 'Volunteer application approved successfully.',
-            'type' => 'success'
-        ]);
     }
 
     // application.blade.php

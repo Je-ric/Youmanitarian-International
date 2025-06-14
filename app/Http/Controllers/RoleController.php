@@ -35,7 +35,7 @@ class RoleController extends Controller
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
-            'roles' => 'required|array',
+            'roles' => 'nullable|array',
             'roles.*' => 'exists:roles,id'
         ]);
 
@@ -44,11 +44,34 @@ class RoleController extends Controller
 
             $user = User::findOrFail($request->user_id);
             
-            // Sync roles (this will remove roles not in the array and add new ones)
-            $user->roles()->sync($request->roles, [
-                'assigned_by' => Auth::id(),
-                'assigned_at' => now()
-            ]);
+            // Get current roles
+            $currentRoles = $user->roles->pluck('id')->toArray();
+            
+            // Get the volunteer role
+            $volunteerRole = Role::where('role_name', 'Volunteer')->first();
+            
+            // If no roles were selected in the form, use current roles
+            $selectedRoles = $request->roles ?? $currentRoles;
+            
+            // Always ensure volunteer role is included if user has it
+            if ($user->hasRole('Volunteer') && !in_array($volunteerRole->id, $selectedRoles)) {
+                $selectedRoles[] = $volunteerRole->id;
+            }
+
+            // Only proceed with sync if there are actual changes
+            if (count(array_diff($selectedRoles, $currentRoles)) > 0 || 
+                count(array_diff($currentRoles, $selectedRoles)) > 0) {
+                
+                // Create sync data with pivot information
+                $syncData = collect($selectedRoles)->mapWithKeys(function ($roleId) {
+                    return [$roleId => [
+                        'assigned_by' => Auth::id(),
+                        'assigned_at' => now()
+                    ]];
+                })->all();
+                
+                $user->roles()->sync($syncData);
+            }
 
             DB::commit();
 
