@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\ProgramTasksController;
 
 class VolunteerAttendanceController extends Controller
 {
@@ -76,6 +77,18 @@ class VolunteerAttendanceController extends Controller
         $canClockIn = $status === 'ongoing' && $isAssigned && !$attendance?->clock_in;
         $canClockOut = $status === 'ongoing' && $isAssigned && $attendance?->clock_in && !$attendance?->clock_out;
 
+        // Get volunteer's tasks using ProgramTasksController
+        $programTasksController = app(ProgramTasksController::class);
+        $volunteerTasks = $programTasksController->getVolunteerTasks($program, $user->volunteer->id ?? null);
+
+        // Prepare task data for view
+        $taskData = $volunteerTasks->map(function($task) {
+            return [
+                'task' => $task,
+                'assignment' => $task->assignments->first()
+            ];
+        });
+
         return view('programs.attendance', compact(
             'program',
             'attendance',
@@ -85,7 +98,9 @@ class VolunteerAttendanceController extends Controller
             'formattedWorkedTime',
             'status',
             'canClockIn',
-            'canClockOut'
+            'canClockOut',
+            'volunteerTasks',
+            'taskData'
         ));
     }
 

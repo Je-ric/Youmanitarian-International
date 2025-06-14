@@ -288,9 +288,51 @@
         {{-- Partial --}}
         @include('programs.partials.attendanceReminders')
 
-        
+        {{-- Volunteer's Assigned Tasks --}}
+        @if($volunteerTasks->isNotEmpty())
+            <div class="mt-8">
+                <h2 class="text-xl font-bold text-[#1a2235] mb-4">Your Assigned Tasks</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    @foreach($taskData as $data)
+                        <div
+                            class="bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-all duration-200 hover:shadow-sm">
+                            <div class="p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $data['assignment']->status === 'completed' ? 'bg-green-100 text-green-800' : ($data['assignment']->status === 'in_progress' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800') }}">
+                                        <div
+                                            class="w-1.5 h-1.5 rounded-full mr-1.5 {{ $data['assignment']->status === 'completed' ? 'bg-green-500' : ($data['assignment']->status === 'in_progress' ? 'bg-blue-500' : 'bg-gray-400') }}">
+                                        </div>
+                                        {{ $data['assignment']->status === 'completed' ? 'Completed' : ($data['assignment']->status === 'in_progress' ? 'In Progress' : 'Pending') }}
+                                    </span>
+                                </div>
+
+                                <p class="text-gray-700 text-sm mb-4">{{ $data['task']->task_description }}</p>
+
+                                <form
+                                    action="{{ route('programs.tasks.assignments.update-status', [$program, $data['task'], $data['assignment']]) }}"
+                                    method="POST" class="inline-flex w-full">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="w-full">
+                                        <select name="status" onchange="this.form.submit()"
+                                            class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:ring-1 focus:ring-[#ffb51b] focus:border-[#ffb51b] bg-white">
+                                            <option value="pending" {{ $data['assignment']->status === 'pending' ? 'selected' : '' }}>
+                                                Pending</option>
+                                            <option value="in_progress" {{ $data['assignment']->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                                            <option value="completed" {{ $data['assignment']->status === 'completed' ? 'selected' : '' }} disabled>Completed (Program Coordinator Only)</option>
+                                        </select>
+                                        <p class="text-xs text-gray-500 mt-1">Note: Only program coordinators can mark tasks as
+                                            complete</p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
 
     </div>
-
 
 @endsection
