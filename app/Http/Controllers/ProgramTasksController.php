@@ -148,19 +148,4 @@ class ProgramTasksController extends Controller
 
         return redirect()->back()->with('success', 'Volunteer removed from task successfully.');
     }
-
-    // Get tasks assigned to a specific volunteer for a program
-    public function getVolunteerTasks(Program $program, $volunteerId)
-    {
-        $tasks = $program->tasks()
-            ->whereHas('assignments', function($query) use ($volunteerId) {
-                $query->where('volunteer_id', $volunteerId);
-            })
-            ->with(['assignments' => function($query) use ($volunteerId) {
-                $query->where('volunteer_id', $volunteerId);
-            }])
-            ->get();
-
-        return $tasks;
-    }
 }

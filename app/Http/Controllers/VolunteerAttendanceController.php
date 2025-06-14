@@ -15,35 +15,6 @@ use App\Http\Controllers\ProgramTasksController;
 
 class VolunteerAttendanceController extends Controller
 {
-    // attendance.blade.php
-    // public function show(Program $program)
-    // {
-    //     $user = Auth::user();
-
-    //     $isAssigned = $program->volunteers()->where('user_id', $user->id)->exists();
-
-    //     $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id ?? null)
-    //         ->where('program_id', $program->id)
-    //         ->latest()
-    //         ->first();
-
-    //     if ($attendance && $attendance->clock_in && $attendance->clock_out) {
-    //         $clock_in = Carbon::parse($attendance->clock_in);
-    //         $clock_out = Carbon::parse($attendance->clock_out);
-
-    //         $diffInSeconds = $clock_in->diffInSeconds($clock_out);
-
-    //         $hours = floor($diffInSeconds / 3600);
-    //         $minutes = floor(($diffInSeconds % 3600) / 60);
-    //         $seconds = $diffInSeconds % 60;
-
-    //         $formattedTime = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-
-    //         $attendance->formatted_time = $formattedTime;
-    //     }
-
-    //     return view('programs.attendance', compact('program', 'attendance', 'isAssigned'));
-    // }
     public function show(Program $program)
     {
         $user = Auth::user();
@@ -77,9 +48,15 @@ class VolunteerAttendanceController extends Controller
         $canClockIn = $status === 'ongoing' && $isAssigned && !$attendance?->clock_in;
         $canClockOut = $status === 'ongoing' && $isAssigned && $attendance?->clock_in && !$attendance?->clock_out;
 
-        // Get volunteer's tasks using ProgramTasksController
-        $programTasksController = app(ProgramTasksController::class);
-        $volunteerTasks = $programTasksController->getVolunteerTasks($program, $user->volunteer->id ?? null);
+        // Get volunteer's tasks directly
+        $volunteerTasks = $program->tasks()
+            ->whereHas('assignments', function($query) use ($user) {
+                $query->where('volunteer_id', $user->volunteer->id ?? null);
+            })
+            ->with(['assignments' => function($query) use ($user) {
+                $query->where('volunteer_id', $user->volunteer->id ?? null);
+            }])
+            ->get();
 
         // Prepare task data for view
         $taskData = $volunteerTasks->map(function($task) {
@@ -103,13 +80,6 @@ class VolunteerAttendanceController extends Controller
             'taskData'
         ));
     }
-
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
-
-
 
     public function clockInOut(Program $program)
     {
@@ -151,69 +121,13 @@ class VolunteerAttendanceController extends Controller
         }
     }
 
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
-
-
-    // attendance.blade.php 
-    // public function clockOut(Program $program)
-    // {
-    //     $user = Auth::user();
-
-    //     $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id)
-    //         ->where('program_id', $program->id)
-    //         ->whereNull('clock_out')
-    //         ->latest()
-    //         ->first();
-
-    //     if (!$attendance) {
-    //         return redirect()->back()->with('toast', [
-    //             'message' => 'You need to clock in first.',
-    //             'type' => 'error',
-    //         ]);
-    //     }
-
-    //     $clock_in = Carbon::parse($attendance->clock_in);
-    //     $clock_out = Carbon::now();
-
-    //     $total_seconds = $clock_in->diffInSeconds($clock_out);
-
-    //     $hours = floor($total_seconds / 3600);
-    //     $minutes = floor(($total_seconds % 3600) / 60);
-    //     $seconds = $total_seconds % 60;
-
-    //     $attendance->update([
-    //         'clock_out' => $clock_out,
-    //         'hours_logged' => $total_seconds / 3600,
-    //         'formatted_time' => sprintf("%02d:%02d:%02d", $hours, $minutes, $seconds),
-    //     ]);
-
-    //     return redirect()->back()->with('toast', [
-    //         'message' => 'Clocked out successfully.',
-    //         'type' => 'success',
-    //     ]);
-    // }
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
-
-
-    // attendance.blade.php 
     public function uploadProof(Request $request, $programId)
     {
-        // $volunteerId = auth()->user()?->volunteer?->id;
         $volunteerId = Auth::user()?->volunteer?->id;
 
         if (!$volunteerId) {
             return back()->with('toast', ['message' => 'You must be logged in as a volunteer.', 'type' => 'error']);
         }
-
-        // $request->validate([
-        //     'proof_image' => 'required|image|max:10048', // 10mb max
-        // ]);
 
         $validator = Validator::make($request->all(), [
             'proof_image' => 'required|image|max:10048', // max 10MB
@@ -235,8 +149,6 @@ class VolunteerAttendanceController extends Controller
         $volunteer = Volunteer::findOrFail($volunteerId);
         $volunteerName = preg_replace('/[^A-Za-z0-9\-]/', '', $volunteer->user->name);
         $programName = preg_replace('/[^A-Za-z0-9\-]/', '', $program->title);
-        // If $programName or $volunteerName contains special characters or spaces, it can cause issues. 
-        // Kaya sinanitize para maging alphanumeric. 
 
         $file = $request->file('proof_image');
         $filename = $programName . '_' . $volunteerName . '_' . time() . '.' . $file->getClientOriginalExtension();
@@ -247,11 +159,6 @@ class VolunteerAttendanceController extends Controller
 
         return back()->with('toast', ['message' => 'Proof of attendance uploaded successfully!', 'type' => 'success']);
     }
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
-
 
     public function programVolunteers(Program $program)
     {
@@ -276,7 +183,6 @@ class VolunteerAttendanceController extends Controller
         return view('volunteers.program-volunteers', compact('program', 'logs'));
     }
 
-    // Combined function for approving and rejecting attendance
     public function updateAttendanceStatus(Request $request, $attendanceId)
     {
         $request->validate([

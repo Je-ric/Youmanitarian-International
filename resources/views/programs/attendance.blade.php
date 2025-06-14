@@ -285,9 +285,6 @@
             </div>
         </div>
 
-        {{-- Partial --}}
-        @include('programs.partials.attendanceReminders')
-
         {{-- Volunteer's Assigned Tasks --}}
         @if($volunteerTasks->isNotEmpty())
             <div class="mt-8">
@@ -332,6 +329,9 @@
                 </div>
             </div>
         @endif
+
+        {{-- Partial --}}   
+        @include('programs.partials.attendanceReminders')
 
     </div>
 
