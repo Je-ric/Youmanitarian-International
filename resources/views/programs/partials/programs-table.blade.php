@@ -44,39 +44,59 @@
                             {{ Carbon::parse($program->date)->format('M d, Y') }}
                         </td>
                         <td class="px-4 py-3 text-sm flex flex-wrap gap-2">
+                            <!-- View Details Button (Available to all) -->
                             <x-button onclick="document.getElementById('modal_{{ $program->id }}').showModal();"
                                 variant="info" class="tooltip" data-tip="View Details"
                                 aria-label="View Details for {{ $program->title }}">
                                 <i class='bx bx-show'></i>
                             </x-button>
 
-                            @if(Auth::user()->hasRole('Volunteer') && $program->volunteers->contains(Auth::user()->volunteer))
-                                <x-button href="{{ route('programs.view', $program) }}" variant="success"
-                                    aria-label="View Log for {{ $program->title }}">
-                                    <i class='bx bx-show'></i> View Log
-                                </x-button>
-                            @elseif(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
-                                <x-button href="{{ route('programs.manage_volunteers', $program) }}" variant="manage"
-                                    class="tooltip" data-tip="Manage Volunteers"
-                                    aria-label="Manage Volunteers for {{ $program->title }}">
-                                    <i class='bx bx-group'></i>
-                                </x-button>
-
-                                <form action="{{ route('programs.destroy', $program) }}" method="POST"
-                                    id="delete-form-{{ $program->id }}" class="inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <x-button type="button" variant="danger"
-                                        onclick="document.getElementById('confirm-dialog-{{ $program->id }}').showModal()"
-                                        class="tooltip" data-tip="Delete" aria-label="Delete {{ $program->title }}">
-                                        <i class='bx bx-trash'></i>
+                            @if(Auth::user()->hasRole('Volunteer'))
+                                @if($program->volunteers->contains(Auth::user()->volunteer))
+                                    <!-- View Log Button (For joined programs) -->
+                                    <x-button href="{{ route('programs.view', $program) }}" variant="success"
+                                        class="tooltip" data-tip="View Log"
+                                        aria-label="View Log for {{ $program->title }}">
+                                        <i class='bx bx-history'></i>
                                     </x-button>
-                                </form>
+                                @endif
+                            @endif
 
-                                <x-delete-confirmation id="confirm-dialog-{{ $program->id }}"
-                                    formId="delete-form-{{ $program->id }}" title="Delete this Program?"
-                                    message='"This will permanently remove the program and all its related data. This action cannot be undone. Are you sure you want to proceed?"'
-                                    confirmText="Delete" cancelText="Cancel" />
+                            @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
+                                @if(Auth::id() === $program->created_by)
+                                    <!-- Manage Volunteers Button (For program creator) -->
+                                    <x-button href="{{ route('programs.manage_volunteers', $program) }}" variant="manage"
+                                        class="tooltip" data-tip="Manage Volunteers"
+                                        aria-label="Manage Volunteers for {{ $program->title }}">
+                                        <i class='bx bx-group'></i>
+                                    </x-button>
+
+                                    <!-- Edit Button (For program creator) -->
+                                    {{-- <x-button href="{{ route('programs.edit', $program) }}" variant="warning"
+                                        class="tooltip" data-tip="Edit Program"
+                                        aria-label="Edit {{ $program->title }}">
+                                        <i class='bx bx-edit'></i>
+                                    </x-button> --}}
+
+                                    <!-- Delete Button (For program creator) -->
+                                    <form action="{{ route('programs.destroy', $program) }}" method="POST"
+                                        id="delete-form-{{ $program->id }}" class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <x-button type="button" variant="danger"
+                                            onclick="document.getElementById('confirm-dialog-{{ $program->id }}').showModal()"
+                                            class="tooltip" data-tip="Delete" 
+                                            aria-label="Delete {{ $program->title }}">
+                                            <i class='bx bx-trash'></i>
+                                        </x-button>
+                                    </form>
+
+                                    <x-delete-confirmation id="confirm-dialog-{{ $program->id }}"
+                                        formId="delete-form-{{ $program->id }}" 
+                                        title="Delete this Program?"
+                                        message='"This will permanently remove the program and all its related data. This action cannot be undone. Are you sure you want to proceed?"'
+                                        confirmText="Delete" cancelText="Cancel" />
+                                @endif
                             @endif
                         </td>
                     </tr>

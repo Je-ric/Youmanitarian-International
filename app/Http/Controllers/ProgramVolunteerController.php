@@ -158,15 +158,12 @@ class ProgramVolunteerController extends Controller
             })->exists();
     
         if (
-            now()->gte($program->start_time) ||
-            $program->progress === 'done' ||
+            $program->progress !== 'incoming' ||
             $hasTasks
         ) {
             $message = $hasTasks
                 ? 'You cannot leave this program because you have assigned tasks.'
-                : ($program->progress === 'done'
-                    ? 'You cannot leave this program because it is already done.'
-                    : 'You cannot leave this program because it has already started.');
+                : 'You cannot leave this program because it is no longer in incoming status.';
     
             return back()->with('error', $message);
         }

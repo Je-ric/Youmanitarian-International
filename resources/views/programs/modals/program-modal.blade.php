@@ -72,6 +72,14 @@
                 @if(Auth::user()->hasRole('Volunteer') && !$isCoordinator)
                     @php
                         $currentVolunteers = $program->volunteers->count();
+                        $volunteer = Auth::user()->volunteer;
+                        $alreadyJoined = $program->volunteers->contains($volunteer?->id ?? 0);
+                        
+                        // Check if the volunteer has any task assignments for this program
+                        $hasTasks = $volunteer ? $volunteer->taskAssignments()
+                            ->whereHas('task', function ($query) use ($program) {
+                                $query->where('program_id', $program->id);
+                            })->exists() : false;
                     @endphp
 
                     <div class="border-t border-slate-200 pt-6">
@@ -80,7 +88,28 @@
                         @elseif($currentVolunteers >= $program->volunteer_count)
                             <x-alert type="error" icon="bx bx-error-circle" message="All volunteer slots are filled, but you're welcome to join as a guest, viewer, or supporter!" />
                         @elseif($alreadyJoined)
-                            <x-alert type="success" icon="bx bx-check-circle" message="You are already joined in this program." />
+                            <div class="space-y-4">
+                                <x-alert type="success" icon="bx bx-check-circle" message="You are already joined in this program." />
+                                
+                                @if($program->progress === 'incoming' && !$hasTasks)
+                                    <form action="{{ route('programs.leave', [$program->id, $volunteer->id]) }}" method="POST"
+                                        onsubmit="return confirm('Are you sure you want to leave this program?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                            <i class='bx bx-log-out'></i>
+                                            Leave Program
+                                        </button>
+                                    </form>
+                                @else
+                                    @if($hasTasks)
+                                        <x-alert type="error" icon="bx bx-task" message="You cannot leave this program because you have assigned tasks." />
+                                    @elseif($program->progress !== 'incoming')
+                                        <x-alert type="info" icon="bx bx-lock" message="You cannot leave this program because it is no longer in incoming status." />
+                                    @endif
+                                @endif
+                            </div>
                         @else
                             <form action="{{ route('programs.join', $program->id) }}" method="POST">
                                 @csrf
@@ -93,42 +122,6 @@
                         @endif
                     </div>
                 @endif
-
-                @if($alreadyJoined)
-                    @php
-                        // Check if the volunteer has any task assignments for this program
-                        $hasTasks = $volunteer->taskAssignments()
-                            ->whereHas('task', function ($query) use ($program) {
-                                $query->where('program_id', $program->id);
-                            })->exists();
-
-                        $canLeave = now()->lt(\Carbon\Carbon::parse($program->start_time))
-                            && $program->progress !== 'done'
-                            && !$hasTasks;
-                    @endphp
-
-                    @if($canLeave)
-                        <form action="{{ route('programs.leave', [$program->id, $volunteer->id]) }}" method="POST"
-                            onsubmit="return confirm('Are you sure you want to leave this program?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                                <i class='bx bx-log-out'></i>
-                                Leave Program
-                            </button>
-                        </form>
-                    @else
-                        @if($hasTasks)
-                            <x-alert type="error" icon="bx bx-task" message="You cannot leave this program because you have assigned tasks." />
-                        @elseif($program->progress === 'done')
-                            <x-alert type="info" icon="bx bx-lock" message="You cannot leave this program because it is already done." />
-                        @elseif(now()->gte(\Carbon\Carbon::parse($program->start_time)))
-                            <x-alert type="info" icon="bx bx-lock" message="You cannot leave this program because it has already started." />
-                        @endif
-                    @endif
-                @endif
-
 
             </div>
 
