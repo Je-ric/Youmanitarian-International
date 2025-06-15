@@ -45,7 +45,7 @@
                         </td>
                         <td class="px-4 py-3 text-sm flex flex-wrap gap-2">
                             <!-- View Details Button (Available to all) -->
-                            <x-button onclick="document.getElementById('modal_{{ $program->id }}').showModal();"
+                            <x-button @click="openModal({{ $program->id }})"
                                 variant="info" class="tooltip" data-tip="View Details"
                                 aria-label="View Details for {{ $program->title }}">
                                 <i class='bx bx-show'></i>
@@ -71,13 +71,6 @@
                                         <i class='bx bx-group'></i>
                                     </x-button>
 
-                                    <!-- Edit Button (For program creator) -->
-                                    {{-- <x-button href="{{ route('programs.edit', $program) }}" variant="warning"
-                                        class="tooltip" data-tip="Edit Program"
-                                        aria-label="Edit {{ $program->title }}">
-                                        <i class='bx bx-edit'></i>
-                                    </x-button> --}}
-
                                     <!-- Delete Button (For program creator) -->
                                     <form action="{{ route('programs.destroy', $program) }}" method="POST"
                                         id="delete-form-{{ $program->id }}" class="inline-block">
@@ -100,8 +93,6 @@
                             @endif
                         </td>
                     </tr>
-
-                    @include('programs.modals.program-modal', ['program' => $program])
                 @endforeach
             </tbody>
         </table>

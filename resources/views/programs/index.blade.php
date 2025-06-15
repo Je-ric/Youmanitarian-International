@@ -16,7 +16,10 @@
             const url = new URL(window.location);
             url.searchParams.set('tab', tab);
             window.history.pushState({}, '', url);
-        }   
+        },
+        openModal(id) {
+            document.getElementById('modal_' + id).showModal();
+        }
     }" class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
         <div class="mb-4 sm:mb-8">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
@@ -98,6 +101,23 @@
                     class="space-y-4">
                     @include('programs.partials.programs-table', ['programs' => $myPrograms])
                 </div>
+            @endif
+        </div>
+
+        <!-- Modals Container -->
+        <div>
+            @foreach($allPrograms as $program)
+                @include('programs.modals.program-modal', ['program' => $program])
+            @endforeach
+            @if(Auth::user()->hasRole('Volunteer'))
+                @foreach($joinedPrograms as $program)
+                    @include('programs.modals.program-modal', ['program' => $program])
+                @endforeach
+            @endif
+            @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
+                @foreach($myPrograms as $program)
+                    @include('programs.modals.program-modal', ['program' => $program])
+                @endforeach
             @endif
         </div>
     </div>
