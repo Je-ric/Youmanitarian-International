@@ -150,13 +150,13 @@
                         <div class="flex items-center gap-2 mb-3">
                             <span class="text-sm text-gray-600">Status:</span>
                             <div class="flex items-center gap-2">
-                                @if($clockInTime && $clockOutTime && $status === 'done')
+                                @if($clockInTime && $clockOutTime && $program->progress_status === 'done')
                                     <div class="w-2 h-2 bg-green-500 rounded-full"></div>
                                     <span class="text-sm font-medium text-green-700">Complete</span>
-                                @elseif($clockInTime && !$clockOutTime && $status === 'done')
+                                @elseif($clockInTime && !$clockOutTime && $program->progress_status === 'done')
                                     <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
                                     <span class="text-sm font-medium text-orange-700">Missed Clock Out</span>
-                                @elseif(!$clockInTime && !$clockOutTime && $status === 'done')
+                                @elseif(!$clockInTime && !$clockOutTime && $program->progress_status === 'done')
                                     <div class="w-2 h-2 bg-red-500 rounded-full"></div>
                                     <span class="text-sm font-medium text-red-700">No Record</span>
                                 @elseif($clockInTime)
@@ -197,14 +197,14 @@
                     </div>
 
 
-                    @if($status === 'upcoming')
+                    @if($program->progress_status === 'incoming')
                         <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                             <div class="flex items-start gap-3">
                                 <i class='bx bx-info-circle text-blue-500 mt-0.5'></i>
                                 <div class="text-sm text-blue-700">
                                     <strong>Program hasn't started yet.</strong><br>
                                     Available on
-                                    {{ \Carbon\Carbon::parse($program->start_date)->format('F j, Y') }} at
+                                    {{ \Carbon\Carbon::parse($program->date)->format('F j, Y') }} at
                                     {{ \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}
                                 </div>
                             </div>
@@ -218,7 +218,7 @@
                             <i class='bx bx-log-out-circle'></i> Clock Out (Unavailable)
                         </x-button>
 
-                    @elseif($status === 'done')
+                    @elseif($program->progress_status === 'done')
                         <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
                             <div class="flex items-start gap-3">
                                 <i class='bx bx-check-circle text-gray-500 mt-0.5'></i>

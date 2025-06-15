@@ -83,7 +83,7 @@
                     @endphp
 
                     <div class="border-t border-slate-200 pt-6">
-                        @if($program->progress == 'done')
+                        @if($program->progress_status === 'done')
                             <x-alert type="success" icon="bx bx-check-circle" message="This program is already done." />
                         @elseif($currentVolunteers >= $program->volunteer_count)
                             <x-alert type="error" icon="bx bx-error-circle" message="All volunteer slots are filled, but you're welcome to join as a guest, viewer, or supporter!" />
@@ -91,7 +91,7 @@
                             <div class="space-y-4">
                                 <x-alert type="success" icon="bx bx-check-circle" message="You are already joined in this program." />
                                 
-                                @if($program->progress === 'incoming' && !$hasTasks)
+                                @if($program->progress_status === 'incoming' && !$hasTasks)
                                     <form action="{{ route('programs.leave', [$program->id, $volunteer->id]) }}" method="POST"
                                         onsubmit="return confirm('Are you sure you want to leave this program?');">
                                         @csrf
@@ -105,7 +105,7 @@
                                 @else
                                     @if($hasTasks)
                                         <x-alert type="error" icon="bx bx-task" message="You cannot leave this program because you have assigned tasks." />
-                                    @elseif($program->progress !== 'incoming')
+                                    @elseif($program->progress_status !== 'incoming')
                                         <x-alert type="info" icon="bx bx-lock" message="You cannot leave this program because it is no longer in incoming status." />
                                     @endif
                                 @endif

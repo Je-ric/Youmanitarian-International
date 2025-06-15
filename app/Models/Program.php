@@ -35,6 +35,54 @@ class Program extends Model
         'date' => 'datetime'
     ];
     
+    /**
+     * Get the program's progress status based on current time.
+     * This is a dynamic calculation that doesn't rely on the database value.
+     *
+     * @return string
+     */
+    public function getProgressStatusAttribute()
+    {
+        $today = now();
+        $programDate = $this->date->format('Y-m-d');
+        $startDateTime = Carbon::parse("$programDate {$this->start_time}");
+        $endDateTime = Carbon::parse("$programDate {$this->end_time}");
+
+        if ($today->lt($startDateTime)) {
+            return 'incoming';
+        } elseif ($today->between($startDateTime, $endDateTime)) {
+            return 'ongoing';
+        } else {
+            return 'done';
+        }
+    }
+
+    /**
+     * Get the program's progress status with styling classes.
+     *
+     * @return array
+     */
+    public function getProgressStatusWithStyleAttribute()
+    {
+        $status = $this->progress_status;
+        
+        $variant = [
+            'success' => 'bg-green-100 text-green-500',
+            'neutral' => 'bg-indigo-50 text-gray-500',
+            'info'    => 'bg-blue-50 text-blue-500',
+            'warning' => 'bg-yellow-50 text-yellow-500',
+            'danger'  => 'bg-red-50 text-red-500',
+        ];
+
+        $statusMap = [
+            'incoming' => ['label' => 'Incoming', 'style' => $variant['info']],
+            'ongoing' => ['label' => 'Ongoing', 'style' => $variant['success']],
+            'done' => ['label' => 'Done', 'style' => $variant['neutral']],
+        ];
+
+        return $statusMap[$status] ?? ['label' => 'Unknown', 'style' => 'bg-gray-300 text-black'];
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
