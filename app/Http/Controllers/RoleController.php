@@ -75,10 +75,16 @@ class RoleController extends Controller
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'Roles updated successfully');
+            return redirect()->back()->with('toast', [
+                'message' => 'Roles updated successfully',
+                'type' => 'success'
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors(['error' => 'Failed to update roles. Please try again.']);
+            return redirect()->back()->with('toast', [
+                'message' => 'Failed to update roles. Please try again.',
+                'type' => 'error'
+            ]);
         }
     }
 } 
