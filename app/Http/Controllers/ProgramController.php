@@ -95,17 +95,6 @@ class ProgramController extends Controller
             'volunteer_count' => 'nullable|integer|min:0',
         ]);
 
-        $start = Carbon::parse($request->date . ' ' . $request->start_time);
-        $end = Carbon::parse($request->date . ' ' . $request->end_time);
-
-        if (now()->lt($start)) {
-            $progress = 'incoming';
-        } elseif (now()->between($start, $end)) {
-            $progress = 'ongoing';
-        } else {
-            $progress = 'done';
-        }
-
         $program = Program::create([
             'title' => $request->title,
             'description' => $request->description,
@@ -114,7 +103,6 @@ class ProgramController extends Controller
             'end_time' => $request->end_time,
             'location' => $request->location,
             'created_by' => Auth::id(),
-            // 'progress' => $progress,
             'volunteer_count' => $request->volunteer_count ?? 0,
         ]);
 

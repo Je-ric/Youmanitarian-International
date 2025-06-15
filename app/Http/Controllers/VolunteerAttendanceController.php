@@ -45,8 +45,8 @@ class VolunteerAttendanceController extends Controller
             default => 'ongoing'
         };
 
-        $canClockIn = $status === 'ongoing' && $isAssigned && !$attendance?->clock_in;
-        $canClockOut = $status === 'ongoing' && $isAssigned && $attendance?->clock_in && !$attendance?->clock_out;
+        $canClockIn = $program->progress_status === 'ongoing' && $isAssigned && !$attendance?->clock_in;
+        $canClockOut = $program->progress_status === 'ongoing' && $isAssigned && $attendance?->clock_in && !$attendance?->clock_out;
 
         // Get volunteer's tasks directly
         $volunteerTasks = $program->tasks()
