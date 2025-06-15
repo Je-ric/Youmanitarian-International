@@ -20,7 +20,12 @@
                 extend: {
                     colors: {
                         'primary': '#1a2235',
-                        'accent': '#ffb51b'
+                        'accent': '#ffb51b',
+                        'sidebar-bg': '#f8fafc',
+                        'hover-bg': '#f1f5f9',
+                        'active-bg-light': '#FEF0E7',
+                        'text-default': '#334155',
+                        'active-text': '#1f2937', /* Dark grey for active text and icon */
                     }
                 }
             }
@@ -35,200 +40,241 @@
         aria-hidden="true"
     ></div>
 
-  <!-- Sidebar -->
-<!-- Sidebar -->
-<aside 
-    id="sidebar" 
-    class="fixed top-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out transform -translate-x-full lg:translate-x-0 bg-white border-r border-gray-200 shadow-lg sidebar-expanded"
-    aria-label="Sidebar"
->
-    <div class="h-full overflow-y-auto bg-white">
-        <!-- Sidebar Header -->
-        <div class="flex items-center p-4 border-b border-gray-200">
-            <div class="sidebar-content">
-                <h1 class="text-lg font-bold text-primary">Admin Panel</h1>
+    <!-- Sidebar -->
+    <aside 
+        id="sidebar" 
+        class="fixed top-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out transform -translate-x-full lg:translate-x-0 bg-sidebar-bg border-r border-gray-200 shadow-lg sidebar-expanded"
+        aria-label="Sidebar"
+    >
+        <!-- Fixed Header -->
+        <div class="sticky top-0 z-10 bg-sidebar-bg border-b border-gray-200">
+            <div class="flex flex-col items-center p-4">
+                <img src="{{ asset('assets/images/logo/YI_Logo.png') }}" alt="Company Logo" class="w-16 h-16 object-contain mb-2">
             </div>
         </div>
 
-        <div class="px-3 py-4">
-            <!-- Navigation Menu -->
-            <ul class="space-y-1 font-medium">
-                <!-- Dashboard -->
-                <li>
-                    <a href="{{ route('dashboard') }}" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}" 
-                       data-tooltip="Dashboard">
-                        <i class="bx bxs-dashboard w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Dashboard</span>
-                    </a>
-                </li>
+        <!-- Scrollable Content -->
+        <div class="h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar">
+            <div class="px-3 py-4">
+                <!-- Overview Section -->
+                <div class="mb-6">
+                    <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
+                        <span class="sidebar-content">Overview</span>
+                        <span class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+                    </h3>
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="{{ route('dashboard') }}" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}" 
+                               data-tooltip="Dashboard">
+                                <i class="bx bxs-dashboard w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Dashboard</span>
+                                <i class="bx bx-chevron-down ml-auto text-gray-400 sidebar-content"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-                <!-- Contents -->
-                <li>
-                    <a href="{{ route('content.content_view') }}" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('content.*') ? 'active' : '' }}" 
-                       data-tooltip="Contents">
-                        <i class="bx bx-file w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Contents</span>
-                    </a>
-                </li>
+                <!-- Content Management Section -->
+                <div class="mb-6">
+                    <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
+                        <span class="sidebar-content">Content Management</span>
+                        <span class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+                    </h3>
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="{{ route('content.content_view') }}" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('content.*') ? 'active' : '' }}" 
+                               data-tooltip="Contents">
+                                <i class="bx bx-file w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Contents</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('programs.index') }}" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('programs.*') ? 'active' : '' }}" 
+                               data-tooltip="Programs">
+                                <i class="bx bx-calendar w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Programs</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('program.chats.index', ['program' => request()->route('program')]) }}" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('program.chats.*') ? 'active' : '' }}" 
+                               data-tooltip="Program Chats">
+                                <i class="bx bx-message-square-dots w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Program Chats</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('content_requests.requests_view') }}" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('content_requests.*') ? 'active' : '' }}" 
+                               data-tooltip="Content Requests">
+                                <i class="bx bx-clipboard w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Content Requests</span>
+                                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-red-800 bg-red-100 rounded-full sidebar-content">5</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-                <!-- Programs -->
-                <li>
-                    <a href="{{ route('programs.index') }}" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('programs.*') ? 'active' : '' }}" 
-                       data-tooltip="Programs">
-                        <i class="bx bx-calendar w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Programs</span>
-                    </a>
-                </li>
+                <!-- User Management Section -->
+                <div class="mb-6">
+                    <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
+                        <span class="sidebar-content">User Management</span>
+                        <span class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+                    </h3>
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="{{ route('volunteers.index') }}" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('volunteers.*') ? 'active' : '' }}" 
+                               data-tooltip="Volunteers">
+                                <i class="bx bx-group w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Volunteers</span>
+                                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-orange-800 bg-orange-100 rounded-full sidebar-content">12</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                               data-tooltip="Members">
+                                <i class="bx bx-group w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Members</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('roles.index') }}" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('roles.*') ? 'active' : '' }}" 
+                               data-tooltip="Assign Roles">
+                                <i class="bx bx-user-plus w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Assign Roles</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-                <!-- Program Chats -->
-                <li>
-                    <a href="{{ route('program.chats.index', ['program' => request()->route('program')]) }}" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('program.chats.*') ? 'active' : '' }}" 
-                       data-tooltip="Program Chats">
-                        <i class="bx bx-message-square-dots w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Program Chats</span>
-                    </a>
-                </li>
+                <!-- Financial Section -->
+                <div class="mb-6">
+                    <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
+                        <span class="sidebar-content">Financial</span>
+                        <span class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+                    </h3>
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="#" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                               data-tooltip="Donations">
+                                <i class="bx bx-heart w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Donations</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                               data-tooltip="Membership Payments">
+                                <i class="bx bx-credit-card w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Membership Payments</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-                <!-- Volunteers -->
-                <li>
-                    <a href="{{ route('volunteers.index') }}" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('volunteers.*') ? 'active' : '' }}" 
-                       data-tooltip="Volunteers">
-                        <i class="bx bx-group w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Volunteers</span>
-                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-orange-800 bg-orange-100 rounded-full sidebar-content">12</span>
-                    </a>
-                </li>
+                <!-- Tools Section -->
+                <div class="mb-6">
+                    <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
+                        <span class="sidebar-content">Tools</span>
+                        <span class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+                    </h3>
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="{{ route('weather-forecast.index') }}" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                               data-tooltip="Weather Forecasts">
+                                <i class="bx bx-shield-quarter w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Weather Forecasts</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-                <!-- Content Requests -->
-                <li>
-                    <a href="{{ route('content_requests.requests_view') }}" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('content_requests.*') ? 'active' : '' }}" 
-                       data-tooltip="Content Requests">
-                        <i class="bx bx-clipboard w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Content Requests</span>
-                        <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-red-800 bg-red-100 rounded-full sidebar-content">5</span>
-                    </a>
-                </li>
-
-                <!-- Members -->
-                <li>
-                    <a href="#" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
-                       data-tooltip="Members">
-                        <i class="bx bx-group w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Members</span>
-                    </a>
-                </li>
-
-                <!-- Donations -->
-                <li>
-                    <a href="#" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
-                       data-tooltip="Donations">
-                        <i class="bx bx-heart w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Donations</span>
-                    </a>
-                </li>
-
-                <!-- Membership Payments -->
-                <li>
-                    <a href="#" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
-                       data-tooltip="Membership Payments">
-                        <i class="bx bx-credit-card w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Membership Payments</span>
-                    </a>
-                </li>
-
-                <!-- User Roles -->
-                <li>
-                    <a href="{{ route('roles.index') }}" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('roles.*') ? 'active' : '' }}" 
-                       data-tooltip="Assign Roles">
-                        <i class="bx bx-user-plus w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Assign Roles</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('weather-forecast.index') }}" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
-                       data-tooltip="User Roles">
-                        <i class="bx bx-shield-quarter w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Weather Forecasts</span>
-                    </a>
-                </li>
-            </ul>
-
-            <!-- Divider -->
-            <hr class="my-6 border-gray-200 sidebar-content">
-
-            <!-- Settings Section -->
-            <ul class="space-y-1 font-medium">
-                <li>
-                    <a href="#" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
-                       data-tooltip="Settings">
-                        <i class="bx bx-cog w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Settings</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" 
-                       class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item" 
-                       data-tooltip="Help & Support">
-                        <i class="bx bx-help-circle w-5 text-center flex-shrink-0"></i>
-                        <span class="ml-3 sidebar-content text-sm">Help & Support</span>
-                    </a>
-                </li>
-                <li>
-                    <form action="{{ route('logout') }}" method="POST" class="w-full">
-                        @csrf
-                        <button type="submit" 
-                            class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item w-full text-left text-red-600 hover:bg-red-50"
-                            data-tooltip="Sign Out">
-                            <i class="bx bx-log-out text-red-500 w-5 text-center flex-shrink-0"></i>
-                            <span class="ml-3 sidebar-content text-sm">Sign Out</span>
-                        </button>
-                    </form>
-                </li>
-            </ul>
+                <!-- Settings Section -->
+                <div class="mb-6">
+                    <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
+                        <span class="sidebar-content">Settings</span>
+                        <span class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+                    </h3>
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="#" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                               data-tooltip="Settings">
+                                <i class="bx bx-cog w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Settings</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" 
+                               class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item" 
+                               data-tooltip="Help & Support">
+                                <i class="bx bx-help-circle w-5 text-center flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-content text-sm">Help & Support</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-</aside>
 
+        <!-- Fixed Logout Button -->
+        <div class="absolute bottom-0 left-0 right-0 bg-sidebar-bg border-t border-gray-200 p-3">
+            <form action="{{ route('logout') }}" method="POST" class="w-full">
+                @csrf
+                <button type="submit" 
+                    class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item w-full text-left text-red-500 logout-link"
+                    data-tooltip="Sign Out">
+                    <i class="bx bx-log-out text-red-500 w-5 text-center flex-shrink-0"></i>
+                    <span class="ml-3 sidebar-content text-sm">Sign Out</span>
+                </button>
+            </form>
+        </div>
+    </aside>
 
     <!-- Navbar -->
-<nav id="navbar" class="bg-white shadow-lg border-b border-gray-200 fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out overflow-x-hidden">
-  <div class="navbar-container w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out">
-    <div class="flex justify-between items-center h-16 w-full">
-        
+    <nav id="navbar" class="bg-white shadow-lg border-b border-gray-200 fixed top-0 right-0 z-40 transition-all duration-300 ease-in-out overflow-x-hidden">
+        <div class="navbar-container w-full mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out">
+            <div class="flex justify-between items-center h-16 w-full">
                 <div class="flex items-center space-x-4">
-                    <button 
-                        id="sidebarToggle" 
-                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
-                        aria-label="Toggle sidebar"
-                        aria-expanded="false"
-                    >
-                        <svg class="h-6 w-6 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="hamburgerIcon">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        <svg class="h-6 w-6 hidden transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="closeIcon">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    
-                    <div id="navbarLogo" class="navbar-logo">
-                        <h1 class="text-xl font-bold text-primary">Admin Panel</h1>
+                    <div class="flex items-center space-x-2">
+                        <button 
+                            id="sidebarToggle" 
+                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
+                            aria-label="Toggle sidebar"
+                            aria-expanded="false"
+                        >
+                            <svg class="h-6 w-6 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="hamburgerIcon">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                            <svg class="h-6 w-6 hidden transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" id="closeIcon">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                        
+                        <div class="flex items-center space-x-4">
+                            <!-- Search Bar (Desktop) -->
+                            <div class="hidden lg:block relative">
+                                <input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm w-64">
+                                <i class="bx bx-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                            </div>
+
+                            <!-- Navbar Links (Desktop) -->
+                            <a href="#" class="hidden lg:block text-gray-600 hover:text-primary transition-colors duration-200 text-sm">Website</a>
+                            <a href="#" class="hidden lg:block text-gray-600 hover:text-primary transition-colors duration-200 text-sm">Weather</a>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Right side  -->
-                <div class="flex items-center space-x-2 sm:space-x-4 flex-wrap max-w-full">
+                <div class="flex items-center space-x-3 flex-wrap max-w-full">
                     
                     <button class="sm:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
                         <i class="fas fa-search text-lg"></i>
@@ -284,102 +330,141 @@
         .sidebar-collapsed .sidebar-content {
             opacity: 0;
             visibility: hidden;
+            width: 0;
+            margin: 0 !important; /* Ensure no residual margin */
+            padding: 0 !important; /* Ensure no residual padding */
+            overflow: hidden; /* Prevents text overflow during collapse */
+            white-space: nowrap; /* Ensures text doesn't wrap to new lines */
+            transition: opacity 0.2s ease-in-out, width 0.2s ease-in-out, margin 0.2s ease-in-out, padding 0.2s ease-in-out; /* Add transitions for smoother collapse */
         }
         
-        .sidebar-collapsed .sidebar-profile {
-            padding: 0.75rem;
-            justify-content: center;
-        }
-        
-        .sidebar-collapsed .sidebar-profile > div:last-child {
-            display: none;
+        .sidebar-collapsed .sidebar-content-line {
+            opacity: 0;
+            visibility: hidden;
+            width: 0 !important; /* Ensure line also takes no space */
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
-        /* Navbar adjustments - NO ANIMATIONS ON LAYOUT CHANGES */
-        .navbar-expanded {
-            margin-left: 16rem;
+        /* New rules for collapsed sidebar elements */
+        .sidebar-collapsed h3 {
+            padding: 0 !important; /* Remove horizontal padding from section headers */
+            margin-bottom: 0 !important; /* Remove bottom margin from section headers */
+        }
+
+        .sidebar-collapsed .sidebar-item {
+            padding-left: 0.5rem !important; /* Adjust padding for icon only */
+            padding-right: 0.5rem !important; /* Adjust padding for icon only */
+            justify-content: center; /* Center the icon */
+        }
+
+        /* Navbar adjustments */
+        #navbar {
+            transition: all 0.3s ease-in-out;
+            left: 16rem;
+            width: calc(100% - 16rem);
         }
         
         .navbar-collapsed {
-            margin-left: 4rem;
+            left: 4rem !important;
+            width: calc(100% - 4rem) !important;
         }
         
-        /* Main content adjustments - NO ANIMATIONS ON LAYOUT CHANGES */
-        .content-expanded {
+        /* Main content adjustments */
+        .main-content {
             margin-left: 16rem;
+            transition: margin-left 0.3s ease-in-out;
         }
         
         .content-collapsed {
             margin-left: 4rem;
         }
-        
-        /* Remove transitions from layout elements to prevent page switch animations */
-        #navbar, #mainContent {
-            transition: margin-left 0.3s ease-in-out;
+
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
         }
-        
-        /* Logo visibility */
-        .navbar-logo {
-            display: none;
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
         }
-        
-        .navbar-logo.show {
-            display: block;
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
 
         /* Sidebar link styles */
         .sidebar-link {
-            color: #6b7280;
+            color: var(--text-default);
+            position: relative;
+            font-weight: 400;
+        }
+
+        .sidebar-link i {
+            width: 1.5rem !important; /* Fixed width for icons */
+            margin: 0 0.5rem; /* Add margin around icons */
         }
 
         .sidebar-link:hover {
-            background-color: #f3f4f6;
-            color: var(--primary-color);
+            background-color: theme('colors.gray.100');
+            color: var(--text-default);
         }
 
         .sidebar-link:hover i {
-            color: var(--accent-color) !important;
+            color: var(--text-default) !important;
         }
 
         .sidebar-link.active {
-            background-color: #f0f9ff;
-            color: var(--primary-color);
-            border-left: 4px solid var(--accent-color);
+            background-color: var(--active-bg-light);
+            color: var(--active-text);
             font-weight: 600;
+            border-radius: 0.375rem; /* Equivalent to rounded-md */
         }
 
         .sidebar-link.active i {
-            color: var(--accent-color) !important;
+            color: var(--active-text) !important;
+        }
+
+        .sidebar-link.logout-link:hover {
+            background-color: theme('colors.gray.100');
+            color: theme('colors.red.500'); /* Keep text red on hover */
+        }
+
+        .sidebar-link.logout-link:hover i {
+            color: theme('colors.red.500') !important; /* Keep icon red on hover */
+        }
+
+        /* Adjust scrollable content height to account for fixed logout */
+        .custom-scrollbar {
+            height: calc(100vh - 10rem) !important; /* Adjust for logo and logout */
         }
 
         /* Responsive adjustments */
         @media (max-width: 1023px) {
+            #navbar {
+                left: 0 !important;
+                width: 100% !important;
+            }
             .navbar-expanded,
             .navbar-collapsed,
             .content-expanded,
             .content-collapsed {
                 margin-left: 0;
             }
-            
-            .navbar-logo {
-                display: block;
-            }
         }
 
-        /* Smooth transitions only for user interactions */
+        /* Smooth transitions */
         .sidebar-item {
             transition: all 0.2s ease-in-out;
         }
 
-        /* Remove any unwanted animations from content area */
         .main-content {
             transition: margin-left 0.3s ease-in-out;
-        }
-
-        /* Ensure responsive navbar elements don't overflow */
-        .navbar-container {
-            max-width: 100%;
-            overflow: hidden;
         }
     </style>
 
@@ -393,12 +478,15 @@
                 this.sidebarToggle = document.getElementById('sidebarToggle');
                 this.hamburgerIcon = document.getElementById('hamburgerIcon');
                 this.closeIcon = document.getElementById('closeIcon');
-                this.navbarLogo = document.getElementById('navbarLogo');
                 this.tooltip = document.getElementById('tooltip');
                 
                 this.isOpen = false;
                 this.isCollapsed = false;
                 this.isDesktop = window.innerWidth >= 1024;
+                
+                // Set initial state immediately
+                this.handleResize();
+                this.updateLayout();
                 
                 this.init();
             }
@@ -420,72 +508,16 @@
                 
                 // Initialize tooltips
                 this.initTooltips();
-                
-                // Set initial state
-                this.handleResize();
-                this.updateLayout();
-                
-                // Set active state based on current URL
-                this.setActiveState();
             }
             
             handleToggle() {
                 if (this.isDesktop) {
-                    if (this.isCollapsed) {
-                        this.expandSidebar();
-                    } else {
-                        this.collapseSidebar();
-                    }
+                    this.isCollapsed = !this.isCollapsed;
+                    this.updateSidebarState();
+                    this.updateLayout();
                 } else {
                     this.toggleMobile();
                 }
-            }
-            
-            expandSidebar() {
-                this.isCollapsed = false;
-                this.updateSidebarState();
-                this.updateLayout();
-            }
-            
-            collapseSidebar() {
-                this.isCollapsed = true;
-                this.updateSidebarState();
-                this.updateLayout();
-            }
-            
-            toggleMobile() {
-                if (this.isOpen) {
-                    this.closeMobile();
-                } else {
-                    this.openMobile();
-                }
-            }
-            
-            openMobile() {
-                this.isOpen = true;
-                this.sidebar.classList.remove('-translate-x-full');
-                this.sidebar.classList.add('translate-x-0');
-                
-                if (!this.isDesktop) {
-                    this.overlay.classList.remove('hidden');
-                    document.body.style.overflow = 'hidden';
-                }
-                
-                this.hamburgerIcon.classList.add('hidden');
-                this.closeIcon.classList.remove('hidden');
-                this.sidebarToggle.setAttribute('aria-expanded', 'true');
-            }
-            
-            closeMobile() {
-                this.isOpen = false;
-                this.sidebar.classList.add('-translate-x-full');
-                this.sidebar.classList.remove('translate-x-0');
-                this.overlay.classList.add('hidden');
-                this.hamburgerIcon.classList.remove('hidden');
-                this.closeIcon.classList.add('hidden');
-                this.sidebarToggle.setAttribute('aria-expanded', 'false');
-                
-                document.body.style.overflow = '';
             }
             
             updateSidebarState() {
@@ -501,18 +533,12 @@
             updateLayout() {
                 if (!this.isDesktop) return;
                 
-                // Update navbar and content without animations during page loads
-                this.navbar.classList.remove('navbar-expanded', 'navbar-collapsed');
-                this.mainContent.classList.remove('content-expanded', 'content-collapsed');
-                
                 if (this.isCollapsed) {
                     this.navbar.classList.add('navbar-collapsed');
                     this.mainContent.classList.add('content-collapsed');
-                    this.navbarLogo.classList.add('show');
                 } else {
-                    this.navbar.classList.add('navbar-expanded');
-                    this.mainContent.classList.add('content-expanded');
-                    this.navbarLogo.classList.remove('show');
+                    this.navbar.classList.remove('navbar-collapsed');
+                    this.mainContent.classList.remove('content-collapsed');
                 }
             }
             
@@ -534,13 +560,37 @@
                     this.updateSidebarState();
                     this.navbar.classList.remove('navbar-expanded', 'navbar-collapsed');
                     this.mainContent.classList.remove('content-expanded', 'content-collapsed');
-                    this.navbarLogo.classList.remove('show');
                 }
             }
             
-            setActiveState() {
-                // This will be handled by Laravel's route checking in the blade template
-                // No JavaScript needed for active state since it's server-side rendered
+            toggleMobile() {
+                if (this.isOpen) {
+                    this.closeMobile();
+                } else {
+                    this.openMobile();
+                }
+            }
+            
+            openMobile() {
+                this.isOpen = true;
+                this.sidebar.classList.remove('-translate-x-full');
+                this.sidebar.classList.add('translate-x-0');
+                this.overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                this.hamburgerIcon.classList.add('hidden');
+                this.closeIcon.classList.remove('hidden');
+                this.sidebarToggle.setAttribute('aria-expanded', 'true');
+            }
+            
+            closeMobile() {
+                this.isOpen = false;
+                this.sidebar.classList.add('-translate-x-full');
+                this.sidebar.classList.remove('translate-x-0');
+                this.overlay.classList.add('hidden');
+                this.hamburgerIcon.classList.remove('hidden');
+                this.closeIcon.classList.add('hidden');
+                this.sidebarToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
             }
             
             initTooltips() {
