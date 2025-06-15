@@ -55,7 +55,7 @@
 
         <!-- Scrollable Content -->
         <div class="h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar">
-            <div class="px-3 py-4">
+            <div class="px-5 py-4">
                 <!-- Overview Section -->
                 <div class="mb-6">
                     <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
@@ -112,7 +112,7 @@
                                data-tooltip="Content Requests">
                                 <i class="bx bx-clipboard w-5 text-center flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-content text-sm">Content Requests</span>
-                                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-red-800 bg-red-100 rounded-full sidebar-content">5</span>
+                                {{-- <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-red-800 bg-red-100 rounded-full sidebar-content">5</span> --}}
                             </a>
                         </li>
                     </ul>
@@ -324,38 +324,47 @@
         }
         
         .sidebar-collapsed {
-            width: 4rem;
+            width: 5rem; /* 4 */
         }
         
         .sidebar-collapsed .sidebar-content {
             opacity: 0;
             visibility: hidden;
             width: 0;
-            margin: 0 !important; /* Ensure no residual margin */
-            padding: 0 !important; /* Ensure no residual padding */
-            overflow: hidden; /* Prevents text overflow during collapse */
-            white-space: nowrap; /* Ensures text doesn't wrap to new lines */
-            transition: opacity 0.2s ease-in-out, width 0.2s ease-in-out, margin 0.2s ease-in-out, padding 0.2s ease-in-out; /* Add transitions for smoother collapse */
-        }
-        
-        .sidebar-collapsed .sidebar-content-line {
-            opacity: 0;
-            visibility: hidden;
-            width: 0 !important; /* Ensure line also takes no space */
             margin: 0 !important;
             padding: 0 !important;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: opacity 0.2s ease-in-out, width 0.2s ease-in-out, margin 0.2s ease-in-out, padding 0.2s ease-in-out;
         }
 
-        /* New rules for collapsed sidebar elements */
+        /* Add divider for collapsed state */
+        .sidebar-collapsed .mb-6 {
+            position: relative;
+            margin-bottom: 1.5rem !important;
+        }
+
+        .sidebar-collapsed .mb-6::after {
+            content: '';
+            position: absolute;
+            bottom: -0.75rem;
+            left: 0.75rem;
+            right: 0.75rem;
+            height: 1px;
+            background-color: #e2e8f0;
+            display: block;
+        }
+
+        /* Hide group headers in collapsed state */
         .sidebar-collapsed h3 {
-            padding: 0 !important; /* Remove horizontal padding from section headers */
-            margin-bottom: 0 !important; /* Remove bottom margin from section headers */
+            display: none;
         }
 
+        /* Adjust spacing for collapsed state */
         .sidebar-collapsed .sidebar-item {
-            padding-left: 0.5rem !important; /* Adjust padding for icon only */
-            padding-right: 0.5rem !important; /* Adjust padding for icon only */
-            justify-content: center; /* Center the icon */
+            padding-left: 0.75rem !important;
+            padding-right: 0.75rem !important;
+            justify-content: center;
         }
 
         /* Navbar adjustments */
