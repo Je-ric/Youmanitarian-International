@@ -189,7 +189,7 @@
                                 class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('finance.membership') ? 'active' : '' }}"
                                 data-tooltip="Membership Payments">
                                 <i class="bx bx-credit-card w-5 text-center flex-shrink-0"></i>
-                                <span class="ml-3 sidebar-content text-sm">Membership Payments</span>
+                                <span class="ml-3 sidebar-content text-sm">Memberships</span>
                             </a>
                         </li>
                     </ul>
@@ -424,20 +424,39 @@
         }
 
         /* Custom scrollbar */
+        .custom-scrollbar {
+            height: calc(100vh - 10rem) !important;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+            -ms-overflow-style: none;
+        }
+
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
+            height: 6px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
             background: transparent;
+            border-radius: 3px;
         }
-
+        
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 3px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+            border: 2px solid transparent;
+            background-clip: padding-box;
         }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        /* Ensure scrollbar is always visible */
+        .custom-scrollbar:hover::-webkit-scrollbar-thumb {
             background: #94a3b8;
         }
 
@@ -485,12 +504,6 @@
         .sidebar-link.logout-link:hover i {
             color: theme('colors.red.500') !important;
             /* Keep icon red on hover */
-        }
-
-        /* Adjust scrollable content height to account for fixed logout */
-        .custom-scrollbar {
-            height: calc(100vh - 10rem) !important;
-            /* Adjust for logo and logout */
         }
 
         /* Responsive adjustments */

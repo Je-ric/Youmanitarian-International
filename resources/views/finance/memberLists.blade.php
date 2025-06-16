@@ -60,15 +60,16 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <form action="{{ route('finance.members.status', $member) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('PATCH')
-                                    <select name="membership_status" onchange="this.form.submit()" 
-                                            class="text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                        <option value="active" {{ $member->membership_status === 'active' ? 'selected' : '' }}>Active</option>
-                                        <option value="inactive" {{ $member->membership_status === 'inactive' ? 'selected' : '' }}>Inactive</option>
-                                    </select>
-                                </form>
+                                <div class="flex space-x-2">
+                                    @if($member->membership_status === 'inactive')
+                                        <form action="{{ route('finance.members.resend-invitation', $member) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" class="text-indigo-600 hover:text-indigo-900">
+                                                <i class='bx bx-refresh'></i> Resend Invitation
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @empty

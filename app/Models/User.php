@@ -108,8 +108,18 @@ class User extends Authenticatable
         return $this->hasOne(Volunteer::class);
     }
 
+    public function member()
+    {
+        return $this->hasOne(Member::class);
+    }
+
     public function isVolunteer()
     {
         return $this->volunteer && $this->volunteer->status === 'active';
+    }
+
+    public function isMember()
+    {
+        return $this->member && $this->member->membership_status === 'active';
     }
 }

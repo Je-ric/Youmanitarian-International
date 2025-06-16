@@ -234,4 +234,16 @@ Route::prefix('finance')->group(function () {
     Route::post('/members', [MemberController::class, 'store'])->name('finance.members.store');
     Route::patch('/members/{member}/status', [MemberController::class, 'updateStatus'])->name('finance.members.status');
     Route::post('/members/invite/{volunteer}', [MemberController::class, 'invite'])->name('finance.members.invite');
+    Route::post('/members/{member}/resend-invitation', [MemberController::class, 'resendInvitation'])->name('finance.members.resend-invitation');
+});
+
+// Member invitation routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/member/invitation/{member}/accept', [MemberController::class, 'acceptInvitation'])
+        ->name('member.invitation.accept')
+        ->middleware('signed');
+    
+    Route::get('/member/invitation/{member}/decline', [MemberController::class, 'declineInvitation'])
+        ->name('member.invitation.decline')
+        ->middleware('signed');
 });

@@ -36,10 +36,12 @@ class Volunteer extends Model
     {
         return $this->hasMany(VolunteerAttendance::class, 'volunteer_id');
     }
-public function attendances()
-{
-    return $this->hasMany(\App\Models\VolunteerAttendance::class);
-}
+
+    public function attendances()
+    {
+        return $this->hasMany(\App\Models\VolunteerAttendance::class);
+    }
+
     public function taskAssignments()
     {
         return $this->hasMany(TaskAssignment::class);
@@ -50,4 +52,8 @@ public function attendances()
         return $this->hasMany(ProgramFeedback::class);
     }
 
+    public function member()
+    {
+        return $this->hasOne(Member::class);
+    }
 }
