@@ -199,14 +199,13 @@ Route::post('/programs/{program}/tasks/{task}/assign', [ProgramTasksController::
 
 // Program Chat Routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('/programs/chat', [ProgramChatController::class, 'show'])->name('program.chats.index');
-    Route::get('/programs/{program}/chat', [ProgramChatController::class, 'show'])->name('program.chats.show');
-    Route::get('/programs/{program}/chats', [ProgramChatController::class, 'index'])->name('program.chats.messages');
+    // Show all program chats
+    Route::get('/programs/chats', [ProgramChatController::class, 'index'])->name('program.chats.index');
+    // Show specific program chat
+    Route::get('/programs/{program}/chats', [ProgramChatController::class, 'show'])->name('program.chats.show');
     Route::post('/programs/{program}/chats', [ProgramChatController::class, 'store'])->name('program.chats.store');
     Route::put('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'update'])->name('program.chats.update');
     Route::delete('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'destroy'])->name('program.chats.destroy');
-    Route::post('/programs/{program}/chats/mark-read', [ProgramChatController::class, 'markAsRead'])->name('program.chats.mark-read');
-    Route::post('/programs/{program}/chats/{chat}/toggle-pin', [ProgramChatController::class, 'togglePin'])->name('program.chats.toggle-pin');
 });
 
 Route::middleware(['auth'])->group(function () {

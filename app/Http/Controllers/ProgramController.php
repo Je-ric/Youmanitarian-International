@@ -109,7 +109,7 @@ class ProgramController extends Controller
         // Create a welcome message in the program chat
         $program->chats()->create([
             'sender_id' => Auth::id(),
-            'message' => "Welcome to the {$program->title} program chat! This is where volunteers and coordinators can communicate about the program.",
+            'message' => "Welcome to the {$program->title} program chat!.",
             'message_type' => 'system',
             'is_pinned' => true
         ]);
