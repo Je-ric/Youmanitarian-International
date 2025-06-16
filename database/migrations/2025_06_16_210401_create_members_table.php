@@ -13,16 +13,18 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->unique(); 
+            $table->unsignedBigInteger('user_id')->unique();
             $table->unsignedBigInteger('volunteer_id')->unique();
-            $table->enum('membership_type', ['full_pledge', 'honorary'])->default('full_pledge'); 
-            $table->timestamp('start_date')->useCurrent();
-            $table->timestamp('end_date')->nullable(); 
+            $table->enum('membership_type', ['full_pledge', 'honorary'])->default('full_pledge');
             $table->enum('membership_status', ['active', 'inactive'])->default('inactive');
-            $table->boolean('board_invited')->default(false); 
-            $table->timestamp('became_member_at')->nullable();
+            $table->enum('invitation_status', ['pending', 'accepted', 'declined'])->default('pending');
+            $table->timestamp('invited_at')->nullable();
+            $table->timestamp('invitation_expires_at')->nullable();
+            $table->timestamp('start_date')->nullable(); // When they actually become a member
+            $table->timestamp('end_date')->nullable();
+            $table->boolean('board_invited')->default(false);
             $table->timestamps();
-
+        
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('volunteer_id')->references('id')->on('volunteers')->onDelete('cascade');
         });
@@ -35,4 +37,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('members');
     }
-}; 
+};

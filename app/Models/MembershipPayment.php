@@ -3,12 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MembershipPayment extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'member_id',
         'amount',
@@ -16,7 +14,8 @@ class MembershipPayment extends Model
         'payment_status',
         'receipt_url',
         'payment_period',
-        'payment_year'
+        'payment_year',
+        'notes'
     ];
 
     protected $casts = [
@@ -25,8 +24,23 @@ class MembershipPayment extends Model
         'payment_year' => 'integer'
     ];
 
-    public function member()
+    public function member(): BelongsTo
     {
         return $this->belongsTo(Member::class);
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->payment_status === 'paid';
+    }
+
+    public function isOverdue(): bool
+    {
+        return $this->payment_status === 'overdue';
+    }
+
+    public function isPending(): bool
+    {
+        return $this->payment_status === 'pending';
     }
 }

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\URL;
 
 class MemberController extends Controller
 {
@@ -149,7 +150,6 @@ class MemberController extends Controller
     public function invite(Volunteer $volunteer)
     {
         try {
-            // Load the user relationship
             $volunteer->load('user');
 
             if (!$volunteer->user) {
@@ -171,29 +171,16 @@ class MemberController extends Controller
                     ]);
             }
 
-            Log::info('Inviting volunteer to be member', [
-                'volunteer_id' => $volunteer->id,
-                'user_id' => $volunteer->user_id,
-                'user_email' => $volunteer->user->email
-            ]);
-
-            // Create member record first
+            // Create member record
             $member = Member::create([
                 'user_id' => $volunteer->user_id,
                 'volunteer_id' => $volunteer->id,
                 'membership_type' => 'full_pledge',
                 'membership_status' => 'inactive',
-                'start_date' => now(),
-                'became_member_at' => null,
-                'board_invited' => false
+                'invitation_status' => 'pending',
+                'invited_at' => now(),
+                'invitation_expires_at' => now()->addDays(7)
             ]);
-
-            // Load the user relationship
-            $member->load('user');
-
-            if (!$member->user) {
-                throw new \Exception('User not found after member creation');
-            }
 
             // Send invitation email
             try {
@@ -213,11 +200,9 @@ class MemberController extends Controller
                 Log::error('Failed to send invitation email', [
                     'error' => $e->getMessage(),
                     'member_id' => $member->id,
-                    'user_email' => $member->user->email,
-                    'trace' => $e->getTraceAsString()
+                    'user_email' => $member->user->email
                 ]);
                 
-                // Member is created but email failed - still return success but with warning
                 return redirect()->back()
                     ->with('toast', [
                         'type' => 'warning',
@@ -227,9 +212,9 @@ class MemberController extends Controller
         } catch (\Exception $e) {
             Log::error('Error in member invitation process', [
                 'error' => $e->getMessage(),
-                'volunteer_id' => $volunteer->id,
-                'trace' => $e->getTraceAsString()
+                'volunteer_id' => $volunteer->id
             ]);
+            
             return redirect()->back()
                 ->with('toast', [
                     'type' => 'error',
@@ -240,9 +225,26 @@ class MemberController extends Controller
 
     public function acceptInvitation(Member $member)
     {
+        if ($member->isInvitationExpired()) {
+            return redirect()->route('dashboard')
+                ->with('toast', [
+                    'type' => 'error',
+                    'message' => 'This invitation has expired. Please request a new invitation.'
+                ]);
+        }
+
         $member->update([
             'membership_status' => 'active',
-            'became_member_at' => now()
+            'invitation_status' => 'accepted',
+            'start_date' => now()
+        ]);
+
+        // Create initial payment record for current quarter
+        $member->payments()->create([
+            'amount' => 1000.00, // Set your default amount
+            'payment_period' => $member->getCurrentQuarter(),
+            'payment_year' => now()->year,
+            'payment_status' => 'pending'
         ]);
 
         return redirect()->route('dashboard')
@@ -254,8 +256,17 @@ class MemberController extends Controller
 
     public function declineInvitation(Member $member)
     {
+        if ($member->isInvitationExpired()) {
+            return redirect()->route('dashboard')
+                ->with('toast', [
+                    'type' => 'error',
+                    'message' => 'This invitation has expired.'
+                ]);
+        }
+
         $member->update([
-            'membership_status' => 'inactive'
+            'membership_status' => 'inactive',
+            'invitation_status' => 'declined'
         ]);
 
         return redirect()->route('dashboard')
@@ -267,22 +278,21 @@ class MemberController extends Controller
 
     public function resendInvitation(Member $member)
     {
-        try {
-            // Load the user relationship
-            $member->load('user');
-
-            if (!$member->user) {
-                Log::error('User not found for member', [
-                    'member_id' => $member->id
+        if ($member->isActive()) {
+            return redirect()->back()
+                ->with('toast', [
+                    'type' => 'error',
+                    'message' => 'Cannot resend invitation to an active member.'
                 ]);
-                return redirect()->back()
-                    ->with('toast', [
-                        'type' => 'error',
-                        'message' => 'Error: User not found for this member.'
-                    ]);
-            }
+        }
 
-            // Send invitation email
+        $member->update([
+            'invitation_status' => 'pending',
+            'invited_at' => now(),
+            'invitation_expires_at' => now()->addDays(7)
+        ]);
+
+        try {
             Mail::to($member->user->email)->send(new MemberInvitation($member));
             
             Log::info('Member invitation email resent successfully', [
@@ -298,8 +308,7 @@ class MemberController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to resend invitation email', [
                 'error' => $e->getMessage(),
-                'member_id' => $member->id,
-                'trace' => $e->getTraceAsString()
+                'member_id' => $member->id
             ]);
             
             return redirect()->back()

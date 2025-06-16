@@ -39,6 +39,13 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-gray-900">{{ $payment->member->user->name }}</div>
+                                <div class="text-sm text-gray-500">
+                                    @if($payment->member->isActive())
+                                        <span class="text-green-600">Active Member</span>
+                                    @else
+                                        <span class="text-gray-600">Inactive Member</span>
+                                    @endif
+                                </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-900">₱{{ number_format($payment->amount, 2) }}</div>
@@ -51,8 +58,8 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    {{ $payment->payment_status === 'Paid' ? 'bg-green-100 text-green-800' : 
-                                       ($payment->payment_status === 'Overdue' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
+                                    {{ $payment->isPaid() ? 'bg-green-100 text-green-800' : 
+                                       ($payment->isOverdue() ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
                                     {{ $payment->payment_status }}
                                 </span>
                             </td>
@@ -62,9 +69,9 @@
                                     @method('PATCH')
                                     <select name="status" onchange="this.form.submit()" 
                                             class="text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                        <option value="Paid" {{ $payment->payment_status === 'Paid' ? 'selected' : '' }}>Paid</option>
-                                        <option value="Pending" {{ $payment->payment_status === 'Pending' ? 'selected' : '' }}>Pending</option>
-                                        <option value="Overdue" {{ $payment->payment_status === 'Overdue' ? 'selected' : '' }}>Overdue</option>
+                                        <option value="paid" {{ $payment->isPaid() ? 'selected' : '' }}>Paid</option>
+                                        <option value="pending" {{ $payment->isPending() ? 'selected' : '' }}>Pending</option>
+                                        <option value="overdue" {{ $payment->isOverdue() ? 'selected' : '' }}>Overdue</option>
                                     </select>
                                 </form>
                                 @if($payment->receipt_url)
@@ -103,7 +110,9 @@
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Member</option>
                         @foreach($members as $member)
-                            <option value="{{ $member->id }}">{{ $member->user->name }}</option>
+                            @if($member->isActive())
+                                <option value="{{ $member->id }}">{{ $member->user->name }}</option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -140,6 +149,13 @@
                     </label>
                     <input type="url" name="receipt_url" id="receipt_url"
                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="notes">
+                        Notes (Optional)
+                    </label>
+                    <textarea name="notes" id="notes" rows="3"
+                              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
                 </div>
                 <div class="flex justify-end space-x-4">
                     <button type="button" onclick="document.getElementById('addPaymentModal').classList.add('hidden')"

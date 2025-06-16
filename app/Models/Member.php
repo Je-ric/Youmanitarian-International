@@ -3,42 +3,68 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Member extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'volunteer_id',
         'membership_type',
+        'membership_status',
+        'invitation_status',
+        'invited_at',
+        'invitation_expires_at',
         'start_date',
         'end_date',
-        'membership_status',
-        'board_invited',
-        'became_member_at'
+        'board_invited'
     ];
 
     protected $casts = [
+        'invited_at' => 'datetime',
+        'invitation_expires_at' => 'datetime',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
-        'became_member_at' => 'datetime',
         'board_invited' => 'boolean'
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function volunteer()
+    public function volunteer(): BelongsTo
     {
         return $this->belongsTo(Volunteer::class);
     }
 
-    public function membershipPayments()
+    public function payments(): HasMany
     {
         return $this->hasMany(MembershipPayment::class);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->membership_status === 'active';
+    }
+
+    public function isInvitationPending(): bool
+    {
+        return $this->invitation_status === 'pending';
+    }
+
+    public function isInvitationExpired(): bool
+    {
+        return $this->invitation_expires_at && $this->invitation_expires_at->isPast();
+    }
+
+    public function getCurrentQuarter(): string
+    {
+        $month = now()->month;
+        if ($month <= 3) return 'Q1';
+        if ($month <= 6) return 'Q2';
+        if ($month <= 9) return 'Q3';
+        return 'Q4';
     }
 }
