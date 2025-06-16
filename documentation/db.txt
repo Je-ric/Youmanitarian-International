@@ -265,20 +265,25 @@ Schema::create('programs', function (Blueprint $table) {
 
 Schema::create('membership_payments', function (Blueprint $table) {
     $table->id();
-    $table->unsignedBigInteger('user_id');
+    $table->unsignedBigInteger('member_id');  // Changed from user_id to member_id
     $table->decimal('amount', 10, 2);
     $table->timestamp('payment_date')->useCurrent();
     $table->enum('payment_status', ['Paid', 'Pending', 'Overdue'])->default('Pending');
     $table->string('receipt_url')->nullable();
-    $table->enum('payment_period', ['Q1', 'Q2', 'Q3', 'Q4'])->nullable(); //since quarterly payment
+    $table->enum('payment_period', ['Q1', 'Q2', 'Q3', 'Q4'])->nullable();
+    $table->year('payment_year')->nullable();  // Added to track which year the payment is for
     $table->timestamps();
 
-    $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict'); // to avoid cascading delete
+    $table->foreign('member_id')->references('id')->on('members')->onDelete('restrict');
+    
+    // Add a unique constraint to prevent duplicate payments for the same period
+    $table->unique(['member_id', 'payment_period', 'payment_year']);
 });
 
 Schema::create('members', function (Blueprint $table) {
     $table->id();
     $table->unsignedBigInteger('user_id')->unique(); 
+    $table->unsignedBigInteger('volunteer_id')->unique();
     $table->enum('membership_type', ['full_pledge', 'honorary'])->default('full_pledge'); 
     $table->timestamp('start_date')->useCurrent();
     $table->timestamp('end_date')->nullable(); 
@@ -288,6 +293,7 @@ Schema::create('members', function (Blueprint $table) {
     $table->timestamps();
 
     $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+    $table->foreign('volunteer_id')->references('id')->on('volunteers')->onDelete('cascade');
 });
 
 Schema::create('donations', function (Blueprint $table) {

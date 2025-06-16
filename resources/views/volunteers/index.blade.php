@@ -302,10 +302,19 @@
                                         <td class="p-3">{{ $volunteer->user->email ?? 'N/A' }}</td>
                                         <td class="p-3">{{ $volunteer->created_at->format('M d, Y') }}</td>
                                         <td class="p-3">
-                                            <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="info" class="tooltip"
-                                                data-tip="View Details">
-                                                <i class='bx bx-show'></i> View
-                                            </x-button>
+                                            <div class="flex flex-wrap gap-2">
+                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="info" class="tooltip"
+                                                    data-tip="View Details">
+                                                    <i class='bx bx-show'></i> View
+                                                </x-button>
+
+                                                <form action="{{ route('finance.members.invite', $volunteer->id) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-success tooltip" data-tip="Invite to be Member">
+                                                        <i class='bx bx-user-plus'></i> Invite to Member
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

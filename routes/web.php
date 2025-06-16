@@ -21,6 +21,9 @@ use App\Http\Controllers\VolunteerAttendanceController;
 use App\Http\Controllers\VolunteerApplicationController;
 use App\Http\Controllers\ProgramChatController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\MemberController;
 
 // Route::middleware([
 //     'auth:sanctum',
@@ -213,4 +216,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
     Route::get('/roles/assign', [RoleController::class, 'showAssignForm'])->name('roles.assign.form');
     Route::post('/roles/assign', [RoleController::class, 'assign'])->name('roles.assign');
+});
+
+// Finance Routes
+Route::prefix('finance')->group(function () {
+    Route::get('/', [FinanceController::class, 'index'])->name('finance.index');
+    Route::get('/donations', [FinanceController::class, 'donations'])->name('finance.donations');
+    Route::patch('/donations/{donation}/status', [FinanceController::class, 'updateDonationStatus'])->name('finance.donations.status');
+
+    // Membership Routes
+    Route::get('/membership', [MembershipController::class, 'index'])->name('finance.membership');
+    Route::post('/membership', [MembershipController::class, 'store'])->name('finance.membership.store');
+    Route::patch('/membership/{payment}/status', [MembershipController::class, 'updateStatus'])->name('finance.membership.status');
+
+    // Member Routes
+    Route::get('/members', [MemberController::class, 'index'])->name('finance.members');
+    Route::post('/members', [MemberController::class, 'store'])->name('finance.members.store');
+    Route::patch('/members/{member}/status', [MemberController::class, 'updateStatus'])->name('finance.members.status');
+    Route::post('/members/invite/{volunteer}', [MemberController::class, 'invite'])->name('finance.members.invite');
 });
