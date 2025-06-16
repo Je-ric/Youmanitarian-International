@@ -27,62 +27,91 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Member</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Period</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q1</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q2</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q3</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q4</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($payments as $payment)
+                    @forelse($members as $member)
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">{{ $payment->member->user->name }}</div>
+                                <div class="text-sm font-medium text-gray-900">{{ $member->user->name }}</div>
                                 <div class="text-sm text-gray-500">
-                                    @if($payment->member->isActive())
+                                    @if($member->isActive())
                                         <span class="text-green-600">Active Member</span>
+                                    @elseif($member->isInvitationPending())
+                                        <span class="text-yellow-600">Pending Invitation</span>
                                     @else
                                         <span class="text-gray-600">Inactive Member</span>
                                     @endif
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">₱{{ number_format($payment->amount, 2) }}</div>
+                                <div class="text-sm text-gray-900">{{ ucfirst($member->membership_type) }}</div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ $payment->payment_period }} {{ $payment->payment_year }}</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ $payment->payment_date->format('M d, Y') }}</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    {{ $payment->isPaid() ? 'bg-green-100 text-green-800' : 
-                                       ($payment->isOverdue() ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
-                                    {{ $payment->payment_status }}
-                                </span>
-                            </td>
+                            @php
+                                $currentYear = now()->year;
+                                $startYear = $member->start_date ? $member->start_date->year : null;
+                                $startQuarter = $member->start_date ? ceil($member->start_date->month / 3) : null;
+                            @endphp
+                            
+                            @foreach(['Q1', 'Q2', 'Q3', 'Q4'] as $quarter)
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @php
+                                        $quarterNumber = substr($quarter, 1);
+                                        $shouldShowPayment = $startYear && 
+                                            ($currentYear > $startYear || 
+                                            ($currentYear == $startYear && $quarterNumber >= $startQuarter));
+                                        
+                                        $payment = $member->payments
+                                            ->where('payment_period', $quarter)
+                                            ->where('payment_year', $currentYear)
+                                            ->first();
+                                    @endphp
+
+                                    @if($shouldShowPayment)
+                                        @if($payment)
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                {{ $payment->isPaid() ? 'bg-green-100 text-green-800' : 
+                                                   ($payment->isOverdue() ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
+                                                {{ $payment->payment_status }}
+                                            </span>
+                                            @if($payment->receipt_url)
+                                                <a href="{{ $payment->receipt_url }}" target="_blank" 
+                                                   class="text-blue-600 hover:text-blue-900 text-xs ml-1">
+                                                    Receipt
+                                                </a>
+                                            @endif
+                                        @else
+                                            <span class="text-gray-400 text-xs">Not Paid</span>
+                                        @endif
+                                    @else
+                                        <span class="text-gray-300 text-xs">N/A</span>
+                                    @endif
+                                </td>
+                            @endforeach
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <form action="{{ route('finance.membership.status', $payment) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('PATCH')
-                                    <select name="status" onchange="this.form.submit()" 
-                                            class="text-sm border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                        <option value="paid" {{ $payment->isPaid() ? 'selected' : '' }}>Paid</option>
-                                        <option value="pending" {{ $payment->isPending() ? 'selected' : '' }}>Pending</option>
-                                        <option value="overdue" {{ $payment->isOverdue() ? 'selected' : '' }}>Overdue</option>
-                                    </select>
-                                </form>
-                                @if($payment->receipt_url)
-                                    <a href="{{ $payment->receipt_url }}" target="_blank" class="text-blue-600 hover:text-blue-900 ml-4">View Receipt</a>
+                                @if($member->isActive())
+                                    <button onclick="showAddPaymentModal('{{ $member->id }}')" 
+                                            class="text-indigo-600 hover:text-indigo-900">
+                                        Add Payment
+                                    </button>
+                                @elseif($member->isInvitationPending())
+                                    <button onclick="resendInvitation('{{ $member->id }}')" 
+                                            class="text-yellow-600 hover:text-yellow-900">
+                                        Resend Invitation
+                                    </button>
                                 @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                No payments found
+                            <td colspan="7" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                No members found
                             </td>
                         </tr>
                     @endforelse
@@ -90,7 +119,7 @@
             </table>
         </div>
         <div class="px-6 py-4 border-t border-gray-200">
-            {{ $payments->links() }}
+            {{ $members->links() }}
         </div>
     </div>
 </div>
@@ -102,20 +131,7 @@
             <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Add New Payment</h3>
             <form action="{{ route('finance.membership.store') }}" method="POST">
                 @csrf
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="member_id">
-                        Member
-                    </label>
-                    <select name="member_id" id="member_id" required
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                        <option value="">Select Member</option>
-                        @foreach($members as $member)
-                            @if($member->isActive())
-                                <option value="{{ $member->id }}">{{ $member->user->name }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
+                <input type="hidden" name="member_id" id="modal_member_id">
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="amount">
                         Amount
@@ -171,4 +187,19 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+function showAddPaymentModal(memberId) {
+    document.getElementById('modal_member_id').value = memberId;
+    document.getElementById('addPaymentModal').classList.remove('hidden');
+}
+
+function resendInvitation(memberId) {
+    if (confirm('Are you sure you want to resend the invitation?')) {
+        window.location.href = `/members/${memberId}/resend-invitation`;
+    }
+}
+</script>
+@endpush
 @endsection
