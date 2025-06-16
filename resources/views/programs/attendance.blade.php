@@ -148,7 +148,7 @@
 
                         <!-- Status Indicator -->
                         <div class="flex items-center gap-2 mb-3">
-                            <span class="text-sm text-gray-600">Status:</span>
+                            <span class="text-sm text-gray-600">Attendance:</span>
                             <div class="flex items-center gap-2">
                                 @if($clockInTime && $clockOutTime && $program->progress_status === 'done')
                                     <div class="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -164,7 +164,7 @@
                                     <span class="text-sm font-medium text-blue-700">Clocked In</span>
                                 @else
                                     <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
-                                    <span class="text-sm font-medium text-gray-600">Not Started</span>
+                                    <span class="text-sm font-medium text-gray-600">Not Clocked In</span>
                                 @endif
                             </div>
                         </div>
@@ -239,7 +239,7 @@
 
                     @elseif($isAssigned)
                         @if($canClockIn)
-                            <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4">
+                            <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Clocking In...';">
                                 @csrf
                                 <x-button type="submit" variant="clock_in">
                                     <i class='bx bx-log-in-circle'></i> Clock In
@@ -251,7 +251,7 @@
                             </x-button>
 
                         @elseif($canClockOut)
-                            <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4">
+                            <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="if(!confirm('Are you sure you want to clock out?')) return false; this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Clocking Out...';">
                                 @csrf
                                 <x-button type="submit" variant="clock_in" class="w-full text-sm sm:text-base">
                                     <i class='bx bx-log-out-circle'></i> Clock Out
