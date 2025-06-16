@@ -66,21 +66,13 @@ class Program extends Model
     {
         $status = $this->progress_status;
         
-        $variant = [
-            'success' => 'bg-green-100 text-green-500',
-            'neutral' => 'bg-indigo-50 text-gray-500',
-            'info'    => 'bg-blue-50 text-blue-500',
-            'warning' => 'bg-yellow-50 text-yellow-500',
-            'danger'  => 'bg-red-50 text-red-500',
-        ];
-
         $statusMap = [
-            'incoming' => ['label' => 'Incoming', 'style' => $variant['info']],
-            'ongoing' => ['label' => 'Ongoing', 'style' => $variant['success']],
-            'done' => ['label' => 'Done', 'style' => $variant['neutral']],
+            'incoming' => ['label' => 'Incoming'],
+            'ongoing' => ['label' => 'Ongoing'],
+            'done' => ['label' => 'Done'],
         ];
 
-        return $statusMap[$status] ?? ['label' => 'Unknown', 'style' => 'bg-gray-300 text-black'];
+        return $statusMap[$status] ?? ['label' => 'Unknown'];
     }
 
     public function creator()

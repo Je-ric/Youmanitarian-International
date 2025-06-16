@@ -186,7 +186,11 @@
                 <div class="bg-gray-50 border border-gray-200 rounded-lg">
                     <div class="p-6">
                         <h4 class="text-sm font-medium text-gray-700 mb-3">Program Status</h4>
-                        <div class="space-y-2 text-sm">
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-600">Status:</span>
+                                <x-programProgress :program="$program" />
+                            </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Created:</span>
                                 <span class="text-gray-900">{{ $program->created_at->format('M d, Y') }}</span>
