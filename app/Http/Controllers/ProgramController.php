@@ -53,11 +53,6 @@ class ProgramController extends Controller
         return view('programs.create');
     }
 
-    public function gotoEditProgram(Program $program)
-    {
-        return view('programs.edit', compact('program'));
-    }
-
     public function storeProgram(Request $request)
     {
         $request->validate([

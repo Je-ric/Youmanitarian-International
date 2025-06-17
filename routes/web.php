@@ -126,7 +126,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/programs-list', [ProgramController::class, 'gotoProgramsList'])->name('programs.index'); // View all programs
     Route::get('/programs/create', [ProgramController::class, 'gotoCreateProgram'])->name('programs.create'); // Form to create
     Route::post('/programs', [ProgramController::class, 'storeProgram'])->name('programs.store'); // Save new program
-    Route::get('/programs/{program}/edit', [ProgramController::class, 'gotoEditProgram'])->name('programs.edit'); // Open Edit form
     Route::put('/programs/{program}', [ProgramController::class, 'updateProgram'])->name('programs.update'); // Update program
     Route::delete('/programs/{program}', [ProgramController::class, 'deleteProgram'])->name('programs.destroy'); // Delete
     
