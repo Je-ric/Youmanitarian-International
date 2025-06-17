@@ -25,115 +25,65 @@ class MembershipController extends Controller
         return view('finance.membership_payments', compact('members'));
     }
 
-    public function determinePaymentStatus($quarter, $payment = null)
+    private function getDueDate($quarter)
     {
-        if ($payment && $payment->payment_status === 'paid') {
-            return 'paid';
-        }
-
-        $currentDate = Carbon::now();
-        $currentYear = $currentDate->year;
-        $currentQuarter = ceil($currentDate->month / 3);
+        $currentYear = now()->year;
         $quarterNumber = (int) substr($quarter, 1);
+        
+        // Set due date to the last day of the quarter
+        return Carbon::create($currentYear, $quarterNumber * 3, 1)
+            ->endOfMonth();
+    }
 
-        if ($quarterNumber > $currentQuarter) {
+    public function determinePaymentStatus($quarter, $payment)
+    {
+        if (!$payment) {
             return 'pending';
         }
 
-        if ($quarterNumber === $currentQuarter) {
-            return $payment ? $payment->payment_status : 'pending';
+        if ($payment->payment_status === 'paid') {
+            return 'paid';
         }
 
-        return 'overdue';
+        $dueDate = $this->getDueDate($quarter);
+        return now()->isAfter($dueDate) ? 'overdue' : 'pending';
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'member_id' => 'required|exists:members,id',
             'amount' => 'required|numeric|min:0',
+            'payment_date' => 'required|date',
             'payment_period' => 'required|in:Q1,Q2,Q3,Q4',
-            'payment_year' => 'required|integer|min:2000|max:2100',
+            'payment_year' => 'required|integer',
             'payment_method' => 'required|in:cash,bank_transfer,credit_card,paypal',
             'receipt' => 'nullable|file|mimes:jpeg,png,pdf|max:10048',
-            'notes' => 'nullable|string|max:1000'
+            'notes' => 'nullable|string|max:500'
         ]);
 
         $member = Member::findOrFail($request->member_id);
-
-        if (!$member->isActive()) {
-            return redirect()->back()
-                ->with('error', 'Cannot add payment for inactive member.');
-        }
-
+        
+        // Check if payment already exists
         $existingPayment = $member->payments()
             ->where('payment_period', $request->payment_period)
             ->where('payment_year', $request->payment_year)
             ->first();
 
         if ($existingPayment) {
-            return redirect()->back()
-                ->with('error', 'Payment already exists for this period.');
+            return back()->with('error', 'A payment for this period already exists.');
         }
 
-        DB::beginTransaction();
+        $data = $request->except('receipt');
+        $data['payment_status'] = 'paid';
 
-        try {
-            $payment = $member->payments()->create([
-                'amount' => $validated['amount'],
-                'payment_period' => $validated['payment_period'],
-                'payment_year' => $validated['payment_year'],
-                'payment_status' => 'paid',
-                'payment_method' => $validated['payment_method'],
-                'notes' => $validated['notes'] ?? null,
-                'payment_date' => now()
-            ]);
-
-            if ($request->hasFile('receipt')) {
-                $file = $request->file('receipt');
-                $memberName = Str::slug($member->user->name);
-                $fileName = sprintf(
-                    'payment_%s_%s_%s_%s.%s',
-                    $memberName,
-                    $validated['payment_period'],
-                    $validated['payment_year'],
-                    time(),
-                    $file->getClientOriginalExtension()
-                );
-                
-                $path = $file->storeAs(
-                    'uploads/membership_payments',
-                    $fileName,
-                    'public'
-                );
-                
-                $payment->update(['receipt_url' => $path]);
-            }
-
-            DB::commit();
-
-            Log::info('Membership payment created', [
-                'payment_id' => $payment->id,
-                'member_id' => $member->id,
-                'amount' => $payment->amount,
-                'period' => $payment->payment_period,
-                'year' => $payment->payment_year,
-                'status' => $payment->payment_status
-            ]);
-
-            return redirect()->back()
-                ->with('success', 'Payment added successfully.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Failed to create payment', [
-                'error' => $e->getMessage(),
-                'member_id' => $request->member_id,
-                'period' => $request->payment_period,
-                'year' => $request->payment_year
-            ]);
-            return redirect()->back()
-                ->with('error', 'Failed to create payment. Please try again.');
+        if ($request->hasFile('receipt')) {
+            $data['receipt_url'] = $request->file('receipt')->store('receipts', 'public');
         }
+
+        $member->payments()->create($data);
+
+        return back()->with('success', 'Payment recorded successfully.');
     }
 
     public function updateStatus(MembershipPayment $payment, Request $request)
@@ -155,26 +105,5 @@ class MembershipController extends Controller
 
         return redirect()->back()
             ->with('success', 'Payment status updated successfully.');
-    }
-
-    public function showPaymentModal($memberId, $quarter, $year)
-    {
-        $member = Member::with('user')->findOrFail($memberId);
-        $payment = $member->payments()
-            ->where('payment_period', $quarter)
-            ->where('payment_year', $year)
-            ->first();
-
-        $status = $payment ? $payment->payment_status : $this->determinePaymentStatus($quarter, $payment);
-        $statusClass = $status === 'paid' ? 'text-green-600' : ($status === 'overdue' ? 'text-red-600' : 'text-yellow-600');
-
-        return view('finance.modals.addPaymentModal', [
-            'member' => $member,
-            'quarter' => $quarter,
-            'year' => $year,
-            'payment' => $payment,
-            'status' => $status,
-            'statusClass' => $statusClass
-        ]);
     }
 }

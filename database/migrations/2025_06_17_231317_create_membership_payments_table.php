@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('payment_date')->useCurrent();
             $table->enum('payment_status', ['paid', 'pending', 'overdue'])->default('pending');
             $table->string('receipt_url')->nullable();
+            $table->enum('payment_method', ['cash', 'bank_transfer', 'credit_card', 'paypal']);
             $table->enum('payment_period', ['Q1', 'Q2', 'Q3', 'Q4']);
             $table->year('payment_year');
             $table->text('notes')->nullable();

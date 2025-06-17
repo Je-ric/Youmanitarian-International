@@ -12,6 +12,7 @@ class MembershipPayment extends Model
         'amount',
         'payment_date',
         'payment_status',
+        'payment_method',
         'receipt_url',
         'payment_period',
         'payment_year',
