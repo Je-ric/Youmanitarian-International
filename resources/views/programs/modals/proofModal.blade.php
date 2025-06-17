@@ -114,12 +114,6 @@
                                 <input type="file" name="proof_image" id="proof_image" accept="image/*" required
                                     class="w-full text-sm text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 file:transition-colors file:duration-200">
                             </div>
-                            {{-- @error('proof_image')
-                                <p class="text-red-600 mt-2 text-sm flex items-center gap-1">
-                                    <i class='bx bx-error-circle'></i>
-                                    {{ $message }}
-                                </p>
-                            @enderror --}}
                         </div>
                     </div>
                 @endif

@@ -249,3 +249,9 @@ Route::middleware(['auth'])->group(function () {
         ->name('member.invitation.decline')
         ->middleware('signed');
 });
+
+Route::get('/finance/membership/payments/{member}/{quarter}/{year}/modal', [MembershipController::class, 'showAddPaymentModal'])
+    ->name('finance.membership.payments.showAddPaymentModal');
+
+Route::get('/finance/membership/payments/modal/{memberId}/{quarter}/{year}', [MembershipController::class, 'showPaymentModal'])
+    ->name('finance.membership.payments.modal');

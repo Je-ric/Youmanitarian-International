@@ -11,10 +11,12 @@
             window.history.pushState({}, '', url);
         }
     }">
+        <!-- Header -->
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-3xl font-bold text-gray-800">Membership Payments</h1>
         </div>
 
+        <!-- Alerts -->
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
                 <span class="block sm:inline">{{ session('success') }}</span>
@@ -54,45 +56,44 @@
                 x-transition:enter-start="opacity-0 transform translate-y-4"
                 x-transition:enter-end="opacity-100 transform translate-y-0"
                 class="p-6">
+                <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <!-- Total Members Card -->
-                    <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-600">Total Members</p>
-                                <p class="text-2xl font-bold text-gray-900">{{ $members->total() }}</p>
-                            </div>
-                            <div class="p-3 bg-blue-50 rounded-full">
-                                <i class='bx bx-group text-blue-500 text-xl'></i>
-                            </div>
-                        </div>
-                    </div>
+                    @php
+                        $stats = [
+                            [
+                                'title' => 'Total Members',
+                                'value' => $members->total(),
+                                'icon' => 'bx-group',
+                                'color' => 'blue'
+                            ],
+                            [
+                                'title' => 'Active Members',
+                                'value' => $members->where('membership_status', 'active')->count(),
+                                'icon' => 'bx-user-check',
+                                'color' => 'green'
+                            ],
+                            [
+                                'title' => 'Total Payments',
+                                'value' => $members->sum(function($member) { return $member->payments->count(); }),
+                                'icon' => 'bx-money',
+                                'color' => 'purple'
+                            ]
+                        ];
+                    @endphp
 
-                    <!-- Active Members Card -->
-                    <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-600">Active Members</p>
-                                <p class="text-2xl font-bold text-gray-900">{{ $members->where('membership_status', 'active')->count() }}</p>
-                            </div>
-                            <div class="p-3 bg-green-50 rounded-full">
-                                <i class='bx bx-user-check text-green-500 text-xl'></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Total Payments Card -->
-                    <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-sm font-medium text-gray-600">Total Payments</p>
-                                <p class="text-2xl font-bold text-gray-900">{{ $members->sum(function($member) { return $member->payments->count(); }) }}</p>
-                            </div>
-                            <div class="p-3 bg-purple-50 rounded-full">
-                                <i class='bx bx-money text-purple-500 text-xl'></i>
+                    @foreach($stats as $stat)
+                        <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">{{ $stat['title'] }}</p>
+                                    <p class="text-2xl font-bold text-gray-900">{{ $stat['value'] }}</p>
+                                </div>
+                                <div class="p-3 bg-{{ $stat['color'] }}-50 rounded-full">
+                                    <i class='bx {{ $stat['icon'] }} text-{{ $stat['color'] }}-500 text-xl'></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
 
                 <!-- Payment Status Chart -->
@@ -112,24 +113,18 @@
                                 @foreach(['Q1', 'Q2', 'Q3', 'Q4'] as $quarter)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $quarter }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $members->sum(function($member) use ($quarter) { 
-                                                return $member->payments->where('payment_period', $quarter)
-                                                    ->where('payment_status', 'paid')->count(); 
-                                            }) }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $members->sum(function($member) use ($quarter) { 
-                                                return $member->payments->where('payment_period', $quarter)
-                                                    ->where('payment_status', 'pending')->count(); 
-                                            }) }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ $members->sum(function($member) use ($quarter) { 
-                                                return $member->payments->where('payment_period', $quarter)
-                                                    ->where('payment_status', 'overdue')->count(); 
-                                            }) }}
-                                        </td>
+                                        @php
+                                            $statuses = ['paid', 'pending', 'overdue'];
+                                            $counts = array_map(function($status) use ($members, $quarter) {
+                                                return $members->sum(function($member) use ($quarter, $status) {
+                                                    return $member->payments->where('payment_period', $quarter)
+                                                        ->where('payment_status', $status)->count();
+                                                });
+                                            }, $statuses);
+                                        @endphp
+                                        @foreach($counts as $count)
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $count }}</td>
+                                        @endforeach
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -149,10 +144,9 @@
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Member</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q1</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q2</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q3</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Q4</th>
+                            @foreach(['Q1', 'Q2', 'Q3', 'Q4'] as $quarter)
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $quarter }}</th>
+                            @endforeach
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
@@ -185,14 +179,17 @@
                                                 ->where('payment_year', $currentYear)
                                                 ->first();
 
+                                            $status = $payment ? $payment->payment_status : app(App\Http\Controllers\MembershipController::class)->determinePaymentStatus($quarter, $payment);
+                                            $statusClass = $status === 'paid' ? 'text-green-600' : ($status === 'overdue' ? 'text-red-600' : 'text-yellow-600');
+
                                             $buttonClass = 'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center gap-2';
                                             
                                             if (!$shouldShowPayment) {
                                                 $buttonClass .= ' bg-gray-100 text-gray-400 cursor-not-allowed';
                                             } else if ($payment) {
-                                                if ($payment->isPaid()) {
+                                                if ($status === 'paid') {
                                                     $buttonClass .= ' bg-green-100 text-green-700 hover:bg-green-200';
-                                                } else if ($payment->isOverdue()) {
+                                                } else if ($status === 'overdue') {
                                                     $buttonClass .= ' bg-red-100 text-red-700 hover:bg-red-200';
                                                 } else {
                                                     $buttonClass .= ' bg-yellow-100 text-yellow-700 hover:bg-yellow-200';
@@ -202,34 +199,65 @@
                                             }
                                         @endphp
 
-                                        @php
-                                            $status = $payment ? ($payment->isPaid() ? 'Paid' : ($payment->isOverdue() ? 'Overdue' : 'Pending')) : 'Unpaid';
-                                            $statusClass = $payment ? ($payment->isPaid() ? 'text-green-600' : ($payment->isOverdue() ? 'text-red-600' : 'text-yellow-600')) : 'text-gray-600';
-                                        @endphp
-                                        <button 
-                                            onclick="{{ $shouldShowPayment ? 'document.getElementById(\'addPaymentModal\').showModal(); document.getElementById(\'modal_member_id\').value = \'' . $member->id . '\'; document.getElementById(\'modal_quarter\').value = \'' . $quarter . '\'; document.getElementById(\'modal_payment_id\').value = \'' . ($payment ? $payment->id : '') . '\'; document.getElementById(\'modal_member_name\').textContent = \'' . $member->user->name . '\'; document.getElementById(\'modal_quarter_display\').textContent = \'' . $quarter . '\'; document.getElementById(\'modal_payment_status\').textContent = \'' . $status . '\'; document.getElementById(\'modal_payment_status\').className = \'font-medium ' . $statusClass . '\'' : '' }}"
-                                            class="{{ $buttonClass }}"
-                                            {{ !$shouldShowPayment ? 'disabled' : '' }}>
-                                            @if($payment)
-                                                @if($payment->isPaid())
-                                                    <i class='bx bx-check-circle'></i>
-                                                    Paid
-                                                @elseif($payment->isOverdue())
-                                                    <i class='bx bx-error-circle'></i>
-                                                    Overdue
+                                        @if($shouldShowPayment)
+                                            @php
+                                                $modalId = 'paymentModal_' . $member->id . '_' . $quarter;
+                                            @endphp
+                                            <button type="button" 
+                                                    onclick="document.getElementById('{{ $modalId }}').showModal()"
+                                                    class="{{ $buttonClass }}">
+                                                @if($payment)
+                                                    @if($status === 'paid')
+                                                        <i class='bx bx-check-circle'></i>
+                                                        Paid
+                                                    @elseif($status === 'overdue')
+                                                        <i class='bx bx-error-circle'></i>
+                                                        Overdue
+                                                    @else
+                                                        <i class='bx bx-time'></i>
+                                                        Pending
+                                                    @endif
                                                 @else
-                                                    <i class='bx bx-time'></i>
-                                                    Pending
+                                                    <i class='bx bx-plus-circle'></i>
+                                                    Add Payment
                                                 @endif
-                                            @else
-                                                <i class='bx bx-plus-circle'></i>
-                                                Add Payment
-                                            @endif
-                                        </button>
+                                            </button>
+
+                                            <!-- Payment Modal for this quarter -->
+                                            @include('finance.modals.addPaymentModal', [
+                                                'modalId' => $modalId,
+                                                'member' => $member,
+                                                'quarter' => $quarter,
+                                                'year' => $currentYear,
+                                                'payment' => $payment,
+                                                'status' => $status,
+                                                'statusClass' => $statusClass
+                                            ])
+                                        @else
+                                            <button class="{{ $buttonClass }}" disabled>
+                                                <i class='bx bx-lock'></i>
+                                                Not Available
+                                            </button>
+                                        @endif
                                     </td>
                                 @endforeach
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    Remind, download, view
+                                    <div class="flex items-center space-x-2">
+                                        @if($payment && $payment->receipt_url)
+                                            <a href="{{ Storage::url($payment->receipt_url) }}" 
+                                               target="_blank"
+                                               class="text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                                                <i class='bx bx-file'></i>
+                                                View Proof
+                                            </a>
+                                        @endif
+                                        <button class="text-gray-600 hover:text-gray-800">
+                                            <i class='bx bx-bell'></i>
+                                        </button>
+                                        <button class="text-gray-600 hover:text-gray-800">
+                                            <i class='bx bx-download'></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -249,5 +277,13 @@
     </div>
 </div>
 
-@include('finance.modals.addPaymentModal')
+<!-- Payment Modal -->
+@include('finance.modals.addPaymentModal', [
+    'member' => $member,
+    'quarter' => $quarter,
+    'year' => $currentYear,
+    'payment' => $payment,
+    'status' => $status,
+    'statusClass' => $statusClass
+])
 @endsection 

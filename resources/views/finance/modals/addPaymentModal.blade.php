@@ -1,112 +1,171 @@
 @php
     $currentYear = now()->year;
+    $paymentMethods = [
+        'cash' => 'Cash',
+        'bank_transfer' => 'Bank Transfer',
+        'credit_card' => 'Credit Card',
+        'paypal' => 'PayPal'
+    ];
+
+    $payment = $member->payments()
+        ->where('payment_period', $quarter)
+        ->where('payment_year', $currentYear)
+        ->first();
+
+    // Set default modalId if not provided
+    $modalId = $modalId ?? 'addPaymentModal';
 @endphp
 
-<dialog id="addPaymentModal" class="modal p-0">
-    <div class="modal-box max-w-lg p-0 overflow-hidden rounded-xl bg-white border border-slate-200 transition-all max-h-[90vh] flex flex-col mx-4 sm:mx-auto">
-        
+<dialog id="{{ $modalId }}" class="modal">
+    <div class="modal-box max-w-lg p-0 overflow-hidden rounded-xl bg-white border border-slate-200">
         <!-- Header -->
-        <header class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex-shrink-0">
+        <header class="px-6 py-4 border-b border-slate-200 bg-slate-50">
             <div class="flex items-center justify-between">
                 <div>
                     <h3 class="text-2xl font-bold text-slate-900 tracking-tight">
-                        <span id="modal_quarter_display"></span> Payment - <span id="modal_member_name"></span>
+                        {{ $quarter }} {{ $year }} Payment
                     </h3>
                     <p class="text-sm text-slate-600 mt-1">
-                        Status: <span id="modal_payment_status" class="font-medium"></span>
+                        Member: {{ $member->user->name }}
                     </p>
                 </div>
-                <x-x-button></x-x-button>
+                <form method="dialog">
+                    <button class="btn btn-ghost btn-sm">
+                        <i class='bx bx-x text-xl'></i>
+                    </button>
+                </form>
             </div>
         </header>
 
-        <!-- Main Content - Scrollable -->
-        <form action="{{ route('finance.membership.payments.store') }}" method="POST" class="flex flex-col flex-1 min-h-0">
-            @csrf
-            <input type="hidden" name="member_id" id="modal_member_id">
-            <input type="hidden" name="payment_period" id="modal_quarter">
-            <input type="hidden" name="payment_id" id="modal_payment_id">
-            <input type="hidden" name="payment_date" id="modal_payment_date" value="{{ now()->format('Y-m-d H:i:s') }}">
-            
-            <div class="p-6 space-y-6 overflow-y-auto flex-1">
-                <!-- Payment Details -->
+        <!-- Main Content -->
+        <div class="p-6 space-y-6">
+            @if($payment)
+                <!-- Display Payment Details -->
                 <div class="space-y-4">
                     <div class="border-b border-slate-200 pb-4">
                         <label class="block font-semibold text-slate-900">Payment Details</label>
                     </div>
 
                     <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-4">
-                        <!-- Amount -->
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Amount</label>
-                            <input type="number" step="0.01" name="amount" id="amount" required
-                                   class="w-full bg-white border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                                   placeholder="Enter payment amount">
-                        </div>
-
-                        <!-- Payment Date (Display Only) -->
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Payment Date</label>
-                            <div class="w-full bg-white border border-slate-300 rounded-lg p-3 text-sm text-slate-600">
-                                {{ now()->format('F j, Y g:i A') }}
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Status</label>
+                            <div class="w-full bg-white border border-slate-300 rounded-lg p-3 text-sm">
+                                <span class="font-medium {{ $statusClass }}">
+                                    {{ ucfirst($payment->payment_status) }}
+                                </span>
                             </div>
                         </div>
 
-                        <!-- Payment Method -->
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Amount</label>
+                            <div class="w-full bg-white border border-slate-300 rounded-lg p-3 text-sm">
+                                ${{ number_format($payment->amount, 2) }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Payment Date</label>
+                            <div class="w-full bg-white border border-slate-300 rounded-lg p-3 text-sm">
+                                {{ $payment->payment_date->format('F j, Y') }}
+                            </div>
+                        </div>
+
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Payment Method</label>
+                            <div class="w-full bg-white border border-slate-300 rounded-lg p-3 text-sm">
+                                {{ $paymentMethods[$payment->payment_method] ?? ucfirst(str_replace('_', ' ', $payment->payment_method)) }}
+                            </div>
+                        </div>
+
+                        @if($payment->receipt_url)
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Receipt</label>
+                                <div class="w-full bg-white border border-slate-300 rounded-lg p-3">
+                                    <a href="{{ Storage::url($payment->receipt_url) }}" 
+                                       target="_blank"
+                                       class="text-blue-600 hover:text-blue-800 flex items-center gap-1">
+                                        <i class='bx bx-file'></i>
+                                        View Receipt
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if($payment->notes)
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Notes</label>
+                                <div class="w-full bg-white border border-slate-300 rounded-lg p-3 text-sm">
+                                    {{ $payment->notes }}
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @else
+                <!-- Add New Payment Form -->
+                <form action="{{ route('finance.membership.payments.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="member_id" value="{{ $member->id }}">
+                    <input type="hidden" name="payment_period" value="{{ $quarter }}">
+                    <input type="hidden" name="payment_year" value="{{ $year }}">
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label for="amount" class="block text-sm font-medium text-slate-700 mb-1">Amount</label>
+                            <input type="number" step="0.01" name="amount" id="amount" required
+                                   class="input input-bordered w-full"
+                                   placeholder="Enter payment amount">
+                        </div>
+
+                        <div>
+                            <label for="payment_date" class="block text-sm font-medium text-slate-700 mb-1">Payment Date</label>
+                            <input type="date" name="payment_date" id="payment_date" required
+                                   class="input input-bordered w-full"
+                                   value="{{ now()->format('Y-m-d') }}">
+                        </div>
+
+                        <div>
+                            <label for="payment_method" class="block text-sm font-medium text-slate-700 mb-1">Payment Method</label>
                             <select name="payment_method" id="payment_method" required
-                                    class="w-full bg-white border border-slate-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                                    class="select select-bordered w-full">
                                 <option value="">Select payment method</option>
-                                <option value="cash">Cash</option>
-                                <option value="bank_transfer">Bank Transfer</option>
-                                <option value="credit_card">Credit Card</option>
-                                <option value="paypal">PayPal</option>
+                                @foreach($paymentMethods as $value => $label)
+                                    <option value="{{ $value }}">{{ $label }}</option>
+                                @endforeach
                             </select>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Receipt/Proof -->
-                <div class="space-y-4">
-                    <div class="border-b border-slate-200 pb-4">
-                        <label class="block font-semibold text-slate-900">Receipt/Proof</label>
-                    </div>
+                        <div>
+                            <label for="receipt" class="block text-sm font-medium text-slate-700 mb-1">Receipt/Proof</label>
+                            <input type="file" name="receipt" id="receipt" accept="image/*,.pdf"
+                                   class="file-input file-input-bordered w-full">
+                            <p class="text-xs text-slate-500 mt-2">Upload receipt or proof of payment (image or PDF)</p>
+                        </div>
 
-                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
-                        <input type="file" name="receipt" id="receipt" accept="image/*,.pdf"
-                               class="w-full text-sm text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 file:transition-colors file:duration-200">
-                        <p class="text-xs text-slate-500 mt-2">Upload receipt or proof of payment (image or PDF)</p>
-                    </div>
-                </div>
+                        <div>
+                            <label for="notes" class="block text-sm font-medium text-slate-700 mb-1">Notes</label>
+                            <textarea name="notes" id="notes" rows="3"
+                                      class="textarea textarea-bordered w-full"
+                                      placeholder="Add any additional notes about the payment"></textarea>
+                        </div>
 
-                <!-- Notes -->
-                <div class="space-y-4">
-                    <div class="border-b border-slate-200 pb-4">
-                        <label class="block font-semibold text-slate-900">Notes</label>
+                        <div class="flex justify-end gap-3">
+                            <form method="dialog">
+                                <button type="button"
+                                        class="btn btn-ghost">
+                                    Cancel
+                                </button>
+                            </form>
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                <i class='bx bx-save'></i>
+                                Save Payment
+                            </button>
+                        </div>
                     </div>
-
-                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
-                        <textarea name="notes" id="notes" rows="3"
-                                  class="w-full bg-white border border-slate-300 rounded-lg p-3 text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                                  placeholder="Add any additional notes about the payment"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Footer - Always Visible -->
-            <footer class="border-t border-slate-200 px-6 py-4 bg-slate-50 flex justify-end gap-3 flex-shrink-0">
-                <button type="button" onclick="document.getElementById('addPaymentModal').close()"
-                        class="px-6 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors duration-200">
-                    Cancel
-                </button>
-                <button type="submit"
-                        class="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors duration-200 flex items-center gap-2">
-                    <i class='bx bx-save'></i>
-                    Save Payment
-                </button>
-            </footer>
-        </form>
+                </form>
+            @endif
+        </div>
     </div>
 </dialog>
 
