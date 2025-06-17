@@ -189,7 +189,7 @@
                                 class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('finance.membership.payments*') ? 'active' : '' }}"
                                 data-tooltip="Membership Payments">
                                 <i class="bx bx-credit-card w-5 text-center flex-shrink-0"></i>
-                                <span class="ml-3 sidebar-content text-sm">Membership Payments</span>
+                                <span class="ml-3 sidebar-content text-sm">Membership</span>
                             </a>
                         </li>
                     </ul>
@@ -336,6 +336,33 @@
 
     <!-- Main Content -->
     <div id="mainContent" class="main-content pt-16">
+        <div class="container mx-auto px-4 py-4">
+            <x-breadcrumb :items="[
+        ['label' => 'Dashboard', 'url' => route('dashboard')],
+        ...(request()->routeIs('content.*') ? [
+            ['label' => 'Content Management', 'url' => route('content.content_view')],
+            ...(request()->routeIs('content.create') ? [['label' => 'Create Content']] : []),
+            ...(request()->routeIs('content.edit') ? [['label' => 'Edit Content']] : []),
+        ] : []),
+        ...(request()->routeIs('programs.*') ? [
+            ['label' => 'Programs', 'url' => route('programs.index')],
+            ...(request()->routeIs('programs.create') ? [['label' => 'Create Program']] : []),
+            ...(request()->routeIs('programs.edit') ? [['label' => 'Edit Program']] : []),
+        ] : []),
+        ...(request()->routeIs('volunteers.*') ? [
+            ['label' => 'Volunteers', 'url' => route('volunteers.index')],
+        ] : []),
+        ...(request()->routeIs('roles.*') ? [
+            ['label' => 'Role Management', 'url' => route('roles.index')],
+        ] : []),
+        ...(request()->routeIs('finance.*') ? [
+            ['label' => 'Finance', 'url' => route('finance.index')],
+            ...(request()->routeIs('finance.donations') ? [['label' => 'Donations']] : []),
+            ...(request()->routeIs('finance.membership.payments') ? [['label' => 'Membership Payments']] : []),
+            ...(request()->routeIs('finance.members') ? [['label' => 'Members']] : []),
+        ] : []),
+    ]" />
+        </div>
         @yield('content')
     </div>
 
@@ -441,14 +468,14 @@
             background: transparent;
             border-radius: 3px;
         }
-        
+
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 3px;
             border: 2px solid transparent;
             background-clip: padding-box;
         }
-        
+
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
             border: 2px solid transparent;

@@ -8,7 +8,7 @@
             <a href="{{ route('finance.donations') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
                 Manage Donations
             </a>
-            <a href="{{ route('finance.membership') }}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+            <a href="{{ route('finance.membership.payments') }}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
                 Membership Payments
             </a>
             <a href="{{ route('finance.members') }}" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg">

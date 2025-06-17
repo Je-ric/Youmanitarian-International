@@ -104,7 +104,6 @@
                     <span class="badge badge-success">Active</span>
                 </td>
             </tr>
-            {{-- More rows... --}}
         </x-table>
 
         <x-alert type="error" icon="bx bx-task" message="You cannot leave this program because you have assigned tasks." />
