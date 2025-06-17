@@ -220,16 +220,19 @@ Route::middleware(['auth'])->group(function () {
 
 // Finance Routes
 Route::prefix('finance')->group(function () {
+    // Finance Dashboard
     Route::get('/', [FinanceController::class, 'index'])->name('finance.index');
+    
+    // Donations Management
     Route::get('/donations', [FinanceController::class, 'donations'])->name('finance.donations');
     Route::patch('/donations/{donation}/status', [FinanceController::class, 'updateDonationStatus'])->name('finance.donations.status');
 
-    // Membership Routes
-    Route::get('/membership', [MembershipController::class, 'index'])->name('finance.membership');
-    Route::post('/membership', [MembershipController::class, 'store'])->name('finance.membership.store');
-    Route::patch('/membership/{payment}/status', [MembershipController::class, 'updateStatus'])->name('finance.membership.status');
+    // Membership Payments Management
+    Route::get('/membership-payments', [MembershipController::class, 'index'])->name('finance.membership.payments');
+    Route::post('/membership-payments', [MembershipController::class, 'store'])->name('finance.membership.payments.store');
+    Route::patch('/membership-payments/{payment}/status', [MembershipController::class, 'updateStatus'])->name('finance.membership.payments.status');
 
-    // Member Routes
+    // Member Management
     Route::get('/members', [MemberController::class, 'index'])->name('finance.members');
     Route::post('/members', [MemberController::class, 'store'])->name('finance.members.store');
     Route::patch('/members/{member}/status', [MemberController::class, 'updateStatus'])->name('finance.members.status');

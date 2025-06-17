@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Member List</h1>
+        <h1 class="text-3xl font-bold text-gray-800">Member Management</h1>
         <div class="flex space-x-4">
             <button onclick="document.getElementById('addMemberModal').classList.remove('hidden')" 
                     class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
@@ -18,6 +18,18 @@
     @if(session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
             <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('error') }}</span>
+        </div>
+    @endif
+
+    @if(session('warning'))
+        <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('warning') }}</span>
         </div>
     @endif
 
@@ -45,12 +57,13 @@
                                 <div class="text-sm text-gray-900">{{ ucfirst(str_replace('_', ' ', $member->membership_type)) }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ $member->start_date->format('M d, Y') }}</div>
+                                <div class="text-sm text-gray-900">{{ $member->start_date ? $member->start_date->format('M d, Y') : 'N/A' }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    {{ $member->membership_status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    {{ ucfirst($member->membership_status) }}
+                                    {{ $member->membership_status === 'active' ? 'bg-green-100 text-green-800' : 
+                                       ($member->invitation_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                    {{ $member->invitation_status === 'pending' ? 'Pending Invitation' : ucfirst($member->membership_status) }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -61,11 +74,31 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <div class="flex space-x-2">
-                                    @if($member->membership_status === 'inactive')
+                                    @if($member->invitation_status === 'pending')
                                         <form action="{{ route('finance.members.resend-invitation', $member) }}" method="POST" class="inline">
                                             @csrf
                                             <button type="submit" class="text-indigo-600 hover:text-indigo-900">
                                                 <i class='bx bx-refresh'></i> Resend Invitation
+                                            </button>
+                                        </form>
+                                    @endif
+                                    @if($member->membership_status === 'inactive' && $member->invitation_status !== 'pending')
+                                        <form action="{{ route('finance.members.status', $member) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="membership_status" value="active">
+                                            <button type="submit" class="text-green-600 hover:text-green-900">
+                                                <i class='bx bx-check'></i> Activate
+                                            </button>
+                                        </form>
+                                    @endif
+                                    @if($member->membership_status === 'active')
+                                        <form action="{{ route('finance.members.status', $member) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="membership_status" value="inactive">
+                                            <button type="submit" class="text-red-600 hover:text-red-900">
+                                                <i class='bx bx-x'></i> Deactivate
                                             </button>
                                         </form>
                                     @endif
@@ -149,4 +182,4 @@
         </div>
     </div>
 </div>
-@endsection
+@endsection 

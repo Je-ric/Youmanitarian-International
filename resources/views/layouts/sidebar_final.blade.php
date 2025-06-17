@@ -185,11 +185,11 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('finance.membership') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('finance.membership') ? 'active' : '' }}"
+                            <a href="{{ route('finance.membership.payments') }}"
+                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('finance.membership.payments*') ? 'active' : '' }}"
                                 data-tooltip="Membership Payments">
                                 <i class="bx bx-credit-card w-5 text-center flex-shrink-0"></i>
-                                <span class="ml-3 sidebar-content text-sm">Memberships</span>
+                                <span class="ml-3 sidebar-content text-sm">Membership Payments</span>
                             </a>
                         </li>
                     </ul>

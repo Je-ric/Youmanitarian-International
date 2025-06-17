@@ -21,6 +21,12 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('error') }}</span>
+        </div>
+    @endif
+
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
@@ -40,15 +46,7 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-gray-900">{{ $member->user->name }}</div>
-                                <div class="text-sm text-gray-500">
-                                    @if($member->isActive())
-                                        <span class="text-green-600">Active Member</span>
-                                    @elseif($member->isInvitationPending())
-                                        <span class="text-yellow-600">Pending Invitation</span>
-                                    @else
-                                        <span class="text-gray-600">Inactive Member</span>
-                                    @endif
-                                </div>
+                                <div class="text-sm text-gray-500">{{ $member->user->email }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-900">{{ ucfirst($member->membership_type) }}</div>
@@ -95,23 +93,16 @@
                                 </td>
                             @endforeach
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                @if($member->isActive())
-                                    <button onclick="showAddPaymentModal('{{ $member->id }}')" 
-                                            class="text-indigo-600 hover:text-indigo-900">
-                                        Add Payment
-                                    </button>
-                                @elseif($member->isInvitationPending())
-                                    <button onclick="resendInvitation('{{ $member->id }}')" 
-                                            class="text-yellow-600 hover:text-yellow-900">
-                                        Resend Invitation
-                                    </button>
-                                @endif
+                                <button onclick="showAddPaymentModal('{{ $member->id }}')" 
+                                        class="text-indigo-600 hover:text-indigo-900">
+                                    Add Payment
+                                </button>
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="7" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                No members found
+                                No active members found
                             </td>
                         </tr>
                     @endforelse
@@ -129,7 +120,7 @@
     <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <div class="mt-3">
             <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Add New Payment</h3>
-            <form action="{{ route('finance.membership.store') }}" method="POST">
+            <form action="{{ route('finance.membership.payments.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="member_id" id="modal_member_id">
                 <div class="mb-4">
@@ -194,12 +185,6 @@ function showAddPaymentModal(memberId) {
     document.getElementById('modal_member_id').value = memberId;
     document.getElementById('addPaymentModal').classList.remove('hidden');
 }
-
-function resendInvitation(memberId) {
-    if (confirm('Are you sure you want to resend the invitation?')) {
-        window.location.href = `/members/${memberId}/resend-invitation`;
-    }
-}
 </script>
 @endpush
-@endsection
+@endsection 

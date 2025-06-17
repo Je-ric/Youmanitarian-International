@@ -14,10 +14,11 @@ class MembershipController extends Controller
         $members = Member::with(['user', 'payments' => function($query) {
             $query->where('payment_year', now()->year);
         }])
+        ->where('membership_status', 'active')
         ->orderBy('created_at', 'desc')
         ->paginate(10);
 
-        return view('finance.membership', compact('members'));
+        return view('finance.membership_payments', compact('members'));
     }
 
     public function store(Request $request)
@@ -36,10 +37,7 @@ class MembershipController extends Controller
 
             if (!$member->isActive()) {
                 return redirect()->back()
-                    ->with('toast', [
-                        'type' => 'error',
-                        'message' => 'Cannot add payment for inactive member.'
-                    ]);
+                    ->with('error', 'Cannot add payment for inactive member.');
             }
 
             // Check if payment already exists for this period
@@ -50,10 +48,7 @@ class MembershipController extends Controller
 
             if ($existingPayment) {
                 return redirect()->back()
-                    ->with('toast', [
-                        'type' => 'error',
-                        'message' => 'Payment already exists for this period.'
-                    ]);
+                    ->with('error', 'Payment already exists for this period.');
             }
 
             $payment = $member->payments()->create([
@@ -72,10 +67,7 @@ class MembershipController extends Controller
             ]);
 
             return redirect()->back()
-                ->with('toast', [
-                    'type' => 'success',
-                    'message' => 'Payment added successfully.'
-                ]);
+                ->with('success', 'Payment added successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to create membership payment', [
                 'error' => $e->getMessage(),
@@ -83,10 +75,7 @@ class MembershipController extends Controller
             ]);
 
             return redirect()->back()
-                ->with('toast', [
-                    'type' => 'error',
-                    'message' => 'Failed to add payment. Please try again.'
-                ]);
+                ->with('error', 'Failed to add payment. Please try again.');
         }
     }
 
@@ -107,10 +96,7 @@ class MembershipController extends Controller
             ]);
 
             return redirect()->back()
-                ->with('toast', [
-                    'type' => 'success',
-                    'message' => 'Payment status updated successfully.'
-                ]);
+                ->with('success', 'Payment status updated successfully.');
         } catch (\Exception $e) {
             Log::error('Failed to update payment status', [
                 'error' => $e->getMessage(),
@@ -118,10 +104,7 @@ class MembershipController extends Controller
             ]);
 
             return redirect()->back()
-                ->with('toast', [
-                    'type' => 'error',
-                    'message' => 'Failed to update payment status. Please try again.'
-                ]);
+                ->with('error', 'Failed to update payment status. Please try again.');
         }
     }
 }
