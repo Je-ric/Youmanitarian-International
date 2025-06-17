@@ -92,7 +92,7 @@
                                 <x-alert type="success" icon="bx bx-check-circle" message="You are already joined in this program." />
                                 
                                 @if($program->progress_status === 'incoming' && !$hasTasks)
-                                    <form action="{{ route('programs.leave', [$program->id, $volunteer->id]) }}" method="POST"
+                                    <form action="{{ route('programs.leaveProgram', [$program->id, $volunteer->id]) }}" method="POST"
                                         onsubmit="return confirm('Are you sure you want to leave this program?');">
                                         @csrf
                                         @method('DELETE')

@@ -53,7 +53,6 @@
 
                             @if(Auth::user()->hasRole('Volunteer'))
                                 @if($program->volunteers->contains(Auth::user()->volunteer))
-                                    <!-- View Log Button (For joined programs) -->
                                     <x-button href="{{ route('programs.view', $program) }}" variant="success"
                                         class="tooltip" data-tip="View Log"
                                         aria-label="View Log for {{ $program->title }}">

@@ -123,12 +123,12 @@ Route::get('/chatbot', [WebsiteController::class, 'chatbot'])->name('chatbot.ind
 
 // Program CRUD
 Route::middleware(['auth'])->group(function () {
-    Route::get('/programs-list', [ProgramController::class, 'index'])->name('programs.index'); // View all programs
-    Route::get('/programs/create', [ProgramController::class, 'create'])->name('programs.create'); // Form to create
-    Route::post('/programs', [ProgramController::class, 'store'])->name('programs.store'); // Save new program
-    Route::get('/programs/{program}/edit', [ProgramController::class, 'edit'])->name('programs.edit'); // Open Edit form
-    Route::put('/programs/{program}', [ProgramController::class, 'update'])->name('programs.update'); // Update program
-    Route::delete('/programs/{program}', [ProgramController::class, 'destroy'])->name('programs.destroy'); // Delete
+    Route::get('/programs-list', [ProgramController::class, 'gotoProgramsList'])->name('programs.index'); // View all programs
+    Route::get('/programs/create', [ProgramController::class, 'gotoCreateProgram'])->name('programs.create'); // Form to create
+    Route::post('/programs', [ProgramController::class, 'storeProgram'])->name('programs.store'); // Save new program
+    Route::get('/programs/{program}/edit', [ProgramController::class, 'gotoEditProgram'])->name('programs.edit'); // Open Edit form
+    Route::put('/programs/{program}', [ProgramController::class, 'updateProgram'])->name('programs.update'); // Update program
+    Route::delete('/programs/{program}', [ProgramController::class, 'deleteProgram'])->name('programs.destroy'); // Delete
     
     Route::get('/program/{program}', [ProgramController::class, 'showDetailsModal'])->name('programs.show');
 });
@@ -138,7 +138,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/programs/{program}/volunteers/manage', [ProgramVolunteerController::class, 'manageVolunteers'])->name('programs.manage_volunteers');
+    Route::get('/programs/{program}/volunteers/manage', [ProgramVolunteerController::class, 'gotoManageVolunteers'])->name('programs.manage_volunteers');
     Route::get('/programs/{program}/volunteers/{volunteer}/logs', [ProgramVolunteerController::class, 'getVolunteerLogs'])->name('programs.volunteer_logs');
 
     // Combined volunteer management route
@@ -148,8 +148,8 @@ Route::middleware(['auth'])->group(function () {
     // Volunteer application routes
     Route::get('/volunteer-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
     Route::post('/volunteer-application', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
-    Route::post('/programs/{program}/join', [ProgramVolunteerController::class, 'join'])->name('programs.join');
-    Route::delete('/programs/{program}/leave/{volunteer}', [ProgramVolunteerController::class, 'leave'])->name('programs.leave');
+    Route::post('/programs/{program}/join', [ProgramVolunteerController::class, 'joinProgram'])->name('programs.join');
+    Route::delete('/programs/{program}/leave/{volunteer}', [ProgramVolunteerController::class, 'leaveProgram'])->name('programs.leave');
 });
 
 
@@ -174,14 +174,14 @@ Route::middleware(['auth'])->group(function () {
 // =================== PROGRAM FEEDBACK ===================
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/programs/{program}/feedback', [ProgramFeedbackController::class, 'submitFeedback'])->name('programs.feedback.submit');  // Submit feedback for a program (modal/form)
+    Route::post('/programs/{program}/feedback', [ProgramFeedbackController::class, 'submitVolunteerFeedback'])->name('programs.feedback.submit');  // Submit feedback for a program (modal/form)
 });
+
 // Show the manual attendance modal/form
 Route::get('/programs/{program}/attendance/manual-entry', [VolunteerAttendanceController::class, 'showManualEntryForm'])->name('attendance.manualEntryForm');
 
 // Handle manual attendance entry submission
 Route::post('/programs/{program}/attendance/manual-entry', [VolunteerAttendanceController::class, 'manualEntry'])->name('attendance.manualEntry');
-
 
 Route::post('/programs/{program}/guest-feedback', [ProgramFeedbackController::class, 'submitGuestFeedback'])
     ->name('programs.feedback.guest.submit');
@@ -191,24 +191,24 @@ Route::post('/programs/{program}/guest-feedback', [ProgramFeedbackController::cl
 // Program tasks CRUD (programs/tasks/index.blade.php, etc.)
 Route::prefix('programs/{program}/tasks')->name('programs.tasks.')->group(function () {
     Route::get('/', [ProgramTasksController::class, 'index'])->name('index'); // List tasks for a program
-    Route::post('/', [ProgramTasksController::class, 'store'])->name('store'); 
-    Route::delete('{task}', [ProgramTasksController::class, 'destroy'])->name('destroy'); 
-    Route::put('{task}', [ProgramTasksController::class, 'update'])->name('update');
+    Route::post('/', [ProgramTasksController::class, 'storeTask'])->name('store'); 
+    Route::delete('{task}', [ProgramTasksController::class, 'deleteTask'])->name('destroy'); 
+    Route::put('{task}', [ProgramTasksController::class, 'updateTask'])->name('update');
     Route::put('{task}/assignments/{assignment}/status', [ProgramTasksController::class, 'updateAssignmentStatus'])->name('assignments.update-status');
-    Route::delete('{task}/assignments/{assignment}', [ProgramTasksController::class, 'removeAssignment'])->name('assignments.destroy');
+    Route::delete('{task}/assignments/{assignment}', [ProgramTasksController::class, 'removeVolunteerFromTask'])->name('assignments.destroy');
 });
 // Assign a volunteer to a task (action)
-Route::post('/programs/{program}/tasks/{task}/assign', [ProgramTasksController::class, 'assignVolunteer'])->name('programs.tasks.assign');
+Route::post('/programs/{program}/tasks/{task}/assign', [ProgramTasksController::class, 'assignVolunteerToTask'])->name('programs.tasks.assign');
 
 // Program Chat Routes
 Route::middleware(['auth'])->group(function () {
     // Show all program chats
-    Route::get('/programs/chats', [ProgramChatController::class, 'index'])->name('program.chats.index');
+    Route::get('/programs/chats', [ProgramChatController::class, 'gotoChatsList'])->name('program.chats.index');
     // Show specific program chat
-    Route::get('/programs/{program}/chats', [ProgramChatController::class, 'show'])->name('program.chats.show');
-    Route::post('/programs/{program}/chats', [ProgramChatController::class, 'store'])->name('program.chats.store');
-    Route::put('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'update'])->name('program.chats.update');
-    Route::delete('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'destroy'])->name('program.chats.destroy');
+    Route::get('/programs/{program}/chats', [ProgramChatController::class, 'gotoProgramChat'])->name('program.chats.show');
+    Route::post('/programs/{program}/chats', [ProgramChatController::class, 'storeChatMessage'])->name('program.chats.store');
+    Route::put('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'updateChatMessage'])->name('program.chats.update');
+    Route::delete('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'deleteChatMessage'])->name('program.chats.destroy');
 });
 
 Route::middleware(['auth'])->group(function () {

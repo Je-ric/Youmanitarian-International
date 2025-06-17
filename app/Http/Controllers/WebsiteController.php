@@ -17,11 +17,7 @@ class WebsiteController extends Controller
         $featuredPost = Content::where('status', 'published')
             ->orderBy('created_at', 'desc')
             ->first();
-
-        // $latestPosts = Content::where('status', 'published')
-        //     ->orderBy('created_at', 'desc')
-        //     ->limit(6)
-        //     ->get();
+            
         $latestPosts = Content::where('status', 'published')
             ->where('id', '!=', $featuredPost->id)
             ->orderBy('created_at', 'desc')

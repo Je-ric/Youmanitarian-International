@@ -16,7 +16,7 @@ class ProgramVolunteerController extends Controller
     // viewFeedback.blade.php (partial)
     //      feedbackItem.blade.php (partial)
     // _form.blade.php (partial) 
-    public function manageVolunteers(Program $program)
+    public function gotoManageVolunteers(Program $program)
     {
         $approvedVolunteers = $program->volunteers()->where('program_volunteers.status', 'approved')->get();
         $pendingVolunteers = $program->volunteers()->where('program_volunteers.status', 'pending')->get();
@@ -116,7 +116,7 @@ class ProgramVolunteerController extends Controller
 
     // index.blade.php (main)
     // view-modal.blade.php (component)
-    public function join(Program $program)
+    public function joinProgram(Program $program)
     {
         $user = Auth::user();
         $volunteer = $user->volunteer;
@@ -149,7 +149,7 @@ class ProgramVolunteerController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    public function leave(Request $request, Program $program, Volunteer $volunteer)
+    public function leaveProgram(Request $request, Program $program, Volunteer $volunteer)
     {
         // Check if the volunteer has any task assignments for this program
         $hasTasks = $volunteer->taskAssignments()

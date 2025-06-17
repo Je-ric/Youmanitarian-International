@@ -12,7 +12,7 @@ class ProgramController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request)
+    public function gotoProgramsList(Request $request)
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
@@ -42,48 +42,23 @@ class ProgramController extends Controller
 
         return view('programs.index', compact('allPrograms', 'joinedPrograms', 'myPrograms'));
     }
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
 
     public function showDetailsModal(Program $program)
     {
         return view('programs.show', compact('program'));
     }
 
-
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
-
-
-
-    public function create()
+    public function gotoCreateProgram()
     {
         return view('programs.create');
     }
 
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
-
-
-
-    public function edit(Program $program)
+    public function gotoEditProgram(Program $program)
     {
         return view('programs.edit', compact('program'));
     }
 
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
-
-
-
-    public function store(Request $request)
+    public function storeProgram(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
@@ -117,15 +92,8 @@ class ProgramController extends Controller
         return redirect()->route('programs.index')->with('success', 'Program created successfully.');
     }
 
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
-
-
-    public function update(Request $request, Program $program)
+    public function updateProgram(Request $request, Program $program)
     {
-
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required',
@@ -135,8 +103,6 @@ class ProgramController extends Controller
             'location' => 'nullable|string|max:255',
             'volunteer_count' => 'nullable|integer|min:0',
         ]);
-
-        // $program->update($request->all()); //risky
 
         $program->update([
             'title' => $request->title,
@@ -148,21 +114,12 @@ class ProgramController extends Controller
             'volunteer_count' => $request->volunteer_count ?? 0,
         ]);
 
-
-        // return redirect()->route('programs.index')->with('success', 'Program updated successfully.');
         return redirect()
             ->route('programs.manage_volunteers', $program->id)
             ->with('success', 'Program updated successfully.');
     }
 
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
-
-
-
-    public function destroy(Program $program)
+    public function deleteProgram(Program $program)
     {
         $program->delete();
 

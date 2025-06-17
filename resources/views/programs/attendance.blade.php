@@ -239,7 +239,7 @@
 
                     @elseif($isAssigned)
                         @if($canClockIn)
-                            <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Clocking In...';">
+                            <form action="{{ route('programs.clockIn', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Clocking In...';">
                                 @csrf
                                 <x-button type="submit" variant="clock_in">
                                     <i class='bx bx-log-in-circle'></i> Clock In
@@ -251,9 +251,13 @@
                             </x-button>
 
                         @elseif($canClockOut)
-                            <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="if(!confirm('Are you sure you want to clock out?')) return false; this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Clocking Out...';">
+                            <x-button variant="disabled" disabled>
+                                <i class='bx bx-log-in-circle'></i> Clock In (Already Clocked In)
+                            </x-button>
+
+                            <form action="{{ route('programs.clockOut', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Clocking Out...';">
                                 @csrf
-                                <x-button type="submit" variant="clock_in" class="w-full text-sm sm:text-base">
+                                <x-button type="submit" variant="clock_out">
                                     <i class='bx bx-log-out-circle'></i> Clock Out
                                 </x-button>
                             </form>
@@ -272,7 +276,7 @@
                         @endif
 
                     @else
-                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                             <div class="flex items-start gap-3">
                                 <i class='bx bx-error-circle text-red-500 mt-0.5'></i>
                                 <div class="text-sm text-red-700">

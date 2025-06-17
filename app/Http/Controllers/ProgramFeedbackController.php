@@ -12,7 +12,7 @@ class ProgramFeedbackController extends Controller
 
     // attendance.blade.php (main)
     // feedbackModal.blade.php (partial)
-    public function submitFeedback(Request $request, Program $program)
+    public function submitVolunteerFeedback(Request $request, Program $program)
     {
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',

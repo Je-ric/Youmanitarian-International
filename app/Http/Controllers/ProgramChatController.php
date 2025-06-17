@@ -14,7 +14,7 @@ class ProgramChatController extends Controller
     /**
      * Display the list of all program chats.
      */
-    public function index()
+    public function gotoChatsList()
     {
         // Get programs where user is either a volunteer or coordinator
         $programs = Program::where(function($query) {
@@ -31,7 +31,7 @@ class ProgramChatController extends Controller
     /**
      * Display the chat interface for a specific program.
      */
-    public function show(Program $program)
+    public function gotoProgramChat(Program $program)
     {
         // Check if user can access the program's chat
         if (!$this->canAccessProgramChat($program)) {
@@ -63,7 +63,7 @@ class ProgramChatController extends Controller
     /**
      * Store a new message
      */
-    public function store(Request $request, Program $program)
+    public function storeChatMessage(Request $request, Program $program)
     {
         if (!$this->canAccessProgramChat($program)) {
             return response()->json([
@@ -101,7 +101,7 @@ class ProgramChatController extends Controller
     /**
      * Update a message
      */
-    public function update(Request $request, Program $program, ProgramChat $chat)
+    public function updateChatMessage(Request $request, Program $program, ProgramChat $chat)
     {
         if ($chat->sender_id !== Auth::id()) {
             return response()->json([
@@ -140,7 +140,7 @@ class ProgramChatController extends Controller
     /**
      * Delete a message
      */
-    public function destroy(Program $program, ProgramChat $chat)
+    public function deleteChatMessage(Program $program, ProgramChat $chat)
     {
         if ($chat->sender_id !== Auth::id()) {
             return response()->json([

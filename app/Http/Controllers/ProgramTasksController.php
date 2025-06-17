@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class ProgramTasksController extends Controller
 {
     // Store a new task under the program
-    public function store(Request $request, Program $program)
+    public function storeTask(Request $request, Program $program)
     {
         $request->validate([
             'task_description' => 'required|string|max:1000',
@@ -26,7 +26,7 @@ class ProgramTasksController extends Controller
     }
 
     // Delete a task from the program
-    public function destroy(Program $program, ProgramTask $task)
+    public function deleteTask(Program $program, ProgramTask $task)
     {
         if ($task->program_id !== $program->id) {
             abort(403);
@@ -38,7 +38,7 @@ class ProgramTasksController extends Controller
     }
 
     // Update a task's description or status
-    public function update(Request $request, Program $program, ProgramTask $task)
+    public function updateTask(Request $request, Program $program, ProgramTask $task)
     {
         if ($task->program_id !== $program->id) {
             abort(403);
@@ -105,7 +105,7 @@ class ProgramTasksController extends Controller
     }
 
     // Assign a volunteer to a task
-    public function assignVolunteer(Request $request, Program $program, ProgramTask $task)
+    public function assignVolunteerToTask(Request $request, Program $program, ProgramTask $task)
     {
         if ($task->program_id !== $program->id) {
             abort(403);
@@ -135,7 +135,7 @@ class ProgramTasksController extends Controller
     }
 
     // Remove a volunteer from a task
-    public function removeAssignment(Program $program, ProgramTask $task, TaskAssignment $assignment)
+    public function removeVolunteerFromTask(Program $program, ProgramTask $task, TaskAssignment $assignment)
     {
         if ($task->program_id !== $program->id || $assignment->task_id !== $task->id) {
             abort(403);
