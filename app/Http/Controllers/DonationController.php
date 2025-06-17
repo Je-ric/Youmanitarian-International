@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Donation;
 use App\Models\MembershipPayment;
 
-class FinanceController extends Controller
+class DonationController extends Controller
 {
     public function index()
     {

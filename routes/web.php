@@ -4,13 +4,18 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RoleController;
 use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\WebsiteController;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\HeartReactController;
+use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\ContentViewController;
+use App\Http\Controllers\ProgramChatController;
 use App\Http\Controllers\ProgramTasksController;
 use App\Http\Controllers\ContentCommentController;
 use App\Http\Controllers\ContentRequestController;
@@ -19,11 +24,6 @@ use App\Http\Controllers\ProgramVolunteerController;
 use App\Http\Controllers\VolunteerApprovalController;
 use App\Http\Controllers\VolunteerAttendanceController;
 use App\Http\Controllers\VolunteerApplicationController;
-use App\Http\Controllers\ProgramChatController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\FinanceController;
-use App\Http\Controllers\MembershipController;
-use App\Http\Controllers\MemberController;
 
 // Route::middleware([
 //     'auth:sanctum',
@@ -221,11 +221,11 @@ Route::middleware(['auth'])->group(function () {
 // Finance Routes
 Route::prefix('finance')->group(function () {
     // Finance Dashboard
-    Route::get('/', [FinanceController::class, 'index'])->name('finance.index');
+    Route::get('/', [DonationController::class, 'index'])->name('finance.index');
     
     // Donations Management
-    Route::get('/donations', [FinanceController::class, 'donations'])->name('finance.donations');
-    Route::patch('/donations/{donation}/status', [FinanceController::class, 'updateDonationStatus'])->name('finance.donations.status');
+    Route::get('/donations', [DonationController::class, 'donations'])->name('finance.donations');
+    Route::patch('/donations/{donation}/status', [DonationController::class, 'updateDonationStatus'])->name('finance.donations.status');
 
     // Membership Payments Management
     Route::get('/membership-payments', [MembershipController::class, 'index'])->name('finance.membership.payments');
