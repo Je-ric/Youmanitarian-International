@@ -10,7 +10,7 @@ use App\Models\Volunteer;
 
 class VolunteerController extends Controller
 {
-    public function index()
+    public function gotoVolunteersList()
     {
         $applications = Volunteer::with('user')
             ->where('application_status', 'pending')
@@ -31,8 +31,7 @@ class VolunteerController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-
-    public function showDetails($id)
+    public function gotoVolunteerDetails($id)
     {
         //  volunteer with associated programs
         $volunteer = Volunteer::with('programs')->findOrFail($id);

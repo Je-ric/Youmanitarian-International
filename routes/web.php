@@ -142,8 +142,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/programs/{program}/volunteers/{volunteer}/logs', [ProgramVolunteerController::class, 'getVolunteerLogs'])->name('programs.volunteer_logs');
 
     // Combined volunteer management route
-    Route::get('/volunteers', [VolunteerController::class, 'index'])->name('volunteers.index');
-    Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'showDetails'])->name('volunteers.viewUser_details');
+    Route::get('/volunteers', [VolunteerController::class, 'gotoVolunteersList'])->name('volunteers.index');
+    Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'gotoVolunteerDetails'])->name('volunteers.viewUser_details');
 
     // Volunteer application routes
     Route::get('/volunteer-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
@@ -213,7 +213,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     // Role Management Routes
-    Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+    Route::get('/roles', [RoleController::class, 'gotoRolesList'])->name('roles.index');
     Route::get('/roles/assign', [RoleController::class, 'showAssignForm'])->name('roles.assign.form');
     Route::post('/roles/assign', [RoleController::class, 'assign'])->name('roles.assign');
 });

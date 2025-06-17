@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
-    public function index()
+    public function gotoRolesList()
     {
         $users = User::with('roles')->get();
         $roles = Role::all();
