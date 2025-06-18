@@ -2,24 +2,18 @@
     <div class="modal-box max-w-4xl w-full p-0 rounded-lg bg-white">
 
         <!-- Modal Header -->
-        <div class="px-4 sm:px-6 py-4 border-b border-gray-200 bg-gray-50">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-lg sm:text-xl font-semibold text-[#1a2235] flex items-center">
-                        <i class='bx bx-clipboard-check mr-2 text-[#ffb51b]'></i>
-                        Review Attendance
-                    </h3>
-                    <p class="text-sm text-gray-600 mt-1 flex items-center">
-                        <i class='bx bx-user mr-1'></i>
-                        {{ $volunteer->user->name }}
-                    </p>
-                </div>
-                <button type="button" class="text-gray-400 hover:text-gray-600 transition-colors p-1"
-                    onclick="document.getElementById('attendanceModal_{{ $volunteer->id }}').close()">
-                    <i class='bx bx-x text-2xl'></i>
-                </button>
+        <x-modal.header>
+            <div>
+                <h3 class="text-lg sm:text-xl font-semibold text-[#1a2235] flex items-center">
+                    <i class='bx bx-clipboard-check mr-2 text-[#ffb51b]'></i>
+                    Review Attendance
+                </h3>
+                <p class="text-sm text-gray-600 mt-1 flex items-center">
+                    <i class='bx bx-user mr-1'></i>
+                    {{ $volunteer->user->name }}
+                </p>
             </div>
-        </div>
+        </x-modal.header>
 
         <!-- Modal Body -->
         <div class="p-4 sm:p-6 max-h-[75vh] overflow-y-auto">
@@ -250,15 +244,9 @@
         </div>
 
         <!-- Modal Footer -->
-        <div class="px-4 sm:px-6 py-4 border-t border-gray-200 bg-gray-50">
-            <div class="flex justify-end">
-                <button type="button"
-                    class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-                    onclick="document.getElementById('attendanceModal_{{ $volunteer->id }}').close()">
-                    <i class='bx bx-x mr-2'></i> Close
-                </button>
-            </div>
-        </div>
+        <x-modal.footer>
+            <x-modal.close-button :modalId="'attendanceModal_' . $volunteer->id" text="Close" />
+        </x-modal.footer>
     </div>
 </dialog>
 

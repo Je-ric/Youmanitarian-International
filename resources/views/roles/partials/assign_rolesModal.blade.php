@@ -3,43 +3,33 @@
     <div class="modal-box max-w-2xl w-full p-0 rounded-lg bg-white">
         
         <!-- Modal Header -->
-        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <!-- User Avatar -->
-                    <div class="flex-shrink-0">
-                        @if($user->profile_pic)
-                            <img class="w-10 h-10 rounded-full object-cover border-2 border-white" 
-                                 src="{{ $user->profile_pic }}" 
-                                 alt="{{ $user->name }}">
-                        @else
-                            <div class="w-10 h-10 rounded-full bg-[#1a2235] flex items-center justify-center">
-                                <span class="text-white font-medium text-sm">
-                                    {{ strtoupper(substr($user->name, 0, 1)) }}
-                                </span>
-                            </div>
-                        @endif
-                    </div>
-                    
-                    <!-- Header Text -->
-                    <div>
-                        <h3 class="text-lg font-semibold text-[#1a2235] flex items-center">
-                            <i class='bx bx-user-check mr-2 text-[#ffb51b]'></i>
-                            Assign Roles
-                        </h3>
-                        <p class="text-sm text-gray-600">{{ $user->name }}</p>
-                    </div>
+        <x-modal.header>
+            <div class="flex items-center gap-3">
+                <!-- User Avatar -->
+                <div class="flex-shrink-0">
+                    @if($user->profile_pic)
+                        <img class="w-10 h-10 rounded-full object-cover border-2 border-white" 
+                             src="{{ $user->profile_pic }}" 
+                             alt="{{ $user->name }}">
+                    @else
+                        <div class="w-10 h-10 rounded-full bg-[#1a2235] flex items-center justify-center">
+                            <span class="text-white font-medium text-sm">
+                                {{ strtoupper(substr($user->name, 0, 1)) }}
+                            </span>
+                        </div>
+                    @endif
                 </div>
                 
-                <!-- Close Button -->
-                <button 
-                    type="button"
-                    onclick="document.getElementById('assignRolesModal_{{ $user->id }}').close()" 
-                    class="text-gray-400 hover:text-gray-600 transition-colors p-1">
-                    <i class='bx bx-x text-2xl'></i>
-                </button>
+                <!-- Header Text -->
+                <div>
+                    <h3 class="text-lg font-semibold text-[#1a2235] flex items-center">
+                        <i class='bx bx-user-check mr-2 text-[#ffb51b]'></i>
+                        Assign Roles
+                    </h3>
+                    <p class="text-sm text-gray-600">{{ $user->name }}</p>
+                </div>
             </div>
-        </div>
+        </x-modal.header>
 
         <!-- Modal Body -->
         <div class="p-6 max-h-[70vh] overflow-y-auto">
@@ -157,23 +147,15 @@
         </div>
 
         <!-- Modal Footer -->
-        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
-            <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
-                <button 
-                    type="button" 
-                    onclick="document.getElementById('assignRolesModal_{{ $user->id }}').close()"
-                    class="w-full sm:w-auto px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-                    <i class='bx bx-x mr-2'></i>
-                    Cancel
-                </button>
-                <button 
-                    type="submit" 
-                    form="roleForm_{{ $user->id }}"
-                    class="w-full sm:w-auto px-4 py-2 bg-[#ffb51b] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors font-medium">
-                    <i class='bx bx-save mr-2'></i>
-                    Save Changes
-                </button>
-            </div>
-        </div>
+        <x-modal.footer>
+            <x-modal.close-button :modalId="'assignRolesModal_' . $user->id" text="Cancel" variant="cancel" />
+            <button 
+                type="submit" 
+                form="roleForm_{{ $user->id }}"
+                class="px-6 py-2 text-sm font-medium text-[#1a2235] bg-[#ffb51b] hover:bg-[#e6a319] rounded-lg transition-colors duration-200 flex items-center gap-2">
+                <i class='bx bx-save'></i>
+                Save Changes
+            </button>
+        </x-modal.footer>
     </div>
 </dialog>

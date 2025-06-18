@@ -1,6 +1,7 @@
 <dialog id="manualAttendanceModal_{{ $selectedVolunteer->id }}" class="modal">
     <div class="modal-box w-full max-w-2xl p-0 overflow-hidden rounded-lg bg-white border border-gray-100 shadow-lg transition-all max-h-[90vh] flex flex-col mx-4 sm:mx-auto">
-        <header class="px-6 py-4 border-b border-gray-100 flex-shrink-0 flex items-center justify-between">
+        
+        <x-modal.header>
             <div>
                 <h3 class="text-xl font-medium text-gray-900">
                     @if($attendance && $attendance->clock_in && !$attendance->clock_out)
@@ -12,8 +13,7 @@
                     @endif
                 </h3>
             </div>
-            <x-x-button></x-x-button>
-        </header>
+        </x-modal.header>
 
         <form method="POST" action="{{ route('attendance.manualEntry', $program->id) }}" class="flex flex-col flex-1 min-h-0">
             @csrf
@@ -73,21 +73,15 @@
                 </div>
             </div>
 
-            <footer class="flex flex-col sm:flex-row justify-end gap-3 px-6 py-4 bg-gray-50 border-t border-gray-100">
-                <button 
-                    type="button" 
-                    class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors border border-gray-300 rounded-md bg-white"
-                    onclick="document.getElementById('manualAttendanceModal_{{ $selectedVolunteer->id }}').close()"
-                >
-                    Cancel
-                </button>
+            <x-modal.footer>
+                <x-modal.close-button :modalId="'manualAttendanceModal_' . $selectedVolunteer->id" text="Cancel" />
                 <button 
                     type="submit" 
                     class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
                 >
                     Save Attendance
                 </button>
-            </footer>
+            </x-modal.footer>
         </form>
     </div>
     <form method="dialog" class="modal-backdrop bg-black/40 backdrop-blur-sm fixed inset-0 z-[-1]"></form>

@@ -6,14 +6,11 @@
         class="modal-box w-11/12 max-w-6xl p-0 overflow-hidden rounded-xl bg-white border border-slate-200 transition-all max-h-[90vh] flex flex-col">
 
         <!-- Header -->
-        <header class="px-6 py-4 border-b border-slate-200 bg-slate-50 flex-shrink-0">
-            <div class="flex items-center justify-between">
-                <h2 id="modal-title-{{ $program->id }}" class="text-2xl font-bold text-slate-900 tracking-tight">
-                    {{ $program->title }}
-                </h2>
-                <x-x-button></x-x-button>
-            </div>
-        </header>
+        <x-modal.header>
+            <h2 id="modal-title-{{ $program->id }}" class="text-2xl font-bold text-slate-900 tracking-tight">
+                {{ $program->title }}
+            </h2>
+        </x-modal.header>
 
         <!-- Main Content - Scrollable -->
         <div class="flex flex-col lg:flex-row flex-1 min-h-0 overflow-hidden">
@@ -92,7 +89,7 @@
                                 <x-alert type="success" icon="bx bx-check-circle" message="You are already joined in this program." />
                                 
                                 @if($program->progress_status === 'incoming' && !$hasTasks)
-                                    <form action="{{ route('programs.leaveProgram', [$program->id, $volunteer->id]) }}" method="POST"
+                                    <form action="{{ route('programs.leave', [$program->id, $volunteer->id]) }}" method="POST"
                                         onsubmit="return confirm('Are you sure you want to leave this program?');">
                                         @csrf
                                         @method('DELETE')
@@ -177,38 +174,14 @@
                     </div>
                 @endforeach
 
-                {{-- <!-- Progress -->
-                <div class="bg-white p-4 border border-slate-200 rounded-lg">
-                    <div class="flex items-center gap-2 text-slate-600 text-sm mb-2">
-                        <i class='bx bx-trending-up'></i>
-                        <span>Progress</span>
-                    </div>
-                    <div class="space-y-2">
-                        @php
-                        $currentVolunteers = $program->volunteers->count();
-                        $progressPercentage = ($currentVolunteers / $program->volunteer_count) * 100;
-                        @endphp
-                        <div class="flex justify-between text-sm">
-                            <span class="text-slate-700">{{ $currentVolunteers }} / {{ $program->volunteer_count }}
-                                volunteers</span>
-                            <span class="text-slate-600">{{ round($progressPercentage) }}%</span>
-                        </div>
-                        <div class="w-full bg-slate-200 rounded-full h-2">
-                            <div class="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                                style="width: {{ min($progressPercentage, 100) }}%"></div>
-                        </div>
-                    </div>
-                </div> --}}
+        
             </aside>
         </div>
 
         <!-- Footer - Always Visible -->
-        <footer class="border-t border-slate-200 px-6 py-4 bg-slate-50 flex justify-end flex-shrink-0">
-            <button onclick="document.getElementById('modal_{{ $program->id }}').close()"
-                class="px-6 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors duration-200">
-                Close
-            </button>
-        </footer>
+        <x-modal.footer>
+            <x-modal.close-button :modalId="'modal_' . $program->id" />
+        </x-modal.footer>
 
     </div>
 </dialog>

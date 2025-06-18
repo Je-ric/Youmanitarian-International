@@ -90,7 +90,15 @@
                                             <i class='bx bx-user text-primary text-xl'></i>
                                         </div>
                                         <div>
-                                            <h4 class="font-medium text-gray-900">{{ $feedback->participant->user->name }}</h4>
+                                            <h4 class="font-medium text-gray-900">
+                                                @if($feedback->user_type === 'guest')
+                                                    {{ $feedback->guest_name ?? 'Guest' }} <span class="text-xs text-gray-500">(Guest)</span>
+                                                @elseif(isset($feedback->volunteer->user->name))
+                                                    {{ $feedback->volunteer->user->name }}
+                                                @else
+                                                    Anonymous Volunteer
+                                                @endif
+                                            </h4>
                                             <p class="text-sm text-gray-500">{{ $feedback->created_at->format('M d, Y') }}</p>
                                         </div>
                                     </div>
@@ -98,8 +106,8 @@
                                         @for($i = 1; $i <= 5; $i++)
                                             <i class='bx {{ $i <= $feedback->rating ? 'bxs-star text-yellow-400' : 'bx-star text-gray-300' }}'></i>
                                         @endfor
-                </div>
-            </div>
+                                    </div>
+                                </div>
                                 <p class="mt-3 text-gray-600">{{ $feedback->feedback }}</p>
                             </div>
                         @empty
