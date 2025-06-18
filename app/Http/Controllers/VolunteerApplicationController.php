@@ -70,8 +70,8 @@ class VolunteerApplicationController extends Controller
         );
 
         return redirect()->route('dashboard')->with('toast', [
-            'type' => 'success',
-            'message' => 'Your application has been submitted and is pending review.'
+            'message' => 'Your application has been submitted and is pending review.',
+            'type' => 'success'
         ]);
     }
 }

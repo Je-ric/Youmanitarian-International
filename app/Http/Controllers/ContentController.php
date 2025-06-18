@@ -118,7 +118,10 @@ class ContentController extends Controller
             ContentRequest::where('id', $request->request_id)->update(['status' => 'completed']);
         }
 
-        return redirect()->route('content.content_view')->with('success', 'Content created successfully!');
+        return redirect()->route('content.content_view')->with('toast', [
+            'message' => 'Content created successfully!',
+            'type' => 'success'
+        ]);
     }
 
 
@@ -180,7 +183,10 @@ class ContentController extends Controller
             }
         }
 
-        return redirect()->route('content.content_view')->with('success', 'Content updated successfully!');
+        return redirect()->route('content.content_view')->with('toast', [
+            'message' => 'Content updated successfully!',
+            'type' => 'success'
+        ]);
     }
 
 
@@ -202,6 +208,9 @@ class ContentController extends Controller
         // Delete record from database
         $image->delete();
 
-        return back()->with('success', 'Image deleted successfully!');
+        return back()->with('toast', [
+            'message' => 'Image deleted successfully!',
+            'type' => 'success'
+        ]);
     }
 }

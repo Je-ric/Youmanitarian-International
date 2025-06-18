@@ -84,7 +84,10 @@ class ProgramController extends Controller
             'is_pinned' => true
         ]);
 
-        return redirect()->route('programs.index')->with('success', 'Program created successfully.');
+        return redirect()->route('programs.index')->with('toast', [
+            'message' => 'Program created successfully.',
+            'type' => 'success'
+        ]);
     }
 
     public function updateProgram(Request $request, Program $program)
@@ -111,13 +114,19 @@ class ProgramController extends Controller
 
         return redirect()
             ->route('programs.manage_volunteers', $program->id)
-            ->with('success', 'Program updated successfully.');
+            ->with('toast', [
+                'message' => 'Program updated successfully.',
+                'type' => 'success'
+            ]);
     }
 
     public function deleteProgram(Program $program)
     {
         $program->delete();
 
-        return redirect()->route('programs.index')->with('success', 'Program deleted.');
+        return redirect()->route('programs.index')->with('toast', [
+            'message' => 'Program deleted successfully.',
+            'type' => 'success'
+        ]);
     }
 }

@@ -46,6 +46,7 @@ class ProgramFeedbackController extends Controller
             'rating' => $request->rating,
             'feedback' => $request->feedback,
             'submitted_at' => now(),
+            'user_type' => 'volunteer',
         ]);
 
         return redirect()->back()->with('toast', [

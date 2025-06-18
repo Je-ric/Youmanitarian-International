@@ -22,7 +22,10 @@ class ProgramTasksController extends Controller
             'status' => 'pending', // default status
         ]);
 
-        return redirect()->back()->with('success', 'Task added successfully.');
+        return redirect()->back()->with('toast', [
+            'message' => 'Task added successfully.',
+            'type' => 'success'
+        ]);
     }
 
     // Delete a task from the program
@@ -34,7 +37,10 @@ class ProgramTasksController extends Controller
 
         $task->delete();
 
-        return redirect()->back()->with('success', 'Task deleted successfully.');
+        return redirect()->back()->with('toast', [
+            'message' => 'Task deleted successfully.',
+            'type' => 'success'
+        ]);
     }
 
     // Update a task's description or status
@@ -59,7 +65,10 @@ class ProgramTasksController extends Controller
             $task->update($request->only('task_description'));
         }
 
-        return redirect()->back()->with('success', 'Task updated successfully.');
+        return redirect()->back()->with('toast', [
+            'message' => 'Task updated successfully.',
+            'type' => 'success'
+        ]);
     }
 
     // Update individual assignment status
@@ -78,7 +87,10 @@ class ProgramTasksController extends Controller
         // Update main task status based on assignment statuses
         $this->updateMainTaskStatus($task);
 
-        return redirect()->back()->with('success', 'Assignment status updated successfully.');
+        return redirect()->back()->with('toast', [
+            'message' => 'Assignment status updated successfully.',
+            'type' => 'success'
+        ]);
     }
 
     // Helper method to update main task status based on assignment statuses
@@ -121,7 +133,10 @@ class ProgramTasksController extends Controller
             ->first();
 
         if ($existing) {
-            return redirect()->back()->with('success', 'Volunteer already assigned to this task.');
+            return redirect()->back()->with('toast', [
+                'message' => 'Volunteer already assigned to this task.',
+                'type' => 'info'
+            ]);
         }
 
         TaskAssignment::create([
@@ -131,7 +146,10 @@ class ProgramTasksController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->back()->with('success', 'Volunteer assigned to task.');
+        return redirect()->back()->with('toast', [
+            'message' => 'Volunteer assigned to task.',
+            'type' => 'success'
+        ]);
     }
 
     // Remove a volunteer from a task
@@ -146,6 +164,9 @@ class ProgramTasksController extends Controller
         // Update main task status after removing assignment
         $this->updateMainTaskStatus($task);
 
-        return redirect()->back()->with('success', 'Volunteer removed from task successfully.');
+        return redirect()->back()->with('toast', [
+            'message' => 'Volunteer removed from task successfully.',
+            'type' => 'success'
+        ]);
     }
 }
