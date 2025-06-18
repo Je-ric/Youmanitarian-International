@@ -78,7 +78,15 @@ class MembershipController extends Controller
         $data['payment_status'] = 'paid';
 
         if ($request->hasFile('receipt')) {
-            $data['receipt_url'] = $request->file('receipt')->store('receipts', 'public');
+            $file = $request->file('receipt');
+            $memberName = preg_replace('/[^A-Za-z0-9\-]/', '', $member->user->name);
+            $quarter = $request->payment_period;
+            $year = $request->payment_year;
+            $timestamp = time();
+            $extension = $file->getClientOriginalExtension();
+            $filename = $memberName . '_' . $quarter . '_' . $year . '_' . $timestamp . '.' . $extension;
+            $path = $file->storeAs('uploads/membership_proof', $filename, 'public');
+            $data['receipt_url'] = $path;
         }
 
         $member->payments()->create($data);

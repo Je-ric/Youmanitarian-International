@@ -173,57 +173,43 @@
                                             $shouldShowPayment = $startYear && 
                                                 ($currentYear > $startYear || 
                                                 ($currentYear == $startYear && $quarterNumber >= $startQuarter));
-                                            
                                             $payment = $member->payments
                                                 ->where('payment_period', $quarter)
                                                 ->where('payment_year', $currentYear)
                                                 ->first();
-
                                             $status = $payment ? $payment->payment_status : app(App\Http\Controllers\MembershipController::class)->determinePaymentStatus($quarter, $payment);
-                                            $statusClass = $status === 'paid' ? 'text-green-600' : ($status === 'overdue' ? 'text-red-600' : 'text-yellow-600');
-
-                                            $buttonClass = 'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center gap-2';
-                                            
+                                            // Icon and color mapping
                                             if (!$shouldShowPayment) {
-                                                $buttonClass .= ' bg-gray-100 text-gray-400 cursor-not-allowed';
+                                                $icon = 'bx-lock';
+                                                $bg = 'bg-gray-300';
+                                                $iconColor = 'text-white';
                                             } else if ($payment) {
                                                 if ($status === 'paid') {
-                                                    $buttonClass .= ' bg-green-100 text-green-700 hover:bg-green-200';
+                                                    $icon = 'bx-check-circle';
+                                                    $bg = 'bg-green-500';
+                                                    $iconColor = 'text-white';
                                                 } else if ($status === 'overdue') {
-                                                    $buttonClass .= ' bg-red-100 text-red-700 hover:bg-red-200';
+                                                    $icon = 'bx-error';
+                                                    $bg = 'bg-red-500';
+                                                    $iconColor = 'text-white';
                                                 } else {
-                                                    $buttonClass .= ' bg-yellow-100 text-yellow-700 hover:bg-yellow-200';
+                                                    $icon = 'bx-time';
+                                                    $bg = 'bg-yellow-400';
+                                                    $iconColor = 'text-white';
                                                 }
                                             } else {
-                                                $buttonClass .= ' bg-blue-100 text-blue-700 hover:bg-blue-200';
+                                                $icon = 'bx-time'; // treat as pending for add payment
+                                                $bg = 'bg-yellow-400';
+                                                $iconColor = 'text-white';
                                             }
                                         @endphp
-
                                         @if($shouldShowPayment)
-                                            @php
-                                                $modalId = 'paymentModal_' . $member->id . '_' . $quarter;
-                                            @endphp
-                                            <button type="button" 
-                                                    onclick="document.getElementById('{{ $modalId }}').showModal()"
-                                                    class="{{ $buttonClass }}">
-                                                @if($payment)
-                                                    @if($status === 'paid')
-                                                        <i class='bx bx-check-circle'></i>
-                                                        Paid
-                                                    @elseif($status === 'overdue')
-                                                        <i class='bx bx-error-circle'></i>
-                                                        Overdue
-                                                    @else
-                                                        <i class='bx bx-time'></i>
-                                                        Pending
-                                                    @endif
-                                                @else
-                                                    <i class='bx bx-plus-circle'></i>
-                                                    Add Payment
-                                                @endif
+                                            @php $modalId = 'paymentModal_' . $member->id . '_' . $quarter; @endphp
+                                            <button type="button"
+                                                onclick="document.getElementById('{{ $modalId }}').showModal()"
+                                                class="w-9 h-9 flex items-center justify-center rounded-full {{ $bg }} {{ $iconColor }} focus:outline-none">
+                                                <i class='bx {{ $icon }} text-xl'></i>
                                             </button>
-
-                                            <!-- Payment Modal for this quarter -->
                                             @include('finance.modals.addPaymentModal', [
                                                 'modalId' => $modalId,
                                                 'member' => $member,
@@ -231,12 +217,11 @@
                                                 'year' => $currentYear,
                                                 'payment' => $payment,
                                                 'status' => $status,
-                                                'statusClass' => $statusClass
+                                                'statusClass' => $status === 'paid' ? 'text-green-600' : ($status === 'overdue' ? 'text-red-600' : 'text-yellow-600')
                                             ])
                                         @else
-                                            <button class="{{ $buttonClass }}" disabled>
-                                                <i class='bx bx-lock'></i>
-                                                Not Available
+                                            <button class="w-9 h-9 flex items-center justify-center rounded-full {{ $bg }} {{ $iconColor }} cursor-not-allowed" disabled>
+                                                <i class='bx {{ $icon }} text-xl'></i>
                                             </button>
                                         @endif
                                     </td>
@@ -284,6 +269,6 @@
     'year' => $currentYear,
     'payment' => $payment,
     'status' => $status,
-    'statusClass' => $statusClass
+    'statusClass' => $status === 'paid' ? 'text-green-600' : ($status === 'overdue' ? 'text-red-600' : 'text-yellow-600')
 ])
 @endsection 
