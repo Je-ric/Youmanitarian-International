@@ -1,7 +1,6 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
     <div x-data="{ 
         activeTab: new URLSearchParams(window.location.search).get('tab') || 'overview',
         setTab(tab) {
@@ -10,15 +9,22 @@
             url.searchParams.set('tab', tab);
             window.history.pushState({}, '', url);
         }
-    }">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Membership Payments</h1>
-        </div>
+    }" class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
+        <div class="mb-4 sm:mb-8">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                        Membership Payments
+                    </h1>
+                    <p class="text-gray-600">View and manage the members membership type, status, and payment activity.</p>
+                </div>
+                <p>Future Buttones</p>
 
+            </div>
+        </div>
         <!-- Alerts -->
         @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <div class="bg-green-100 border border-green-400  text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
                 <span class="block sm:inline">{{ session('success') }}</span>
             </div>
         @endif
@@ -49,7 +55,7 @@
         </div>
 
         <!-- Tab Content -->
-        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 sm:p-6">
             <!-- Overview Tab -->
             <div x-show="activeTab === 'overview'" 
                 x-transition:enter="transition ease-out duration-200"
@@ -260,7 +266,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <!-- Payment Modal -->
 @include('finance.modals.addPaymentModal', [

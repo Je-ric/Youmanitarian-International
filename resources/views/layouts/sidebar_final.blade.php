@@ -442,12 +442,24 @@
 
         /* Main content adjustments */
         .main-content {
-            margin-left: 16rem;
+            /* margin-left: 16rem; */
             transition: margin-left 0.3s ease-in-out;
         }
 
-        .content-collapsed {
-            margin-left: 4rem;
+        @media (min-width: 1024px) {
+            .main-content {
+                margin-left: 16rem;
+            }
+            
+            .content-collapsed {
+                margin-left: 4rem;
+            }
+        }
+
+        @media (max-width: 1023px) {
+            .main-content {
+                margin-left: 0;
+            }
         }
 
         /* Custom scrollbar */
