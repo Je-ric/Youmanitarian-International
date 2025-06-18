@@ -72,7 +72,6 @@
             </div>
 
             <div class="flex justify-between">
-
                 <div class="mb-6 flex gap-2 flex-wrap">
                     <x-status-indicator status="success" />
                     <x-status-indicator status="info" />
@@ -81,30 +80,7 @@
                     <x-status-indicator status="danger" />
                 </div>
             </div>
-
         </div>
-
-        <x-table :headers="[
-            ['label' => 'Name'],
-            ['label' => 'Position'],
-            ['label' => 'Department'],
-            ['label' => 'Salary'],
-            ['label' => 'Start Date'],
-            ['label' => 'Status', 'hideOnSmall' => true],
-        ]" variant="striped">
-            <tr>
-                <td class="px-6 py-4 font-medium">
-                    John Doe
-                </td>
-                <td class="px-6 py-4">Software Engineer</td>
-                <td class="px-6 py-4">Engineering</td>
-                <td class="px-6 py-4 font-mono">$85,000</td>
-                <td class="px-6 py-4">2023-01-15</td>
-                <td class="px-6 py-4 hidden sm:table-cell">
-                    <span class="badge badge-success">Active</span>
-                </td>
-            </tr>
-        </x-table>
 
         <x-alert type="error" icon="bx bx-task" message="You cannot leave this program because you have assigned tasks." />
         <x-alert type="info" icon="bx bx-lock" message="You cannot leave this program because it is already done." />

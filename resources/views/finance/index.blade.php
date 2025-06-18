@@ -2,21 +2,6 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Finance Dashboard</h1>
-        <div class="flex space-x-4">
-            <a href="{{ route('finance.donations') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
-                Manage Donations
-            </a>
-            <a href="{{ route('finance.membership.payments') }}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
-                Membership Payments
-            </a>
-            <a href="{{ route('finance.members') }}" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg">
-                Member List
-            </a>
-        </div>
-    </div>
-
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <!-- Total Donations Card -->
         <div class="bg-white rounded-lg shadow-md p-6">
