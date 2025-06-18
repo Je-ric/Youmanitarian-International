@@ -18,15 +18,7 @@
         }
     </style>
 
-    <div x-data="{ 
-        activeTab: new URLSearchParams(window.location.search).get('tab') || 'applications',
-        setTab(tab) {
-            this.activeTab = tab;
-            const url = new URL(window.location);
-            url.searchParams.set('tab', tab);
-            window.history.pushState({}, '', url);
-        }   
-    }" class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
+    <div class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
         <div class="mb-4 sm:mb-8">
             <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-[#1a2235] mb-1 sm:mb-2">
                 Volunteers Management
@@ -38,47 +30,20 @@
             <x-toast :message="session('toast')['message']" :type="session('toast')['type']" />
         @endif
 
-        <!-- Responsive Tab Navigation -->
-        <div class="mb-4 sm:mb-8 overflow-x-auto pb-2 sm:pb-0">
-            <div class="bg-gray-50 p-1 rounded-lg inline-flex space-x-1 min-w-max">
-                <button @click="setTab('applications')" 
-                    :class="activeTab === 'applications' ? 'bg-white text-[#1a2235] border border-gray-200 shadow-sm' : 'text-gray-600 hover:text-[#1a2235]'"
-                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap flex items-center">
-                    <i class='bx bx-user-plus text-lg sm:mr-1'></i>
-                    <span class="hidden sm:inline">Applications</span>
-                </button>
+        @php
+            $tabs = [
+                ['id' => 'applications', 'label' => 'Applications', 'icon' => 'bx-user-plus'],
+                ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-stats'],
+                ['id' => 'denied', 'label' => 'Denied', 'icon' => 'bx-x-circle'],
+                ['id' => 'approved', 'label' => 'Approved', 'icon' => 'bx-check-circle']
+            ];
+        @endphp
 
-                <button @click="setTab('overview')" 
-                    :class="activeTab === 'overview' ? 'bg-white text-[#1a2235] border border-gray-200 shadow-sm' : 'text-gray-600 hover:text-[#1a2235]'"
-                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap flex items-center">
-                    <i class='bx bx-stats text-lg sm:mr-1'></i>
-                    <span class="hidden sm:inline">Overview</span>
-                </button>
-
-                <button @click="setTab('denied')" 
-                    :class="activeTab === 'denied' ? 'bg-white text-[#1a2235] border border-gray-200 shadow-sm' : 'text-gray-600 hover:text-[#1a2235]'"
-                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap flex items-center">
-                    <i class='bx bx-x-circle text-lg sm:mr-1'></i>
-                    <span class="hidden sm:inline">Denied</span>
-                </button>
-
-                <button @click="setTab('approved')" 
-                    :class="activeTab === 'approved' ? 'bg-white text-[#1a2235] border border-gray-200 shadow-sm' : 'text-gray-600 hover:text-[#1a2235]'"
-                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap flex items-center">
-                    <i class='bx bx-check-circle text-lg sm:mr-1'></i>
-                    <span class="hidden sm:inline">Approved</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Tab Content with Smooth Transitions -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
-            <!-- Applications Tab -->
-            <div x-show="activeTab === 'applications'" 
-                x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0 transform translate-y-4"
-                x-transition:enter-end="opacity-100 transform translate-y-0"
-                class="space-y-4">
+        <x-tabs 
+            :tabs="$tabs"
+            default-tab="applications"
+        >
+            <x-slot:slot_applications>
                 @if($applications->isEmpty())
                     <p class="text-gray-600 text-center py-4">No pending applications found.</p>
                 @else
@@ -120,15 +85,9 @@
                         </table>
                     </div>
                 @endif
-            </div>
+            </x-slot>
 
-            <!-- Overview Tab -->
-            <div x-show="activeTab === 'overview'" 
-                x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0 transform translate-y-4"
-                x-transition:enter-end="opacity-100 transform translate-y-0"
-                class="space-y-6">
-                
+            <x-slot:slot_overview>
                 <!-- Statistics Cards -->
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     <!-- Total Volunteers -->
@@ -190,7 +149,7 @@
                 </div>
 
                 <!-- Recent Activity -->
-                <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
+                <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm mt-6">
                     <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Recent Activity</h3>
                     <div class="space-y-3 sm:space-y-4">
                         @php
@@ -228,14 +187,9 @@
                         @endforelse
                     </div>
                 </div>
-            </div>
+            </x-slot>
 
-            <!-- Denied Applications Tab -->
-            <div x-show="activeTab === 'denied'" 
-                x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0 transform translate-y-4"
-                x-transition:enter-end="opacity-100 transform translate-y-0"
-                class="space-y-4">
+            <x-slot:slot_denied>
                 @if($deniedApplications->isEmpty())
                     <p class="text-gray-600 text-center py-4">No denied applications found.</p>
                 @else
@@ -274,14 +228,9 @@
                         </table>
                     </div>
                 @endif
-            </div>
+            </x-slot>
 
-            <!-- Approved Volunteers Tab -->
-            <div x-show="activeTab === 'approved'" 
-                x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0 transform translate-y-4"
-                x-transition:enter-end="opacity-100 transform translate-y-0"
-                class="space-y-4">
+            <x-slot:slot_approved>
                 @if($approvedVolunteers->isEmpty())
                     <p class="text-gray-600 text-center py-4">No approved volunteers found.</p>
                 @else
@@ -322,7 +271,7 @@
                         </table>
                     </div>
                 @endif
-            </div>
-        </div>
+            </x-slot>
+        </x-tabs>
     </div>
 @endsection 

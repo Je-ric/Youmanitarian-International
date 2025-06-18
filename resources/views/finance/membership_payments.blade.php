@@ -1,15 +1,7 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-    <div x-data="{ 
-        activeTab: new URLSearchParams(window.location.search).get('tab') || 'overview',
-        setTab(tab) {
-            this.activeTab = tab;
-            const url = new URL(window.location);
-            url.searchParams.set('tab', tab);
-            window.history.pushState({}, '', url);
-        }
-    }" class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
+    <div class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
         <div class="mb-4 sm:mb-8">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div>
@@ -19,9 +11,9 @@
                     <p class="text-gray-600">View and manage the members membership type, status, and payment activity.</p>
                 </div>
                 <p>Future Buttones</p>
-
             </div>
         </div>
+
         <!-- Alerts -->
         @if(session('success'))
             <div class="bg-green-100 border border-green-400  text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -35,41 +27,23 @@
             </div>
         @endif
 
-        <!-- Tab Navigation -->
-        <div class="mb-4 sm:mb-8 overflow-x-auto pb-2 sm:pb-0">
-            <div class="bg-gray-50 p-1 rounded-lg inline-flex space-x-1 min-w-max">
-                <button @click="setTab('overview')" 
-                    :class="activeTab === 'overview' ? 'bg-white text-[#1a2235] border border-gray-200 shadow-sm' : 'text-gray-600 hover:text-[#1a2235]'"
-                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap flex items-center">
-                    <i class='bx bx-line-chart text-lg sm:mr-1'></i>
-                    <span class="hidden sm:inline">Overview</span>
-                </button>
+        @php
+            $tabs = [
+                ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-line-chart'],
+                ['id' => 'members', 'label' => 'Active Members', 'icon' => 'bx-user-check']
+            ];
+        @endphp
 
-                <button @click="setTab('members')" 
-                    :class="activeTab === 'members' ? 'bg-white text-[#1a2235] border border-gray-200 shadow-sm' : 'text-gray-600 hover:text-[#1a2235]'"
-                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap flex items-center">
-                    <i class='bx bx-user-check text-lg sm:mr-1'></i>
-                    <span class="hidden sm:inline">Active Members</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Tab Content -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 sm:p-6">
-            <!-- Overview Tab -->
-            <div x-show="activeTab === 'overview'" 
-                x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0 transform translate-y-4"
-                x-transition:enter-end="opacity-100 transform translate-y-0">
+        <x-tabs 
+            :tabs="$tabs"
+            default-tab="{{ request()->query('tab', 'overview') }}"
+        >
+            <x-slot:slot_overview>
                 @include('finance.partials.membershipOverview')
-            </div>
+            </x-slot>
 
-            <!-- Members Tab -->
-            <div x-show="activeTab === 'members'" 
-                x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0 transform translate-y-4"
-                x-transition:enter-end="opacity-100 transform translate-y-0"
-                class="overflow-x-auto">
+            <x-slot:slot_members>
+                    <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
@@ -189,7 +163,8 @@
                     {{ $members->links() }}
                 </div>
             </div>
-        </div>
+            </x-slot>
+        </x-tabs>
     </div>
 
 <!-- Payment Modal -->

@@ -1,10 +1,5 @@
 <!-- Overview Tab Content -->
-<div x-show="activeTab === 'overview'" 
-    x-transition:enter="transition ease-out duration-200"
-    x-transition:enter-start="opacity-0 transform translate-y-4"
-    x-transition:enter-end="opacity-100 transform translate-y-0"
-    class="space-y-6">
-    
+<div class="space-y-6">
     <!-- Statistics Cards -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <!-- Total Users -->

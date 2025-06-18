@@ -10,13 +10,6 @@
     @endif
 
     <div x-data="{ 
-        activeTab: new URLSearchParams(window.location.search).get('tab') || 'all',
-        setTab(tab) {
-            this.activeTab = tab;
-            const url = new URL(window.location);
-            url.searchParams.set('tab', tab);
-            window.history.pushState({}, '', url);
-        },
         openModal(id) {
             document.getElementById('modal_' + id).showModal();
         }
@@ -40,69 +33,40 @@
             </div>
         </div>
 
-        <!-- Responsive Tab Navigation -->
-        <div class="mb-4 sm:mb-8 overflow-x-auto pb-2 sm:pb-0">
-            <div class="bg-gray-50 p-1 rounded-lg inline-flex space-x-1 min-w-max">
-                <button @click="setTab('all')" 
-                    :class="activeTab === 'all' ? 'bg-white text-[#1a2235] border border-gray-200 shadow-sm' : 'text-gray-600 hover:text-[#1a2235]'"
-                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap flex items-center">
-                    <i class='bx bx-list-ul text-lg sm:mr-1'></i>
-                    <span class="hidden sm:inline">All Programs</span>
-                </button>
+        @php
+            $tabs = [
+                ['id' => 'all', 'label' => 'All Programs', 'icon' => 'bx-list-ul']
+            ];
 
-                @if(Auth::user()->hasRole('Volunteer'))
-                    <button @click="setTab('joined')" 
-                        :class="activeTab === 'joined' ? 'bg-white text-[#1a2235] border border-gray-200 shadow-sm' : 'text-gray-600 hover:text-[#1a2235]'"
-                        class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap flex items-center">
-                        <i class='bx bx-user-check text-lg sm:mr-1'></i>
-                        <span class="hidden sm:inline">Joined Programs</span>
-                    </button>
-                @endif
+            if(Auth::user()->hasRole('Volunteer')) {
+                $tabs[] = ['id' => 'joined', 'label' => 'Joined Programs', 'icon' => 'bx-user-check'];
+            }
 
-                @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
-                    <button @click="setTab('my')" 
-                        :class="activeTab === 'my' ? 'bg-white text-[#1a2235] border border-gray-200 shadow-sm' : 'text-gray-600 hover:text-[#1a2235]'"
-                        class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap flex items-center">
-                        <i class='bx bx-cog text-lg sm:mr-1'></i>
-                        <span class="hidden sm:inline">My Programs</span>
-                    </button>
-                @endif
-            </div>
-        </div>
+            if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin')) {
+                $tabs[] = ['id' => 'my', 'label' => 'My Programs', 'icon' => 'bx-cog'];
+            }
+        @endphp
 
-        <!-- Tab Content with Smooth Transitions -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
-            <!-- All Programs Tab -->
-            <div x-show="activeTab === 'all'" 
-                x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0 transform translate-y-4"
-                x-transition:enter-end="opacity-100 transform translate-y-0"
-                class="space-y-4">
+        <x-tabs 
+            :tabs="$tabs"
+            default-tab="all"
+        >
+            <x-slot:slot_all>
                 @include('programs.partials.programs-table', ['programs' => $allPrograms])
-            </div>
+            </x-slot>
 
-            <!-- Joined Programs Tab -->
             @if(Auth::user()->hasRole('Volunteer'))
-                <div x-show="activeTab === 'joined'" 
-                    x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0 transform translate-y-4"
-                    x-transition:enter-end="opacity-100 transform translate-y-0"
-                    class="space-y-4">
+                <x-slot:slot_joined>
                     @include('programs.partials.programs-table', ['programs' => $joinedPrograms])
-                </div>
+                </x-slot>
             @endif
 
-            <!-- My Programs Tab -->
             @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
-                <div x-show="activeTab === 'my'" 
-                    x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0 transform translate-y-4"
-                    x-transition:enter-end="opacity-100 transform translate-y-0"
-                    class="space-y-4">
+                <x-slot:slot_my>
                     @include('programs.partials.programs-table', ['programs' => $myPrograms])
-                </div>
+                </x-slot>
             @endif
-        </div>
+        </x-tabs>
 
         <!-- Modals Container -->
         <div>
@@ -121,20 +85,4 @@
             @endif
         </div>
     </div>
-
-    <script>
-        // Preserve tab state on page reload
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('form').forEach(form => {
-                form.addEventListener('submit', function() {
-                    const activeTab = Alpine.store ? Alpine.store.activeTab : 'all';
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = 'preserve_tab';
-                    input.value = activeTab;
-                    this.appendChild(input);
-                });
-            });
-        });
-    </script>
 @endsection

@@ -66,97 +66,99 @@
         </div>
 
         {{-- Right: Feedback list with tabs --}}
-        <div class="lg:col-span-2" x-data="{ activeTab: 'all' }">
-            <!-- Tab Navigation -->
-            <div class="mb-6">
-                <div class="bg-gray-50 p-1 rounded-lg inline-flex space-x-1">
-                    <button @click="activeTab = 'all'" :class="activeTab === 'all' ? 'bg-white text-gray-900 border border-gray-200' : 'text-gray-600 hover:text-gray-900'"
-                        class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap">
-                        <i class='bx bx-list-ul mr-1'></i>
-                        All ({{ $totalFeedbacks }})
-                    </button>
+        <div class="lg:col-span-2">
+            @php
+                $tabs = [
+                    ['id' => 'all', 'label' => 'All (' . $totalFeedbacks . ')', 'icon' => 'bx-list-ul'],
+                    ['id' => 'positive', 'label' => 'Positive', 'icon' => 'bx-smile'],
+                    ['id' => 'neutral', 'label' => 'Neutral', 'icon' => 'bx-meh'],
+                    ['id' => 'needs_improvement', 'label' => 'Needs Improvement', 'icon' => 'bx-sad']
+                ];
+            @endphp
 
-                    <button @click="activeTab = 'positive'" :class="activeTab === 'positive' ? 'bg-white text-gray-900 border border-gray-200' : 'text-gray-600 hover:text-gray-900'"
-                        class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap">
-                        <i class='bx bx-smile mr-1'></i>
-                        Positive
-                    </button>
-
-                    <button @click="activeTab = 'neutral'" :class="activeTab === 'neutral' ? 'bg-white text-gray-900 border border-gray-200' : 'text-gray-600 hover:text-gray-900'"
-                        class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap">
-                        <i class='bx bx-meh mr-1'></i>
-                        Neutral
-                    </button>
-
-                    <button @click="activeTab = 'needs_improvement'" :class="activeTab === 'needs_improvement' ? 'bg-white text-gray-900 border border-gray-200' : 'text-gray-600 hover:text-gray-900'"
-                        class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 whitespace-nowrap">
-                        <i class='bx bx-sad mr-1'></i>
-                        Needs Improvement
-                    </button>
+            <x-tabs 
+                :tabs="$tabs"
+                default-tab="all"
+            >
+                <x-slot:slot_all>
+                    <div class="space-y-4">
+                        @forelse($feedbacks as $feedback)
+                            <div class="bg-white rounded-lg p-4">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                            <i class='bx bx-user text-primary text-xl'></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-gray-900">{{ $feedback->participant->user->name }}</h4>
+                                            <p class="text-sm text-gray-500">{{ $feedback->created_at->format('M d, Y') }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <i class='bx {{ $i <= $feedback->rating ? 'bxs-star text-yellow-400' : 'bx-star text-gray-300' }}'></i>
+                                        @endfor
                 </div>
             </div>
-
-            <!-- Feedback Content -->
-            <div class="space-y-4">
-                @if($feedbacks->isEmpty())
-                    <div class="text-center py-12">
-                        <i class='bx bx-message-dots text-4xl text-gray-300 mb-4'></i>
-                        <p class="text-gray-500 text-lg">No feedback submitted for this program yet.</p>
-                        <p class="text-gray-400 text-sm mt-2">Feedback will appear here once participants submit their
-                            reviews.</p>
+                                <p class="mt-3 text-gray-600">{{ $feedback->feedback }}</p>
+                            </div>
+                        @empty
+                            <div class="text-center py-8">
+                                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                                    <i class='bx bx-message-square-dots text-gray-400 text-2xl'></i>
+                                </div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-1">No Feedback Yet</h3>
+                                <p class="text-gray-500">There are no feedback entries for this category.</p>
+                            </div>
+                        @endforelse
                     </div>
-                @endif
+                </x-slot>
 
-                <!-- All Feedbacks -->
-                <div x-show="activeTab === 'all'" x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                    @foreach($feedbacks as $feedback)
-                        @include('programs_volunteers.partials.feedbackItem', ['feedback' => $feedback])
-                    @endforeach
-                </div>
-
-                <!-- Positive Feedbacks -->
-                <div x-show="activeTab === 'positive'" x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                    @foreach($feedbacks->whereIn('rating', [4, 5]) as $feedback)
-                        @include('programs_volunteers.partials.feedbackItem', ['feedback' => $feedback])
-                    @endforeach
+                <x-slot:slot_positive>
+                    <div class="space-y-4">
                     @if($feedbacks->whereIn('rating', [4, 5])->isEmpty())
                         <div class="text-center py-8">
                             <i class='bx bx-smile text-3xl text-gray-300 mb-2'></i>
                             <p class="text-gray-500">No positive feedback yet.</p>
                         </div>
+                        @else
+                            @foreach($feedbacks->whereIn('rating', [4, 5]) as $feedback)
+                                @include('programs_volunteers.partials.feedbackItem', ['feedback' => $feedback])
+                            @endforeach
                     @endif
                 </div>
+                </x-slot>
 
-                <!-- Neutral Feedbacks -->
-                <div x-show="activeTab === 'neutral'" x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                    @foreach($feedbacks->where('rating', 3) as $feedback)
-                        @include('programs_volunteers.partials.feedbackItem', ['feedback' => $feedback])
-                    @endforeach
+                <x-slot:slot_neutral>
+                    <div class="space-y-4">
                     @if($feedbacks->where('rating', 3)->isEmpty())
                         <div class="text-center py-8">
                             <i class='bx bx-meh text-3xl text-gray-300 mb-2'></i>
                             <p class="text-gray-500">No neutral feedback yet.</p>
                         </div>
+                        @else
+                            @foreach($feedbacks->where('rating', 3) as $feedback)
+                                @include('programs_volunteers.partials.feedbackItem', ['feedback' => $feedback])
+                            @endforeach
                     @endif
                 </div>
+                </x-slot>
 
-                <!-- Needs Improvement Feedbacks -->
-                <div x-show="activeTab === 'needs_improvement'" x-transition:enter="transition ease-out duration-200"
-                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
-                    @foreach($feedbacks->whereIn('rating', [1, 2]) as $feedback)
-                        @include('programs_volunteers.partials.feedbackItem', ['feedback' => $feedback])
-                    @endforeach
+                <x-slot:slot_needs_improvement>
+                    <div class="space-y-4">
                     @if($feedbacks->whereIn('rating', [1, 2])->isEmpty())
                         <div class="text-center py-8">
                             <i class='bx bx-sad text-3xl text-gray-300 mb-2'></i>
                             <p class="text-gray-500">No critical feedback yet.</p>
                         </div>
+                        @else
+                            @foreach($feedbacks->whereIn('rating', [1, 2]) as $feedback)
+                                @include('programs_volunteers.partials.feedbackItem', ['feedback' => $feedback])
+                            @endforeach
                     @endif
                 </div>
-            </div>
+                </x-slot>
+            </x-tabs>
         </div>
     </div>
 </div>

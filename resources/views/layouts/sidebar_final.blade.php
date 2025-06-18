@@ -731,6 +731,8 @@
             new SidebarManager();
         });
     </script>
+    @stack('scripts') 
+    {{-- "put all the scripts that were pushed here" --}}
 </body>
 
 </html>
