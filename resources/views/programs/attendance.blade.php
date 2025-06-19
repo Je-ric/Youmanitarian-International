@@ -313,8 +313,7 @@
                                             <option value="in_progress" {{ $data['assignment']->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
                                             <option value="completed" {{ $data['assignment']->status === 'completed' ? 'selected' : '' }} disabled>Completed (Program Coordinator Only)</option>
                                         </select>
-                                        <p class="text-xs text-gray-500 mt-1">Note: Only program coordinators can mark tasks as
-                                            complete</p>
+                                        <p class="text-xs text-gray-500 mt-1">Note: Only program coordinators can mark tasks as complete</p>
                                     </div>
                                 </form>
                             </div>

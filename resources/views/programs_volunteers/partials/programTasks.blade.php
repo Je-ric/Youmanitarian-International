@@ -66,15 +66,16 @@
                             <form action="{{ route('programs.tasks.update', [$program, $task]) }}" method="POST" class="inline-flex">
                                 @csrf
                                 @method('PUT')
-                                <select 
-                                    name="status" 
-                                    onchange="this.form.submit()" 
+                                <x-select-option
+                                    name="status"
                                     class="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-1 focus:ring-[#ffb51b] focus:border-[#ffb51b] bg-white"
-                                >
-                                    <option value="pending" {{ $task->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="in_progress" {{ $task->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                                    <option value="completed" {{ $task->status === 'completed' ? 'selected' : '' }}>Completed</option>
-                                </select>
+                                    onchange="this.form.submit()"
+                                    :options="[
+                                        ['value' => 'pending', 'label' => 'Pending', 'selected' => $task->status === 'pending'],
+                                        ['value' => 'in_progress', 'label' => 'In Progress', 'selected' => $task->status === 'in_progress'],
+                                        ['value' => 'completed', 'label' => 'Completed', 'selected' => $task->status === 'completed'],
+                                    ]"
+                                />
                             </form>
 
                             <!-- Delete Button -->
@@ -153,15 +154,16 @@
                                                   class="inline-flex">
                                                 @csrf
                                                 @method('PUT')
-                                                <select 
-                                                    name="status" 
-                                                    onchange="this.form.submit()" 
+                                                <x-select-option
+                                                    name="status"
                                                     class="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-1 focus:ring-[#ffb51b] focus:border-[#ffb51b] bg-white"
-                                                >
-                                                    <option value="pending" {{ $assignment->status === 'pending' ? 'selected' : '' }}>Pending</option>
-                                                    <option value="in_progress" {{ $assignment->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                                                    <option value="completed" {{ $assignment->status === 'completed' ? 'selected' : '' }}>Completed</option>
-                                                </select>
+                                                    onchange="this.form.submit()"
+                                                    :options="[
+                                                        ['value' => 'pending', 'label' => 'Pending', 'selected' => $assignment->status === 'pending'],
+                                                        ['value' => 'in_progress', 'label' => 'In Progress', 'selected' => $assignment->status === 'in_progress'],
+                                                        ['value' => 'completed', 'label' => 'Completed', 'selected' => $assignment->status === 'completed'],
+                                                    ]"
+                                                />
                                             </form>
                                             <!-- Remove Button -->
                                             <form action="{{ route('programs.tasks.assignments.destroy', [$program, $task, $assignment]) }}" 

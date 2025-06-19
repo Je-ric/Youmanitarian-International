@@ -9,9 +9,9 @@
     $typeClasses = [
         'success' => 'text-green-600 font-medium bg-green-50 border-green-200',
         'error' => 'text-red-600 font-medium bg-red-50 border-red-200',
-        'info' => 'text-blue-700 bg-blue-50 border-blue-200',
+        'info' => 'text-blue-700 font-medium bg-blue-50 border-blue-200',
         'warning' => 'text-yellow-600 font-medium bg-yellow-50 border-yellow-200',
-        'neutral' => 'text-gray-500 bg-gray-100 border-gray-200',
+        'neutral' => 'text-gray-500 font-medium bg-gray-100 border-gray-200',
     ];
     $classes = $typeClasses[$type] ?? $typeClasses['info'];
 @endphp

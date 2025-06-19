@@ -103,7 +103,7 @@
             </x-slot>
 
             <x-slot:slot_overview>
-                @include('roles.partials.overview')
+                @include('roles.partials.rolesOverview')
             </x-slot>
         </x-tabs>
     </div>

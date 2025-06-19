@@ -1,4 +1,4 @@
-@props(['status', 'label' => null])
+@props(['status', 'label' => null, 'icon' => null])
 
 @php
 $variant = [
@@ -12,6 +12,7 @@ $variant = [
     'pending' => 'bg-yellow-50 text-yellow-700',
     'rejected' => 'bg-red-50 text-red-600',
     'approved' => 'bg-green-50 text-green-600',
+    'role' => 'bg-[#1a2235] text-white',
 ];
 $icons = [
     'success' => 'bx bx-check-circle',
@@ -24,14 +25,15 @@ $icons = [
     'pending' => 'bx bx-hourglass',
     'rejected' => 'bx bx-x',
     'approved' => 'bx bx-check-double',
+    'role' => 'bx bx-check-circle text-xs',
 ];
 $style = $variant[$status] ?? 'bg-gray-300 text-black';
-$icon = $icons[$status] ?? '';
+$iconClass = $icon ?? ($icons[$status] ?? '');
 @endphp
 
-<span class="inline-flex items-center gap-1 px-3 py-1 text-[11px] md:text-xs rounded-full font-semibold leading-tight {{ $style }}">
-    @if($icon)
-        <i class="{{ $icon }}"></i>
+<span class="inline-flex items-center gap-1 px-3 py-1 text-xs rounded-full font-medium {{ $style }}">
+    @if($iconClass)
+        <i class="{{ $iconClass }}"></i>
     @endif
     {{ $label ?? ucfirst(str_replace('_', ' ', $status)) }}
 </span>

@@ -45,14 +45,15 @@
                     </h4>
                     <div class="flex flex-wrap gap-2">
                         @forelse($user->roles as $role)
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#1a2235] text-white">
-                                <i class='bx bx-check-circle mr-1 text-xs'></i>
-                                {{ $role->role_name }}
-                            </span>
+                            <x-status-indicator status="role" :label="$role->role_name" />
                         @empty
-                            <div class="flex items-center text-gray-500 text-sm bg-gray-50 px-3 py-2 rounded-lg">
-                                <i class='bx bx-info-circle mr-2'></i>
-                                No roles assigned
+                            <div class="w-full">
+                                <x-alert 
+                                    class="basis-full"
+                                    type="neutral" 
+                                    icon="bx bx-info-circle" 
+                                    message="No roles assigned" 
+                                />
                             </div>
                         @endforelse
                     </div>
@@ -103,16 +104,15 @@
                             @foreach($additionalRoles as $role)
                                 <label for="role_{{ $user->id }}_{{ $role->id }}" 
                                        class="relative flex items-start p-4 bg-white border border-gray-200 rounded-lg hover:border-[#ffb51b] hover:bg-gray-50 transition-all duration-200 cursor-pointer group">
-                                    
+                                
                                     <!-- Checkbox -->
                                     <div class="flex items-center h-5">
-                                        <input 
-                                            type="checkbox" 
-                                            name="roles[]" 
-                                            value="{{ $role->id }}" 
+                                        <x-checkbox
+                                            name="roles[]"
+                                            value="{{ $role->id }}"
                                             id="role_{{ $user->id }}_{{ $role->id }}"
-                                            {{ $user->roles->contains($role->id) ? 'checked' : '' }}
-                                            class="w-4 h-4 text-[#ffb51b] bg-white border-gray-300 rounded focus:ring-[#ffb51b] focus:ring-2 transition-colors">
+                                            :checked="$user->roles->pluck('id')->contains($role->id)"
+                                        />
                                     </div>
                                     
                                     <!-- Role Info -->
@@ -121,9 +121,10 @@
                                             @php
                                                 $roleIcon = match(strtolower($role->role_name)) {
                                                     'admin' => 'bx-crown',
-                                                    'program coordinator' => 'bx-user-voice',
-                                                    'coordinator' => 'bx-user-voice',
-                                                    'manager' => 'bx-briefcase',
+                                                    'program coordinator' => 'bx-calendar-event',
+                                                    'financial coordinator' => 'bx-wallet',
+                                                    'content manager' => 'bx-edit-alt',
+                                                    'volunteer' => 'bx-hand-heart',
                                                     default => 'bx-user-circle'
                                                 };
                                             @endphp

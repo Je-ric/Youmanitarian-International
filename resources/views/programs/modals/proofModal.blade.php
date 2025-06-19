@@ -61,8 +61,9 @@
                                 Upload Image:
                             </label>
                             <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
-                                <input type="file" name="proof_image" id="proof_image" accept="image/*" required
-                                    class="w-full text-sm text-slate-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 file:transition-colors file:duration-200">
+                                <x-input-upload name="proof_image" id="proof_image" accept="image/*" required>
+                                    PNG, JPG up to 10MB
+                                </x-input-upload>
                             </div>
                         </div>
                     </div>

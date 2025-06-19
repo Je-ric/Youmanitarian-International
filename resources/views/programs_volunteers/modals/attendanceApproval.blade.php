@@ -20,12 +20,6 @@
             @forelse ($volunteerLogs as $log)
                 @php
                     $disabled = ($log->approval_status === 'approved' || $log->approval_status === 'rejected');
-
-                    $statusConfig = match ($log->approval_status ?? 'pending') {
-                        'approved' => ['bg-green-100', 'text-green-800', 'bx-check', 'Approved'],
-                        'rejected' => ['bg-red-100', 'text-red-800', 'bx-x', 'Rejected'],
-                        default => ['bg-yellow-100', 'text-yellow-800', 'bx-time', 'Pending'],
-                    };
                 @endphp
 
                 <!-- Attendance Record Card -->
@@ -36,7 +30,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div class="flex items-center gap-2">
                                 <span class="text-sm font-medium text-gray-700">Status:</span>
-                                <x-status-indicator :status="$log->approval_status ?? 'pending'" :label="$statusConfig[3]" />
+                                <x-status-indicator :status="$log->approval_status ?? 'pending'" />
                             </div>
                             <div class="text-sm text-gray-500">
                                 {{ \Carbon\Carbon::parse($log->created_at)->format('M j, Y') }}
@@ -167,7 +161,7 @@
                                                         <p class="text-sm text-gray-700 line-clamp-2 flex-1">
                                                             {{ $task->task_description }}
                                                         </p>
-                                                        <x-status-indicator :status="$assignment?->status ?? 'pending'" :label="$taskStatusConfig[3]" />
+                                                        <x-status-indicator :status="$assignment?->status ?? 'pending'" />
                                                     </div>
                                                 </div>
                                             @endforeach
