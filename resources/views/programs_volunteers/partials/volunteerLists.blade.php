@@ -68,15 +68,15 @@
                                 $hasLogs = !$volunteerLogs->isEmpty();
                                 $allReviewed = $hasLogs && $volunteerLogs->every(fn($log) => in_array($log->approval_status, ['approved', 'rejected']));
                             @endphp
-                            <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="info">
-                                <i class='bx bx-show'></i> View
+                            <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view">
+                                <i class='bx bx-show'></i>
                             </x-button>
                              @php
                                 $hasLogs = !$volunteerLogs->isEmpty();
                                 $hasClockOut = $hasLogs && $volunteerLogs->first()->clock_out;
                             @endphp
                             @if (!$hasLogs || ($hasLogs && !$hasClockOut))
-                                <x-button variant="warning"
+                                <x-button variant="manual-entry"
                                     onclick="document.getElementById('manualAttendanceModal_{{ $volunteer->id }}').showModal()">
                                     <i class='bx bx-edit'></i> Manual Entry
                                 </x-button>
@@ -99,7 +99,7 @@
                                     <i class='bx bx-check-double'></i> Reviewed
                                 </x-button>
                             @else
-                                <x-button variant="info"
+                                <x-button variant="review-attendance"
                                     onclick="document.getElementById('attendanceModal_{{ $volunteer->id }}').showModal()">
                                     <i class='bx bx-show'></i> Review Attendance
                                 </x-button>

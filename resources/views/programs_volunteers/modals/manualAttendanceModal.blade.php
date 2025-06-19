@@ -74,13 +74,11 @@
             </div>
 
             <x-modal.footer>
-                <x-modal.close-button :modalId="'manualAttendanceModal_' . $selectedVolunteer->id" text="Cancel" />
-                <button 
-                    type="submit" 
-                    class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
-                >
+                <x-modal.close-button :modalId="'manualAttendanceModal_' . $selectedVolunteer->id" text="Cancel" variant="cancel" />
+                <x-button type="submit" variant="save-entry">
+                    <i class='bx bx-time-five'></i>
                     Save Attendance
-                </button>
+                </x-button>
             </x-modal.footer>
         </form>
     </div>

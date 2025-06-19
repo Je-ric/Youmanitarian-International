@@ -1,5 +1,5 @@
 <!-- Add New Task - Compact Design -->
-<div class="w-full bg-white border border-gray-200 rounded-lg p-4 mb-6">
+<div class="w-full bg-gradient-to-r from-slate-50 to-gray-50 border border-slate-200 rounded-xl p-5 mb-6 shadow-sm hover:shadow-md transition-all duration-200">
     <form action="{{ route('programs.tasks.store', $program) }}" method="POST" x-data="{ expanded: false }">
         @csrf
         <div class="flex items-center justify-between">
@@ -7,7 +7,7 @@
                 <i class='bx bx-plus-circle mr-2 text-[#ffb51b]'></i>
                 Add New Task
             </h3>
-            <x-button type="button" variant="task-primary" @click="expanded = !expanded">
+            <x-button type="button" variant="primary" @click="expanded = !expanded">
                 <i class='bx bx-plus mr-1'></i>
                 <span x-text="expanded ? 'Cancel' : 'New Task'"></span>
             </x-button>
@@ -22,7 +22,7 @@
                     placeholder="Describe the task..." 
                     required
                 ></textarea>
-                <x-button type="submit" variant="task-secondary">
+                <x-button type="submit" variant="save-entry">
                     <i class='bx bx-check mr-1'></i> Add Task
                 </x-button>
             </div>
@@ -45,17 +45,17 @@
 @else
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         @foreach($tasks as $task)
-            <div class="bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-all duration-200 hover:shadow-sm">
+            <div class="bg-white border border-slate-200 rounded-xl hover:border-slate-300 transition-all duration-200 hover:shadow-lg shadow-sm overflow-hidden">
                 
                 <!-- Card Header -->
-                <div class="p-4 border-b border-gray-100">
+                <div class="p-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-gray-50">
                     <div class="flex items-center justify-between mb-3">
                         <!-- Status Badge -->
                         @php
                             $statusConfig = match ($task->status) {
                                 'completed' => ['bg-green-100', 'text-green-800', 'bx-check-circle', 'Completed', 'bg-green-500'],
                                 'in_progress' => ['bg-blue-100', 'text-blue-800', 'bx-time', 'In Progress', 'bg-blue-500'],
-                                default => ['bg-gray-100', 'text-gray-800', 'bx-clock', 'Pending', 'bg-gray-400']
+                                default => ['bg-amber-100', 'text-amber-800', 'bx-clock', 'Pending', 'bg-amber-500', 'border-amber-200']
                             };
                         @endphp
                         <x-status-indicator :status="$task->status" :label="$statusConfig[3]" />
@@ -94,8 +94,11 @@
                             @csrf
                             @method('PUT')
                             <div x-show="!editing" class="cursor-pointer group" @click="editing = true">
-                                <p class="text-gray-800 text-sm leading-relaxed line-clamp-3">{{ $task->task_description }}</p>
-                                <p class="text-xs text-gray-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Click to edit</p>
+                                <p class="text-slate-700 text-sm leading-relaxed line-clamp-3 font-medium">{{ $task->task_description }}</p>
+                                <p class="text-xs text-slate-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                                    <i class='bx bx-edit-alt'></i>
+                                    Click to edit
+                                </p>
                             </div>
                             <div x-show="editing" class="space-y-2">
                                 <textarea 
@@ -105,12 +108,12 @@
                                     required
                                 >{{ $task->task_description }}</textarea>
                                 <div class="flex gap-2">
-                                    <button type="submit" class="px-2 py-1 bg-[#1a2235] text-white rounded text-xs hover:bg-[#2a3245] transition-colors">
+                                    <x-button type="submit" variant="save-entry" class="px-2 py-1">
                                         Save
-                                    </button>
-                                    <button type="button" @click="editing = false" class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs hover:bg-gray-200 transition-colors">
+                                    </x-button>
+                                    <x-button type="button" variant="cancel" @click="editing = false" class="px-2 py-1">
                                         Cancel
-                                    </button>
+                                    </x-button>
                                 </div>
                             </div>
                         </form>
@@ -137,7 +140,7 @@
                                         };
                                     @endphp
                                     <div class="flex items-center justify-between p-2 rounded border {{ $assignmentStatusConfig[0] }} {{ $assignmentStatusConfig[2] }}">
-                                        <div class="flex items-center gap-2 min-w-0">
+                                        <div class="flex items-center gap-3 min-w-0 flex-1">
                                             <div class="w-1.5 h-1.5 rounded-full {{ $assignmentStatusConfig[3] }} flex-shrink-0"></div>
                                             <span class="text-xs font-medium {{ $assignmentStatusConfig[1] }} truncate">
                                                 {{ $assignment->volunteer->user->name }}
@@ -183,13 +186,12 @@
 
                     <!-- Assign New Volunteer -->
                     <div x-data="{ showAssign: false }">
-                        <button 
+                        <x-button 
                             @click="showAssign = !showAssign"
-                            class="w-full py-2 text-xs font-medium text-[#1a2235] bg-gray-50 hover:bg-gray-100 rounded border border-gray-200 transition-colors flex items-center justify-center gap-1"
-                        >
+                            variant="test">
                             <i class='bx bx-plus'></i>
                             <span x-text="showAssign ? 'Cancel' : 'Assign Volunteer'"></span>
-                        </button>
+                        </x-button>
                         
                         <div x-show="showAssign" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" class="mt-2">
                             <form action="{{ route('programs.tasks.assign', [$program, $task]) }}" method="POST" class="space-y-2">
@@ -206,12 +208,12 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <button 
+                                <x-button 
                                     type="submit" 
-                                    class="w-full py-2 bg-[#ffb51b] text-[#1a2235] rounded hover:bg-[#e6a319] transition-colors text-xs font-medium"
-                                >
+                                    variant="test"
+                                    class="w-full">
                                     <i class='bx bx-check mr-1'></i> Assign
-                                </button>
+                                </x-button>
                             </form>
                         </div>
                     </div>
