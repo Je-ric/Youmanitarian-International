@@ -7,14 +7,10 @@
                 <i class='bx bx-plus-circle mr-2 text-[#ffb51b]'></i>
                 Add New Task
             </h3>
-            <button 
-                type="button" 
-                @click="expanded = !expanded"
-                class="px-3 py-1 text-sm bg-[#ffb51b] text-[#1a2235] rounded-md hover:bg-[#e6a319] transition-colors font-medium"
-            >
+            <x-button type="button" variant="task-primary" @click="expanded = !expanded">
                 <i class='bx bx-plus mr-1'></i>
                 <span x-text="expanded ? 'Cancel' : 'New Task'"></span>
-            </button>
+            </x-button>
         </div>
         
         <div x-show="expanded" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 transform -translate-y-2" x-transition:enter-end="opacity-100 transform translate-y-0" class="mt-4">
@@ -26,12 +22,9 @@
                     placeholder="Describe the task..." 
                     required
                 ></textarea>
-                <button 
-                    type="submit"
-                    class="px-4 py-2 bg-[#1a2235] text-white rounded-md hover:bg-[#2a3245] transition-colors font-medium whitespace-nowrap text-sm"
-                >
+                <x-button type="submit" variant="task-secondary">
                     <i class='bx bx-check mr-1'></i> Add Task
-                </button>
+                </x-button>
             </div>
             @error('task_description')
                 <p class="text-red-600 mt-2 text-sm">{{ $message }}</p>
@@ -65,10 +58,7 @@
                                 default => ['bg-gray-100', 'text-gray-800', 'bx-clock', 'Pending', 'bg-gray-400']
                             };
                         @endphp
-                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $statusConfig[0] }} {{ $statusConfig[1] }}">
-                            <div class="w-1.5 h-1.5 rounded-full mr-1.5 {{ $statusConfig[4] }}"></div>
-                            {{ $statusConfig[3] }}
-                        </span>
+                        <x-status-indicator :status="$task->status" :label="$statusConfig[3]" />
 
                         <!-- Actions Menu -->
                         <div class="flex items-center gap-1">

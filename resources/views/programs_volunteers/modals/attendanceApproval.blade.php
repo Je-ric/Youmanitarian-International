@@ -36,11 +36,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div class="flex items-center gap-2">
                                 <span class="text-sm font-medium text-gray-700">Status:</span>
-                                <span
-                                    class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $statusConfig[0] }} {{ $statusConfig[1] }}">
-                                    <i class="bx {{ $statusConfig[2] }} mr-1"></i>
-                                    {{ $statusConfig[3] }}
-                                </span>
+                                <x-status-indicator :status="$log->approval_status ?? 'pending'" :label="$statusConfig[3]" />
                             </div>
                             <div class="text-sm text-gray-500">
                                 {{ \Carbon\Carbon::parse($log->created_at)->format('M j, Y') }}
@@ -167,15 +163,11 @@
                                                     };
                                                 @endphp
                                                 <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
-                                                    <div class="flex items-start justify-between gap-2 mb-2">
+                                                    <div class="flex items-start justify-between gap-2">
                                                         <p class="text-sm text-gray-700 line-clamp-2 flex-1">
                                                             {{ $task->task_description }}
                                                         </p>
-                                                        <span
-                                                            class="inline-flex items-center px-2 py-1 rounded text-xs font-medium {{ $taskStatusConfig[0] }} {{ $taskStatusConfig[1] }} flex-shrink-0">
-                                                            <i class="bx {{ $taskStatusConfig[2] }} mr-1"></i>
-                                                            {{ $taskStatusConfig[3] }}
-                                                        </span>
+                                                        <x-status-indicator :status="$assignment?->status ?? 'pending'" :label="$taskStatusConfig[3]" />
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -200,22 +192,20 @@
                                     @csrf
                                     <input type="hidden" name="status" value="approved">
                                     <input type="hidden" name="notes" id="approve_notes_{{ $log->id }}">
-                                    <button type="submit"
-                                        onclick="document.getElementById('approve_notes_{{ $log->id }}').value = document.getElementById('notes_{{ $log->id }}').value"
-                                        class="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center justify-center">
+                                    <x-button variant="attendance-approve" type="submit"
+                                        onclick="document.getElementById('approve_notes_{{ $log->id }}').value = document.getElementById('notes_{{ $log->id }}').value">
                                         <i class='bx bx-check-circle mr-2'></i> Approve Attendance
-                                    </button>
+                                    </x-button>
                                 </form>
 
                                 <form action="{{ route('attendance.status', $log->id) }}" method="POST" class="flex-1">
                                     @csrf
                                     <input type="hidden" name="status" value="rejected">
                                     <input type="hidden" name="notes" id="reject_notes_{{ $log->id }}">
-                                    <button type="submit"
-                                        onclick="document.getElementById('reject_notes_{{ $log->id }}').value = document.getElementById('notes_{{ $log->id }}').value"
-                                        class="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center justify-center">
+                                    <x-button variant="attendance-reject" type="submit"
+                                        onclick="document.getElementById('reject_notes_{{ $log->id }}').value = document.getElementById('notes_{{ $log->id }}').value">
                                         <i class='bx bx-x-circle mr-2'></i> Reject Attendance
-                                    </button>
+                                    </x-button>
                                 </form>
                             </div>
                         </div>

@@ -48,8 +48,12 @@
             transition-transform duration-200
         ',
 
-
-        ];
+        'reviewed'  => 'btn btn-outline text-green-600 border-green-300 hover:bg-green-50 font-semibold',
+        'attendance-approve' => 'w-full bg-green-50 border border-green-300 text-green-700 hover:bg-green-100 font-semibold rounded-lg flex items-center justify-center gap-2 py-2 transition',
+        'attendance-reject'  => 'w-full bg-red-50 border border-red-300 text-red-700 hover:bg-red-100 font-semibold rounded-lg flex items-center justify-center gap-2 py-2 transition',
+        'task-primary' => 'px-3 py-1 text-sm bg-[#ffb51b] text-[#1a2235] rounded-md hover:bg-[#e6a319] font-semibold transition-colors',
+        'task-secondary' => 'px-3 py-1 text-sm bg-[#1a2235] text-white rounded-md hover:bg-[#2a3245] font-semibold transition-colors',
+    ];
 
     $class = "inline-flex items-center justify-center gap-1 px-4 py-2 rounded-md font-semibold transition duration-200 " . ($styles[$variant] ?? $styles['primary']);
 @endphp
@@ -65,25 +69,3 @@
         {{ $slot }}
     </button>
 @endif
-
-{{-- 
-
-<div class="flex flex-col sm:flex-row gap-3 w-full max-w-md">
-  <!-- Log Attendance Button -->
-  <button
-    class="flex items-center justify-center gap-2 px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-800 
-           hover:bg-gray-100 hover:border-gray-400 active:bg-gray-200 active:scale-[.98] cursor-pointer 
-           shadow-sm transition-all duration-150 ease-in-out flex-1">
-    <i class='bx bx-time text-xl'></i>
-    <span class="text-sm sm:text-base font-medium">Log Attendance</span>
-  </button>
-
-  <!-- Participate Button -->
-  <button
-    class="flex items-center justify-center gap-2 px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-800 
-           hover:bg-gray-100 hover:border-gray-400 active:bg-gray-200 active:scale-[.98] cursor-pointer 
-           shadow-sm transition-all duration-150 ease-in-out flex-1">
-    <i class='bx bx-user-plus text-xl'></i>
-    <span class="text-sm sm:text-base font-medium">Participate</span>
-  </button>
-</div> --}}

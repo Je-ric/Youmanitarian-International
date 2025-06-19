@@ -76,34 +76,33 @@
                                 $hasClockOut = $hasLogs && $volunteerLogs->first()->clock_out;
                             @endphp
                             @if (!$hasLogs || ($hasLogs && !$hasClockOut))
-    <button type="button"
-        class="btn btn-warning"
-        onclick="document.getElementById('manualAttendanceModal_{{ $volunteer->id }}').showModal()">
-        <i class='bx bx-edit'></i> Manual Entry
-    </button>
-    @php
-    $attendance = \App\Models\VolunteerAttendance::where('volunteer_id', $volunteer->id)
-        ->where('program_id', $program->id)
-        ->first();
-@endphp
+                                <x-button variant="warning"
+                                    onclick="document.getElementById('manualAttendanceModal_{{ $volunteer->id }}').showModal()">
+                                    <i class='bx bx-edit'></i> Manual Entry
+                                </x-button>
+                                @php
+                                $attendance = \App\Models\VolunteerAttendance::where('volunteer_id', $volunteer->id)
+                                    ->where('program_id', $program->id)
+                                    ->first();
+                            @endphp
 
-@include('programs_volunteers.modals.manualAttendanceModal', [
-    'program' => $program,
-    'selectedVolunteer' => $volunteer,
-    'attendance' => $attendance
-])
-@endif
+                            @include('programs_volunteers.modals.manualAttendanceModal', [
+                                'program' => $program,
+                                'selectedVolunteer' => $volunteer,
+                                'attendance' => $attendance
+                            ])
+                            @endif
                             @if ($allReviewed)
-                                <button class="btn btn-outline text-green-600 border-green-300 hover:bg-green-50"
+                                <x-button variant="reviewed"
                                     title="Attendance already reviewed"
                                     onclick="document.getElementById('attendanceModal_{{ $volunteer->id }}').showModal()">
                                     <i class='bx bx-check-double'></i> Reviewed
-                                </button>
+                                </x-button>
                             @else
-                                <button class="btn btn-info"
+                                <x-button variant="info"
                                     onclick="document.getElementById('attendanceModal_{{ $volunteer->id }}').showModal()">
                                     <i class='bx bx-show'></i> Review Attendance
-                                </button>
+                                </x-button>
                             @endif
                             @include('programs_volunteers.modals.attendanceApproval', ['volunteer' => $volunteer, 'volunteerLogs' => $volunteerLogs])
                         </td>

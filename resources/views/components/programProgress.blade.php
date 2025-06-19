@@ -3,7 +3,6 @@
 @php
     $status = $program->progress_status_with_style;
     
-    // Define icons and colors for each status
     $statusConfig = [
         'incoming' => [
             'icon' => 'bx-calendar-event',
@@ -31,7 +30,7 @@
     $config = $statusConfig[$program->progress_status] ?? $statusConfig['done'];
 @endphp
 
-<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border {{ $config['bg'] }} {{ $config['border'] }} {{ $config['text'] }}">
+<div class="inline-flex items-center gap-2 px-3 py-1 text-[11px] md:text-xs rounded-full font-semibold {{ $config['bg'] }} {{ $config['text'] }}">
     <i class='bx {{ $config['icon'] }} text-lg {{ $config['iconColor'] }}'></i>
-    <span class="font-medium text-sm">{{ $status['label'] }}</span>
+    <span>{{ $status['label'] }}</span>
 </div>
