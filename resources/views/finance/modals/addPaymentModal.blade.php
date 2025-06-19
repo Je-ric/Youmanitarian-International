@@ -206,11 +206,10 @@
             <x-modal.footer>
                 <x-modal.close-button :modalId="$modalId" text="Cancel" variant="cancel" />
                 @if(!$payment)
-                    <button type="submit"
-                        class="w-full sm:w-auto order-1 sm:order-2 px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg transition-colors">
+                    <x-button type="submit" variant="save-entry" class="w-full sm:w-auto order-1 sm:order-2">
                         <i class='bx bx-save mr-1'></i>
                         Save Payment
-                    </button>
+                    </x-button>
                 @endif
             </x-modal.footer>
         </form>

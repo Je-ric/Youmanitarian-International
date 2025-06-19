@@ -71,13 +71,12 @@
 
                 <!-- Footer - Always Visible -->
                 <x-modal.footer>
-                    <button type="submit" 
-                            class="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors duration-200 flex items-center gap-2">
+                    <x-modal.close-button :modalId="'uploadProofModal'" text="Cancel" variant="cancel" />
+                    
+                    <x-button type="submit" variant="save-entry">
                         <i class='bx bx-upload'></i>
                         Upload
-                    </button>
-
-                    <x-modal.close-button :modalId="'uploadProofModal'" text="Cancel" variant="cancel" />
+                    </x-button>
                 </x-modal.footer>
             </form>
         @endif

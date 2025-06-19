@@ -77,11 +77,10 @@
                 <x-modal.footer>
                     <x-modal.close-button :modalId="'feedbackModal_' . $program->id" text="Cancel" variant="cancel" />
                     @if(!$userFeedback)
-                        <button type="submit"
-                            class="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors duration-200 flex items-center gap-2">
+                        <x-button type="submit" variant="save-entry" class="px-6 py-2 text-sm font-medium flex items-center gap-2">
                             <i class='bx bx-send'></i>
                             Submit Feedback
-                        </button>
+                        </x-button>
                     @else
                         <button type="button"
                             class="px-6 py-2 text-sm font-medium text-slate-400 bg-slate-100 border border-slate-300 rounded-lg cursor-not-allowed"
