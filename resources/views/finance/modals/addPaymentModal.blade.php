@@ -20,31 +20,28 @@
     <div class="modal-box w-11/12 max-w-2xl mx-auto p-0 bg-white border border-gray-200 rounded-xl shadow-xl">
 
         <!-- Header -->
-        <header class="px-4 sm:px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-xl">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div class="flex-1 min-w-0">
-                    <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">
-                        {{ $quarter }} {{ $year }} Payment
-                    </h3>
-                    <p class="text-sm text-gray-600 truncate mt-1">
-                        {{ $member->user->name }}
-                    </p>
-                    <div class="flex flex-wrap items-center gap-2 mt-2">
-                        <span
-                            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $statusClass }}">
-                            <div
-                                class="w-1.5 h-1.5 rounded-full mr-1.5 {{ $status === 'paid' ? 'bg-green-500' : ($status === 'overdue' ? 'bg-red-500' : 'bg-yellow-500') }}">
-                            </div>
-                            {{ ucfirst($status) }}
-                        </span>
-                        <span class="text-xs text-gray-500">
-                            {{ now()->format('M j, Y') }}
-                        </span>
-                    </div>
+        <x-modal.header>
+            <div class="flex-1 min-w-0">
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">
+                    {{ $quarter }} {{ $year }} Payment
+                </h3>
+                <p class="text-sm text-gray-600 truncate mt-1">
+                    {{ $member->user->name }}
+                </p>
+                <div class="flex flex-wrap items-center gap-2 mt-2">
+                    <span
+                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $statusClass }}">
+                        <div
+                            class="w-1.5 h-1.5 rounded-full mr-1.5 {{ $status === 'paid' ? 'bg-green-500' : ($status === 'overdue' ? 'bg-red-500' : 'bg-yellow-500') }}">
+                        </div>
+                        {{ ucfirst($status) }}
+                    </span>
+                    <span class="text-xs text-gray-500">
+                        {{ now()->format('M j, Y') }}
+                    </span>
                 </div>
-                <x-modal.x-button></x-modal.x-button>
             </div>
-        </header>
+        </x-modal.header>
 
         <!-- Main Content -->
         <form action="{{ route('finance.membership.payments.store') }}" method="POST" enctype="multipart/form-data"
@@ -206,22 +203,16 @@
             </div>
 
             <!-- Footer -->
-            <footer class="border-t border-gray-200 px-4 sm:px-6 py-4 bg-gray-50 rounded-b-xl">
-                <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
-                    <button type="button" onclick="this.closest('dialog').close()"
-                        class="w-full sm:w-auto order-2 sm:order-1 px-6 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
-                        <i class='bx bx-x mr-1'></i>
-                        Cancel
+            <x-modal.footer>
+                <x-modal.close-button :modalId="$modalId" text="Cancel" variant="cancel" />
+                @if(!$payment)
+                    <button type="submit"
+                        class="w-full sm:w-auto order-1 sm:order-2 px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg transition-colors">
+                        <i class='bx bx-save mr-1'></i>
+                        Save Payment
                     </button>
-                    @if(!$payment)
-                        <button type="submit"
-                            class="w-full sm:w-auto order-1 sm:order-2 px-6 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg transition-colors">
-                            <i class='bx bx-save mr-1'></i>
-                            Save Payment
-                        </button>
-                    @endif
-                </div>
-            </footer>
+                @endif
+            </x-modal.footer>
         </form>
     </div>
 </dialog>
