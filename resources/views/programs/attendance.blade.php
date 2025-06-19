@@ -12,10 +12,6 @@
 
 @section('content')
 
-    @if (session('toast'))
-        <x-toast :message="session('toast')['message']" :type="session('toast')['type']" />
-    @endif
-
     <div class="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
 
         <div class="mb-6">

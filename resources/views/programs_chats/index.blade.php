@@ -1,9 +1,6 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-    @if (session('toast'))
-        <x-toast :message="session('toast')['message']" :type="session('toast')['type']" />
-    @endif
 
     <div class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
         <div class="mb-4 sm:mb-8">

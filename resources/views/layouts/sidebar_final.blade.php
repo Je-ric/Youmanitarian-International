@@ -363,6 +363,11 @@
         ] : []),
     ]" />
         </div>
+
+        @if (session('toast'))
+            <x-toast :message="session('toast')['message']" :type="session('toast')['type']" />
+        @endif
+        
         @yield('content')
     </div>
 
@@ -450,7 +455,7 @@
             .main-content {
                 margin-left: 16rem;
             }
-            
+
             .content-collapsed {
                 margin-left: 4rem;
             }
@@ -731,7 +736,7 @@
             new SidebarManager();
         });
     </script>
-    @stack('scripts') 
+    @stack('scripts')
     {{-- "put all the scripts that were pushed here" --}}
 </body>
 

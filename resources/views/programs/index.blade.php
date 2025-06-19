@@ -5,9 +5,6 @@
 @endphp
 
 @section('content')
-    @if (session('toast'))
-        <x-toast :message="session('toast')['message']" :type="session('toast')['type']" />
-    @endif
 
     <div x-data="{ 
         openModal(id) {

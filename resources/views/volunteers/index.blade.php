@@ -26,10 +26,6 @@
             <p class="text-sm sm:text-base text-gray-600">Manage volunteer applications and approved volunteers</p>
         </div>
 
-        @if (session('toast'))
-            <x-toast :message="session('toast')['message']" :type="session('toast')['type']" />
-        @endif
-
         @php
             $tabs = [
                 ['id' => 'applications', 'label' => 'Applications', 'icon' => 'bx-user-plus'],

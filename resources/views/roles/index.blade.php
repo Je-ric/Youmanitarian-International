@@ -26,10 +26,6 @@
             <p class="text-sm sm:text-base text-gray-600">Manage user roles and permissions</p>
         </div>
 
-        @if (session('toast'))
-            <x-toast :message="session('toast')['message']" :type="session('toast')['type']" />
-        @endif
-
         @php
             $tabs = [
                 ['id' => 'users', 'label' => 'Users & Roles', 'icon' => 'bx-user'],
