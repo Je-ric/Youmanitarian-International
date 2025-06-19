@@ -93,10 +93,9 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                    <button onclick="document.getElementById('assignRolesModal_{{ $user->id }}').showModal()" 
-                                                            class="text-indigo-600 hover:text-indigo-900">
-                                                        Assign Roles
-                                                    </button>
+                                                    <x-button type="button" variant="table-action-manage" onclick="document.getElementById('assignRolesModal_{{ $user->id }}').showModal()">
+                                                        <i class='bx bx-edit-alt'></i>
+                                                    </x-button>
                                                 </td>
                                     </tr>
 

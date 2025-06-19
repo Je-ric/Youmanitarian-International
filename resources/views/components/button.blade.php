@@ -53,6 +53,11 @@
         'attendance-reject'  => 'w-full bg-red-50 border border-red-300 text-red-700 hover:bg-red-100 font-semibold rounded-lg flex items-center justify-center gap-2 py-2 transition',
         'task-primary' => 'px-3 py-1 text-sm bg-[#ffb51b] text-[#1a2235] rounded-md hover:bg-[#e6a319] font-semibold transition-colors',
         'task-secondary' => 'px-3 py-1 text-sm bg-[#1a2235] text-white rounded-md hover:bg-[#2a3245] font-semibold transition-colors',
+    
+        'table-action-view' => 'w-9 h-9 flex items-center justify-center bg-blue-50 border border-blue-100 rounded-md hover:bg-blue-100 hover:border-blue-300 text-[#1a2235] text-xl p-0 shadow-sm focus:ring-2 focus:ring-blue-200 transition',
+        'table-action-manage' => 'w-9 h-9 flex items-center justify-center bg-green-50 border border-green-100 rounded-md hover:bg-green-100 hover:border-green-300 text-green-600 text-xl p-0 shadow-sm focus:ring-2 focus:ring-green-200 transition',
+        'table-action-edit' => 'w-9 h-9 flex items-center justify-center bg-yellow-50 border border-yellow-100 rounded-md hover:bg-yellow-100 hover:border-yellow-300 text-yellow-500 text-xl p-0 shadow-sm focus:ring-2 focus:ring-yellow-200 transition',
+        'table-action-danger' => 'w-9 h-9 flex items-center justify-center bg-red-50 border border-red-100 rounded-md hover:bg-red-100 hover:border-red-300 text-red-500 text-xl p-0 shadow-sm focus:ring-2 focus:ring-red-200 transition',
     ];
 
     $class = "inline-flex items-center justify-center gap-1 px-4 py-2 rounded-md font-semibold transition duration-200 " . ($styles[$variant] ?? $styles['primary']);

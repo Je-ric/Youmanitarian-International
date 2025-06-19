@@ -63,19 +63,22 @@
                                         <td class="p-3">{{ $volunteer->user->email }}</td>
                                         <td class="p-3">
                                             <div class="flex flex-wrap gap-2">
-                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="info" class="tooltip"
-                                                    data-tip="View Details">
-                                                    <i class='bx bx-show'></i> View
+                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                                    <i class='bx bx-show'></i>
                                                 </x-button>
 
                                                 <form action="{{ route('volunteers.approve', $volunteer->id) }}" method="POST" class="inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-success">Approve</button>
+                                                    <x-button type="submit" variant="table-action-manage" class="tooltip" data-tip="Approve">
+                                                        <i class='bx bx-check'></i>
+                                                    </x-button>
                                                 </form>
 
                                                 <form action="{{ route('volunteers.deny', $volunteer->id) }}" method="POST" class="inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-warning">Deny</button>
+                                                    <x-button type="submit" variant="table-action-danger" class="tooltip" data-tip="Deny">
+                                                        <i class='bx bx-x'></i>
+                                                    </x-button>
                                                 </form>
                                             </div>
                                         </td>
@@ -209,16 +212,15 @@
                                         <td class="p-3">{{ $volunteer->user->email }}</td>
                                         <td class="p-3">
                                             <div class="flex flex-wrap gap-2">
-                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="info" class="tooltip"
-                                                    data-tip="View Details">
-                                                    <i class='bx bx-show'></i> View
+                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                                    <i class='bx bx-show'></i>
                                                 </x-button>
 
                                                 <form action="{{ route('volunteers.restore', $volunteer->id) }}" method="POST" class="inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-info tooltip" data-tip="Restore to Pending">
-                                                        <i class='bx bx-reset'></i> Restore
-                                                    </button>
+                                                    <x-button type="submit" variant="table-action-edit" class="tooltip" data-tip="Restore to Pending">
+                                                        <i class='bx bx-reset'></i>
+                                                    </x-button>
                                                 </form>
                                             </div>
                                         </td>
@@ -252,16 +254,15 @@
                                         <td class="p-3">{{ $volunteer->created_at->format('M d, Y') }}</td>
                                         <td class="p-3">
                                             <div class="flex flex-wrap gap-2">
-                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="info" class="tooltip"
-                                                    data-tip="View Details">
-                                                    <i class='bx bx-show'></i> View
+                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                                    <i class='bx bx-show'></i>
                                                 </x-button>
 
                                                 <form action="{{ route('finance.members.invite', $volunteer->id) }}" method="POST" class="inline">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-success tooltip" data-tip="Invite to be Member">
-                                                        <i class='bx bx-user-plus'></i> Invite to Member
-                                                    </button>
+                                                    <x-button type="submit" variant="table-action-manage" class="tooltip" data-tip="Invite to be Member">
+                                                        <i class='bx bx-user-plus'></i>
+                                                    </x-button>
                                                 </form>
                                             </div>
                                         </td>

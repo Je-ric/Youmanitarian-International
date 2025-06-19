@@ -46,14 +46,14 @@
                         <td class="px-4 py-3 text-sm flex flex-wrap gap-2">
                             <!-- View Details Button (Available to all) -->
                             <x-button @click="openModal({{ $program->id }})"
-                                variant="info" class="tooltip" data-tip="View Details"
+                                variant="table-action-view" class="tooltip" data-tip="View Details"
                                 aria-label="View Details for {{ $program->title }}">
                                 <i class='bx bx-show'></i>
                             </x-button>
 
                             @if(Auth::user()->hasRole('Volunteer'))
                                 @if($program->volunteers->contains(Auth::user()->volunteer))
-                                    <x-button href="{{ route('programs.view', $program) }}" variant="success"
+                                    <x-button href="{{ route('programs.view', $program) }}" variant="table-action-manage"
                                         class="tooltip" data-tip="View Log"
                                         aria-label="View Log for {{ $program->title }}">
                                         <i class='bx bx-history'></i>
@@ -64,14 +64,14 @@
                             @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
                                 @if(Auth::id() === $program->created_by)
                                     <!-- Manage Volunteers Button (For program creator) -->
-                                    <x-button href="{{ route('programs.manage_volunteers', $program) }}" variant="manage"
+                                    <x-button href="{{ route('programs.manage_volunteers', $program) }}" variant="table-action-manage"
                                         class="tooltip" data-tip="Manage Volunteers"
                                         aria-label="Manage Volunteers for {{ $program->title }}">
                                         <i class='bx bx-group'></i>
                                     </x-button>
 
                                     <!-- Delete Button (For program creator) -->
-                                    <x-button type="button" variant="danger"
+                                    <x-button type="button" variant="table-action-danger"
                                         onclick="document.getElementById('delete-program-modal-{{ $program->id }}').showModal()"
                                         class="tooltip" data-tip="Delete" 
                                         aria-label="Delete {{ $program->title }}">
