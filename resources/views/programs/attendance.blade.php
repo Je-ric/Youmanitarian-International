@@ -299,13 +299,7 @@
                             class="bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-all duration-200 hover:shadow-sm">
                             <div class="p-4">
                                 <div class="flex items-center justify-between mb-3">
-                                    <span
-                                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $data['assignment']->status === 'completed' ? 'bg-green-100 text-green-800' : ($data['assignment']->status === 'in_progress' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800') }}">
-                                        <div
-                                            class="w-1.5 h-1.5 rounded-full mr-1.5 {{ $data['assignment']->status === 'completed' ? 'bg-green-500' : ($data['assignment']->status === 'in_progress' ? 'bg-blue-500' : 'bg-gray-400') }}">
-                                        </div>
-                                        {{ $data['assignment']->status === 'completed' ? 'Completed' : ($data['assignment']->status === 'in_progress' ? 'In Progress' : 'Pending') }}
-                                    </span>
+                                    <x-status-indicator :status="$data['assignment']->status" :label="ucwords(str_replace('_', ' ', $data['assignment']->status))" />
                                 </div>
 
                                 <p class="text-gray-700 text-sm mb-4">{{ $data['task']->task_description }}</p>
@@ -317,9 +311,9 @@
                                     @method('PUT')
                                     <div class="w-full">
                                         <select name="status" onchange="this.form.submit()"
-                                            class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:ring-1 focus:ring-[#ffb51b] focus:border-[#ffb51b] bg-white">
-                                            <option value="pending" {{ $data['assignment']->status === 'pending' ? 'selected' : '' }}>
-                                                Pending</option>
+                                            class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:ring-1 focus:ring-[#ffb51b] focus:border-[#ffb51b] bg-white"
+                                            @if($data['assignment']->status === 'completed') disabled @endif>
+                                            <option value="pending" {{ $data['assignment']->status === 'pending' ? 'selected' : '' }}>Pending</option>
                                             <option value="in_progress" {{ $data['assignment']->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
                                             <option value="completed" {{ $data['assignment']->status === 'completed' ? 'selected' : '' }} disabled>Completed (Program Coordinator Only)</option>
                                         </select>
