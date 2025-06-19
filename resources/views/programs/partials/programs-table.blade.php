@@ -71,23 +71,13 @@
                                     </x-button>
 
                                     <!-- Delete Button (For program creator) -->
-                                    <form action="{{ route('programs.destroy', $program) }}" method="POST"
-                                        id="delete-form-{{ $program->id }}" class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <x-button type="button" variant="danger"
-                                            onclick="document.getElementById('confirm-dialog-{{ $program->id }}').showModal()"
-                                            class="tooltip" data-tip="Delete" 
-                                            aria-label="Delete {{ $program->title }}">
-                                            <i class='bx bx-trash'></i>
-                                        </x-button>
-                                    </form>
-
-                                    <x-delete-confirmation id="confirm-dialog-{{ $program->id }}"
-                                        formId="delete-form-{{ $program->id }}" 
-                                        title="Delete this Program?"
-                                        message='"This will permanently remove the program and all its related data. This action cannot be undone. Are you sure you want to proceed?"'
-                                        confirmText="Delete" cancelText="Cancel" />
+                                    <x-button type="button" variant="danger"
+                                        onclick="document.getElementById('delete-program-modal-{{ $program->id }}').showModal()"
+                                        class="tooltip" data-tip="Delete" 
+                                        aria-label="Delete {{ $program->title }}">
+                                        <i class='bx bx-trash'></i>
+                                    </x-button>
+                                    @include('programs.modals.deleteProgramModal', ['program' => $program, 'modalId' => 'delete-program-modal-' . $program->id])
                                 @endif
                             @endif
                         </td>

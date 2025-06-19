@@ -9,7 +9,7 @@
                 <p class="mt-2 text-sm text-gray-600">Fill in the details below to create a new volunteer program.</p>
             </div>
 
-            <form action="{{ route('programs.createProgram') }}" method="POST" class="space-y-8">
+            <form action="{{ route('programs.store') }}" method="POST" class="space-y-8">
                 @csrf
 
                 <div class="space-y-6">
