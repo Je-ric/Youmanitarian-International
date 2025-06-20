@@ -61,9 +61,13 @@
                         </div>
 
                         <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
-                            <textarea name="feedback" rows="4"
-                                class="w-full bg-white border border-slate-300 rounded-lg p-3 text-sm resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
-                                placeholder="Share your thoughts about this program..." {{ $userFeedback ? 'readonly' : '' }}>{{ $userFeedback ? $userFeedback->feedback : '' }}</textarea>
+                            <x-textarea
+                                name="feedback"
+                                :value="$userFeedback ? $userFeedback->feedback : ''"
+                                :disabled="$userFeedback"
+                                rows="4"
+                                placeholder="Share your thoughts about this program..."
+                            />
                         </div>
                     </div>
 

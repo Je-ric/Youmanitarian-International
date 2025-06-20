@@ -84,14 +84,15 @@
 
                                 <!-- Notes Section -->
                                 <div>
-                                    <label for="notes_{{ $log->id }}"
-                                        class="block text-sm font-semibold text-gray-700 mb-2 items-center">
-                                        <i class='bx bx-note mr-1 text-[#ffb51b]'></i>
-                                        Notes
-                                    </label>
-                                    <textarea id="notes_{{ $log->id }}" name="notes" rows="3" @if($disabled) disabled @endif
-                                        class="w-full p-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] resize-none transition-colors @if($disabled) bg-gray-50 text-gray-500 cursor-not-allowed @endif"
-                                        placeholder="Add any comments about this attendance record...">{{ old('notes', $log->notes) }}</textarea>
+                                    <x-textarea
+                                        id="notes_{{ $log->id }}"
+                                        name="notes"
+                                        :value="old('notes', $log->notes)"
+                                        :disabled="$disabled"
+                                        label="Notes"
+                                        placeholder="Add any comments about this attendance record..."
+                                        rows="3"
+                                    />
                                 </div>
                             </div>
 

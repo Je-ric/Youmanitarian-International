@@ -211,24 +211,30 @@ class VolunteerAttendanceController extends Controller
 
     public function manualEntry(Request $request, Program $program)
     {
-        $request->validate([
-            'volunteer_id' => 'required|exists:volunteers,id',
-            'date' => 'required|date',
-            'clock_in' => 'required',
-            'clock_out' => 'nullable',
-            'notes' => 'required|string|max:1000',
-        ]);
-
-        $clockIn = $request->date . ' ' . $request->clock_in;
-        $clockOut = $request->clock_out ? $request->date . ' ' . $request->clock_out : null;
-
         $attendance = \App\Models\VolunteerAttendance::firstOrNew([
             'program_id' => $program->id,
             'volunteer_id' => $request->volunteer_id,
         ]);
 
-        $attendance->clock_in = $clockIn;
-        $attendance->clock_out = $clockOut;
+        $rules = [
+            'volunteer_id' => 'required|exists:volunteers,id',
+            'date' => 'required|date',
+            'notes' => 'required|string|max:1000',
+        ];
+        if (!$attendance->clock_in) {
+            $rules['clock_in'] = 'required';
+        }
+        $rules['clock_out'] = 'nullable';
+        $request->validate($rules);
+
+        // Only update clock_in if present in the request
+        if ($request->has('clock_in')) {
+            $attendance->clock_in = $request->date . ' ' . $request->clock_in;
+        }
+        // Only update clock_out if present in the request
+        if ($request->filled('clock_out')) {
+            $attendance->clock_out = $request->date . ' ' . $request->clock_out;
+        }
         $attendance->notes = $request->notes;
 
         // Calculate hours_logged

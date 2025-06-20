@@ -42,9 +42,18 @@
                         <div class="relative flex items-center">
                             <i class='bx bx-time-five absolute left-3 text-gray-400'></i>
                             @if($clockIn)
-                                <input type="text" readonly class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 bg-gray-100 text-gray-700 focus:outline-none" value="{{ $clockIn->format('g:i A') }}">
+                                <input type="text" readonly 
+                                    class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 bg-gray-100 text-gray-700 focus:outline-none" 
+                                    value="{{ $clockIn->format('h:i a') }}">
+                                <input type="hidden" name="clock_in" value="{{ $clockIn->format('H:i') }}">
                             @else
-                                <input type="time" name="clock_in" class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors" required>
+                                <input
+                                    type="time"
+                                    name="clock_in"
+                                    class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"
+                                    value=""
+                                    required
+                                >
                             @endif
                         </div>
                     </div>
@@ -53,7 +62,7 @@
                         <div class="relative flex items-center">
                             <i class='bx bx-time-five absolute left-3 text-gray-400'></i>
                             @if($clockOut)
-                                <input type="text" readonly class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 bg-gray-100 text-gray-700 focus:outline-none" value="{{ $clockOut->format('g:i A') }}">
+                                <input type="text" readonly class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 bg-gray-100 text-gray-700 focus:outline-none" value="{{ $clockOut->format('H:i') }}">
                             @else
                                 <input type="time" name="clock_out" class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors">
                             @endif
@@ -63,13 +72,13 @@
 
                 <!-- Reason -->
                 <div class="space-y-1.5">
-                    <label class="block text-sm font-medium text-gray-700">Reason for Manual Entry (optional): <span class="text-gray-500 text-xs">(optional)</span></label>
-                    <textarea 
-                        name="notes" 
-                        class="w-full px-3 py-2 rounded-md border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors resize-none"
-                        rows="3"
+                    <x-textarea
+                        name="notes"
+                        :value="$attendance?->notes"
+                        label="Reason for Manual Entry (optional):"
                         placeholder="Explain why manual entry is needed..."
-                    >{{ $attendance?->notes }}</textarea>
+                        rows="3"
+                    />
                 </div>
             </div>
 
