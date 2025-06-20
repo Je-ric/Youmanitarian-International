@@ -51,14 +51,7 @@
                 <div class="p-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-gray-50">
                     <div class="flex items-center justify-between mb-3">
                         <!-- Status Badge -->
-                        @php
-                            $statusConfig = match ($task->status) {
-                                'completed' => ['bg-green-100', 'text-green-800', 'bx-check-circle', 'Completed', 'bg-green-500'],
-                                'in_progress' => ['bg-blue-100', 'text-blue-800', 'bx-time', 'In Progress', 'bg-blue-500'],
-                                default => ['bg-amber-100', 'text-amber-800', 'bx-clock', 'Pending', 'bg-amber-500', 'border-amber-200']
-                            };
-                        @endphp
-                        <x-status-indicator :status="$task->status" :label="$statusConfig[3]" />
+                        <x-status-indicator :status="$task->status" />
 
                         <!-- Actions Menu -->
                         <div class="flex items-center gap-1">
@@ -109,10 +102,10 @@
                                     required
                                 >{{ $task->task_description }}</textarea>
                                 <div class="flex gap-2">
-                                    <x-button type="submit" variant="save-entry" class="px-2 py-1">
+                                    <x-button type="submit" variant="save-entry">
                                         Save
                                     </x-button>
-                                    <x-button type="button" variant="cancel" @click="editing = false" class="px-2 py-1">
+                                    <x-button type="button" variant="cancel" @click="editing = false">
                                         Cancel
                                     </x-button>
                                 </div>
@@ -137,7 +130,7 @@
                                         $assignmentStatusConfig = match ($assignment->status) {
                                             'completed' => ['bg-green-50', 'text-green-700', 'border-green-200', 'bg-green-500'],
                                             'in_progress' => ['bg-blue-50', 'text-blue-700', 'border-blue-200', 'bg-blue-500'],
-                                            default => ['bg-gray-50', 'text-gray-700', 'border-gray-200', 'bg-gray-400']
+                                            default => ['bg-amber-50', 'text-amber-700', 'border-amber-200', 'bg-amber-500'],
                                         };
                                     @endphp
                                     <div class="flex items-center justify-between p-2 rounded border {{ $assignmentStatusConfig[0] }} {{ $assignmentStatusConfig[2] }}">
