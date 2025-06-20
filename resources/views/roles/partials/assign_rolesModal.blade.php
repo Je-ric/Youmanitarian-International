@@ -104,12 +104,12 @@
                             @foreach($additionalRoles as $role)
                                 <label for="role_{{ $user->id }}_{{ $role->id }}" 
                                        class="relative flex items-start p-4 bg-white border border-gray-200 rounded-lg hover:border-[#ffb51b] hover:bg-gray-50 transition-all duration-200 cursor-pointer group">
-                                
+                                    
                                     <!-- Checkbox -->
                                     <div class="flex items-center h-5">
                                         <x-checkbox
-                                            name="roles[]"
-                                            value="{{ $role->id }}"
+                                            name="roles[]" 
+                                            value="{{ $role->id }}" 
                                             id="role_{{ $user->id }}_{{ $role->id }}"
                                             :checked="$user->roles->pluck('id')->contains($role->id)"
                                         />

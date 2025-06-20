@@ -27,14 +27,6 @@
 
         'delete'    => 'text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center',
         
-        'disabled' => '
-            bg-slate-400 
-            text-white text-base font-semibold tracking-tight 
-            rounded-md 
-            shadow-[0px_5.28px_13.2px_rgba(49,56,73,0.24)] 
-            cursor-not-allowed 
-            transition duration-200
-        ',
         'clock_in' => '
             bg-[#ffb51b] hover:bg-[#ffc449] 
             text-white 
@@ -47,9 +39,9 @@
             transition-transform duration-200
         ',
 
-        'reviewed'  => 'btn btn-outline text-green-600 border-green-300 hover:bg-green-50 font-semibold',
-        'attendance-approve' => 'w-full bg-green-50 border border-green-300 text-green-700 hover:bg-green-100 font-semibold rounded-lg flex items-center justify-center gap-2 py-2 transition',
-        'attendance-reject'  => 'w-full bg-red-50 border border-red-300 text-red-700 hover:bg-red-100 font-semibold rounded-lg flex items-center justify-center gap-2 py-2 transition',
+        'reviewed'  => 'btn btn-outline text-green-600 text-sm border-green-300 hover:bg-green-50 font-semibold',
+        'attendance-approve' => 'w-full bg-green-50 text-sm border border-green-300 text-green-700 hover:bg-green-100 font-semibold rounded-lg flex items-center justify-center gap-2 py-2 transition',
+        'attendance-reject'  => 'w-full bg-red-50 text-sm border border-red-300 text-red-700 hover:bg-red-100 font-semibold rounded-lg flex items-center justify-center gap-2 py-2 transition',
         
         'task-primary' => 'px-3 py-1 text-sm bg-[#ffb51b] text-[#1a2235] rounded-md hover:bg-[#e6a319] font-semibold transition-colors',
         'task-secondary' => 'px-3 py-1 text-sm bg-[#1a2235] text-white rounded-md hover:bg-[#2a3245] font-semibold transition-colors',
@@ -59,10 +51,11 @@
         'table-action-edit' => 'w-9 h-9 flex items-center justify-center bg-yellow-50 border border-yellow-100 rounded-md hover:bg-yellow-100 hover:border-yellow-300 text-yellow-500 text-xl p-0 shadow-sm focus:ring-2 focus:ring-yellow-200 transition',
         'table-action-danger' => 'w-9 h-9 flex items-center justify-center bg-red-50 border border-red-100 rounded-md hover:bg-red-100 hover:border-red-300 text-red-500 text-xl p-0 shadow-sm focus:ring-2 focus:ring-red-200 transition',
         
-        'save-entry' => 'btn bg-[#283658] hover:bg-[#313849] text-[#FFB51B] font-semibold px-2 py-1 text-xs rounded shadow active:scale-95 transition-transform duration-200 border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#283658]',
+        'save-entry' => 'btn px-6 py-2 text-sm font-semibold flex items-center gap-2 bg-[#283658] hover:bg-[#313849] text-[#FFB51B] rounded shadow active:scale-95 transition-transform duration-200 border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#283658]',
         'manual-entry' => 'btn bg-[#FFB51B] hover:bg-[#FFCB5F] text-white font-semibold px-2 py-1 text-xs rounded shadow active:scale-95 transition-transform duration-200 border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#FFB51B]',
         'review-attendance' => 'btn bg-[#1A2235] hover:bg-[#313849] text-white font-semibold px-2 py-1 text-xs rounded shadow active:scale-95 transition-transform duration-200 border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#1A2235]',
         
+        'disabled' => 'px-6 py-2 text-sm font-medium text-slate-400 bg-slate-100 border border-slate-300 rounded-lg cursor-not-allowed',
         'cancel' => 'px-3 py-1.5 bg-slate-100 text-slate-600 rounded-md text-xs font-medium hover:bg-slate-200 transition-colors',
         'test' => 'w-full py-2.5 text-xs font-semibold text-indigo-600 bg-gradient-to-r from-indigo-50 to-indigo-100 hover:from-indigo-100 hover:to-indigo-200 rounded-lg border border-indigo-200 transition-all duration-200 flex items-center justify-center gap-2 shadow-sm hover:shadow-md',
     ];

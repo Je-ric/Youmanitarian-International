@@ -18,29 +18,29 @@
 
 <dialog id="{{ $modalId }}" class="modal">
     <div class="modal-box w-11/12 max-w-2xl mx-auto p-0 bg-white border border-gray-200 rounded-xl shadow-xl">
-
+        
         <!-- Header -->
         <x-modal.header>
-            <div class="flex-1 min-w-0">
-                <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">
-                    {{ $quarter }} {{ $year }} Payment
-                </h3>
-                <p class="text-sm text-gray-600 truncate mt-1">
-                    {{ $member->user->name }}
-                </p>
-                <div class="flex flex-wrap items-center gap-2 mt-2">
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">
+                        {{ $quarter }} {{ $year }} Payment
+                    </h3>
+                    <p class="text-sm text-gray-600 truncate mt-1">
+                        {{ $member->user->name }}
+                    </p>
+                    <div class="flex flex-wrap items-center gap-2 mt-2">
                     <span
                         class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $statusClass }}">
                         <div
                             class="w-1.5 h-1.5 rounded-full mr-1.5 {{ $status === 'paid' ? 'bg-green-500' : ($status === 'overdue' ? 'bg-red-500' : 'bg-yellow-500') }}">
                         </div>
-                        {{ ucfirst($status) }}
-                    </span>
-                    <span class="text-xs text-gray-500">
-                        {{ now()->format('M j, Y') }}
-                    </span>
+                            {{ ucfirst($status) }}
+                        </span>
+                        <span class="text-xs text-gray-500">
+                            {{ now()->format('M j, Y') }}
+                        </span>
+                    </div>
                 </div>
-            </div>
         </x-modal.header>
 
         <!-- Main Content -->
@@ -51,12 +51,12 @@
             <input type="hidden" name="payment_period" value="{{ $quarter }}">
             <input type="hidden" name="payment_year" value="{{ $year }}">
             <input type="hidden" name="payment_date" value="{{ now()->format('Y-m-d H:i:s') }}">
-
+            
             <div class="p-4 sm:p-6 space-y-6 max-h-[60vh] sm:max-h-[70vh] overflow-y-auto">
-
+                
                 <!-- Payment Details Grid -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-
+                    
                     <!-- Left Column -->
                     <div class="space-y-4">
                         <!-- Amount -->
@@ -75,8 +75,8 @@
                                         <span
                                             class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">₱</span>
                                         <input type="number" step="0.01" name="amount" id="amount" required
-                                            class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                            placeholder="0.00">
+                                               class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                               placeholder="0.00">
                                     </div>
                                 @endif
                             </div>
@@ -95,7 +95,7 @@
                                 </div>
                             @else
                                 <select name="payment_method" id="payment_method" required
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                                     <option value="">Select payment method</option>
                                     @foreach($paymentMethods as $value => $label)
                                         <option value="{{ $value }}">{{ $label }}</option>
@@ -121,19 +121,19 @@
 
                         <!-- Status Display (if payment exists) -->
                         {{-- @if($payment)
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                <i class='bx bx-check-shield mr-1 text-green-600'></i>
-                                Status
-                            </label>
-                            <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <i class='bx bx-check-shield mr-1 text-green-600'></i>
+                                    Status
+                                </label>
+                                <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3">
                                 <span
                                     class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    <i class='bx bx-check mr-1'></i>
-                                    Paid
-                                </span>
+                                        <i class='bx bx-check mr-1'></i>
+                                        Paid
+                                    </span>
+                                </div>
                             </div>
-                        </div>
                         @endif --}}
                     </div>
                 </div>
@@ -151,8 +151,8 @@
                         </div>
                     @else
                         <textarea name="notes" id="notes" rows="3"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
-                            placeholder="Add any additional notes about the payment..."></textarea>
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+                                  placeholder="Add any additional notes about the payment..."></textarea>
                     @endif
                 </div>
 
@@ -165,7 +165,7 @@
                             <span class="text-xs font-normal text-gray-500">(Optional)</span>
                         @endif
                     </label>
-
+                    
                     @if($payment && $payment->receipt_url)
                         @php
                             $extension = pathinfo($payment->receipt_url, PATHINFO_EXTENSION);
@@ -174,11 +174,11 @@
                             @if(in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif']))
                                 <div class="aspect-video bg-gray-100 flex items-center justify-center">
                                     <img src="{{ Storage::url($payment->receipt_url) }}" alt="Payment Receipt"
-                                        class="max-w-full max-h-full object-contain rounded">
+                                         class="max-w-full max-h-full object-contain rounded">
                                 </div>
                                 <div class="p-3 bg-white border-t border-gray-200">
                                     <a href="{{ Storage::url($payment->receipt_url) }}" target="_blank"
-                                        class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 font-medium">
+                                       class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 font-medium">
                                         <i class='bx bx-external-link mr-1'></i>
                                         View Full Size
                                     </a>
@@ -187,7 +187,7 @@
                                 <div class="p-4 text-center">
                                     <i class='bx bx-file text-3xl text-gray-400 mb-2'></i>
                                     <a href="{{ Storage::url($payment->receipt_url) }}" target="_blank"
-                                        class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                                       class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
                                         <i class='bx bx-download mr-1'></i>
                                         Download Receipt
                                     </a>
@@ -205,12 +205,12 @@
             <!-- Footer -->
             <x-modal.footer>
                 <x-modal.close-button :modalId="$modalId" text="Cancel" variant="cancel" />
-                @if(!$payment)
+                    @if(!$payment)
                     <x-button type="submit" variant="save-entry" class="w-full sm:w-auto order-1 sm:order-2">
-                        <i class='bx bx-save mr-1'></i>
-                        Save Payment
+                            <i class='bx bx-save mr-1'></i>
+                            Save Payment
                     </x-button>
-                @endif
+                    @endif
             </x-modal.footer>
         </form>
     </div>

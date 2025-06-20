@@ -82,12 +82,12 @@
                             Submit Feedback
                         </x-button>
                     @else
-                        <button type="button"
-                            class="px-6 py-2 text-sm font-medium text-slate-400 bg-slate-100 border border-slate-300 rounded-lg cursor-not-allowed"
+                        <x-button type="button"
+                            variant="disabled"
                             disabled>
                             <i class='bx bx-check'></i>
                             Feedback Submitted
-                        </button>
+                        </x-button>
                     @endif
                 </x-modal.footer>
             </form>

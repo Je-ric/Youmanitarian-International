@@ -67,7 +67,7 @@
                                 @csrf
                                 @method('PUT')
                                 <x-select-option
-                                    name="status"
+                                    name="status" 
                                     class="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-1 focus:ring-[#ffb51b] focus:border-[#ffb51b] bg-white"
                                     onchange="this.form.submit()"
                                     :options="[
@@ -155,7 +155,7 @@
                                                 @csrf
                                                 @method('PUT')
                                                 <x-select-option
-                                                    name="status"
+                                                    name="status" 
                                                     class="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-1 focus:ring-[#ffb51b] focus:border-[#ffb51b] bg-white"
                                                     onchange="this.form.submit()"
                                                     :options="[
