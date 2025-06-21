@@ -17,6 +17,20 @@
             <h1 class="text-2xl font-bold text-black">Hello, {{ Auth::user()->name }}!</h1>
             <p class="text-gray-600">{{ Auth::user()->email }}</p>
 
+            <div class="mt-4">
+                <h2 class="text-lg font-semibold text-gray-800">Your Roles:</h2>
+                <div class="flex flex-wrap justify-center gap-2 mt-2">
+                    @if(Auth::user()->roles->isNotEmpty())
+                        @foreach(Auth::user()->roles as $role)
+                            <span
+                                class="bg-indigo-100 text-indigo-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300">{{ $role->role_name }}</span>
+                        @endforeach
+                    @else
+                        <p class="text-gray-500">No roles assigned.</p>
+                    @endif
+                </div>
+            </div>
+
             @if(Auth::user()->profile_pic)
                 <img src="{{ Auth::user()->profile_pic }}" alt="Profile Picture" class="mt-4 w-24 h-24 rounded-full mx-auto">
             @endif
