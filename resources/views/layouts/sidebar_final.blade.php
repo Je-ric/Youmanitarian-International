@@ -349,6 +349,7 @@
             ...(request()->routeIs('programs.create') ? [['label' => 'Create Program']] : []),
             ...(request()->routeIs('programs.edit') ? [['label' => 'Edit Program']] : []),
             ...(request()->routeIs('programs.view') ? [['label' => 'Attendance']] : []),
+            ...(request()->routeIs('programs.manage_volunteers') ? [['label' => 'Manage Program & Volunteers']] : []),            
         ] : []),
         ...(request()->routeIs('volunteers.*') ? [
             ['label' => 'Volunteers', 'url' => route('volunteers.index')],

@@ -5,87 +5,81 @@
 @if($programs->isEmpty())
     <p class="text-gray-600 text-center py-4">No programs found.</p>
 @else
-    <div class="overflow-x-auto custom-scrollbar">
-        <table class="min-w-full w-full divide-y divide-gray-200">
-            <thead class="bg-[#1a2235] text-white">
-                <tr>
-                    <th scope="col" class="px-4 py-3 text-left text-sm font-semibold">#</th>
-                    <th scope="col"
-                        class="px-4 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-[#2a3245] transition-colors"
-                        onclick="sortTable('title')">
-                        <div class="flex items-center gap-1">
-                            Title <i class='bx bx-sort text-xs'></i>
-                        </div>
-                    </th>
-                    <th scope="col" class="px-4 py-3 text-left text-sm font-semibold">Location</th>
-                    <th scope="col" class="px-4 py-3 text-left text-sm font-semibold">Status</th>
-                    <th scope="col"
-                        class="px-4 py-3 text-left text-sm font-semibold cursor-pointer hover:bg-[#2a3245] transition-colors"
-                        onclick="sortTable('date')">
-                        <div class="flex items-center gap-1">
-                            Date <i class='bx bx-sort text-xs'></i>
-                        </div>
-                    </th>
-                    <th scope="col" class="px-4 py-3 text-left text-sm font-semibold">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-100">
-                @foreach($programs as $program)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-3 text-sm text-gray-800">
-                            {{ $loop->iteration + ($programs->currentPage() - 1) * $programs->perPage() }}
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-800 font-medium">{{ $program->title }}</td>
-                        <td class="px-4 py-3 text-sm text-gray-700">{{ $program->location ?? 'N/A' }}</td>
-                        <td class="px-4 py-3 text-sm">
-                            <x-programProgress :program="$program" />
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-700">
-                            {{ Carbon::parse($program->date)->format('M d, Y') }}
-                        </td>
-                        <td class="px-4 py-3 text-sm flex flex-wrap gap-2">
-                            <!-- View Details Button (Available to all) -->
-                            <x-button @click="openModal({{ $program->id }})"
-                                variant="table-action-view" class="tooltip" data-tip="View Details"
-                                aria-label="View Details for {{ $program->title }}">
-                                <i class='bx bx-show'></i>
-                            </x-button>
+    <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="w-full">
+        <x-table.thead>
+            <x-table.tr :hover="false">
+                <x-table.th align="right">#</x-table.th>
+                <x-table.th class="cursor-pointer hover:bg-gray-200/50 transition-colors" onclick="sortTable('title')">
+                    <div class="flex items-center gap-1">
+                        Title <i class='bx bx-sort text-sm text-gray-400'></i>
+                    </div>
+                </x-table.th>
+                <x-table.th>Location</x-table.th>
+                <x-table.th>Status</x-table.th>
+                <x-table.th class="cursor-pointer hover:bg-gray-200/50 transition-colors" onclick="sortTable('date')">
+                    <div class="flex items-center gap-1">
+                        Date <i class='bx bx-sort text-sm text-gray-400'></i>
+                    </div>
+                </x-table.th>
+                <x-table.th>Actions</x-table.th>
+            </x-table.tr>
+        </x-table.thead>
+        <x-table.tbody class="bg-white">
+            @foreach($programs as $program)
+                <x-table.tr>
+                    <x-table.td align="right" class="text-gray-500">
+                        {{ $loop->iteration + ($programs->currentPage() - 1) * $programs->perPage() }}
+                    </x-table.td>
+                    <x-table.td class="font-bold text-gray-800">{{ $program->title }}</x-table.td>
+                    <x-table.td>{{ $program->location ?? 'N/A' }}</x-table.td>
+                    <x-table.td>
+                        <x-programProgress :program="$program" />
+                    </x-table.td>
+                    <x-table.td>
+                        {{ Carbon::parse($program->date)->format('M d, Y') }}
+                    </x-table.td>
+                    <x-table.td class="flex flex-wrap gap-2">
+                        <!-- View Details Button (Available to all) -->
+                        <x-button @click="openModal({{ $program->id }})"
+                            variant="table-action-view" class="tooltip" data-tip="View Details"
+                            aria-label="View Details for {{ $program->title }}">
+                            <i class='bx bx-show'></i>
+                        </x-button>
 
-                            @if(Auth::user()->hasRole('Volunteer'))
-                                @if($program->volunteers->contains(Auth::user()->volunteer))
-                                    <x-button href="{{ route('programs.view', $program) }}" variant="table-action-manage"
-                                        class="tooltip" data-tip="View Log"
-                                        aria-label="View Log for {{ $program->title }}">
-                                        <i class='bx bx-history'></i>
-                                    </x-button>
-                                @endif
+                        @if(Auth::user()->hasRole('Volunteer'))
+                            @if($program->volunteers->contains(Auth::user()->volunteer))
+                                <x-button href="{{ route('programs.view', $program) }}" variant="table-action-manage"
+                                    class="tooltip" data-tip="View Log"
+                                    aria-label="View Log for {{ $program->title }}">
+                                    <i class='bx bx-history'></i>
+                                </x-button>
                             @endif
+                        @endif
 
-                            @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
-                                @if(Auth::id() === $program->created_by)
-                                    <!-- Manage Volunteers Button (For program creator) -->
-                                    <x-button href="{{ route('programs.manage_volunteers', $program) }}" variant="table-action-manage"
-                                        class="tooltip" data-tip="Manage Volunteers"
-                                        aria-label="Manage Volunteers for {{ $program->title }}">
-                                        <i class='bx bx-group'></i>
-                                    </x-button>
+                        @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
+                            @if(Auth::id() === $program->created_by)
+                                <!-- Manage Volunteers Button (For program creator) -->
+                                <x-button href="{{ route('programs.manage_volunteers', $program) }}" variant="table-action-manage"
+                                    class="tooltip" data-tip="Manage Volunteers"
+                                    aria-label="Manage Volunteers for {{ $program->title }}">
+                                    <i class='bx bx-group'></i>
+                                </x-button>
 
-                                    <!-- Delete Button (For program creator) -->
-                                    <x-button type="button" variant="table-action-danger"
-                                        onclick="document.getElementById('delete-program-modal-{{ $program->id }}').showModal()"
-                                        class="tooltip" data-tip="Delete" 
-                                        aria-label="Delete {{ $program->title }}">
-                                        <i class='bx bx-trash'></i>
-                                    </x-button>
-                                    @include('programs.modals.deleteProgramModal', ['program' => $program, 'modalId' => 'delete-program-modal-' . $program->id])
-                                @endif
+                                <!-- Delete Button (For program creator) -->
+                                <x-button type="button" variant="table-action-danger"
+                                    onclick="document.getElementById('delete-program-modal-{{ $program->id }}').showModal()"
+                                    class="tooltip" data-tip="Delete"
+                                    aria-label="Delete {{ $program->title }}">
+                                    <i class='bx bx-trash'></i>
+                                </x-button>
+                                @include('programs.modals.deleteProgramModal', ['program' => $program, 'modalId' => 'delete-program-modal-' . $program->id])
                             @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+                        @endif
+                    </x-table.td>
+                </x-table.tr>
+            @endforeach
+        </x-table.tbody>
+    </x-table.table>
 
     <div class="mt-6">
         {{ $programs->appends(Request::except('page'))->links() }}

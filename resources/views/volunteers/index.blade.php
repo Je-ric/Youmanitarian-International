@@ -43,46 +43,44 @@
                 @if($applications->isEmpty())
                     <p class="text-gray-600 text-center py-4">No pending applications found.</p>
                 @else
-                    <div class="overflow-x-auto custom-scrollbar">
-                        <table class="w-full min-w-[640px]">
-                            <thead>
-                                <tr class="bg-gray-100">
-                                    <th class="p-3 text-left">Name</th>
-                                    <th class="p-3 text-left">Email</th>
-                                    <th class="p-3 text-left">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($applications as $volunteer)
-                                    <tr class="border-t">
-                                        <td class="p-3">{{ $volunteer->user->name }}</td>
-                                        <td class="p-3">{{ $volunteer->user->email }}</td>
-                                        <td class="p-3">
-                                            <div class="flex flex-wrap gap-2">
-                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
-                                                    <i class='bx bx-show'></i>
+                    <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="w-full min-w-[640px]">
+                        <x-table.thead>
+                            <x-table.tr :hover="false">
+                                <x-table.th>Name</x-table.th>
+                                <x-table.th>Email</x-table.th>
+                                <x-table.th>Actions</x-table.th>
+                            </x-table.tr>
+                        </x-table.thead>
+                        <x-table.tbody>
+                            @foreach($applications as $volunteer)
+                                <x-table.tr>
+                                    <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name }}</x-table.td>
+                                    <x-table.td>{{ $volunteer->user->email }}</x-table.td>
+                                    <x-table.td>
+                                        <div class="flex flex-wrap gap-2">
+                                            <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                                <i class='bx bx-show'></i>
+                                            </x-button>
+
+                                            <form action="{{ route('volunteers.approve', $volunteer->id) }}" method="POST" class="inline">
+                                                @csrf
+                                                <x-button type="submit" variant="table-action-manage" class="tooltip" data-tip="Approve">
+                                                    <i class='bx bx-check'></i>
                                                 </x-button>
+                                            </form>
 
-                                                <form action="{{ route('volunteers.approve', $volunteer->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    <x-button type="submit" variant="table-action-manage" class="tooltip" data-tip="Approve">
-                                                        <i class='bx bx-check'></i>
-                                                    </x-button>
-                                                </form>
-
-                                                <form action="{{ route('volunteers.deny', $volunteer->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    <x-button type="submit" variant="table-action-danger" class="tooltip" data-tip="Deny">
-                                                        <i class='bx bx-x'></i>
-                                                    </x-button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                            <form action="{{ route('volunteers.deny', $volunteer->id) }}" method="POST" class="inline">
+                                                @csrf
+                                                <x-button type="submit" variant="table-action-danger" class="tooltip" data-tip="Deny">
+                                                    <i class='bx bx-x'></i>
+                                                </x-button>
+                                            </form>
+                                        </div>
+                                    </x-table.td>
+                                </x-table.tr>
+                            @endforeach
+                        </x-table.tbody>
+                    </x-table.table>
                 @endif
             </x-slot>
 
@@ -192,39 +190,37 @@
                 @if($deniedApplications->isEmpty())
                     <p class="text-gray-600 text-center py-4">No denied applications found.</p>
                 @else
-                    <div class="overflow-x-auto custom-scrollbar">
-                        <table class="w-full min-w-[640px]">
-                            <thead>
-                                <tr class="bg-gray-100">
-                                    <th class="p-3 text-left">Name</th>
-                                    <th class="p-3 text-left">Email</th>
-                                    <th class="p-3 text-left">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($deniedApplications as $volunteer)
-                                    <tr class="border-t">
-                                        <td class="p-3">{{ $volunteer->user->name }}</td>
-                                        <td class="p-3">{{ $volunteer->user->email }}</td>
-                                        <td class="p-3">
-                                            <div class="flex flex-wrap gap-2">
-                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
-                                                    <i class='bx bx-show'></i>
-                                                </x-button>
+                    <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="w-full min-w-[640px]">
+                        <x-table.thead>
+                            <x-table.tr :hover="false">
+                                <x-table.th>Name</x-table.th>
+                                <x-table.th>Email</x-table.th>
+                                <x-table.th>Actions</x-table.th>
+                            </x-table.tr>
+                        </x-table.thead>
+                        <x-table.tbody>
+                            @foreach($deniedApplications as $volunteer)
+                                <x-table.tr>
+                                    <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name }}</x-table.td>
+                                    <x-table.td>{{ $volunteer->user->email }}</x-table.td>
+                                    <x-table.td>
+                                        <div class="flex flex-wrap gap-2">
+                                            <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                                <i class='bx bx-show'></i>
+                                            </x-button>
 
-                                                <form action="{{ route('volunteers.restore', $volunteer->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    <x-button type="submit" variant="table-action-edit" class="tooltip" data-tip="Restore to Pending">
-                                                        <i class='bx bx-reset'></i>
-                                                    </x-button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                            <form action="{{ route('volunteers.restore', $volunteer->id) }}" method="POST" class="inline">
+                                                @csrf
+                                                <x-button type="submit" variant="table-action-edit" class="tooltip" data-tip="Restore to Pending">
+                                                    <i class='bx bx-reset'></i>
+                                                </x-button>
+                                            </form>
+                                        </div>
+                                    </x-table.td>
+                                </x-table.tr>
+                            @endforeach
+                        </x-table.tbody>
+                    </x-table.table>
                 @endif
             </x-slot>
 
@@ -232,41 +228,39 @@
                 @if($approvedVolunteers->isEmpty())
                     <p class="text-gray-600 text-center py-4">No approved volunteers found.</p>
                 @else
-                    <div class="overflow-x-auto custom-scrollbar">
-                        <table class="w-full min-w-[640px]">
-                            <thead>
-                                <tr class="bg-gray-100">
-                                    <th class="p-3 text-left">Name</th>
-                                    <th class="p-3 text-left">Email</th>
-                                    <th class="p-3 text-left">Joined At</th>
-                                    <th class="p-3 text-left">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($approvedVolunteers as $volunteer)
-                                    <tr class="border-t">
-                                        <td class="p-3">{{ $volunteer->user->name ?? 'N/A' }}</td>
-                                        <td class="p-3">{{ $volunteer->user->email ?? 'N/A' }}</td>
-                                        <td class="p-3">{{ $volunteer->created_at->format('M d, Y') }}</td>
-                                        <td class="p-3">
-                                            <div class="flex flex-wrap gap-2">
-                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
-                                                    <i class='bx bx-show'></i>
-                                                </x-button>
+                    <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="w-full min-w-[640px]">
+                        <x-table.thead>
+                            <x-table.tr :hover="false">
+                                <x-table.th>Name</x-table.th>
+                                <x-table.th>Email</x-table.th>
+                                <x-table.th>Joined At</x-table.th>
+                                <x-table.th>Actions</x-table.th>
+                            </x-table.tr>
+                        </x-table.thead>
+                        <x-table.tbody>
+                            @foreach($approvedVolunteers as $volunteer)
+                                <x-table.tr>
+                                    <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name ?? 'N/A' }}</x-table.td>
+                                    <x-table.td>{{ $volunteer->user->email ?? 'N/A' }}</x-table.td>
+                                    <x-table.td>{{ $volunteer->created_at->format('M d, Y') }}</x-table.td>
+                                    <x-table.td>
+                                        <div class="flex flex-wrap gap-2">
+                                            <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                                <i class='bx bx-show'></i>
+                                            </x-button>
 
-                                                <form action="{{ route('finance.members.invite', $volunteer->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    <x-button type="submit" variant="table-action-manage" class="tooltip" data-tip="Invite to be Member">
-                                                        <i class='bx bx-user-plus'></i>
-                                                    </x-button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                            <form action="{{ route('finance.members.invite', $volunteer->id) }}" method="POST" class="inline">
+                                                @csrf
+                                                <x-button type="submit" variant="table-action-manage" class="tooltip" data-tip="Invite to be Member">
+                                                    <i class='bx bx-user-plus'></i>
+                                                </x-button>
+                                            </form>
+                                        </div>
+                                    </x-table.td>
+                                </x-table.tr>
+                            @endforeach
+                        </x-table.tbody>
+                    </x-table.table>
                 @endif
             </x-slot>
         </x-tabs>

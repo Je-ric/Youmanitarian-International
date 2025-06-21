@@ -1,27 +1,26 @@
 @if($program->volunteers->isEmpty())
     <p class="text-gray-600 text-center py-4">No volunteers assigned to this program.</p>
 @else
-    <table class="min-w-full bg-white overflow-hidden border border-gray-200">
-        <thead class="bg-[#1a2235] text-white">
-            <tr>
-                <th class="p-4 text-left text-sm font-medium">#</th>
-                <th class="p-4 text-left text-sm font-medium">Name</th>
-                <th class="p-4 text-left text-sm font-medium">Clock In</th>
-                <th class="p-4 text-left text-sm font-medium">Clock Out</th>
-                <th class="p-4 text-left text-sm font-medium">Total Time</th>
-                <th class="p-4 text-left text-sm font-medium">Action</th>
-            </tr>
-        </thead>
-        <tbody>
+    <x-table.table tableClass="min-w-full bg-white" containerClass="overflow-hidden">
+        <x-table.thead>
+            <x-table.tr :hover="false">
+                <x-table.th align="right">#</x-table.th>
+                <x-table.th>Name</x-table.th>
+                <x-table.th>Clock In</x-table.th>
+                <x-table.th>Clock Out</x-table.th>
+                <x-table.th>Total Time</x-table.th>
+                <x-table.th>Action</x-table.th>
+            </x-table.tr>
+        </x-table.thead>
+        <x-table.tbody>
             @foreach($program->volunteers as $volunteer)
                 @if($volunteer->pivot->status == 'approved')
-                    <tr class="border-t hover:bg-gray-50 transition-all duration-200">
-                        <td class="p-4">{{ $loop->iteration }}</td>
-                        <td class="p-4 text-sm text-[#1a2235] font-semibold">
+                    <x-table.tr>
+                        <x-table.td align="right" class="text-gray-500">{{ $loop->iteration }}</x-table.td>
+                        <x-table.td class="font-bold text-gray-800">
                             {{ $volunteer->user->name }}
-                            {{-- <span class="text-gray-500">({{ $volunteer->user->email }})</span> --}}
-                        </td>
-                        <td class="p-4 text-sm">
+                        </x-table.td>
+                        <x-table.td>
                             @php
                                 $volunteerLogs = $logs[$volunteer->id]['logs'] ?? collect();
                             @endphp
@@ -29,8 +28,8 @@
                                 <p class="text-gray-500">N/A</p>
                             @else
                                 @foreach ($volunteerLogs as $log)
-                                    <div class="flex gap-2">
-                                        <span class="text-sm text-gray-600">
+                                    <div>
+                                        <span>
                                             @if ($log->clock_in)
                                                 {{ \Carbon\Carbon::parse($log->clock_in)->format('h:i A') }}
                                             @else
@@ -40,14 +39,14 @@
                                     </div>
                                 @endforeach
                             @endif
-                        </td>
-                        <td class="p-4 text-sm">
+                        </x-table.td>
+                        <x-table.td>
                             @if ($volunteerLogs->isEmpty())
                                 <p class="text-gray-500">N/A</p>
                             @else
                                 @foreach ($volunteerLogs as $log)
-                                    <div class="flex gap-2">
-                                        <span class="text-sm text-gray-600">
+                                    <div>
+                                        <span>
                                             @if ($log->clock_in)
                                                 @if ($log->clock_out)
                                                     {{ \Carbon\Carbon::parse($log->clock_out)->format('h:i A') }}
@@ -61,15 +60,15 @@
                                     </div>
                                 @endforeach
                             @endif
-                        </td>
-                        <td class="p-4 text-sm">
+                        </x-table.td>
+                        <x-table.td>
                             @if ($volunteerLogs->isEmpty())
                                 <p class="text-gray-500">N/A</p>
                             @else
-                                <p class="text-gray-600">{{ $logs[$volunteer->id]['totalTime'] ?? 'N/A' }}</p>
+                                <p>{{ $logs[$volunteer->id]['totalTime'] ?? 'N/A' }}</p>
                             @endif
-                        </td>
-                        <td class="p-4 flex items-center gap-2">
+                        </x-table.td>
+                        <x-table.td class="flex items-center gap-2">
                             @php
                                 $hasLogs = !$volunteerLogs->isEmpty();
                                 $allReviewed = $hasLogs && $volunteerLogs->every(fn($log) => in_array($log->approval_status, ['approved', 'rejected']));
@@ -111,10 +110,10 @@
                                 </x-button>
                             @endif
                             @include('programs_volunteers.modals.attendanceApproval', ['volunteer' => $volunteer, 'volunteerLogs' => $volunteerLogs])
-                        </td>
-                    </tr>
+                        </x-table.td>
+                    </x-table.tr>
                 @endif
             @endforeach
-        </tbody>
-    </table>
+        </x-table.tbody>
+    </x-table.table>
 @endif
