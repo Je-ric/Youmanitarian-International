@@ -62,6 +62,7 @@ class UserRolesUpdated extends Notification implements ShouldQueue
 
         return [
             'title' => 'Your Roles Have Been Updated',
+            'type' => 'role_update',
             'message' => $message,
             'action_url' => route('dashboard'),
         ];

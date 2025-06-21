@@ -57,6 +57,7 @@ class AttendanceStatusUpdated extends Notification implements ShouldQueue
         
         return [
             'title' => $title,
+            'type' => 'program_update',
             'message' => $message,
             'action_url' => route('programs.view', $this->program->id),
         ];

@@ -48,6 +48,7 @@ class VolunteerJoinedProgram extends Notification implements ShouldQueue
     {
         return [
             'title' => 'A Volunteer Joined Your Program!',
+            'type' => 'volunteer_joined',
             'message' => "{$this->volunteerUser->name} has joined your program: {$this->program->title}.",
             'action_url' => route('programs.manage_volunteers', $this->program->id),
             'program_id' => $this->program->id,

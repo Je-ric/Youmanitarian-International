@@ -48,6 +48,7 @@ class TaskAssigned extends Notification implements ShouldQueue
     {
         return [
             'title' => 'You Have a New Task!',
+            'type' => 'task_assigned',
             'message' => "You have been assigned a new task: '{$this->task->task_description}' in the program '{$this->program->title}'.",
             'action_url' => route('programs.view', $this->program->id),
         ];

@@ -47,6 +47,7 @@ class NewProgramAvailable extends Notification implements ShouldQueue
     {
         return [
             'title' => 'New Program Available!',
+            'type' => 'program_update',
             'message' => "A new program, '{$this->program->title},' is now open for volunteers.",
             'action_url' => route('programs.index'),
             'program_id' => $this->program->id,

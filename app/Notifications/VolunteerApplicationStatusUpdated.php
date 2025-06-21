@@ -49,6 +49,7 @@ class VolunteerApplicationStatusUpdated extends Notification implements ShouldQu
         
         return [
             'title' => $title,
+            'type' => 'volunteer_joined',
             'message' => $message,
             'action_url' => $this->status === 'approved' ? route('programs.index') : route('dashboard'),
         ];
