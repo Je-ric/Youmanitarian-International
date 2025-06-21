@@ -6,6 +6,7 @@ use App\Models\Program;
 use App\Models\Volunteer;
 use Illuminate\Http\Request;
 use App\Models\ProgramFeedback;
+use App\Notifications\VolunteerJoinedProgram;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -133,6 +134,12 @@ class ProgramVolunteerController extends Controller
         // Avoid duplicate entry
         if (!$program->volunteers->contains($volunteer->id)) {
             $program->volunteers()->attach($volunteer->id, ['status' => 'approved']);
+
+            // Notify the program coordinator
+            $programCoordinator = $program->creator;
+            if ($programCoordinator) {
+                $programCoordinator->notify(new VolunteerJoinedProgram($program, $user));
+            }
 
             // Create a welcome message in the program chat
             $program->chats()->create([

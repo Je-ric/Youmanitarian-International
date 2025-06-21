@@ -235,12 +235,15 @@
 
                     @elseif($isAssigned)
                         @if($canClockIn)
-                            <form action="{{ route('programs.clockIn', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Clocking In...';">
-                                @csrf
-                                <x-button type="submit" variant="clock_in">
-                                    <i class='bx bx-log-in-circle'></i> Clock In
-                                </x-button>
-                            </form>
+                            <div class="text-center">
+                                <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Processing...';">
+                                    @csrf
+                                    <x-button type="submit" variant="clock_in" class="w-full">
+                                        <i class='bx bx-time-five mr-2'></i>
+                                        Clock In
+                                    </x-button>
+                                </form>
+                            </div>
 
                             <x-button variant="disabled" disabled>
                                 <i class='bx bx-log-out-circle'></i> Clock Out (Clock In First)
@@ -251,12 +254,15 @@
                                 <i class='bx bx-log-in-circle'></i> Clock In (Already Clocked In)
                             </x-button>
 
-                            <form action="{{ route('programs.clockOut', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Clocking Out...';">
-                                @csrf
-                                <x-button type="submit" variant="clock_out">
-                                    <i class='bx bx-log-out-circle'></i> Clock Out
-                                </x-button>
-                            </form>
+                            <div class="text-center">
+                                <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Processing...';">
+                                    @csrf
+                                    <x-button type="submit" variant="clock_in" class="w-full sm:w-auto">
+                                        <i class='bx bx-time-five mr-2'></i>
+                                        Clock Out
+                                    </x-button>
+                                </form>
+                            </div>
 
                             <x-button variant="disabled" disabled>
                                 <i class='bx bx-check-circle'></i> Clock In (Already Done)

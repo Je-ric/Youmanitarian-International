@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\ProgramTasksController;
+use App\Notifications\AttendanceStatusUpdated;
 
 class VolunteerAttendanceController extends Controller
 {
@@ -195,6 +196,11 @@ class VolunteerAttendanceController extends Controller
         $attendance->approved_by = Auth::user()->volunteer?->id;
         $attendance->notes = $request->input('notes', $attendance->notes);
         $attendance->save();
+
+        // Notify the volunteer
+        $volunteerUser = $attendance->volunteer->user;
+        $program = $attendance->program;
+        $volunteerUser->notify(new AttendanceStatusUpdated($request->status, $program, $request->notes));
 
         return back()->with('toast', [
             'message' => 'Attendance ' . ucfirst($request->status) . ' successfully!',

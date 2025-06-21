@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\VolunteerApplicationStatusUpdated;
 
 class VolunteerApprovalController extends Controller
 {
@@ -49,6 +50,9 @@ class VolunteerApprovalController extends Controller
 
             DB::commit();
 
+            // Notify the user
+            $user->notify(new VolunteerApplicationStatusUpdated('approved'));
+
             return redirect()->back()->with('toast', [
                 'message' => 'Volunteer application approved successfully.',
                 'type' => 'success'
@@ -69,6 +73,9 @@ class VolunteerApprovalController extends Controller
 
         $volunteer->application_status = 'denied';
         $volunteer->save();
+
+        // Notify the user
+        $volunteer->user->notify(new VolunteerApplicationStatusUpdated('denied'));
 
         return redirect()->back()->with('toast', [
             'message' => 'Volunteer application denied.',

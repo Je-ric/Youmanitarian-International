@@ -3,27 +3,28 @@
 namespace App\Notifications;
 
 use App\Models\Program;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-// class NewProgramAvailable extends Notification
-class NewProgramAvailable extends Notification implements ShouldQueue
+class VolunteerJoinedProgram extends Notification implements ShouldQueue
 {
     use Queueable;
 
     protected $program;
+    protected $volunteerUser;
 
     /**
      * Create a new notification instance.
      *
-     * @param  \App\Models\Program  $program
      * @return void
      */
-    public function __construct(Program $program)
+    public function __construct(Program $program, User $volunteerUser)
     {
         $this->program = $program;
+        $this->volunteerUser = $volunteerUser;
     }
 
     /**
@@ -34,7 +35,7 @@ class NewProgramAvailable extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database']; // We'll store it in the database for now
+        return ['database'];
     }
 
     /**
@@ -46,9 +47,9 @@ class NewProgramAvailable extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            'title' => 'New Program Available!',
-            'message' => "A new program, '{$this->program->title},' is now open for volunteers.",
-            'action_url' => route('programs.index'),
+            'title' => 'A Volunteer Joined Your Program!',
+            'message' => "{$this->volunteerUser->name} has joined your program: {$this->program->title}.",
+            'action_url' => route('programs.manage_volunteers', $this->program->id),
             'program_id' => $this->program->id,
         ];
     }

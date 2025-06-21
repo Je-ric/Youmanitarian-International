@@ -7,6 +7,7 @@ use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\UserRolesUpdated;
 
 class RoleController extends Controller
 {
@@ -45,25 +46,29 @@ class RoleController extends Controller
             $user = User::findOrFail($request->user_id);
             
             // Get current roles
-            $currentRoles = $user->roles->pluck('id')->toArray();
+            $currentRoleIds = $user->roles->pluck('id')->toArray();
+            $currentRoleNames = $user->roles->pluck('role_name')->toArray();
+
+            // If no roles were selected in the form, treat it as an empty array.
+            $selectedRoleIds = $request->roles ?? [];
             
             // Get the volunteer role
             $volunteerRole = Role::where('role_name', 'Volunteer')->first();
             
-            // If no roles were selected in the form, use current roles
-            $selectedRoles = $request->roles ?? $currentRoles;
-            
             // Always ensure volunteer role is included if user has it
-            if ($user->hasRole('Volunteer') && !in_array($volunteerRole->id, $selectedRoles)) {
-                $selectedRoles[] = $volunteerRole->id;
+            if ($user->hasRole('Volunteer') && !in_array($volunteerRole->id, $selectedRoleIds)) {
+                $selectedRoleIds[] = $volunteerRole->id;
             }
 
-            // Only proceed with sync if there are actual changes
-            if (count(array_diff($selectedRoles, $currentRoles)) > 0 || 
-                count(array_diff($currentRoles, $selectedRoles)) > 0) {
+            // Determine what roles were added or removed
+            $addedRoleIds = array_diff($selectedRoleIds, $currentRoleIds);
+            $removedRoleIds = array_diff($currentRoleIds, $selectedRoleIds);
+
+            // Only proceed if there are actual changes
+            if (!empty($addedRoleIds) || !empty($removedRoleIds)) {
                 
                 // Create sync data with pivot information
-                $syncData = collect($selectedRoles)->mapWithKeys(function ($roleId) {
+                $syncData = collect($selectedRoleIds)->mapWithKeys(function ($roleId) {
                     return [$roleId => [
                         'assigned_by' => Auth::id(),
                         'assigned_at' => now()
@@ -71,6 +76,12 @@ class RoleController extends Controller
                 })->all();
                 
                 $user->roles()->sync($syncData);
+
+                // Get role names for notification
+                $addedRoleNames = Role::whereIn('id', $addedRoleIds)->pluck('role_name')->all();
+                $removedRoleNames = Role::whereIn('id', $removedRoleIds)->pluck('role_name')->all();
+
+                $user->notify(new UserRolesUpdated($addedRoleNames, $removedRoleNames));
             }
 
             DB::commit();

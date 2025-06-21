@@ -8,22 +8,24 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-// class NewProgramAvailable extends Notification
-class NewProgramAvailable extends Notification implements ShouldQueue
+class AttendanceStatusUpdated extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    protected $status;
     protected $program;
+    protected $notes;
 
     /**
      * Create a new notification instance.
      *
-     * @param  \App\Models\Program  $program
      * @return void
      */
-    public function __construct(Program $program)
+    public function __construct($status, Program $program, $notes = null)
     {
+        $this->status = $status;
         $this->program = $program;
+        $this->notes = $notes;
     }
 
     /**
@@ -34,7 +36,7 @@ class NewProgramAvailable extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database']; // We'll store it in the database for now
+        return ['database'];
     }
 
     /**
@@ -45,11 +47,18 @@ class NewProgramAvailable extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
+        $statusText = ucfirst($this->status);
+        $title = "Your Attendance has been {$statusText}!";
+        $message = "Your attendance for the program '{$this->program->title}' has been {$this->status}.";
+        
+        if ($this->notes) {
+            $message .= " Reviewer's notes: \"{$this->notes}\"";
+        }
+        
         return [
-            'title' => 'New Program Available!',
-            'message' => "A new program, '{$this->program->title},' is now open for volunteers.",
-            'action_url' => route('programs.index'),
-            'program_id' => $this->program->id,
+            'title' => $title,
+            'message' => $message,
+            'action_url' => route('programs.view', $this->program->id),
         ];
     }
 } 

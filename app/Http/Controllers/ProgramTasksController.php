@@ -6,7 +6,9 @@ use App\Models\Program;
 use App\Models\ProgramTask;
 use Illuminate\Http\Request;
 use App\Models\TaskAssignment;
+use App\Models\Volunteer;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\TaskAssigned;
 
 class ProgramTasksController extends Controller
 {
@@ -145,6 +147,12 @@ class ProgramTasksController extends Controller
             'assigned_by' => optional(Auth::user())->id,
             'status' => 'pending',
         ]);
+
+        // Notify the assigned volunteer
+        $volunteer = Volunteer::find($request->volunteer_id);
+        if ($volunteer && $volunteer->user) {
+            $volunteer->user->notify(new TaskAssigned($task, $program));
+        }
 
         return redirect()->back()->with('toast', [
             'message' => 'Volunteer assigned to task.',
