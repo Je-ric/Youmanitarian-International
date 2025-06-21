@@ -10,15 +10,10 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
+/** @mixin \Illuminate\Notifications\Notifiable */
 class User extends Authenticatable
 {
-    use HasApiTokens;
-
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
+    use HasApiTokens, Notifiable, HasFactory, HasProfilePhoto, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.

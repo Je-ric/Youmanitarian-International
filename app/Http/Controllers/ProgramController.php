@@ -7,6 +7,9 @@ use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\User;
+use App\Notifications\NewProgramAvailable;
+use Illuminate\Support\Facades\Notification;
 
 class ProgramController extends Controller
 {
@@ -75,6 +78,15 @@ class ProgramController extends Controller
             'created_by' => Auth::id(),
             'volunteer_count' => $request->volunteer_count ?? 0,
         ]);
+
+        // Notify all volunteers about the new program
+        $volunteers = User::whereHas('roles', function ($query) {
+            $query->where('role_name', 'Volunteer');
+        })->get();
+
+        if ($volunteers->isNotEmpty()) {
+            Notification::send($volunteers, new NewProgramAvailable($program));
+        }
 
         // Create a welcome message in the program chat
         $program->chats()->create([

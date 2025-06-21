@@ -24,6 +24,7 @@ use App\Http\Controllers\ProgramVolunteerController;
 use App\Http\Controllers\VolunteerApprovalController;
 use App\Http\Controllers\VolunteerAttendanceController;
 use App\Http\Controllers\VolunteerApplicationController;
+use App\Http\Controllers\NotificationController;
 
 // Route::middleware([
 //     'auth:sanctum',
@@ -255,3 +256,10 @@ Route::get('/finance/membership/payments/{member}/{quarter}/{year}/modal', [Memb
 
 Route::get('/finance/membership/payments/modal/{memberId}/{quarter}/{year}', [MembershipController::class, 'showPaymentModal'])
     ->name('finance.membership.payments.modal');
+
+// Route::get('/donations/export', [DonationController::class, 'export'])->name('donations.export');
+
+// Notification routes
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');

@@ -305,12 +305,16 @@
                         <i class="fas fa-search text-lg"></i>
                     </button>
 
-                    <button
+                    <a href="{{ route('notifications.index') }}"
                         class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200 relative">
                         <i class="fas fa-bell text-lg"></i>
-                        <span
-                            class="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
-                    </button>
+                        @if(Auth::check() && Auth::user()->unreadNotifications->count() > 0)
+                            <span
+                                class="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                                {{ Auth::user()->unreadNotifications->count() }}
+                            </span>
+                        @endif
+                    </a>
 
                     <div class="relative">
                         <button
