@@ -19,16 +19,42 @@ use Illuminate\Support\Facades\Auth;
 
 class MemberController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $members = Member::with(['user', 'volunteer'])
+        $tab = $request->input('tab', 'overview');
+
+        $members = Member::with(['user', 'volunteer'])->latest()->paginate(10, ['*'], 'overview_page');
+        
+        $fullPledgeMembers = Member::with(['user', 'volunteer'])
+            ->where('membership_type', 'full_pledge')
             ->latest()
-            ->paginate(10);
+            ->paginate(10, ['*'], 'full_pledge_page');
+            
+        $honoraryMembers = Member::with(['user', 'volunteer'])
+            ->where('membership_type', 'honorary')
+            ->latest()
+            ->paginate(10, ['*'], 'honorary_page');
+
+        $pendingMembers = Member::with(['user', 'volunteer'])
+            ->where('invitation_status', 'pending')
+            ->latest()
+            ->paginate(10, ['*'], 'pending_page');
+
         $users = User::whereNotIn('id', function($query) {
             $query->select('user_id')->from('members');
         })->get();
+
         $volunteers = Volunteer::with('user')->get();
-        return view('finance.members', compact('members', 'users', 'volunteers'));
+
+        return view('finance.members', compact(
+            'members',
+            'fullPledgeMembers',
+            'honoraryMembers',
+            'pendingMembers',
+            'users',
+            'volunteers',
+            'tab'
+        ));
     }
 
     public function store(Request $request)
