@@ -19,8 +19,8 @@
 
     <x-tabs :tabs="$tabs" default-tab="{{ $activeTab }}">
         <x-slot:slot_overview>
-            @include('member.partials.members_table', ['members' => $members])
-        </x-slot>
+            @include('member.partials.membersOverview')
+        </x-slot:slot_overview>
 
         <x-slot:slot_full_pledge>
             @include('member.partials.members_table', ['members' => $fullPledgeMembers])
