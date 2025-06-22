@@ -18,11 +18,15 @@ class WebsiteController extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
             
+        $latestPosts = collect();
+
+        if ($featuredPost) {
         $latestPosts = Content::where('status', 'published')
             ->where('id', '!=', $featuredPost->id)
             ->orderBy('created_at', 'desc')
             ->limit(6)
             ->get();
+        }
 
         return view('website.index', compact('featuredPost', 'latestPosts'));
     }

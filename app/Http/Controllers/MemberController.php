@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
+use App\Notifications\MemberInvited;
+use Illuminate\Support\Facades\Auth;
 
 class MemberController extends Controller
 {
@@ -35,7 +37,8 @@ class MemberController extends Controller
             'user_id' => 'required|exists:users,id',
             'volunteer_id' => 'required|exists:volunteers,id',
             'membership_type' => 'required|in:full_pledge,honorary',
-            'board_invited' => 'boolean'
+            'board_invited' => 'boolean',
+            'invitation_message' => 'nullable|string|max:500',
         ]);
 
         try {
@@ -48,9 +51,11 @@ class MemberController extends Controller
                 'membership_status' => 'inactive',
                 'invitation_status' => 'pending',
                 'invited_at' => now(),
-                'invitation_expires_at' => now()->addDays(7),
                 'board_invited' => $request->board_invited ?? false
             ]);
+
+            $invitationMessage = $request->invitation_message;
+            $member->user->notify(new MemberInvited($member, $invitationMessage));
 
             // Send invitation email
             try {
@@ -96,9 +101,14 @@ class MemberController extends Controller
             ->with('success', 'Member status updated successfully');
     }
 
-    public function invite(Volunteer $volunteer)
+    public function invite(Request $request, Volunteer $volunteer)
     {
         try {
+            $request->validate([
+                'membership_type' => 'required|in:full_pledge,honorary',
+                'invitation_message' => 'nullable|string|max:500',
+            ]);
+
             $volunteer->load('user');
 
             if (!$volunteer->user) {
@@ -118,12 +128,14 @@ class MemberController extends Controller
             $member = Member::create([
                 'user_id' => $volunteer->user_id,
                 'volunteer_id' => $volunteer->id,
-                'membership_type' => 'full_pledge',
+                'membership_type' => $request->membership_type,
                 'membership_status' => 'inactive',
                 'invitation_status' => 'pending',
                 'invited_at' => now(),
-                'invitation_expires_at' => now()->addDays(7)
             ]);
+
+            $invitationMessage = $request->invitation_message;
+            $member->user->notify(new MemberInvited($member, $invitationMessage));
 
             // Send invitation email
             try {
@@ -159,11 +171,6 @@ class MemberController extends Controller
 
     public function acceptInvitation(Member $member)
     {
-        if ($member->isInvitationExpired()) {
-            return redirect()->route('dashboard')
-                ->with('error', 'This invitation has expired. Please request a new invitation.');
-        }
-
         $member->update([
             'membership_status' => 'active',
             'invitation_status' => 'accepted',
@@ -176,11 +183,6 @@ class MemberController extends Controller
 
     public function declineInvitation(Member $member)
     {
-        if ($member->isInvitationExpired()) {
-            return redirect()->route('dashboard')
-                ->with('error', 'This invitation has expired.');
-        }
-
         $member->update([
             'membership_status' => 'inactive',
             'invitation_status' => 'declined'
@@ -201,7 +203,6 @@ class MemberController extends Controller
             $member->update([
                 'invitation_status' => 'pending',
                 'invited_at' => now(),
-                'invitation_expires_at' => now()->addDays(7)
             ]);
 
             Mail::to($member->user->email)->send(new MemberInvitation($member));
@@ -222,5 +223,33 @@ class MemberController extends Controller
             return redirect()->back()
                 ->with('error', 'Failed to resend invitation. Please try again.');
         }
+    }
+
+    public function showInvitation(Member $member)
+    {
+        if (Auth::id() !== $member->user_id) {
+            abort(403, 'This is not your invitation.');
+        }
+        
+        $acceptUrl = URL::temporarySignedRoute(
+            'member.invitation.accept',
+            now()->addDays(7),
+            ['member' => $member->id]
+        );
+
+        $declineUrl = URL::temporarySignedRoute(
+            'member.invitation.decline',
+            now()->addDays(7),
+            ['member' => $member->id]
+        );
+
+        $notification = $member->user->notifications()
+            ->where('data->member_id', $member->id)
+            ->where('type', 'App\Notifications\MemberInvited')
+            ->first();
+        
+        $invitationMessage = $notification->data['message'] ?? null;
+
+        return view('member.show-invitation', compact('member', 'acceptUrl', 'declineUrl', 'invitationMessage'));
     }
 }

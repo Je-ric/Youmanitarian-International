@@ -54,10 +54,10 @@ class Member extends Model
         return $this->invitation_status === 'pending';
     }
 
-    public function isInvitationExpired(): bool
-    {
-        return $this->invitation_expires_at && $this->invitation_expires_at->isPast();
-    }
+    // public function isInvitationExpired(): bool
+    // {
+    //     return $this->invitation_expires_at && $this->invitation_expires_at->isPast();
+    // }
 
     public function getCurrentQuarter(): string
     {

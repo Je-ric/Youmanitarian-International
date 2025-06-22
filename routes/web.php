@@ -242,6 +242,8 @@ Route::prefix('finance')->group(function () {
 
 // Member invitation routes
 Route::middleware(['auth'])->group(function () {
+    Route::get('/member/invitation/{member}', [MemberController::class, 'showInvitation'])->name('member.invitation.show');
+
     Route::get('/member/invitation/{member}/accept', [MemberController::class, 'acceptInvitation'])
         ->name('member.invitation.accept')
         ->middleware('signed');

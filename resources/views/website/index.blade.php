@@ -18,12 +18,11 @@
             </div>
         </div>
     </a>
-    @endif
 </section>
 
 <div class="container mx-auto px-4 py-6 bg-white flex justify-center">
     <div class="w-9/12">
-        @foreach ($latestPosts as $post)
+        @forelse ($latestPosts as $post)
         <hr class="border-gray-300">
         <a href="{{ route('website.view-content', $post->id) }}" class="block w-11/12 mx-auto no-underline">
             <div class="bg-white flex flex-col md:flex-row items-center w-full hover:bg-gray-200 transition duration-200">
@@ -36,8 +35,16 @@
                 </div>
             </div>
         </a>
-        @endforeach
+        @empty
+        {{-- This part is already handled by the message below since if latestPosts is empty, featuredPost must also be null --}}
+        @endforelse
     </div>
 </div>
+
+@else
+<div class="text-center py-16">
+    <p class="text-gray-500 text-xl">No news or updates have been posted yet. Please check back later!</p>
+</div>
+@endif
 
 @endsection

@@ -52,33 +52,33 @@
                             </x-table.tr>
                         </x-table.thead>
                         <x-table.tbody>
-                            @foreach($applications as $volunteer)
+                                @foreach($applications as $volunteer)
                                 <x-table.tr>
                                     <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name }}</x-table.td>
                                     <x-table.td>{{ $volunteer->user->email }}</x-table.td>
                                     <x-table.td>
-                                        <div class="flex flex-wrap gap-2">
-                                            <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
-                                                <i class='bx bx-show'></i>
-                                            </x-button>
-
-                                            <form action="{{ route('volunteers.approve', $volunteer->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                <x-button type="submit" variant="table-action-manage" class="tooltip" data-tip="Approve">
-                                                    <i class='bx bx-check'></i>
+                                            <div class="flex flex-wrap gap-2">
+                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                                    <i class='bx bx-show'></i>
                                                 </x-button>
-                                            </form>
 
-                                            <form action="{{ route('volunteers.deny', $volunteer->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                <x-button type="submit" variant="table-action-danger" class="tooltip" data-tip="Deny">
-                                                    <i class='bx bx-x'></i>
-                                                </x-button>
-                                            </form>
-                                        </div>
+                                                <form action="{{ route('volunteers.approve', $volunteer->id) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    <x-button type="submit" variant="table-action-manage" class="tooltip" data-tip="Approve">
+                                                        <i class='bx bx-check'></i>
+                                                    </x-button>
+                                                </form>
+
+                                                <form action="{{ route('volunteers.deny', $volunteer->id) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    <x-button type="submit" variant="table-action-danger" class="tooltip" data-tip="Deny">
+                                                        <i class='bx bx-x'></i>
+                                                    </x-button>
+                                                </form>
+                                            </div>
                                     </x-table.td>
                                 </x-table.tr>
-                            @endforeach
+                                @endforeach
                         </x-table.tbody>
                     </x-table.table>
                 @endif
@@ -199,26 +199,26 @@
                             </x-table.tr>
                         </x-table.thead>
                         <x-table.tbody>
-                            @foreach($deniedApplications as $volunteer)
+                                @foreach($deniedApplications as $volunteer)
                                 <x-table.tr>
                                     <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name }}</x-table.td>
                                     <x-table.td>{{ $volunteer->user->email }}</x-table.td>
                                     <x-table.td>
-                                        <div class="flex flex-wrap gap-2">
-                                            <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
-                                                <i class='bx bx-show'></i>
-                                            </x-button>
-
-                                            <form action="{{ route('volunteers.restore', $volunteer->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                <x-button type="submit" variant="table-action-edit" class="tooltip" data-tip="Restore to Pending">
-                                                    <i class='bx bx-reset'></i>
+                                            <div class="flex flex-wrap gap-2">
+                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                                    <i class='bx bx-show'></i>
                                                 </x-button>
-                                            </form>
-                                        </div>
+
+                                                <form action="{{ route('volunteers.restore', $volunteer->id) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    <x-button type="submit" variant="table-action-edit" class="tooltip" data-tip="Restore to Pending">
+                                                        <i class='bx bx-reset'></i>
+                                                    </x-button>
+                                                </form>
+                                            </div>
                                     </x-table.td>
                                 </x-table.tr>
-                            @endforeach
+                                @endforeach
                         </x-table.tbody>
                     </x-table.table>
                 @endif
@@ -238,31 +238,45 @@
                             </x-table.tr>
                         </x-table.thead>
                         <x-table.tbody>
-                            @foreach($approvedVolunteers as $volunteer)
+                                @foreach($approvedVolunteers as $volunteer)
                                 <x-table.tr>
                                     <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name ?? 'N/A' }}</x-table.td>
                                     <x-table.td>{{ $volunteer->user->email ?? 'N/A' }}</x-table.td>
                                     <x-table.td>{{ $volunteer->created_at->format('M d, Y') }}</x-table.td>
                                     <x-table.td>
-                                        <div class="flex flex-wrap gap-2">
-                                            <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
-                                                <i class='bx bx-show'></i>
-                                            </x-button>
-
-                                            <form action="{{ route('finance.members.invite', $volunteer->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                <x-button type="submit" variant="table-action-manage" class="tooltip" data-tip="Invite to be Member">
-                                                    <i class='bx bx-user-plus'></i>
+                                            <div class="flex flex-wrap gap-2">
+                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                                    <i class='bx bx-show'></i>
                                                 </x-button>
-                                            </form>
-                                        </div>
+
+                                            @if($volunteer->user && $volunteer->user->member)
+                                                <x-button variant="table-action-success-outline" class="tooltip" data-tip="Already a member" disabled>
+                                                    <i class='bx bx-user-check'></i>
+                                                </x-button>
+                                            @else
+                                                <x-button 
+                                                    variant="table-action-manage" 
+                                                    class="tooltip"
+                                                    data-tip="Invite to be Member"
+                                                    onclick="
+                                                        const modal = document.getElementById('invitationModal');
+                                                        const form = document.getElementById('invitationForm');
+                                                        form.action = '{{ route('finance.members.invite', $volunteer->id) }}';
+                                                        modal.showModal();
+                                                    ">
+                                                    <i class='bx bx-mail-send'></i>
+                                                    </x-button>
+                                            @endif
+                                            </div>
                                     </x-table.td>
                                 </x-table.tr>
-                            @endforeach
+                                @endforeach
                         </x-table.tbody>
                     </x-table.table>
                 @endif
             </x-slot>
         </x-tabs>
     </div>
+
+    @include('volunteers.modals.invitationModal')
 @endsection 
