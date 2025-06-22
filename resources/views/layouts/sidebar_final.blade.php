@@ -142,7 +142,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('finance.members') }}"
+                            <a href="{{ route('members.index') }}"
                                 class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item"
                                 data-tooltip="Members">
                                 <i class="bx bx-group w-5 text-center flex-shrink-0"></i>
@@ -365,7 +365,7 @@
             ['label' => 'Finance', 'url' => route('finance.index')],
             ...(request()->routeIs('finance.donations') ? [['label' => 'Donations']] : []),
             ...(request()->routeIs('finance.membership.payments') ? [['label' => 'Membership Payments']] : []),
-            ...(request()->routeIs('finance.members') ? [['label' => 'Members']] : []),
+            ...(request()->routeIs('members.index*') ? [['label' => 'Members']] : []),
         ] : []),
     ]" />
         </div>

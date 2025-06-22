@@ -261,7 +261,8 @@
                                                     onclick="
                                                         const modal = document.getElementById('invitationModal');
                                                         const form = document.getElementById('invitationForm');
-                                                        form.action = '{{ route('finance.members.invite', $volunteer->id) }}';
+                                                        form.action = '{{ route('members.invite', $volunteer->id) }}';
+                                                        form.method = 'POST';
                                                         modal.showModal();
                                                     ">
                                                     <i class='bx bx-mail-send'></i>

@@ -1,4 +1,4 @@
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
+
     <x-table.table containerClass="overflow-x-auto" tableClass="min-w-full">
         <x-table.thead>
             <x-table.tr :hover="false">
@@ -39,7 +39,7 @@
                     <x-table.td>
                         <div class="flex space-x-2">
                             @if($member->invitation_status === 'pending')
-                                <form action="{{ route('finance.members.resend-invitation', $member) }}" method="POST" class="inline">
+                                <form action="{{ route('members.resend-invitation', $member) }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit" class="text-indigo-600 hover:text-indigo-900">
                                         <i class='bx bx-refresh'></i> Resend Invitation
@@ -47,7 +47,7 @@
                                 </form>
                             @endif
                             @if($member->membership_status === 'inactive' && $member->invitation_status !== 'pending')
-                                <form action="{{ route('finance.members.status', $member) }}" method="POST" class="inline">
+                                <form action="{{ route('members.status', $member) }}" method="POST" class="inline">
                                     @csrf
                                     @method('PATCH')
                                     <input type="hidden" name="membership_status" value="active">
@@ -57,7 +57,7 @@
                                 </form>
                             @endif
                             @if($member->membership_status === 'active')
-                                <form action="{{ route('finance.members.status', $member) }}" method="POST" class="inline">
+                                <form action="{{ route('members.status', $member) }}" method="POST" class="inline">
                                     @csrf
                                     @method('PATCH')
                                     <input type="hidden" name="membership_status" value="inactive">
@@ -81,4 +81,3 @@
     <div class="px-6 py-4 border-t border-gray-200">
         {{ $members->links() }}
     </div>
-</div> 

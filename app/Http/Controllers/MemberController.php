@@ -46,7 +46,7 @@ class MemberController extends Controller
 
         $volunteers = Volunteer::with('user')->get();
 
-        return view('finance.members', compact(
+        return view('member.index', compact(
             'members',
             'fullPledgeMembers',
             'honoraryMembers',
@@ -100,7 +100,7 @@ class MemberController extends Controller
 
             DB::commit();
 
-            return redirect()->route('finance.members')
+            return redirect()->route('members.index')
                 ->with('success', 'Member created successfully and invitation sent!');
         } catch (\Exception $e) {
             DB::rollBack();

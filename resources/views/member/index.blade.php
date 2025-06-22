@@ -19,22 +19,22 @@
 
     <x-tabs :tabs="$tabs" default-tab="{{ $activeTab }}">
         <x-slot:slot_overview>
-            @include('finance.members.partials.members_table', ['members' => $members])
+            @include('member.partials.members_table', ['members' => $members])
         </x-slot>
 
         <x-slot:slot_full_pledge>
-            @include('finance.members.partials.members_table', ['members' => $fullPledgeMembers])
+            @include('member.partials.members_table', ['members' => $fullPledgeMembers])
         </x-slot>
 
         <x-slot:slot_honorary>
-            @include('finance.members.partials.members_table', ['members' => $honoraryMembers])
+            @include('member.partials.members_table', ['members' => $honoraryMembers])
         </x-slot>
 
         <x-slot:slot_pending>
-            @include('finance.members.partials.members_table', ['members' => $pendingMembers])
+            @include('member.partials.members_table', ['members' => $pendingMembers])
         </x-slot>
     </x-tabs>
 </div>
 
 
-@endsection
+@endsection 

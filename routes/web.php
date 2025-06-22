@@ -218,31 +218,27 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/roles/assign', [RoleController::class, 'assign'])->name('roles.assign');
 });
 
-// Finance Routes
-Route::prefix('finance')->group(function () {
-    // Finance Dashboard
-    Route::get('/', [DonationController::class, 'index'])->name('finance.index');
+// Finance Routes   
+Route::middleware(['auth'])->prefix('finance')->group(function () {
+    Route::get('/', [DonationController::class, 'finance_index'])->name('finance.index');
+    Route::get('/donations', [DonationController::class, 'index'])->name('finance.donations');
     
-    // Donations Management
-    Route::get('/donations', [DonationController::class, 'donations'])->name('finance.donations');
-    Route::patch('/donations/{donation}/status', [DonationController::class, 'updateDonationStatus'])->name('finance.donations.status');
-
-    // Membership Payments Management
     Route::get('/membership-payments', [MembershipController::class, 'index'])->name('finance.membership.payments');
     Route::post('/membership-payments', [MembershipController::class, 'store'])->name('finance.membership.payments.store');
     Route::patch('/membership-payments/{payment}/status', [MembershipController::class, 'updateStatus'])->name('finance.membership.payments.status');
-
-    // Member Management
-    Route::get('/members', [MemberController::class, 'index'])->name('finance.members');
-    Route::post('/members', [MemberController::class, 'store'])->name('finance.members.store');
-    Route::patch('/members/{member}/status', [MemberController::class, 'updateStatus'])->name('finance.members.status');
-    Route::post('/members/invite/{volunteer}', [MemberController::class, 'invite'])->name('finance.members.invite');
-    Route::post('/members/{member}/resend-invitation', [MemberController::class, 'resendInvitation'])->name('finance.members.resend-invitation');
 });
 
-// Member invitation routes
+Route::middleware(['auth'])->prefix('members')->name('members.')->group(function () {
+    Route::get('/', [MemberController::class, 'index'])->name('index');
+    Route::post('/', [MemberController::class, 'store'])->name('store');
+    Route::patch('/{member}/status', [MemberController::class, 'updateStatus'])->name('status');
+    Route::post('/invite/{volunteer}', [MemberController::class, 'invite'])->name('invite');
+    Route::post('/{member}/resend-invitation', [MemberController::class, 'resendInvitation'])->name('resend-invitation');
+});
+
 Route::middleware(['auth'])->group(function () {
-    Route::get('/member/invitation/{member}', [MemberController::class, 'showInvitation'])->name('member.invitation.show');
+    Route::get('member/invitation/{member}', [MemberController::class, 'showInvitation'])
+        ->name('member.invitation.show');
 
     Route::get('/member/invitation/{member}/accept', [MemberController::class, 'acceptInvitation'])
         ->name('member.invitation.accept')
