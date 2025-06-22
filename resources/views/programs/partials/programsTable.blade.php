@@ -72,7 +72,6 @@
                                     aria-label="Delete {{ $program->title }}">
                                     <i class='bx bx-trash'></i>
                                 </x-button>
-                                @include('programs.modals.deleteProgramModal', ['program' => $program, 'modalId' => 'delete-program-modal-' . $program->id])
                             @endif
                         @endif
                     </x-table.td>

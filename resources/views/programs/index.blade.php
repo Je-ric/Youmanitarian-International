@@ -49,21 +49,28 @@
             default-tab="all"
         >
             <x-slot:slot_all>
-                @include('programs.partials.programs-table', ['programs' => $allPrograms])
+                @include('programs.partials.programsTable', ['programs' => $allPrograms])
             </x-slot>
 
             @if(Auth::user()->hasRole('Volunteer'))
                 <x-slot:slot_joined>
-                    @include('programs.partials.programs-table', ['programs' => $joinedPrograms])
+                    @include('programs.partials.programsTable', ['programs' => $joinedPrograms])
                 </x-slot>
             @endif
 
             @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
                 <x-slot:slot_my>
-                    @include('programs.partials.programs-table', ['programs' => $myPrograms])
+                    @include('programs.partials.programsTable', ['programs' => $myPrograms])
                 </x-slot>
             @endif
         </x-tabs>
+        
+        @php
+            $uniquePrograms = collect($allPrograms->items())
+                ->merge(optional($joinedPrograms)->items())
+                ->merge(optional($myPrograms)->items())
+                ->unique('id');
+        @endphp
 
         <!-- Modals Container -->
         <div>
@@ -77,7 +84,9 @@
             @endif
             @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
                 @foreach($myPrograms as $program)
-                    @include('programs.modals.program-modal', ['program' => $program])
+                    @if(Auth::id() === $program->created_by)
+                        @include('programs.modals.deleteProgramModal', ['program' => $program, 'modalId' => 'delete-program-modal-' . $program->id])
+                    @endif
                 @endforeach
             @endif
         </div>
