@@ -1,3 +1,8 @@
+@props([
+    'type' => 'info',
+    'message'
+])
+
 @php
     $toastStyles = [
         'success' => [

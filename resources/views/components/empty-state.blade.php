@@ -294,7 +294,7 @@
     
     <!-- Title -->
     <h3 class="{{ $currentSize['titleText'] }} font-semibold text-[#1a2235] mb-2">
-        {{ $slot->isNotEmpty() ? $slot : $finalTitle }}
+        {{ isset($slot) && !$slot->isEmpty() ? $slot : $finalTitle }}
     </h3>
     
     <!-- Description -->

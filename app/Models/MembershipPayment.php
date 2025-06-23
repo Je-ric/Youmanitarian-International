@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MembershipPayment extends Model
 {
@@ -28,6 +29,14 @@ class MembershipPayment extends Model
     public function member(): BelongsTo
     {
         return $this->belongsTo(Member::class);
+    }
+
+    /**
+     * Get the reminders for this payment
+     */
+    public function reminders(): HasMany
+    {
+        return $this->hasMany(PaymentReminder::class, 'membership_payment_id');
     }
 
     public function isPaid(): bool
