@@ -33,7 +33,7 @@
                     <x-table.td class="font-bold text-gray-800">{{ $program->title }}</x-table.td>
                     <x-table.td>{{ $program->location ?? 'N/A' }}</x-table.td>
                     <x-table.td>
-                        <x-programProgress :program="$program" />
+                        <x-feedback-status.programProgress :program="$program" />
                     </x-table.td>
                     <x-table.td>
                         {{ Carbon::parse($program->date)->format('M d, Y') }}

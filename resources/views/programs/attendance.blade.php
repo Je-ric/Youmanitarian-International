@@ -53,7 +53,7 @@
                     <h2 class="text-xl lg:text-2xl font-bold text-[#1a2235]">
                         {{ $program->title }}
                     </h2>
-                    <x-programProgress :program="$program" />
+                    <x-feedback-status.programProgress :program="$program" />
                 </div>
 
                 <!-- Description -->
@@ -301,7 +301,7 @@
                             class="bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-all duration-200 hover:shadow-sm">
                             <div class="p-4">
                                 <div class="flex items-center justify-between mb-3">
-                                    <x-status-indicator :status="$data['assignment']->status" :label="ucwords(str_replace('_', ' ', $data['assignment']->status))" />
+                                    <x-feedback-status.status-indicator :status="$data['assignment']->status" :label="ucwords(str_replace('_', ' ', $data['assignment']->status))" />
                                 </div>
 
                                 <p class="text-gray-700 text-sm mb-4">{{ $data['task']->task_description }}</p>

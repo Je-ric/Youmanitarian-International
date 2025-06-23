@@ -341,7 +341,7 @@
     <!-- Main Content -->
     <div id="mainContent" class="main-content pt-16">
         <div class="container mx-auto px-4 py-4">
-            <x-breadcrumb :items="[
+            <x-navigation-layout.breadcrumb :items="[
         ['label' => 'Dashboard', 'url' => route('dashboard')],
         ...(request()->routeIs('content.*') ? [
             ['label' => 'Content Management', 'url' => route('content.content_view')],
@@ -371,7 +371,7 @@
         </div>
 
         @if (session('toast'))
-            <x-toast :message="session('toast')['message']" :type="session('toast')['type']" />
+            <x-feedback-status.toast :message="session('toast')['message']" :type="session('toast')['type']" />
         @endif
         
         @yield('content')

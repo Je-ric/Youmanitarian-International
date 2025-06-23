@@ -17,7 +17,7 @@
         $activeTab = $tab ?? 'overview';
     @endphp
 
-    <x-tabs :tabs="$tabs" default-tab="{{ $activeTab }}">
+    <x-navigation-layout.tabs :tabs="$tabs" default-tab="{{ $activeTab }}">
         <x-slot:slot_overview>
             @include('member.partials.membersOverview')
         </x-slot:slot_overview>
@@ -33,7 +33,7 @@
         <x-slot:slot_pending>
             @include('member.partials.members_table', ['members' => $pendingMembers])
         </x-slot>
-    </x-tabs>
+    </x-navigation-layout.tabs>
 </div>
 
 

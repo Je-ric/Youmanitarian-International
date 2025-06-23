@@ -32,10 +32,10 @@
                     <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
                         <td class="py-3 px-4 text-sm text-[#1a2235]">{{ $content->title }}</td>
                         <td>
-                            <x-status-indicator status="{{ $content->type }}" variant="outline" />
+                            <x-feedback-status.status-indicator status="{{ $content->type }}" variant="outline" />
                         </td>
                         <td>
-                            <x-status-indicator status="{{ $content->status }}" variant="outline" />
+                            <x-feedback-status.status-indicator status="{{ $content->status }}" variant="outline" />
                         </td>
                         <td class="py-3 px-4 text-sm text-[#1a2235]">{{ $content->updated_at->setTimezone('Asia/Manila')->format('M d, Y h:i A') }}</td>
                         <td class="py-3 px-4 flex items-center space-x-2">

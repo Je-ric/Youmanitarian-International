@@ -51,7 +51,7 @@
                 <div class="p-5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-gray-50">
                     <div class="flex items-center justify-between mb-3">
                         <!-- Status Badge -->
-                        <x-status-indicator :status="$task->status" />
+                        <x-feedback-status.status-indicator :status="$task->status" />
 
                         <!-- Actions Menu -->
                         <div class="flex items-center gap-1">

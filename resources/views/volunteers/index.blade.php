@@ -35,7 +35,7 @@
             ];
         @endphp
 
-        <x-tabs 
+        <x-navigation-layout.tabs
             :tabs="$tabs"
             default-tab="applications"
         >
@@ -182,7 +182,7 @@
                     </x-table.table>
                 @endif
             </x-slot>
-        </x-tabs>
+        </x-navigation-layout.tabs>
     </div>
 
     @include('volunteers.modals.invitationModal')

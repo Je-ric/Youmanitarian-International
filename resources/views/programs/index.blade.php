@@ -44,7 +44,7 @@
             }
         @endphp
 
-        <x-tabs 
+        <x-navigation-layout.tabs
             :tabs="$tabs"
             default-tab="all"
         >
@@ -63,7 +63,7 @@
                     @include('programs.partials.programsTable', ['programs' => $myPrograms])
                 </x-slot>
             @endif
-        </x-tabs>
+        </x-navigation-layout.tabs>
         
         @php
             $uniquePrograms = collect($allPrograms->items())

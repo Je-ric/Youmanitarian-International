@@ -45,10 +45,10 @@
                     </h4>
                     <div class="flex flex-wrap gap-2">
                         @forelse($user->roles as $role)
-                            <x-status-indicator status="role" :label="$role->role_name" />
+                            <x-feedback-status.status-indicator status="role" :label="$role->role_name" />
                         @empty
                             <div class="w-full">
-                                <x-alert 
+                                <x-feedback-status.alert
                                     class="basis-full"
                                     type="neutral" 
                                     icon="bx bx-info-circle" 

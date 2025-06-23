@@ -87,20 +87,20 @@
 
             <div class="flex justify-between">
                 <div class="mb-6 flex gap-2 flex-wrap">
-                    <x-status-indicator status="success" />
-                    <x-status-indicator status="info" />
-                    <x-status-indicator status="warning" />
-                    <x-status-indicator status="neutral" />
-                    <x-status-indicator status="danger" />
+                    <x-feedback-status.status-indicator status="success" />
+                    <x-feedback-status.status-indicator status="info" />
+                    <x-feedback-status.status-indicator status="warning" />
+                    <x-feedback-status.status-indicator status="neutral" />
+                    <x-feedback-status.status-indicator status="danger" />
                 </div>
             </div>
         </div>
 
-        <x-alert type="error" icon="bx bx-task" message="You cannot leave this program because you have assigned tasks." />
-        <x-alert type="info" icon="bx bx-lock" message="You cannot leave this program because it is already done." />
-        <x-alert type="success" icon="bx bx-check-circle" message="You are already joined in this program." />
-        <x-alert type="warning" icon="bx bx-check-circle" message="You are already joined in this program." />
-        <x-alert type="neutral" icon="bx bx-check-circle" message="You are already joined in this program." />
+        <x-feedback-status.alert type="error" icon="bx bx-task" message="You cannot leave this program because you have assigned tasks." />
+        <x-feedback-status.alert type="info" icon="bx bx-lock" message="You cannot leave this program because it is already done." />
+        <x-feedback-status.alert type="success" icon="bx bx-check-circle" message="You are already joined in this program." />
+        <x-feedback-status.alert type="warning" icon="bx bx-check-circle" message="You are already joined in this program." />
+        <x-feedback-status.alert type="neutral" icon="bx bx-check-circle" message="You are already joined in this program." />
 
 
     </div>

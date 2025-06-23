@@ -76,7 +76,7 @@
                 ];
             @endphp
 
-            <x-tabs 
+            <x-navigation-layout.tabs
                 :tabs="$tabs"
                 default-tab="all"
             >
@@ -166,7 +166,7 @@
                     @endif
                 </div>
                 </x-slot>
-            </x-tabs>
+            </x-navigation-layout.tabs>
         </div>
     </div>
 </div>

@@ -28,7 +28,7 @@
                     <td class="py-3 px-4 text-sm text-[#1a2235]">{{ $request->title }}</td>
                     <td class="py-3 px-4 text-sm text-[#1a2235]">{{ $request->user->name ?? 'N/A' }}</td>
                     <td>
-                        <x-status-indicator status="{{ $request->status  }}" variant="outline" />
+                        <x-feedback-status.status-indicator status="{{ $request->status  }}" variant="outline" />
                     </td>
                     <td class="py-3 px-4 text-sm text-[#1a2235]">{{ $request->created_at->setTimezone('Asia/Manila')->format('M d, Y h:i A') }}</td>
                     

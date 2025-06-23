@@ -183,7 +183,7 @@
                         <div class="space-y-3 text-sm">
                             <div class="flex items-center justify-between">
                                 <span class="text-gray-600">Status:</span>
-                                <x-programProgress :program="$program" />
+                                <x-feedback-status.programProgress :program="$program" />
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Created:</span>

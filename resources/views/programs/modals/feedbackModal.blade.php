@@ -25,7 +25,7 @@
 
                 <div class="p-6 space-y-6 overflow-y-auto flex-1">
                     @if($userFeedback)
-                        <x-alert 
+                        <x-feedback-status.alert
                             type="success"
                             icon="bx bx-check-circle"
                             message="Thank you for your feedback! We truly appreciate your contribution."

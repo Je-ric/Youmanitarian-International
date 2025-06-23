@@ -21,7 +21,7 @@
             ];
         @endphp
 
-        <x-tabs 
+        <x-navigation-layout.tabs
             :tabs="$tabs"
             default-tab="{{ request()->query('tab', 'overview') }}"
         >
@@ -149,7 +149,7 @@
                     {{ $members->links() }}
             </div>
             </x-slot>
-        </x-tabs>
+        </x-navigation-layout.tabs>
     </div>
 
 <!-- Payment Modal -->

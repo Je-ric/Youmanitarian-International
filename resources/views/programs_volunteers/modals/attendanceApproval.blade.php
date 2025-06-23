@@ -30,7 +30,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div class="flex items-center gap-2">
                                 <span class="text-sm font-medium text-gray-700">Status:</span>
-                                <x-status-indicator :status="$log->approval_status ?? 'pending'" />
+                                <x-feedback-status.status-indicator :status="$log->approval_status ?? 'pending'" />
                             </div>
                             <div class="text-sm text-gray-500">
                                 {{ \Carbon\Carbon::parse($log->created_at)->format('M j, Y') }}
@@ -144,7 +144,7 @@
                                                         <p class="text-sm text-gray-700 line-clamp-2 flex-1">
                                                             {{ $task->task_description }}
                                                         </p>
-                                                        <x-status-indicator :status="$assignment?->status ?? 'pending'" />
+                                                        <x-feedback-status.status-indicator :status="$assignment?->status ?? 'pending'" />
                                                     </div>
                                                 </div>
                                             @endforeach

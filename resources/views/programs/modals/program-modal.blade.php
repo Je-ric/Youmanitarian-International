@@ -81,12 +81,12 @@
 
                     <div class="border-t border-slate-200 pt-6">
                         @if($program->progress_status === 'done')
-                            <x-alert type="success" icon="bx bx-check-circle" message="This program is already done." />
+                            <x-feedback-status.alert type="success" icon="bx bx-check-circle" message="This program is already done." />
                         @elseif($currentVolunteers >= $program->volunteer_count)
-                            <x-alert type="error" icon="bx bx-error-circle" message="All volunteer slots are filled, but you're welcome to join as a guest, viewer, or supporter!" />
+                            <x-feedback-status.alert type="error" icon="bx bx-error-circle" message="All volunteer slots are filled, but you're welcome to join as a guest, viewer, or supporter!" />
                         @elseif($alreadyJoined)
                             <div class="space-y-4">
-                                <x-alert type="success" icon="bx bx-check-circle" message="You are already joined in this program." />
+                                <x-feedback-status.alert type="success" icon="bx bx-check-circle" message="You are already joined in this program." />
                                 
                                 @if($program->progress_status === 'incoming' && !$hasTasks)
                                     <form action="{{ route('programs.leave', [$program->id, $volunteer->id]) }}" method="POST"
@@ -101,9 +101,9 @@
                                     </form>
                                 @else
                                     @if($hasTasks)
-                                        <x-alert type="error" icon="bx bx-task" message="You cannot leave this program because you have assigned tasks." />
+                                        <x-feedback-status.alert type="error" icon="bx bx-task" message="You cannot leave this program because you have assigned tasks." />
                                     @elseif($program->progress_status !== 'incoming')
-                                        <x-alert type="info" icon="bx bx-lock" message="You cannot leave this program because it is no longer in incoming status." />
+                                        <x-feedback-status.alert type="info" icon="bx bx-lock" message="You cannot leave this program because it is no longer in incoming status." />
                                     @endif
                                 @endif
                             </div>

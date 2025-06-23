@@ -33,7 +33,7 @@
             ];
         @endphp
 
-        <x-tabs 
+        <x-navigation-layout.tabs
             :tabs="$tabs"
             default-tab="{{ request()->query('tab', 'users') }}"
         >
@@ -97,6 +97,6 @@
             <x-slot:slot_overview>
                 @include('roles.partials.rolesOverview')
             </x-slot>
-        </x-tabs>
+        </x-navigation-layout.tabs>
     </div>
 @endsection 

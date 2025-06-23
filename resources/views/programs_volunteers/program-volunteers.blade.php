@@ -31,7 +31,7 @@
             ];
         @endphp
 
-        <x-tabs 
+        <x-navigation-layout.tabs
             :tabs="$tabs"
             default-tab="{{ request()->query('tab', 'volunteers') }}"
         >
@@ -71,6 +71,6 @@
                         'ratingCounts' => $ratingCounts,
                     ])
             </x-slot>
-        </x-tabs>
+        </x-navigation-layout.tabs>
     </div>
 @endsection
