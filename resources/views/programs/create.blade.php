@@ -14,7 +14,7 @@
 
                 <div class="space-y-6">
                     <div>
-                        <label for="title" class="block text-sm font-medium text-gray-700">Program Title</label>
+                        <x-label for="title"><i class="bx bx-book"></i>Program Title</x-label>
                         <input
                             type="text"
                             id="title"
@@ -28,7 +28,7 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                         <div>
-                            <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
+                            <x-label for="date"><i class="bx bx-calendar"></i>Date</x-label>
                             <x-date-picker
                                 id="date"
                                 name="date"
@@ -38,7 +38,7 @@
                         </div>
 
                         <div>
-                            <label for="start_time" class="block text-sm font-medium text-gray-700">Start Time</label>
+                            <x-label for="start_time"><i class="bx bx-time-five"></i>Start Time</x-label>
                             <x-time-picker
                                 id="start_time"
                                 name="start_time"
@@ -48,7 +48,7 @@
                         </div>
 
                         <div>
-                            <label for="end_time" class="block text-sm font-medium text-gray-700">End Time</label>
+                            <x-label for="end_time"><i class="bx bx-time-five"></i>End Time</x-label>
                             <x-time-picker
                                 id="end_time"
                                 name="end_time"
@@ -60,7 +60,7 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label for="location" class="block text-sm font-medium text-gray-700">Location (Optional)</label>
+                            <x-label for="location"><i class="bx bx-map"></i>Location (Optional)</x-label>
                             <input
                                 type="text"
                                 id="location"
@@ -72,7 +72,7 @@
                         </div>
 
                         <div>
-                            <label for="volunteer_count" class="block text-sm font-medium text-gray-700">Volunteers Needed</label>
+                            <x-label for="volunteer_count"><i class="bx bx-group"></i>Volunteers Needed</x-label>
                             <input
                                 type="number"
                                 id="volunteer_count"
@@ -86,7 +86,7 @@
                     </div>
 
                     <div>
-                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <x-label for="description"><i class="bx bx-align-left"></i>Description</x-label>
                         <textarea
                             id="description"
                             name="description"
