@@ -41,26 +41,24 @@
 
                         <div>
                             <label for="start_time" class="block text-sm font-medium text-gray-700">Start Time</label>
-                            <input
-                                type="time"
+                            <x-time-picker
                                 id="start_time"
                                 name="start_time"
-                                class="mt-1 block w-full rounded-lg border border-gray-200 px-4 py-2.5 text-gray-900 focus:border-black focus:ring-2 focus:ring-black/20 transition-colors"
-                                value="{{ old('start_time') }}"
-                                required
-                            >
+                                :value="old('start_time')"
+                                required="true"
+                            />
+                            <p class="text-xs text-gray-400 mt-1">If no picker appears, enter time as HH:MM (24-hour).</p>
                         </div>
 
                         <div>
                             <label for="end_time" class="block text-sm font-medium text-gray-700">End Time</label>
-                            <input
-                                type="time"
+                            <x-time-picker
                                 id="end_time"
                                 name="end_time"
-                                class="mt-1 block w-full rounded-lg border border-gray-200 px-4 py-2.5 text-gray-900 focus:border-black focus:ring-2 focus:ring-black/20 transition-colors"
-                                value="{{ old('end_time') }}"
-                                required
-                            >
+                                :value="old('end_time')"
+                                required="true"
+                            />
+                            <p class="text-xs text-gray-400 mt-1">If no picker appears, enter time as HH:MM (24-hour).</p>
                         </div>
                     </div>
 

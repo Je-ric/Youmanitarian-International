@@ -129,28 +129,24 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label for="start_time" class="block text-sm font-medium text-gray-700 mb-2">Start</label>
-                                <input
-                                    type="time"
+                                <x-time-picker
                                     id="start_time"
                                     name="start_time"
-                                    class="program-field w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1a2235] transition-all duration-200 focus:bg-white focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]/20"
-                                    value="{{ old('start_time', \Carbon\Carbon::parse($program->start_time)->format('H:i')) }}"
-                                    readonly
-                                    required
-                                >
+                                    :value="old('start_time', \Carbon\Carbon::parse($program->start_time)->format('H:i'))"
+                                    readonly="true"
+                                    required="true"
+                                />
                             </div>
 
                             <div>
                                 <label for="end_time" class="block text-sm font-medium text-gray-700 mb-2">End</label>
-                                <input
-                                    type="time"
+                                <x-time-picker
                                     id="end_time"
                                     name="end_time"
-                                    class="program-field w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1a2235] transition-all duration-200 focus:bg-white focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]/20"
-                                    value="{{ old('end_time', \Carbon\Carbon::parse($program->end_time)->format('H:i')) }}"
-                                    readonly
-                                    required
-                                >
+                                    :value="old('end_time', \Carbon\Carbon::parse($program->end_time)->format('H:i'))"
+                                    readonly="true"
+                                    required="true"
+                                />
                             </div>
                         </div>
                     </div>
