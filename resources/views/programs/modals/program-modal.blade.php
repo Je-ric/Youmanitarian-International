@@ -130,7 +130,7 @@
                 </h3>
 
                 @php
-                    $progressComponent = view('components.programProgress', ['program' => $program])->render();
+                    $progressComponent = view('components.feedback-status.programProgress', ['program' => $program])->render();
 
                     $currentVolunteers = $program->volunteers->count();
                     // $progressPercentage = ($currentVolunteers / $program->volunteer_count) * 100;

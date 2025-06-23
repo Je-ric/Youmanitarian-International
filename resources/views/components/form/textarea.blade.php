@@ -31,4 +31,13 @@
 
 @error($name)
     <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>
-@enderror 
+@enderror
+
+{{--
+Used in:
+- resources/views/volunteers/modals/invitationModal.blade.php
+- resources/views/programs_volunteers/modals/manualAttendanceModal.blade.php
+- resources/views/programs_volunteers/modals/attendanceApproval.blade.php
+- resources/views/programs/modals/feedbackModal.blade.php
+- resources/views/finance/modals/addPaymentModal.blade.php
+--}} 

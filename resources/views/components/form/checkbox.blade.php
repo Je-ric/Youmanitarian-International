@@ -5,4 +5,8 @@
     ]) }}
     @if($checked) checked="checked" @endif
 >
- 
+{{--
+Used in:
+- resources/views/roles/partials/assign_rolesModal.blade.php
+- resources/views/auth/register.blade.php
+--}}

@@ -54,7 +54,7 @@
                     <div class="p-6 space-y-6">
                         <!-- Program Title -->
                         <div>
-                            <x-label for="title"><i class='bx bx-info-circle mr-1 text-blue-500'></i>Program Title</x-label>
+                            <x-form.label for="title"><i class='bx bx-info-circle mr-1 text-blue-500'></i>Program Title</x-form.label>
                             <input
                                 type="text"
                                 id="title"
@@ -68,7 +68,7 @@
 
                         <!-- Description -->
                         <div>
-                            <x-label for="description"><i class='bx bx-info-circle mr-1 text-blue-500'></i>Description</x-label>
+                            <x-form.label for="description"><i class='bx bx-info-circle mr-1 text-blue-500'></i>Description</x-form.label>
                             <textarea
                                 id="description"
                                 name="description"
@@ -81,7 +81,7 @@
 
                         <!-- Location -->
                         <div>
-                            <x-label for="location"><i class='bx bx-map mr-1 text-green-600'></i>Location <span class="text-gray-400 text-xs">(Optional)</span></x-label>
+                            <x-form.label for="location"><i class='bx bx-map mr-1 text-green-600'></i>Location <span class="text-gray-400 text-xs">(Optional)</span></x-form.label>
                             <input
                                 type="text"
                                 id="location"
@@ -110,8 +110,8 @@
                     <div class="p-6 space-y-4">
                         <!-- Date -->
                         <div>
-                            <x-label for="date"><i class='bx bx-calendar mr-1 text-purple-600'></i>Date</x-label>
-                            <x-date-picker
+                            <x-form.label for="date"><i class='bx bx-calendar mr-1 text-purple-600'></i>Date</x-form.label>
+                            <x-form.date-picker
                                 id="date"
                                 name="date"
                                 :value="old('date', \Carbon\Carbon::parse($program->date)->format('Y-m-d'))"
@@ -124,8 +124,8 @@
                         <!-- Time Range -->
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <x-label for="start_time"><i class='bx bx-time-five mr-1 text-green-600'></i>Start</x-label>
-                                <x-time-picker
+                                <x-form.label for="start_time"><i class='bx bx-time-five mr-1 text-green-600'></i>Start</x-form.label>
+                                <x-form.time-picker
                                     id="start_time"
                                     name="start_time"
                                     :value="old('start_time', \Carbon\Carbon::parse($program->start_time)->format('H:i'))"
@@ -136,8 +136,8 @@
                             </div>
 
                             <div>
-                                <x-label for="end_time"><i class='bx bx-time-five mr-1 text-red-600'></i>End</x-label>
-                                <x-time-picker
+                                <x-form.label for="end_time"><i class='bx bx-time-five mr-1 text-red-600'></i>End</x-form.label>
+                                <x-form.time-picker
                                     id="end_time"
                                     name="end_time"
                                     :value="old('end_time', \Carbon\Carbon::parse($program->end_time)->format('H:i'))"
@@ -161,7 +161,7 @@
                     <div class="p-6">
                         <!-- Volunteers Needed -->
                         <div>
-                            <x-label for="volunteer_count"><i class='bx bx-group mr-1 text-pink-500'></i>Volunteers Needed</x-label>
+                            <x-form.label for="volunteer_count"><i class='bx bx-group mr-1 text-pink-500'></i>Volunteers Needed</x-form.label>
                             <input
                                 type="number"
                                 id="volunteer_count"

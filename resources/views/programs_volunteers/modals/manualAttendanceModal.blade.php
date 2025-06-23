@@ -22,7 +22,7 @@
 
             <div class="p-6 space-y-6">
                 <div class="space-y-1.5">
-                    <x-label><i class='bx bx-user text-blue-500'></i>Volunteer Name:</x-label>
+                    <x-form.label><i class='bx bx-user text-blue-500'></i>Volunteer Name:</x-form.label>
                     <div class="flex items-center space-x-2 px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
                         <span class="text-sm text-gray-900">{{ $selectedVolunteer->user->name ?? 'No Name' }}</span>
                     </div>
@@ -36,7 +36,7 @@
                 <!-- Time Inputs -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="space-y-1.5">
-                        <x-label><i class='bx bx-time-five mr-1 text-green-600'></i>Time In</x-label>
+                        <x-form.label><i class='bx bx-time-five mr-1 text-green-600'></i>Time In</x-form.label>
                         <div class="relative flex items-center">
                             {{-- <i class='bx bx-time-five absolute left-3 text-gray-400'></i> --}}
                             @if($clockIn)
@@ -45,7 +45,7 @@
                                     value="{{ $clockIn->format('h:i a') }}">
                                 <input type="hidden" name="clock_in" value="{{ $clockIn->format('H:i') }}">
                             @else
-                                <x-time-picker
+                                <x-form.time-picker
                                     id="clock_in"
                                     name="clock_in"
                                     :value="old('clock_in')"
@@ -55,13 +55,13 @@
                         </div>
                     </div>
                     <div class="space-y-1.5">
-                        <x-label><i class='bx bx-time-five mr-1 text-red-600'></i>Time Out</x-label>
+                        <x-form.label><i class='bx bx-time-five mr-1 text-red-600'></i>Time Out</x-form.label>
                         <div class="relative flex items-center">
                             {{-- <i class='bx bx-time-five absolute left-3 text-gray-400'></i> --}}
                             @if($clockOut)
                                 <input type="text" readonly class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 bg-gray-100 text-gray-700 focus:outline-none" value="{{ $clockOut->format('H:i') }}">
                             @else
-                                <x-time-picker
+                                <x-form.time-picker
                                     id="clock_out"
                                     name="clock_out"
                                     :value="old('clock_out')"
@@ -74,7 +74,7 @@
 
                 <!-- Reason -->
                 <div class="space-y-1.5">
-                    <x-textarea
+                    <x-form.textarea
                         name="notes"
                         :value="$attendance?->notes"
                         label="Reason for Manual Entry (optional):"

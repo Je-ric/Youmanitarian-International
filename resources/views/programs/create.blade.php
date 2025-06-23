@@ -14,7 +14,7 @@
 
                 <div class="space-y-6">
                     <div>
-                        <x-label for="title"><i class="bx bx-book"></i>Program Title</x-label>
+                        <x-form.label for="title"><i class="bx bx-book"></i>Program Title</x-form.label>
                         <input
                             type="text"
                             id="title"
@@ -28,8 +28,8 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                         <div>
-                            <x-label for="date"><i class="bx bx-calendar"></i>Date</x-label>
-                            <x-date-picker
+                            <x-form.label for="date"><i class="bx bx-calendar"></i>Date</x-form.label>
+                            <x-form.date-picker
                                 id="date"
                                 name="date"
                                 :value="old('date')"
@@ -38,8 +38,8 @@
                         </div>
 
                         <div>
-                            <x-label for="start_time"><i class="bx bx-time-five"></i>Start Time</x-label>
-                            <x-time-picker
+                            <x-form.label for="start_time"><i class="bx bx-time-five"></i>Start Time</x-form.label>
+                            <x-form.time-picker
                                 id="start_time"
                                 name="start_time"
                                 :value="old('start_time')"
@@ -48,8 +48,8 @@
                         </div>
 
                         <div>
-                            <x-label for="end_time"><i class="bx bx-time-five"></i>End Time</x-label>
-                            <x-time-picker
+                            <x-form.label for="end_time"><i class="bx bx-time-five"></i>End Time</x-form.label>
+                            <x-form.time-picker
                                 id="end_time"
                                 name="end_time"
                                 :value="old('end_time')"
@@ -60,7 +60,7 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <x-label for="location"><i class="bx bx-map"></i>Location (Optional)</x-label>
+                            <x-form.label for="location"><i class="bx bx-map"></i>Location (Optional)</x-form.label>
                             <input
                                 type="text"
                                 id="location"
@@ -72,7 +72,7 @@
                         </div>
 
                         <div>
-                            <x-label for="volunteer_count"><i class="bx bx-group"></i>Volunteers Needed</x-label>
+                            <x-form.label for="volunteer_count"><i class="bx bx-group"></i>Volunteers Needed</x-form.label>
                             <input
                                 type="number"
                                 id="volunteer_count"
@@ -86,7 +86,7 @@
                     </div>
 
                     <div>
-                        <x-label for="description"><i class="bx bx-align-left"></i>Description</x-label>
+                        <x-form.label for="description"><i class="bx bx-align-left"></i>Description</x-form.label>
                         <textarea
                             id="description"
                             name="description"

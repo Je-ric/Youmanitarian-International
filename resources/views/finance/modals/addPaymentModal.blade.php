@@ -61,10 +61,10 @@
                     <div class="space-y-4">
                         <!-- Amount -->
                         <div>
-                            <x-label for="amount">
+                            <x-form.label for="amount">
                                 <i class='bx bx-dollar-circle mr-1 text-green-600'></i>
                                 Amount
-                            </x-label>
+                            </x-form.label>
                             <div class="relative">
                                 @if($payment)
                                     <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
@@ -84,10 +84,10 @@
 
                         <!-- Payment Method -->
                         <div>
-                            <x-label for="payment_method">
+                            <x-form.label for="payment_method">
                                 <i class='bx bx-credit-card mr-1 text-blue-600'></i>
                                 Payment Method
-                            </x-label>
+                            </x-form.label>
                             @if($payment)
                                 <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
                                     <span
@@ -109,10 +109,10 @@
                     <div class="space-y-4">
                         <!-- Payment Date -->
                         <div>
-                            <x-label>
+                            <x-form.label>
                                 <i class='bx bx-calendar mr-1 text-purple-600'></i>
                                 Payment Date
-                            </x-label>
+                            </x-form.label>
                             <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
                                 <span class="font-medium">{{ now()->format('F j, Y') }}</span>
                                 <span class="text-sm text-gray-500 ml-2">{{ now()->format('h:i A') }}</span>
@@ -140,17 +140,17 @@
 
                 <!-- Notes Section -->
                 <div>
-                    <x-label for="notes">
+                    <x-form.label for="notes">
                         <i class='bx bx-note mr-1 text-orange-600'></i>
                         Notes
                         <span class="text-xs font-normal text-gray-500">(Optional)</span>
-                    </x-label>
+                    </x-form.label>
                     @if($payment)
                         <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900 min-h-[80px]">
                             {{ $payment->notes ?: 'No notes provided' }}
                         </div>
                     @else
-                        <x-textarea
+                        <x-form.textarea
                             name="notes"
                             id="notes"
                             rows="3"
@@ -162,13 +162,13 @@
 
                 <!-- Receipt/Proof Section -->
                 <div>
-                    <x-label for="receipt">
+                    <x-form.label for="receipt">
                         <i class='bx bx-receipt mr-1 text-indigo-600'></i>
                         Receipt/Proof
                         @if(!$payment)
                             <span class="text-xs font-normal text-gray-500">(Optional)</span>
                         @endif
-                    </x-label>
+                    </x-form.label>
                     
                     @if($payment && $payment->receipt_url)
                         @php
@@ -199,9 +199,9 @@
                             @endif
                         </div>
                     @else
-                        <x-input-upload name="receipt" id="receipt" accept="image/*,.pdf" required>
+                        <x-form.input-upload name="receipt" id="receipt" accept="image/*,.pdf" required>
                             PNG, JPG, PDF up to 10MB
-                        </x-input-upload>
+                        </x-form.input-upload>
                     @endif
                 </div>
             </div>

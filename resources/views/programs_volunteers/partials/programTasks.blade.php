@@ -59,7 +59,7 @@
                             <form action="{{ route('programs.tasks.update', [$program, $task]) }}" method="POST" class="inline-flex">
                                 @csrf
                                 @method('PUT')
-                                <x-select-option
+                                <x-form.select-option
                                     name="status" 
                                     class="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-1 focus:ring-[#ffb51b] focus:border-[#ffb51b] bg-white"
                                     onchange="this.form.submit()"
@@ -147,7 +147,7 @@
                                                   class="inline-flex">
                                                 @csrf
                                                 @method('PUT')
-                                                <x-select-option
+                                                <x-form.select-option
                                                     name="status" 
                                                     class="text-xs border border-gray-300 rounded px-2 py-1 focus:ring-1 focus:ring-[#ffb51b] focus:border-[#ffb51b] bg-white"
                                                     onchange="this.form.submit()"

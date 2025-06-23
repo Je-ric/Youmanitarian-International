@@ -76,7 +76,7 @@
                                 </div>
 
                                 <div>
-                                    <x-textarea
+                                    <x-form.textarea
                                         id="notes_{{ $log->id }}"
                                         name="notes"
                                         :value="old('notes', $log->notes)"

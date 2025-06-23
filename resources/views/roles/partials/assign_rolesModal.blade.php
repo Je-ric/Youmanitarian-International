@@ -107,7 +107,7 @@
                                     
                                     <!-- Checkbox -->
                                     <div class="flex items-center h-5">
-                                        <x-checkbox
+                                        <x-form.checkbox
                                             name="roles[]" 
                                             value="{{ $role->id }}" 
                                             id="role_{{ $user->id }}_{{ $role->id }}"

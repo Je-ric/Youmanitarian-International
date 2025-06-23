@@ -24,4 +24,9 @@
             </li>
         @endforeach
     </ol>
-</nav> 
+</nav>
+
+{{--
+Used in:
+- resources/views/layouts/sidebar_final.blade.php
+--}} 

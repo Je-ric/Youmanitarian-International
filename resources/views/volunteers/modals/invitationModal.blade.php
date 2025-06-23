@@ -13,10 +13,10 @@
             
             <!-- Membership Type -->
             <div class="mb-5">
-                <x-select-option id="membership_type" name="membership_type" label="Membership Type">
+                <x-form.select-option id="membership_type" name="membership_type" label="Membership Type">
                     <option value="full_pledge">Full-Pledge</option>
                     <option value="honorary">Honorary</option>
-                </x-select-option>
+                </x-form.select-option>
             </div>
             
             @php
@@ -30,17 +30,17 @@
 
             <!-- Template Messages -->
             <div class="mb-5">
-                 <x-select-option id="template_messages" name="template_messages" label="Use a Message Template (Optional)" x-on:change="message = $event.target.value">
+                 <x-form.select-option id="template_messages" name="template_messages" label="Use a Message Template (Optional)" x-on:change="message = $event.target.value">
                     <option value="">Select a message...</option>
                     @foreach($templateMessages as $msg)
                         <option value="{{ $msg }}">{{ \Illuminate\Support\Str::limit($msg, 50) }}</option>
                     @endforeach
-                </x-select-option>
+                </x-form.select-option>
             </div>
 
             <!-- Invitation Message -->
             <div class="mb-6">
-                <x-textarea id="invitation_message" name="invitation_message" label="Invitation Message" placeholder="Add a personal message or select a template..." x-model="message"></x-textarea>
+                <x-form.textarea id="invitation_message" name="invitation_message" label="Invitation Message" placeholder="Add a personal message or select a template..." x-model="message"></x-form.textarea>
             </div>
 
             <!-- Submit Button -->

@@ -26,4 +26,10 @@
             {{ $slot->isEmpty() ? 'PNG, JPG, PDF up to 10MB' : $slot }}
         </p>
     </div>
-</div> 
+</div>
+
+{{--
+Used in:
+- resources/views/programs/modals/proofModal.blade.php
+- resources/views/finance/modals/addPaymentModal.blade.php
+--}} 
