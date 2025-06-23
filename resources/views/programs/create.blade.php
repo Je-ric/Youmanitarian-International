@@ -29,14 +29,12 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                         <div>
                             <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
-                            <input
-                                type="date"
+                            <x-date-picker
                                 id="date"
                                 name="date"
-                                class="mt-1 block w-full rounded-lg border border-gray-200 px-4 py-2.5 text-gray-900 focus:border-black focus:ring-2 focus:ring-black/20 transition-colors"
-                                value="{{ old('date') }}"
-                                required
-                            >
+                                :value="old('date')"
+                                required="true"
+                            />
                         </div>
 
                         <div>
