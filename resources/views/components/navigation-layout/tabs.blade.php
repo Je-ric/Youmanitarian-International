@@ -69,7 +69,7 @@
         });
     });
 </script>
-@endpush
+@endpush 
 
 {{--
 Used in:

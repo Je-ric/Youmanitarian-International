@@ -102,6 +102,85 @@
         <x-feedback-status.alert type="warning" icon="bx bx-check-circle" message="You are already joined in this program." />
         <x-feedback-status.alert type="neutral" icon="bx bx-check-circle" message="You are already joined in this program." />
 
+        {{-- Usage Examples --}}
+
+{{-- Basic usage with variant --}}
+<x-empty-state variant="no-volunteers" />
+
+{{-- Custom title and description --}}
+<x-empty-state 
+    variant="no-tasks" 
+    title="No Tasks Available"
+    description="Create your first task to start managing your project."
+/>
+
+{{-- With action button --}}
+<x-empty-state 
+    variant="no-programs" 
+    actionText="Create Program"
+    actionUrl="{{ route('programs.create') }}"
+    actionVariant="primary"
+/>
+
+{{-- Small size for compact spaces --}}
+<x-empty-state 
+    variant="no-data" 
+    size="small"
+/>
+
+{{-- Large size for main content areas --}}
+<x-empty-state 
+    variant="no-images" 
+    size="large"
+    actionText="Upload Images"
+    {{-- actionUrl="{{ route('images.upload') }}" --}}
+/>
+
+{{-- Custom icon and colors --}}
+<x-empty-state 
+    variant="custom"
+    icon="bx bx-star"
+    iconColor="text-yellow-500"
+    bgColor="bg-yellow-50"
+    title="No Favorites Yet"
+    description="Items you favorite will appear here."
+/>
+
+{{-- Using slot for custom title --}}
+<x-empty-state variant="no-feedback">
+    No Customer Feedback
+</x-empty-state>
+
+{{-- Table empty state --}}
+<x-empty-state 
+    variant="empty-table"
+    title="No Records in Database"
+    description="This table will populate as data is added."
+    size="small"
+/>
+
+{{-- Search results empty state --}}
+<x-empty-state 
+    variant="no-search"
+    {{-- title="No matches found for '{{ $searchTerm }}'" --}}
+    description="Try different keywords or check your spelling."
+    actionText="Clear Search"
+    {{-- actionUrl="{{ route('search.clear') }}" --}}
+    actionVariant="outline"
+/>
+
+{{-- Loading state --}}
+<x-empty-state variant="loading" />
+
+{{-- Error state --}}
+<x-empty-state 
+    variant="error"
+    title="Failed to Load Data"
+    description="Please refresh the page or try again later."
+    actionText="Retry"
+    {{-- actionUrl="{{ request()->url() }}" --}}
+    actionVariant="secondary"
+/>
 
     </div>
 
