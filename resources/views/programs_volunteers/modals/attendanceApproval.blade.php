@@ -38,27 +38,20 @@
                         </div>
                     </div>
 
-                    <!-- Card Content -->
                     <div class="p-4">
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-                            <!-- Left Column: Time & Notes -->
                             <div class="space-y-4">
-                                <!-- Time Information -->
                                 <div>
-                                    <h4 class="text-sm font-semibold text-gray-700 mb-3 flex items-center">
-                                        <i class='bx bx-time mr-1 text-[#ffb51b]'></i>
-                                        Time Information
-                                    </h4>
+                                    <x-label><i class='bx bx-time mr-1 text-yellow-500'></i>Time Information</x-label>
                                     <div class="space-y-2 bg-gray-50 rounded-lg p-3">
                                         <div class="flex justify-between items-center">
-                                            <span class="text-sm text-gray-600">Time In:</span>
+                                            <span class="text-sm text-gray-600"><i class='bx bx-time-five mr-1 text-green-600'></i>Time In:</span>
                                             <span class="font-medium text-[#1a2235]">
                                                 {{ $log->clock_in ? \Carbon\Carbon::parse($log->clock_in)->format('h:i A') : '--:--' }}
                                             </span>
                                         </div>
                                         <div class="flex justify-between items-center">
-                                            <span class="text-sm text-gray-600">Time Out:</span>
+                                            <span class="text-sm text-gray-600"><i class='bx bx-time-five mr-1 text-red-600'></i>Time Out:</span>
                                             <span class="font-medium text-[#1a2235]">
                                                 {{ $log->clock_out ? \Carbon\Carbon::parse($log->clock_out)->format('h:i A') : '--:--' }}
                                             </span>
@@ -82,7 +75,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Notes Section -->
                                 <div>
                                     <x-textarea
                                         id="notes_{{ $log->id }}"
@@ -96,15 +88,9 @@
                                 </div>
                             </div>
 
-                            <!-- Right Column: Proof & Tasks -->
                             <div class="space-y-4">
-
-                                <!-- Proof Image -->
                                 <div>
-                                    <h4 class="text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                                        <i class='bx bx-image mr-1 text-[#ffb51b]'></i>
-                                        Attendance Proof
-                                    </h4>
+                                    <x-label><i class='bx bx-image mr-1 text-orange-600'></i>Attendance Proof</x-label>
                                     @if ($log->proof_image)
                                         <div class="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
                                             <div class="aspect-video relative">
@@ -127,12 +113,8 @@
                                     @endif
                                 </div>
 
-                                <!-- Assigned Tasks -->
                                 <div>
-                                    <h4 class="text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                                        <i class='bx bx-task mr-1 text-[#ffb51b]'></i>
-                                        Assigned Tasks
-                                    </h4>
+                                    <x-label><i class='bx bx-task mr-1 text-blue-600'></i>Assigned Tasks</x-label>
                                     @php
                                         $volunteerTasks = $program->tasks()
                                             ->whereHas('assignments', function ($query) use ($volunteer) {

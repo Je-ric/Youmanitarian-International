@@ -35,7 +35,7 @@
                     <!-- Rating Section -->
                     <div class="space-y-4">
                         <div class="border-b pb-4">
-                            <label class="block font-semibold text-slate-900 text-start">Rating</label>
+                            <x-label>Rating</x-label>
                         </div>
 
                         <div class="bg-slate-50 border rounded-lg p-6">
@@ -57,7 +57,7 @@
                     <!-- Feedback Section -->
                     <div class="space-y-4">
                         <div class="border-b border-slate-200 pb-4">
-                            <label class="block font-semibold text-slate-900">Your Feedback</label>
+                            <x-label>Your Feedback</x-label>
                         </div>
 
                         <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">

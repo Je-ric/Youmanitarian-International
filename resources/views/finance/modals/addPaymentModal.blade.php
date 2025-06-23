@@ -61,10 +61,10 @@
                     <div class="space-y-4">
                         <!-- Amount -->
                         <div>
-                            <label for="amount" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <x-label for="amount">
                                 <i class='bx bx-dollar-circle mr-1 text-green-600'></i>
                                 Amount
-                            </label>
+                            </x-label>
                             <div class="relative">
                                 @if($payment)
                                     <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
@@ -84,10 +84,10 @@
 
                         <!-- Payment Method -->
                         <div>
-                            <label for="payment_method" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <x-label for="payment_method">
                                 <i class='bx bx-credit-card mr-1 text-blue-600'></i>
                                 Payment Method
-                            </label>
+                            </x-label>
                             @if($payment)
                                 <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
                                     <span
@@ -109,10 +109,10 @@
                     <div class="space-y-4">
                         <!-- Payment Date -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <x-label>
                                 <i class='bx bx-calendar mr-1 text-purple-600'></i>
                                 Payment Date
-                            </label>
+                            </x-label>
                             <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
                                 <span class="font-medium">{{ now()->format('F j, Y') }}</span>
                                 <span class="text-sm text-gray-500 ml-2">{{ now()->format('h:i A') }}</span>
@@ -140,31 +140,35 @@
 
                 <!-- Notes Section -->
                 <div>
-                    <label for="notes" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <x-label for="notes">
                         <i class='bx bx-note mr-1 text-orange-600'></i>
                         Notes
                         <span class="text-xs font-normal text-gray-500">(Optional)</span>
-                    </label>
+                    </x-label>
                     @if($payment)
                         <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900 min-h-[80px]">
                             {{ $payment->notes ?: 'No notes provided' }}
                         </div>
                     @else
-                        <textarea name="notes" id="notes" rows="3"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
-                                  placeholder="Add any additional notes about the payment..."></textarea>
+                        <x-textarea
+                            name="notes"
+                            id="notes"
+                            rows="3"
+                            :value="old('notes')"
+                            placeholder="Add any additional notes about the payment..."
+                        />
                     @endif
                 </div>
 
                 <!-- Receipt/Proof Section -->
                 <div>
-                    <label for="receipt" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <x-label for="receipt">
                         <i class='bx bx-receipt mr-1 text-indigo-600'></i>
                         Receipt/Proof
                         @if(!$payment)
                             <span class="text-xs font-normal text-gray-500">(Optional)</span>
                         @endif
-                    </label>
+                    </x-label>
                     
                     @if($payment && $payment->receipt_url)
                         @php

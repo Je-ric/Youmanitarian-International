@@ -54,7 +54,7 @@
                     <div class="p-6 space-y-6">
                         <!-- Program Title -->
                         <div>
-                            <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Program Title</label>
+                            <x-label for="title"><i class='bx bx-info-circle mr-1 text-blue-500'></i>Program Title</x-label>
                             <input
                                 type="text"
                                 id="title"
@@ -68,7 +68,7 @@
 
                         <!-- Description -->
                         <div>
-                            <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <x-label for="description"><i class='bx bx-info-circle mr-1 text-blue-500'></i>Description</x-label>
                             <textarea
                                 id="description"
                                 name="description"
@@ -81,10 +81,7 @@
 
                         <!-- Location -->
                         <div>
-                            <label for="location" class="block text-sm font-medium text-gray-700 mb-2">
-                                Location 
-                                <span class="text-gray-400 text-xs">(Optional)</span>
-                            </label>
+                            <x-label for="location"><i class='bx bx-map mr-1 text-green-600'></i>Location <span class="text-gray-400 text-xs">(Optional)</span></x-label>
                             <input
                                 type="text"
                                 id="location"
@@ -113,7 +110,7 @@
                     <div class="p-6 space-y-4">
                         <!-- Date -->
                         <div>
-                            <label for="date" class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                            <x-label for="date"><i class='bx bx-calendar mr-1 text-purple-600'></i>Date</x-label>
                             <x-date-picker
                                 id="date"
                                 name="date"
@@ -127,7 +124,7 @@
                         <!-- Time Range -->
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label for="start_time" class="block text-sm font-medium text-gray-700 mb-2">Start</label>
+                                <x-label for="start_time"><i class='bx bx-time-five mr-1 text-green-600'></i>Start</x-label>
                                 <x-time-picker
                                     id="start_time"
                                     name="start_time"
@@ -139,7 +136,7 @@
                             </div>
 
                             <div>
-                                <label for="end_time" class="block text-sm font-medium text-gray-700 mb-2">End</label>
+                                <x-label for="end_time"><i class='bx bx-time-five mr-1 text-red-600'></i>End</x-label>
                                 <x-time-picker
                                     id="end_time"
                                     name="end_time"
@@ -164,7 +161,7 @@
                     <div class="p-6">
                         <!-- Volunteers Needed -->
                         <div>
-                            <label for="volunteer_count" class="block text-sm font-medium text-gray-700 mb-2">Volunteers Needed</label>
+                            <x-label for="volunteer_count"><i class='bx bx-group mr-1 text-pink-500'></i>Volunteers Needed</x-label>
                             <input
                                 type="number"
                                 id="volunteer_count"

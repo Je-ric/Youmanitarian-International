@@ -21,11 +21,9 @@
             <input type="hidden" name="date" value="{{ \Carbon\Carbon::parse($program->date)->format('Y-m-d') }}">
 
             <div class="p-6 space-y-6">
-                <!-- Volunteer Info -->
                 <div class="space-y-1.5">
-                    <label class="block text-sm font-bold text-gray-700">Volunteer Name:</label>
+                    <x-label><i class='bx bx-user text-blue-500'></i>Volunteer Name:</x-label>
                     <div class="flex items-center space-x-2 px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
-                        <i class='bx bx-user text-gray-500'></i>
                         <span class="text-sm text-gray-900">{{ $selectedVolunteer->user->name ?? 'No Name' }}</span>
                     </div>
                 </div>
@@ -38,9 +36,9 @@
                 <!-- Time Inputs -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="space-y-1.5">
-                        <label class="block text-sm font-medium text-gray-700">Time In</label>
+                        <x-label><i class='bx bx-time-five mr-1 text-green-600'></i>Time In</x-label>
                         <div class="relative flex items-center">
-                            <i class='bx bx-time-five absolute left-3 text-gray-400'></i>
+                            {{-- <i class='bx bx-time-five absolute left-3 text-gray-400'></i> --}}
                             @if($clockIn)
                                 <input type="text" readonly 
                                     class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 bg-gray-100 text-gray-700 focus:outline-none" 
@@ -57,9 +55,9 @@
                         </div>
                     </div>
                     <div class="space-y-1.5">
-                        <label class="block text-sm font-medium text-gray-700">Time Out</label>
+                        <x-label><i class='bx bx-time-five mr-1 text-red-600'></i>Time Out</x-label>
                         <div class="relative flex items-center">
-                            <i class='bx bx-time-five absolute left-3 text-gray-400'></i>
+                            {{-- <i class='bx bx-time-five absolute left-3 text-gray-400'></i> --}}
                             @if($clockOut)
                                 <input type="text" readonly class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 bg-gray-100 text-gray-700 focus:outline-none" value="{{ $clockOut->format('H:i') }}">
                             @else
