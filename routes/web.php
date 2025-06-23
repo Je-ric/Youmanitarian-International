@@ -25,6 +25,7 @@ use App\Http\Controllers\VolunteerApprovalController;
 use App\Http\Controllers\VolunteerAttendanceController;
 use App\Http\Controllers\VolunteerApplicationController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\MembershipReminderController;
 
 // Route::middleware([
 //     'auth:sanctum',
@@ -226,6 +227,10 @@ Route::middleware(['auth'])->prefix('finance')->group(function () {
     Route::get('/membership-payments', [MembershipController::class, 'index'])->name('finance.membership.payments');
     Route::post('/membership-payments', [MembershipController::class, 'store'])->name('finance.membership.payments.store');
     Route::patch('/membership-payments/{payment}/status', [MembershipController::class, 'updateStatus'])->name('finance.membership.payments.status');
+
+    // Membership payment reminders
+    Route::middleware(['auth'])->post('/finance/membership/reminders', [MembershipReminderController::class, 'store'])
+        ->name('finance.membership.reminders.store');
 });
 
 Route::middleware(['auth'])->prefix('members')->name('members.')->group(function () {

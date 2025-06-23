@@ -118,24 +118,39 @@
                                         </x-table.td>
                                 @endforeach
                                     <x-table.td>
-                                    <div class="flex items-center space-x-2">
-                                        @if($payment && $payment->receipt_url)
-                                            <a href="{{ Storage::url($payment->receipt_url) }}" 
-                                               target="_blank"
-                                               class="text-blue-600 hover:text-blue-800 flex items-center gap-1">
-                                                <i class='bx bx-file'></i>
-                                                View Proof
-                                            </a>
-                                        @endif
-                                        <button class="text-gray-600 hover:text-gray-800">
-                                            <i class='bx bx-bell'></i>
-                                        </button>
-                                        <button class="text-gray-600 hover:text-gray-800">
-                                            <i class='bx bx-download'></i>
-                                        </button>
-                                    </div>
+                                        <div class="flex items-center gap-2">
+                                            @if($payment && $payment->receipt_url)
+                                                <a href="{{ Storage::url($payment->receipt_url) }}" 
+                                                   target="_blank"
+                                                   class="text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                                                   title="View Payment Proof">
+                                                    <i class='bx bx-file'></i>
+                                                    <span>Proof</span>
+                                                </a>
+                                            @endif
+
+                                            @php $reminderModalId = 'reminderModal_' . $member->id; @endphp
+                                            <button type="button" 
+                                                onclick="document.getElementById('{{ $reminderModalId }}').showModal()"
+                                                class="flex items-center gap-1 text-orange-600 hover:text-orange-700"
+                                                title="Send Payment Reminder">
+                                                <i class='bx bx-bell'></i>
+                                                <span>Remind</span>
+                                            </button>
+
+                                            <button type="button"
+                                                class="flex items-center gap-1 text-gray-600 hover:text-gray-700"
+                                                title="Download Report">
+                                                <i class='bx bx-download'></i>
+                                                <span>Report</span>
+                                            </button>
+                                        </div>
                                     </x-table.td>
                                 </x-table.tr>
+                                @include('finance.modals.paymentReminderModal', [
+                                    'modalId' => $reminderModalId,
+                                    'member' => $member
+                                ])
                         @empty
                             <tr>
                                 <td colspan="7" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
@@ -160,5 +175,11 @@
     'payment' => $payment,
     'status' => $status,
     'statusClass' => $status === 'paid' ? 'text-green-600' : ($status === 'overdue' ? 'text-red-600' : 'text-yellow-600')
+])
+
+<!-- Reminder Modal -->
+@include('finance.modals.paymentReminderModal', [
+    'modalId' => $reminderModalId,
+    'member' => $member
 ])
 @endsection 
