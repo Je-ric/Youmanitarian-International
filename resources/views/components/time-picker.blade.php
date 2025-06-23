@@ -5,19 +5,26 @@
     'required' => false,
     'readonly' => false,
     'class' => '',
+    'placeholder' => '',
 ])
 
-<div class="relative">
-    <input
-        type="time"
-        id="{{ $id }}"
-        name="{{ $name }}"
-        value="{{ old($name, $value) }}"
-        @if($required) required @endif
-        @if($readonly) readonly @endif
-        class="program-field w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1a2235] transition-all duration-200 focus:bg-white focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]/20 pr-14 {{ $class }}"
-    />
-    <span class="pointer-events-none absolute inset-y-0 right-0 w-12 flex items-center justify-center">
-        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    </span>
-</div>
+<div class="form-control w-full">
+    <div class="relative">
+        <input
+            type="time"
+            id="{{ $id }}"
+            name="{{ $name }}"
+            value="{{ old($name, $value) }}"
+            @if($required) required @endif
+            @if($readonly) readonly @endif
+            placeholder="{{ $placeholder }}"
+            class="input input-bordered w-full pl-12 pr-10 cursor-pointer {{ $class }}"
+        />
+        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+            <i class="bx bx-time-five text-xl"></i>
+        </span>
+        <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+            <i class="bx bx-chevron-down text-xl text-gray-300"></i>
+        </span>
+    </div>
+</div> 

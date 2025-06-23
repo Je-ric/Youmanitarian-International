@@ -45,7 +45,6 @@
                                 :value="old('start_time')"
                                 required="true"
                             />
-                            <p class="text-xs text-gray-400 mt-1">If no picker appears, enter time as HH:MM (24-hour).</p>
                         </div>
 
                         <div>
@@ -56,7 +55,6 @@
                                 :value="old('end_time')"
                                 required="true"
                             />
-                            <p class="text-xs text-gray-400 mt-1">If no picker appears, enter time as HH:MM (24-hour).</p>
                         </div>
                     </div>
 

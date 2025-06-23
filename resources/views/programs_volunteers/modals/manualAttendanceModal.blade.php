@@ -47,13 +47,12 @@
                                     value="{{ $clockIn->format('h:i a') }}">
                                 <input type="hidden" name="clock_in" value="{{ $clockIn->format('H:i') }}">
                             @else
-                                <input
-                                    type="time"
+                                <x-time-picker
+                                    id="clock_in"
                                     name="clock_in"
-                                    class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"
-                                    value=""
-                                    required
-                                >
+                                    :value="old('clock_in')"
+                                    required="true"
+                                />
                             @endif
                         </div>
                     </div>
@@ -64,7 +63,12 @@
                             @if($clockOut)
                                 <input type="text" readonly class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 bg-gray-100 text-gray-700 focus:outline-none" value="{{ $clockOut->format('H:i') }}">
                             @else
-                                <input type="time" name="clock_out" class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors">
+                                <x-time-picker
+                                    id="clock_out"
+                                    name="clock_out"
+                                    :value="old('clock_out')"
+                                    required="true"
+                                />
                             @endif
                         </div>
                     </div>
