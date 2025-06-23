@@ -114,15 +114,14 @@
                         <!-- Date -->
                         <div>
                             <label for="date" class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                            <input
-                                type="date"
+                            <x-date-picker
                                 id="date"
                                 name="date"
-                                class="program-field w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1a2235] transition-all duration-200 focus:bg-white focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]/20"
-                                value="{{ old('date', \Carbon\Carbon::parse($program->date)->format('Y-m-d')) }}"
-                                readonly
-                                required
-                            >
+                                :value="old('date', \Carbon\Carbon::parse($program->date)->format('Y-m-d'))"
+                                readonly="true"
+                                required="true"
+                                class="program-field"
+                            />
                         </div>
 
                         <!-- Time Range -->
@@ -135,6 +134,7 @@
                                     :value="old('start_time', \Carbon\Carbon::parse($program->start_time)->format('H:i'))"
                                     readonly="true"
                                     required="true"
+                                    class="program-field"
                                 />
                             </div>
 
@@ -146,6 +146,7 @@
                                     :value="old('end_time', \Carbon\Carbon::parse($program->end_time)->format('H:i'))"
                                     readonly="true"
                                     required="true"
+                                    class="program-field"
                                 />
                             </div>
                         </div>
