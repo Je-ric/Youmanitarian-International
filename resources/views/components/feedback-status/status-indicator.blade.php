@@ -37,3 +37,14 @@ $iconClass = $icon ?? ($icons[$status] ?? '');
     @endif
     {{ $label ?? ucfirst(str_replace('_', ' ', $status)) }}
 </span>
+
+{{--
+Used in:
+- resources/views/roles/partials/assign_rolesModal.blade.php
+- resources/views/programs_volunteers/partials/programTasks.blade.php
+- resources/views/programs_volunteers/modals/attendanceApproval.blade.php
+- resources/views/programs/attendance.blade.php
+- resources/views/dashboard.blade.php
+- resources/views/content/index.blade.php
+- resources/views/content_requests/requests-index.blade.php
+--}}

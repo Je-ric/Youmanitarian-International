@@ -57,3 +57,8 @@
         &times;
     </button>
 </div>
+
+{{--
+Used in:
+- resources/views/layouts/sidebar_final.blade.php
+--}}

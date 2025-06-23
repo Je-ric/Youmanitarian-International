@@ -30,4 +30,12 @@
         <i class="{{ $icon }}"></i>
         {!! $message !!}
     </div>
-@endif 
+@endif
+
+{{--
+Used in:
+- resources/views/roles/partials/assign_rolesModal.blade.php
+- resources/views/programs/modals/feedbackModal.blade.php
+- resources/views/programs/modals/program-modal.blade.php
+- resources/views/dashboard.blade.php
+--}} 

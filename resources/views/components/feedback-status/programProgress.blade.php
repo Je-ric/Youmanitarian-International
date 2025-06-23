@@ -34,3 +34,10 @@
     <i class='bx {{ $config['icon'] }} text-lg {{ $config['iconColor'] }}'></i>
     <span>{{ $status['label'] }}</span>
 </div>
+
+{{--
+Used in:
+- resources/views/programs_volunteers/partials/programDetails.blade.php
+- resources/views/programs/attendance.blade.php
+- resources/views/programs/partials/programsTable.blade.php
+--}}
