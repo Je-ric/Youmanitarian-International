@@ -3,7 +3,7 @@
         <!-- Header -->
         <x-modal.header>
             <h2 id="invitation-modal-title" class="text-2xl font-bold text-slate-900 tracking-tight">
-                Invite to Become a Member
+                Invite {{ $volunteer->user->name }} to Become a Member
             </h2>
         </x-modal.header>
         
@@ -21,10 +21,13 @@
             
             @php
                 $templateMessages = [
-                    "We're impressed with your contributions and would like to formally invite you to become a member.",
-                    "Your dedication as a volunteer has been outstanding. We would be honored to have you as a full-pledge member.",
-                    "As a respected partner, we would like to offer you an honorary membership to our organization.",
-                    "Join us in a greater capacity! We invite you to become a member and help us shape the future of our mission."
+                    "Dear {$volunteer->user->name},\n\nWe're impressed with your contributions and would like to formally invite you to become a member. Your dedication and commitment have not gone unnoticed, and we believe you would be a valuable addition to our membership.\n\nBest regards,\n" . auth()->user()->name,
+
+                    "Dear {$volunteer->user->name},\n\nYour dedication as a volunteer has been outstanding. We would be honored to have you as a full-pledge member. Your consistent efforts and positive impact align perfectly with our organization's values.\n\nBest regards,\n" . auth()->user()->name,
+
+                    "Dear {$volunteer->user->name},\n\nAs a respected partner in our mission, we would like to offer you an honorary membership to our organization. Your expertise and contributions have made a significant difference in our community.\n\nBest regards,\n" . auth()->user()->name,
+
+                    "Dear {$volunteer->user->name},\n\nJoin us in a greater capacity! We invite you to become a member and help us shape the future of our mission. Your experience and perspective would be invaluable in our continued growth.\n\nBest regards,\n" . auth()->user()->name
                 ];
             @endphp
 

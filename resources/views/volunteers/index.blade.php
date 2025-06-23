@@ -185,5 +185,5 @@
         </x-navigation-layout.tabs>
     </div>
 
-    @include('volunteers.modals.invitationModal')
+    @include('volunteers.modals.invitationModal', ['volunteer' => $volunteer])
 @endsection 
