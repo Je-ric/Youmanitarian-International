@@ -9,7 +9,6 @@
     <div
         class="modal-box max-w-xl p-0 overflow-hidden rounded-xl bg-white border border-slate-200 transition-all max-h-[90vh] flex flex-col mx-4 sm:mx-auto">
 
-        <!-- Header -->
         <x-modal.header>
             <div>
                 <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Program Feedback</h2>
@@ -17,7 +16,7 @@
             </div>
         </x-modal.header>
 
-        <!-- Main Content - Scrollable -->
+        {{-- Main Content - Scrollable --}}
         <div class="flex flex-col flex-1 min-h-0">
             <form method="POST" action="{{ route('programs.feedback.submit', $program->id) }}"
                 onsubmit="return {{ $userFeedback ? 'false' : 'true' }};" class="flex flex-col flex-1 min-h-0">
@@ -32,7 +31,6 @@
                         />
                     @endif
 
-                    <!-- Rating Section -->
                     <div class="space-y-4">
                         <div class="border-b pb-4">
                             <x-form.label>Rating</x-form.label>
@@ -54,7 +52,6 @@
                         </div>
                     </div>
 
-                    <!-- Feedback Section -->
                     <div class="space-y-4">
                         <div class="border-b border-slate-200 pb-4">
                             <x-form.label>Your Feedback</x-form.label>
@@ -77,7 +74,6 @@
                     @endif
                 </div>
 
-                <!-- Footer - Always Visible -->
                 <x-modal.footer>
                     <x-modal.close-button :modalId="'feedbackModal_' . $program->id" text="Cancel" variant="cancel" />
                     @if(!$userFeedback)
@@ -100,7 +96,6 @@
 </dialog>
 
 <style>
-    /* Custom rating styles */
     .rating input[type="radio"]:checked {
         background-color: #fbbf24 !important;
     }
@@ -110,7 +105,6 @@
         cursor: not-allowed;
     }
 
-    /* Responsive adjustments for feedback modal */
     @media (max-width: 768px) {
         #feedbackModal_{{ $program->id }} .modal-box {
             max-width: 95vw;

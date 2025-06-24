@@ -23,44 +23,54 @@ programs/
 ## Key Features
 
 1. **Program Types**
-   - Active Programs
-   - Upcoming Programs
-   - Completed Programs
-   - Cancelled Programs
+   1. All Programs
+   2. Joined Programs 
+   3. My Programs
 
 2. **Program Management Rules**
-   - Programs must be created by Admin / Program Coordinators
-   - Each program requires a coordinator
-   - Programs must have defined start and end dates
-   - Programs must have a maximum volunteer capacity
-   - Program status can be updated by coordinators
-   - Program details can be modified before start date
-   - All changes are logged for tracking
+   - Only Admins and Program Coordinators can create new programs.
+   - Volunteers see "All Programs" and "Joined Programs" tabs.
+   - Coordinators/Admins see "All Programs" and "My Programs" tabs.
+   - Only the program creator (coordinator) can manage volunteers and delete their own programs.
+   - All users can view program details button.
 
-3. **Program Creation Process**
-   - Fill out program details form
-   - Set program schedule and location
-   - Define volunteer requirements
-   - Set program objectives and goals
-   - Assign program coordinator
-   - Set program capacity
-   - Submit for approval (if required)
-   - Program becomes visible to volunteers
+3. **Volunteer Participation Rules**
+   - Volunteers can join a program only if:
+     - The program is not full.
+     - The program is not already done.
+     - They are not already joined. (Duh)
+     - Their volunteer application is approved.
+   - Volunteers can leave a program only if:
+     - The program is still in "incoming" status (not started yet).
+     - They have no assigned tasks in that program.
 
-4. **Attendance Management**
-   - Track volunteer attendance
-   - Send attendance reminders
-   - Record late arrivals
-   - Document absences
-   - Generate attendance reports
-   - Monitor participation rates
+4. **Attendance and Task Rules**
+   - Volunteers can only clock in/out for attendance if:
+     - The program has started.
+     - They are assigned to the program.
+   - Volunteers can only clock in once and clock out once per program.
+   - After clocking in, the clock-in button is disabled.
+   - After clocking out, the clock-out button is disabled.
+   - Attendance is only accessible after the program has started and is not available after the program is done.
+   - Volunteers can only upload attendance proof after clocking in.
+   - Volunteers can only submit feedback/rating after the program has ended. (Same for guests)
+   - If a volunteer misses clocking in/out, only the coordinator can manually add attendance.
 
-5. **Program Documentation**
-   - Program objectives and goals
-   - Required volunteer skills
-   - Program schedule
-   - Location details
-   - Required documents
-   - Program feedback
-   - Proof of completion
-   - Impact assessment 
+5. **Task Assignment Rules**
+   - Only coordinators can mark a volunteer's task as "completed".
+   - Volunteers can set their task assignment status to "pending" or "in progress", but not "completed".
+
+6. **UI/UX Feedback and Restrictions**
+   - Toasts and alerts are used throughout the system to provide feedback for user actions.
+   - Users will see toast notifications or alerts when:
+     - A program is created, updated, or deleted.
+     - A volunteer joins or leaves a program.
+     - A volunteer tries to join a full or finished program.
+     - A volunteer tries to leave but has assigned tasks or the program is not incoming.
+     - Attendance actions (clock in/out, upload proof) are performed or restricted.
+     - Task assignment status is updated.
+     - Any error, restriction, or important information needs to be communicated (e.g., not assigned to a program, duplicate join, missing attendance, etc.).
+
+7. **Other Reminders**
+   - Attendance is official documentation and is used for recognizing volunteer contributions.
+   - If you missed clocking in/out, contact your program coordinator for manual attendance entry.

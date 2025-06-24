@@ -12,12 +12,10 @@
     <div
         class="modal-box max-w-lg p-0 overflow-hidden rounded-xl bg-white border border-slate-200 transition-all max-h-[90vh] flex flex-col mx-4 sm:mx-auto">
 
-        <!-- Header -->
         <x-modal.header>
             <h3 class="text-2xl font-bold text-slate-900 tracking-tight">Upload Proof of Attendance</h3>
         </x-modal.header>
 
-        <!-- Main Content - Scrollable -->
         @if ($proofPath)
             <div class="p-6 space-y-6 overflow-y-auto flex-1">
                 <div class="space-y-4">
@@ -43,7 +41,6 @@
                 </div>
             </div>
 
-            <!-- Footer - Always Visible -->
             <x-modal.footer>
                 <x-modal.close-button :modalId="'uploadProofModal'" text="Close" />
             </x-modal.footer>
@@ -73,7 +70,6 @@
                     </div>
                 </div>
 
-                <!-- Footer - Always Visible -->
                 <x-modal.footer>
                     <x-modal.close-button :modalId="'uploadProofModal'" text="Cancel" variant="cancel" />
 
@@ -88,7 +84,6 @@
 </dialog>
 
 <style>
-    /* Responsive adjustments for upload modal */
     @media (max-width: 768px) {
         #uploadProofModal .modal-box {
             max-width: 95vw;
