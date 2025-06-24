@@ -1,15 +1,5 @@
 @extends('layouts.sidebar_final')
 
-@php
-    $volunteerId = auth()->user()?->volunteer?->id;
-
-    $volunteerAttendance = \App\Models\VolunteerAttendance::where('program_id', $program->id)
-        ->where('volunteer_id', $volunteerId)
-        ->first();
-
-    $proofPath = $volunteerAttendance?->proof_image;
-@endphp
-
 @section('content')
 
     <div class="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
@@ -40,7 +30,7 @@
             </div>
         </div>
 
-        @include('programs.modals.feedbackModal', ['program' => $program, 'userFeedback' => $program->userFeedback])
+        @include('programs.modals.feedbackModal', ['program' => $program, 'userFeedback' => $userFeedback])
         @include('programs.modals.proofModal', ['program' => $program, 'volunteerAttendance' => $volunteerAttendance,])
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -236,7 +226,8 @@
                     @elseif($isJoined)
                         @if($canClockIn)
                             <div class="text-center">
-                                <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Processing...';">
+                                <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4"
+                                    onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Processing...';">
                                     @csrf
                                     <x-button type="submit" variant="clock_in" class="w-full">
                                         <i class='bx bx-time-five mr-2'></i>
@@ -255,18 +246,15 @@
                             </x-button>
 
                             <div class="text-center">
-                                <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Processing...';">
+                                <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4"
+                                    onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Processing...';">
                                     @csrf
-                                    <x-button type="submit" variant="clock_in" class="w-full sm:w-auto">
+                                    <x-button type="submit" variant="clock_in" class="w-full">
                                         <i class='bx bx-time-five mr-2'></i>
                                         Clock Out
                                     </x-button>
                                 </form>
                             </div>
-
-                            <x-button variant="disabled" disabled>
-                                <i class='bx bx-check-circle'></i> Clock In (Already Done)
-                            </x-button>
 
                         @else
                             <x-button variant="disabled" disabled>
@@ -291,6 +279,57 @@
             </div>
         </div>
 
+        {{-- Attendance Approval Summary --}}
+        @if($attendance && ($attendance->clock_in || $attendance->clock_out))
+            <div class="border-t border-gray-200 pt-4 mt-4">
+                <h3 class="text-lg font-semibold text-[#1a2235] mb-3">Attendance Summary</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Approval Status</span>
+                        @if($attendance->approval_status == 'approved')
+                            <span
+                                class="font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full text-sm inline-flex items-center">
+                                <i class='bx bx-check-circle mr-1'></i>
+                                {{ ucfirst($attendance->approval_status) }}
+                            </span>
+                        @elseif($attendance->approval_status == 'rejected')
+                            <span
+                                class="font-medium text-red-600 bg-red-100 px-2 py-1 rounded-full text-sm inline-flex items-center">
+                                <i class='bx bx-x-circle mr-1'></i>
+                                {{ ucfirst($attendance->approval_status) }}
+                            </span>
+                        @else
+                            <span
+                                class="font-medium text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full text-sm inline-flex items-center">
+                                <i class='bx bx-time-five mr-1'></i>
+                                {{ ucfirst($attendance->approval_status) }}
+                            </span>
+                        @endif
+                    </div>
+
+                    @if($attendance->approved_by)
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">
+                                {{ ucfirst($attendance->approval_status) }} by
+                            </span>
+                            <span class="font-medium text-[#1a2235]">
+                                {{ $attendance->approver->name ?? 'N/A' }}
+                            </span>
+                        </div>
+                    @endif
+
+                    @if($attendance->notes)
+                        <div>
+                            <span class="text-gray-600">Notes / Reason</span>
+                            <p class="text-gray-800 bg-gray-50 p-3 rounded-lg mt-1 text-sm">
+                                {{ $attendance->notes }}
+                            </p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        @endif
+
         {{-- Volunteer's Assigned Tasks --}}
         @if($volunteerTasks->isNotEmpty())
             <div class="mt-8">
@@ -301,7 +340,8 @@
                             class="bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-all duration-200 hover:shadow-sm">
                             <div class="p-4">
                                 <div class="flex items-center justify-between mb-3">
-                                    <x-feedback-status.status-indicator :status="$data['assignment']->status" :label="ucwords(str_replace('_', ' ', $data['assignment']->status))" />
+                                    <x-feedback-status.status-indicator :status="$data['assignment']->status"
+                                        :label="ucwords(str_replace('_', ' ', $data['assignment']->status))" />
                                 </div>
 
                                 <p class="text-gray-700 text-sm mb-4">{{ $data['task']->task_description }}</p>
@@ -315,11 +355,13 @@
                                         <select name="status" onchange="this.form.submit()"
                                             class="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:ring-1 focus:ring-[#ffb51b] focus:border-[#ffb51b] bg-white"
                                             @if($data['assignment']->status === 'completed') disabled @endif>
-                                            <option value="pending" {{ $data['assignment']->status === 'pending' ? 'selected' : '' }}>Pending</option>
+                                            <option value="pending" {{ $data['assignment']->status === 'pending' ? 'selected' : '' }}>
+                                                Pending</option>
                                             <option value="in_progress" {{ $data['assignment']->status === 'in_progress' ? 'selected' : '' }}>In Progress</option>
                                             <option value="completed" {{ $data['assignment']->status === 'completed' ? 'selected' : '' }} disabled>Completed (Program Coordinator Only)</option>
                                         </select>
-                                        <p class="text-xs text-gray-500 mt-1">Note: Only program coordinators can mark tasks as complete</p>
+                                        <p class="text-xs text-gray-500 mt-1">Note: Only program coordinators can mark tasks as
+                                            complete</p>
                                     </div>
                                 </form>
                             </div>
@@ -327,9 +369,16 @@
                     @endforeach
                 </div>
             </div>
+        @else
+            <div class="text-center py-16">
+                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class='bx bx-task text-2xl text-gray-400'></i>
+                </div>
+                <p class="text-gray-500 text-lg font-medium">No tasks assigned yet</p>
+            </div>
         @endif
 
-        {{-- Partial --}}   
+        {{-- Partial --}}
         @include('programs.partials.attendanceReminders')
 
     </div>

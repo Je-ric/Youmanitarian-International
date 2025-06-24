@@ -10,7 +10,17 @@ class VolunteerAttendance extends Model
     use HasFactory;
 
     protected $table = 'volunteer_attendance';
-    protected $fillable = ['volunteer_id', 'program_id', 'clock_in', 'clock_out', 'hours_logged'];
+    protected $fillable = [
+        'volunteer_id', 
+        'program_id', 
+        'clock_in', 
+        'clock_out', 
+        'hours_logged',
+        'approval_status',
+        'approved_by',
+        'notes',
+        'proof_image',
+    ];
 
     public function volunteer()
     {
@@ -22,5 +32,8 @@ class VolunteerAttendance extends Model
         return $this->belongsTo(Program::class, 'program_id');
     }
 
-    
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
 }

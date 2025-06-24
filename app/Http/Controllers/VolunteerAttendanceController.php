@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\VolunteerAttendance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Models\ProgramFeedback;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\ProgramTasksController;
@@ -29,6 +30,10 @@ class VolunteerAttendanceController extends Controller
         $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id ?? null)
             ->where('program_id', $program->id)
             ->latest()
+            ->first();
+
+        $volunteerAttendance = VolunteerAttendance::where('program_id', $program->id)
+            ->where('volunteer_id', $user->volunteer?->id)
             ->first();
 
         // If the attendance record exists and has a clock-in/clock-out time, convert it to a Carbon date in Manila timezone
@@ -74,6 +79,10 @@ class VolunteerAttendanceController extends Controller
             ];
         });
 
+        $userFeedback = ProgramFeedback::where('program_id', $program->id)
+            ->where('volunteer_id', $user->volunteer?->id)
+            ->first();
+
         return view('programs.attendance', compact(
             'program',
             'attendance',
@@ -85,7 +94,9 @@ class VolunteerAttendanceController extends Controller
             'canClockIn',
             'canClockOut',
             'volunteerTasks',
-            'taskData'
+            'taskData',
+            'volunteerAttendance',
+            'userFeedback'
         ));
     }
 
