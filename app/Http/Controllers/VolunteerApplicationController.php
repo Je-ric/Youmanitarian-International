@@ -46,9 +46,12 @@ class VolunteerApplicationController extends Controller
             ]
         );
 
+        // array_merge is just a way to combine the 
+        // user’s answers and the system’s extra info 
+        // before saving them together
         $volunteer->application()->updateOrCreate(
             ['volunteer_id' => $volunteer->id],
-            array_merge(
+            array_merge( // combines two sets of information into one
                 $request->only([
                     'why_volunteer',
                     'interested_programs',

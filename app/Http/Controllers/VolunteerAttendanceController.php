@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
+use Carbon\Carbon; // It makes date/time work much easier and more readable
 use App\Models\Program;
 use App\Models\Volunteer;
 use Illuminate\Http\Request;
@@ -16,23 +16,27 @@ use App\Notifications\AttendanceStatusUpdated;
 
 class VolunteerAttendanceController extends Controller
 {
+    // programs/attendance.blade.php
     public function show(Program $program)
     {
         $user = Auth::user();
         $now = now()->setTimezone('Asia/Manila');
 
-        $isAssigned = $program->volunteers()->where('user_id', $user->id)->exists();
+        // Check if the user has joined the program
+        $isJoined = $program->volunteers()->where('user_id', $user->id)->exists();
 
+        // Get the user's attendance record for this program
         $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id ?? null)
             ->where('program_id', $program->id)
             ->latest()
             ->first();
 
+        // If the attendance record exists and has a clock-in/clock-out time, convert it to a Carbon date in Manila timezone
         $clockInTime = $attendance?->clock_in ? Carbon::parse($attendance->clock_in)->setTimezone('Asia/Manila') : null;
         $clockOutTime = $attendance?->clock_out ? Carbon::parse($attendance->clock_out)->setTimezone('Asia/Manila') : null;
 
         $formattedWorkedTime = null;
-        if ($clockInTime && $clockOutTime) {
+        if ($clockInTime && $clockOutTime) { //I f both times ay meron na, calculates the total difference (work hours)
             $diffInSeconds = $clockInTime->diffInSeconds($clockOutTime);
             $hours = floor($diffInSeconds / 3600);
             $minutes = floor(($diffInSeconds % 3600) / 60);
@@ -46,21 +50,24 @@ class VolunteerAttendanceController extends Controller
             default => 'ongoing'
         };
 
-        $canClockIn = $program->progress_status === 'ongoing' && $isAssigned && !$attendance?->clock_in;
-        $canClockOut = $program->progress_status === 'ongoing' && $isAssigned && $attendance?->clock_in && !$attendance?->clock_out;
+        // canClockIn: ongoing, the user is joined, and hasn't clocked in yet
+        // canClockOut: ongoing, the user is joined, has clocked in, but hasn't clocked out yet
+        $canClockIn = $program->progress_status === 'ongoing' && $isJoined && !$attendance?->clock_in;
+        $canClockOut = $program->progress_status === 'ongoing' && $isJoined && $attendance?->clock_in && !$attendance?->clock_out;
 
-        // Get volunteer's tasks directly
+        // Get volunteers tasks 
         $volunteerTasks = $program->tasks()
-            ->whereHas('assignments', function($query) use ($user) {
+            ->whereHas('assignments', function ($query) use ($user) {
                 $query->where('volunteer_id', $user->volunteer->id ?? null);
             })
-            ->with(['assignments' => function($query) use ($user) {
+            ->with(['assignments' => function ($query) use ($user) {
                 $query->where('volunteer_id', $user->volunteer->id ?? null);
             }])
             ->get();
 
-        // Prepare task data for view
-        $taskData = $volunteerTasks->map(function($task) {
+        // creates an array with the task and the volunteers assignment for that task
+        //  para mas madaling idisplay sa blade
+        $taskData = $volunteerTasks->map(function ($task) {
             return [
                 'task' => $task,
                 'assignment' => $task->assignments->first()
@@ -70,7 +77,7 @@ class VolunteerAttendanceController extends Controller
         return view('programs.attendance', compact(
             'program',
             'attendance',
-            'isAssigned',
+            'isJoined',
             'clockInTime',
             'clockOutTime',
             'formattedWorkedTime',
@@ -82,11 +89,12 @@ class VolunteerAttendanceController extends Controller
         ));
     }
 
+    // programs/attendance.blade.php
     public function clockInOut(Program $program)
     {
         $user = Auth::user();
 
-        // Check for existing active attendance
+        // Check if the volunteer is already clocked in for this program (no clock out yet)
         $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id)
             ->where('program_id', $program->id)
             ->whereNull('clock_out')
@@ -94,7 +102,7 @@ class VolunteerAttendanceController extends Controller
             ->first();
 
         if (!$attendance) {
-            // No active attendance - perform clock in
+            // Not clocked in yet: create a new attendance record and clock in
             VolunteerAttendance::create([
                 'volunteer_id' => $user->volunteer->id,
                 'program_id' => $program->id,
@@ -106,11 +114,10 @@ class VolunteerAttendanceController extends Controller
                 'type' => 'success',
             ]);
         } else {
-            // Active attendance exists - perform clock out
-            $clock_in = \Carbon\Carbon::parse($attendance->clock_in);
-            $clock_out = \Carbon\Carbon::now();
+            // Already clocked in: set clock out time and calculate hours worked
+            $clock_in = Carbon::parse($attendance->clock_in);
+            $clock_out = Carbon::now();
 
-            // Calculate hours_logged as decimal hours
             $attendance->clock_out = $clock_out;
             $attendance->hours_logged = round($clock_in->floatDiffInHours($clock_out), 2);
             $attendance->save();
@@ -122,18 +129,28 @@ class VolunteerAttendanceController extends Controller
         }
     }
 
+    // programs/attendance.blade.php
     public function uploadProof(Request $request, $programId)
     {
+        // Get the current volunteer's ID
         $volunteerId = Auth::user()?->volunteer?->id;
 
         if (!$volunteerId) {
-            return back()->with('toast', ['message' => 'You must be logged in as a volunteer.', 'type' => 'error']);
+            return back()->with(
+                'toast',
+                [
+                    'message' => 'You must be logged in as a volunteer.',
+                    'type' => 'error'
+                ]
+            );
         }
 
+        // must be an image, max 10MB
         $validator = Validator::make($request->all(), [
-            'proof_image' => 'required|image|max:10048', // max 10MB
+            'proof_image' => 'required|image|max:10048',
         ]);
 
+        // If validation fails, show an error toast
         if ($validator->fails()) {
             return redirect()->back()->with('toast', [
                 'message' => $validator->errors()->first('proof_image'),
@@ -141,26 +158,28 @@ class VolunteerAttendanceController extends Controller
             ]);
         }
 
+        // Find the volunteers attendance record for the program
         $attendance = VolunteerAttendance::where('program_id', $programId)
             ->where('volunteer_id', $volunteerId)
             ->firstOrFail();
 
-        // Filename: ProgramName-VolunteerName.extension
+        // Filename: ProgramName_VolunteerName_timestamp.extension
         $program = Program::findOrFail($programId);
         $volunteer = Volunteer::findOrFail($volunteerId);
+        // remove any characters that are not letters, numbers, or dashes
         $volunteerName = preg_replace('/[^A-Za-z0-9\-]/', '', $volunteer->user->name);
         $programName = preg_replace('/[^A-Za-z0-9\-]/', '', $program->title);
 
         $file = $request->file('proof_image');
         $filename = $programName . '_' . $volunteerName . '_' . time() . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('uploads/attendance_proof', $filename, 'public');
-
         $attendance->proof_image = $path;
         $attendance->save();
 
         return back()->with('toast', ['message' => 'Proof of attendance uploaded successfully!', 'type' => 'success']);
     }
 
+    // volunteers.program-volunteers.blade.php
     public function programVolunteers(Program $program)
     {
         $logs = [];
@@ -184,6 +203,7 @@ class VolunteerAttendanceController extends Controller
         return view('volunteers.program-volunteers', compact('program', 'logs'));
     }
 
+    // volunteers/program-volunteers.blade.php
     public function updateAttendanceStatus(Request $request, $attendanceId)
     {
         $request->validate([
@@ -197,7 +217,7 @@ class VolunteerAttendanceController extends Controller
         $attendance->notes = $request->input('notes', $attendance->notes);
         $attendance->save();
 
-        // Notify the volunteer
+        // Send notification sa volunteer kung approved or reject yung attendance \Notifications\AttendanceStatusUpdated.php
         $volunteerUser = $attendance->volunteer->user;
         $program = $attendance->program;
         $volunteerUser->notify(new AttendanceStatusUpdated($request->status, $program, $request->notes));
@@ -208,6 +228,7 @@ class VolunteerAttendanceController extends Controller
         ]);
     }
 
+    // programs-volunteers/modals/manualAttendanceModal.blade.php
     public function showManualEntryForm(Request $request, Program $program)
     {
         $volunteers = $program->volunteers()->with('user')->get();
@@ -215,38 +236,44 @@ class VolunteerAttendanceController extends Controller
         return view('programs-volunteers.modals.manualAttendanceModal', compact('program', 'volunteers', 'selectedVolunteerId'));
     }
 
+    // programs-volunteers/modals/manualAttendanceModal.blade.php
     public function manualEntry(Request $request, Program $program)
     {
-        $attendance = \App\Models\VolunteerAttendance::firstOrNew([
+        // Find an existing attendance record or create a new one
+        $attendance = VolunteerAttendance::firstOrNew([
             'program_id' => $program->id,
             'volunteer_id' => $request->volunteer_id,
         ]);
 
+        // Define base validation rules.
         $rules = [
             'volunteer_id' => 'required|exists:volunteers,id',
             'date' => 'required|date',
             'notes' => 'required|string|max:1000',
         ];
+
+        // Make clock_in required only for new attendance records.
         if (!$attendance->clock_in) {
             $rules['clock_in'] = 'required';
         }
-        $rules['clock_out'] = 'nullable';
+        $rules['clock_out'] = 'nullable'; // Clock_out is always optional.        
         $request->validate($rules);
 
-        // Only update clock_in if present in the request
+        // Update clock_in only if meron na, to avoid overwriting existing data.
         if ($request->has('clock_in')) {
             $attendance->clock_in = $request->date . ' ' . $request->clock_in;
         }
-        // Only update clock_out if present in the request
+        // Update clock_out only if a clock_out was provided.
         if ($request->filled('clock_out')) {
             $attendance->clock_out = $request->date . ' ' . $request->clock_out;
         }
+        
         $attendance->notes = $request->notes;
 
-        // Calculate hours_logged
+        // Calculate total hours worked if both clock_in and clock_out are set.
         if ($attendance->clock_in && $attendance->clock_out) {
-            $in = \Carbon\Carbon::parse($attendance->clock_in);
-            $out = \Carbon\Carbon::parse($attendance->clock_out);
+            $in = Carbon::parse($attendance->clock_in);
+            $out = Carbon::parse($attendance->clock_out);
             $attendance->hours_logged = round($in->floatDiffInHours($out), 2);
         } else {
             $attendance->hours_logged = 0;

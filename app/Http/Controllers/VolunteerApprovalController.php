@@ -14,10 +14,10 @@ class VolunteerApprovalController extends Controller
     // application.blade.php
     public function approve($id)
     {
+        //Retrieve the volunteer by ID or fail with a 404 error if not found
         $volunteer = Volunteer::findOrFail($id);
         $user = $volunteer->user;
 
-        // Get the volunteer role
         $volunteerRole = Role::where('role_name', 'Volunteer')->first();
         
         if (!$volunteerRole) {
@@ -27,18 +27,18 @@ class VolunteerApprovalController extends Controller
             ]);
         }
 
+        // ito lang yung may try-catch because it involves multiple database operations na dapat mag-succeed lahat.
+        // 
         try {
             DB::beginTransaction();
 
-            // Update volunteer status
             $volunteer->application_status = 'approved';
             $volunteer->joined_at = now();
             $volunteer->save();
 
             // Assign the volunteer role if not already assigned
             if (!$user->hasRole('Volunteer')) {
-                // Create the role assignment in user_roles table
-                DB::table('user_roles')->insert([
+                DB::table('user_roles')->insert([  // Create the role assignment in user_roles table
                     'user_id' => $user->id,
                     'role_id' => $volunteerRole->id,
                     'assigned_by' => Auth::id(),
@@ -50,7 +50,7 @@ class VolunteerApprovalController extends Controller
 
             DB::commit();
 
-            // Notify the user
+            // Send notification sa approved volunteer  \Notifications\VolunteerApplicationStatusUpdated.php
             $user->notify(new VolunteerApplicationStatusUpdated('approved'));
 
             return redirect()->back()->with('toast', [
@@ -74,7 +74,7 @@ class VolunteerApprovalController extends Controller
         $volunteer->application_status = 'denied';
         $volunteer->save();
 
-        // Notify the user
+        // Send notification sa denied volunteer  \Notifications\VolunteerApplicationStatusUpdated.php
         $volunteer->user->notify(new VolunteerApplicationStatusUpdated('denied'));
 
         return redirect()->back()->with('toast', [

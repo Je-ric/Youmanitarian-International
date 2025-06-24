@@ -1,76 +1,83 @@
-# Programs Management System
+# Programs & Volunteers Management System
 
-This directory contains the views for managing humanitarian programs in the YouManitarian International platform.
+This documentation covers the views for managing humanitarian programs and volunteers in the YouManitarian International platform, located in `resources/views/programs`, `resources/views/programs_volunteers`, and `resources/views/volunteers`.
 
 ## Directory Structure
 
 ```
-programs/
-├── index.blade.php              # Main programs listing page
-├── create.blade.php             # Program creation page
-├── edit.blade.php               # Program editing page
-├── _form.blade.php              # Shared program form component
-├── attendance.blade.php         # Program attendance management
-├── partials/
-│   ├── programs-table.blade.php     # Programs listing table
-│   └── attendanceReminders.blade.php # Attendance reminder system
-└── modals/
-    ├── program-modal.blade.php      # Program details modal
-    ├── feedbackModal.blade.php      # Program feedback interface
-    └── proofModal.blade.php         # Program proof/documentation modal
+views/
+├── programs/                  # General program listing and creation
+├── programs_volunteers/       # Managing volunteers within a specific program
+└── volunteers/                # Global volunteer application and list management
 ```
 
-## Key Features
+---
 
-1. **Program Types**
-   1. All Programs
-   2. Joined Programs 
-   3. My Programs
+## Key Features & Rules
 
-2. **Program Management Rules**
-   - Only Admins and Program Coordinators can create new programs.
-   - Volunteers see "All Programs" and "Joined Programs" tabs.
-   - Coordinators/Admins see "All Programs" and "My Programs" tabs.
-   - Only the program creator (coordinator) can manage volunteers and delete their own programs.
-   - All users can view program details button.
+### 1. Global Program Management (`/programs`)
 
-3. **Volunteer Participation Rules**
-   - Volunteers can join a program only if:
-     - The program is not full.
-     - The program is not already done.
-     - They are not already joined. (Duh)
-     - Their volunteer application is approved.
-   - Volunteers can leave a program only if:
-     - The program is still in "incoming" status (not started yet).
-     - They have no assigned tasks in that program.
+-   **Only Admins and Program Coordinators can create new programs.**
+-   Tabs and program lists are role-based:
+    -   Volunteers see "All Programs" and "Joined Programs" tabs.
+    -   Coordinators/Admins see "All Programs" and "My Programs" tabs.
+-   **Program creators can delete only their own programs.**
+-   All users can view program details.
+-   **Volunteer Participation Rules:**
+    -   Volunteers can **join** a program only if:
+        -   The program is not full and is not already done.
+        -   They are not already joined.
+        -   Their global volunteer application is approved.
+    -   Volunteers can **leave** a program only if:
+        -   The program is still in "incoming" status (has not started).
+        -   They have no assigned tasks in that program.
 
-4. **Attendance and Task Rules**
-   - Volunteers can only clock in/out for attendance if:
-     - The program has started.
-     - They are assigned to the program.
-   - Volunteers can only clock in once and clock out once per program.
-   - After clocking in, the clock-in button is disabled.
-   - After clocking out, the clock-out button is disabled.
-   - Attendance is only accessible after the program has started and is not available after the program is done.
-   - Volunteers can only upload attendance proof after clocking in.
-   - Volunteers can only submit feedback/rating after the program has ended. (Same for guests)
-   - If a volunteer misses clocking in/out, only the coordinator can manually add attendance.
+### 2. Program-Specific Volunteer Management (`/programs/{id}/manage`)
 
-5. **Task Assignment Rules**
-   - Only coordinators can mark a volunteer's task as "completed".
-   - Volunteers can set their task assignment status to "pending" or "in progress", but not "completed".
+This view is for program coordinators to manage the volunteers and tasks for a specific program they created.
 
-6. **UI/UX Feedback and Restrictions**
-   - Toasts and alerts are used throughout the system to provide feedback for user actions.
-   - Users will see toast notifications or alerts when:
-     - A program is created, updated, or deleted.
-     - A volunteer joins or leaves a program.
-     - A volunteer tries to join a full or finished program.
-     - A volunteer tries to leave but has assigned tasks or the program is not incoming.
-     - Attendance actions (clock in/out, upload proof) are performed or restricted.
-     - Task assignment status is updated.
-     - Any error, restriction, or important information needs to be communicated (e.g., not assigned to a program, duplicate join, missing attendance, etc.).
+-   **Tabs include:** Volunteers, Overview, Tasks & Assignments, Program Settings, and Feedbacks.
+-   **Coordinators can:**
+    -   View lists of approved and pending volunteers for their program.
+    -   Approve or deny pending volunteer requests for their program.
+    -   Approve or reject uploaded attendance proofs from volunteers.
+    -   Create, assign, and manage tasks for volunteers.
+    -   Manually enter attendance for volunteers who missed clocking in/out.
+    -   View all feedback submitted for the program.
+    -   Edit their program's details and settings.
 
-7. **Other Reminders**
-   - Attendance is official documentation and is used for recognizing volunteer contributions.
-   - If you missed clocking in/out, contact your program coordinator for manual attendance entry.
+### 3. Global Volunteer Management (`/volunteers`)
+
+This section is for Admins/Coordinators to manage the central list of all volunteers and their applications to join the organization.
+
+-   **Submitting an Application:**
+    -   Any registered user can submit a volunteer application via the form.
+    -   The application includes details on motivation, skills, availability, and consent.
+-   **Application Processing (`VolunteerApprovalController`):**
+    -   Admins/Coordinators can view all pending volunteer applications.
+    -   They can **Approve** or **Deny** applications.
+    -   Denied applications can be **restored** to pending status.
+-   **Approved Volunteers:**
+    -   Once approved, a volunteer can join programs.
+    -   Admins can invite approved volunteers to become official **Members** of the organization.
+
+### 4. Participant Rules (Attendance, Tasks, and Feedback)
+
+-   **Attendance:**
+    -   Volunteers can only clock in/out if the program has started and they have joined it.
+    -   Clock in/out is allowed only once per program.
+    -   Attendance proof can only be uploaded after clocking in.
+    -   If a volunteer misses clocking in/out, they must contact their coordinator for manual entry.
+-   **Tasks:**
+    -   Volunteers can update their own task status to "pending" or "in progress".
+    -   Volunteers cannot mark their own tasks as "completed"; this must be done by a coordinator.
+-   **Feedback:**
+    -   Volunteers and guests can only submit feedback/ratings after a program has ended.
+
+### 5. UI/UX Feedback (Toasts and Alerts)
+
+-   The system uses toasts and alerts to provide clear feedback for all major actions, such as:
+    -   Creating, updating, or deleting programs and tasks.
+    -   Joining or leaving a program.
+    -   Approving, denying, or managing volunteers.
+    -   All successful actions and error conditions.

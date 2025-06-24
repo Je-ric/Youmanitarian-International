@@ -233,7 +233,7 @@
                             <i class='bx bx-log-out-circle'></i> Clock Out (Completed)
                         </x-button>
 
-                    @elseif($isAssigned)
+                    @elseif($isJoined)
                         @if($canClockIn)
                             <div class="text-center">
                                 <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4" onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Processing...';">
