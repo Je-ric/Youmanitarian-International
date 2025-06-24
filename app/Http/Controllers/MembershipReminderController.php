@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MembershipPayment;
 use App\Models\PaymentReminder;
+use App\Notifications\PaymentReminder as PaymentReminderNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,12 +23,12 @@ class MembershipReminderController extends Controller
             'membership_payment_id' => $payment->id,
             'sent_by_user_id' => Auth::id(),
             'content' => $request->content,
-            'status' => 'sent' // You might want to change this if you implement actual email sending
+            'status' => 'sent' 
         ]);
 
-        // TODO: Implement actual reminder sending (email, notification, etc.)
-        // For now, we'll just save it to the database
-
+        $memberUser = $payment->member->user;
+        $memberUser->notify(new PaymentReminderNotification($reminder));
+        
         return back()->with('success', 'Payment reminder has been sent.');
     }
 } 

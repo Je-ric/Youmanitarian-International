@@ -49,8 +49,14 @@
                     'payment_received' => ['bx-credit-card', 'bg-emerald-100', 'text-emerald-600'],
                     'role_update' => ['bx-user-check', 'bg-orange-100', 'text-orange-600'],
                     'system_alert' => ['bx-error', 'bg-red-100', 'text-red-600'],
+                    'payment_reminder' => ['bx-bell', 'bg-yellow-100', 'text-yellow-600'],
                     default => ['bx-bell', 'bg-[#1a2235]', 'text-[#ffb51b]']
                 };
+
+                $actionUrl = $notification->data['action_url'] ?? '#';
+                if ($notificationType === 'payment_reminder') {
+                    $actionUrl = route('notifications.show_payment_reminder', ['notification' => $notification->id]);
+                }
             @endphp
             
             <div class="relative border-b border-gray-100 last:border-b-0 transition-all duration-200 hover:bg-gray-50 {{ $isUnread ? 'bg-gradient-to-r from-[#ffb51b]/5 to-transparent' : '' }}">

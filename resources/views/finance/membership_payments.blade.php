@@ -119,7 +119,7 @@
                                 @endforeach
                                     <x-table.td>
                                         <div class="flex items-center gap-2">
-                                            @if($payment && $payment->receipt_url)
+                                            {{-- @if($payment && $payment->receipt_url)
                                                 <a href="{{ Storage::url($payment->receipt_url) }}" 
                                                    target="_blank"
                                                    class="text-blue-600 hover:text-blue-800 flex items-center gap-1"
@@ -127,7 +127,7 @@
                                                     <i class='bx bx-file'></i>
                                                     <span>Proof</span>
                                                 </a>
-                                            @endif
+                                            @endif --}}
 
                                             @php $reminderModalId = 'reminderModal_' . $member->id; @endphp
                                             <button type="button" 
@@ -138,12 +138,12 @@
                                                 <span>Remind</span>
                                             </button>
 
-                                            <button type="button"
+                                            {{-- <button type="button"
                                                 class="flex items-center gap-1 text-gray-600 hover:text-gray-700"
                                                 title="Download Report">
                                                 <i class='bx bx-download'></i>
                                                 <span>Report</span>
-                                            </button>
+                                            </button> --}}
                                         </div>
                                     </x-table.td>
                                 </x-table.tr>

@@ -271,29 +271,20 @@ class MemberController extends Controller
 
     public function showInvitation(Member $member)
     {
-        if (Auth::id() !== $member->user_id) {
-            abort(403, 'This is not your invitation.');
-        }
-        
+        // if ($member->status !== 'invited') {
+        //     abort(404, 'Invitation not found or has already been responded to.');
+        // }
+
+        // Generate signed URLs
         $acceptUrl = URL::temporarySignedRoute(
-            'member.invitation.accept',
-            now()->addDays(7),
-            ['member' => $member->id]
+            'member.invitation.accept', now()->addDays(7), ['member' => $member->id]
         );
-
         $declineUrl = URL::temporarySignedRoute(
-            'member.invitation.decline',
-            now()->addDays(7),
-            ['member' => $member->id]
+            'member.invitation.decline', now()->addDays(7), ['member' => $member->id]
         );
 
-        $notification = $member->user->notifications()
-            ->where('data->member_id', $member->id)
-            ->where('type', 'App\Notifications\MemberInvited')
-            ->first();
-        
-        $invitationMessage = $notification->data['message'] ?? null;
+        $invitationMessage = "You have been invited to join as a member.";
 
-        return view('member.show-invitation', compact('member', 'acceptUrl', 'declineUrl', 'invitationMessage'));
+        return view('notifications.show-invitation', compact('member', 'acceptUrl', 'declineUrl', 'invitationMessage'));
     }
 }

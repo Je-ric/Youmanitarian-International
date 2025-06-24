@@ -26,6 +26,8 @@ use App\Http\Controllers\VolunteerAttendanceController;
 use App\Http\Controllers\VolunteerApplicationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\MembershipReminderController;
+use App\Models\MembershipPayment;
+use Illuminate\Notifications\DatabaseNotification;
 
 // Route::middleware([
 //     'auth:sanctum',
@@ -220,6 +222,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/roles/list', [RoleController::class, 'gotoRolesList'])->name('roles.index');
     Route::get('/roles/assign', [RoleController::class, 'showAssignForm'])->name('roles.assign.form');
     Route::post('/roles/assign', [RoleController::class, 'assign'])->name('roles.assign');
+
+    Route::get('/notifications/{notification}/payment-reminder', [NotificationController::class, 'showPaymentReminder'])->name('notifications.show_payment_reminder');
 });
 
 // Finance Routes   
