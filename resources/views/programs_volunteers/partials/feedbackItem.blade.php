@@ -1,13 +1,11 @@
 <div class="bg-white border border-gray-200 rounded-lg p-6 hover:border-gray-300 transition-colors duration-200">
-    <!-- Header -->
+
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
         <div class="flex items-center space-x-3 mb-2 sm:mb-0">
-            <!-- Avatar -->
             <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
                 <i class='bx bx-user text-gray-500 text-lg'></i>
             </div>
             
-            <!-- User Info -->
             <div>
                 <p class="font-medium text-gray-900">
                     {{-- {{ $feedback->volunteer->user->name ?? 'Anonymous Volunteer' }} --}}

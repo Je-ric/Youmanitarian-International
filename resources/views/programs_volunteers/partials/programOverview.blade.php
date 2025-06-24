@@ -18,7 +18,8 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-xs sm:text-sm text-gray-600">Active Tasks</p>
-                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">{{ $tasks->where('status', 'active')->count() }}</h3>
+                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">
+                    {{ $tasks->where('status', 'active')->count() }}</h3>
             </div>
             <div class="bg-yellow-50 p-2 sm:p-3 rounded-full">
                 <i class='bx bx-task text-xl sm:text-2xl text-yellow-500'></i>
@@ -31,7 +32,8 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-xs sm:text-sm text-gray-600">Completed Tasks</p>
-                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">{{ $tasks->where('status', 'completed')->count() }}</h3>
+                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">
+                    {{ $tasks->where('status', 'completed')->count() }}</h3>
             </div>
             <div class="bg-green-50 p-2 sm:p-3 rounded-full">
                 <i class='bx bx-check-circle text-xl sm:text-2xl text-green-500'></i>
@@ -59,43 +61,13 @@
     <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
         <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Attendance Overview</h3>
         <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:space-y-4">
-            @php
-                $totalVolunteers = $program->volunteers()->where('program_volunteers.status', 'approved')->count();
-                $totalAttendanceRecords = 0;
-                $approvedCount = 0;
-                $pendingCount = 0;
-                $rejectedCount = 0;
-                $noRecordsCount = 0;
-
-                foreach ($program->volunteers()->where('program_volunteers.status', 'approved')->get() as $volunteer) {
-                    $attendanceRecords = $volunteer->attendanceLogs()->where('program_id', $program->id)->get();
-                    if ($attendanceRecords->isEmpty()) {
-                        $noRecordsCount++;
-                    } else {
-                        $totalAttendanceRecords += $attendanceRecords->count();
-                        foreach ($attendanceRecords as $record) {
-                            switch ($record->approval_status) {
-                                case 'approved':
-                                    $approvedCount++;
-                                    break;
-                                case 'pending':
-                                    $pendingCount++;
-                                    break;
-                                case 'rejected':
-                                    $rejectedCount++;
-                                    break;
-                            }
-                        }
-                    }
-                }
-            @endphp
-
             <!-- Total Attendance Records -->
             <div class="bg-blue-50 p-2 sm:p-4 rounded-lg">
                 <div class="flex justify-between items-center">
                     <div>
                         <h4 class="text-xs sm:text-sm font-medium text-blue-800">Total Records</h4>
-                        <p class="text-lg sm:text-2xl font-bold text-blue-900">{{ $totalAttendanceRecords }}</p>
+                        <p class="text-lg sm:text-2xl font-bold text-blue-900">
+                            {{ $attendanceOverview['totalAttendanceRecords'] }}</p>
                     </div>
                     <div class="bg-blue-100 p-2 rounded-full">
                         <i class='bx bx-time text-lg sm:text-2xl text-blue-600'></i>
@@ -108,8 +80,9 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <h4 class="text-xs sm:text-sm font-medium text-yellow-800">No Records</h4>
-                        <p class="text-lg sm:text-2xl font-bold text-yellow-900">{{ $noRecordsCount }}</p>
-                        <p class="text-xs text-yellow-700">of {{ $totalVolunteers }}</p>
+                        <p class="text-lg sm:text-2xl font-bold text-yellow-900">
+                            {{ $attendanceOverview['noRecordsCount'] }}</p>
+                        <p class="text-xs text-yellow-700">of {{ $attendanceOverview['totalVolunteers'] }}</p>
                     </div>
                     <div class="bg-yellow-100 p-2 rounded-full">
                         <i class='bx bx-user-x text-lg sm:text-2xl text-yellow-600'></i>
@@ -127,7 +100,8 @@
                             <span class="w-2 h-2 rounded-full bg-green-500"></span>
                             <span class="text-xs text-gray-600">Approved</span>
                         </div>
-                        <span class="text-base font-semibold text-green-700">{{ $approvedCount }}</span>
+                        <span
+                            class="text-base font-semibold text-green-700">{{ $attendanceOverview['approvedCount'] }}</span>
                     </div>
                     <!-- Pending -->
                     <div class="bg-yellow-50 p-2 rounded-lg">
@@ -135,7 +109,8 @@
                             <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
                             <span class="text-xs text-gray-600">Pending</span>
                         </div>
-                        <span class="text-base font-semibold text-yellow-700">{{ $pendingCount }}</span>
+                        <span
+                            class="text-base font-semibold text-yellow-700">{{ $attendanceOverview['pendingCount'] }}</span>
                     </div>
                     <!-- Rejected -->
                     <div class="bg-red-50 p-2 rounded-lg">
@@ -143,7 +118,8 @@
                             <span class="w-2 h-2 rounded-full bg-red-500"></span>
                             <span class="text-xs text-gray-600">Rejected</span>
                         </div>
-                        <span class="text-base font-semibold text-red-700">{{ $rejectedCount }}</span>
+                        <span
+                            class="text-base font-semibold text-red-700">{{ $attendanceOverview['rejectedCount'] }}</span>
                     </div>
                 </div>
             </div>
@@ -154,20 +130,6 @@
     <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
         <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Recent Activity</h3>
         <div class="max-h-[300px] sm:max-h-[400px] overflow-y-auto pr-2">
-            @php
-                $recentActivities = $program->volunteers()
-                    ->where('program_volunteers.status', 'approved')
-                    ->orderBy('program_volunteers.created_at', 'desc')
-                    ->get()
-                    ->map(function($volunteer) {
-                        return [
-                            'user' => $volunteer->user,
-                            'date' => $volunteer->pivot->created_at,
-                            'message' => 'joined the program'
-                        ];
-                    });
-            @endphp
-
             @forelse($recentActivities as $activity)
                 <div class="flex items-center justify-between border-b pb-2 sm:pb-3 last:border-0">
                     <div class="flex items-center space-x-2 sm:space-x-3">
@@ -188,4 +150,4 @@
             @endforelse
         </div>
     </div>
-</div> 
+</div>

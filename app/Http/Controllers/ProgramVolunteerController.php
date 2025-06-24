@@ -24,6 +24,58 @@ class ProgramVolunteerController extends Controller
         $approvedCount = $approvedVolunteers->count();
         $isFull = $approvedCount >= $program->volunteer_count;
 
+        // Attendance Overview Logic
+        $totalVolunteers = $approvedVolunteers->count();
+        $totalAttendanceRecords = 0;
+        $approvedAttendanceCount = 0;
+        $pendingAttendanceCount = 0;
+        $rejectedAttendanceCount = 0;
+        $noRecordsCount = 0;
+
+        foreach ($approvedVolunteers as $volunteer) {
+            $attendanceRecords = $volunteer->attendanceLogs()->where('program_id', $program->id)->get();
+            if ($attendanceRecords->isEmpty()) {
+                $noRecordsCount++;
+            } else {
+                $totalAttendanceRecords += $attendanceRecords->count();
+                foreach ($attendanceRecords as $record) {
+                    switch ($record->approval_status) {
+                        case 'approved':
+                            $approvedAttendanceCount++;
+                            break;
+                        case 'pending':
+                            $pendingAttendanceCount++;
+                            break;
+                        case 'rejected':
+                            $rejectedAttendanceCount++;
+                            break;
+                    }
+                }
+            }
+        }
+
+        $attendanceOverview = [
+            'totalVolunteers' => $totalVolunteers,
+            'totalAttendanceRecords' => $totalAttendanceRecords,
+            'approvedCount' => $approvedAttendanceCount,
+            'pendingCount' => $pendingAttendanceCount,
+            'rejectedCount' => $rejectedAttendanceCount,
+            'noRecordsCount' => $noRecordsCount,
+        ];
+
+        // Recent Activity Logic
+        $recentActivities = $program->volunteers()
+            ->where('program_volunteers.status', 'approved')
+            ->orderBy('program_volunteers.created_at', 'desc')
+            ->get()
+            ->map(function ($volunteer) {
+                return [
+                    'user' => $volunteer->user,
+                    'date' => $volunteer->pivot->created_at,
+                    'message' => 'joined the program'
+                ];
+            });
+
         $logs = [];
         foreach ($approvedVolunteers as $volunteer) {
             $volunteerLogs = $program->volunteerAttendances()
@@ -72,7 +124,9 @@ class ProgramVolunteerController extends Controller
             'feedbacks',
             'totalFeedbacks',
             'averageRating',
-            'ratingCounts'
+            'ratingCounts',
+            'attendanceOverview',
+            'recentActivities'
         ));
     }
 
