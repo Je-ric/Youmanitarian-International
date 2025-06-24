@@ -47,8 +47,8 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Google OAuth Routes
-Route::get('/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback']);
+Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 
 // -----------------------------------------------------------------------------
 
@@ -64,37 +64,37 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/content/{content}', [ContentViewController::class, 'destroy'])->name('content.destroy');
 
     // Gallery image delete (for deleting individual images, not content)
-    Route::delete('/content_images/{id}', [ContentController::class, 'destroyImage'])->name('content_images.destroy');
+    Route::delete('/content/images/{id}', [ContentController::class, 'destroyImage'])->name('content_images.destroy');
 
     // Status Updates for Content Requests
-    Route::post('/content/update-status', [ContentViewController::class, 'updateRequestStatus'])->name('content.updateStatus');
+    Route::post('/content/status/update', [ContentViewController::class, 'updateRequestStatus'])->name('content.updateStatus');
 
     // Archive content
-    Route::get('/content/archive/{content}', [ContentViewController::class, 'archiveContent'])->name('content.archive');
+    Route::get('/content/{content}/archive', [ContentViewController::class, 'archiveContent'])->name('content.archive');
 
     // List
-    Route::get('/content', [ContentViewController::class, 'content_index'])->name('content.content_view');
-    Route::get('/content-requests', [ContentViewController::class, 'requests_index'])->name('content_requests.requests_view');
+    Route::get('/content/list', [ContentViewController::class, 'content_index'])->name('content.content_view');
+    Route::get('/content-requests/list', [ContentViewController::class, 'requests_index'])->name('content_requests.requests_view');
 
     // Content Requests
     Route::get('/content-requests/create', [ContentRequestController::class, 'create'])->name('content_requests.create');
-    Route::post('/content-requests/store', [ContentRequestController::class, 'store'])->name('content_requests.store');
+    Route::post('/content-requests/create', [ContentRequestController::class, 'store'])->name('content_requests.store');
 
     // Create content from request 
-    Route::get('/content/create/{contentId?}', [ContentViewController::class, 'create'])->name('content.create');
+    Route::get('/content-requests/{contentId}/convert', [ContentViewController::class, 'create'])->name('content.create');
 
-    Route::post('/react/{contentId}', [HeartReactController::class, 'toggleReact'])->middleware('auth');
+    Route::post('/content/{contentId}/react', [HeartReactController::class, 'toggleReact']);
 });
 
 
 
 Route::middleware('auth')->group(function () {
-    Route::post('/comments/{contentId}', [ContentCommentController::class, 'store']);
-    Route::put('/comments/{commentId}', [ContentCommentController::class, 'update']);
-    Route::delete('/comments/{commentId}', [ContentCommentController::class, 'destroy']);
+    Route::post('/content/{contentId}/comments', [ContentCommentController::class, 'store']);
+    Route::put('/content/comments/{commentId}', [ContentCommentController::class, 'update']);
+    Route::delete('/content/comments/{commentId}', [ContentCommentController::class, 'destroy']);
 });
 
-Route::get('/comments/{contentId}', [ContentCommentController::class, 'fetchComments']);
+Route::get('/content/{contentId}/comments', [ContentCommentController::class, 'fetchComments']);
 
 
 
@@ -104,6 +104,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    // Component Showcase Route
+    Route::get('/components/showcase', function () {
+        return view('components.showcase');
+    })->name('components.showcase');
 });
 
 // =================================================================
@@ -118,20 +123,20 @@ Route::get('/about', [WebsiteController::class, 'about'])->name('website.about')
 Route::get('/team', [WebsiteController::class, 'team'])->name('website.team');
 Route::get('/weather-forecast', [WebsiteController::class, 'forecast'])->name('weather-forecast.index');
 Route::get('/chatbot', [WebsiteController::class, 'chatbot'])->name('chatbot.index');
-//                 url                                             class                  direction(action?)
+//                 url                      controller then    class                  direction(action)
 // Remember iba-iba dapat urls same to name
 
 // =================================================================
 
 // Program CRUD
 Route::middleware(['auth'])->group(function () {
-    Route::get('/programs-list', [ProgramController::class, 'gotoProgramsList'])->name('programs.index'); // View all programs
+    Route::get('/programs/list', [ProgramController::class, 'gotoProgramsList'])->name('programs.index'); // View all programs
     Route::get('/programs/create', [ProgramController::class, 'gotoCreateProgram'])->name('programs.create'); // Form to create
-    Route::post('/programs', [ProgramController::class, 'storeProgram'])->name('programs.store'); // Save new program
+    Route::post('/programs/create', [ProgramController::class, 'storeProgram'])->name('programs.store'); // Save new program
     Route::put('/programs/{program}', [ProgramController::class, 'updateProgram'])->name('programs.update'); // Update program
     Route::delete('/programs/{program}', [ProgramController::class, 'deleteProgram'])->name('programs.destroy'); // Delete
     
-    Route::get('/program/{program}', [ProgramController::class, 'showDetailsModal'])->name('programs.show');
+    Route::get('/programs/{program}', [ProgramController::class, 'showDetailsModal'])->name('programs.show');
 });
 
 
@@ -143,25 +148,25 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/programs/{program}/volunteers/{volunteer}/logs', [ProgramVolunteerController::class, 'getVolunteerLogs'])->name('programs.volunteer_logs');
 
     // Combined volunteer management route
-    Route::get('/volunteers', [VolunteerController::class, 'gotoVolunteersList'])->name('volunteers.index');
+    Route::get('/volunteers/list', [VolunteerController::class, 'gotoVolunteersList'])->name('volunteers.index');
     Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'gotoVolunteerDetails'])->name('volunteers.viewUser_details');
 
     // Volunteer application routes
-    Route::get('/volunteer-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
-    Route::post('/volunteer-application', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
-    Route::post('/programs/{program}/join', [ProgramVolunteerController::class, 'joinProgram'])->name('programs.join');
-    Route::delete('/programs/{program}/leave/{volunteer}', [ProgramVolunteerController::class, 'leaveProgram'])->name('programs.leave');
+    Route::get('/volunteers/application-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
+    Route::post('/volunteers/apply', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
+    Route::post('/programs/{program}/volunteers/join', [ProgramVolunteerController::class, 'joinProgram'])->name('programs.join');
+    Route::delete('/programs/{program}/volunteers/{volunteer}/leave', [ProgramVolunteerController::class, 'leaveProgram'])->name('programs.leave');
 });
 
 
 // =================== VOLUNTEER ATTENDANCE ===================
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/programs/{program}/view', [VolunteerAttendanceController::class, 'show'])->name('programs.view'); // View attendance page for a program (programs/attendance.blade.php)
-    Route::post('/programs/{program}/clock-in-out', [VolunteerAttendanceController::class, 'clockInOut'])->name('programs.clock-in-out');
-    Route::post('/programs/{program}/attendance/upload-proof', [VolunteerAttendanceController::class, 'uploadProof'])->name('attendance.uploadProof'); // Upload proof of attendance (modal/form)
-    Route::get('/programs/{program}/volunteers', [VolunteerAttendanceController::class, 'programVolunteers'])->name('programs.volunteers'); // List volunteers for a program (programs/volunteers.blade.php)
-    Route::post('/attendance/{attendance}/status', [VolunteerAttendanceController::class, 'updateAttendanceStatus'])->name('attendance.status'); // Update attendance status
+    Route::get('/programs/{program}/attendance', [VolunteerAttendanceController::class, 'show'])->name('programs.view'); // View attendance page for a program (programs/attendance.blade.php)
+    Route::post('/programs/{program}/attendance/clock', [VolunteerAttendanceController::class, 'clockInOut'])->name('programs.clock-in-out');
+    Route::post('/programs/{program}/attendance/proof', [VolunteerAttendanceController::class, 'uploadProof'])->name('attendance.uploadProof'); // Upload proof of attendance (modal/form)
+    Route::get('/programs/{program}/attendance/volunteers', [VolunteerAttendanceController::class, 'programVolunteers'])->name('programs.volunteers'); // List volunteers for a program (programs/volunteers.blade.php)
+    Route::post('/programs/attendance/{attendance}/status', [VolunteerAttendanceController::class, 'updateAttendanceStatus'])->name('attendance.status'); // Update attendance status
 });
 
 // =================== VOLUNTEER APPLICATION APPROVAL ===================
@@ -175,16 +180,16 @@ Route::middleware(['auth'])->group(function () {
 // =================== PROGRAM FEEDBACK ===================
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/programs/{program}/feedback', [ProgramFeedbackController::class, 'submitVolunteerFeedback'])->name('programs.feedback.submit');  // Submit feedback for a program (modal/form)
+    Route::post('/programs/{program}/feedback/volunteer', [ProgramFeedbackController::class, 'submitVolunteerFeedback'])->name('programs.feedback.submit');  // Submit feedback for a program (modal/form)
 });
 
 // Show the manual attendance modal/form
-Route::get('/programs/{program}/attendance/manual-entry', [VolunteerAttendanceController::class, 'showManualEntryForm'])->name('attendance.manualEntryForm');
+Route::get('/programs/{program}/attendance/manual', [VolunteerAttendanceController::class, 'showManualEntryForm'])->name('attendance.manualEntryForm');
 
 // Handle manual attendance entry submission
-Route::post('/programs/{program}/attendance/manual-entry', [VolunteerAttendanceController::class, 'manualEntry'])->name('attendance.manualEntry');
+Route::post('/programs/{program}/attendance/manual', [VolunteerAttendanceController::class, 'manualEntry'])->name('attendance.manualEntry');
 
-Route::post('/programs/{program}/guest-feedback', [ProgramFeedbackController::class, 'submitGuestFeedback'])
+Route::post('/programs/{program}/feedback/guest', [ProgramFeedbackController::class, 'submitGuestFeedback'])
     ->name('programs.feedback.guest.submit');
 
 // =================== PROGRAM TASKS ===================
@@ -204,7 +209,7 @@ Route::post('/programs/{program}/tasks/{task}/assign', [ProgramTasksController::
 // Program Chat Routes
 Route::middleware(['auth'])->group(function () {
     // Show all program chats
-    Route::get('/programs/chats', [ProgramChatController::class, 'gotoChatsList'])->name('program.chats.index');
+    Route::get('/programs/chats/list', [ProgramChatController::class, 'gotoChatsList'])->name('program.chats.index');
     // Show specific program chat
     Route::get('/programs/{program}/chats', [ProgramChatController::class, 'gotoProgramChat'])->name('program.chats.show');
     Route::post('/programs/{program}/chats', [ProgramChatController::class, 'storeChatMessage'])->name('program.chats.store');
@@ -214,42 +219,39 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     // Role Management Routes
-    Route::get('/roles', [RoleController::class, 'gotoRolesList'])->name('roles.index');
+    Route::get('/roles/list', [RoleController::class, 'gotoRolesList'])->name('roles.index');
     Route::get('/roles/assign', [RoleController::class, 'showAssignForm'])->name('roles.assign.form');
     Route::post('/roles/assign', [RoleController::class, 'assign'])->name('roles.assign');
 });
 
 // Finance Routes   
-Route::middleware(['auth'])->prefix('finance')->group(function () {
-    Route::get('/', [DonationController::class, 'finance_index'])->name('finance.index');
-    Route::get('/donations', [DonationController::class, 'index'])->name('finance.donations');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/finance/dashboard', [DonationController::class, 'finance_index'])->name('finance.index');
+    Route::get('/finance/donations', [DonationController::class, 'index'])->name('finance.donations');
     
-    Route::get('/membership-payments', [MembershipController::class, 'index'])->name('finance.membership.payments');
-    Route::post('/membership-payments', [MembershipController::class, 'store'])->name('finance.membership.payments.store');
-    Route::patch('/membership-payments/{payment}/status', [MembershipController::class, 'updateStatus'])->name('finance.membership.payments.status');
+    Route::get('/finance/membership/payments', [MembershipController::class, 'index'])->name('finance.membership.payments');
+    Route::post('/finance/membership/payments', [MembershipController::class, 'store'])->name('finance.membership.payments.store');
+    Route::patch('/finance/membership/payments/{payment}/status', [MembershipController::class, 'updateStatus'])->name('finance.membership.payments.status');
 
     // Membership payment reminders
-    Route::middleware(['auth'])->post('/finance/membership/reminders', [MembershipReminderController::class, 'store'])
+    Route::post('/finance/membership/reminders', [MembershipReminderController::class, 'store'])
         ->name('finance.membership.reminders.store');
 });
 
-Route::middleware(['auth'])->prefix('members')->name('members.')->group(function () {
-    Route::get('/', [MemberController::class, 'index'])->name('index');
-    Route::post('/', [MemberController::class, 'store'])->name('store');
-    Route::patch('/{member}/status', [MemberController::class, 'updateStatus'])->name('status');
-    Route::post('/invite/{volunteer}', [MemberController::class, 'invite'])->name('invite');
-    Route::post('/{member}/resend-invitation', [MemberController::class, 'resendInvitation'])->name('resend-invitation');
-});
-
 Route::middleware(['auth'])->group(function () {
-    Route::get('member/invitation/{member}', [MemberController::class, 'showInvitation'])
+    Route::get('members/list', [MemberController::class, 'index'])->name('members.index');
+    Route::post('/members/create', [MemberController::class, 'store'])->name('members.store');
+    Route::patch('/members/{member}/status', [MemberController::class, 'updateStatus'])->name('members.status');
+    Route::post('/members/invite/{volunteer}', [MemberController::class, 'invite'])->name('members.invite');
+    Route::post('/members/{member}/resend-invitation', [MemberController::class, 'resendInvitation'])->name('members.resend-invitation');
+    Route::get('members/invitation/{member}', [MemberController::class, 'showInvitation'])
         ->name('member.invitation.show');
 
-    Route::get('/member/invitation/{member}/accept', [MemberController::class, 'acceptInvitation'])
+    Route::get('/members/invitation/{member}/accept', [MemberController::class, 'acceptInvitation'])
         ->name('member.invitation.accept')
         ->middleware('signed');
     
-    Route::get('/member/invitation/{member}/decline', [MemberController::class, 'declineInvitation'])
+    Route::get('/members/invitation/{member}/decline', [MemberController::class, 'declineInvitation'])
         ->name('member.invitation.decline')
         ->middleware('signed');
 });
@@ -263,6 +265,6 @@ Route::get('/finance/membership/payments/modal/{memberId}/{quarter}/{year}', [Me
 // Route::get('/donations/export', [DonationController::class, 'export'])->name('donations.export');
 
 // Notification routes
-Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+Route::get('/notifications/list', [NotificationController::class, 'index'])->name('notifications.index');
 Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');

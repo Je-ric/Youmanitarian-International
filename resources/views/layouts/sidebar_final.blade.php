@@ -205,12 +205,30 @@
                     <ul class="space-y-1">
                         <li>
                             <a href="{{ route('weather-forecast.index') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item"
+                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('weather-forecast.index') ? 'active' : '' }}"
                                 data-tooltip="Weather Forecasts">
-                                <i class="bx bx-shield-quarter w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bx-cloud w-5 text-center flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-content text-sm">Weather Forecasts</span>
                             </a>
                         </li>
+                        {{-- <li>
+                            <a href="{{ route('chatbot.index') }}"
+                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('chatbot.index') ? 'active' : '' }}"
+                                data-tooltip="Chatbot">
+                                <i class='bx bx-bot w-5 text-center flex-shrink-0'></i>
+                                <span class="ml-3 sidebar-content text-sm">Chatbot</span>
+                            </a>
+                        </li> --}}
+                        @if (config('app.env') == 'local')
+                            <li>
+                                <a href="{{ route('components.showcase') }}"
+                                    class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('components.showcase') ? 'active' : '' }}"
+                                    data-tooltip="Component Showcase">
+                                    <i class='bx bx-category w-5 text-center flex-shrink-0'></i>
+                                    <span class="ml-3 sidebar-content text-sm">Component Showcase</span>
+                                </a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
 
