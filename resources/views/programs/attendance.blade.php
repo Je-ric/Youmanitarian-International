@@ -331,9 +331,9 @@
         @endif
 
         {{-- Volunteer's Assigned Tasks --}}
-        @if($volunteerTasks->isNotEmpty())
-            <div class="mt-8">
-                <h2 class="text-xl font-bold text-[#1a2235] mb-4">Your Assigned Tasks</h2>
+        <div class="mt-8">
+            <h2 class="text-xl font-bold text-[#1a2235] mb-4">Your Assigned Tasks</h2>
+            @if($volunteerTasks->isNotEmpty())
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                     @foreach($taskData as $data)
                         <div
@@ -368,16 +368,13 @@
                         </div>
                     @endforeach
                 </div>
-            </div>
-        @else
-            <div class="text-center py-16">
-                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class='bx bx-task text-2xl text-gray-400'></i>
-                </div>
-                <p class="text-gray-500 text-lg font-medium">No tasks assigned yet</p>
-            </div>
-        @endif
-
+            @else
+                <x-empty-state 
+                    icon="bx bx-task" 
+                    title="No Tasks Assigned"
+                    description="You have not been assigned any tasks for this program yet. Please check back later." />
+            @endif
+        </div>
         {{-- Partial --}}
         @include('programs.partials.attendanceReminders')
 
