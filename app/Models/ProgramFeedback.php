@@ -9,6 +9,9 @@ class ProgramFeedback extends Model
     protected $fillable = [
         'program_id',
         'volunteer_id',
+        'guest_name',
+        'guest_email',
+        'user_type',
         'rating',
         'feedback',
         'submitted_at',

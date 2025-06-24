@@ -181,13 +181,11 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/programs/{program}/feedback/volunteer', [ProgramFeedbackController::class, 'submitVolunteerFeedback'])->name('programs.feedback.submit');  // Submit feedback for a program (modal/form)
+    Route::get('/programs/{program}/attendance/manual', [VolunteerAttendanceController::class, 'showManualEntryForm'])->name('attendance.manualEntryForm');
+    Route::post('/programs/{program}/attendance/manual', [VolunteerAttendanceController::class, 'manualEntry'])->name('attendance.manualEntry');
+
 });
 
-// Show the manual attendance modal/form
-Route::get('/programs/{program}/attendance/manual', [VolunteerAttendanceController::class, 'showManualEntryForm'])->name('attendance.manualEntryForm');
-
-// Handle manual attendance entry submission
-Route::post('/programs/{program}/attendance/manual', [VolunteerAttendanceController::class, 'manualEntry'])->name('attendance.manualEntry');
 
 Route::post('/programs/{program}/feedback/guest', [ProgramFeedbackController::class, 'submitGuestFeedback'])
     ->name('programs.feedback.guest.submit');
