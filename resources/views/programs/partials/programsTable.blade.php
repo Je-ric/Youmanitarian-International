@@ -40,7 +40,7 @@
                     </x-table.td>
                     <x-table.td class="flex flex-wrap gap-2">
                         <!-- View Details Button (Available to all) -->
-                        <x-button @click="openModal({{ $program->id }})"
+                        <x-button @click="openModal({{ $program->id }})" {{-- Pass ID to the function --}}
                             variant="table-action-view" class="tooltip" data-tip="View Details"
                             aria-label="View Details for {{ $program->title }}">
                             <i class='bx bx-show'></i>

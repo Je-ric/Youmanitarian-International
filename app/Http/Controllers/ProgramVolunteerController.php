@@ -76,39 +76,6 @@ class ProgramVolunteerController extends Controller
         ));
     }
 
-    // public function manageVolunteers(Program $program)
-    // {
-    //     $approvedVolunteers = $program->volunteers()->where('program_volunteers.status', 'approved')->get();
-    //     $pendingVolunteers = $program->volunteers()->where('program_volunteers.status', 'pending')->get();
-
-    //     $approvedCount = $approvedVolunteers->count();
-    //     $isFull = $approvedCount >= $program->volunteer_count;
-
-    //     $logs = [];
-    //     foreach ($approvedVolunteers as $volunteer) {
-    //         $volunteerLogs = $program->volunteerAttendances()
-    //             ->where('volunteer_id', $volunteer->id)
-    //             ->orderBy('clock_in', 'desc')
-    //             ->get();
-
-    //         $totalTime = 0;
-    //         foreach ($volunteerLogs as $log) {
-    //             if ($log->clock_out) {
-    //                 $diff = \Carbon\Carbon::parse($log->clock_in)->diff(\Carbon\Carbon::parse($log->clock_out));
-    //                 $totalTime += $diff->h * 3600 + $diff->i * 60 + $diff->s;
-    //             }
-    //         }
-    //         $totalTimeInHours = gmdate("H:i:s", $totalTime);
-
-    //         $logs[$volunteer->id] = [
-    //             'logs' => $volunteerLogs,
-    //             'totalTime' => $totalTimeInHours
-    //         ];
-    //     }
-
-    //     return view('volunteers.program-volunteers', compact('program', 'approvedVolunteers', 'pendingVolunteers', 'approvedCount', 'isFull', 'logs'));
-    // }
-
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
@@ -123,19 +90,24 @@ class ProgramVolunteerController extends Controller
         $volunteer = $user->volunteer;
 
         if (!$volunteer) {
-            return redirect()->back()->with('error', 'Only volunteers can join programs.');
+            return redirect()->back()->with('toast', [
+                'message' => 'Only volunteers can join programs.',
+                'type' => 'error'
+            ]);
         }
-
-        // Check if the volunteer is approved
-        if ($volunteer->application_status !== 'approved') {
-            return redirect()->back()->with('error', 'Your volunteer application must be approved before joining a program.');
+        
+        if ($volunteer->application_status !== 'approved') { // check kung approved volunteer
+            return redirect()->back()->with('toast', [
+                'message' => 'Your volunteer application must be approved before joining a program.',
+                'type' => 'error'
+            ]);
         }
 
         // Avoid duplicate entry
         if (!$program->volunteers->contains($volunteer->id)) {
             $program->volunteers()->attach($volunteer->id, ['status' => 'approved']);
 
-            // Notify the program coordinator
+            // Notify coordinator na may nagjoin sa program niya \Notifications\VolunteerJoinedProgram.php
             $programCoordinator = $program->creator;
             if ($programCoordinator) {
                 $programCoordinator->notify(new VolunteerJoinedProgram($program, $user));
@@ -149,7 +121,10 @@ class ProgramVolunteerController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'You have successfully joined the program.');
+        return redirect()->back()->with('toast', [
+            'message' => 'You have successfully joined the program.',
+            'type' => 'success'
+        ]);
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -158,27 +133,26 @@ class ProgramVolunteerController extends Controller
 
     public function leaveProgram(Request $request, Program $program, Volunteer $volunteer)
     {
-        // Check if the volunteer has any task assignments for this program
+        // Makes sure the volunteer has any task assignments for this program
         $hasTasks = $volunteer->taskAssignments()
-            ->whereHas('task', function($query) use ($program) {
+            ->whereHas('task', function ($query) use ($program) {
                 $query->where('program_id', $program->id);
             })->exists();
-    
-        if (
-            $program->progress !== 'incoming' ||
-            $hasTasks
-        ) {
+
+        if ($program->progress !== 'incoming' || $hasTasks) {
             $message = $hasTasks
                 ? 'You cannot leave this program because you have assigned tasks.'
                 : 'You cannot leave this program because it is no longer in incoming status.';
-    
+
             return back()->with('error', $message);
         }
-    
+
         // Detach volunteer from program
         $program->volunteers()->detach($volunteer->id);
-    
-        return back()->with('success', 'You have left the program.');
+
+        return back()->with('toast', [
+            'message' => 'You have left the program.',
+            'type' => 'success'
+        ]);
     }
 }
-

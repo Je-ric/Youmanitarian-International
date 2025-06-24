@@ -21,12 +21,11 @@ class ProgramController extends Controller
         $user = Auth::user();
         $tab = $request->get('tab', 'all');
 
-        // Base query for all programs
         $allPrograms = Program::orderBy('date', 'desc')->paginate(10);
 
         // Initialize other program collections with empty paginated collections
-        $joinedPrograms = Program::where('id', 0)->paginate(10); // Empty paginated collection
-        $myPrograms = Program::where('id', 0)->paginate(10); // Empty paginated collection
+        $joinedPrograms = Program::where('id', 0)->paginate(10); 
+        $myPrograms = Program::where('id', 0)->paginate(10);
 
         // Get joined programs for volunteers
         if ($user->hasRole('Volunteer') && $user->volunteer) {
@@ -43,7 +42,19 @@ class ProgramController extends Controller
                 ->paginate(10);
         }
 
-        return view('programs.index', compact('allPrograms', 'joinedPrograms', 'myPrograms'));
+        return view('programs.index', 
+            compact('allPrograms', 
+            'joinedPrograms', 
+                        'myPrograms')
+                    );
+        
+        // compact() takes variable names as strings
+
+        // return view('programs.index', [
+        //     'allPrograms' => $allPrograms,
+        //     'joinedPrograms' => $joinedPrograms,
+        //     'myPrograms' => $myPrograms
+        // ]);
     }
 
     public function showDetailsModal(Program $program)
@@ -79,14 +90,17 @@ class ProgramController extends Controller
             'volunteer_count' => $request->volunteer_count ?? 0,
         ]);
 
-        // Notify all volunteers about the new program
+        // Get all users with volunteer role
         $volunteers = User::whereHas('roles', function ($query) {
             $query->where('role_name', 'Volunteer');
         })->get();
 
+        
+        // Only send notifications if there are volunteers in the system
+        // Send notification to all volunteers \Notifications\NewProgramAvailable.php
         if ($volunteers->isNotEmpty()) {
             Notification::send($volunteers, new NewProgramAvailable($program));
-        }
+        } 
 
         // Create a welcome message in the program chat
         $program->chats()->create([

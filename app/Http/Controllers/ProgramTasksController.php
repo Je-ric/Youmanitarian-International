@@ -12,7 +12,6 @@ use App\Notifications\TaskAssigned;
 
 class ProgramTasksController extends Controller
 {
-    // Store a new task under the program
     public function storeTask(Request $request, Program $program)
     {
         $request->validate([
@@ -30,9 +29,9 @@ class ProgramTasksController extends Controller
         ]);
     }
 
-    // Delete a task from the program
     public function deleteTask(Program $program, ProgramTask $task)
     {
+        // Makes sure the task belongs to the correct program
         if ($task->program_id !== $program->id) {
             abort(403);
         }
@@ -45,9 +44,9 @@ class ProgramTasksController extends Controller
         ]);
     }
 
-    // Update a task's description or status
     public function updateTask(Request $request, Program $program, ProgramTask $task)
     {
+        // Makes sure the task belongs to the correct program
         if ($task->program_id !== $program->id) {
             abort(403);
         }
@@ -61,7 +60,7 @@ class ProgramTasksController extends Controller
         if ($request->has('status')) {
             $task->update(['status' => $request->status]);
             
-            // Update all assignments to match the task status
+            // Update all task_assignments
             $task->assignments()->update(['status' => $request->status]);
         } else {
             $task->update($request->only('task_description'));
@@ -76,6 +75,7 @@ class ProgramTasksController extends Controller
     // Update individual assignment status
     public function updateAssignmentStatus(Request $request, Program $program, ProgramTask $task, TaskAssignment $assignment)
     {
+        // Makes sure the assignment belongs to the correct task and program
         if ($task->program_id !== $program->id || $assignment->task_id !== $task->id) {
             abort(403);
         }
@@ -84,6 +84,9 @@ class ProgramTasksController extends Controller
             'status' => 'required|in:pending,in_progress,completed',
         ]);
 
+        // update based sa selection ni volunteer and ni coordinator
+        // Volunteer: Pending, In Progress
+        // Coordinator: Pending, In Progress but Siya lang ang pwedeng mag set na complete
         $assignment->update(['status' => $request->status]);
 
         // Update main task status based on assignment statuses
@@ -95,32 +98,34 @@ class ProgramTasksController extends Controller
         ]);
     }
 
-    // Helper method to update main task status based on assignment statuses
+    // Helper method to remove and update main task status based on assignment statuses
     private function updateMainTaskStatus(ProgramTask $task)
     {
+        // Gets all volunteer assignments for specific task
+        // fn($assignment)
         $assignments = $task->assignments;
         
         if ($assignments->isEmpty()) {
             return;
         }
-
-        // If all assignments are completed, mark task as completed
+        
+        // If EVERYONE is done -> Task is completed
         if ($assignments->every(fn($assignment) => $assignment->status === 'completed')) {
             $task->update(['status' => 'completed']);
         }
-        // If any assignment is in progress, mark task as in progress
+        // If ANYONE is working (in_progress) -> Task is in progress
         elseif ($assignments->contains(fn($assignment) => $assignment->status === 'in_progress')) {
             $task->update(['status' => 'in_progress']);
         }
-        // Otherwise, mark as pending
+        // If NO ONE is working -> Task is pending
         else {
             $task->update(['status' => 'pending']);
         }
     }
 
-    // Assign a volunteer to a task
     public function assignVolunteerToTask(Request $request, Program $program, ProgramTask $task)
     {
+        // Makes sure the task belongs to the correct program
         if ($task->program_id !== $program->id) {
             abort(403);
         }
@@ -148,7 +153,7 @@ class ProgramTasksController extends Controller
             'status' => 'pending',
         ]);
 
-        // Notify the assigned volunteer
+        // Send notification sa volunteer na nilagyan ng task \Notifications\TaskAssigned.php
         $volunteer = Volunteer::find($request->volunteer_id);
         if ($volunteer && $volunteer->user) {
             $volunteer->user->notify(new TaskAssigned($task, $program));
@@ -163,6 +168,7 @@ class ProgramTasksController extends Controller
     // Remove a volunteer from a task
     public function removeVolunteerFromTask(Program $program, ProgramTask $task, TaskAssignment $assignment)
     {
+        // Makes sure the assignment belongs to the correct task and program
         if ($task->program_id !== $program->id || $assignment->task_id !== $task->id) {
             abort(403);
         }
