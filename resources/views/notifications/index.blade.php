@@ -43,14 +43,15 @@
                 $isUnread = is_null($notification->read_at);
                 $notificationType = $notification->data['type'] ?? 'general';
                 $iconConfig = match($notificationType) {
-                    'task_assigned' => ['bx-task', 'bg-blue-100', 'text-blue-600'],
-                    'program_update' => ['bx-calendar', 'bg-purple-100', 'text-purple-600'],
-                    'volunteer_joined' => ['bx-user-plus', 'bg-green-100', 'text-green-600'],
-                    'payment_received' => ['bx-credit-card', 'bg-emerald-100', 'text-emerald-600'],
-                    'role_update' => ['bx-user-check', 'bg-orange-100', 'text-orange-600'],
-                    'system_alert' => ['bx-error', 'bg-red-100', 'text-red-600'],
-                    'payment_reminder' => ['bx-bell', 'bg-yellow-100', 'text-yellow-600'],
-                    default => ['bx-bell', 'bg-[#1a2235]', 'text-[#ffb51b]']
+                    'task_assigned'               => ['bx-clipboard', 'bg-blue-100', 'text-blue-700'],
+                    'program_volunteer_attendance'=> ['bx-user-check', 'bg-indigo-100', 'text-indigo-700'],
+                    'program_update'              => ['bx-refresh', 'bg-purple-100', 'text-purple-700'],
+                    'volunteer_joined'            => ['bx-group', 'bg-green-100', 'text-green-700'],
+                    'volunteer_application'       => ['bx-file-find', 'bg-teal-100', 'text-teal-700'],
+                    'role_update'                 => ['bx-shield-quarter', 'bg-orange-100', 'text-orange-700'],
+                    'payment_reminder'            => ['bx-alarm', 'bg-yellow-100', 'text-yellow-700'],
+                    'member_invitation'           => ['bx-mail-send', 'bg-cyan-100', 'text-cyan-700'],
+                    default                       => ['bx-info-circle', 'bg-gray-200', 'text-gray-700'],
                 };
 
                 $actionUrl = $notification->data['action_url'] ?? '#';

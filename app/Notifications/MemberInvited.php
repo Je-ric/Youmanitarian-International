@@ -53,6 +53,8 @@ class MemberInvited extends Notification
     public function toArray(object $notifiable): array
     {
         return [
+            'title' => 'Member Invitation',
+            'type' => 'member_invitation',
             'member_id' => $this->member->id,
             'message' => $this->message,
             'action_url' => route('member.invitation.show', ['member' => $this->member->id])

@@ -43,12 +43,12 @@ class PaymentReminder extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        $title = "Payment Reminder";
         $payment = $this->reminder->membershipPayment;
         $period = $payment->payment_period . ' ' . $payment->payment_year;
         
         
         return [
+            'title' => 'Payment Reminder',
             'reminder_id' => $this->reminder->id,
             'type' => 'payment_reminder',
             'membership_payment_id' => $this->reminder->membership_payment_id,
