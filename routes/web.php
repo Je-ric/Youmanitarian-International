@@ -83,7 +83,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/content-requests/create', [ContentRequestController::class, 'store'])->name('content_requests.store');
 
     // Create content from request 
-    Route::get('/content-requests/{contentId}/convert', [ContentViewController::class, 'create'])->name('content.create');
+    Route::get('/content-requests/{contentId}/convert', [ContentViewController::class, 'create'])->name('content.convert');
 
     Route::post('/content/{contentId}/react', [HeartReactController::class, 'toggleReact']);
 });

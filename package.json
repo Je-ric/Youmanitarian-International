@@ -9,6 +9,7 @@
         "@tailwindcss/forms": "^0.5.10",
         "@tailwindcss/typography": "^0.5.10",
         "@tailwindcss/vite": "^4.0.0",
+        "@vitejs/plugin-vue": "^6.0.0",
         "autoprefixer": "^10.4.21",
         "axios": "^1.7.4",
         "concurrently": "^9.0.1",
@@ -21,15 +22,17 @@
     "dependencies": {
         "@ckeditor/ckeditor5-build-classic": "^44.3.0",
         "@preline/overlay": "^3.0.0",
-        "@tiptap/core": "^2.11.7",
-        "@tiptap/pm": "^2.11.7",
-        "@tiptap/starter-kit": "^2.11.7",
+        "@tiptap/core": "^2.22.3",
+        "@tiptap/pm": "^2.22.3",
+        "@tiptap/starter-kit": "^2.22.3",
+        "@tiptap/vue-3": "^2.22.3",
         "alpinejs": "^3.14.9",
         "ckeditor5": "^44.3.0",
         "flatpickr": "^4.6.13",
         "flowbite": "^3.1.2",
         "flowbite-typography": "^1.0.5",
         "laravel-echo": "^2.1.5",
-        "pusher-js": "^8.4.0"
+        "pusher-js": "^8.4.0",
+        "vue": "^3.3.0"
     }
 }

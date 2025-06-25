@@ -216,6 +216,8 @@
             </div>
         </div>
         
+
+        
         {{-- CKEDITOR di na gumagana, kapangit mo kabonding --}}
 
         {{-- <div class="form-control mb-6">
@@ -233,18 +235,17 @@
 
     
         <link rel="stylesheet" href="{{ asset('css/editor.css') }}">
-        <script type="module" src="{{ asset('js/editor.js') }}"></script>
-
-
+        @vite('resources/js/editors.js')
+        
         <div class="form-control mb-6">
             <label class="label">
                 <span class="label-text font-semibold text-[#1a2235]">Body</span>
             </label>
             <div>
-                <textarea id="body" name="body" 
-                    class="textarea textarea-bordered w-full h-64 bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b] pl-10"
-                    required>{{ old('body', $content->body ?? '') }}
-                </textarea>
+                <div id="editor-menu-bar"></div>
+                <div id="editor"></div>
+                <input type="hidden" name="body" id="body" value="{{ old('body', $content->body ?? '') }}">
+                <div id="editor-word-count" class="mt-2"></div>
             </div>
         </div>
         
@@ -299,6 +300,8 @@
 </div>
 
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+<script type="module" src="{{ asset('js/app.js') }}"></script>
 {{-- <script src="https://cdn.tiny.cloud/1/zctnfzjfl8blcadzgdm4gwxy3986m39amafpx9zq9xbe5dk8/tinymce/5/tinymce.min.js"></script> --}}
 {{-- <script src="https://cdn.tiny.cloud/1/vuvcfajzp5h0glvobgw3o47ynzsgadyfyccgj2jtjbz69s7i/tinymce/5/tinymce.min.js"></script>
     <script>
@@ -317,4 +320,5 @@
         }
     });
 </script> --}}
+
 @endsection

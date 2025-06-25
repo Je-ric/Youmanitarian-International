@@ -1,165 +1,90 @@
+/**
+ * This configuration was generated using the CKEditor 5 Builder. You can modify it anytime using this link:
+ * https://ckeditor.com/ckeditor-5/builder/?redirect=portal#installation/NoNgNARATAdCNQpKB2ALABgJxoBx4xQEYBWAZhKyxBTLKkuIw1xMJHrJRCQgFMAdkgxhgRMOJEjJAXUhkiAMwDG9RRBlA===
+ */
 
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'; // or your custom build
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>CKEditor 5 Sample</title>
-		<link rel="stylesheet" href="./style.css">
-		<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/45.2.1/ckeditor5.css" crossorigin>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Oswald&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-    
-    @media print {
-      body {
-        margin: 0 !important;
-      }
-    }
-    
-    .main-container {
-      font-family: 'Lato';
-      width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .ck-content {
-      font-family: 'Lato';
-      line-height: 1.6;
-      word-break: break-word;
-    }
-    
-    .editor-container_classic-editor .editor-container__editor {
-      min-width: 795px;
-      max-width: 795px;
-    }
-    
-    .ck-content h3.category {
-      font-family: 'Oswald';
-      font-size: 20px;
-      font-weight: bold;
-      color: #555;
-      letter-spacing: 10px;
-      margin: 0;
-      padding: 0;
-    }
-    
-    .ck-content h2.document-title {
-      font-family: 'Oswald';
-      font-size: 50px;
-      font-weight: bold;
-      margin: 0;
-      padding: 0;
-      border: 0;
-    }
-    
-    .ck-content h3.document-subtitle {
-      font-family: 'Oswald';
-      font-size: 20px;
-      color: #555;
-      margin: 0 0 1em;
-      font-weight: bold;
-      padding: 0;
-    }
-    
-    .ck-content p.info-box {
-      --background-size: 30px;
-      --background-color: #e91e63;
-      padding: 1.2em 2em;
-      border: 1px solid var(--background-color);
-      background:
-        linear-gradient(135deg, var(--background-color) 0%, var(--background-color) var(--background-size), transparent var(--background-size)),
-        linear-gradient(
-          135deg,
-          transparent calc(100% - var(--background-size)),
-          var(--background-color) calc(100% - var(--background-size)),
-          var(--background-color)
-        );
-      border-radius: 10px;
-      margin: 1.5em 2em;
-      box-shadow: 5px 5px 0 #ffe6ef;
-    }
-    
-    .ck-content span.marker {
-      background: yellow;
-    }
-    
-    .ck-content span.spoiler {
-      background: #000;
-      color: #000;
-    }
-    
-    .ck-content span.spoiler:hover {
-      background: #000;
-      color: #fff;
-    }
-    
-    .ck-content .button {
-      display: inline-block;
-      width: 260px;
-      border-radius: 8px;
-      margin: 0 auto;
-      padding: 12px;
-      color: #ffffff;
-      font-size: 24px;
-      font-weight: 700;
-      text-align: center;
-      text-decoration: none;
-    }
-    
-    .ck-content .button--green {
-      background-color: #406b1e;
-    }
-    
-    .ck-content .button--black {
-      background-color: #141517;
-    }
-    
-    .editor_container__word-count .ck-word-count {
-      color: var(--ck-color-text);
-      display: flex;
-      height: 20px;
-      gap: var(--ck-spacing-small);
-      justify-content: flex-end;
-      font-size: var(--ck-font-size-base);
-      line-height: var(--ck-line-height-base);
-      font-family: var(--ck-font-face);
-      padding: var(--ck-spacing-small) var(--ck-spacing-standard);
-    }
-    
-    .editor-container_include-word-count.editor-container_classic-editor .editor_container__word-count {
-      border: 1px solid var(--ck-color-base-border);
-      border-radius: var(--ck-border-radius);
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      border-top: none;
-    }
-    
-    .editor-container_include-word-count.editor-container_classic-editor .editor-container__editor .ck-editor .ck-editor__editable {
-      border-radius: 0;
-    }
-    
-    </style>
-    
-	</head>
-	<body>
-		<div class="main-container">
-			<div
-				class="editor-container editor-container_classic-editor editor-container_include-style editor-container_include-word-count"
-				id="editor-container"
-			>
-				<div class="editor-container__editor"><div id="editor"></div></div>
-				<div class="editor_container__word-count" id="editor-word-count"></div>
-			</div>
-		</div>
-		<script src="https://cdn.ckeditor.com/ckeditor5/45.2.1/ckeditor5.umd.js" crossorigin></script>
-		<script src="./main.js"></script>
-	</body>
-</html>
+// Optionally, expose to window for debugging or global access
+window.CKEDITOR = { ClassicEditor };
 
+window.CKEDITOR = {
+	ClassicEditor,
+	Alignment,
+	Autoformat,
+	AutoImage,
+	AutoLink,
+	Autosave,
+	BalloonToolbar,
+	BlockQuote,
+	Bold,
+	Bookmark,
+	CloudServices,
+	Code,
+	CodeBlock,
+	Essentials,
+	FindAndReplace,
+	FontBackgroundColor,
+	FontColor,
+	FontFamily,
+	FontSize,
+	FullPage,
+	GeneralHtmlSupport,
+	Heading,
+	Highlight,
+	HorizontalLine,
+	HtmlComment,
+	HtmlEmbed,
+	ImageBlock,
+	ImageCaption,
+	ImageInline,
+	ImageInsertViaUrl,
+	ImageResize,
+	ImageStyle,
+	ImageTextAlternative,
+	ImageToolbar,
+	ImageUpload,
+	Indent,
+	IndentBlock,
+	Italic,
+	Link,
+	LinkImage,
+	List,
+	ListProperties,
+	Markdown,
+	MediaEmbed,
+	Mention,
+	Paragraph,
+	PasteFromMarkdownExperimental,
+	PasteFromOffice,
+	RemoveFormat,
+	ShowBlocks,
+	SourceEditing,
+	SpecialCharacters,
+	SpecialCharactersArrows,
+	SpecialCharactersCurrency,
+	SpecialCharactersEssentials,
+	SpecialCharactersLatin,
+	SpecialCharactersMathematical,
+	SpecialCharactersText,
+	Strikethrough,
+	Style,
+	Subscript,
+	Superscript,
+	Table,
+	TableCaption,
+	TableCellProperties,
+	TableColumnResize,
+	TableProperties,
+	TableToolbar,
+	TextPartLanguage,
+	TextTransformation,
+	Title,
+	TodoList,
+	Underline,
+	WordCount
+};
 
-<script>
 const {
 	ClassicEditor,
 	Alignment,
@@ -238,7 +163,7 @@ const {
 } = window.CKEDITOR;
 
 const LICENSE_KEY =
-	'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3Nzk0OTQzOTksImp0aSI6ImI1OTQ0N2Y1LTNjZjQtNDJlMS04OGE5LTAzZmVhMTI4YzVlMCIsImxpY2Vuc2VkSG9zdHMiOlsiMTI3LjAuMC4xIiwibG9jYWxob3N0IiwiMTkyLjE2OC4qLioiLCIxMC4qLiouKiIsIjE3Mi4qLiouKiIsIioudGVzdCIsIioubG9jYWxob3N0IiwiKi5sb2NhbCJdLCJ1c2FnZUVuZHBvaW50IjoiaHR0cHM6Ly9wcm94eS1ldmVudC5ja2VkaXRvci5jb20iLCJkaXN0cmlidXRpb25DaGFubmVsIjpbImNsb3VkIiwiZHJ1cGFsIl0sImxpY2Vuc2VUeXBlIjoiZGV2ZWxvcG1lbnQiLCJmZWF0dXJlcyI6WyJEUlVQIiwiRTJQIiwiRTJXIl0sInZjIjoiYTg3NGNlNTAifQ.DCQW43_kcKACFKhRx8jM1B_Jdo79iW1df698AWLNsBgsELFZlVyglk_-vHArz9c57_V8Dm843LsYOh2FRLDA7Q';
+	'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3Nzk0OTQzOTksImp0aSI6ImI1OTQ0N2Y1LTNjZjQtNDJlMS04OGE5LTAzZmVhMTI4YzVlMCIsImxpY2Vuc2VkSG9zdHMiOlsiMTI3LjAuMC4xIiwibG9jYWxob3N0IiwiMTkyLjE2OC4qLioiLCIxMC4qLiouKiIsIiE3Mi4qLiouKiIsIioudGVzdCIsIioubG9jYWxob3N0IiwiKi5sb2NhbCJdLCJ1c2FnZUVuZHBvaW50IjoiaHR0cHM6Ly9wcm94eS1ldmVudC5ja2VkaXRvci5jb20iLCJkaXN0cmlidXRpb25DaGFubmVsIjpbImNsb3VkIiwiZHJ1cGFsIl0sImxpY2Vuc2VUeXBlIjoiZGV2ZWxvcG1lbnQiLCJmZWF0dXJlcyI6WyJEUlVQIiwiRTJQIiwiRTJXIl0sInZjIjoiYTg3NGNlNTAifQ.DCQW43_kcKACFKhRx8jM1B_Jdo79iW1df698AWLNsBgsELFZlVyglk_-vHArz9c57_V8Dm843LsYOh2FRLDA7Q';
 
 const editorConfig = {
 	toolbar: {
@@ -519,7 +444,9 @@ ClassicEditor.create(document.querySelector('#editor'), editorConfig).then(edito
 
 	document.querySelector('#editor-menu-bar').appendChild(editor.ui.view.menuBarView.element);
 
+	editor.model.document.on('change:data', () => {
+		document.getElementById('body').value = editor.getData();
+	});
+
 	return editor;
 });
-
-</script>
