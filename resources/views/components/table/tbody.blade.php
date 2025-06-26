@@ -1,10 +1,10 @@
 @props(['class' => '', 'striped' => true])
 
 @php
-    $baseClasses = 'divide-y divide-gray-100';
+    $baseClasses = '';
     if ($striped) {
-        $baseClasses .= ' [&>tr:nth-child(odd)]:bg-white';
-        $baseClasses .= ' [&>tr:nth-child(even)]:bg-gray-50';
+        $baseClasses .= ' [&>tr:nth-child(odd)>td]:bg-white';
+        $baseClasses .= ' [&>tr:nth-child(even)>td]:bg-gray-100';
     }
     $classes = trim($baseClasses . ' ' . $class);
 @endphp

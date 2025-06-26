@@ -5,7 +5,7 @@
 ])
 
 @php
-    $baseClasses = 'px-4 py-3 text-left font-semibold uppercase tracking-wider text-xs';
+    $baseClasses = 'px-6 py-3 text-left font-medium tracking-wider text-xs';
     if ($hideOnSmall) {
         $baseClasses .= ' hidden sm:table-cell';
     }
@@ -15,6 +15,6 @@
     $classes = trim($baseClasses . ' ' . $class);
 @endphp
 
-<th class="{{ $classes }}">
+<th scope="col" class="{{ $classes }}">
     {{ $slot }}
 </th> 

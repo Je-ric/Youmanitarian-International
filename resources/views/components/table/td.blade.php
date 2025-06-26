@@ -6,7 +6,7 @@
 ])
 
 @php
-    $baseClasses = 'px-4 py-3 align-middle text-sm font-normal text-gray-700 bg-[#ebf3fe] group-hover:bg-[#fff8e8] transition-colors duration-150';
+    $baseClasses = 'px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 group-hover:bg-[#fff8e8]';
     if ($hideOnSmall) {
         $baseClasses .= ' hidden sm:table-cell';
     }

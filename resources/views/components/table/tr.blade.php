@@ -1,11 +1,10 @@
 @props([
     'class' => '',
     'hover' => true,
-    'selectable' => false,
 ])
 
 @php
-    $baseClasses = 'group border border-gray-200';
+    $baseClasses = 'group [&>td]:border-y [&>td:first-child]:border-l [&>td:last-child]:border-r [&>td:first-child]:rounded-l-lg [&>td:last-child]:rounded-r-lg';
     $classes = trim($baseClasses . ' ' . $class);
 @endphp
 
