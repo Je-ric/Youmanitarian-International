@@ -2,7 +2,47 @@
 
 
 @section('content')
-    <div class="container mx-auto px-4 py-8">
+<x-page-header icon="bx-user" title="Employee" desc="Manage your employee">
+    <div class="flex items-center gap-2">
+        <x-button variant="secondary">
+            <i class='bx bx-export mr-1'></i>
+            Export
+        </x-button>
+        <x-button variant="primary">
+            <i class='bx bx-plus mr-1'></i>
+            Add Employee
+        </x-button>
+    </div>
+</x-page-header>
+<x-navigation-layout.tabs-modern
+:tabs="[
+    ['id' => 'modern1', 'label' => 'Overview', 'icon' => 'bx-home'],
+    ['id' => 'modern2', 'label' => 'Requests', 'icon' => 'bx-calendar'],
+    ['id' => 'modern3', 'label' => 'Settings', 'icon' => 'bx-cog']
+]"
+defaultTab="modern1"
+>
+@slot('slot_modern1')
+    <div>
+        <h4 class="text-lg font-semibold mb-2">Overview</h4>
+        <p>This is the overview tab content. You can place any Blade or HTML here.</p>
+    </div>
+@endslot
+@slot('slot_modern2')
+    <div>
+        <h4 class="text-lg font-semibold mb-2">Requests</h4>
+        <p>This is the requests tab content. You can place any Blade or HTML here.</p>
+    </div>
+@endslot
+@slot('slot_modern3')
+    <div>
+        <h4 class="text-lg font-semibold mb-2">Settings</h4>
+        <p>This is the settings tab content. You can place any Blade or HTML here.</p>
+    </div>
+@endslot
+</x-navigation-layout.tabs-modern>
+
+    {{-- <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold mb-8">Component Showcase</h1>
 
         <!-- Buttons Section -->
@@ -192,6 +232,39 @@
             </div>
         </section>
 
+        <!-- Tab Components Section -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Tab Components</h2>
+            <div class="p-4 bg-white rounded-lg shadow">
+                <x-navigation-layout.tabs
+                    :tabs="[
+                        ['id' => 'tab1', 'label' => 'Tab One', 'icon' => 'bx-home'],
+                        ['id' => 'tab2', 'label' => 'Tab Two', 'icon' => 'bx-user'],
+                        ['id' => 'tab3', 'label' => 'Tab Three', 'icon' => 'bx-cog']
+                    ]"
+                    defaultTab="tab1"
+                >
+                    @slot('slot_tab1')
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">Tab One Content</h4>
+                            <p>This is the content for Tab One. You can put any Blade or HTML here.</p>
+                        </div>
+                    @endslot
+                    @slot('slot_tab2')
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">Tab Two Content</h4>
+                            <p>This is the content for Tab Two. You can put any Blade or HTML here.</p>
+                        </div>
+                    @endslot
+                    @slot('slot_tab3')
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">Tab Three Content</h4>
+                            <p>This is the content for Tab Three. You can put any Blade or HTML here.</p>
+                        </div>
+                    @endslot
+                </x-navigation-layout.tabs>
+            </div>
+        </section>
         <!-- Table Components Section -->
         <section class="mb-12">
             <h2 class="text-2xl font-semibold mb-4">Table Components</h2>
@@ -212,5 +285,8 @@
                 </x-table.table>
             </div>
         </section>
-    </div>
+
+        <!-- Page Header Section -->
+                
+    </div> --}}
     @endsection

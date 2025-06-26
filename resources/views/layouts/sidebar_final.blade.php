@@ -277,8 +277,9 @@
     </aside>
 
     <!-- Navbar -->
+    {{-- shadow-lg --}}
     <nav id="navbar"
-        class="bg-white shadow-lg border-b border-gray-200 fixed top-0 right-0 z-40 transition-all duration-300 ease-in-out overflow-x-hidden">
+        class="bg-white border-b border-gray-200 fixed top-0 right-0 z-40 transition-all duration-300 ease-in-out overflow-x-hidden">
         <div class="navbar-container w-full mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out">
             <div class="flex justify-between items-center h-16 w-full">
                 <div class="flex items-center space-x-4">
