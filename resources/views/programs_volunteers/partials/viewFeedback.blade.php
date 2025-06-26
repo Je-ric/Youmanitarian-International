@@ -1,11 +1,11 @@
 <div class="w-full">
     <!-- Header -->
-    <div class="mb-8">
+    {{-- <div class="mb-8">
         <h1 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">
             "{{ $program->title }}"
         </h1>
         <p class="text-gray-600">Review and analyze participant feedback for this program</p>
-    </div>
+    </div> --}}
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {{-- Left: Summary Card --}}

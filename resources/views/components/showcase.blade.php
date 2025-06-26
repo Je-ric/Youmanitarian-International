@@ -22,24 +22,26 @@
 ]"
 defaultTab="modern1"
 >
-@slot('slot_modern1')
-    <div>
-        <h4 class="text-lg font-semibold mb-2">Overview</h4>
-        <p>This is the overview tab content. You can place any Blade or HTML here.</p>
-    </div>
-@endslot
-@slot('slot_modern2')
-    <div>
-        <h4 class="text-lg font-semibold mb-2">Requests</h4>
-        <p>This is the requests tab content. You can place any Blade or HTML here.</p>
-    </div>
-@endslot
-@slot('slot_modern3')
-    <div>
-        <h4 class="text-lg font-semibold mb-2">Settings</h4>
-        <p>This is the settings tab content. You can place any Blade or HTML here.</p>
-    </div>
-@endslot
+<div class="container mx-auto px-4 py-8">
+    @slot('slot_modern1')
+        <div>
+            <h4 class="text-lg font-semibold mb-2">Overview</h4>
+            <p>This is the overview tab content. You can place any Blade or HTML here.</p>
+        </div>
+    @endslot
+    @slot('slot_modern2')
+        <div>
+            <h4 class="text-lg font-semibold mb-2">Requests</h4>
+            <p>This is the requests tab content. You can place any Blade or HTML here.</p>
+        </div>
+    @endslot
+    @slot('slot_modern3')
+        <div>
+            <h4 class="text-lg font-semibold mb-2">Settings</h4>
+            <p>This is the settings tab content. You can place any Blade or HTML here.</p>
+        </div>
+    @endslot
+</div>
 </x-navigation-layout.tabs-modern>
 
     {{-- <div class="container mx-auto px-4 py-8">

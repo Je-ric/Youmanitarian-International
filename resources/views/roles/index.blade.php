@@ -17,14 +17,9 @@
             background: #666;
         }
     </style>
-
-    <div class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
-        <div class="mb-4 sm:mb-8">
-            <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-[#1a2235] mb-1 sm:mb-2">
-                Role Management
-            </h1>
-            <p class="text-sm sm:text-base text-gray-600">Manage user roles and permissions</p>
-        </div>
+    <x-page-header icon="bx-calendar-event" title="Role Management"
+        desc="Manage user roles and permissions">
+    </x-page-header>
 
         @php
             $tabs = [
@@ -33,7 +28,7 @@
             ];
         @endphp
 
-        <x-navigation-layout.tabs
+        <x-navigation-layout.tabs-modern
             :tabs="$tabs"
             default-tab="{{ request()->query('tab', 'users') }}"
         >
@@ -97,6 +92,5 @@
             <x-slot:slot_overview>
                 @include('roles.partials.rolesOverview')
             </x-slot>
-        </x-navigation-layout.tabs>
-    </div>
+        </x-navigation-layout.tabs-modern>
 @endsection 

@@ -1,8 +1,8 @@
 @props([
-    'tabs' => [], // Array of tab items with 'id', 'label', 'icon' keys (icon optional)
-    'defaultTab' => null, // Default active tab
-    'preserveState' => true, // Whether to preserve tab state in URL
-    'class' => '', // Additional classes for the tabs container
+    'tabs' => [], 
+    'defaultTab' => null,
+    'preserveState' => true,
+    'class' => '', 
 ])
 
 @php
@@ -20,16 +20,16 @@
         @endif
     }
 }" class="{{ $class }}">
-    <!-- Modern Tab Navigation -->
-    <div class="border-b border-gray-200 mb-6">
-        <nav class="-mb-px flex px-4 space-x-8" aria-label="Tabs">
+
+    <div class="border-b border-gray-200">
+        <nav class="-mb-px flex px-2 sm:px-4 space-x-4 sm:space-x-8 overflow-x-auto min-w-max scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent" aria-label="Tabs">
             @foreach($tabs as $tab)
                 <button type="button"
                     @click="setTab('{{ $tab['id'] }}')"
-                    :class="activeTab === '{{ $tab['id'] }}' 
-                        ? 'border-[#ffb51b] text-[#ffb51b] font-semibold border-b-2' 
-                        : 'border-transparent text-gray-500 hover:text-[#1a2235] hover:border-[#1a2235]'"
-                    class="whitespace-nowrap py-2 px-3 border-b-2 text-sm transition-all duration-200 focus:outline-none flex items-center gap-2">
+                    :class="activeTab === '{{ $tab['id'] }}'
+                        ? 'border-b-2 border-[#1a2235] text-[#1a2235] font-semibold'
+                        : 'border-b-0 text-gray-500 hover:text-[#ffb51b] hover:border-b-2 hover:border-[#ffb51b]'"
+                    class="whitespace-nowrap py-2 px-3 text-sm transition-all duration-200 focus:outline-none flex items-center gap-2">
                     @if(isset($tab['icon']))
                         <i class="bx {{ $tab['icon'] }} text-base"></i>
                     @endif
@@ -39,8 +39,7 @@
         </nav>
     </div>
 
-    <!-- Tab Content -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6">
+    <div class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
         @foreach($tabIds as $tabId)
             <div x-show="activeTab === '{{ $tabId }}'"
                 x-transition:enter="transition ease-out duration-200"

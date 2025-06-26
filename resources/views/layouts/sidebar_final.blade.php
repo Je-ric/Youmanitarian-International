@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {{-- <title>Professional Sidebar Component</title> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @vite(['resources/css/editors.css'])
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -360,8 +359,8 @@
 
     <!-- Main Content -->
     <div id="mainContent" class="main-content pt-16">
-        <div class="container mx-auto px-4 py-4">
-            <x-navigation-layout.breadcrumb :items="[
+        <div class="container mx-auto">
+           <x-navigation-layout.breadcrumb :items="[
         ['label' => 'Dashboard', 'url' => route('dashboard')],
         ...(request()->routeIs('content.*') ? [
             ['label' => 'Content Management', 'url' => route('content.content_view')],
@@ -373,7 +372,7 @@
             ...(request()->routeIs('programs.create') ? [['label' => 'Create Program']] : []),
             ...(request()->routeIs('programs.edit') ? [['label' => 'Edit Program']] : []),
             ...(request()->routeIs('programs.view') ? [['label' => 'Attendance']] : []),
-            ...(request()->routeIs('programs.manage_volunteers') ? [['label' => 'Manage Program & Volunteers']] : []),            
+            ...(request()->routeIs('programs.manage_volunteers') ? [['label' => 'Manage']] : []),            
         ] : []),
         ...(request()->routeIs('volunteers.*') ? [
             ['label' => 'Volunteers', 'url' => route('volunteers.index')],
@@ -387,7 +386,7 @@
             ...(request()->routeIs('finance.membership.payments') ? [['label' => 'Membership Payments']] : []),
             ...(request()->routeIs('members.index*') ? [['label' => 'Members']] : []),
         ] : []),
-    ]" />
+    ]" /> 
         </div>
 
         @if (session('toast'))

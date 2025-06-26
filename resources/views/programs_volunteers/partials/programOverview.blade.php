@@ -1,6 +1,4 @@
-<!-- Program Statistics -->
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-    <!-- Total Volunteers -->
     <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
         <div class="flex items-center justify-between">
             <div>
@@ -13,7 +11,6 @@
         </div>
     </div>
 
-    <!-- Active Tasks -->
     <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
         <div class="flex items-center justify-between">
             <div>
@@ -27,7 +24,6 @@
         </div>
     </div>
 
-    <!-- Completed Tasks -->
     <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
         <div class="flex items-center justify-between">
             <div>
@@ -41,7 +37,6 @@
         </div>
     </div>
 
-    <!-- Average Rating -->
     <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
         <div class="flex items-center justify-between">
             <div>
@@ -55,13 +50,10 @@
     </div>
 </div>
 
-<!-- Program Details -->
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-6">
-    <!-- Program Information -->
     <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
         <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Attendance Overview</h3>
         <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:space-y-4">
-            <!-- Total Attendance Records -->
             <div class="bg-blue-50 p-2 sm:p-4 rounded-lg">
                 <div class="flex justify-between items-center">
                     <div>
@@ -75,7 +67,6 @@
                 </div>
             </div>
 
-            <!-- Volunteers Without Records -->
             <div class="bg-yellow-50 p-2 sm:p-4 rounded-lg">
                 <div class="flex justify-between items-center">
                     <div>
@@ -90,11 +81,9 @@
                 </div>
             </div>
 
-            <!-- Approval Status Breakdown -->
             <div class="col-span-2 sm:col-span-1">
                 <h4 class="text-xs sm:text-sm font-medium text-gray-700 mb-2">Status Breakdown</h4>
                 <div class="grid grid-cols-3 gap-2">
-                    <!-- Approved -->
                     <div class="bg-green-50 p-2 rounded-lg">
                         <div class="flex items-center gap-1 mb-1">
                             <span class="w-2 h-2 rounded-full bg-green-500"></span>
@@ -103,7 +92,6 @@
                         <span
                             class="text-base font-semibold text-green-700">{{ $attendanceOverview['approvedCount'] }}</span>
                     </div>
-                    <!-- Pending -->
                     <div class="bg-yellow-50 p-2 rounded-lg">
                         <div class="flex items-center gap-1 mb-1">
                             <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
@@ -112,7 +100,6 @@
                         <span
                             class="text-base font-semibold text-yellow-700">{{ $attendanceOverview['pendingCount'] }}</span>
                     </div>
-                    <!-- Rejected -->
                     <div class="bg-red-50 p-2 rounded-lg">
                         <div class="flex items-center gap-1 mb-1">
                             <span class="w-2 h-2 rounded-full bg-red-500"></span>
@@ -126,7 +113,6 @@
         </div>
     </div>
 
-    <!-- Recent Activity -->
     <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
         <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Recent Activity</h3>
         <div class="max-h-[300px] sm:max-h-[400px] overflow-y-auto pr-2">
