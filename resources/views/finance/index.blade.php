@@ -1,4 +1,4 @@
-@extends('layouts.sidebar_final')
+{{-- @extends('layouts.sidebar_final')
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
@@ -73,4 +73,4 @@
         </div>
     </div>
 </div>
-@endsection
+@endsection --}}

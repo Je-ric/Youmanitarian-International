@@ -168,14 +168,14 @@
                             class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
                     </h3>
                     <ul class="space-y-1">
-                        <li>
+                        {{-- <li>
                             <a href="{{ route('finance.index') }}"
                                 class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('finance.index') ? 'active' : '' }}"
                                 data-tooltip="Finance Dashboard">
                                 <i class="bx bx-line-chart w-5 text-center flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-content text-sm">Finance Dashboard</span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li>
                             <a href="{{ route('finance.donations') }}"
                                 class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('finance.donations') ? 'active' : '' }}"
