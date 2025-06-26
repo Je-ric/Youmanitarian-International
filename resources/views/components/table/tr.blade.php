@@ -5,10 +5,7 @@
 ])
 
 @php
-    $baseClasses = 'border-b border-gray-100';
-    if ($hover) {
-        $baseClasses .= ' hover:bg-[#D1D3D7] transition-colors duration-150';
-    }
+    $baseClasses = 'group border border-gray-200';
     $classes = trim($baseClasses . ' ' . $class);
 @endphp
 

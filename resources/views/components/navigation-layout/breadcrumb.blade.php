@@ -9,7 +9,7 @@
                         <i class="bx bx-chevron-right text-gray-400"></i>
                     @endif
                     @if(isset($item['url']))
-                        <a href="{{ $item['url'] }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white">
+                        <a href="{{ $item['url'] }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-[#ffb51b] md:ml-2 dark:text-gray-400 dark:hover:text-white">
                             @if($loop->first)
                                 <i class="bx bxs-home mr-2"></i>
                             @endif

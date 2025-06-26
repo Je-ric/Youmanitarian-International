@@ -5,7 +5,7 @@
 ])
 
 @php
-    $baseClasses = 'px-4 py-3 text-left font-bold uppercase tracking-wider text-xs';
+    $baseClasses = 'px-4 py-3 text-left font-semibold uppercase tracking-wider text-xs';
     if ($hideOnSmall) {
         $baseClasses .= ' hidden sm:table-cell';
     }
