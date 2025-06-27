@@ -8,6 +8,7 @@ use App\Models\ContentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ContentController extends Controller
 {
@@ -96,6 +97,7 @@ class ContentController extends Controller
             'created_by' => $user_id,
             'status' => $validated['status'],
             'image_content' => $image_path,
+            'slug' => Str::slug($validated['title']),
         ]);
 
         // Multiple Image 

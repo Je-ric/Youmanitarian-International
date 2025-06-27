@@ -36,34 +36,26 @@ Schema::create('roles', function (Blueprint $table) {
             $table->timestamps();
         });
 
+
+
         Schema::create('content', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->text('body');
-            $table->string('image_content')->nullable();
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
-            $table->enum('type', ['news', 'program'])->default('news');
-$table->enum('approval_status', ['pending', 'approved', 'rejected', needs_revision])->default('pending');
-$table->unsignedBigInteger('created_by'); // the user who made the content
-$table->unsignedBigInteger('approved_by')->nullable();
-$table->timestamp('approved_at')->nullable();
-
-
-$table->string('slug')->unique();
-            $table->integer('views')->default(0);
-
-$table->boolean('enable_likes')->default(true);
-$table->boolean('enable_comments')->default(true);
-$table->boolean('enable_bookmark')->default(true);
-
-$table->foreignId('request_id')->nullable()->after('created_by')->constrained('content_requests')->onDelete('set null');
-
-       remove   
-            --$table->foreignId('locked_by')->nullable()->constrained('users')->nullOnDelete();
-            --$table->timestamp('locked_at')->nullable();
-            $table->timestamps();
-        });
+    $table->id();
+    $table->string('title');
+    $table->text('body');
+    $table->string('image_content')->nullable();
+    $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+    $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
+    $table->enum('type', ['news', 'program','announcement','event','article','blog'])->default('news')->index();
+    $table->enum('approval_status', ['pending', 'approved', 'rejected', 'needs_revision'])->default('pending');
+    $table->unsignedBigInteger('approved_by')->nullable();
+    $table->timestamp('approved_at')->nullable();
+    $table->string('slug')->unique();
+    $table->integer('views')->default(0);
+    $table->boolean('enable_likes')->default(true);
+    $table->boolean('enable_comments')->default(true);
+    $table->boolean('enable_bookmark')->default(true);
+    $table->timestamps();
+});
 
 
 Schema::create('bookmarks', function (Blueprint $table) {
@@ -79,25 +71,7 @@ Schema::create('bookmarks', function (Blueprint $table) {
             $table->timestamp('uploaded_at')->useCurrent();
         });
 
-        Schema::create('content_requests', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->foreignId('requested_by')->constrained('users')->onDelete('cascade');
-$table->enum('urgency_level', ['low', 'medium', 'high'])->default('medium');
-$table->date('expected_publication_date')->nullable()->after('description');
-            $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
-            $table->text('notes')->nullable();
-            $table->timestamps();
-        });
-
-        Schema::create('content_request_images', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('request_id')->constrained('content_requests')->onDelete('cascade');
-            $table->string('image_url');
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->nullable()->after('created_at');
-        });
+   
 
          Schema::create('heart_reacts', function (Blueprint $table) {
             $table->id();
@@ -131,6 +105,26 @@ Schema::create('content_review_comments', function (Blueprint $table) {
             // Foreign Keys
             $table->foreign('content_id')->references('id')->on('content')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+
+             Schema::create('content_requests', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('description');
+            $table->foreignId('requested_by')->constrained('users')->onDelete('cascade');
+$table->enum('urgency_level', ['low', 'medium', 'high'])->default('medium');
+$table->date('expected_publication_date')->nullable()->after('description');
+            $table->enum('status', ['pending', 'in_progress', 'completed'])->default('pending');
+            $table->text('notes')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('content_request_images', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('request_id')->constrained('content_requests')->onDelete('cascade');
+            $table->string('image_url');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable()->after('created_at');
         });
 
      
