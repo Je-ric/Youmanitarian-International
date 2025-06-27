@@ -26,3 +26,7 @@
         {{ $text }}
     </button>
 @endif 
+
+{{--
+    Usage: <x-modal.close-button :modalId="$yourModalId" text="Cancel" variant="cancel" />
+--}}

@@ -9,74 +9,74 @@
 @endphp
 
 <x-modal.dialog id="uploadProofModal" maxWidth="max-w-lg" width="w-11/12" maxHeight="max-h-[90vh]">
-    <x-modal.header>
-        <h3 class="text-2xl font-bold text-slate-900 tracking-tight">Upload Proof of Attendance</h3>
-    </x-modal.header>
+        <x-modal.header>
+            <h3 class="text-2xl font-bold text-slate-900 tracking-tight">Upload Proof of Attendance</h3>
+        </x-modal.header>
 
-    @if ($proofPath)
-        <div class="p-6 space-y-6 overflow-y-auto flex-1">
-            <div class="space-y-4">
-                <div class="border-b border-slate-200 pb-4">
-                    <p class="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                        <i class='bx bx-check-circle text-green-500'></i>
-                        Your uploaded proof:
-                    </p>
-                </div>
-
-                <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
-                    <img src="{{ asset('storage/' . $proofPath) }}" alt="Proof of Attendance"
-                        class="w-full max-w-sm rounded-lg border border-slate-300 mb-4 object-contain mx-auto">
-
-                    <div class="text-center">
-                        <a href="{{ asset('storage/' . $proofPath) }}" target="_blank"
-                            class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200">
-                            <i class='bx bx-external-link'></i>
-                            View Full Size
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <x-modal.footer>
-            <x-modal.close-button :modalId="'uploadProofModal'" text="Close" />
-        </x-modal.footer>
-    @else
-        <form method="POST" action="{{ route('attendance.uploadProof', $program->id) }}" enctype="multipart/form-data"
-            class="flex flex-col flex-1 min-h-0">
-            @csrf
-
+        @if ($proofPath)
             <div class="p-6 space-y-6 overflow-y-auto flex-1">
                 <div class="space-y-4">
                     <div class="border-b border-slate-200 pb-4">
-                        <p class="text-sm text-slate-600">Please upload an image as proof of your attendance at this
-                            program.</p>
+                        <p class="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                            <i class='bx bx-check-circle text-green-500'></i>
+                            Your uploaded proof:
+                        </p>
                     </div>
 
-                    <div class="space-y-3">
-                        <label for="proof_image" class="block text-sm font-semibold text-slate-700">
-                            Upload Image:
-                        </label>
-                        {{-- <div class="bg-slate-50 border border-slate-200 rounded-lg p-4"> --}}
-                            <x-form.input-upload name="proof_image" id="proof_image" accept="image/*" required>
-                                PNG, JPG up to 10MB
-                            </x-form.input-upload>
-                            {{--
-                        </div> --}}
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
+                        <img src="{{ asset('storage/' . $proofPath) }}" alt="Proof of Attendance"
+                            class="w-full max-w-sm rounded-lg border border-slate-300 mb-4 object-contain mx-auto">
+
+                        <div class="text-center">
+                            <a href="{{ asset('storage/' . $proofPath) }}" target="_blank"
+                                class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200">
+                                <i class='bx bx-external-link'></i>
+                                View Full Size
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <x-modal.footer>
-                <x-modal.close-button :modalId="'uploadProofModal'" text="Cancel" variant="cancel" />
-
-                <x-button type="submit" variant="save-entry">
-                    <i class='bx bx-upload'></i>
-                    Upload
-                </x-button>
+                <x-modal.close-button :modalId="'uploadProofModal'" text="Close" />
             </x-modal.footer>
-        </form>
-    @endif
+        @else
+            <form method="POST" action="{{ route('attendance.uploadProof', $program->id) }}" enctype="multipart/form-data"
+                class="flex flex-col flex-1 min-h-0">
+                @csrf
+
+                <div class="p-6 space-y-6 overflow-y-auto flex-1">
+                    <div class="space-y-4">
+                        <div class="border-b border-slate-200 pb-4">
+                            <p class="text-sm text-slate-600">Please upload an image as proof of your attendance at this
+                                program.</p>
+                        </div>
+
+                        <div class="space-y-3">
+                            <label for="proof_image" class="block text-sm font-semibold text-slate-700">
+                                Upload Image:
+                            </label>
+                            {{-- <div class="bg-slate-50 border border-slate-200 rounded-lg p-4"> --}}
+                                <x-form.input-upload name="proof_image" id="proof_image" accept="image/*" required>
+                                    PNG, JPG up to 10MB
+                                </x-form.input-upload>
+                                {{--
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
+
+                <x-modal.footer>
+                    <x-modal.close-button :modalId="'uploadProofModal'" text="Cancel" variant="cancel" />
+
+                    <x-button type="submit" variant="save-entry">
+                        <i class='bx bx-upload'></i>
+                        Upload
+                    </x-button>
+                </x-modal.footer>
+            </form>
+        @endif
 </x-modal.dialog>
 
 <style>

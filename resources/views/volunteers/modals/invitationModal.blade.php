@@ -31,10 +31,11 @@
                 <!-- Membership Type -->
                 <div>
                     <x-form.label for="membership_type">Membership Type</x-form.label>
-                    <select id="membership_type" name="membership_type" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
-                        <option value="full_pledge">Full-Pledge</option>
-                        <option value="honorary">Honorary</option>
-                    </select>
+                    <x-form.radio-group
+                        name="membership_type"
+                        :options="['full_pledge' => 'Full-Pledge', 'honorary' => 'Honorary']"
+                        :selected="old('membership_type')"
+                    />
                 </div>
 
                 <!-- Template Selection -->
@@ -43,16 +44,16 @@
                         Message Template
                         <span class="text-xs font-normal text-gray-500">(Click to use a template)</span>
                     </x-form.label>
-                    <div class="mt-1 space-y-2">
+                    <x-form.button-group class="mt-1">
                         @foreach($templateMessages as $index => $template)
                             <button type="button"
                                 x-on:click="message = $el.getAttribute('data-message')"
                                 data-message="{{ $template }}"
-                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-md transition-colors">
-                                Template {{ $index + 1 }}
+                                class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ffb51b] transition-colors">
+                                Template #{{ $index + 1 }}
                             </button>
                         @endforeach
-                    </div>
+                    </x-form.button-group>
                 </div>
 
                 <!-- Invitation Message -->
@@ -67,10 +68,8 @@
 
             <!-- Footer -->
             <x-modal.footer>
-                <x-button type="button" variant="secondary" onclick="document.getElementById('invitationModal').close()">
-                    Cancel
-                </x-button>
-                <x-button type="submit" variant="primary" class="w-full">
+                <x-modal.close-button :modalId="'invitationModal'" text="Cancel" variant="cancel" />
+                <x-button type="submit" variant="primary">
                     <i class='bx bx-mail-send'></i>
                     Send Invitation
                 </x-button>
