@@ -9,19 +9,29 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Content extends Model
 {
     use HasFactory;
-    protected $table = 'content';
+    protected $table = 'contents';
 
     protected $fillable = [
         'title',
-        'type',
         'body',
-        'status',
         'image_content',
         'created_by',
-        'request_id'
+        'content_status',
+        'content_type',
+        'approval_status',
+        'approved_by',
+        'approved_at',
+        'slug',
+        'views',
+        'enable_likes',
+        'enable_comments',
+        'enable_bookmark',
+        'published_at',
+        'is_featured',
+        'meta_title',
+        'meta_description',
     ];
 
-    // relationship with ContentRequest
     public function contentRequest()
     {
         return $this->belongsTo(ContentRequest::class, 'request_id');

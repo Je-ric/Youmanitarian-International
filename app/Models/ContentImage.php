@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class ContentImage extends Model
 {
     //
-    protected $fillable = ['content_id', 'image_path'];
+    protected $fillable = ['content_id', 'image_path', 'uploaded_at'];
 
-    public $timestamps = false; //prevent Laravel inserting updated_at
+    public $timestamps = false; 
     public function content()
     {
         return $this->belongsTo(Content::class, 'content_id');
     }
 
     protected $casts = [
-        'uploaded_at' => 'datetime', // Ensure uploaded_at is treated as a date
+        'uploaded_at' => 'datetime', 
     ];
 
 }
