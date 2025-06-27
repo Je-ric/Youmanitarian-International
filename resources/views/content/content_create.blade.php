@@ -233,21 +233,35 @@
             </div>
         </div> --}}
 
-    
-        <link rel="stylesheet" href="{{ asset('css/editor.css') }}">
-        @vite('resources/js/editors.js')
+        <!-- Summernote CSS/JS -->
+        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
         
         <div class="form-control mb-6">
             <label class="label">
                 <span class="label-text font-semibold text-[#1a2235]">Body</span>
             </label>
             <div>
-                <div id="editor-menu-bar"></div>
-                <div id="editor"></div>
+                <textarea id="editor" class="textarea textarea-bordered w-full h-64 bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b] pl-10">{{ old('body', $content->body ?? '') }}</textarea>
                 <input type="hidden" name="body" id="body" value="{{ old('body', $content->body ?? '') }}">
-                <div id="editor-word-count" class="mt-2"></div>
             </div>
         </div>
+        <script>
+            $(document).ready(function() {
+                $('#editor').summernote({
+                    height: 300,
+                    placeholder: 'Write your content here...',
+                    callbacks: {
+                        onChange: function(contents, $editable) {
+                            $('#body').val(contents);
+                        }
+                    }
+                });
+                // Set initial value
+                $('#body').val($('#editor').summernote('code'));
+            });
+        </script>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div class="form-control">
