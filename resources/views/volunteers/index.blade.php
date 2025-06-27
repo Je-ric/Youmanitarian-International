@@ -46,6 +46,7 @@
                     <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="w-full min-w-[640px]">
                         <x-table.thead>
                             <x-table.tr :hover="false">
+                                <x-table.th class="w-10 text-center">#</x-table.th>
                                 <x-table.th>Name</x-table.th>
                                 <x-table.th>Email</x-table.th>
                                 <x-table.th>Actions</x-table.th>
@@ -54,6 +55,7 @@
                         <x-table.tbody>
                                 @foreach($applications as $volunteer)
                                 <x-table.tr>
+                                    <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration }}</x-table.td>
                                     <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name }}</x-table.td>
                                     <x-table.td>{{ $volunteer->user->email }}</x-table.td>
                                     <x-table.td>
@@ -99,6 +101,7 @@
                     <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="w-full min-w-[640px]">
                         <x-table.thead>
                             <x-table.tr :hover="false">
+                                <x-table.th class="w-10 text-center">#</x-table.th>
                                 <x-table.th>Name</x-table.th>
                                 <x-table.th>Email</x-table.th>
                                 <x-table.th>Actions</x-table.th>
@@ -107,6 +110,7 @@
                         <x-table.tbody>
                                 @foreach($deniedApplications as $volunteer)
                                 <x-table.tr>
+                                    <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration }}</x-table.td>
                                     <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name }}</x-table.td>
                                     <x-table.td>{{ $volunteer->user->email }}</x-table.td>
                                     <x-table.td>
@@ -137,6 +141,7 @@
                     <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="w-full min-w-[640px]">
                         <x-table.thead>
                             <x-table.tr :hover="false">
+                                <x-table.th class="w-10 text-center">#</x-table.th>
                                 <x-table.th>Name</x-table.th>
                                 <x-table.th>Email</x-table.th>
                                 <x-table.th>Joined At</x-table.th>
@@ -146,6 +151,7 @@
                         <x-table.tbody>
                                 @foreach($approvedVolunteers as $volunteer)
                                 <x-table.tr>
+                                    <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration }}</x-table.td>
                                     <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name ?? 'N/A' }}</x-table.td>
                                     <x-table.td>{{ $volunteer->user->email ?? 'N/A' }}</x-table.td>
                                     <x-table.td>{{ $volunteer->created_at->format('M d, Y') }}</x-table.td>

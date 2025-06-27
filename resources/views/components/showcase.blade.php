@@ -274,12 +274,14 @@ defaultTab="modern1"
                 <x-table.table>
                     <thead>
                         <tr>
+                            <x-table.th class="w-10 text-center">#</x-table.th>
                             <x-table.th>Header 1</x-table.th>
                             <x-table.th>Header 2</x-table.th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration }}</x-table.td>
                             <x-table.td>Content 1</x-table.td>
                             <x-table.td>Content 2</x-table.td>
                         </tr>

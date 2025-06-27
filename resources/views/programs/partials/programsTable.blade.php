@@ -8,7 +8,7 @@
     <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="w-full">
         <x-table.thead>
             <x-table.tr :hover="false">
-                <x-table.th align="right">#</x-table.th>
+                <x-table.th class="w-10 text-center">#</x-table.th>
                 <x-table.th class="cursor-pointer hover:bg-gray-200/50 transition-colors" onclick="sortTable('title')">
                     <div class="flex items-center gap-1">
                         Title <i class='bx bx-sort text-sm text-gray-400'></i>
@@ -27,7 +27,7 @@
         <x-table.tbody class="bg-white">
             @foreach($programs as $program)
                 <x-table.tr>
-                    <x-table.td align="right" class="text-gray-500">
+                    <x-table.td class="w-10 text-center text-gray-500">
                         {{ $loop->iteration + ($programs->currentPage() - 1) * $programs->perPage() }}
                     </x-table.td>
                     <x-table.td class="font-bold text-gray-800">{{ $program->title }}</x-table.td>

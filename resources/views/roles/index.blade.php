@@ -36,6 +36,7 @@
                     <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="min-w-full">
                         <x-table.thead>
                             <x-table.tr :hover="false">
+                                <x-table.th class="w-10 text-center">#</x-table.th>
                                 <x-table.th>User</x-table.th>
                                 <x-table.th>Current Roles</x-table.th>
                                 <x-table.th>Actions</x-table.th>
@@ -44,6 +45,7 @@
                         <x-table.tbody>
                             @foreach($users as $user)
                                 <x-table.tr>
+                                    <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration + ($users->currentPage() - 1) * $users->perPage() }}</x-table.td>
                                     <x-table.td>
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">

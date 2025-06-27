@@ -2,6 +2,7 @@
     <x-table.table containerClass="overflow-x-auto" tableClass="min-w-full">
         <x-table.thead>
             <x-table.tr :hover="false">
+                <x-table.th class="w-10 text-center">#</x-table.th>
                 <x-table.th>Name</x-table.th>
                 <x-table.th>Membership Type</x-table.th>
                 <x-table.th>Start Date</x-table.th>
@@ -13,6 +14,7 @@
         <x-table.tbody>
             @forelse($members as $member)
                 <x-table.tr>
+                    <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration + ($members->currentPage() - 1) * $members->perPage() }}</x-table.td>
                     <x-table.td>
                         <div class="text-sm font-bold text-gray-800">{{ $member->user->name }}</div>
                         <div class="text-sm text-gray-500">{{ $member->user->email }}</div>

@@ -4,7 +4,7 @@
     <x-table.table tableClass="min-w-full bg-white" containerClass="overflow-hidden">
         <x-table.thead>
             <x-table.tr :hover="false">
-                <x-table.th align="right">#</x-table.th>
+                <x-table.th class="w-10 text-center">#</x-table.th>
                 <x-table.th>Name</x-table.th>
                 <x-table.th>Clock In</x-table.th>
                 <x-table.th>Clock Out</x-table.th>
@@ -16,7 +16,7 @@
             @foreach($program->volunteers as $volunteer)
                 @if($volunteer->pivot->status == 'approved')
                     <x-table.tr>
-                        <x-table.td align="right" class="text-gray-500">{{ $loop->iteration }}</x-table.td>
+                        <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration }}</x-table.td>
                         <x-table.td class="font-bold text-gray-800">
                             {{ $volunteer->user->name }}
                         </x-table.td>
