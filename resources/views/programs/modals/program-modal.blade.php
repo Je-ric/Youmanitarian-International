@@ -1,4 +1,4 @@
-<div id="modal-overlay-{{ $program->id }}" class="fixed inset-0 bg-slate-900/20 backdrop-blur-sm hidden z-40"></div>
+{{-- <div id="modal-overlay-{{ $program->id }}" class="fixed inset-0 bg-slate-900/20 backdrop-blur-sm hidden z-40"></div> --}}
 
 <x-modal.dialog id="modal_{{ $program->id }}" maxWidth="max-w-6xl" width="w-11/12" maxHeight="max-h-[90vh]">
         <!-- Header -->

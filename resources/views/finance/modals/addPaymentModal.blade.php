@@ -12,7 +12,6 @@
         ->where('payment_year', $currentYear)
         ->first();
 
-    // Set default modalId if not provided
     $modalId = $modalId ?? 'addPaymentModal';
 @endphp
 
