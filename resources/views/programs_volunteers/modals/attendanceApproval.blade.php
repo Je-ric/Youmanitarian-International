@@ -1,6 +1,4 @@
-<dialog id="attendanceModal_{{ $volunteer->id }}" class="modal">
-    <div class="modal-box max-w-4xl w-full p-0 rounded-lg bg-white">
-
+<x-modal.dialog id="attendanceModal_{{ $volunteer->id }}" maxWidth="max-w-4xl" width="w-full" maxHeight="max-h-[90vh]">
         <!-- Modal Header -->
         <x-modal.header>
             <div>
@@ -214,8 +212,7 @@
         <x-modal.footer>
             <x-modal.close-button :modalId="'attendanceModal_' . $volunteer->id" text="Close" />
         </x-modal.footer>
-    </div>
-</dialog>
+</x-modal.dialog>
 
 <style>
     /* Line clamp utility for task descriptions */

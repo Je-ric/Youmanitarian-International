@@ -1,5 +1,5 @@
-<dialog id="invitationModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="invitation-modal-title">
-    <div x-data="{ message: '' }" class="modal-box w-11/12 max-w-lg p-0 overflow-hidden rounded-xl bg-white border border-slate-200">
+<x-modal.dialog id="invitationModal" maxWidth="max-w-lg" width="w-11/12" maxHeight="max-h-[90vh]">
+    <div x-data="{ message: '' }">
         <!-- Header -->
         <x-modal.header>
             <h2 id="invitation-modal-title" class="text-2xl font-bold text-slate-900 tracking-tight">
@@ -58,4 +58,4 @@
              <x-modal.close-button modalId="invitationModal" variant="cancel" text="Cancel" />
         </x-modal.footer>
     </div>
-</dialog>
+</x-modal.dialog>
