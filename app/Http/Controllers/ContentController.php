@@ -65,12 +65,19 @@ class ContentController extends Controller
         $image_max_size = 51200; // 50mb
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'type' => 'required|string',
+            'content_type' => 'required|string',
             'body' => 'required|string',
-            'status' => 'required|in:draft,published',
+            'content_status' => 'required|in:draft,published,archived',
             'image' => "nullable|image|mimes:jpeg,png,jpg,gif|max:$image_max_size",
             'gallery_images' => 'nullable|array',
             'gallery_images.*' => "nullable|image|mimes:jpeg,png,jpg,gif|max:$image_max_size",
+            'enable_likes' => 'nullable|boolean',
+            'enable_comments' => 'nullable|boolean',
+            'enable_bookmark' => 'nullable|boolean',
+            'published_at' => 'nullable|date',
+            'is_featured' => 'nullable|boolean',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:255',
             // 'request_id' => $request_id,
         ]);
 
@@ -80,24 +87,31 @@ class ContentController extends Controller
         //  Single Image 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-
             $sanitized_title = preg_replace('/[^A-Za-z0-9\-]/', '_', $validated['title']);
-            $new_filename = $sanitized_title . '_' . time() . '_' . $file->getClientOriginalName(); //concat title to the image
+            $new_filename = $sanitized_title . '_' . time() . '_' . $file->getClientOriginalName();
             $image_path = $file->storeAs('uploads/content/', $new_filename, 'public');
-
             $validated['image_content'] = $image_path;
         }
 
-
-        // Create Content
         $content = Content::create([
             'title' => $validated['title'],
-            'type' => $validated['type'],
+            'content_type' => $validated['content_type'],
             'body' => $validated['body'],
             'created_by' => $user_id,
-            'status' => $validated['status'],
+            'content_status' => $validated['content_status'],
             'image_content' => $image_path,
             'slug' => Str::slug($validated['title']),
+            'approval_status' => 'pending',
+            'approved_by' => null,
+            'approved_at' => null,
+            'views' => 0,
+            'enable_likes' => $request->boolean('enable_likes', true),
+            'enable_comments' => $request->boolean('enable_comments', true),
+            'enable_bookmark' => $request->boolean('enable_bookmark', true),
+            'published_at' => $validated['published_at'] ?? null,
+            'is_featured' => $request->boolean('is_featured', false),
+            'meta_title' => $validated['meta_title'] ?? null,
+            'meta_description' => $validated['meta_description'] ?? null,
         ]);
 
         // Multiple Image 
@@ -116,7 +130,7 @@ class ContentController extends Controller
         }
 
         // If published and linked to request, mark request as completed
-        if ($validated['status'] === 'published' && $request->filled('request_id')) {
+        if ($validated['content_status'] === 'published' && $request->filled('request_id')) {
             ContentRequest::where('id', $request->request_id)->update(['status' => 'completed']);
         }
 
@@ -139,15 +153,22 @@ class ContentController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
-            'status' => 'required|in:draft,published',
-            'type' => 'required|string',
+            'content_status' => 'required|in:draft,published,archived',
+            'content_type' => 'required|string',
             'image' => "nullable|image|mimes:jpeg,png,jpg,gif|max:$image_max_size",
             'gallery_images' => 'nullable|array',
             'gallery_images.*' => "nullable|image|mimes:jpeg,png,jpg,gif|max:$image_max_size",
+            'enable_likes' => 'nullable|boolean',
+            'enable_comments' => 'nullable|boolean',
+            'enable_bookmark' => 'nullable|boolean',
+            'published_at' => 'nullable|date',
+            'is_featured' => 'nullable|boolean',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:255',
         ]);
 
         $content = Content::findOrFail($id);
-
+        
         // Single Image Update
         if ($request->hasFile('image')) {
             if ($content->image_content) {
@@ -162,10 +183,23 @@ class ContentController extends Controller
         }
 
         // Update Content
-        $content->update($validated);
+        $content->update([
+            'title' => $validated['title'],
+            'content_type' => $validated['content_type'],
+            'body' => $validated['body'],
+            'content_status' => $validated['content_status'],
+            'image_content' => $validated['image_content'],
+            'enable_likes' => $request->boolean('enable_likes', true),
+            'enable_comments' => $request->boolean('enable_comments', true),
+            'enable_bookmark' => $request->boolean('enable_bookmark', true),
+            'published_at' => $validated['published_at'] ?? null,
+            'is_featured' => $request->boolean('is_featured', false),
+            'meta_title' => $validated['meta_title'] ?? null,
+            'meta_description' => $validated['meta_description'] ?? null,
+        ]);
 
         // Check if content request exists and update its status if content is published
-        if ($content->contentRequest && $validated['status'] === 'published') {
+        if ($content->contentRequest && $validated['content_status'] === 'published') {
             $content->contentRequest->update(['status' => 'completed']);
         }
 

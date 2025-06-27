@@ -14,14 +14,14 @@ class WebsiteController extends Controller
 {
     public function index()
     {
-        $featuredPost = Content::where('status', 'published')
+        $featuredPost = Content::where('content_status', 'published')
             ->orderBy('created_at', 'desc')
             ->first();
             
         $latestPosts = collect();
 
         if ($featuredPost) {
-        $latestPosts = Content::where('status', 'published')
+        $latestPosts = Content::where('content_status', 'published')
             ->where('id', '!=', $featuredPost->id)
             ->orderBy('created_at', 'desc')
             ->limit(6)
@@ -33,18 +33,18 @@ class WebsiteController extends Controller
 
     public function viewContent($id)
     {
-        $content = Content::where('id', $id)->where('status', 'published')->firstOrFail();
+        $content = Content::where('id', $id)->where('content_status', 'published')->firstOrFail();
         $content->increment('views'); //views
 
         // multiple images
         $galleryImages = ContentImage::where('content_id', $content->id)->get();
 
         // navigation
-        $prevContent = Content::where('id', '<', $id)->where('status', 'published')->orderBy('id', 'desc')->first();
-        $nextContent = Content::where('id', '>', $id)->where('status', 'published')->orderBy('id', 'asc')->first();
+        $prevContent = Content::where('id', '<', $id)->where('content_status', 'published')->orderBy('id', 'desc')->first();
+        $nextContent = Content::where('id', '>', $id)->where('content_status', 'published')->orderBy('id', 'asc')->first();
 
         // other contents
-        $otherContents = Content::where('id', '!=', $id)->where('status', 'published')->orderBy('created_at', 'desc')->limit(10)->get();
+        $otherContents = Content::where('id', '!=', $id)->where('content_status', 'published')->orderBy('created_at', 'desc')->limit(10)->get();
 
         $comments = ContentComment::where('content_id', $id)->with('user')->latest()->get();
 
