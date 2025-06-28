@@ -109,17 +109,6 @@
                                 <span class="ml-3 sidebar-content text-sm">Program Chats</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('content_requests.requests_view') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('content_requests.*') ? 'active' : '' }}"
-                                data-tooltip="Content Requests">
-                                <i class="bx bx-clipboard w-5 text-center flex-shrink-0"></i>
-                                <span class="ml-3 sidebar-content text-sm">Content Requests</span>
-                                {{-- <span
-                                    class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-red-800 bg-red-100 rounded-full sidebar-content">5</span>
-                                --}}
-                            </a>
-                        </li>
                     </ul>
                 </div>
 

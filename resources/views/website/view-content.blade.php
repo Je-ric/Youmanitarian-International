@@ -125,14 +125,14 @@
         <!-- Previous/Next Navigation -->
         <div class="flex justify-between mt-8">
             @if ($prevContent)
-                <x-link href="{{ route('website.view-content', $prevContent->id) }}"
+                <x-link href="{{ route('website.view-content', $prevContent->slug) }}"
                     variant="nextPrevious">
                     <i class='bx bx-chevron-left'></i> Previous
                 </x-link>
             @endif
         
             @if ($nextContent)
-                <x-link href="{{ route('website.view-content', $nextContent->id) }}"
+                <x-link href="{{ route('website.view-content', $nextContent->slug) }}"
                     variant="nextPrevious">
                     <i class='bx bx-chevron-right'></i> Next
                 </x-link>
@@ -147,7 +147,7 @@
             <ul class="space-y-4">
                 @foreach ($otherContents as $item)
                 <li>
-                    <a href="{{ route('website.view-content', $item->id) }}" 
+                    <a href="{{ route('website.view-content', $item->slug) }}" 
                        class="block p-6 rounded-xl hover:shadow-lg transition-all transform hover:-translate-y-1"
                        style="background: linear-gradient(135deg, {{ $loop->index % 2 == 0 ? '#ffb51b' : '#1a2235' }}, {{ $loop->index % 2 == 0 ? '#e6a017' : '#0e1425' }});">
                         <div class="flex items-center gap-4">

@@ -63,27 +63,16 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/content/{content}', [ContentController::class, 'update'])->name('content.update');
 
     // Delete content - DELETE route should only be for content deletion
-    Route::delete('/content/{content}', [ContentViewController::class, 'destroy'])->name('content.destroy');
+    Route::delete('/content/{content}', [ContentController::class, 'destroy'])->name('content.destroy');
 
     // Gallery image delete (for deleting individual images, not content)
     Route::delete('/content/images/{id}', [ContentController::class, 'destroyImage'])->name('content_images.destroy');
 
-    // Status Updates for Content Requests
-    Route::post('/content/status/update', [ContentViewController::class, 'updateRequestStatus'])->name('content.updateStatus');
-
     // Archive content
-    Route::get('/content/{content}/archive', [ContentViewController::class, 'archiveContent'])->name('content.archive');
+    Route::get('/content/{content}/archive', [ContentController::class, 'archiveContent'])->name('content.archive');
 
     // List
-    Route::get('/content/list', [ContentViewController::class, 'content_index'])->name('content.content_view');
-    Route::get('/content-requests/list', [ContentViewController::class, 'requests_index'])->name('content_requests.requests_view');
-
-    // Content Requests
-    Route::get('/content-requests/create', [ContentRequestController::class, 'create'])->name('content_requests.create');
-    Route::post('/content-requests/create', [ContentRequestController::class, 'store'])->name('content_requests.store');
-
-    // Create content from request 
-    Route::get('/content-requests/{contentId}/convert', [ContentViewController::class, 'create'])->name('content.convert');
+    Route::get('/content/list', [ContentController::class, 'content_index'])->name('content.content_view');
 
     Route::post('/content/{contentId}/react', [HeartReactController::class, 'toggleReact']);
 });
@@ -117,7 +106,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Website Routes
 Route::get('/', [WebsiteController::class, 'index'])->name('website.index');
-Route::get('/content/{id}', [WebsiteController::class, 'viewContent'])->name('website.view-content');
+Route::get('/content/{slug}', [WebsiteController::class, 'viewContent'])->name('website.view-content');
 Route::get('/news', [WebsiteController::class, 'news'])->name('website.news');
 Route::get('/programs', [WebsiteController::class, 'programs'])->name('website.programs');
 Route::get('/sponsors', [WebsiteController::class, 'sponsors'])->name('website.sponsors');

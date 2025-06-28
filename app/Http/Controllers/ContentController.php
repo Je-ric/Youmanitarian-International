@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Content;
 use App\Models\ContentImage;
-use App\Models\ContentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -12,59 +11,30 @@ use Illuminate\Support\Str;
 
 class ContentController extends Controller
 {
-    public function createfromRequest(Request $request)
-    {
-        $request_id = $request->query('request_id');
-        $request_data = null;
-        $request_data_images = [];
-
-        if ($request_id) {
-            $request_data = ContentRequest::find($request_id);
-            $request_data_images = $request_data ? $request_data->images : [];
-        }
-
-        return view('content.content_create', compact('request_id', 'request_data', 'request_data_images'));
-    }
-
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
-
-
     public function create()
     {
         return view('content.content_create');
     }
 
-
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
-
-
 
     public function edit(Content $content)
     {
-        // $content = Content::find($content->id);
-        $contentRequest = $content->contentRequest;
-
-        return view('content.content_create', compact('content', 'contentRequest'));
+        return view('content.content_create', compact('content'));
     }
-
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    
-
     public function store(Request $request)
     {
-        // $request_id = $request->input('request_id');
         $image_max_size = 51200; // 50mb
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:contents,slug',
             'content_type' => 'required|string',
             'body' => 'required|string',
             'content_status' => 'required|in:draft,published,archived',
@@ -78,7 +48,6 @@ class ContentController extends Controller
             'is_featured' => 'nullable|boolean',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:255',
-            // 'request_id' => $request_id,
         ]);
 
         $user_id = Auth::id();
@@ -95,12 +64,12 @@ class ContentController extends Controller
 
         $content = Content::create([
             'title' => $validated['title'],
+            'slug' => $validated['slug'],
             'content_type' => $validated['content_type'],
             'body' => $validated['body'],
             'created_by' => $user_id,
             'content_status' => $validated['content_status'],
             'image_content' => $image_path,
-            'slug' => Str::slug($validated['title']),
             'approval_status' => 'pending',
             'approved_by' => null,
             'approved_at' => null,
@@ -129,29 +98,22 @@ class ContentController extends Controller
             }
         }
 
-        // If published and linked to request, mark request as completed
-        if ($validated['content_status'] === 'published' && $request->filled('request_id')) {
-            ContentRequest::where('id', $request->request_id)->update(['status' => 'completed']);
-        }
-
         return redirect()->route('content.content_view')->with('toast', [
             'message' => 'Content created successfully!',
             'type' => 'success'
         ]);
     }
 
-
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
-
-    
 
     public function update(Request $request, $id)
     {
         $image_max_size = 51200; // 50mb
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:contents,slug,' . $id,
             'body' => 'required|string',
             'content_status' => 'required|in:draft,published,archived',
             'content_type' => 'required|string',
@@ -185,6 +147,7 @@ class ContentController extends Controller
         // Update Content
         $content->update([
             'title' => $validated['title'],
+            'slug' => $validated['slug'],
             'content_type' => $validated['content_type'],
             'body' => $validated['body'],
             'content_status' => $validated['content_status'],
@@ -197,11 +160,6 @@ class ContentController extends Controller
             'meta_title' => $validated['meta_title'] ?? null,
             'meta_description' => $validated['meta_description'] ?? null,
         ]);
-
-        // Check if content request exists and update its status if content is published
-        if ($content->contentRequest && $validated['content_status'] === 'published') {
-            $content->contentRequest->update(['status' => 'completed']);
-        }
 
         // Gallery Image Update
         if ($request->hasFile('gallery_images')) {
@@ -225,12 +183,9 @@ class ContentController extends Controller
         ]);
     }
 
-
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
-
-    
 
     public function destroyImage($id)
     {
@@ -248,5 +203,46 @@ class ContentController extends Controller
             'message' => 'Image deleted successfully!',
             'type' => 'success'
         ]);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    public function content_index()
+    {
+        $contents = Content::latest()->paginate(perPage: 5);
+        return view('content.index', compact('contents'));
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    public function archiveContent($id)
+    {
+        $content = Content::findOrFail($id);
+        $content->update(['content_status' => 'archived']);
+        return redirect()->route('content.content_view')->with('message', 'Content archived successfully!');
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════════════
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // ═══════════════════════════════════════════════════════════════════════════════
+
+    public function destroy(Content $content)
+    {
+        if ($content->image_content) {
+            Storage::disk('public')->delete($content->image_content);
+        }
+    
+        foreach ($content->images as $image) {
+            Storage::disk('public')->delete($image->image_path);
+            $image->delete();
+        }
+    
+        $content->delete();
+    
+        return redirect()->route('content.content_view')->with('message', 'Content deleted successfully!');
     }
 }

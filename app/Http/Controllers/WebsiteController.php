@@ -31,22 +31,22 @@ class WebsiteController extends Controller
         return view('website.index', compact('featuredPost', 'latestPosts'));
     }
 
-    public function viewContent($id)
+    public function viewContent($slug)
     {
-        $content = Content::where('id', $id)->where('content_status', 'published')->firstOrFail();
+        $content = Content::where('slug', $slug)->where('content_status', 'published')->firstOrFail();
         $content->increment('views'); //views
 
         // multiple images
         $galleryImages = ContentImage::where('content_id', $content->id)->get();
 
         // navigation
-        $prevContent = Content::where('id', '<', $id)->where('content_status', 'published')->orderBy('id', 'desc')->first();
-        $nextContent = Content::where('id', '>', $id)->where('content_status', 'published')->orderBy('id', 'asc')->first();
+        $prevContent = Content::where('id', '<', $content->id)->where('content_status', 'published')->orderBy('id', 'desc')->first();
+        $nextContent = Content::where('id', '>', $content->id)->where('content_status', 'published')->orderBy('id', 'asc')->first();
 
         // other contents
-        $otherContents = Content::where('id', '!=', $id)->where('content_status', 'published')->orderBy('created_at', 'desc')->limit(10)->get();
+        $otherContents = Content::where('id', '!=', $content->id)->where('content_status', 'published')->orderBy('created_at', 'desc')->limit(10)->get();
 
-        $comments = ContentComment::where('content_id', $id)->with('user')->latest()->get();
+        $comments = ContentComment::where('content_id', $content->id)->with('user')->latest()->get();
 
         return view('website.view-content', compact('content', 'galleryImages', 'prevContent', 'nextContent', 'otherContents', 'comments'));
     }

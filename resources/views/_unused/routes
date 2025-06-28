@@ -1,0 +1,12 @@
+Route::get('/content-requests/list', [ContentViewController::class, 'requests_index'])->name('content_requests.requests_view');
+
+// Content Requests
+Route::get('/content-requests/create', [ContentRequestController::class, 'create'])->name('content_requests.create');
+Route::post('/content-requests/create', [ContentRequestController::class, 'store'])->name('content_requests.store');
+
+// Create content from request 
+Route::get('/content-requests/{contentId}/convert', [ContentViewController::class, 'create'])->name('content.convert');
+
+
+    // Status Updates for Content Requests
+    Route::post('/content/status/update', [ContentController::class, 'updateRequestStatus'])->name('content.updateStatus');
