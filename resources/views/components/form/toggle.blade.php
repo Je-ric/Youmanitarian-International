@@ -12,10 +12,11 @@
         type="checkbox"
         name="{{ $name }}"
         id="{{ $id }}"
+        value="1"
         {{ $checked ? 'checked' : '' }}
         class="toggle toggle-warning"
     >
     @if($label)
         <span class="text-sm text-gray-700">{{ $label }}</span>
     @endif
-</label>
+</label> 

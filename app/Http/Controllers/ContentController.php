@@ -6,11 +6,20 @@ use App\Models\Content;
 use App\Models\ContentImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ContentController extends Controller
 {
+    
+    public function content_index()
+    {
+        $contents = Content::latest()->paginate(perPage: 5);
+        return view('content.index', compact('contents'));
+    }
+
+    
     public function create()
     {
         return view('content.content_create');
@@ -34,7 +43,7 @@ class ContentController extends Controller
         $image_max_size = 51200; // 50mb
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'slug' => 'required|string|max:255|unique:contents,slug',
+            'slug' => 'nullable|string|max:255|unique:contents,slug',
             'content_type' => 'required|string',
             'body' => 'required|string',
             'content_status' => 'required|in:draft,published,archived',
@@ -50,6 +59,20 @@ class ContentController extends Controller
             'meta_description' => 'nullable|string|max:255',
         ]);
 
+        // Auto-generate slug if not provided (pero meron naman na using js)
+        if (empty($validated['slug'])) {
+            $baseSlug = Str::slug($validated['title']);
+            $slug = $baseSlug;
+            $counter = 1;
+            
+            // Check if slug exists and add number kung may existing na
+            while (Content::where('slug', $slug)->exists()) {
+                $slug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+            $validated['slug'] = $slug;
+        }
+
         $user_id = Auth::id();
         $image_path = null;
 
@@ -57,7 +80,7 @@ class ContentController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $sanitized_title = preg_replace('/[^A-Za-z0-9\-]/', '_', $validated['title']);
-            $new_filename = $sanitized_title . '_' . time() . '_' . $file->getClientOriginalName();
+            $new_filename = $sanitized_title . '_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $image_path = $file->storeAs('uploads/content/', $new_filename, 'public');
             $validated['image_content'] = $image_path;
         }
@@ -74,31 +97,19 @@ class ContentController extends Controller
             'approved_by' => null,
             'approved_at' => null,
             'views' => 0,
-            'enable_likes' => $request->boolean('enable_likes', true),
-            'enable_comments' => $request->boolean('enable_comments', true),
-            'enable_bookmark' => $request->boolean('enable_bookmark', true),
+            'enable_likes' => $request->has('enable_likes'),
+            'enable_comments' => $request->has('enable_comments'),
+            'enable_bookmark' => $request->has('enable_bookmark'),
             'published_at' => $validated['published_at'] ?? null,
-            'is_featured' => $request->boolean('is_featured', false),
+            'is_featured' => $request->has('is_featured'),
             'meta_title' => $validated['meta_title'] ?? null,
             'meta_description' => $validated['meta_description'] ?? null,
         ]);
 
-        // Multiple Image 
-        if ($request->hasFile('gallery_images')) {
-            foreach ($request->file('gallery_images') as $file) {
-                if ($file->isValid()) {
-                    $new_filename = time() . '_' . $file->getClientOriginalName();
-                    $gallery_path = $file->storeAs('uploads/content_gallery/', $new_filename, 'public');
+        // Func. call - Multiple
+        $this->handleGalleryImages($request, $content->id, $validated['title']);
 
-                    ContentImage::create([
-                        'content_id' => $content->id,
-                        'image_path' => $gallery_path,
-                    ]);
-                }
-            }
-        }
-
-        return redirect()->route('content.content_view')->with('toast', [
+        return redirect()->route('content.index')->with('toast', [
             'message' => 'Content created successfully!',
             'type' => 'success'
         ]);
@@ -130,21 +141,19 @@ class ContentController extends Controller
         ]);
 
         $content = Content::findOrFail($id);
-        
-        // Single Image Update
+        // Single Image 
         if ($request->hasFile('image')) {
             if ($content->image_content) {
                 Storage::disk('public')->delete($content->image_content);
             }
             $file = $request->file('image');
             $sanitized_title = preg_replace('/[^A-Za-z0-9\-]/', '_', $validated['title']);
-            $new_filename = $sanitized_title . '_' . time() . '_' . $file->getClientOriginalName();
+            $new_filename = $sanitized_title . '_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $validated['image_content'] = $file->storeAs('uploads/content/', $new_filename, 'public');
         } else {
             $validated['image_content'] = $content->image_content; // Keep old image if no new one uploaded
         }
 
-        // Update Content
         $content->update([
             'title' => $validated['title'],
             'slug' => $validated['slug'],
@@ -152,35 +161,49 @@ class ContentController extends Controller
             'body' => $validated['body'],
             'content_status' => $validated['content_status'],
             'image_content' => $validated['image_content'],
-            'enable_likes' => $request->boolean('enable_likes', true),
-            'enable_comments' => $request->boolean('enable_comments', true),
-            'enable_bookmark' => $request->boolean('enable_bookmark', true),
+            'enable_likes' => $request->has('enable_likes'),
+            'enable_comments' => $request->has('enable_comments'),
+            'enable_bookmark' => $request->has('enable_bookmark'),
             'published_at' => $validated['published_at'] ?? null,
-            'is_featured' => $request->boolean('is_featured', false),
+            'is_featured' => $request->has('is_featured'),
             'meta_title' => $validated['meta_title'] ?? null,
             'meta_description' => $validated['meta_description'] ?? null,
         ]);
 
-        // Gallery Image Update
-        if ($request->hasFile('gallery_images')) {
-            foreach ($request->file('gallery_images') as $file) {
-                if ($file->isValid()) {
-                    $sanitized_title = preg_replace('/[^A-Za-z0-9\-]/', '_', $validated['title']);
-                    $new_filename = $sanitized_title . '_' . time() . '_' . $file->getClientOriginalName();
-                    $gallery_path = $file->storeAs('uploads/content_gallery/', $new_filename, 'public');
+        // Func. call - Multiple
+        $this->handleGalleryImages($request, $content->id, $validated['title']);
 
-                    ContentImage::create([
-                        'content_id' => $content->id,
+        return redirect()->route('content.index')->with('toast', [
+            'message' => 'Content updated successfully!',
+            'type' => 'success'
+        ]);
+    }
+
+
+    // Insert into content_images table
+    private function handleGalleryImages(Request $request, $contentId, $title)
+    {
+        if ($request->hasFile('gallery_images')) {
+            $files = $request->file('gallery_images');
+            
+            // If only one file is uploaded, $files may not be an array
+            if (!is_array($files)) {
+                $files = [$files];
+            }
+            
+            foreach ($files as $file) {
+                if ($file && $file->isValid()) {
+                    $sanitized_title = preg_replace('/[^A-Za-z0-9\-]/', '_', $title);
+                    $new_filename = $sanitized_title . '_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                    $gallery_path = $file->storeAs('uploads/content_gallery/', $new_filename, 'public');
+                    
+                    $contentImage = ContentImage::create([
+                        'content_id' => $contentId,
                         'image_path' => $gallery_path,
                     ]);
                 }
             }
         }
-
-        return redirect()->route('content.content_view')->with('toast', [
-            'message' => 'Content updated successfully!',
-            'type' => 'success'
-        ]);
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -191,7 +214,7 @@ class ContentController extends Controller
     {
         $image = ContentImage::findOrFail($id);
 
-        // Delete image from storage
+        // Delete image from storage (directory)
         if ($image->image_path) {
             Storage::disk('public')->delete($image->image_path);
         }
@@ -209,12 +232,6 @@ class ContentController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    public function content_index()
-    {
-        $contents = Content::latest()->paginate(perPage: 5);
-        return view('content.index', compact('contents'));
-    }
-
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -223,7 +240,10 @@ class ContentController extends Controller
     {
         $content = Content::findOrFail($id);
         $content->update(['content_status' => 'archived']);
-        return redirect()->route('content.content_view')->with('message', 'Content archived successfully!');
+        return redirect()->route('content.index')->with('toast', [
+            'message' => 'Content archived successfully!',
+            'type' => 'success'
+        ]);
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -243,6 +263,9 @@ class ContentController extends Controller
     
         $content->delete();
     
-        return redirect()->route('content.content_view')->with('message', 'Content deleted successfully!');
+        return redirect()->route('content.index')->with('toast', [
+            'message' => 'Content deleted successfully!',
+            'type' => 'success'
+        ]);
     }
 }

@@ -72,7 +72,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/content/{content}/archive', [ContentController::class, 'archiveContent'])->name('content.archive');
 
     // List
-    Route::get('/content/list', [ContentController::class, 'content_index'])->name('content.content_view');
+    Route::get('/content/list', [ContentController::class, 'content_index'])->name('content.index');
 
     Route::post('/content/{contentId}/react', [HeartReactController::class, 'toggleReact']);
 });

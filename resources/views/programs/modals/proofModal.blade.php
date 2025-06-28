@@ -57,12 +57,9 @@
                             <label for="proof_image" class="block text-sm font-semibold text-slate-700">
                                 Upload Image:
                             </label>
-                            {{-- <div class="bg-slate-50 border border-slate-200 rounded-lg p-4"> --}}
                                 <x-form.input-upload name="proof_image" id="proof_image" accept="image/*" required>
                                     PNG, JPG up to 10MB
                                 </x-form.input-upload>
-                                {{--
-                            </div> --}}
                         </div>
                     </div>
                 </div>

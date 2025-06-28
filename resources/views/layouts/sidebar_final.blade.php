@@ -86,7 +86,7 @@
                     </h3>
                     <ul class="space-y-1">
                         <li>
-                            <a href="{{ route('content.content_view') }}"
+                            <a href="{{ route('content.index') }}"
                                 class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('content.*') ? 'active' : '' }}"
                                 data-tooltip="Contents">
                                 <i class="bx bx-file w-5 text-center flex-shrink-0"></i>
@@ -352,7 +352,7 @@
            <x-navigation-layout.breadcrumb :items="[
         ['label' => 'Dashboard', 'url' => route('dashboard')],
         ...(request()->routeIs('content.*') ? [
-            ['label' => 'Content Management', 'url' => route('content.content_view')],
+            ['label' => 'Content Management', 'url' => route('content.index')],
             ...(request()->routeIs('content.create') ? [['label' => 'Create Content']] : []),
             ...(request()->routeIs('content.edit') ? [['label' => 'Edit Content']] : []),
         ] : []),

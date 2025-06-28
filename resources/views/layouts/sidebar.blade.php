@@ -65,7 +65,7 @@
 
                 <!-- Contents -->
                 <li>
-                    <a href="{{ route('content.content_view') }}" 
+                    <a href="{{ route('content.index') }}" 
                        class="sidebar-link flex items-center p-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('content.*') ? 'active' : '' }}" 
                        data-tooltip="Contents">
                         <i class="bx bx-file w-5 text-center flex-shrink-0"></i>
