@@ -6,22 +6,31 @@ use App\Models\ContentComment;
 use App\Models\Content;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ContentCommentController extends Controller {
     public function store(Request $request, $contentId) {
-        $request->validate(['comment' => 'required|string|max:500']);
+        $request->validate([
+            'comment' => 'required|string|max:500',
+            'parent_id' => 'nullable|integer|exists:content_comments,id',
+        ]);
 
         if (!Auth::check()) {
             return response()->json(['error' => 'You must be logged in to comment'], 401);
         }
 
-        $comment = ContentComment::create([
-            'content_id' => $contentId,
-            'user_id' => Auth::id(),
-            'comment' => $request->comment,
-        ]);
+        try {
+            $comment = ContentComment::create([
+                'content_id' => $contentId,
+                'user_id' => Auth::id(),
+                'comment' => $request->comment,
+                'parent_id' => $request->parent_id,
+            ]);
 
-        return response()->json(['message' => 'Comment added successfully', 'comment' => $comment]);
+            return response()->json(['message' => 'Comment added successfully', 'comment' => $comment]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to create comment: ' . $e->getMessage()], 500);
+        }
     }
 
 
