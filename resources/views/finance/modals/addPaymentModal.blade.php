@@ -16,7 +16,7 @@
 @endphp
 
 <x-modal.dialog :id="$modalId" maxWidth="max-w-2xl" width="w-11/12" maxHeight="max-h-[90vh]">
-        <!-- Header -->
+        {{-- Header --}}
         <x-modal.header>
                 <div class="flex-1 min-w-0">
                     <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">
@@ -40,7 +40,7 @@
                     </div>
         </x-modal.header>
 
-        <!-- Main Content -->
+        {{-- Main Content --}}
         <form action="{{ route('finance.membership.payments.store') }}" method="POST" enctype="multipart/form-data"
             class="flex flex-col">
             @csrf
@@ -51,12 +51,12 @@
             
             <div class="p-4 sm:p-6 space-y-6 max-h-[60vh] sm:max-h-[70vh] overflow-y-auto">
                 
-                <!-- Payment Details Grid -->
+                {{-- Payment Details Grid --}}
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     
-                    <!-- Left Column -->
+                    {{-- Left Column --}}
                     <div class="space-y-4">
-                        <!-- Amount -->
+                        {{-- Amount --}}
                         <div>
                             <x-form.label for="amount">
                                 <i class='bx bx-dollar-circle mr-1 text-green-600'></i>
@@ -79,7 +79,7 @@
                             </div>
                         </div>
 
-                        <!-- Payment Method -->
+                        {{-- Payment Method --}}
                         <div>
                             <x-form.label for="payment_method">
                                 <i class='bx bx-credit-card mr-1 text-blue-600'></i>
@@ -102,9 +102,9 @@
                         </div>
                     </div>
 
-                    <!-- Right Column -->
+                    {{-- Right Column --}}
                     <div class="space-y-4">
-                        <!-- Payment Date -->
+                        {{-- Payment Date --}}
                         <div>
                             <x-form.label>
                                 <i class='bx bx-calendar mr-1 text-purple-600'></i>
@@ -116,7 +116,7 @@
                             </div>
                         </div>
 
-                        <!-- Status Display (if payment exists) -->
+                        {{-- Status Display (if payment exists) --}}
                         {{-- @if($payment)
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">
@@ -135,7 +135,7 @@
                     </div>
                 </div>
 
-                <!-- Notes Section -->
+                {{-- Notes Section --}}
                 <div>
                     <x-form.label for="notes">
                         <i class='bx bx-note mr-1 text-orange-600'></i>
@@ -157,7 +157,7 @@
                     @endif
                 </div>
 
-                <!-- Receipt/Proof Section -->
+                {{-- Receipt/Proof Section --}}
                 <div>
                     <x-form.label for="receipt">
                         <i class='bx bx-receipt mr-1 text-indigo-600'></i>
@@ -203,7 +203,7 @@
                 </div>
             </div>
 
-            <!-- Footer -->
+            {{-- Footer --}}
             <x-modal.footer>
                 <x-modal.close-button :modalId="$modalId" text="Cancel" variant="cancel" />
                     @if(!$payment)

@@ -169,7 +169,7 @@
         </x-navigation-layout.tabs>
     </div>
 
-<!-- Payment Modal -->
+{{-- Payment Modal --}}
 @include('finance.modals.addPaymentModal', [
     'member' => $member,
     'quarter' => $quarter,
@@ -179,7 +179,7 @@
     'statusClass' => $status === 'paid' ? 'text-green-600' : ($status === 'overdue' ? 'text-red-600' : 'text-yellow-600')
 ])
 
-<!-- Reminder Modal -->
+{{-- Reminder Modal --}}
 @include('finance.modals.paymentReminderModal', [
     'modalId' => $reminderModalId,
     'member' => $member

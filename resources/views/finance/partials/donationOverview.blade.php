@@ -43,7 +43,7 @@
     @endforeach
 </div>
 
-<!-- Financial Summary Chart -->
+{{-- Financial Summary Chart --}}
 <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm mb-6">
     <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Financial Summary</h3>
     <div class="overflow-x-auto">
@@ -81,7 +81,7 @@
     </div>
 </div>
 
-<!-- Recent Activity Section -->
+{{-- Recent Activity Section --}}
 <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
     <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Recent Activity</h3>
     <div class="space-y-3 sm:space-y-4">

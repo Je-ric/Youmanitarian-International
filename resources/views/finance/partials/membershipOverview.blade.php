@@ -39,7 +39,7 @@
     @endforeach
 </div>
 
-<!-- Payment Status Chart -->
+{{-- Payment Status Chart --}}
 <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
     <h3 class="text-lg font-semibold text-gray-900 mb-4">Payment Status Overview</h3>
     <div class="overflow-x-auto">
