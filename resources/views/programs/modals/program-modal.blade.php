@@ -1,18 +1,18 @@
 {{-- <div id="modal-overlay-{{ $program->id }}" class="fixed inset-0 bg-slate-900/20 backdrop-blur-sm hidden z-40"></div> --}}
 
 <x-modal.dialog id="modal_{{ $program->id }}" maxWidth="max-w-6xl" width="w-11/12" maxHeight="max-h-[90vh]">
-        <!-- Header -->
+        {{-- Header --}}
         <x-modal.header>
             <h2 id="modal-title-{{ $program->id }}" class="text-2xl font-bold text-slate-900 tracking-tight">
                 {{ $program->title }}
             </h2>
         </x-modal.header>
-        <!-- Main Content - Scrollable -->
+        {{-- Main Content - Scrollable --}}
         <div class="flex flex-col lg:flex-row flex-1 min-h-0 overflow-hidden">
-            <!-- Left Content -->
+            {{-- Left Content --}}
             <div class="lg:w-2/3 w-full p-6 space-y-6 overflow-y-auto">
 
-                <!-- Description -->
+                {{-- Description --}}
                 <article>
                     <h3 class="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
                         <i class='bx bx-book-open text-slate-600'></i>
@@ -26,7 +26,7 @@
                     </div>
                 </article>
 
-                <!-- Program Coordinator -->
+                {{-- Program Coordinator --}}
                 <div class="border-t border-slate-200 pt-6">
                     <h4 class="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
                         <i class='bx bx-user-circle text-slate-600'></i>
@@ -51,7 +51,7 @@
                     </div>
                 </div>
 
-                <!-- Join Button -->
+                {{-- Join Button --}}
                 @php
                     $volunteer = Auth::user()->volunteer ?? null;
                     $alreadyJoined = false;
@@ -117,7 +117,7 @@
 
             </div>
 
-            <!-- Right Details -->
+            {{-- Right Details --}}
             <aside class="lg:w-1/3 w-full bg-slate-50 border-l border-slate-200 p-6 space-y-5 overflow-y-auto">
                 <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 pb-2 border-b border-slate-300">
                     <i class='bx bx-detail text-slate-600'></i>
@@ -173,7 +173,6 @@
             </aside>
         </div>
 
-        <!-- Footer - Always Visible -->
         <x-modal.footer>
             <x-modal.close-button :modalId="'modal_' . $program->id" />
         </x-modal.footer>
@@ -181,7 +180,6 @@
 </x-modal.dialog>
 
 <style>
-    /* Custom scrollbar for description area */
     .custom-scrollbar::-webkit-scrollbar {
         width: 6px;
     }
@@ -200,13 +198,13 @@
         background: #94a3b8;
     }
 
-    /* Firefox scrollbar */
+    {{-- Firefox scrollbar --}}
     .custom-scrollbar {
         scrollbar-width: thin;
         scrollbar-color: #cbd5e1 #f1f5f9;
     }
 
-    /* Responsive adjustments */
+    {{-- Responsive adjustments --}}
     @media (max-width: 1024px) {
         .modal-box {
             max-width: 95vw;

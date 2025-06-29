@@ -1,30 +1,14 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-    <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            height: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #666;
-        }
-    </style>
+<x-page-header 
+    icon="bx-calendar-event" 
+    title="Volunteers" 
+    desc="Manage volunteer applications and volunteers.">
+    
+</x-page-header>
 
-    <div class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
-        <div class="mb-4 sm:mb-8">
-            <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-[#1a2235] mb-1 sm:mb-2">
-                Volunteers Management
-            </h1>
-            <p class="text-sm sm:text-base text-gray-600">Manage volunteer applications and approved volunteers</p>
-        </div>
+
 
         @php
             $tabs = [
@@ -35,7 +19,7 @@
             ];
         @endphp
 
-        <x-navigation-layout.tabs
+        <x-navigation-layout.tabs-modern
             :tabs="$tabs"
             default-tab="applications"
         >
@@ -188,8 +172,24 @@
                     </x-table.table>
                 @endif
             </x-slot>
-        </x-navigation-layout.tabs>
-    </div>
+        </x-navigation-layout.tabs-modern>
 
     @include('volunteers.modals.invitationModal', ['volunteer' => $volunteer])
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+      
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }
+    </style>
 @endsection 
