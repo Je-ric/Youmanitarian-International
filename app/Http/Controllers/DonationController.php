@@ -8,25 +8,21 @@ use App\Models\MembershipPayment;
 
 class DonationController extends Controller
 {
-    public function index()
+    public function finance_index()
     {
         $totalDonations = Donation::where('status', 'Confirmed')->sum('amount');
         $totalMembershipPayments = MembershipPayment::where('payment_status', 'Paid')->sum('amount');
         $pendingDonations = Donation::where('status', 'Pending')->count();
         $overduePayments = MembershipPayment::where('payment_status', 'Overdue')->count();
+        $donations = Donation::latest()->paginate(10);
 
-        return view('finance.index', compact(
+        return view('finance.donations', compact(
             'totalDonations',
             'totalMembershipPayments',
             'pendingDonations',
-            'overduePayments'
+            'overduePayments',
+            'donations'
         ));
-    }
-
-    public function donations()
-    {
-        $donations = Donation::latest()->paginate(10);
-        return view('finance.donations', compact('donations'));
     }
 
     public function updateDonationStatus(Donation $donation)

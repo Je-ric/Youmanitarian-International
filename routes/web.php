@@ -218,7 +218,7 @@ Route::middleware(['auth'])->group(function () {
 // Finance Routes   
 Route::middleware(['auth'])->group(function () {
     Route::get('/finance/dashboard', [DonationController::class, 'finance_index'])->name('finance.index');
-    Route::get('/finance/donations', [DonationController::class, 'index'])->name('finance.donations');
+    Route::patch('/finance/donations/{donation}/status', [DonationController::class, 'updateDonationStatus'])->name('finance.donations.status');
     
     Route::get('/finance/membership/payments', [MembershipController::class, 'index'])->name('finance.membership.payments');
     Route::post('/finance/membership/payments', [MembershipController::class, 'store'])->name('finance.membership.payments.store');
