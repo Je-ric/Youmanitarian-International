@@ -2,7 +2,7 @@
 
 @section('content')
     <x-page-header 
-        icon="bx-calendar-event" 
+        icon="bx-donate-heart" 
         title="Donations Management"
         desc="View and manage donations, track financial statistics, and monitor payment activities.">
         <p>Future Buttons</p>

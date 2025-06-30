@@ -2,9 +2,9 @@
 
 @section('content')
     <x-page-header 
-        icon="bx-calendar-event" 
+        icon="bx-file" 
         title="{{ isset($content) ? 'Edit Content' : 'Create New Content' }}"
-        desc="View and manage all programs.">
+        desc="Fill out the form to create or edit content.">
 
         <x-button variant="add-create" type="submit" form="contentForm">
             <i class='bx {{ isset($content) ? 'bx-edit' : 'bx-save' }} mr-2'></i>

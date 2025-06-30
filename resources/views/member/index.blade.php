@@ -2,10 +2,9 @@
 
 @section('content')
 <x-page-header 
-    icon="bx-calendar-event" 
+    icon="bx-group" 
     title="Member Management" 
-    desc="View and manage all programs.">
-    
+    desc="Manage and view details of all members.">
 </x-page-header>
 
     @php

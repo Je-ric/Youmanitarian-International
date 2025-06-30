@@ -2,7 +2,7 @@
 
 @section('content')
     <x-page-header 
-        icon="bx-calendar-event" 
+        icon="bx-credit-card" 
         title="Membership Payments"
         desc="View and manage the members membership type, status, and payment activity.">
         <p>Future Buttones</p>

@@ -17,7 +17,9 @@
             background: #666;
         }
     </style>
-    <x-page-header icon="bx-calendar-event" title="Role Management"
+    <x-page-header 
+        icon="bx-shield-quarter" 
+        title="Role Management"
         desc="Manage user roles and permissions">
     </x-page-header>
 

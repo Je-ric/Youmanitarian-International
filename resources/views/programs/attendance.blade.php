@@ -1,16 +1,16 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-
-    <div class="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
+<x-page-header 
+        icon="bx-credit-card" 
+        title="Volunteer Attendance - Clock In / Clock Out"
+        desc="View and manage the members membership type, status, and payment activity.">
+        <p>Future Buttones</p>
+    </x-page-header>
 
         <div class="mb-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
-                <div>
-                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 tracking-tight">
-                        Volunteer Attendance - Clock In / Clock Out
-                    </h1>
-                </div>
+                
                 <div class="flex flex-wrap gap-2 w-full sm:w-auto">
                     {{-- Pag nag clock in, tsaka palang makakapag upload --}}
                     @if($attendance && $attendance->clock_in)
@@ -377,7 +377,5 @@
         </div>
         {{-- Partial --}}
         @include('programs.partials.attendanceReminders')
-
-    </div>
 
 @endsection
