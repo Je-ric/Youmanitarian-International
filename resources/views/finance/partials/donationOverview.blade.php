@@ -1,46 +1,32 @@
-@php
-    $stats = [
-        [
-            'title' => 'Total Donations',
-            'value' => '₱' . number_format($totalDonations, 2),
-            'icon' => 'bx-money',
-            'color' => 'blue'
-        ],
-        [
-            'title' => 'Membership Payments',
-            'value' => '₱' . number_format($totalMembershipPayments, 2),
-            'icon' => 'bx-credit-card',
-            'color' => 'green'
-        ],
-        [
-            'title' => 'Pending Donations',
-            'value' => $pendingDonations,
-            'icon' => 'bx-time',
-            'color' => 'yellow'
-        ],
-        [
-            'title' => 'Overdue Payments',
-            'value' => $overduePayments,
-            'icon' => 'bx-error-circle',
-            'color' => 'red'
-        ]
-    ];
-@endphp
-
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
-    @foreach($stats as $stat)
-        <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-xs sm:text-sm text-gray-600">{{ $stat['title'] }}</p>
-                    <p class="text-lg sm:text-2xl font-bold text-[#1a2235]">{{ $stat['value'] }}</p>
-                </div>
-                <div class="bg-{{ $stat['color'] }}-50 p-2 sm:p-3 rounded-full">
-                    <i class='bx {{ $stat['icon'] }} text-xl sm:text-2xl text-{{ $stat['color'] }}-500'></i>
-                </div>
-            </div>
-        </div>
-    @endforeach
+    <x-overview.stat-card
+        icon="bx-money"
+        title="Total Donations"
+        :value="'₱' . number_format($totalDonations, 2)"
+        bgColor="bg-blue-50"
+        iconColor="text-blue-500"
+    />
+    <x-overview.stat-card
+        icon="bx-credit-card"
+        title="Membership Payments"
+        :value="'₱' . number_format($totalMembershipPayments, 2)"
+        bgColor="bg-green-50"
+        iconColor="text-green-500"
+    />
+    <x-overview.stat-card
+        icon="bx-time"
+        title="Pending Donations"
+        :value="$pendingDonations"
+        bgColor="bg-yellow-50"
+        iconColor="text-yellow-500"
+    />
+    <x-overview.stat-card
+        icon="bx-error-circle"
+        title="Overdue Payments"
+        :value="$overduePayments"
+        bgColor="bg-red-50"
+        iconColor="text-red-500"
+    />
 </div>
 
 {{-- Financial Summary Chart --}}

@@ -22,7 +22,26 @@ class MembershipController extends Controller
         ->orderBy('created_at', 'desc')
         ->paginate(10);
 
-        return view('finance.membership_payments', compact('members'));
+        $totalMembers = Member::count();
+        $activeMembers = Member::where('membership_status', 'active')->count();
+        $totalPayments = MembershipPayment::count();
+
+        $paymentStatusByQuarter = [];
+        $quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
+        $statuses = ['paid', 'pending', 'overdue'];
+
+        foreach ($quarters as $quarter) {
+            $paymentStatusByQuarter[$quarter] = [];
+            foreach ($statuses as $status) {
+                $paymentStatusByQuarter[$quarter][$status] = MembershipPayment::where('payment_period', $quarter)
+                    ->where('payment_year', now()->year)
+                    ->where('payment_status', $status)
+                    ->count();
+            }
+        }
+
+        return view('finance.membership_payments', 
+        compact('members', 'totalMembers', 'activeMembers', 'totalPayments', 'paymentStatusByQuarter'));
     }
 
     private function getDueDate($quarter)

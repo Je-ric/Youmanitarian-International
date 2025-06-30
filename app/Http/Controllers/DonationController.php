@@ -16,12 +16,19 @@ class DonationController extends Controller
         $overduePayments = MembershipPayment::where('payment_status', 'Overdue')->count();
         $donations = Donation::latest()->paginate(10);
 
+        $totalRevenue = $totalDonations + $totalMembershipPayments;
+        $donationPercentage = $totalRevenue > 0 ? round(($totalDonations / $totalRevenue) * 100) : 0;
+        $membershipPercentage = $totalRevenue > 0 ? round(($totalMembershipPayments / $totalRevenue) * 100) : 0;
+
         return view('finance.donations', compact(
             'totalDonations',
             'totalMembershipPayments',
             'pendingDonations',
             'overduePayments',
-            'donations'
+            'donations',
+            'totalRevenue',
+            'donationPercentage',
+            'membershipPercentage'
         ));
     }
 
