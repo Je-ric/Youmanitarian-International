@@ -41,6 +41,11 @@ class MemberController extends Controller
             ->paginate(10, ['*'], 'pending_page');
 
         // Data for overview
+        $totalMembersCount = Member::count();
+        $activeMembersCount = Member::where('membership_status', 'active')->count();
+        $fullPledgeMembersCount = Member::where('membership_type', 'full_pledge')->count();
+        $honoraryMembersCount = Member::where('membership_type', 'honorary')->count();
+
         $recentlyJoinedMembers = Member::with('user')
             ->where('membership_status', 'active')
             ->latest('start_date')
@@ -53,8 +58,6 @@ class MemberController extends Controller
             ->take(5)
             ->get();
         
-        $activeMembersCount = Member::where('membership_status', 'active')->count();
-
         $users = User::whereNotIn('id', function($query) {
             $query->select('user_id')->from('members');
         })->get();
@@ -68,7 +71,10 @@ class MemberController extends Controller
             'pendingMembers',
             'recentlyJoinedMembers',
             'oldestPendingInvitations',
+            'totalMembersCount',
             'activeMembersCount',
+            'fullPledgeMembersCount',
+            'honoraryMembersCount',
             'users',
             'volunteers',
             'tab'

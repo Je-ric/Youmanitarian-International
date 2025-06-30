@@ -113,6 +113,10 @@ class ProgramVolunteerController extends Controller
             $ratingCounts[$i] = $feedbacks->where('rating', $i)->count();
         }
 
+        $totalVolunteersCount = $program->volunteers->count();
+        $activeTasksCount = $tasks->where('status', 'active')->count();
+        $completedTasksCount = $tasks->where('status', 'completed')->count();
+
         return view('programs_volunteers.program-volunteers', compact(
             'program',
             'approvedVolunteers',
@@ -126,7 +130,10 @@ class ProgramVolunteerController extends Controller
             'averageRating',
             'ratingCounts',
             'attendanceOverview',
-            'recentActivities'
+            'recentActivities',
+            'totalVolunteersCount',
+            'activeTasksCount',
+            'completedTasksCount'
         ));
     }
 

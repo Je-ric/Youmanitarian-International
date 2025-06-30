@@ -28,23 +28,38 @@
 @endphp
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    @foreach($stats as $stat)
-        <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">{{ $stat['title'] }}</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $stat['value'] }}</p>
-                </div>
-                <div class="p-3 bg-{{ $stat['color'] }}-100 rounded-full">
-                    <i class='bx {{ $stat['icon'] }} text-{{ $stat['color'] }}-500 text-xl'></i>
-                </div>
-            </div>
-        </div>
-    @endforeach
+    <x-overview.stat-card
+        icon="bx-group"
+        title="Total Members"
+        :value="$totalMembersCount"
+        bgColor="bg-blue-50"
+        iconColor="text-blue-500"
+    />
+    <x-overview.stat-card
+        icon="bx-user-check"
+        title="Active Members"
+        :value="$activeMembersCount"
+        bgColor="bg-green-50"
+        iconColor="text-green-500"
+    />
+    <x-overview.stat-card
+        icon="bx-star"
+        title="Full-Pledge Members"
+        :value="$fullPledgeMembersCount"
+        bgColor="bg-yellow-50"
+        iconColor="text-yellow-500"
+    />
+    <x-overview.stat-card
+        icon="bx-award"
+        title="Honorary Members"
+        :value="$honoraryMembersCount"
+        bgColor="bg-purple-50"
+        iconColor="text-purple-500"
+    />
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- Recently Joined Members -->
+    {{-- Recently Joined Members --}}
     <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
         <h3 class="text-lg font-semibold text-gray-900 mb-4">Recently Joined Members</h3>
         <div class="space-y-4">
@@ -65,7 +80,7 @@
         </div>
     </div>
 
-    <!-- Oldest Pending Invitations -->
+    {{-- Oldest Pending Invitations --}}
     <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
         <h3 class="text-lg font-semibold text-gray-900 mb-4">Oldest Pending Invitations</h3>
         <div class="space-y-4">

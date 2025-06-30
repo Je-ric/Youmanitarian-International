@@ -1,53 +1,32 @@
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-xs sm:text-sm text-gray-600">Total Volunteers</p>
-                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">{{ $program->volunteers->count() }}</h3>
-            </div>
-            <div class="bg-blue-50 p-2 sm:p-3 rounded-full">
-                <i class='bx bx-group text-xl sm:text-2xl text-blue-500'></i>
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-xs sm:text-sm text-gray-600">Active Tasks</p>
-                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">
-                    {{ $tasks->where('status', 'active')->count() }}</h3>
-            </div>
-            <div class="bg-yellow-50 p-2 sm:p-3 rounded-full">
-                <i class='bx bx-task text-xl sm:text-2xl text-yellow-500'></i>
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-xs sm:text-sm text-gray-600">Completed Tasks</p>
-                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">
-                    {{ $tasks->where('status', 'completed')->count() }}</h3>
-            </div>
-            <div class="bg-green-50 p-2 sm:p-3 rounded-full">
-                <i class='bx bx-check-circle text-xl sm:text-2xl text-green-500'></i>
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-xs sm:text-sm text-gray-600">Average Rating</p>
-                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">{{ number_format($averageRating, 1) }}/5</h3>
-            </div>
-            <div class="bg-purple-50 p-2 sm:p-3 rounded-full">
-                <i class='bx bx-star text-xl sm:text-2xl text-purple-500'></i>
-            </div>
-        </div>
-    </div>
+    <x-overview.stat-card
+        icon="bx-group"
+        title="Total Volunteers"
+        :value="$totalVolunteersCount"
+        bgColor="bg-blue-50"
+        iconColor="text-blue-500"
+    />
+    <x-overview.stat-card
+        icon="bx-task"
+        title="Active Tasks"
+        :value="$activeTasksCount"
+        bgColor="bg-yellow-50"
+        iconColor="text-yellow-500"
+    />
+    <x-overview.stat-card
+        icon="bx-check-circle"
+        title="Completed Tasks"
+        :value="$completedTasksCount"
+        bgColor="bg-green-50"
+        iconColor="text-green-500"
+    />
+    <x-overview.stat-card
+        icon="bx-star"
+        title="Average Rating"
+        :value="number_format($averageRating, 1) . '/5'"
+        bgColor="bg-purple-50"
+        iconColor="text-purple-500"
+    />
 </div>
 
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-6">
