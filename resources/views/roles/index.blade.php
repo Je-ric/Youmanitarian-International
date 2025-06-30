@@ -25,15 +25,19 @@
 
         @php
             $tabs = [
-                ['id' => 'users', 'label' => 'Users & Roles', 'icon' => 'bx-user'],
-                ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-stats']
+                ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-stats'],
+                ['id' => 'users', 'label' => 'Users & Roles', 'icon' => 'bx-user']
             ];
         @endphp
 
         <x-navigation-layout.tabs-modern
             :tabs="$tabs"
-            default-tab="{{ request()->query('tab', 'users') }}"
+            default-tab="{{ request()->query('tab', 'overview') }}"
         >
+            <x-slot:slot_overview>
+                @include('roles.partials.rolesOverview')
+            </x-slot>
+
             <x-slot:slot_users>
                     <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="min-w-full">
                         <x-table.thead>
@@ -91,10 +95,6 @@
                             @endforeach
                         </x-table.tbody>
                     </x-table.table>
-            </x-slot>
-
-            <x-slot:slot_overview>
-                @include('roles.partials.rolesOverview')
             </x-slot>
         </x-navigation-layout.tabs-modern>
 @endsection 

@@ -12,8 +12,8 @@
 
         @php
             $tabs = [
-                ['id' => 'applications', 'label' => 'Applications', 'icon' => 'bx-user-plus'],
                 ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-stats'],
+                ['id' => 'applications', 'label' => 'Applications', 'icon' => 'bx-user-plus'],
                 ['id' => 'denied', 'label' => 'Denied', 'icon' => 'bx-x-circle'],
                 ['id' => 'approved', 'label' => 'Approved', 'icon' => 'bx-check-circle']
             ];
@@ -21,8 +21,16 @@
 
         <x-navigation-layout.tabs-modern
             :tabs="$tabs"
-            default-tab="applications"
+            default-tab="{{ request()->query('tab', 'overview') }}"
         >
+            <x-slot:slot_overview>
+                @include('volunteers.partials.volunteersOverview', [
+                    'approvedVolunteers' => $approvedVolunteers,
+                    'applications' => $applications,
+                    'deniedApplications' => $deniedApplications
+                ])
+            </x-slot>
+
             <x-slot:slot_applications>
                 @if($applications->isEmpty())
                     <p class="text-gray-600 text-center py-4">No pending applications found.</p>
@@ -68,14 +76,6 @@
                         </x-table.tbody>
                     </x-table.table>
                 @endif
-            </x-slot>
-
-            <x-slot:slot_overview>
-                @include('volunteers.partials.volunteersOverview', [
-                    'approvedVolunteers' => $approvedVolunteers,
-                    'applications' => $applications,
-                    'deniedApplications' => $deniedApplications
-                ])
             </x-slot>
 
             <x-slot:slot_denied>

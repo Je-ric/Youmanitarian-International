@@ -11,51 +11,51 @@
 
     @php
         $tabs = [
-            ['id' => 'volunteers', 'label' => 'Volunteers', 'icon' => 'bx-group'],
             ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-stats'],
+            ['id' => 'volunteers', 'label' => 'Volunteers', 'icon' => 'bx-group'],
             ['id' => 'tasks', 'label' => 'Tasks & Assignments', 'icon' => 'bx-task'],
             ['id' => 'program', 'label' => 'Program Settings', 'icon' => 'bx-cog'],
             ['id' => 'feedbacks', 'label' => 'Program Feedbacks', 'icon' => 'bx-message-dots']
         ];
     @endphp
 
-    <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="{{ request()->query('tab', 'volunteers') }}">
+    <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="{{ request()->query('tab', 'overview') }}">
+        <x-slot:slot_overview>
+            @include('programs_volunteers.partials.programOverview', [
+                'program' => $program,
+                'tasks' => $tasks,
+                'averageRating' => $averageRating
+            ])
+        </x-slot>
+
         <x-slot:slot_volunteers>
             @include('programs_volunteers.partials.volunteerLists')
-            </x-slot>
+        </x-slot>
 
-            <x-slot:slot_overview>
-                @include('programs_volunteers.partials.programOverview', [
-                    'program' => $program,
-                    'tasks' => $tasks,
-                    'averageRating' => $averageRating
-                ])
-                    </x-slot>
-
-                    <x-slot:slot_tasks>
-                        @include('programs_volunteers.partials.programTasks', [
-                            'program' => $program,
-                            'tasks' => $tasks
-                        ])
-                    </x-slot>
+        <x-slot:slot_tasks>
+            @include('programs_volunteers.partials.programTasks', [
+                'program' => $program,
+                'tasks' => $tasks
+            ])
+        </x-slot>
 
         <x-slot:slot_program>
-                    @include('programs_volunteers.partials.programDetails', [
-                        'route' => route('programs.update', $program),
-                        'method' => 'PUT',
-                        'program' => $program
-                    ])
-                </x-slot>
+            @include('programs_volunteers.partials.programDetails', [
+                'route' => route('programs.update', $program),
+                'method' => 'PUT',
+                'program' => $program
+            ])
+        </x-slot>
 
-                <x-slot:slot_feedbacks>
-                        @include('programs_volunteers.partials.viewFeedback', [
-                            'program' => $program,
-                            'feedbacks' => $feedbacks,
-                            'totalFeedbacks' => $totalFeedbacks,
-                            'averageRating' => $averageRating,
-                            'ratingCounts' => $ratingCounts,
-                        ])
-                </x-slot>
-            </x-navigation-layout.tabs-modern>
-        </div>
+        <x-slot:slot_feedbacks>
+            @include('programs_volunteers.partials.viewFeedback', [
+                'program' => $program,
+                'feedbacks' => $feedbacks,
+                'totalFeedbacks' => $totalFeedbacks,
+                'averageRating' => $averageRating,
+                'ratingCounts' => $ratingCounts,
+            ])
+        </x-slot>
+    </x-navigation-layout.tabs-modern>
+</div>
 @endsection
