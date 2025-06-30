@@ -23,8 +23,16 @@ class VolunteerController extends Controller
         $approvedVolunteers = Volunteer::with('user')
             ->where('application_status', 'approved')
             ->get();
+
+        $total = $approvedVolunteers->count() + $deniedApplications->count();
+        $approvalRate = $total > 0 ? round(($approvedVolunteers->count() / $total) * 100) : 0;
             
-        return view('volunteers.index', compact('applications', 'deniedApplications', 'approvedVolunteers'));
+        return view('volunteers.index',
+        compact(
+            'applications',
+            'deniedApplications', 
+            'approvedVolunteers', 
+            'approvalRate'));
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════

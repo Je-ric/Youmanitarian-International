@@ -15,7 +15,18 @@ class RoleController extends Controller
     {
         $users = User::with('roles')->get();
         $roles = Role::all();
-        return view('roles.index', compact('users', 'roles'));
+
+        $usersWithMultipleRoles = $users->filter(fn($user) => $user->roles->count() > 1)->count();
+        $totalRoleAssignments = $users->sum(fn($user) => $user->roles->count());
+        $averageRolesPerUser = $users->count() > 0 ? number_format($totalRoleAssignments / $users->count(), 1) : '0.0';
+
+        return view('roles.index', compact(
+            'users',
+            'roles',
+            'usersWithMultipleRoles',
+            'totalRoleAssignments',
+            'averageRolesPerUser'
+        ));
     }
 
     public function showAssignForm(Request $request)

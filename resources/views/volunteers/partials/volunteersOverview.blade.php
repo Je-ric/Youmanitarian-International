@@ -1,64 +1,39 @@
-<!-- Statistics Cards -->
+{{-- Statistics Cards --}}
 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-    <!-- Total Volunteers -->
-    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-xs sm:text-sm text-gray-600">Total Volunteers</p>
-                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">{{ $approvedVolunteers->count() }}</h3>
-            </div>
-            <div class="bg-blue-50 p-2 sm:p-3 rounded-full">
-                <i class='bx bx-user text-xl sm:text-2xl text-blue-500'></i>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pending Applications -->
-    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-xs sm:text-sm text-gray-600">Pending Applications</p>
-                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">{{ $applications->count() }}</h3>
-            </div>
-            <div class="bg-yellow-50 p-2 sm:p-3 rounded-full">
-                <i class='bx bx-time text-xl sm:text-2xl text-yellow-500'></i>
-            </div>
-        </div>
-    </div>
-
-    <!-- Denied Applications -->
-    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-xs sm:text-sm text-gray-600">Denied Applications</p>
-                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">{{ $deniedApplications->count() }}</h3>
-            </div>
-            <div class="bg-red-50 p-2 sm:p-3 rounded-full">
-                <i class='bx bx-x-circle text-xl sm:text-2xl text-red-500'></i>
-            </div>
-        </div>
-    </div>
-
-    <!-- Approval Rate -->
-    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
-        <div class="flex items-center justify-between">
-            <div>
-                <p class="text-xs sm:text-sm text-gray-600">Approval Rate</p>
-                <h3 class="text-lg sm:text-2xl font-bold text-[#1a2235]">
-                    @php
-                        $total = $approvedVolunteers->count() + $deniedApplications->count();
-                        echo $total > 0 ? round(($approvedVolunteers->count() / $total) * 100) : 0;
-                    @endphp%
-                </h3>
-            </div>
-            <div class="bg-green-50 p-2 sm:p-3 rounded-full">
-                <i class='bx bx-trending-up text-xl sm:text-2xl text-green-500'></i>
-            </div>
-        </div>
-    </div>
+    <x-overview.stat-card
+        icon="bx-user"
+        title="Total Volunteers"
+        :value="$approvedVolunteers->count()"
+        bgColor="bg-blue-50"
+        iconColor="text-blue-500"
+        href="{{ route('volunteers.index', ['tab' => 'approved']) }}"
+    />
+    <x-overview.stat-card
+        icon="bx-time"
+        title="Pending Applications"
+        :value="$applications->count()"
+        bgColor="bg-yellow-50"
+        iconColor="text-yellow-500"
+        href="{{ route('volunteers.index', ['tab' => 'applications']) }}"
+    />
+    <x-overview.stat-card
+        icon="bx-x-circle"
+        title="Denied Applications"
+        :value="$deniedApplications->count()"
+        bgColor="bg-red-50"
+        iconColor="text-red-500"
+        href="{{ route('volunteers.index', ['tab' => 'denied']) }}"
+    />
+    <x-overview.stat-card
+        icon="bx-trending-up"
+        title="Approval Rate"
+        value="{{ $approvalRate }}%"
+        bgColor="bg-green-50"
+        iconColor="text-green-500"
+    />
 </div>
 
-<!-- Recent Activity -->
+{{-- Recent Activity --}}
 <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm mt-6">
     <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Recent Activity</h3>
     <div class="space-y-3 sm:space-y-4">
