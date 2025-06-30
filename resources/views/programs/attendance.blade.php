@@ -1,38 +1,31 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-<x-page-header 
-        icon="bx-credit-card" 
-        title="Volunteer Attendance - Clock In / Clock Out"
+    <x-page-header icon="bx-credit-card" title="Volunteer Attendance - Clock In / Clock Out"
         desc="View and manage the members membership type, status, and payment activity.">
-        <p>Future Buttones</p>
+
+        <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+            {{-- Pag nag clock in, tsaka palang makakapag upload --}}
+            @if($attendance && $attendance->clock_in)
+                <x-button variant="secondary" class="w-full sm:w-auto"
+                    onclick="document.getElementById('uploadProofModal').showModal();">
+                    <i class='bx bx-upload mr-1'></i> Upload Proof
+                </x-button>
+            @endif
+            {{-- Pag tapos complete attendance, tsaka palang makakapag rate and review --}}
+            @if($attendance && $attendance->clock_in && $attendance->clock_out)
+                <x-button variant="secondary" class="w-full sm:w-auto"
+                    onclick="document.getElementById('feedbackModal_{{ $program->id }}').showModal();">
+                    <i class='bx bx-star mr-1'></i> Rate & Review
+                </x-button>
+            @endif
+        </div>
     </x-page-header>
 
-        <div class="mb-6">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
-                
-                <div class="flex flex-wrap gap-2 w-full sm:w-auto">
-                    {{-- Pag nag clock in, tsaka palang makakapag upload --}}
-                    @if($attendance && $attendance->clock_in)
-                        <x-button variant="secondary" class="w-full sm:w-auto"
-                            onclick="document.getElementById('uploadProofModal').showModal();">
-                            <i class='bx bx-upload mr-1'></i> Upload Proof
-                        </x-button>
-                    @endif
-                    {{-- Pag tapos complete attendance, tsaka palang makakapag rate and review --}}
-                    @if($attendance && $attendance->clock_in && $attendance->clock_out)
-                        <x-button variant="secondary" class="w-full sm:w-auto"
-                            onclick="document.getElementById('feedbackModal_{{ $program->id }}').showModal();">
-                            <i class='bx bx-star mr-1'></i> Rate & Review
-                        </x-button>
-                    @endif
-                </div>
-            </div>
-        </div>
+    @include('programs.modals.feedbackModal', ['program' => $program, 'userFeedback' => $userFeedback])
+    @include('programs.modals.proofModal', ['program' => $program, 'volunteerAttendance' => $volunteerAttendance,])
 
-        @include('programs.modals.feedbackModal', ['program' => $program, 'userFeedback' => $userFeedback])
-        @include('programs.modals.proofModal', ['program' => $program, 'volunteerAttendance' => $volunteerAttendance,])
-
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
 
             <section
@@ -46,7 +39,7 @@
                     <x-feedback-status.programProgress :program="$program" />
                 </div>
 
-                <!-- Description -->
+                {{-- Description --}}
                 <div class="mb-8">
                     <h3 class="text-[#1a2235] font-semibold mb-3 flex items-center">
                         <i class='bx bx-file-blank mr-2 text-lg'></i>
@@ -57,7 +50,7 @@
                     </p>
                 </div>
 
-                <!-- Program Details Grid -->
+                {{-- Program Details Grid --}}
                 <div class="space-y-4">
                     <h3 class="text-[#1a2235] font-semibold mb-4 flex items-center">
                         <i class='bx bx-info-circle mr-2 text-lg'></i>
@@ -65,7 +58,7 @@
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Date -->
+                        {{-- Date --}}
                         <div class="flex items-start gap-3">
                             <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <i class='bx bx-calendar text-[#1a2235]'></i>
@@ -78,7 +71,7 @@
                             </div>
                         </div>
 
-                        <!-- Time -->
+                        {{-- Time --}}
                         <div class="flex items-start gap-3">
                             <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <i class='bx bx-time text-[#1a2235]'></i>
@@ -93,7 +86,7 @@
                             </div>
                         </div>
 
-                        <!-- Location -->
+                        {{-- Location --}}
                         <div class="flex items-start gap-3">
                             <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <i class='bx bx-map text-[#1a2235]'></i>
@@ -106,7 +99,7 @@
                             </div>
                         </div>
 
-                        <!-- Coordinator -->
+                        {{-- Coordinator --}}
                         <div class="flex items-start gap-3">
                             <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                 <i class='bx bx-user text-[#1a2235]'></i>
@@ -132,7 +125,7 @@
                             Your Attendance
                         </h2>
 
-                        <!-- Status Indicator -->
+                        {{-- Status Indicator --}}
                         <div class="flex items-center gap-2 mb-3">
                             <span class="text-sm text-gray-600">Attendance:</span>
                             <div class="flex items-center gap-2">
@@ -156,7 +149,7 @@
                         </div>
                     </div>
 
-                    <!-- Time Information -->
+                    {{-- Time Information --}}
                     <div class="space-y-4 mb-6">
                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
                             <span class="text-gray-600">Time In</span>
@@ -281,27 +274,27 @@
 
         {{-- Attendance Approval Summary --}}
         @if($attendance && ($attendance->clock_in || $attendance->clock_out))
-            <div class="border-t border-gray-200 pt-4 mt-4">
-                <h3 class="text-lg font-semibold text-[#1a2235] mb-3">Attendance Summary</h3>
-                <div class="space-y-3">
+            <div class="bg-white border-2 border-gray-200 rounded-2xl p-4 sm:p-5 mt-6">
+                <h3 class="text-lg font-semibold text-[#1a2235] mb-4 pb-3 border-b border-gray-200">Attendance Summary</h3>
+                <div class="space-y-4">
                     <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Approval Status</span>
+                        <span class="text-gray-600 font-medium">Approval Status</span>
                         @if($attendance->approval_status == 'approved')
                             <span
-                                class="font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full text-sm inline-flex items-center">
-                                <i class='bx bx-check-circle mr-1'></i>
+                                class="font-medium text-green-600 bg-green-100 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1">
+                                <i class='bx bx-check-circle'></i>
                                 {{ ucfirst($attendance->approval_status) }}
                             </span>
                         @elseif($attendance->approval_status == 'rejected')
                             <span
-                                class="font-medium text-red-600 bg-red-100 px-2 py-1 rounded-full text-sm inline-flex items-center">
-                                <i class='bx bx-x-circle mr-1'></i>
+                                class="font-medium text-red-600 bg-red-100 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1">
+                                <i class='bx bx-x-circle'></i>
                                 {{ ucfirst($attendance->approval_status) }}
                             </span>
                         @else
                             <span
-                                class="font-medium text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full text-sm inline-flex items-center">
-                                <i class='bx bx-time-five mr-1'></i>
+                                class="font-medium text-yellow-600 bg-yellow-100 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1">
+                                <i class='bx bx-time-five'></i>
                                 {{ ucfirst($attendance->approval_status) }}
                             </span>
                         @endif
@@ -309,10 +302,10 @@
 
                     @if($attendance->approved_by)
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-600">
+                            <span class="text-gray-600 font-medium">
                                 {{ ucfirst($attendance->approval_status) }} by
                             </span>
-                            <span class="font-medium text-[#1a2235]">
+                            <span class="font-semibold text-[#1a2235]">
                                 {{ $attendance->approver->name ?? 'N/A' }}
                             </span>
                         </div>
@@ -320,8 +313,8 @@
 
                     @if($attendance->notes)
                         <div>
-                            <span class="text-gray-600">Notes / Reason</span>
-                            <p class="text-gray-800 bg-gray-50 p-3 rounded-lg mt-1 text-sm">
+                            <span class="text-gray-600 font-medium">Notes / Reason</span>
+                            <p class="text-gray-800 bg-gray-50 p-3 rounded-lg mt-2 text-sm border border-gray-200">
                                 {{ $attendance->notes }}
                             </p>
                         </div>
@@ -369,13 +362,12 @@
                     @endforeach
                 </div>
             @else
-                <x-empty-state 
-                    icon="bx bx-task" 
-                    title="No Tasks Assigned"
+                <x-empty-state icon="bx bx-task" title="No Tasks Assigned"
                     description="You have not been assigned any tasks for this program yet. Please check back later." />
             @endif
         </div>
         {{-- Partial --}}
         @include('programs.partials.attendanceReminders')
+    </div>
 
 @endsection

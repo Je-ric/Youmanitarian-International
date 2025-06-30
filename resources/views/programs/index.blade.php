@@ -54,7 +54,7 @@
                 ->unique('id');
         @endphp
 
-        <!-- Modals Container -->
+        {{-- Modals Container --}}
         <div>
             @foreach($allPrograms as $program)
                 @include('programs.modals.program-modal', ['program' => $program])
