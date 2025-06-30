@@ -1,11 +1,12 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Member Management</h1>
+<x-page-header 
+    icon="bx-calendar-event" 
+    title="Member Management" 
+    desc="View and manage all programs.">
     
-    </div>
+</x-page-header>
 
     @php
         $tabs = [
@@ -17,7 +18,7 @@
         $activeTab = $tab ?? 'overview';
     @endphp
 
-    <x-navigation-layout.tabs :tabs="$tabs" default-tab="{{ $activeTab }}">
+    <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="{{ $activeTab }}">
         <x-slot:slot_overview>
             @include('member.partials.membersOverview')
         </x-slot:slot_overview>
@@ -33,8 +34,6 @@
         <x-slot:slot_pending>
             @include('member.partials.members_table', ['members' => $pendingMembers])
         </x-slot>
-    </x-navigation-layout.tabs>
-</div>
-
+    </x-navigation-layout.tabs-modern>
 
 @endsection 

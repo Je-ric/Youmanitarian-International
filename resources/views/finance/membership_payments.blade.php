@@ -1,18 +1,13 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-    <div class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
-        <div class="mb-4 sm:mb-8">
-            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                <div>
-                    <h1 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">
-                        Membership Payments
-                    </h1>
-                    <p class="text-gray-600">View and manage the members membership type, status, and payment activity.</p>
-                </div>
-                <p>Future Buttones</p>
-            </div>
-        </div>
+    <x-page-header 
+        icon="bx-calendar-event" 
+        title="Membership Payments"
+        desc="View and manage the members membership type, status, and payment activity.">
+        <p>Future Buttones</p>
+    </x-page-header>
+        
 
         @php
             $tabs = [
@@ -21,7 +16,7 @@
             ];
         @endphp
 
-        <x-navigation-layout.tabs
+        <x-navigation-layout.tabs-modern
             :tabs="$tabs"
             default-tab="{{ request()->query('tab', 'overview') }}"
         >
@@ -166,8 +161,7 @@
                     {{ $members->links() }}
             </div>
             </x-slot>
-        </x-navigation-layout.tabs>
-    </div>
+        </x-navigation-layout.tabs-modern>
 
 {{-- Payment Modal --}}
 @include('finance.modals.addPaymentModal', [

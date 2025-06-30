@@ -1,37 +1,29 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-    <div class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
-        <div class="mb-4 sm:mb-8">
-            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-                <div>
-                    <h1 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">
-                        Donations Management
-                    </h1>
-                    <p class="text-gray-600">View and manage donations, track financial statistics, and monitor payment activities.</p>
-                </div>
-                <p>Future Buttons</p>
-            </div>
-        </div>
+    <x-page-header 
+        icon="bx-calendar-event" 
+        title="Donations Management"
+        desc="View and manage donations, track financial statistics, and monitor payment activities.">
+        <p>Future Buttons</p>
+    </x-page-header>
 
-        @php
-            $tabs = [
-                ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-line-chart'],
-                ['id' => 'donations', 'label' => 'Donations', 'icon' => 'bx-heart']
-            ];
-        @endphp
+    @php
+        $tabs = [
+            ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-line-chart'],
+            ['id' => 'donations', 'label' => 'Donations', 'icon' => 'bx-heart']
+        ];
+    @endphp
 
-        <x-navigation-layout.tabs
-            :tabs="$tabs"
-            default-tab="{{ request()->query('tab', 'overview') }}"
-        >
-            <x-slot:slot_overview>
-                @include('finance.partials.donationOverview')
+    <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="{{ request()->query('tab', 'overview') }}">
+        <x-slot:slot_overview>
+            @include('finance.partials.donationOverview')
             </x-slot>
 
             <x-slot:slot_donations>
                 @if(session('success'))
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
+                        role="alert">
                         <span class="block sm:inline">{{ session('success') }}</span>
                     </div>
                 @endif
@@ -64,14 +56,16 @@
                                     <div class="text-sm text-gray-900">{{ $donation->payment_method }}</div>
                                 </x-table.td>
                                 <x-table.td>
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                        {{ $donation->status === 'Confirmed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                    <span
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                {{ $donation->status === 'Confirmed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
                                         {{ $donation->status }}
                                     </span>
                                 </x-table.td>
                                 <x-table.td>
                                     @if($donation->status === 'Pending')
-                                        <form action="{{ route('finance.donations.status', $donation) }}" method="POST" class="inline">
+                                        <form action="{{ route('finance.donations.status', $donation) }}" method="POST"
+                                            class="inline">
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="text-green-600 hover:text-green-900">Confirm</button>
@@ -88,11 +82,10 @@
                         @endforelse
                     </x-table.tbody>
                 </x-table.table>
-                
+
                 <div class="px-6 py-4 border-t border-gray-200">
                     {{ $donations->links() }}
                 </div>
-            </x-slot>
-        </x-navigation-layout.tabs>
-    </div>
+                </x-slot>
+    </x-navigation-layout.tabs-modern>
 @endsection
