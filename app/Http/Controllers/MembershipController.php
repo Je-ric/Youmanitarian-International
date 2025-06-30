@@ -25,6 +25,8 @@ class MembershipController extends Controller
         $totalMembers = Member::count();
         $activeMembers = Member::where('membership_status', 'active')->count();
         $totalPayments = MembershipPayment::count();
+        $totalMembershipRevenue = MembershipPayment::where('payment_status', 'paid')->sum('amount');
+        $overduePayments = MembershipPayment::where('payment_status', 'overdue')->count();
 
         $paymentStatusByQuarter = [];
         $quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
@@ -41,7 +43,7 @@ class MembershipController extends Controller
         }
 
         return view('finance.membership_payments', 
-        compact('members', 'totalMembers', 'activeMembers', 'totalPayments', 'paymentStatusByQuarter'));
+        compact('members', 'totalMembers', 'activeMembers', 'totalPayments', 'paymentStatusByQuarter', 'totalMembershipRevenue', 'overduePayments'));
     }
 
     private function getDueDate($quarter)

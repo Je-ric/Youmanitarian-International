@@ -16,16 +16,15 @@ class RoleController extends Controller
         $users = User::with('roles')->get();
         $roles = Role::all();
 
-        $usersWithMultipleRoles = $users->filter(fn($user) => $user->roles->count() > 1)->count();
-        $totalRoleAssignments = $users->sum(fn($user) => $user->roles->count());
-        $averageRolesPerUser = $users->count() > 0 ? number_format($totalRoleAssignments / $users->count(), 1) : '0.0';
+        // Required for Overview
+        $activeUsers = $users->filter(fn($user) => $user->is_active);
+        $usersWithoutRoles = $users->filter(fn($user) => $user->roles->isEmpty());
 
         return view('roles.index', compact(
             'users',
             'roles',
-            'usersWithMultipleRoles',
-            'totalRoleAssignments',
-            'averageRolesPerUser'
+            'activeUsers',
+            'usersWithoutRoles'
         ));
     }
 

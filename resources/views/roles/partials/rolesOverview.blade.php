@@ -1,6 +1,6 @@
 <div class="space-y-6">
     {{-- Statistics Cards --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+    <x-overview.stat-card-group>
         <x-overview.stat-card
             icon="bx-user"
             title="Total Users"
@@ -10,29 +10,29 @@
             iconColor="text-blue-500"
         />
         <x-overview.stat-card
-            icon="bx-shield"
+            icon="bx-shield-quarter"
             title="Total Roles"
             :value="$roles->count()"
-            bgColor="bg-indigo-50"
-            iconColor="text-indigo-500"
-        />
-        <x-overview.stat-card
-            icon="bx-layer"
-            title="Users with Multiple Roles"
-            :value="$usersWithMultipleRoles"
-            note="Out of {{ $users->count() }} total users"
             bgColor="bg-green-50"
             iconColor="text-green-500"
         />
         <x-overview.stat-card
-            icon="bx-stats"
-            title="Average Roles per User"
-            :value="$averageRolesPerUser"
-            note="Total assignments: {{ $totalRoleAssignments }}"
+            icon="bx-user-plus"
+            title="Users Without Roles"
+            :value="$usersWithoutRoles->count()"
+            href="{{ route('roles.index', ['tab' => 'users']) }}"
             bgColor="bg-yellow-50"
             iconColor="text-yellow-500"
         />
-    </div>
+        <x-overview.stat-card
+            icon="bx-user-check"
+            title="Active Users"
+            :value="$activeUsers->count()"
+            href="{{ route('roles.index', ['tab' => 'users']) }}"
+            bgColor="bg-red-50"
+            iconColor="text-red-500"
+        />
+    </x-overview.stat-card-group>
 
     {{-- Role Distribution --}}
     <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">

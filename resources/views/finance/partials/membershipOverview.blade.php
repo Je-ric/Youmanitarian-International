@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+<x-overview.stat-card-group>
     <x-overview.stat-card
         icon="bx-group"
         title="Total Members"
@@ -14,13 +14,20 @@
         iconColor="text-green-500"
     />
     <x-overview.stat-card
-        icon="bx-money"
-        title="Total Payments"
-        :value="$totalPayments"
+        icon="bx-wallet"
+        title="Membership Revenue"
+        :value="'₱' . number_format($totalMembershipRevenue, 2)"
         bgColor="bg-purple-50"
         iconColor="text-purple-500"
     />
-</div>
+    <x-overview.stat-card
+        icon="bx-error-circle"
+        title="Overdue Payments"
+        :value="$overduePayments"
+        bgColor="bg-red-50"
+        iconColor="text-red-500"
+    />
+</x-overview.stat-card-group>
 
 {{-- Payment Status Chart --}}
 <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">

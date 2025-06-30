@@ -27,12 +27,18 @@ class VolunteerController extends Controller
         $total = $approvedVolunteers->count() + $deniedApplications->count();
         $approvalRate = $total > 0 ? round(($approvedVolunteers->count() / $total) * 100) : 0;
             
+        $recentActivities = $applications->merge($deniedApplications)->merge($approvedVolunteers)
+            ->sortByDesc('updated_at')
+            ->take(5);
+
         return view('volunteers.index',
         compact(
             'applications',
             'deniedApplications', 
             'approvedVolunteers', 
-            'approvalRate'));
+            'approvalRate',
+            'recentActivities'
+        ));
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════

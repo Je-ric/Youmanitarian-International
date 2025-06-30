@@ -1,10 +1,10 @@
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+<x-overview.stat-card-group>
     <x-overview.stat-card
         icon="bx-group"
         title="Total Volunteers"
         :value="$totalVolunteersCount"
         bgColor="bg-blue-50"
-        iconColor="text-blue-500"
+        iconColor="text-purple-500"
     />
     <x-overview.stat-card
         icon="bx-task"
@@ -27,7 +27,7 @@
         bgColor="bg-purple-50"
         iconColor="text-purple-500"
     />
-</div>
+</x-overview.stat-card-group>
 
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-6">
     <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
@@ -116,3 +116,21 @@
         </div>
     </div>
 </div>
+
+<x-overview.summary-card title="Recent Activity" maxHeight="300px">
+    <div class="overflow-y-auto pr-2">
+        @forelse($recentActivities as $activity)
+            <x-overview.summary-list-item>
+                <x-slot:title>{{ $activity['user']->name }}</x-slot:title>
+                <x-slot:subtitle>{{ $activity['message'] }}</x-slot:subtitle>
+                <x-slot:action>
+                    <span class="text-xs sm:text-sm text-gray-500 whitespace-nowrap">
+                        {{ \Carbon\Carbon::parse($activity['date'])->format('M d, Y') }}
+                    </span>
+                </x-slot:action>
+            </x-overview.summary-list-item>
+        @empty
+            <p class="text-gray-600 text-center py-4">No recent activity</p>
+        @endforelse
+    </div>
+</x-overview.summary-card>

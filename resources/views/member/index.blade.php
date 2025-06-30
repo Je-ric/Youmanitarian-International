@@ -9,7 +9,7 @@
 
     @php
         $tabs = [
-            ['id' => 'overview', 'label' => 'Members Overview', 'icon' => 'bx-group'],
+            ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-group'],
             ['id' => 'full_pledge', 'label' => 'Full-Pledge', 'icon' => 'bx-user-check'],
             ['id' => 'honorary', 'label' => 'Honorary', 'icon' => 'bx-award'],
             ['id' => 'pending', 'label' => 'Pending Invitations', 'icon' => 'bx-mail-send'],
