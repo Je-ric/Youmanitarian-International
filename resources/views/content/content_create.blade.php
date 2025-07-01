@@ -105,7 +105,18 @@
                                 </div>
                             </div>
                         @endif
-                        <input type="file" name="gallery_images[]" id="gallery_images" accept="image/png,image/jpeg" multiple>
+                        <x-form.input-upload 
+                            name="gallery_images[]" 
+                            id="gallery_images" 
+                            accept="image/png,image/jpeg" 
+                            multiple
+                        >
+                            @if(isset($content) && $content->images && $content->images->count() > 0)
+                                <span class="text-green-600">You can upload more images. Current images are shown above.</span>
+                            @else
+                                PNG, JPG up to 10MB
+                            @endif
+                        </x-form.input-upload>
                     </div>
                     <div>
                         <x-form.label>Publish Date</x-form.label>
