@@ -24,15 +24,83 @@
 - **WYSIWYG:** TipTap
 - **APIs:** OpenWeatherMap / OpenMeteo for weather data
 
-<!-- ## 🤝 Contributing
+- **Backend:** Laravel 12 (PHP 8.2)
+- **Frontend:** Vue 3, Tailwind CSS, Alpine.js
+- **Database:** MySQL
+- **Build Tools:** Vite, PostCSS
+- **WYSIWYG Editors:** TipTap, CKEditor 5 (not used)
+- **UI Plugins:** DaisyUI, Flowbite
+- **Date Picker:** Flatpickr (not used)
+- **Real-time:** Laravel Echo, Pusher (for chat)
+- **Testing:** Pest, Mockery, Faker (seeder/factory) - for testings
 
-We welcome contributions! Please fork the repository and submit a pull request, or open an issue to discuss your ideas.
+---
 
-## 📄 License
+## 📦 Installed NPM Packages (Key)
 
-[Specify your license here, e.g., MIT License]
+- **@tiptap/core, @tiptap/vue-3, @tiptap/starter-kit, @tiptap/pm** — Modern, extensible rich-text editor for Vue.
+- **@ckeditor/ckeditor5-build-classic, ckeditor5** — Classic CKEditor 5 build for advanced WYSIWYG editing.
+- **@tailwindcss/forms, @tailwindcss/typography, tailwindcss** — Tailwind CSS core and plugins for forms and typography.
+- **daisyui** — Tailwind CSS UI component library, provides themes and ready-to-use components.
+- **flowbite, flowbite-typography** — More Tailwind UI components and typography utilities.
+- **@vitejs/plugin-vue, vite, laravel-vite-plugin** — Modern frontend build tool and Vue integration for fast dev/build.
+- **vue** — Progressive JavaScript framework for building UIs.
+- **alpinejs** — Lightweight JS framework for simple reactivity in Blade views.
+- **axios** — Promise-based HTTP client for API requests.
+- **flatpickr** — Lightweight, powerful date picker.
+- **autoprefixer, postcss** — CSS post-processing and vendor prefixing.
+- **concurrently** — Run multiple npm scripts (dev server, queue, etc.) at once.
+- **pusher-js** — Real-time WebSockets for notifications and chat.
 
---- -->
+---
+
+## 📦 Installed Composer (PHP) Packages (Key)
+
+- **laravel/framework** — The Laravel PHP framework.
+- **laravel/jetstream** — Auth scaffolding and UI for Laravel (with Tailwind).
+- **laravel/sanctum** — API token authentication for SPAs/mobile.
+- **laravel/socialite** — OAuth authentication (Google, Facebook, etc.).
+- **laravel/tinker** — REPL for Laravel (run PHP interactively).
+- **livewire/livewire** — Reactive components for Laravel Blade.
+- **spatie/laravel-permission** — Role & permission management.
+- **kyslik/column-sortable** — Easy column sorting in tables.
+- **pusher/pusher-php-server** — Real-time event broadcasting backend.
+- **vlucas/phpdotenv** — Loads .env config into PHP.
+- **fakerphp/faker** — Generate fake data for testing/seeding.
+- **laravel/pint** — PHP code style fixer.
+- **laravel/sail** — Docker dev environment for Laravel.
+- **mockery/mockery** — Mocking framework for PHP tests.
+- **nunomaduro/collision** — Pretty error reporting for CLI.
+- **pestphp/pest, pestphp/pest-plugin-laravel** — Elegant PHP testing framework.
+
+---
+
+## 🎨 Color Scheme
+- **Primary:** `#1a2235` (used for main UI elements, active states)
+- **Accent:** `#ffb51b` (used for highlights, buttons, hovers)
+
+---
+
+## 📝 Notable Features
+- Volunteer, member, and program management
+- Role-based access and permissions
+- Real-time notifications and chat
+- Rich content editing (TipTap, CKEditor)
+- Responsive, modern UI (Tailwind, DaisyUI, Flowbite)
+- Weather integration (OpenWeatherMap/OpenMeteo)
+- Docker-ready (Laravel Sail)
+
+---
+
+## 📚 More
+- **Laravel Docs:** https://laravel.com/docs
+- **Tailwind CSS:** https://tailwindcss.com/
+- **Jetstream:** https://jetstream.laravel.com/
+- **TipTap:** https://tiptap.dev/
+- **DaisyUI:** https://daisyui.com/
+- **Flowbite:** https://flowbite.com/
+
+---
 
 *Empowering humanity, one project at a time.*
 
