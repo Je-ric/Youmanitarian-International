@@ -23,7 +23,7 @@
     @if($required) required @endif
     placeholder="{{ $placeholder }}"
     {{ $attributes->merge(['class' => (
-        'w-full p-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] resize-none transition-colors '.
+        'w-full p-3 text-sm border border-[#1a2235] rounded-lg focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] resize-none transition-colors '.
         ($disabled ? 'bg-gray-50 text-gray-500 cursor-not-allowed ' : '').
         $class
     )]) }}

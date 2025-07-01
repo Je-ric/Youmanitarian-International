@@ -4,12 +4,12 @@
     'accept' => 'image/*,.pdf',
     'class' => '',
 ])
-<div x-data="{ files: [] }" class="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-gray-400 transition-colors {{ $class }}">
+<div x-data="{ files: [] }" class="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-[#ffb51b] transition-colors {{ $class }}">
     <div class="text-center">
-        <i class='bx bx-cloud-upload text-3xl text-gray-400 mb-2'></i>
+        <i class='bx bx-cloud-upload text-3xl text-gray-400 mb-2 group-hover:text-[#ffb51b]'></i>
         <div class="mb-2">
-            <label for="{{ $id }}" class="cursor-pointer">
-                <span class="text-sm font-medium text-blue-600 hover:text-blue-800">Upload a file</span>
+            <label for="{{ $id }}" class="cursor-pointer group">
+                <span class="text-sm font-medium text-[#ffb51b] group-hover:text-[#1a2235]">Upload a file</span>
                 <span class="text-sm text-gray-500"> or drag and drop</span>
             </label>
             <input
@@ -30,7 +30,7 @@
     
     <!-- Show selected files -->
     <template x-if="files.length">
-        <p class="text-xs text-green-600 mt-2" x-text="files.join(', ')"></p>
+        <p class="text-xs text-[#1a2235] mt-2" x-text="files.join(', ')"></p>
     </template>
 </div>
 

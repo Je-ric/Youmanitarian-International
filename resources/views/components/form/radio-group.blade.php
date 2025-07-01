@@ -21,7 +21,7 @@
                     name="{{ $name }}"
                     value="{{ $value }}"
                     @checked($selected == $value)
-                    class="w-4 h-4 text-[#ffb51b] bg-gray-100 border-gray-300 focus:ring-[#ffb51b] focus:ring-2"
+                    class="w-4 h-4 text-[#ffb51b] bg-gray-100 border-[#1a2235] focus:ring-[#ffb51b] focus:ring-2"
                 >
                 <label for="{{ $id }}" class="ms-2 text-sm font-medium text-gray-900">{{ $optionLabel }}</label>
             </div>

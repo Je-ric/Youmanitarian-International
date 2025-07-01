@@ -294,3 +294,67 @@ defaultTab="modern1"
                 
     </div> --}}
     @endsection
+
+    <!-- Form Components Section -->
+    <section class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4">Form Components</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white rounded-lg shadow">
+            <!-- Label -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Label</h3>
+                <x-form.label for="showcase_label">
+                    <i class='bx bx-user'></i>
+                    Showcase Label
+                </x-form.label>
+            </div>
+            <!-- Input Upload -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Input Upload</h3>
+                <x-form.input-upload name="showcase_upload" id="showcase_upload" />
+            </div>
+            <!-- Textarea -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Textarea</h3>
+                <x-form.textarea name="showcase_textarea" id="showcase_textarea" label="Showcase Textarea" placeholder="Type here..." />
+            </div>
+            <!-- Select Option -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Select Option</h3>
+                <x-form.select-option name="showcase_select" label="Showcase Select" :options="[['value' => '1', 'label' => 'Option 1'], ['value' => '2', 'label' => 'Option 2']]" />
+            </div>
+            <!-- Checkbox -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Checkbox</h3>
+                <x-form.checkbox name="showcase_checkbox" id="showcase_checkbox" />
+                <label for="showcase_checkbox" class="ml-2 text-sm">Showcase Checkbox</label>
+            </div>
+            <!-- Radio Group -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Radio Group</h3>
+                <x-form.radio-group name="showcase_radio" label="Showcase Radio" :options="['one' => 'One', 'two' => 'Two']" selected="one" />
+            </div>
+            <!-- Toggle -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Toggle</h3>
+                <x-form.toggle name="showcase_toggle" label="Showcase Toggle" />
+            </div>
+            <!-- Date Picker -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Date Picker</h3>
+                <x-form.date-picker name="showcase_date" id="showcase_date" />
+            </div>
+            <!-- Time Picker -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Time Picker</h3>
+                <x-form.time-picker name="showcase_time" id="showcase_time" />
+            </div>
+            <!-- Button Group -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Button Group</h3>
+                <x-form.button-group>
+                    <x-button variant="primary">Button 1</x-button>
+                    <x-button variant="secondary">Button 2</x-button>
+                </x-form.button-group>
+            </div>
+        </div>
+    </section>

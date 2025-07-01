@@ -16,7 +16,7 @@
         id="{{ $name }}"
         @if($required) required @endif
         @if($onchange) onchange="{{ $onchange }}" @endif
-        {{ $attributes->merge(['class' => 'w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] transition ' . $class]) }}
+        {{ $attributes->merge(['class' => 'w-full px-3 py-2 border border-[#1a2235] rounded-lg focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] transition ' . $class]) }}
     >
         @if ($slot->isNotEmpty())
             {{ $slot }}

@@ -18,7 +18,7 @@
             @if($required) required @endif
             @if($readonly) readonly @endif
             placeholder="{{ $placeholder }}"
-            class="input input-bordered w-full pr-10 cursor-pointer {{ $class }} focus:!border-[#ffb51b] focus:!ring-2 focus:!ring-[#ffb51b]/20"
+            class="input input-bordered w-full pr-10 cursor-pointer {{ $class }} border-[#1a2235] focus:!border-[#ffb51b] focus:!ring-2 focus:!ring-[#ffb51b]/20"
         />
         <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
             <i class="bx bx-chevron-down text-xl text-gray-300"></i>
