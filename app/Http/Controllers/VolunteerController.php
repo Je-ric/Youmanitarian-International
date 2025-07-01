@@ -14,15 +14,15 @@ class VolunteerController extends Controller
     {
         $applications = Volunteer::with('user')
             ->where('application_status', 'pending')
-            ->get();
+            ->paginate(10);
             
         $deniedApplications = Volunteer::with('user')
             ->where('application_status', 'denied')
-            ->get();
+            ->paginate(10);
             
         $approvedVolunteers = Volunteer::with('user')
             ->where('application_status', 'approved')
-            ->get();
+            ->paginate(10);
 
         $total = $approvedVolunteers->count() + $deniedApplications->count();
         $approvalRate = $total > 0 ? round(($approvedVolunteers->count() / $total) * 100) : 0;

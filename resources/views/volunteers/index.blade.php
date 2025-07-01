@@ -75,6 +75,7 @@
                                 @endforeach
                         </x-table.tbody>
                     </x-table.table>
+                    <div class="mt-4">{{ $applications->appends(['tab' => 'applications'])->links() }}</div>
                 @endif
             </x-slot>
 
@@ -115,6 +116,7 @@
                                 @endforeach
                         </x-table.tbody>
                     </x-table.table>
+                    <div class="mt-4">{{ $deniedApplications->appends(['tab' => 'denied'])->links() }}</div>
                 @endif
             </x-slot>
 
@@ -170,6 +172,7 @@
                                 @endforeach
                         </x-table.tbody>
                     </x-table.table>
+                    <div class="mt-4">{{ $approvedVolunteers->appends(['tab' => 'approved'])->links() }}</div>
                 @endif
             </x-slot>
         </x-navigation-layout.tabs-modern>
@@ -177,19 +180,5 @@
     @include('volunteers.modals.invitationModal', ['volunteer' => $volunteer])
 
     <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            height: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-      
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #666;
-        }
     </style>
 @endsection 

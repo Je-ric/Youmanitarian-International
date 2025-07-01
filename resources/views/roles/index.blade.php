@@ -1,22 +1,6 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-    <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            height: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #666;
-        }
-    </style>
     <x-page-header 
         icon="bx-shield-quarter" 
         title="Role Management"
@@ -39,7 +23,7 @@
             </x-slot>
 
             <x-slot:slot_users>
-                    <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="min-w-full">
+                    <x-table.table containerClass="overflow-x-auto" tableClass="min-w-full">
                         <x-table.thead>
                             <x-table.tr :hover="false">
                                 <x-table.th class="w-10 text-center">#</x-table.th>
@@ -95,6 +79,7 @@
                             @endforeach
                         </x-table.tbody>
                     </x-table.table>
+                    <div class="mt-4">{{ $users->appends(['tab' => 'users'])->links() }}</div>
             </x-slot>
         </x-navigation-layout.tabs-modern>
 @endsection 
