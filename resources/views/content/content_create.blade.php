@@ -27,15 +27,15 @@
                 <div class="lg:col-span-1 space-y-6">
                     <div>
                         <x-form.label>Content Title</x-form.label>
-                        <input type="text" name="title" placeholder="What's the title???"
-                            class="input input-bordered w-full bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]"
-                            value="{{ old('title', $content->title ?? '') }}" required>
+                        <x-form.input type="text" name="title" placeholder="What's the title???"
+                            class="w-full bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]"
+                            value="{{ old('title', $content->title ?? '') }}" required />
                     </div>
                     <div>
                         <x-form.label>Slug</x-form.label>
-                        <input type="text" name="slug" placeholder="what's-the-title???"
-                            class="input input-bordered w-full bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]"
-                            value="{{ old('slug', $content->slug ?? '') }}" required>
+                        <x-form.input type="text" name="slug" placeholder="what's-the-title???"
+                            class="w-full bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]"
+                            value="{{ old('slug', $content->slug ?? '') }}" required />
                     </div>
                     <div>
                         <x-form.label>Featured Image</x-form.label>
@@ -120,18 +120,18 @@
                     </div>
                     <div>
                         <x-form.label>Publish Date</x-form.label>
-                        <input type="date" name="published_at" class="input input-bordered w-full"
-                            value="{{ old('published_at', isset($content->published_at) ? \Illuminate\Support\Carbon::parse($content->published_at)->format('Y-m-d') : '') }}">
+                        <x-form.input type="date" name="published_at" class="w-full"
+                            value="{{ old('published_at', isset($content->published_at) ? \Illuminate\Support\Carbon::parse($content->published_at)->format('Y-m-d') : '') }}" />
                     </div>
                     <div>
                         <x-form.label>Meta Title</x-form.label>
-                        <input type="text" name="meta_title" class="input input-bordered w-full"
-                            value="{{ old('meta_title', $content->meta_title ?? '') }}">
+                        <x-form.input type="text" name="meta_title" class="w-full"
+                            value="{{ old('meta_title', $content->meta_title ?? '') }}" />
                     </div>
                     <div>
                         <x-form.label>Meta Description</x-form.label>
-                        <input type="text" name="meta_description" class="input input-bordered w-full"
-                            value="{{ old('meta_description', $content->meta_description ?? '') }}">
+                        <x-form.input type="text" name="meta_description" class="w-full"
+                            value="{{ old('meta_description', $content->meta_description ?? '') }}" />
                     </div>
                 </div>
                 <!-- Right Column (Body/Editor) -->

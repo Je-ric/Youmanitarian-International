@@ -72,7 +72,7 @@
                                     <h4 class="text-sm font-semibold text-green-800">Volunteer</h4>
                                     <p class="text-xs text-green-600">Base role for all users</p>
                                 </div>
-                            </div>
+                            </div>  
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
                                 <i class='bx bx-lock-alt mr-1'></i>
                                 Default

@@ -9,70 +9,54 @@
 
         <!-- Section 1: Personal Motivation -->
         <div class="mb-6">
-            <label class="font-semibold">Why do you want to volunteer?</label>
+            <x-form.label for="why_volunteer">Why do you want to volunteer?</x-form.label>
             <textarea name="why_volunteer" class="textarea textarea-bordered w-full" maxlength="500" required></textarea>
         </div>
 
         <div class="mb-6">
-            <label class="font-semibold">Interested Programs</label>
-            <input type="text" name="interested_programs" class="input input-bordered w-full" maxlength="255" required>
+            <x-form.input name="interested_programs" type="text" label="Interested Programs" class="w-full" maxlength="255" required />
         </div>
 
         <div class="mb-6">
-            <label class="font-semibold">Skills or Experience</label>
-            <input type="text" name="skills_experience" class="input input-bordered w-full" maxlength="255">
+            <x-form.input name="skills_experience" type="text" label="Skills or Experience" class="w-full" maxlength="255" />
         </div>
 
         <!-- Section 2: Availability & Health -->
         <div class="mb-6">
-            <label class="font-semibold">Availability</label>
-            <input type="text" name="availability" class="input input-bordered w-full" maxlength="255" required>
+            <x-form.input name="availability" type="text" label="Availability" class="w-full" maxlength="255" required />
         </div>
 
         <div class="mb-6">
-            <label class="font-semibold">Commitment Hours</label>
-            <input type="text" name="commitment_hours" class="input input-bordered w-full" maxlength="255" required>
+            <x-form.input name="commitment_hours" type="text" label="Commitment Hours" class="w-full" maxlength="255" required />
         </div>
 
         <div class="mb-6">
-            <label class="font-semibold">Physical Limitations</label>
-            <input type="text" name="physical_limitations" class="input input-bordered w-full" maxlength="255">
+            <x-form.input name="physical_limitations" type="text" label="Physical Limitations" class="w-full" maxlength="255" />
         </div>
 
         <!-- Section 3: Emergency & Consent -->
         <div class="mb-6">
-            <label class="font-semibold">Emergency Contact</label>
-            <input type="text" name="emergency_contact" class="input input-bordered w-full" maxlength="255" required>
+            <x-form.input name="emergency_contact" type="text" label="Emergency Contact" class="w-full" maxlength="255" required />
         </div>
 
         <div class="mb-6">
-            <label class="font-semibold block mb-1">Emergency Contact Consent</label>
-            <div class="flex gap-4">
-                <label><input type="radio" name="contact_consent" value="yes" required> Yes</label>
-                <label><input type="radio" name="contact_consent" value="no"> No</label>
-            </div>
+            <x-form.label for="emergency_contact_consent">Emergency Contact Consent</x-form.label>
+            <x-form.radio-group name="contact_consent" :options="['yes' => 'Yes', 'no' => 'No']" required />
         </div>
 
         <!-- Section 4: Reflection -->
         <div class="mb-6">
-            <label class="font-semibold block mb-1">Have you volunteered before?</label>
-            <div class="flex gap-4">
-                <label><input type="radio" name="volunteered_before" value="yes" required> Yes</label>
-                <label><input type="radio" name="volunteered_before" value="no"> No</label>
-            </div>
+            <x-form.label for="volunteered_before">Have you volunteered before?</x-form.label>
+            <x-form.radio-group name="volunteered_before" :options="['yes' => 'Yes', 'no' => 'No']" required />
         </div>
 
         <div class="mb-6">
-            <label class="font-semibold block mb-1">Are you comfortable with outdoor or physical activities?</label>
-            <div class="flex gap-4">
-                <label><input type="radio" name="outdoor_ok" value="yes" required> Yes</label>
-                <label><input type="radio" name="outdoor_ok" value="no"> No</label>
-                <label><input type="radio" name="outdoor_ok" value="depends"> Depends</label>
-            </div>
+            <x-form.label for="outdoor_ok">Are you comfortable with outdoor or physical activities?</x-form.label>
+            <x-form.radio-group name="outdoor_ok" :options="['yes' => 'Yes', 'no' => 'No', 'depends' => 'Depends']" required />
         </div>
 
         <div class="mb-6">
-            <label class="font-semibold">Short Bio</label>
+            <x-form.label for="short_bio">Short Bio</x-form.label>
             <textarea name="short_bio" class="textarea textarea-bordered w-full" maxlength="500"></textarea>
         </div>
 

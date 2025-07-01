@@ -293,7 +293,6 @@ defaultTab="modern1"
         <!-- Page Header Section -->
                 
     </div> --}}
-    @endsection
 
     <!-- Form Components Section -->
     <section class="mb-12">
@@ -356,5 +355,21 @@ defaultTab="modern1"
                     <x-button variant="secondary">Button 2</x-button>
                 </x-form.button-group>
             </div>
+            <!-- General Input: Name -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Input (Name)</h3>
+                <x-form.input name="showcase_name" type="name" label="Full Name" placeholder="Enter your name" required />
+            </div>
+            <!-- General Input: Email -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Input (Email)</h3>
+                <x-form.input name="showcase_email" type="email" label="Email Address" placeholder="Enter your email" required />
+            </div>
+            <!-- General Input: Number -->
+            <div>
+                <h3 class="text-lg font-medium mb-3">Input (Number)</h3>
+                <x-form.input name="showcase_number" type="number" label="Age" placeholder="Enter your age" required />
+            </div>
         </div>
     </section>
+    @endsection

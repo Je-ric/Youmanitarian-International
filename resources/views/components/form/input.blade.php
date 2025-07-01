@@ -30,7 +30,7 @@
     placeholder="{{ $placeholder }}"
     @if($required) required @endif
     @if($inputPattern) pattern="{{ $inputPattern }}" @endif
-    {{ $attributes->merge(['class' => 'w-full px-3 py-2 border border-[#1a2235] rounded-lg focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] transition ' . $class]) }}
+    {{ $attributes->merge(['class' => 'w-full px-3 py-2 border border-gray-300 rounded-lg ring-1 ring-gray-200 focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] focus:ring-offset-0 transition ' . $class]) }}
 />
 @error($name)
     <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>

@@ -54,12 +54,10 @@
                         </div>
 
                         <div class="space-y-3">
-                            <label for="proof_image" class="block text-sm font-semibold text-slate-700">
-                                Upload Image:
-                            </label>
-                                <x-form.input-upload name="proof_image" id="proof_image" accept="image/*" required>
-                                    PNG, JPG up to 10MB
-                                </x-form.input-upload>
+                            <x-form.label for="proof_image">Upload Image:</x-form.label>
+                            <x-form.input-upload name="proof_image" id="proof_image" accept="image/*" required>
+                                PNG, JPG up to 10MB
+                            </x-form.input-upload>
                         </div>
                     </div>
                 </div>
