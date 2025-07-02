@@ -33,4 +33,16 @@
             {{ $action }}
         </div>
     @endif
-</div> 
+</div>
+
+{{--
+Usage: <x-overview.summary-list-item title="John Doe" subtitle="john@example.com" action="View Profile" />
+       <x-overview.summary-list-item imageUrl="/path/to/avatar.jpg" title="Jane Smith" subtitle="Administrator" />
+       <x-overview.summary-list-item icon="bx-user" title="Guest User" subtitle="Limited access" action="Edit" />
+
+Used in:
+- resources/views/dashboard.blade.php
+- resources/views/member/partials/members_table.blade.php
+- resources/views/volunteers/partials/volunteersOverview.blade.php
+- resources/views/programs_volunteers/partials/programOverview.blade.php
+--}} 

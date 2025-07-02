@@ -7,6 +7,20 @@
     'required' => false,
 ])
 
+{{--
+Usage: <x-form.select-option name="role" label="Select Role" 
+           :options="[['value' => 'admin', 'label' => 'Administrator'], ['value' => 'user', 'label' => 'User']]" 
+           required />
+       <x-form.select-option name="program" onchange="handleProgramChange()">
+           <option value="">Select Program</option>
+           <option value="1">Program 1</option>
+       </x-form.select-option>
+
+Used in:
+- resources/views/volunteers/modals/invitationModal.blade.php
+- resources/views/programs_volunteers/partials/programTasks.blade.php
+--}}
+
 <div>
     @if ($label)
         <label for="{{ $name }}" class="block text-sm font-semibold text-slate-800 mb-2">{{ $label }}</label>
@@ -28,10 +42,4 @@
             @endforeach
         @endif
     </select> 
-</div>
-
-{{--
-Used in:
-- resources/views/volunteers/modals/invitationModal.blade.php
-- resources/views/programs_volunteers/partials/programTasks.blade.php
---}} 
+</div> 

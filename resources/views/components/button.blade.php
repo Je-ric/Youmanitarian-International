@@ -74,3 +74,46 @@
         {{ $slot }}
     </button>
 @endif
+
+{{--
+Usage: <x-button variant="primary">Submit</x-button>
+       <x-button href="/dashboard" variant="secondary">Go to Dashboard</x-button>
+       <x-button variant="table-action-view" class="tooltip" data-tip="View Details">
+           <i class="bx bx-show"></i>
+       </x-button>
+       <x-button variant="save-entry" type="submit">Save Entry</x-button>
+
+Available Variants:
+- Basic: primary, secondary, success, danger, warning, info, manage
+- Actions: restore, approve, delete
+- Attendance: clock_in, attendance-approve, attendance-reject, manual-entry, review-attendance
+- Tasks: task-primary, task-secondary, save-entry
+- Table Actions: table-action-view, table-action-manage, table-action-edit, table-action-danger
+- States: disabled, cancel, test
+
+Used in:
+- resources/views/content/index.blade.php
+- resources/views/volunteers/index.blade.php
+- resources/views/roles/index.blade.php
+- resources/views/programs_volunteers/modals/manualAttendanceModal.blade.php
+- resources/views/programs_volunteers/modals/attendanceApproval.blade.php
+- resources/views/programs_volunteers/partials/programTasks.blade.php
+- resources/views/programs_volunteers/partials/volunteerLists.blade.php
+- resources/views/profile/update-profile-information-form.blade.php
+- resources/views/profile/update-password-form.blade.php
+- resources/views/profile/two-factor-authentication-form.blade.php
+- resources/views/profile/logout-other-browser-sessions-form.blade.php
+- resources/views/programs/modals/proofModal.blade.php
+- resources/views/programs/modals/feedbackModal.blade.php
+- resources/views/programs/modals/deleteProgramModal.blade.php
+- resources/views/programs/partials/programsTable.blade.php
+- resources/views/programs/index.blade.php
+- resources/views/programs/attendance.blade.php
+- resources/views/auth/login.blade.php
+- resources/views/auth/register.blade.php
+- resources/views/auth/forgot-password.blade.php
+- resources/views/auth/reset-password.blade.php
+- resources/views/auth/two-factor-challenge.blade.php
+- resources/views/auth/confirm-password.blade.php
+- resources/views/api/api-token-manager.blade.php
+--}}

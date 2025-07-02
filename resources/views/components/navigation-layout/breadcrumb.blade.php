@@ -27,6 +27,12 @@
 </nav>
 
 {{--
+Usage: <x-navigation-layout.breadcrumb :items="[
+            ['label' => 'Dashboard', 'url' => '/dashboard'],
+            ['label' => 'Programs', 'url' => '/programs'],
+            ['label' => 'Program Details']
+        ]" />
+
 Used in:
 - resources/views/layouts/sidebar_final.blade.php
 --}} 

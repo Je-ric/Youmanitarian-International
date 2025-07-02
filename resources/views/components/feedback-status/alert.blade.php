@@ -33,6 +33,10 @@
 @endif
 
 {{--
+Usage: <x-feedback-status.alert type="success" message="Operation completed successfully!" />
+       <x-feedback-status.alert type="error" message="Something went wrong!" />
+       <x-feedback-status.alert type="warning" message="Please review your input." variant="attendance" />
+
 Used in:
 - resources/views/roles/partials/assign_rolesModal.blade.php
 - resources/views/programs/modals/feedbackModal.blade.php

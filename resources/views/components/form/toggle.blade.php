@@ -4,6 +4,16 @@
     'label' => '',
     'id' => null,
 ])
+
+{{--
+Usage: <x-form.toggle name="notifications" label="Enable Notifications" checked="{{ old('notifications') }}" />
+       <x-form.toggle name="public_profile" checked="true" />
+
+Used in:
+- resources/views/profile/show.blade.php
+- resources/views/programs/modals/feedbackModal.blade.php
+--}}
+
 @php
     $id = $id ?? $name . '_' . uniqid();
 @endphp

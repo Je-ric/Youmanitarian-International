@@ -6,3 +6,19 @@
               clip-rule="evenodd" />
     </svg>
 </button>
+
+{{--
+Usage: <x-modal.x-button />
+       Note: This component is automatically included in x-modal.header
+
+Used in:
+- Automatically included in x-modal.header component
+- resources/views/programs/modals/feedbackModal.blade.php
+- resources/views/programs/modals/proofModal.blade.php
+- resources/views/finance/modals/addPaymentModal.blade.php
+- resources/views/finance/modals/paymentReminderModal.blade.php
+- resources/views/volunteers/modals/invitationModal.blade.php
+- resources/views/programs_volunteers/modals/attendanceApproval.blade.php
+- resources/views/programs_volunteers/modals/manualAttendanceModal.blade.php
+- resources/views/roles/partials/assign_rolesModal.blade.php
+--}}

@@ -22,3 +22,21 @@
     ($sizes[$size] ?? $sizes['md'])]) }}>
     {{ $slot }}
 </a>
+
+{{--
+Usage: <x-link href="/dashboard" variant="primary">Dashboard</x-link>
+       <x-link href="/profile" variant="secondary" size="sm">Profile</x-link>
+       <x-link href="/delete" variant="danger">Delete Account</x-link>
+       <x-link href="/next" variant="nextPrevious">
+           <i class="bx bx-right-arrow-alt"></i> Next
+       </x-link>
+
+Available Variants:
+- primary, secondary, danger, success, outline, nextPrevious
+
+Available Sizes:
+- sm, md, lg
+
+Used in:
+- resources/views/components/showcase.blade.php
+--}}

@@ -338,3 +338,31 @@
     animation: spin 1s linear infinite;
 }
 </style>
+
+{{--
+Usage: <x-empty-state variant="no-data" />
+       <x-empty-state variant="no-volunteers" actionText="Invite Volunteers" actionUrl="/volunteers/invite" />
+       <x-empty-state variant="loading" size="large" />
+       <x-empty-state icon="bx bx-custom" title="Custom Title" description="Custom description" />
+
+Available Variants:
+- General: default, loading, error
+- Content: no-data, empty-table, no-search
+- Volunteer: no-volunteers, no-applications, no-approved, no-pending, no-denied
+- Tasks: no-tasks, no-assigned-tasks
+- Programs: no-programs, no-attendance
+- Communication: no-notifications, no-messages, no-feedback
+- Media: no-images, no-files, no-documents
+- Financial: no-payments, no-donations
+- Roles: no-roles, no-permissions
+- Analytics: no-reports, no-analytics
+- Success: completed, success
+
+Available Sizes:
+- small, default, large
+
+Used in:
+- resources/views/programs_volunteers/partials/programTasks.blade.php
+- resources/views/programs/attendance.blade.php
+- resources/views/components/showcase.blade.php
+--}}

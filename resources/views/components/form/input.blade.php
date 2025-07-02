@@ -10,6 +10,19 @@
     'pattern' => null,
 ])
 
+{{--
+Usage: <x-form.input name="email" type="email" label="Email Address" required />
+       <x-form.input name="phone" type="tel" placeholder="Enter phone number" />
+       <x-form.input name="name" type="name" label="Full Name" pattern="[A-Za-z\s]+" />
+
+Used in:
+- resources/views/auth/login.blade.php
+- resources/views/auth/register.blade.php
+- resources/views/volunteers/form.blade.php
+- resources/views/programs/create.blade.php
+- resources/views/finance/modals/addPaymentModal.blade.php
+--}}
+
 @php
     $inputId = $id ?? $name;
     $inputType = $type === 'name' ? 'text' : $type;

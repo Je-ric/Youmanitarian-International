@@ -64,6 +64,14 @@
 </div>
 
 {{--
+Usage: <x-feedback-status.toast type="success" message="Your action was completed successfully!" />
+       <x-feedback-status.toast type="error" message="An error occurred. Please try again." />
+       <x-feedback-status.toast type="warning" message="Please review your input before proceeding." />
+
+Note: Toast automatically disappears after 3.5 seconds and can be manually closed
+
 Used in:
 - resources/views/layouts/sidebar_final.blade.php
+- resources/views/programs/modals/feedbackModal.blade.php
+- resources/views/auth/login.blade.php
 --}}

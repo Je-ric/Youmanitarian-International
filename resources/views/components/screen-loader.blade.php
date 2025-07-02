@@ -91,4 +91,18 @@
     document.addEventListener('DOMContentLoaded', () => {
         new ScreenLoader();
     });
-</script> 
+</script>
+
+{{--
+Usage: <x-screen-loader />
+       Note: This component automatically handles page loading states
+
+Features:
+- Shows on page load, navigation, and form submissions
+- Automatically hides when page is ready
+- Includes spinning logo and animated dots
+- Handles browser back/forward navigation
+
+Used in:
+- resources/views/layouts/sidebar_final.blade.php
+--}} 

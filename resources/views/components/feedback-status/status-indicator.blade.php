@@ -79,6 +79,17 @@ $iconClass = $icon ?? ($icons[$status] ?? '');
 </span>
 
 {{--
+Usage: <x-feedback-status.status-indicator status="success" />
+       <x-feedback-status.status-indicator status="pending" label="Awaiting Approval" />
+       <x-feedback-status.status-indicator status="published" icon="bx-check-circle" />
+
+Supported Statuses:
+- General: success, neutral, info, warning, danger
+- Program/Volunteer: completed, in_progress, pending, rejected, approved, role
+- Content Types: news, program, announcement, event, article, blog
+- Content Status: draft, published, archived
+- Approval Status: needs_revision
+
 Used in:
 - resources/views/roles/partials/assign_rolesModal.blade.php
 - resources/views/programs_volunteers/partials/programTasks.blade.php
@@ -87,9 +98,4 @@ Used in:
 - resources/views/dashboard.blade.php
 - resources/views/content/index.blade.php
 - resources/views/content_requests/requests-index.blade.php
-
-Content Statuses Supported:
-- Content Types: news, program, announcement, event, article, blog
-- Content Status: draft, published, archived
-- Approval Status: pending, approved, rejected, needs_revision
 --}}

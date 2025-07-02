@@ -4,6 +4,18 @@
     'accept' => 'image/*,.pdf',
     'class' => '',
 ])
+
+{{--
+Usage: <x-form.input-upload name="proof_file" accept="image/*" required />
+       <x-form.input-upload name="documents" accept=".pdf,.doc,.docx" multiple>
+           PDF, DOC, DOCX files up to 5MB
+       </x-form.input-upload>
+
+Used in:
+- resources/views/programs/modals/proofModal.blade.php
+- resources/views/finance/modals/addPaymentModal.blade.php
+--}}
+
 <div x-data="{ files: [] }" class="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-[#ffb51b] transition-colors {{ $class }}">
     <div class="text-center">
         <i class='bx bx-cloud-upload text-3xl text-gray-400 mb-2 group-hover:text-[#ffb51b]'></i>
@@ -32,10 +44,4 @@
     <template x-if="files.length">
         <p class="text-xs text-[#1a2235] mt-2" x-text="files.join(', ')"></p>
     </template>
-</div>
-
-{{--
-Used in:
-- resources/views/programs/modals/proofModal.blade.php
-- resources/views/finance/modals/addPaymentModal.blade.php
---}} 
+</div> 

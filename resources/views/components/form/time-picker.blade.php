@@ -8,6 +8,16 @@
     'placeholder' => '',
 ])
 
+{{--
+Usage: <x-form.time-picker id="start_time" name="start_time" value="{{ old('start_time') }}" required />
+       <x-form.time-picker id="end_time" name="end_time" class="mt-2" />
+
+Used in:
+- resources/views/programs_volunteers/modals/manualAttendanceModal.blade.php
+- resources/views/programs_volunteers/partials/programDetails.blade.php
+- resources/views/programs/create.blade.php
+--}}
+
 <div class="form-control w-full">
     <div class="relative">
         <input
@@ -24,11 +34,4 @@
             <i class="bx bx-chevron-down text-xl text-gray-300"></i>
         </span>
     </div>
-</div>
-
-{{--
-Used in:
-- resources/views/programs_volunteers/modals/manualAttendanceModal.blade.php
-- resources/views/programs_volunteers/partials/programDetails.blade.php
-- resources/views/programs/create.blade.php
---}} 
+</div> 

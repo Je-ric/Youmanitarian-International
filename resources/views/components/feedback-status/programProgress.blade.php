@@ -36,6 +36,9 @@
 </div>
 
 {{--
+Usage: <x-feedback-status.programProgress :program="$program" />
+       Note: Requires a program model with progress_status and progress_status_with_style attributes
+
 Used in:
 - resources/views/programs_volunteers/partials/programDetails.blade.php
 - resources/views/programs/attendance.blade.php

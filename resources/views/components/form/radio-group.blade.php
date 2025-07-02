@@ -5,6 +5,18 @@
     'selected' => null,
 ])
 
+{{--
+Usage: <x-form.radio-group name="gender" label="Gender" 
+           :options="['male' => 'Male', 'female' => 'Female']" 
+           :selected="old('gender')" />
+       <x-form.radio-group name="status" 
+           :options="['active' => 'Active', 'inactive' => 'Inactive']" />
+
+Used in:
+- resources/views/volunteers/form.blade.php
+- resources/views/programs_volunteers/modals/attendanceApproval.blade.php
+--}}
+
 <div>
     @if($label)
         <label class="block text-sm font-medium text-gray-700 mb-2">{{ $label }}</label>

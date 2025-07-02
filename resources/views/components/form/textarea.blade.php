@@ -10,6 +10,19 @@
     'class' => '',
 ])
 
+{{--
+Usage: <x-form.textarea name="description" label="Description" placeholder="Enter description" rows="5" />
+       <x-form.textarea name="notes" value="{{ old('notes') }}" required />
+       <x-form.textarea name="comment" disabled class="bg-gray-50" />
+
+Used in:
+- resources/views/volunteers/modals/invitationModal.blade.php
+- resources/views/programs_volunteers/modals/manualAttendanceModal.blade.php
+- resources/views/programs_volunteers/modals/attendanceApproval.blade.php
+- resources/views/programs/modals/feedbackModal.blade.php
+- resources/views/finance/modals/addPaymentModal.blade.php
+--}}
+
 @if($label)
     <label for="{{ $id ?? $name }}" class="block text-sm font-semibold text-gray-700 mb-2">
         {{ $label }}
@@ -31,13 +44,4 @@
 
 @error($name)
     <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>
-@enderror
-
-{{--
-Used in:
-- resources/views/volunteers/modals/invitationModal.blade.php
-- resources/views/programs_volunteers/modals/manualAttendanceModal.blade.php
-- resources/views/programs_volunteers/modals/attendanceApproval.blade.php
-- resources/views/programs/modals/feedbackModal.blade.php
-- resources/views/finance/modals/addPaymentModal.blade.php
---}} 
+@enderror 

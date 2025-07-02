@@ -1,6 +1,16 @@
 @props([
     'checked' => false
 ])
+
+{{--
+Usage: <x-form.checkbox name="terms" checked="{{ old('terms') }}" required />
+       <x-form.checkbox name="newsletter" checked="true" />
+
+Used in:
+- resources/views/roles/partials/assign_rolesModal.blade.php
+- resources/views/auth/register.blade.php
+--}}
+
 <input 
     type="checkbox"
     {{ $attributes->merge([
@@ -8,8 +18,3 @@
     ]) }}
     @if($checked) checked="checked" @endif
 >
-{{--
-Used in:
-- resources/views/roles/partials/assign_rolesModal.blade.php
-- resources/views/auth/register.blade.php
---}}

@@ -45,4 +45,18 @@
             @endif
         </div>
     @endif
-</a> 
+</a>
+
+{{--
+Usage: <x-overview.stat-card icon="bx-users" title="Total Users" value="1,234" href="/users" />
+       <x-overview.stat-card icon="bx-dollar" title="Revenue" value="$12,345" percentage="12%" period="vs last month" />
+       <x-overview.stat-card icon="bx-chart" title="Growth" value="23%" percentage="5%" percentage_type="decrease" note="From last week" />
+
+Used in:
+- resources/views/dashboard.blade.php
+- resources/views/finance/donations.blade.php
+- resources/views/finance/membership_payments.blade.php
+- resources/views/programs/index.blade.php
+- resources/views/volunteers/index.blade.php
+- resources/views/member/index.blade.php
+--}} 

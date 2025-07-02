@@ -69,15 +69,26 @@
         });
     });
 </script>
-@endpush 
+@endpush
 
 {{--
+Usage: <x-navigation-layout.tabs :tabs="[
+            ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-home'],
+            ['id' => 'details', 'label' => 'Details', 'icon' => 'bx-info-circle'],
+            ['id' => 'settings', 'label' => 'Settings', 'icon' => 'bx-cog']
+        ]" defaultTab="overview">
+            <x-slot name="slot_overview">
+                <p>Overview content here</p>
+            </x-slot>
+            <x-slot name="slot_details">
+                <p>Details content here</p>
+            </x-slot>
+            <x-slot name="slot_settings">
+                <p>Settings content here</p>
+            </x-slot>
+        </x-navigation-layout.tabs>
+
 Used in:
-- resources/views/volunteers/index.blade.php
-- resources/views/roles/index.blade.php
-- resources/views/programs_volunteers/program-volunteers.blade.php
 - resources/views/programs_volunteers/partials/viewFeedback.blade.php
-- resources/views/programs/index.blade.php
-- resources/views/member/index.blade.php
-- resources/views/finance/membership_payments.blade.php
+- resources/views/components/showcase.blade.php
 --}} 

@@ -25,8 +25,19 @@
     >
         {{ $text }}
     </button>
-@endif 
+@endif
 
 {{--
-    Usage: <x-modal.close-button :modalId="$yourModalId" text="Cancel" variant="cancel" />
+Usage: <x-modal.close-button :modalId="'myModal'" text="Cancel" variant="cancel" />
+       <x-modal.close-button :modalId="'myModal'" text="Close" class="bg-red-500 text-white" />
+
+Used in:
+- resources/views/programs/modals/feedbackModal.blade.php
+- resources/views/programs/modals/proofModal.blade.php
+- resources/views/finance/modals/addPaymentModal.blade.php
+- resources/views/finance/modals/paymentReminderModal.blade.php
+- resources/views/volunteers/modals/invitationModal.blade.php
+- resources/views/programs_volunteers/modals/attendanceApproval.blade.php
+- resources/views/programs_volunteers/modals/manualAttendanceModal.blade.php
+- resources/views/roles/partials/assign_rolesModal.blade.php
 --}}

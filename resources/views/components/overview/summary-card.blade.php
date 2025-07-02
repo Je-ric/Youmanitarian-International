@@ -13,4 +13,20 @@
     >
         {{ $slot }}
     </div>
-</div> 
+</div>
+
+{{--
+Usage: <x-overview.summary-card title="Recent Activities">
+            <x-overview.summary-list-item title="New user registered" subtitle="2 minutes ago" />
+            <x-overview.summary-list-item title="Payment received" subtitle="1 hour ago" />
+        </x-overview.summary-card>
+       <x-overview.summary-card title="User List" maxHeight="300px">
+            <div class="overflow-y-auto">Content here</div>
+        </x-overview.summary-card>
+
+Used in:
+- resources/views/dashboard.blade.php
+- resources/views/member/index.blade.php
+- resources/views/volunteers/index.blade.php
+- resources/views/programs_volunteers/program-volunteers.blade.php
+--}} 
