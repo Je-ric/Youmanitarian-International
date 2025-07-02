@@ -59,7 +59,7 @@
         </div>
 
         {{-- Scrollable Content --}}
-        <div class="h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar-gold">
+        <div class="h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar-blue">
             <div class="px-5 py-4">
                 {{-- Overview Section --}}
                 <div class="mb-6">
@@ -93,7 +93,7 @@
                             <a href="{{ route('content.index') }}"
                                 class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('content.*') ? 'active' : '' }}"
                                 data-tooltip="Contents">
-                                <i class="bx bx-file w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bxs-file-doc w-5 text-center flex-shrink-0 sidebar-icon"></i>
                                 <span class="ml-3 sidebar-content text-sm">Contents</span>
                             </a>
                         </li>
@@ -385,10 +385,24 @@
     </div>
 
     <style>
-        /* Custom colors */
         :root {
             --primary-color: #1a2235;
+            --primary-tint: #313849;
+            --primary-shade: #171F30;
             --accent-color: #ffb51b;
+            --accent-tint: #FFBC32;
+            --accent-shade: #E6A318;
+            --sidebar-hover-bg: #ffe9b3;
+            --sidebar-active-bg: #ffecd1;
+            --sidebar-active-text: #1a2235;
+            --sidebar-hover-text: #1a2235;
+            --sidebar-text-default: #334155;
+            --sidebar-border-active: #ffb51b;
+            --sidebar-border-hover: #FFBC32;
+            --sidebar-shadow-active: 0 2px 8px 0 rgba(255, 181, 27, 0.10);
+            --sidebar-shadow-hover: 0 2px 8px 0 rgba(255, 181, 27, 0.12);
+            --logout-bg-hover: #1a2235;
+            --logout-text-hover: #fff;
         }
 
         /* Sidebar states */
@@ -477,48 +491,51 @@
 
         /* Sidebar link styles */
         .sidebar-link {
-            color: var(--text-default);
+            color: var(--sidebar-text-default);
             position: relative;
             font-weight: 400;
+            border-left: 4px solid transparent;
         }
 
+        .sidebar-link .sidebar-icon,
         .sidebar-link i {
-            width: 1.5rem !important;
-            /* Fixed width for icons */
-            margin: 0 0.5rem;
-            /* Add margin around icons */
+            color: var(--primary-color) !important;
+            transition: color 0.2s;
         }
 
         .sidebar-link:hover {
-            background-color: theme('colors.gray.100');
-            color: var(--text-default);
+            background-color: var(--sidebar-hover-bg);
+            color: var(--sidebar-hover-text);
+            border-left: 4px solid var(--sidebar-border-hover);
+            box-shadow: var(--sidebar-shadow-hover);
         }
 
+        .sidebar-link:hover .sidebar-icon,
         .sidebar-link:hover i {
-            color: var(--text-default) !important;
+            color: var(--primary-color) !important;
         }
 
         .sidebar-link.active {
-            background-color: var(--active-bg-light);
-            color: var(--active-text);
-            font-weight: 600;
+            background-color: var(--sidebar-active-bg);
+            color: var(--sidebar-active-text);
+            font-weight: 700;
             border-radius: 0.375rem;
-            /* Equivalent to rounded-md */
+            border-left: 4px solid var(--sidebar-border-active);
+            box-shadow: var(--sidebar-shadow-active);
         }
 
+        .sidebar-link.active .sidebar-icon,
         .sidebar-link.active i {
-            color: var(--active-text) !important;
+            color: var(--primary-color) !important;
         }
 
         .sidebar-link.logout-link:hover {
-            background-color: theme('colors.gray.100');
-            color: theme('colors.red.500');
-            /* Keep text red on hover */
+            background-color: var(--logout-bg-hover);
+            color: var(--logout-text-hover);
         }
 
         .sidebar-link.logout-link:hover i {
-            color: theme('colors.red.500') !important;
-            /* Keep icon red on hover */
+            color: var(--logout-text-hover) !important;
         }
 
         /* Responsive adjustments */
