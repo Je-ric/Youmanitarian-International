@@ -5,7 +5,11 @@
         icon="bx-donate-heart" 
         title="Donations Management"
         desc="View and manage donations, track financial statistics, and monitor payment activities.">
-        <p>Future Buttons</p>
+
+            <x-button variant="primary" onclick="document.getElementById('addDonationModal').showModal()">
+                <i class='bx bx-plus mr-1'></i>
+                Add Donation
+            </x-button>
     </x-page-header>
 
     @php
@@ -21,13 +25,7 @@
             </x-slot>
 
             <x-slot:slot_donations>
-                @if(session('success'))
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
-                        role="alert">
-                        <span class="block sm:inline">{{ session('success') }}</span>
-                    </div>
-                @endif
-
+                
                 <x-table.table containerClass="overflow-x-auto" tableClass="min-w-full">
                     <x-table.thead>
                         <x-table.tr :hover="false">
@@ -88,4 +86,6 @@
                 </div>
                 </x-slot>
     </x-navigation-layout.tabs-modern>
+
+    @include('finance.modals.addDonationModal')
 @endsection

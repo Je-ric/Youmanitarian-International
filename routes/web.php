@@ -227,6 +227,8 @@ Route::middleware(['auth'])->group(function () {
     // Membership payment reminders
     Route::post('/finance/membership/reminders', [MembershipReminderController::class, 'store'])
         ->name('finance.membership.reminders.store');
+
+    Route::post('/finance/donations', [DonationController::class, 'store'])->name('finance.donations.store');
 });
 
 Route::middleware(['auth'])->group(function () {
