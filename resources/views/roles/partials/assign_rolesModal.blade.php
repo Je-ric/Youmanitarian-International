@@ -30,7 +30,7 @@
         </x-modal.header>
 
         <!-- Modal Body -->
-        <div class="p-6 max-h-[70vh] overflow-y-auto">
+        <x-modal.body>
             <form method="POST" action="{{ route('roles.assign') }}" id="roleForm_{{ $user->id }}">
                 @csrf
                 <input type="hidden" name="user_id" value="{{ $user->id }}">
@@ -143,7 +143,7 @@
                     @endif
                 </div>
             </form>
-        </div>
+        </x-modal.body>
 
         <!-- Modal Footer -->
         <x-modal.footer>

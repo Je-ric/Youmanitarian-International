@@ -5,7 +5,7 @@
 @if($programs->isEmpty())
     <p class="text-gray-600 text-center py-4">No programs found.</p>
 @else
-    <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="w-full">
+    <x-table.table containerClass="overflow-x-auto custom-scrollbar-gold" tableClass="w-full">
         <x-table.thead>
             <x-table.tr :hover="false">
                 <x-table.th class="w-10 text-center">#</x-table.th>

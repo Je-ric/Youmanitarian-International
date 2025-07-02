@@ -14,7 +14,7 @@
         </x-modal.header>
 
         @if ($proofPath)
-            <div class="p-6 space-y-6 overflow-y-auto flex-1">
+            <x-modal.body>
                 <div class="space-y-4">
                     <div class="border-b border-slate-200 pb-4">
                         <p class="text-sm font-semibold text-slate-700 flex items-center gap-2">
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </x-modal.body>
 
             <x-modal.footer>
                 <x-modal.close-button :modalId="'uploadProofModal'" text="Close" />
@@ -46,7 +46,7 @@
                 class="flex flex-col flex-1 min-h-0">
                 @csrf
 
-                <div class="p-6 space-y-6 overflow-y-auto flex-1">
+                <x-modal.body>
                     <div class="space-y-4">
                         <div class="border-b border-slate-200 pb-4">
                             <p class="text-sm text-slate-600">Please upload an image as proof of your attendance at this
@@ -60,7 +60,7 @@
                             </x-form.input-upload>
                         </div>
                     </div>
-                </div>
+                </x-modal.body>
 
                 <x-modal.footer>
                     <x-modal.close-button :modalId="'uploadProofModal'" text="Cancel" variant="cancel" />

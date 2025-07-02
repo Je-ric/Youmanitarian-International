@@ -14,7 +14,7 @@
         </x-modal.header>
 
         <!-- Modal Body -->
-        <div class="p-4 sm:p-6 max-h-[75vh] overflow-y-auto">
+        <x-modal.body>
             @forelse ($volunteerLogs as $log)
                 @php
                     $disabled = ($log->approval_status === 'approved' || $log->approval_status === 'rejected');
@@ -206,7 +206,7 @@
                     </p>
                 </div>
             @endforelse
-        </div>
+        </x-modal.body>
 
         <!-- Modal Footer -->
         <x-modal.footer>

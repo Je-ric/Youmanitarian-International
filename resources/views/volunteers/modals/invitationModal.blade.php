@@ -27,7 +27,7 @@
         <!-- Form -->
         <form id="invitationForm" action="" method="POST" class="flex flex-col">
             @csrf
-            <div class="p-4 sm:p-6 space-y-6">
+            <x-modal.body>
                 <!-- Membership Type -->
                 <div>
                     <x-form.label for="membership_type">Membership Type</x-form.label>
@@ -64,7 +64,7 @@
                     </x-form.label>
                     <x-form.textarea id="invitation_message" name="invitation_message" rows="6" class="mt-1" x-model="message" placeholder="Add a personal message or select a template..."></x-form.textarea>
                 </div>
-            </div>
+            </x-modal.body>
 
             <!-- Footer -->
             <x-modal.footer>

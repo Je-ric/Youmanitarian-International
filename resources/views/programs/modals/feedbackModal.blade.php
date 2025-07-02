@@ -19,7 +19,7 @@
                 onsubmit="return {{ $userFeedback ? 'false' : 'true' }};" class="flex flex-col flex-1 min-h-0">
                 @csrf
 
-                <div class="p-6 space-y-6 overflow-y-auto flex-1">
+                <x-modal.body>
                     @if($userFeedback)
                         <x-feedback-status.alert
                             type="success"
@@ -69,7 +69,7 @@
                         <input type="hidden" name="rating" value="{{ $userFeedback->rating }}">
                         <input type="hidden" name="feedback" value="{{ $userFeedback->feedback }}">
                     @endif
-                </div>
+                </x-modal.body>
 
                 <x-modal.footer>
                     <x-modal.close-button :modalId="'feedbackModal_' . $program->id" text="Cancel" variant="cancel" />

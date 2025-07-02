@@ -49,7 +49,7 @@
             <input type="hidden" name="payment_year" value="{{ $year }}">
             <input type="hidden" name="payment_date" value="{{ now()->format('Y-m-d H:i:s') }}">
             
-            <div class="flex-1 min-h-0 overflow-y-auto sm:p-6 pb-32 p-6 space-y-6 max-h-[60vh] sm:max-h-[70vh]">
+            <x-modal.body>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     
                     {{-- Left Column --}}
@@ -197,7 +197,7 @@
                         </x-form.input-upload>
                     @endif
                 </div>
-            </div>
+            </x-modal.body>
             <x-modal.footer>
                 <x-modal.close-button :modalId="$modalId" text="Cancel" variant="cancel" />
                 @if(!$payment)

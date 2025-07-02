@@ -8,170 +8,172 @@
             </h2>
         </x-modal.header>
         {{-- Main Content - Scrollable --}}
-        <div class="flex flex-col lg:flex-row flex-1 min-h-0 overflow-hidden">
-            {{-- Left Content --}}
-            <div class="lg:w-2/3 w-full p-6 space-y-6 overflow-y-auto">
+        <x-modal.body :padded="false">
+            <div class="flex flex-col lg:flex-row flex-1 min-h-0 overflow-hidden">
+                {{-- Left Content --}}
+                <div class="lg:w-2/3 w-full p-6 space-y-6 overflow-y-auto">
 
-                {{-- Description --}}
-                <article>
-                    <h3 class="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                        <i class='bx bx-book-open text-slate-600'></i>
-                        Description
-                    </h3>
-                    <div
-                        class="bg-slate-50 border border-slate-200 rounded-lg p-4 max-h-36 overflow-y-auto custom-scrollbar">
-                        <p class="text-slate-700 leading-relaxed">
-                            {{ $program->description }}
-                        </p>
-                    </div>
-                </article>
+                    {{-- Description --}}
+                    <article>
+                        <h3 class="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                            <i class='bx bx-book-open text-slate-600'></i>
+                            Description
+                        </h3>
+                        <div
+                            class="bg-slate-50 border border-slate-200 rounded-lg p-4 max-h-36 overflow-y-auto custom-scrollbar-gold">
+                            <p class="text-slate-700 leading-relaxed">
+                                {{ $program->description }}
+                            </p>
+                        </div>
+                    </article>
 
-                {{-- Program Coordinator --}}
-                <div class="border-t border-slate-200 pt-6">
-                    <h4 class="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
-                        <i class='bx bx-user-circle text-slate-600'></i>
-                        Program Coordinator
-                    </h4>
-                    <div
-                        class="flex items-center space-x-4 p-4 border border-slate-200 rounded-lg hover:border-blue-200 transition-colors duration-200">
-                        <div class="relative">
-                            <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
-                                alt="Coordinator" class="rounded-lg w-16 h-16 object-cover border-2 border-slate-300" />
-                            <div
-                                class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full">
+                    {{-- Program Coordinator --}}
+                    <div class="border-t border-slate-200 pt-6">
+                        <h4 class="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                            <i class='bx bx-user-circle text-slate-600'></i>
+                            Program Coordinator
+                        </h4>
+                        <div
+                            class="flex items-center space-x-4 p-4 border border-slate-200 rounded-lg hover:border-blue-200 transition-colors duration-200">
+                            <div class="relative">
+                                <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
+                                    alt="Coordinator" class="rounded-lg w-16 h-16 object-cover border-2 border-slate-300" />
+                                <div
+                                    class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full">
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-lg font-semibold text-slate-900">{{ $program->creator->name }}</div>
+                                <div class="text-slate-600 text-sm flex items-center gap-1">
+                                    <i class='bx bx-check-circle text-green-500'></i>
+                                    Program Coordinator
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <div class="text-lg font-semibold text-slate-900">{{ $program->creator->name }}</div>
-                            <div class="text-slate-600 text-sm flex items-center gap-1">
-                                <i class='bx bx-check-circle text-green-500'></i>
-                                Program Coordinator
-                            </div>
-                        </div>
                     </div>
-                </div>
 
-                {{-- Join Button --}}
-                @php
-                    $volunteer = Auth::user()->volunteer ?? null;
-                    $alreadyJoined = false;
-                    if(Auth::user()->hasRole('Volunteer') && $volunteer) {
-                        $alreadyJoined = $program->volunteers->contains($volunteer->id);
-                    }
-                    $isCoordinator = Auth::id() === $program->created_by;
-                @endphp
-
-                @if(Auth::user()->hasRole('Volunteer') && !$isCoordinator)
+                    {{-- Join Button --}}
                     @php
-                        $currentVolunteers = $program->volunteers->count();
-                        $volunteer = Auth::user()->volunteer;
-                        $alreadyJoined = $program->volunteers->contains($volunteer?->id ?? 0);
-                        
-                        // Check if the volunteer has any task assignments for this program
-                        $hasTasks = $volunteer ? $volunteer->taskAssignments()
-                            ->whereHas('task', function ($query) use ($program) {
-                                $query->where('program_id', $program->id);
-                            })->exists() : false;
+                        $volunteer = Auth::user()->volunteer ?? null;
+                        $alreadyJoined = false;
+                        if(Auth::user()->hasRole('Volunteer') && $volunteer) {
+                            $alreadyJoined = $program->volunteers->contains($volunteer->id);
+                        }
+                        $isCoordinator = Auth::id() === $program->created_by;
                     @endphp
 
-                    <div class="border-t border-slate-200 pt-6">
-                        @if($program->progress_status === 'done')
-                            <x-feedback-status.alert type="success" icon="bx bx-check-circle" message="This program is already done." />
-                        @elseif($currentVolunteers >= $program->volunteer_count)
-                            <x-feedback-status.alert type="error" icon="bx bx-error-circle" message="All volunteer slots are filled, but you're welcome to join as a guest, viewer, or supporter!" />
-                        @elseif($alreadyJoined)
-                            <div class="space-y-4">
-                                <x-feedback-status.alert type="success" icon="bx bx-check-circle" message="You are already joined in this program." />
-                                
-                                @if($program->progress_status === 'incoming' && !$hasTasks)
-                                    <form action="{{ route('programs.leave', [$program->id, $volunteer->id]) }}" method="POST"
-                                        onsubmit="return confirm('Are you sure you want to leave this program?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                                            <i class='bx bx-log-out'></i>
-                                            Leave Program
-                                        </button>
-                                    </form>
-                                @else
-                                    @if($hasTasks)
-                                        <x-feedback-status.alert type="error" icon="bx bx-task" message="You cannot leave this program because you have assigned tasks." />
-                                    @elseif($program->progress_status !== 'incoming')
-                                        <x-feedback-status.alert type="info" icon="bx bx-lock" message="You cannot leave this program because it is no longer in incoming status." />
+                    @if(Auth::user()->hasRole('Volunteer') && !$isCoordinator)
+                        @php
+                            $currentVolunteers = $program->volunteers->count();
+                            $volunteer = Auth::user()->volunteer;
+                            $alreadyJoined = $program->volunteers->contains($volunteer?->id ?? 0);
+                            
+                            // Check if the volunteer has any task assignments for this program
+                            $hasTasks = $volunteer ? $volunteer->taskAssignments()
+                                ->whereHas('task', function ($query) use ($program) {
+                                    $query->where('program_id', $program->id);
+                                })->exists() : false;
+                        @endphp
+
+                        <div class="border-t border-slate-200 pt-6">
+                            @if($program->progress_status === 'done')
+                                <x-feedback-status.alert type="success" icon="bx bx-check-circle" message="This program is already done." />
+                            @elseif($currentVolunteers >= $program->volunteer_count)
+                                <x-feedback-status.alert type="error" icon="bx bx-error-circle" message="All volunteer slots are filled, but you're welcome to join as a guest, viewer, or supporter!" />
+                            @elseif($alreadyJoined)
+                                <div class="space-y-4">
+                                    <x-feedback-status.alert type="success" icon="bx bx-check-circle" message="You are already joined in this program." />
+                                    
+                                    @if($program->progress_status === 'incoming' && !$hasTasks)
+                                        <form action="{{ route('programs.leave', [$program->id, $volunteer->id]) }}" method="POST"
+                                            onsubmit="return confirm('Are you sure you want to leave this program?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                                <i class='bx bx-log-out'></i>
+                                                Leave Program
+                                            </button>
+                                        </form>
+                                    @else
+                                        @if($hasTasks)
+                                            <x-feedback-status.alert type="error" icon="bx bx-task" message="You cannot leave this program because you have assigned tasks." />
+                                        @elseif($program->progress_status !== 'incoming')
+                                            <x-feedback-status.alert type="info" icon="bx bx-lock" message="You cannot leave this program because it is no longer in incoming status." />
+                                        @endif
                                     @endif
-                                @endif
-                            </div>
-                        @else
-                            <form action="{{ route('programs.join', $program->id) }}" method="POST">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-                                    <i class='bx bx-user-plus'></i>
-                                    Join Program
-                                </button>
-                            </form>
-                        @endif
-                    </div>
-                @endif
-
-            </div>
-
-            {{-- Right Details --}}
-            <aside class="lg:w-1/3 w-full bg-slate-50 border-l border-slate-200 p-6 space-y-5 overflow-y-auto">
-                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 pb-2 border-b border-slate-300">
-                    <i class='bx bx-detail text-slate-600'></i>
-                    Program Details
-                </h3>
-
-                @php
-                    $progressComponent = view('components.feedback-status.programProgress', ['program' => $program])->render();
-
-                    $currentVolunteers = $program->volunteers->count();
-                    // $progressPercentage = ($currentVolunteers / $program->volunteer_count) * 100;
-                    $progressPercentage = ($program->volunteer_count > 0)
-                        ? ($currentVolunteers / $program->volunteer_count) * 100
-                        : 0;
-                    $details = [
-                        ['icon' => 'calendar', 'label' => 'Date', 'value' => \Carbon\Carbon::parse($program->date)->format('M d, Y')],
-                        ['icon' => 'time', 'label' => 'Time', 'value' => \Carbon\Carbon::parse($program->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($program->end_time)->format('h:i A')],
-                        ['icon' => 'map-pin', 'label' => 'Location', 'value' => $program->location],
-                        // ['icon' => 'group', 'label' => 'Volunteers Needed', 'value' => $program->volunteer_count]
-                        [
-                            'icon' => 'group',
-                            'label' => 'Volunteers Needed',
-                            'value' => new \Illuminate\Support\HtmlString('
-                                                                    <div class="space-y-2">
-                                                                        <div class="flex justify-between text-sm">
-                                                                            <span class="text-slate-700">' . $currentVolunteers . ' / ' . $program->volunteer_count . ' volunteers</span>
-                                                                            <span class="text-slate-600">' . round($progressPercentage) . '%</span>
-                                                                        </div>
-                                                                        <div class="w-full bg-slate-200 rounded-full h-2">
-                                                                            <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: ' . min($progressPercentage, 100) . '%"></div>
-                                                                        </div>
-                                                                    </div>
-                                                                ')
-                        ],
-
-                        ['icon' => 'trending-up', 'label' => 'Progress', 'value' => $progressComponent]
-                    ];
-                @endphp
-
-                @foreach ($details as $detail)
-                    <div
-                        class="bg-white p-4 border border-slate-200 rounded-lg hover:border-blue-200 transition-colors duration-200">
-                        <div class="flex items-center gap-2 text-slate-600 text-sm mb-2">
-                            <i class='bx bx-{{ $detail['icon'] }}'></i>
-                            <span>{{ $detail['label'] }}</span>
+                                </div>
+                            @else
+                                <form action="{{ route('programs.join', $program->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                                        <i class='bx bx-user-plus'></i>
+                                        Join Program
+                                    </button>
+                                </form>
+                            @endif
                         </div>
-                        {{-- <p class="text-slate-900 font-medium text-sm">{{ $detail['value'] }}</p> --}}
-                        <p class="text-slate-900 font-medium text-sm">{!! $detail['value'] !!}</p>
-                    </div>
-                @endforeach
+                    @endif
 
-        
-            </aside>
-        </div>
+                </div>
+
+                {{-- Right Details --}}
+                <aside class="lg:w-1/3 w-full bg-slate-50 border-l border-slate-200 p-6 space-y-5 overflow-y-auto">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 pb-2 border-b border-slate-300">
+                        <i class='bx bx-detail text-slate-600'></i>
+                        Program Details
+                    </h3>
+
+                    @php
+                        $progressComponent = view('components.feedback-status.programProgress', ['program' => $program])->render();
+
+                        $currentVolunteers = $program->volunteers->count();
+                        // $progressPercentage = ($currentVolunteers / $program->volunteer_count) * 100;
+                        $progressPercentage = ($program->volunteer_count > 0)
+                            ? ($currentVolunteers / $program->volunteer_count) * 100
+                            : 0;
+                        $details = [
+                            ['icon' => 'calendar', 'label' => 'Date', 'value' => \Carbon\Carbon::parse($program->date)->format('M d, Y')],
+                            ['icon' => 'time', 'label' => 'Time', 'value' => \Carbon\Carbon::parse($program->start_time)->format('h:i A') . ' - ' . \Carbon\Carbon::parse($program->end_time)->format('h:i A')],
+                            ['icon' => 'map-pin', 'label' => 'Location', 'value' => $program->location],
+                            // ['icon' => 'group', 'label' => 'Volunteers Needed', 'value' => $program->volunteer_count]
+                            [
+                                'icon' => 'group',
+                                'label' => 'Volunteers Needed',
+                                'value' => new \Illuminate\Support\HtmlString('
+                                                                        <div class="space-y-2">
+                                                                            <div class="flex justify-between text-sm">
+                                                                                <span class="text-slate-700">' . $currentVolunteers . ' / ' . $program->volunteer_count . ' volunteers</span>
+                                                                                <span class="text-slate-600">' . round($progressPercentage) . '%</span>
+                                                                            </div>
+                                                                            <div class="w-full bg-slate-200 rounded-full h-2">
+                                                                                <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: ' . min($progressPercentage, 100) . '%"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                    ')
+                            ],
+
+                            ['icon' => 'trending-up', 'label' => 'Progress', 'value' => $progressComponent]
+                        ];
+                    @endphp
+
+                    @foreach ($details as $detail)
+                        <div
+                            class="bg-white p-4 border border-slate-200 rounded-lg hover:border-blue-200 transition-colors duration-200">
+                            <div class="flex items-center gap-2 text-slate-600 text-sm mb-2">
+                                <i class='bx bx-{{ $detail['icon'] }}'></i>
+                                <span>{{ $detail['label'] }}</span>
+                            </div>
+                            {{-- <p class="text-slate-900 font-medium text-sm">{{ $detail['value'] }}</p> --}}
+                            <p class="text-slate-900 font-medium text-sm">{!! $detail['value'] !!}</p>
+                        </div>
+                    @endforeach
+
+            
+                </aside>
+            </div>
+        </x-modal.body>
 
         <x-modal.footer>
             <x-modal.close-button :modalId="'modal_' . $program->id" />

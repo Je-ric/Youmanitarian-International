@@ -31,52 +31,54 @@
         @csrf
         <input type="hidden" name="member_id" value="{{ $member->id }}">
         
-        <div class="p-4 sm:p-6 space-y-6">
-            <!-- Payment Period Selection -->
-            <div>
-                <x-form.label for="payment_period">Payment Period</x-form.label>
-                <select name="membership_payment_id" id="payment_period" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
-                    @foreach($member->payments()->whereIn('payment_status', ['pending', 'overdue'])->get() as $payment)
-                        <option value="{{ $payment->id }}">
-                            {{ $payment->payment_period }} {{ $payment->payment_year }} 
-                            ({{ ucfirst($payment->payment_status) }})
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+        <x-modal.body>
+            <div class="p-4 sm:p-6 space-y-6">
+                <!-- Payment Period Selection -->
+                <div>
+                    <x-form.label for="payment_period">Payment Period</x-form.label>
+                    <select name="membership_payment_id" id="payment_period" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
+                        @foreach($member->payments()->whereIn('payment_status', ['pending', 'overdue'])->get() as $payment)
+                            <option value="{{ $payment->id }}">
+                                {{ $payment->payment_period }} {{ $payment->payment_year }} 
+                                ({{ ucfirst($payment->payment_status) }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <!-- Template Selection -->
-            <div>
-                <x-form.label for="template">
-                    Message Template
-                    <span class="text-xs font-normal text-gray-500">(Click to use a template)</span>
-                </x-form.label>
-                <x-form.button-group class="mt-1">
-                    @foreach($templateMessages as $index => $template)
-                        <button type="button"
-                            onclick="document.getElementById('content').value = this.getAttribute('data-message')"
-                            data-message="{{ $template }}"
-                            class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ffb51b] transition-colors">
-                            Template #{{ $index + 1 }}
-                        </button>
-                    @endforeach
-                </x-form.button-group>
-            </div>
+                <!-- Template Selection -->
+                <div>
+                    <x-form.label for="template">
+                        Message Template
+                        <span class="text-xs font-normal text-gray-500">(Click to use a template)</span>
+                    </x-form.label>
+                    <x-form.button-group class="mt-1">
+                        @foreach($templateMessages as $index => $template)
+                            <button type="button"
+                                onclick="document.getElementById('content').value = this.getAttribute('data-message')"
+                                data-message="{{ $template }}"
+                                class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ffb51b] transition-colors">
+                                Template #{{ $index + 1 }}
+                            </button>
+                        @endforeach
+                    </x-form.button-group>
+                </div>
 
-            <!-- Reminder Message -->
-            <div>
-                <x-form.label for="content">
-                    Reminder Message
-                    <span class="text-xs font-normal text-gray-500">(You can customize this message)</span>
-                </x-form.label>
-                <x-form.textarea
-                    name="content"
-                    id="content"
-                    rows="6"
-                    class="mt-1"
-                ></x-form.textarea>
+                <!-- Reminder Message -->
+                <div>
+                    <x-form.label for="content">
+                        Reminder Message
+                        <span class="text-xs font-normal text-gray-500">(You can customize this message)</span>
+                    </x-form.label>
+                    <x-form.textarea
+                        name="content"
+                        id="content"
+                        rows="6"
+                        class="mt-1"
+                    ></x-form.textarea>
+                </div>
             </div>
-        </div>
+        </x-modal.body>
 
         <!-- Footer -->
         <x-modal.footer>

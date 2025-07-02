@@ -4,7 +4,7 @@
             <i class='bx bx-trash'></i> Delete Program
         </h2>
     </x-modal.header>
-    <div class="p-4 sm:p-6">
+    <x-modal.body>
         <div class="flex flex-col items-center text-center gap-3">
             <div class="bg-red-100 rounded-full w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center mb-2">
                 <i class='bx bx-error text-2xl sm:text-3xl text-red-500'></i>
@@ -15,7 +15,7 @@
                 <span class="font-semibold text-gray-800 text-xs sm:text-base">{{ $program->title }}</span>
             </div>
         </div>
-    </div>
+    </x-modal.body>
     <x-modal.footer>
         <div class="flex gap-2 w-full justify-end flex-col sm:flex-row">
             <x-modal.close-button :modalId="$modalId" text="Cancel" />

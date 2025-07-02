@@ -35,7 +35,7 @@
                 @if($applications->isEmpty())
                     <p class="text-gray-600 text-center py-4">No pending applications found.</p>
                 @else
-                    <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="w-full min-w-[640px]">
+                    <x-table.table containerClass="overflow-x-auto custom-scrollbar-gold" tableClass="w-full min-w-[640px]">
                         <x-table.thead>
                             <x-table.tr :hover="false">
                                 <x-table.th class="w-10 text-center">#</x-table.th>
@@ -83,7 +83,7 @@
                 @if($deniedApplications->isEmpty())
                     <p class="text-gray-600 text-center py-4">No denied applications found.</p>
                 @else
-                    <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="w-full min-w-[640px]">
+                    <x-table.table containerClass="overflow-x-auto custom-scrollbar-gold" tableClass="w-full min-w-[640px]">
                         <x-table.thead>
                             <x-table.tr :hover="false">
                                 <x-table.th class="w-10 text-center">#</x-table.th>
@@ -124,7 +124,7 @@
                 @if($approvedVolunteers->isEmpty())
                     <p class="text-gray-600 text-center py-4">No approved volunteers found.</p>
                 @else
-                    <x-table.table containerClass="overflow-x-auto custom-scrollbar" tableClass="w-full min-w-[640px]">
+                    <x-table.table containerClass="overflow-x-auto custom-scrollbar-gold" tableClass="w-full min-w-[640px]">
                         <x-table.thead>
                             <x-table.tr :hover="false">
                                 <x-table.th class="w-10 text-center">#</x-table.th>

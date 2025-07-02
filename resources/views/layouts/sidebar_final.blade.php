@@ -59,7 +59,7 @@
         </div>
 
         {{-- Scrollable Content --}}
-        <div class="h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar">
+        <div class="h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar-gold">
             <div class="px-5 py-4">
                 {{-- Overview Section --}}
                 <div class="mb-6">
@@ -473,43 +473,6 @@
             .main-content {
                 margin-left: 0;
             }
-        }
-
-        /* Custom scrollbar */
-        .custom-scrollbar {
-            height: calc(100vh - 10rem) !important;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e1 transparent;
-            -ms-overflow-style: none;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-            border-radius: 3px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-        }
-
-        /* Ensure scrollbar is always visible */
-        .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-            background: #94a3b8;
         }
 
         /* Sidebar link styles */

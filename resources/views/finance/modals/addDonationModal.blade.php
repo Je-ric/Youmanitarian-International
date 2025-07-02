@@ -26,7 +26,7 @@
         @endif
         enctype="multipart/form-data" class="flex flex-col flex-1 min-h-0">
         @csrf
-        <div class="flex-1 min-h-0 overflow-y-auto p-6 space-y-6 max-h-[60vh] sm:max-h-[70vh]">
+        <x-modal.body>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-4">
                     {{-- Donor Name --}}
@@ -107,7 +107,7 @@
                     @endif
                 </div>
             </div>
-        </div>
+        </x-modal.body>
         <x-modal.footer>
             <x-modal.close-button :modalId="$modalId" text="Cancel" variant="cancel" />
             @unless($isView)
