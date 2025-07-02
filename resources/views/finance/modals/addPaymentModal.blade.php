@@ -15,7 +15,7 @@
     $modalId = $modalId ?? 'addPaymentModal';
 @endphp
 
-<x-modal.dialog :id="$modalId" maxWidth="max-w-2xl" width="w-11/12" maxHeight="max-h-[90vh]">
+<x-modal.dialog :id="$modalId" maxWidth="max-w-3xl" width="w-11/12" maxHeight="max-h-[90vh]">
         {{-- Header --}}
         <x-modal.header>
                 <div class="flex-1 min-w-0">
@@ -42,14 +42,14 @@
 
         {{-- Main Content --}}
         <form action="{{ route('finance.membership.payments.store') }}" method="POST" enctype="multipart/form-data"
-            class="flex flex-col">
+            class="flex flex-col flex-1">
             @csrf
             <input type="hidden" name="member_id" value="{{ $member->id }}">
             <input type="hidden" name="payment_period" value="{{ $quarter }}">
             <input type="hidden" name="payment_year" value="{{ $year }}">
             <input type="hidden" name="payment_date" value="{{ now()->format('Y-m-d H:i:s') }}">
             
-            <div class="p-4 sm:p-6 space-y-6 max-h-[60vh] sm:max-h-[70vh] overflow-y-auto">
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 pb-32 space-y-6 max-h-[60vh] sm:max-h-[70vh]">
                 
                 {{-- Payment Details Grid --}}
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
@@ -200,16 +200,14 @@
                     @endif
                 </div>
             </div>
-
-            {{-- Footer --}}
             <x-modal.footer>
                 <x-modal.close-button :modalId="$modalId" text="Cancel" variant="cancel" />
-                    @if(!$payment)
+                @if(!$payment)
                     <x-button type="submit" variant="save-entry" class="w-full sm:w-auto order-1 sm:order-2">
-                            <i class='bx bx-save mr-1'></i>
-                            Save Payment
+                        <i class='bx bx-save mr-1'></i>
+                        Save Payment
                     </x-button>
-                    @endif
+                @endif
             </x-modal.footer>
         </form>
 </x-modal.dialog>

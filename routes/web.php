@@ -217,7 +217,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Finance Routes   
 Route::middleware(['auth'])->group(function () {
-    Route::get('/finance/dashboard', [DonationController::class, 'finance_index'])->name('finance.index');
+    Route::get('/finance/donations', [DonationController::class, 'index'])->name('finance.index');
     Route::patch('/finance/donations/{donation}/status', [DonationController::class, 'updateDonationStatus'])->name('finance.donations.status');
     
     Route::get('/finance/membership/payments', [MembershipController::class, 'index'])->name('finance.membership.payments');
@@ -225,8 +225,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/finance/membership/payments/{payment}/status', [MembershipController::class, 'updateStatus'])->name('finance.membership.payments.status');
 
     // Membership payment reminders
-    Route::post('/finance/membership/reminders', [MembershipReminderController::class, 'store'])
-        ->name('finance.membership.reminders.store');
+    Route::post('/finance/membership/reminders', [MembershipReminderController::class, 'store'])->name('finance.membership.reminders.store');
 
     Route::post('/finance/donations', [DonationController::class, 'store'])->name('finance.donations.store');
 });

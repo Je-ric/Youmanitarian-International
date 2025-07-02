@@ -1,15 +1,14 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-    <x-page-header 
-        icon="bx-donate-heart" 
-        title="Donations Management"
-        desc="View and manage donations, track financial statistics, and monitor payment activities.">
+    <x-page-header icon="bx-donate-heart" 
+                    title="Donations Management"
+                    desc="View and manage donations, track financial statistics, and monitor payment activities.">
 
-            <x-button variant="primary" onclick="document.getElementById('addDonationModal').showModal()">
-                <i class='bx bx-plus mr-1'></i>
-                Add Donation
-            </x-button>
+        <x-button variant="primary" onclick="document.getElementById('addDonationModal').showModal()">
+            <i class='bx bx-plus mr-1'></i>
+            Add Donation
+        </x-button>
     </x-page-header>
 
     @php
@@ -25,7 +24,7 @@
             </x-slot>
 
             <x-slot:slot_donations>
-                
+
                 <x-table.table containerClass="overflow-x-auto" tableClass="min-w-full">
                     <x-table.thead>
                         <x-table.tr :hover="false">
@@ -56,11 +55,15 @@
                                 <x-table.td>
                                     <span
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                {{ $donation->status === 'Confirmed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                                        {{ $donation->status === 'Confirmed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
                                         {{ $donation->status }}
                                     </span>
                                 </x-table.td>
                                 <x-table.td>
+                                    <x-button variant="table-action-view"
+                                        onclick="document.getElementById('viewDonationModal-{{ $donation->id }}').showModal()">
+                                        <i class='bx bx-show'></i>
+                                    </x-button>
                                     @if($donation->status === 'Pending')
                                         <form action="{{ route('finance.donations.status', $donation) }}" method="POST"
                                             class="inline">
@@ -87,5 +90,15 @@
                 </x-slot>
     </x-navigation-layout.tabs-modern>
 
-    @include('finance.modals.addDonationModal')
+    @include('finance.modals.addDonationModal', [
+        'donation' => null, 
+        'modalId' => 'addDonationModal'
+        ])
+
+    @foreach($donations as $donation)
+        @include('finance.modals.addDonationModal', [
+            'modalId' => 'viewDonationModal-' . $donation->id,
+            'donation' => $donation
+        ])
+    @endforeach
 @endsection

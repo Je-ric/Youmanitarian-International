@@ -8,7 +8,7 @@ use App\Models\MembershipPayment;
 
 class DonationController extends Controller
 {
-    public function finance_index()
+    public function index()
     {
         $totalDonations = Donation::where('status', 'Confirmed')->sum('amount');
         $pendingDonations = Donation::where('status', 'Pending')->count();
@@ -59,6 +59,6 @@ class DonationController extends Controller
             'status' => 'Pending',
         ]);
 
-        return redirect()->back()->with('success', 'Donation added successfully!');
+        return redirect()->route('finance.index')->with('success', 'Donation added successfully!');
     }
 }
