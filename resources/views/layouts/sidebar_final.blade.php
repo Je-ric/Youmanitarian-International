@@ -37,16 +37,37 @@
 </head>
 
 <body class="bg-gray-50 font-sans">
-    <!-- Sidebar Overlay (Mobile) -->
+    {{-- Screen Loader --}}
+    <div id="screenLoader" class="fixed inset-0 z-[9999] bg-white flex items-center justify-center transition-opacity duration-500">
+        <div class="text-center">
+            <div class="relative">
+                {{-- Spinning Logo --}}
+                <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4">
+                    <img src="{{ asset('assets/images/logo/YI_Logo.png') }}" alt="Loading..." 
+                         class="h-12 w-12 object-contain absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                </div>
+                {{-- Loading Text --}}
+                <div class="text-primary font-semibold text-lg mb-2">Loading...</div>
+                {{-- Loading Dots --}}
+                <div class="flex justify-center space-x-1">
+                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+                    <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Sidebar Overlay (Mobile) --}}
     <div id="sidebarOverlay"
         class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden transition-opacity duration-300"
         aria-hidden="true"></div>
 
-    <!-- Sidebar -->
+    {{-- Sidebar --}}
     <aside id="sidebar"
         class="fixed top-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out transform -translate-x-full lg:translate-x-0 bg-sidebar-bg border-r border-gray-200 shadow-lg sidebar-expanded"
         aria-label="Sidebar">
-        <!-- Fixed Header -->
+        {{-- Fixed Header --}}
         <div class="sticky top-0 z-10 bg-sidebar-bg border-b border-gray-200">
             <div class="flex flex-col items-center p-4">
                 <img src="{{ asset('assets/images/logo/YI_Logo.png') }}" alt="Company Logo"
@@ -54,10 +75,10 @@
             </div>
         </div>
 
-        <!-- Scrollable Content -->
+        {{-- Scrollable Content --}}
         <div class="h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar">
             <div class="px-5 py-4">
-                <!-- Overview Section -->
+                {{-- Overview Section --}}
                 <div class="mb-6">
                     <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
                         <span class="sidebar-content">Overview</span>
@@ -77,7 +98,7 @@
                     </ul>
                 </div>
 
-                <!-- Content Management Section -->
+                {{-- Content Management Section --}}
                 <div class="mb-6">
                     <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
                         <span class="sidebar-content">Content Management</span>
@@ -112,7 +133,7 @@
                     </ul>
                 </div>
 
-                <!-- User Management Section -->
+                {{-- User Management Section --}}
                 <div class="mb-6">
                     <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
                         <span class="sidebar-content">User Management</span>
@@ -149,7 +170,7 @@
                     </ul>
                 </div>
 
-                <!-- Financial Section -->
+                {{-- Financial Section --}}
                 <div class="mb-6">
                     <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
                         <span class="sidebar-content">Financial</span>
@@ -176,7 +197,7 @@
                     </ul>
                 </div>
 
-                <!-- Tools Section -->
+                {{-- Tools Section --}}
                 <div class="mb-6">
                     <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
                         <span class="sidebar-content">Tools</span>
@@ -213,7 +234,7 @@
                     </ul>
                 </div>
 
-                <!-- Settings Section -->
+                {{-- Settings Section --}}
                 <div class="mb-6">
                     <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
                         <span class="sidebar-content">Settings</span>
@@ -242,7 +263,7 @@
             </div>
         </div>
 
-        <!-- Fixed Logout Button -->
+        {{-- Fixed Logout Button --}}
         <div class="absolute bottom-0 left-0 right-0 bg-sidebar-bg border-t border-gray-200 p-3">
             <form action="{{ route('logout') }}" method="POST" class="w-full">
                 @csrf
@@ -256,8 +277,7 @@
         </div>
     </aside>
 
-    <!-- Navbar -->
-    {{-- shadow-lg --}}
+    {{-- Navbar --}}
     <nav id="navbar"
         class="bg-white border-b border-gray-200 fixed top-0 right-0 z-40 transition-all duration-300 ease-in-out overflow-x-hidden">
         <div class="navbar-container w-full mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out">
@@ -280,7 +300,7 @@
                         </button>
 
                         <div class="flex items-center space-x-4">
-                            <!-- Search Bar (Desktop) -->
+                            {{-- Search Bar (Desktop) --}}
                             <div class="hidden lg:block relative">
                                 <input type="text" placeholder="Search..."
                                     class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm w-64">
@@ -288,16 +308,16 @@
                                     class="bx bx-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                             </div>
 
-                            <!-- Navbar Links (Desktop) -->
-                            <a href="#"
+                            {{-- Navbar Links (Desktop) --}}
+                            <a href="{{ route('website.index') }}"
                                 class="hidden lg:block text-gray-600 hover:text-primary transition-colors duration-200 text-sm">Website</a>
-                            <a href="#"
+                            <a href="{{ route('weather-forecast.index') }}"
                                 class="hidden lg:block text-gray-600 hover:text-primary transition-colors duration-200 text-sm">Weather</a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right side  -->
+                {{-- Right side  --}}
                 <div class="flex items-center space-x-3 flex-wrap max-w-full">
 
                     <button
@@ -338,7 +358,7 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
+    {{-- Main Content --}}
     <div id="mainContent" class="main-content pt-16">
         <div class="container mx-auto">
            <x-navigation-layout.breadcrumb :items="[
@@ -376,7 +396,7 @@
         @yield('content')
     </div>
 
-    <!-- Tooltip -->
+    {{-- Tooltip --}}
     <div id="tooltip"
         class="absolute bg-gray-900 text-white text-sm rounded py-1 px-2 z-50 opacity-0 pointer-events-none transition-opacity duration-200">
     </div>
@@ -739,7 +759,77 @@
         // Initialize sidebar when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             new SidebarManager();
+            new ScreenLoader();
         });
+    </script>
+
+    <script>
+        class ScreenLoader {
+            constructor() {
+                this.loader = document.getElementById('screenLoader');
+                this.init();
+            }
+
+            init() {
+                // Hide loader when page is fully loaded
+                window.addEventListener('load', () => {
+                    this.hideLoader();
+                });
+
+                // Hide loader when DOM is ready (fallback)
+                if (document.readyState === 'complete') {
+                    this.hideLoader();
+                }
+
+                // Show loader on navigation
+                this.showLoaderOnNavigation();
+            }
+
+            showLoader() {
+                if (this.loader) {
+                    this.loader.style.opacity = '1';
+                    this.loader.style.pointerEvents = 'auto';
+                }
+            }
+
+            hideLoader() {
+                if (this.loader) {
+                    this.loader.style.opacity = '0';
+                    this.loader.style.pointerEvents = 'none';
+                    // Remove from DOM after animation
+                    setTimeout(() => {
+                        if (this.loader && this.loader.style.opacity === '0') {
+                            this.loader.remove();
+                        }
+                    }, 500);
+                }
+            }
+
+            showLoaderOnNavigation() {
+                // Show loader on link clicks
+                document.addEventListener('click', (e) => {
+                    const link = e.target.closest('a');
+                    if (link && link.href && !link.href.includes('#') && !link.href.includes('javascript:') && !e.ctrlKey && !e.metaKey) {
+                        // Don't show loader for same-page links or external links
+                        if (link.href !== window.location.href && link.href.startsWith(window.location.origin)) {
+                            this.showLoader();
+                        }
+                    }
+                });
+
+                // Show loader on form submissions
+                document.addEventListener('submit', (e) => {
+                    if (e.target.tagName === 'FORM') {
+                        this.showLoader();
+                    }
+                });
+
+                // Show loader on browser back/forward
+                window.addEventListener('beforeunload', () => {
+                    this.showLoader();
+                });
+            }
+        }
     </script>
     @stack('scripts')
     {{-- "put all the scripts that were pushed here" --}}
