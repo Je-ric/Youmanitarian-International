@@ -18,7 +18,7 @@
 <x-modal.dialog :id="$modalId" maxWidth="max-w-3xl" width="w-11/12" maxHeight="max-h-[90vh]">
         {{-- Header --}}
         <x-modal.header>
-                <div class="flex-1 min-w-0">
+                <div class="flex-1 flex-row min-w-0">
                     <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">
                         {{ $quarter }} {{ $year }} Payment
                     </h3>
@@ -42,16 +42,14 @@
 
         {{-- Main Content --}}
         <form action="{{ route('finance.membership.payments.store') }}" method="POST" enctype="multipart/form-data"
-            class="flex flex-col flex-1">
+            class="flex flex-col flex-1 min-h-0">
             @csrf
             <input type="hidden" name="member_id" value="{{ $member->id }}">
             <input type="hidden" name="payment_period" value="{{ $quarter }}">
             <input type="hidden" name="payment_year" value="{{ $year }}">
             <input type="hidden" name="payment_date" value="{{ now()->format('Y-m-d H:i:s') }}">
             
-            <div class="flex-1 overflow-y-auto p-4 sm:p-6 pb-32 space-y-6 max-h-[60vh] sm:max-h-[70vh]">
-                
-                {{-- Payment Details Grid --}}
+            <div class="flex-1 min-h-0 overflow-y-auto sm:p-6 pb-32 p-6 space-y-6 max-h-[60vh] sm:max-h-[70vh]">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     
                     {{-- Left Column --}}

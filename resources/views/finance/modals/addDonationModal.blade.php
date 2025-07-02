@@ -24,9 +24,9 @@
         @if(!$isView)
             action="{{ route('finance.donations.store') }}" method="POST"
         @endif
-        enctype="multipart/form-data" class="flex flex-col">
+        enctype="multipart/form-data" class="flex flex-col flex-1 min-h-0">
         @csrf
-        <div class="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
+        <div class="flex-1 min-h-0 overflow-y-auto p-6 space-y-6 max-h-[60vh] sm:max-h-[70vh]">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-4">
                     {{-- Donor Name --}}
