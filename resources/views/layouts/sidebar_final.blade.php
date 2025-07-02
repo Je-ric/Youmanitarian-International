@@ -28,7 +28,7 @@
                         'hover-bg': '#f1f5f9',
                         'active-bg-light': '#FEF0E7',
                         'text-default': '#334155',
-                        'active-text': '#1f2937', /* Dark grey for active text and icon */
+                        'active-text': '#1f2937', 
                     }
                 }
             }
@@ -50,10 +50,11 @@
         class="fixed top-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out transform -translate-x-full lg:translate-x-0 bg-sidebar-bg border-r border-gray-200 shadow-lg sidebar-expanded"
         aria-label="Sidebar">
         {{-- Fixed Header --}}
-        <div class="sticky top-0 z-10 bg-sidebar-bg border-b border-gray-200">
-            <div class="flex flex-col items-center p-4">
+        <div class="sticky top-0 z-10 border-b border-gray-200"
+             style="background: linear-gradient(to bottom, #ffb51b 0%, #ffb51b 50%, #f8fafc 50%, #f8fafc 100%);">
+            <div class="flex items-center justify-center h-28 w-full">
                 <img src="{{ asset('assets/images/logo/YI_Logo.png') }}" alt="Company Logo"
-                    class="w-16 h-16 object-contain mb-2">
+                     class="w-24 h-24 object-contain" style="z-index:1;">
             </div>
         </div>
 
@@ -83,7 +84,7 @@
                 {{-- Content Management Section --}}
                 <div class="mb-6">
                     <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
-                        <span class="sidebar-content">Content Management</span>
+                        <span class="sidebar-content">Content</span>
                         <span
                             class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
                     </h3>
@@ -118,7 +119,7 @@
                 {{-- User Management Section --}}
                 <div class="mb-6">
                     <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
-                        <span class="sidebar-content">User Management</span>
+                        <span class="sidebar-content">User</span>
                         <span
                             class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
                     </h3>
@@ -129,8 +130,8 @@
                                 data-tooltip="Volunteers">
                                 <i class="bx bx-group w-5 text-center flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-content text-sm">Volunteers</span>
-                                <span
-                                    class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-orange-800 bg-orange-100 rounded-full sidebar-content">12</span>
+                                {{-- <span
+                                    class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-orange-800 bg-orange-100 rounded-full sidebar-content">12</span> --}}
                             </a>
                         </li>
                         <li>

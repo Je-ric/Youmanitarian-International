@@ -9,7 +9,7 @@
 
     <div class="flex items-start md:items-center gap-3 sm:gap-4">
         @if($icon)
-            <span class="flex-shrink-0 inline-flex items-center justify-center shadow-lg rounded-lg bg-white text-[#ffb51b] w-10 h-10 sm:w-12 sm:h-12 text-xl sm:text-2xl">
+            <span class="flex-shrink-0 inline-flex items-center justify-center shadow-lg rounded-lg bg-[#313849] text-[#ffb51b] w-10 h-10 sm:w-12 sm:h-12 text-xl sm:text-2xl">
                 <i class="bx {{ $icon }}"></i>
             </span>
         @endif
