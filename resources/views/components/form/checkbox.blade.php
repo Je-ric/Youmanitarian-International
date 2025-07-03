@@ -14,7 +14,7 @@ Used in:
 <input 
     type="checkbox"
     {{ $attributes->merge([
-        'class' => 'w-4 h-4 text-[#ffb51b] bg-white border-[#1a2235] rounded focus:ring-[#ffb51b] focus:ring-2 transition-colors'
+        'class' => 'w-4 h-4 text-[#ffb51b] bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] checked:bg-[#ffb51b] transition-colors'
     ]) }}
     @if($checked) checked="checked" @endif
 >

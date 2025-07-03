@@ -30,6 +30,7 @@ Used in:
     if ($type === 'name' && !$pattern) {
         $inputPattern = '[A-Za-z\s]+';
     }
+    // pattern="^(https?://)?([a-zA-Z0-9]([a-zA-Z0-9\-].*[a-zA-Z0-9])?\.)+[a-zA-Z].*$"
 @endphp
 
 @if($label)
@@ -43,7 +44,7 @@ Used in:
     placeholder="{{ $placeholder }}"
     @if($required) required @endif
     @if($inputPattern) pattern="{{ $inputPattern }}" @endif
-    {{ $attributes->merge(['class' => 'w-full px-3 py-2 border border-gray-300 rounded-lg ring-1 ring-gray-200 focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] focus:ring-offset-0 transition ' . $class]) }}
+    {{ $attributes->merge(['class' => 'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] focus:ring-offset-0 transition-colors ' . $class]) }}
 />
 @error($name)
     <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>
