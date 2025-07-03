@@ -41,14 +41,16 @@ class DonationController extends Controller
         $receiptPath = null;
         if ($request->hasFile('receipt')) {
             $file = $request->file('receipt');
-            $donorName = preg_replace('/[^A-Za-z0-9\-]/', '', $validated['donor_name']);
-            $date = date('Ymd', strtotime($validated['donation_date']));
+            $sanitizedName = preg_replace('/[^A-Za-z0-9\-]/', '', $validated['donor_name']);
+            $dateString = date('Ymd', strtotime($validated['donation_date']));
             $timestamp = time();
             $extension = $file->getClientOriginalExtension();
-            $filename = "{$donorName}_{$date}_{$timestamp}.{$extension}";
-            $receiptPath = $file->storeAs('uploads/donation_proof', $filename, 'public');
-        }
-
+            $newFilename = "{$sanitizedName}_{$dateString}_{$timestamp}.{$extension}";
+            $receiptPath = $file->storeAs('uploads/donation_proof', $newFilename, 'public');
+        } 
+        // [DonorName]_[YYYYMMDD]_[timestamp].jpg
+        // JericDelaCruz_20240605_1717581234.jpg
+        
         Donation::create([
             'donor_name' => $validated['donor_name'],
             'donor_email' => $validated['donor_email'],

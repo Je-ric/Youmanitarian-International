@@ -32,6 +32,7 @@ class VolunteerAttendanceController extends Controller
             ->latest()
             ->first();
 
+
         $volunteerAttendance = VolunteerAttendance::where('program_id', $program->id)
             ->where('volunteer_id', $user->volunteer?->id)
             ->first();
@@ -41,7 +42,7 @@ class VolunteerAttendanceController extends Controller
         $clockOutTime = $attendance?->clock_out ? Carbon::parse($attendance->clock_out)->setTimezone('Asia/Manila') : null;
 
         $formattedWorkedTime = null;
-        if ($clockInTime && $clockOutTime) { //I f both times ay meron na, calculates the total difference (work hours)
+        if ($clockInTime && $clockOutTime) { //If both times ay meron na, calculates the total difference (work hours)
             $diffInSeconds = $clockInTime->diffInSeconds($clockOutTime);
             $hours = floor($diffInSeconds / 3600);
             $minutes = floor(($diffInSeconds % 3600) / 60);
@@ -177,14 +178,17 @@ class VolunteerAttendanceController extends Controller
         // Filename: ProgramName_VolunteerName_timestamp.extension
         $program = Program::findOrFail($programId);
         $volunteer = Volunteer::findOrFail($volunteerId);
+        
         // remove any characters that are not letters, numbers, or dashes
         $volunteerName = preg_replace('/[^A-Za-z0-9\-]/', '', $volunteer->user->name);
         $programName = preg_replace('/[^A-Za-z0-9\-]/', '', $program->title);
 
         $file = $request->file('proof_image');
-        $filename = $programName . '_' . $volunteerName . '_' . time() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('uploads/attendance_proof', $filename, 'public');
-        $attendance->proof_image = $path;
+        $timestamp = time();
+        $extension = $file->getClientOriginalExtension();
+        $newFilename = "{$programName}_{$volunteerName}_{$timestamp}.{$extension}";
+        $storagePath = $file->storeAs('uploads/attendance_proof', $newFilename, 'public');
+        $attendance->proof_image = $storagePath;
         $attendance->save();
 
         return back()->with('toast', ['message' => 'Proof of attendance uploaded successfully!', 'type' => 'success']);

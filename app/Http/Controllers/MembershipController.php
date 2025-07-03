@@ -100,15 +100,17 @@ class MembershipController extends Controller
 
         if ($request->hasFile('receipt')) {
             $file = $request->file('receipt');
-            $memberName = preg_replace('/[^A-Za-z0-9\-]/', '', $member->user->name);
+            $sanitizedName = preg_replace('/[^A-Za-z0-9\-]/', '', $member->user->name);
             $quarter = $request->payment_period;
             $year = $request->payment_year;
             $timestamp = time();
             $extension = $file->getClientOriginalExtension();
-            $filename = $memberName . '_' . $quarter . '_' . $year . '_' . $timestamp . '.' . $extension;
-            $path = $file->storeAs('uploads/membership_proof', $filename, 'public');
-            $data['receipt_url'] = $path;
-        }
+            $newFilename = "{$sanitizedName}_{$quarter}_{$year}_{$timestamp}.{$extension}";
+            $storagePath = $file->storeAs('uploads/membership_proof', $newFilename, 'public');
+            $data['receipt_url'] = $storagePath;
+        }     
+        // [MemberName]_[Quarter]_[Year]_[timestamp].jpg
+        // JericDelaCruz_Q2_2025_1717581234.jpg
 
         $member->payments()->create($data);
 

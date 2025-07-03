@@ -26,7 +26,7 @@ class ContentController extends Controller
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨��✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
     public function edit(Content $content)
@@ -79,9 +79,12 @@ class ContentController extends Controller
         //  Single Image 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $sanitized_title = preg_replace('/[^A-Za-z0-9\-]/', '_', $validated['title']);
-            $new_filename = $sanitized_title . '_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $image_path = $file->storeAs('uploads/content/', $new_filename, 'public');
+            $sanitizedName = preg_replace('/[^A-Za-z0-9\-]/', '', $validated['title']);
+            $timestamp = time();
+            $uniqueId = uniqid();
+            $extension = $file->getClientOriginalExtension();
+            $newFilename = "{$sanitizedName}_{$timestamp}_{$uniqueId}.{$extension}";
+            $image_path = $file->storeAs('uploads/content/', $newFilename, 'public');
             $validated['image_content'] = $image_path;
         }
 
@@ -147,9 +150,14 @@ class ContentController extends Controller
                 Storage::disk('public')->delete($content->image_content);
             }
             $file = $request->file('image');
-            $sanitized_title = preg_replace('/[^A-Za-z0-9\-]/', '_', $validated['title']);
-            $new_filename = $sanitized_title . '_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $validated['image_content'] = $file->storeAs('uploads/content/', $new_filename, 'public');
+            $sanitizedName = preg_replace('/[^A-Za-z0-9\-]/', '', $validated['title']);
+            $timestamp = time();
+            $uniqueId = uniqid();
+            $extension = $file->getClientOriginalExtension();
+            $newFilename = "{$sanitizedName}_{$timestamp}_{$uniqueId}.{$extension}";
+            $validated['image_content'] = $file->storeAs('uploads/content/', $newFilename, 'public');
+            // [Title]_[Timestamp]_[uniqid].jpg
+            // MyContentTitle_1717581234_662a1b2c3d4e5.jpg
         } else {
             $validated['image_content'] = $content->image_content; // Keep old image if no new one uploaded
         }
@@ -186,16 +194,19 @@ class ContentController extends Controller
         if ($request->hasFile('gallery_images')) {
             $files = $request->file('gallery_images');
             
-            // If only one file is uploaded, $files may not be an array
+            // If only one file is uploaded, $files may not be an array (kase nga isa lang)
             if (!is_array($files)) {
                 $files = [$files];
             }
             
             foreach ($files as $file) {
                 if ($file && $file->isValid()) {
-                    $sanitized_title = preg_replace('/[^A-Za-z0-9\-]/', '_', $title);
-                    $new_filename = $sanitized_title . '_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                    $gallery_path = $file->storeAs('uploads/content_gallery/', $new_filename, 'public');
+                    $sanitizedName = preg_replace('/[^A-Za-z0-9\-]/', '', $title);
+                    $timestamp = time();
+                    $uniqueId = uniqid();
+                    $extension = $file->getClientOriginalExtension();
+                    $newFilename = "{$sanitizedName}_{$timestamp}_{$uniqueId}.{$extension}";
+                    $gallery_path = $file->storeAs('uploads/content_gallery/', $newFilename, 'public');
                     
                     $contentImage = ContentImage::create([
                         'content_id' => $contentId,
