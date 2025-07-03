@@ -285,10 +285,7 @@
                         <div class="flex items-center space-x-4">
                             {{-- Search Bar (Desktop) --}}
                             <div class="hidden lg:block relative">
-                                <input type="text" placeholder="Search..."
-                                    class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent text-sm w-64">
-                                <i
-                                    class="bx bx-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                <x-form.search-input name="search" placeholder="Search..." class="w-64" />
                             </div>
 
                             {{-- Navbar Links (Desktop) --}}
