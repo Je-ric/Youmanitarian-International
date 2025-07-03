@@ -23,12 +23,12 @@
                 extend: {
                     colors: {
                         'primary': '#1a2235',
-                        'accent': '#ffb51b',
-                        'sidebar-bg': '#f8fafc',
-                        'hover-bg': '#f1f5f9',
-                        'active-bg-light': '#FEF0E7',
+                        'accent': '#4f46e5',
+                        'sidebar-bg': '#ffffff',
+                        'hover-bg': '#f8fafc',
+                        'active-bg': '#f1f5f9',
                         'text-default': '#334155',
-                        'active-text': '#1f2937', 
+                        'active-text': '#1f2937',
                     }
                 }
             }
@@ -37,33 +37,27 @@
 </head>
 
 <body class="bg-gray-50 font-sans">
-    {{-- Include Screen Loader Component --}}
     <x-screen-loader />
 
-    {{-- Sidebar Overlay (Mobile) --}}
     <div id="sidebarOverlay"
         class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden transition-opacity duration-300"
         aria-hidden="true"></div>
 
-    {{-- Sidebar --}}
     <aside id="sidebar"
         class="fixed top-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out transform -translate-x-full lg:translate-x-0 bg-sidebar-bg border-r border-gray-200 shadow-lg sidebar-expanded"
         aria-label="Sidebar">
-        {{-- Fixed Header --}}
         <div class="sticky top-0 z-10 border-b border-gray-200"
-             style="background: linear-gradient(to bottom, #ffb51b 0%, #ffb51b 50%, #f8fafc 50%, #f8fafc 100%);">
+            style="background: linear-gradient(to bottom, #FFB51B 0%, #e6a318 50%, #ffffff 50%, #ffffff 100%);">
             <div class="flex items-center justify-center h-28 w-full">
                 <img src="{{ asset('assets/images/logo/YI_Logo.png') }}" alt="Company Logo"
-                     class="w-24 h-24 object-contain" style="z-index:1;">
+                    class="w-24 h-24 object-contain" style="z-index:1;">
             </div>
         </div>
 
-        {{-- Scrollable Content --}}
         <div class="h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar-blue">
-            <div class="px-5 py-4">
-                {{-- Overview Section --}}
-                <div class="mb-6">
-                    <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
+            <div class="px-3 py-4">
+                <div class="mb-4">
+                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Overview</span>
                         <span
                             class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
@@ -71,19 +65,17 @@
                     <ul class="space-y-1">
                         <li>
                             <a href="{{ route('dashboard') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}"
                                 data-tooltip="Dashboard">
-                                <i class="bx bxs-dashboard w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bxs-dashboard w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Dashboard</span>
-                                <i class="bx bx-chevron-down ml-auto text-gray-400 sidebar-content"></i>
                             </a>
                         </li>
                     </ul>
                 </div>
 
-                {{-- Content Management Section --}}
-                <div class="mb-6">
-                    <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
+                <div class="mb-4">
+                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Content</span>
                         <span
                             class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
@@ -91,34 +83,33 @@
                     <ul class="space-y-1">
                         <li>
                             <a href="{{ route('content.index') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('content.*') ? 'active' : '' }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('content.*') ? 'active' : '' }}"
                                 data-tooltip="Contents">
-                                <i class="bx bxs-file-doc w-5 text-center flex-shrink-0 sidebar-icon"></i>
+                                <i class="bx bxs-file-doc w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Contents</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('programs.index') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('programs.*') ? 'active' : '' }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('programs.*') ? 'active' : '' }}"
                                 data-tooltip="Programs">
-                                <i class="bx bx-calendar w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bx-calendar w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Programs</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('program.chats.index', ['program' => request()->route('program')]) }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('program.chats.*') ? 'active' : '' }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('program.chats.*') ? 'active' : '' }}"
                                 data-tooltip="Program Chats">
-                                <i class="bx bx-message-square-dots w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bx-message-square-dots w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Program Chats</span>
                             </a>
                         </li>
                     </ul>
                 </div>
 
-                {{-- User Management Section --}}
-                <div class="mb-6">
-                    <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
+                <div class="mb-4">
+                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">User</span>
                         <span
                             class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
@@ -126,36 +117,33 @@
                     <ul class="space-y-1">
                         <li>
                             <a href="{{ route('volunteers.index') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('volunteers.*') ? 'active' : '' }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('volunteers.*') ? 'active' : '' }}"
                                 data-tooltip="Volunteers">
-                                <i class="bx bx-group w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bx-group w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Volunteers</span>
-                                {{-- <span
-                                    class="inline-flex items-center justify-center w-3 h-3 p-3 ml-auto text-sm font-medium text-orange-800 bg-orange-100 rounded-full sidebar-content">12</span> --}}
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('members.index') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item"
                                 data-tooltip="Members">
-                                <i class="bx bx-group w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bx-group w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Members</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('roles.index') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('roles.*') ? 'active' : '' }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('roles.*') ? 'active' : '' }}"
                                 data-tooltip="Assign Roles">
-                                <i class="bx bx-user-plus w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bx-user-plus w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Assign Roles</span>
                             </a>
                         </li>
                     </ul>
                 </div>
 
-                {{-- Financial Section --}}
-                <div class="mb-6">
-                    <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
+                <div class="mb-4">
+                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Financial</span>
                         <span
                             class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
@@ -163,26 +151,25 @@
                     <ul class="space-y-1">
                         <li>
                             <a href="{{ route('finance.index') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('finance.index') ? 'active' : '' }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('finance.index') ? 'active' : '' }}"
                                 data-tooltip="Donations">
-                                <i class="bx bx-heart w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bx-heart w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Donations</span>
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('finance.membership.payments') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('finance.membership.payments*') ? 'active' : '' }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('finance.membership.payments*') ? 'active' : '' }}"
                                 data-tooltip="Membership Payments">
-                                <i class="bx bx-credit-card w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bx-credit-card w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Membership</span>
                             </a>
                         </li>
                     </ul>
                 </div>
 
-                {{-- Tools Section --}}
-                <div class="mb-6">
-                    <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
+                <div class="mb-4">
+                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Tools</span>
                         <span
                             class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
@@ -190,26 +177,18 @@
                     <ul class="space-y-1">
                         <li>
                             <a href="{{ route('weather-forecast.index') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('weather-forecast.index') ? 'active' : '' }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('weather-forecast.index') ? 'active' : '' }}"
                                 data-tooltip="Weather Forecasts">
-                                <i class="bx bx-cloud w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bx-cloud w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Weather Forecasts</span>
                             </a>
                         </li>
-                        {{-- <li>
-                            <a href="{{ route('chatbot.index') }}"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('chatbot.index') ? 'active' : '' }}"
-                                data-tooltip="Chatbot">
-                                <i class='bx bx-bot w-5 text-center flex-shrink-0'></i>
-                                <span class="ml-3 sidebar-content text-sm">Chatbot</span>
-                            </a>
-                        </li> --}}
                         @if (config('app.env') == 'local')
                             <li>
                                 <a href="{{ route('components.showcase') }}"
-                                    class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item {{ request()->routeIs('components.showcase') ? 'active' : '' }}"
+                                    class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('components.showcase') ? 'active' : '' }}"
                                     data-tooltip="Component Showcase">
-                                    <i class='bx bx-category w-5 text-center flex-shrink-0'></i>
+                                    <i class='bx bx-category w-5 text-center flex-shrink-0 text-primary'></i>
                                     <span class="ml-3 sidebar-content text-sm">Component Showcase</span>
                                 </a>
                             </li>
@@ -217,9 +196,8 @@
                     </ul>
                 </div>
 
-                {{-- Settings Section --}}
-                <div class="mb-6">
-                    <h3 class="flex items-center text-sm font-medium text-gray-500 mb-2">
+                <div class="mb-4">
+                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Settings</span>
                         <span
                             class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
@@ -227,17 +205,17 @@
                     <ul class="space-y-1">
                         <li>
                             <a href="#"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item"
                                 data-tooltip="Settings">
-                                <i class="bx bx-cog w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bx-cog w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Settings</span>
                             </a>
                         </li>
                         <li>
                             <a href="#"
-                                class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item"
                                 data-tooltip="Help & Support">
-                                <i class="bx bx-help-circle w-5 text-center flex-shrink-0"></i>
+                                <i class="bx bx-help-circle w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Help & Support</span>
                             </a>
                         </li>
@@ -246,21 +224,19 @@
             </div>
         </div>
 
-        {{-- Fixed Logout Button --}}
-        <div class="absolute bottom-0 left-0 right-0 bg-sidebar-bg border-t border-gray-200 p-3">
+        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-3">
             <form action="{{ route('logout') }}" method="POST" class="w-full">
                 @csrf
                 <button type="submit"
-                    class="sidebar-link flex items-center py-2.5 px-3 rounded-lg transition-colors duration-200 group sidebar-item w-full text-left text-red-500 logout-link"
+                    class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item w-full text-left hover:bg-red-50 hover:text-red-600"
                     data-tooltip="Sign Out">
-                    <i class="bx bx-log-out text-red-500 w-5 text-center flex-shrink-0"></i>
+                    <i class="bx bx-log-out w-5 text-center flex-shrink-0 text-red-500"></i>
                     <span class="ml-3 sidebar-content text-sm">Sign Out</span>
                 </button>
             </form>
         </div>
     </aside>
 
-    {{-- Navbar --}}
     <nav id="navbar"
         class="bg-white border-b border-gray-200 fixed top-0 right-0 z-40 transition-all duration-300 ease-in-out overflow-x-hidden">
         <div class="navbar-container w-full mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out">
@@ -268,7 +244,7 @@
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center space-x-2">
                         <button id="sidebarToggle"
-                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
+                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-primary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary transition-all duration-200"
                             aria-label="Toggle sidebar" aria-expanded="false">
                             <svg class="h-6 w-6 transition-transform duration-200" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" id="hamburgerIcon">
@@ -283,30 +259,26 @@
                         </button>
 
                         <div class="flex items-center space-x-4">
-                            {{-- Search Bar (Desktop) --}}
                             <div class="hidden lg:block relative">
                                 <x-form.search-input name="search" placeholder="Search..." class="w-64" />
                             </div>
 
-                            {{-- Navbar Links (Desktop) --}}
                             <a href="{{ route('website.index') }}"
-                                class="hidden lg:block text-gray-600 hover:text-primary transition-colors duration-200 text-sm">Website</a>
+                                class="hidden lg:block text-gray-600 hover:text-primary transition-all duration-200 text-sm">Website</a>
                             <a href="{{ route('weather-forecast.index') }}"
-                                class="hidden lg:block text-gray-600 hover:text-primary transition-colors duration-200 text-sm">Weather</a>
+                                class="hidden lg:block text-gray-600 hover:text-primary transition-all duration-200 text-sm">Weather</a>
                         </div>
                     </div>
                 </div>
 
-                {{-- Right side  --}}
                 <div class="flex items-center space-x-3 flex-wrap max-w-full">
-
                     <button
-                        class="sm:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+                        class="sm:hidden p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
                         <i class="fas fa-search text-lg"></i>
                     </button>
 
                     <a href="{{ route('notifications.index') }}"
-                        class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200 relative">
+                        class="p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200 relative">
                         <i class="fas fa-bell text-lg"></i>
                         @if(Auth::check() && Auth::user()->unreadNotifications->count() > 0)
                             <span
@@ -318,7 +290,7 @@
 
                     <div class="relative">
                         <button
-                            class="flex items-center space-x-2 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+                            class="flex items-center space-x-2 p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
                             @if(Auth::user()->profile_pic)
                                 <img src="{{ Auth::user()->profile_pic }}" alt="Profile"
                                     class="h-8 w-8 rounded-full object-cover">
@@ -329,7 +301,7 @@
                                 </div>
                             @endif
                             <span
-                                class="hidden lg:block text-sm font-medium max-w-24 truncate">{{ Auth::user()->name }}</span>
+                                class="hidden lg:block text-sm font-medium max-w-24 truncate text-gray-700">{{ Auth::user()->name }}</span>
                             <i class="fas fa-chevron-down text-xs hidden lg:block"></i>
                         </button>
                     </div>
@@ -338,10 +310,9 @@
         </div>
     </nav>
 
-    {{-- Main Content --}}
     <div id="mainContent" class="main-content pt-16">
         <div class="container mx-auto">
-           <x-navigation-layout.breadcrumb :items="[
+            <x-navigation-layout.breadcrumb :items="[
         ['label' => 'Dashboard', 'url' => route('dashboard')],
         ...(request()->routeIs('content.*') ? [
             ['label' => 'Content Management', 'url' => route('content.index')],
@@ -353,7 +324,7 @@
             ...(request()->routeIs('programs.create') ? [['label' => 'Create Program']] : []),
             ...(request()->routeIs('programs.edit') ? [['label' => 'Edit Program']] : []),
             ...(request()->routeIs('programs.view') ? [['label' => 'Attendance']] : []),
-            ...(request()->routeIs('programs.manage_volunteers') ? [['label' => 'Manage']] : []),            
+            ...(request()->routeIs('programs.manage_volunteers') ? [['label' => 'Manage']] : []),
         ] : []),
         ...(request()->routeIs('volunteers.*') ? [
             ['label' => 'Volunteers', 'url' => route('volunteers.index')],
@@ -366,50 +337,41 @@
             ...(request()->routeIs('finance.membership.payments') ? [['label' => 'Membership Payments']] : []),
             ...(request()->routeIs('members.index*') ? [['label' => 'Members']] : []),
         ] : []),
-    ]" /> 
+    ]" />
         </div>
 
         @if (session('toast'))
             <x-feedback-status.toast :message="session('toast')['message']" :type="session('toast')['type']" />
         @endif
-        
+
         @yield('content')
     </div>
 
-    {{-- Tooltip --}}
     <div id="tooltip"
         class="absolute bg-gray-900 text-white text-sm rounded py-1 px-2 z-50 opacity-0 pointer-events-none transition-opacity duration-200">
     </div>
 
     <style>
         :root {
-            --primary-color: #1a2235;
-            --primary-tint: #313849;
-            --primary-shade: #171F30;
-            --accent-color: #ffb51b;
-            --accent-tint: #FFBC32;
-            --accent-shade: #E6A318;
-            --sidebar-hover-bg: #ffe9b3;
-            --sidebar-active-bg: #ffecd1;
+            --primary-color: #1A2235;
+            --primary-tint-1: #313849;
+            --primary-tint-2: #484E5D;
+            --primary-tint-3: #5F6472;
+            --primary-tint-4: #767A86;
+            --primary-tint-5: #8D919A;
+            --primary-tint-6: #A3A7AE;
+            --accent-color: #FFB51B;
+            --sidebar-active-bg: #eef2ff;
             --sidebar-active-text: #1a2235;
-            --sidebar-hover-text: #1a2235;
-            --sidebar-text-default: #334155;
-            --sidebar-border-active: #ffb51b;
-            --sidebar-border-hover: #FFBC32;
-            --sidebar-shadow-active: 0 2px 8px 0 rgba(255, 181, 27, 0.10);
-            --sidebar-shadow-hover: 0 2px 8px 0 rgba(255, 181, 27, 0.12);
-            --logout-bg-hover: #1a2235;
-            --logout-text-hover: #fff;
+            --sidebar-border-active: #4f46e5;
         }
 
-        /* Sidebar states */
         .sidebar-expanded {
             width: 16rem;
         }
 
         .sidebar-collapsed {
             width: 5rem;
-            /* 4 */
         }
 
         .sidebar-collapsed .sidebar-content {
@@ -423,16 +385,15 @@
             transition: opacity 0.2s ease-in-out, width 0.2s ease-in-out, margin 0.2s ease-in-out, padding 0.2s ease-in-out;
         }
 
-        /* Add divider for collapsed state */
-        .sidebar-collapsed .mb-6 {
+        .sidebar-collapsed .mb-4 {
             position: relative;
-            margin-bottom: 1.5rem !important;
+            margin-bottom: 1rem !important;
         }
 
-        .sidebar-collapsed .mb-6::after {
+        .sidebar-collapsed .mb-4::after {
             content: '';
             position: absolute;
-            bottom: -0.75rem;
+            bottom: -0.5rem;
             left: 0.75rem;
             right: 0.75rem;
             height: 1px;
@@ -440,19 +401,16 @@
             display: block;
         }
 
-        /* Hide group headers in collapsed state */
         .sidebar-collapsed h3 {
             display: none;
         }
 
-        /* Adjust spacing for collapsed state */
         .sidebar-collapsed .sidebar-item {
             padding-left: 0.75rem !important;
             padding-right: 0.75rem !important;
             justify-content: center;
         }
 
-        /* Navbar adjustments */
         #navbar {
             transition: all 0.3s ease-in-out;
             left: 16rem;
@@ -464,9 +422,7 @@
             width: calc(100% - 4rem) !important;
         }
 
-        /* Main content adjustments */
         .main-content {
-            /* margin-left: 16rem; */
             transition: margin-left 0.3s ease-in-out;
         }
 
@@ -486,44 +442,34 @@
             }
         }
 
-        /* Sidebar link styles */
         .sidebar-link {
             color: var(--sidebar-text-default);
             position: relative;
-            font-weight: 400;
-            border-left: 4px solid transparent;
-        }
-
-        .sidebar-link .sidebar-icon,
-        .sidebar-link i {
-            color: var(--primary-color) !important;
-            transition: color 0.2s;
+            font-weight: 500;
         }
 
         .sidebar-link:hover {
-            background-color: var(--sidebar-hover-bg);
-            color: var(--sidebar-hover-text);
-            border-left: 4px solid var(--sidebar-border-hover);
-            box-shadow: var(--sidebar-shadow-hover);
+            background-color: #ffda8d;
+            color: #313849;
+            transform: translateX(2px);
         }
 
         .sidebar-link:hover .sidebar-icon,
         .sidebar-link:hover i {
-            color: var(--primary-color) !important;
+            color: #313849 !important;
         }
 
         .sidebar-link.active {
             background-color: var(--sidebar-active-bg);
             color: var(--sidebar-active-text);
-            font-weight: 700;
-            border-radius: 0.375rem;
-            border-left: 4px solid var(--sidebar-border-active);
+            font-weight: 600;
+            border-left: 3px solid var(--sidebar-border-active);
             box-shadow: var(--sidebar-shadow-active);
         }
 
         .sidebar-link.active .sidebar-icon,
         .sidebar-link.active i {
-            color: var(--primary-color) !important;
+            color: var(--accent-color) !important;
         }
 
         .sidebar-link.logout-link:hover {
@@ -535,7 +481,6 @@
             color: var(--logout-text-hover) !important;
         }
 
-        /* Responsive adjustments */
         @media (max-width: 1023px) {
             #navbar {
                 left: 0 !important;
@@ -550,13 +495,25 @@
             }
         }
 
-        /* Smooth transitions */
         .sidebar-item {
             transition: all 0.2s ease-in-out;
         }
 
         .main-content {
             transition: margin-left 0.3s ease-in-out;
+        }
+
+        .sidebar-link.active {
+            background-color: var(--primary-color);
+            color: var(--accent-color);
+            font-weight: 600;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 2px 8px 0 rgba(26, 34, 53, 0.3);
+        }
+
+        .sidebar-link.active .sidebar-icon,
+        .sidebar-link.active i {
+            color: var(--accent-color) !important;
         }
     </style>
 
@@ -576,29 +533,22 @@
                 this.isCollapsed = false;
                 this.isDesktop = window.innerWidth >= 1024;
 
-                // Set initial state immediately
                 this.handleResize();
                 this.updateLayout();
-
                 this.init();
             }
 
             init() {
-                // Event listeners
                 this.sidebarToggle.addEventListener('click', () => this.handleToggle());
                 this.overlay.addEventListener('click', () => this.closeMobile());
-
-                // Handle window resize
                 window.addEventListener('resize', () => this.handleResize());
 
-                // Handle escape key
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape' && this.isOpen && !this.isDesktop) {
                         this.closeMobile();
                     }
                 });
 
-                // Initialize tooltips
                 this.initTooltips();
             }
 
@@ -716,13 +666,11 @@
             }
         }
 
-        // Initialize sidebar when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             new SidebarManager();
         });
     </script>
     @stack('scripts')
-    {{-- "put all the scripts that were pushed here" --}}
 </body>
 
 </html>
