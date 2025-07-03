@@ -12,27 +12,18 @@
                 </div>
                 
                 <div class="flex gap-3 w-full lg:w-auto">
-                    <button
+                    <x-button
+                        variant="primary"
                         type="button"
-                        id="editBtn"
-                        class="flex-1 lg:flex-none inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-                    >
+                        id="editBtn">
                         <i class='bx bx-edit mr-2'></i> Edit Program
-                    </button>
-                    <button
-                        type="button"
-                        id="discardBtn"
-                        class="hidden flex-1 lg:flex-none items-center justify-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                    >
-                        <i class='bx bx-x mr-2'></i> Discard
-                    </button>
-                    <button
-                        type="submit"
-                        id="saveBtn"
-                        class="hidden flex-1 lg:flex-none items-center justify-center px-4 py-2 bg-[#ffb51b] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors font-medium"
-                    >
+                    </x-button>
+                    <x-button variant="discard" type="button" id="discardBtn" class="hidden">
+                        <i class='bx bx-x mr-2'></i>Discard
+                    </x-button>
+                    <x-button variant="save-entry" type="submit" id="saveBtn" class="hidden">
                         <i class='bx bx-save mr-2'></i> Save Changes
-                    </button>
+                    </x-button>
                 </div>
             </div>
         </div>
@@ -55,42 +46,41 @@
                         <!-- Program Title -->
                         <div>
                             <x-form.label for="title"><i class='bx bx-info-circle mr-1 text-blue-500'></i>Program Title</x-form.label>
-                            <input
-                                type="text"
+                            <x-form.input
                                 id="title"
                                 name="title"
-                                class="program-field w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1a2235] transition-all duration-200 focus:bg-white focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]/20"
-                                value="{{ old('title', $program->title) }}"
-                                readonly
+                                :value="old('title', $program->title)"
                                 required
-                            >
+                                readonly
+                                class="program-field"
+                            />
                         </div>
 
                         <!-- Description -->
                         <div>
                             <x-form.label for="description"><i class='bx bx-info-circle mr-1 text-blue-500'></i>Description</x-form.label>
-                            <textarea
+                            <x-form.textarea
                                 id="description"
                                 name="description"
                                 rows="6"
-                                class="program-field w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1a2235] resize-none transition-all duration-200 focus:bg-white focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]/20"
-                                readonly
+                                :value="old('description', $program->description)"
                                 required
-                            >{{ old('description', $program->description) }}</textarea>
+                                readonly
+                                class="program-field resize-none"
+                            />
                         </div>
 
                         <!-- Location -->
                         <div>
-                            <x-form.label for="location"><i class='bx bx-map mr-1 text-green-600'></i>Location <span class="text-gray-400 text-xs">(Optional)</span></x-form.label>
-                            <input
-                                type="text"
+                            <x-form.label for="location"><i class='bx bx-map mr-1 text-green-600'></i>Location <span class='text-gray-400 text-xs'>(Optional)</span></x-form.label>
+                            <x-form.input
                                 id="location"
                                 name="location"
-                                class="program-field w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1a2235] transition-all duration-200 focus:bg-white focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]/20"
-                                value="{{ old('location', $program->location) }}"
+                                :value="old('location', $program->location)"
                                 placeholder="Enter program location"
                                 readonly
-                            >
+                                class="program-field"
+                            />
                         </div>
                     </div>
                 </div>
@@ -162,16 +152,16 @@
                         <!-- Volunteers Needed -->
                         <div>
                             <x-form.label for="volunteer_count"><i class='bx bx-group mr-1 text-pink-500'></i>Volunteers Needed</x-form.label>
-                            <input
-                                type="number"
+                            <x-form.input
                                 id="volunteer_count"
                                 name="volunteer_count"
+                                type="number"
                                 min="0"
-                                class="program-field w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-[#1a2235] transition-all duration-200 focus:bg-white focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]/20"
-                                value="{{ old('volunteer_count', $program->volunteer_count) }}"
+                                :value="old('volunteer_count', $program->volunteer_count)"
                                 placeholder="0"
                                 readonly
-                            >
+                                class="program-field"
+                            />
                         </div>
                     </div>
                 </div>
@@ -212,13 +202,14 @@
                 </a>
                 
                 <div class="flex gap-3">
-                    <button
+                    <x-button
+                    variant="ca"
                         type="button"
                         id="cancelBtn"
                         class="hidden items-center justify-center px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
                     >
                         Cancel
-                    </button>
+                    </x-button>
                 </div>
             </div>
         </div>
