@@ -470,4 +470,6 @@ defaultTab="modern1"
             </x-card>
         </div>
     </div>
+
+    
     @endsection

@@ -83,7 +83,7 @@
                 <x-slot:slot_all>
                     <div class="space-y-4">
                         @forelse($feedbacks as $feedback)
-                            <div class="bg-white rounded-lg p-4">
+                            <div class="bg-white border border-gray-200 rounded-xl p-5 mb-4 shadow-sm">
                                 <div class="flex items-start justify-between">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">

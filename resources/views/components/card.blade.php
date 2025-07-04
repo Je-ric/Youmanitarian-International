@@ -66,7 +66,6 @@
         <div class="flex items-center gap-3 px-6 py-4 {{ $headerClass }} {{ $headerClass }} relative">
             
             @if($variant === 'elevated')
-                <!-- Decorative background pattern for elevated variant -->
                 <div class="absolute inset-0 opacity-10">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full -translate-y-16 translate-x-16"></div>
                     <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-12 -translate-x-12"></div>

@@ -1,11 +1,11 @@
 <!-- Add New Task - Compact Design -->
 <div
-    class="w-full bg-gradient-to-r from-slate-50 to-gray-50 border border-slate-200 rounded-xl p-5 mb-6 shadow-sm hover:shadow-md transition-all duration-200">
+    class="w-full bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
     <form action="{{ route('programs.tasks.store', $program) }}" method="POST" x-data="{ expanded: false }">
         @csrf
         <div class="flex items-center justify-between">
             <h3 class="text-base font-semibold text-[#1a2235] flex items-center">
-                <i class='bx bx-plus-circle mr-2 text-[#ffb51b]'></i>
+                <i class='bx bx-plus-circle mr-2' style="color:#1a2235;"></i>
                 Add New Task
             </h3>
             <x-button type="button" variant="primary" @click="expanded = !expanded">
@@ -17,13 +17,15 @@
         <div x-show="expanded" x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="opacity-0 transform -translate-y-2"
             x-transition:enter-end="opacity-100 transform translate-y-0" class="mt-4">
-            <div class="flex flex-col sm:flex-row gap-3">
+            <div class="flex flex-col gap-3">
                 <textarea name="task_description" rows="2"
-                    class="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] resize-none"
+                    class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] bg-slate-50 text-[#1a2235] placeholder-gray-400 resize-none"
                     placeholder="Describe the task..." required></textarea>
-                <x-button type="submit" variant="save-entry">
-                    <i class='bx bx-check mr-1'></i> Add Task
-                </x-button>
+                <div class="flex justify-end">
+                    <x-button type="submit" variant="save-entry">
+                        <i class='bx bx-check mr-1'></i> Add Task
+                    </x-button>
+                </div>
             </div>
             @error('task_description')
                 <p class="text-red-600 mt-2 text-sm">{{ $message }}</p>
