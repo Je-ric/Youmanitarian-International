@@ -85,7 +85,8 @@
                 </x-table.table>
 
                 <div class="px-6 py-4 border-t border-gray-200">
-                    {{ $donations->links() }}
+                    {{-- {{ $donations->links() }} --}}
+                    {{ $donations->appends(['tab' => 'donations'])->links() }}
                 </div>
                 </x-slot>
     </x-navigation-layout.tabs-modern>
