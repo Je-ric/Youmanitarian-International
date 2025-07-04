@@ -54,6 +54,6 @@ class Volunteer extends Model
 
     public function member()
     {
-        return $this->hasOne(Member::class);
+        return $this->belongsTo(Member::class);
     }
 }

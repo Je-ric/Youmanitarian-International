@@ -31,19 +31,28 @@
         @csrf
         <input type="hidden" name="member_id" value="{{ $member->id }}">
         
-        <x-modal.body>
+        <x-modal.body :padded="false">
             <div class="p-4 sm:p-6 space-y-6">
                 <!-- Payment Period Selection -->
                 <div>
                     <x-form.label for="payment_period">Payment Period</x-form.label>
-                    <select name="membership_payment_id" id="payment_period" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm rounded-md">
-                        @foreach($member->payments()->whereIn('payment_status', ['pending', 'overdue'])->get() as $payment)
-                            <option value="{{ $payment->id }}">
-                                {{ $payment->payment_period }} {{ $payment->payment_year }} 
-                                ({{ ucfirst($payment->payment_status) }})
-                            </option>
-                        @endforeach
-                    </select>
+                    @php
+                        $allPayments = $member->payments()->get();
+                        $pendingOrOverduePayments = $allPayments->whereIn('payment_status', ['pending', 'overdue']);
+                        $paymentsToShow = $pendingOrOverduePayments->isNotEmpty() ? $pendingOrOverduePayments : $allPayments;
+                    @endphp
+
+                    <x-form.select-option
+                        name="membership_payment_id"
+                        id="payment_period"
+                        :options="$paymentsToShow->map(function($payment) {
+                            return [
+                                'value' => $payment->id,
+                                'label' => $payment->payment_period . ' ' . $payment->payment_year . ' (' . ucfirst($payment->payment_status) . ')'
+                            ];
+                        })->toArray()"
+                        class="mt-1 block w-full"
+                    />
                 </div>
 
                 <!-- Template Selection -->

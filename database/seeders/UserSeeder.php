@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\VolunteerApplication;
 use App\Models\Volunteer;
+use App\Models\Member;
 
 class UserSeeder extends Seeder
 {
@@ -15,9 +16,14 @@ class UserSeeder extends Seeder
         $users = User::factory(20)->create();
 
         foreach ($users as $user) {
-            // Create a volunteer for each user
-            $volunteer = Volunteer::factory()->create([
+            // Create a member for each user
+            $member = Member::factory()->create([
                 'user_id' => $user->id,
+            ]);
+
+            // Create a volunteer for each member
+            $volunteer = Volunteer::factory()->create([
+                'member_id' => $member->id,
             ]);
 
             // Create a volunteer application for each volunteer

@@ -34,9 +34,9 @@ class Member extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function volunteer(): BelongsTo
+    public function volunteer()
     {
-        return $this->belongsTo(Volunteer::class);
+        return $this->hasOne(Volunteer::class);
     }
 
     public function payments(): HasMany

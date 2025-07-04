@@ -48,6 +48,13 @@ class MembershipController extends Controller
 
     private function getDueDate($quarter)
     {
+        // - Each quarter is represented as 'Q1', 'Q2', 'Q3', or 'Q4'.
+        // - The due date for a quarter is set to the last day of that quarter.
+        //     Q1 (Jan-Mar): due date is Mar 31
+        //     Q2 (Apr-Jun): due date is Jun 30
+        //     Q3 (Jul-Sep): due date is Sep 30
+        //     Q4 (Oct-Dec): due date is Dec 31
+        // - This ensures that for any given quarter, the payment is expected by the end of that quarter.
         $currentYear = now()->year;
         $quarterNumber = (int) substr($quarter, 1);
         
