@@ -50,9 +50,7 @@
                         @endif
                     </div>
                     @if($isView)
-                        <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
-                            {{ $donation->donor_name }}
-                        </div>
+                        <x-form.readonly>{{ $donation->donor_name }}</x-form.readonly>
                     @else
                         <x-form.input name="donor_name" label="" placeholder="Donor Name" value="{{ old('donor_name') }}" required />
                     @endif
@@ -79,9 +77,7 @@
                         @endif
                     </div>
                     @if($isView)
-                        <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
-                            {{ $donation->donor_email }}
-                        </div>
+                        <x-form.readonly>{{ $donation->donor_email }}</x-form.readonly>
                     @else
                         <x-form.input name="donor_email" type="text" label="" placeholder="Donor Email" value="{{ old('donor_email') }}" required />
                         @error('donor_email')
@@ -95,9 +91,7 @@
                         Donation Amount (₱)
                     </x-form.label>
                     @if($isView)
-                        <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
-                            ₱{{ number_format($donation->amount, 2) }}
-                        </div>
+                        <x-form.readonly>₱{{ number_format($donation->amount, 2) }}</x-form.readonly>
                     @else
                         <x-form.input name="amount" type="number" label="" placeholder="Amount" min="1" step="0.01" value="{{ old('amount') }}" required />
                     @endif
@@ -109,9 +103,7 @@
                         Mode of Donation
                     </x-form.label>
                     @if($isView)
-                        <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
-                            {{ collect($donationMethods)->firstWhere('value', $donation->payment_method)['label'] ?? $donation->payment_method }}
-                        </div>
+                        <x-form.readonly>{{ collect($donationMethods)->firstWhere('value', $donation->payment_method)['label'] ?? $donation->payment_method }}</x-form.readonly>
                     @else
                         <x-form.select-option name="payment_method" label="" :options="$donationMethods" :selected="old('payment_method')" required />
                     @endif
@@ -122,9 +114,7 @@
                         Date
                     </x-form.label>
                     @if($isView)
-                        <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
-                            {{ $donation->donation_date ? $donation->donation_date->format('M d, Y') : '' }}
-                        </div>
+                        <x-form.readonly>{{ $donation->donation_date ? $donation->donation_date->format('M d, Y') : '' }}</x-form.readonly>
                     @else
                         <x-form.date-picker id="donation_date" name="donation_date" label="" value="{{ old('donation_date') }}" required />
                     @endif

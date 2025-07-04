@@ -61,9 +61,7 @@
                                     <i class='bx bx-dollar-circle mr-1 text-green-600'></i>
                                     Amount
                                 </x-form.label>
-                                <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
-                                    <span class="font-medium">₱{{ number_format($payment->amount, 2) }}</span>
-                                </div>
+                                <x-form.readonly>₱{{ number_format($payment->amount, 2) }}</x-form.readonly>
                             @else
                                 <div class="space-y-2">
                                     <x-form.input
@@ -105,9 +103,7 @@
                                 <i class='bx bx-credit-card mr-1 text-blue-600'></i>
                                 Payment Method
                             </x-form.label>
-                                <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
-                                    <span class="font-medium">{{ $paymentMethods[$payment->payment_method] ?? ucfirst(str_replace('_', ' ', $payment->payment_method)) }}</span>
-                                </div>
+                                <x-form.readonly>{{ $paymentMethods[$payment->payment_method] ?? ucfirst(str_replace('_', ' ', $payment->payment_method)) }}</x-form.readonly>
                             @else
                                 <x-form.select-option
                                     name="payment_method"
@@ -167,9 +163,7 @@
                             <i class='bx bx-note mr-1 text-orange-600'></i>
                             Notes
                         </x-form.label>
-                        <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900 min-h-[80px]">
-                            {{ $payment->notes ?: 'No notes provided' }}
-                        </div>
+                        <x-form.readonly>{{ $payment->notes ?: 'No notes provided' }}</x-form.readonly>
                     @else
                         <x-form.textarea
                             name="notes"
