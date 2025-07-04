@@ -161,30 +161,30 @@
                     <i class='bx bx-receipt mr-1 text-indigo-600'></i>
                     Receipt/Proof (Optional)
                 </x-form.label>
-                <p class="text-gray-500 text-xs mb-2">You may include an image related to the donation if necessary.</p>
-                @if($isView && $donation->receipt_url)
-                    @php
-                        $ext = pathinfo($donation->receipt_url, PATHINFO_EXTENSION);
-                    @endphp
-                    <div class="border border-gray-200 rounded-lg overflow-hidden bg-gray-50 p-4">
-                        @if(in_array(strtolower($ext), ['jpg','jpeg','png','gif']))
-                            <img src="{{ asset('storage/' . $donation->receipt_url) }}" alt="Donation Proof" class="max-w-full max-h-60 object-contain rounded mx-auto">
-                            <div class="text-center mt-2">
-                                <a href="{{ asset('storage/' . $donation->receipt_url) }}" target="_blank" class="text-blue-600 hover:underline text-sm"><i class='bx bx-external-link mr-1'></i>View Full Size</a>
-                            </div>
-                        @elseif(strtolower($ext) === 'pdf')
-                            <div class="text-center">
-                                <a href="{{ asset('storage/' . $donation->receipt_url) }}" target="_blank" class="text-blue-600 hover:underline text-sm"><i class='bx bx-download mr-1'></i>Download PDF</a>
-                            </div>
-                        @endif
-                    </div>
-                @elseif($isView && !$donation->receipt_url)
-                    <div class="text-gray-400 italic text-xs">No proof uploaded.</div>
-                @else
-                    <x-form.input-upload name="receipt" id="receipt" accept="image/jpeg,image/png,application/pdf">
-                        Supported formats: JPEG, PNG, PDF
-                    </x-form.input-upload>
-                @endif
+                    <p class="text-gray-500 text-xs mb-2">You may include an image related to the donation if necessary.</p>
+                    @if($isView && $donation->receipt_url)
+                        @php
+                            $ext = pathinfo($donation->receipt_url, PATHINFO_EXTENSION);
+                        @endphp
+                        <div class="border border-gray-200 rounded-lg overflow-hidden bg-gray-50 p-4">
+                            @if(in_array(strtolower($ext), ['jpg','jpeg','png','gif']))
+                                <img src="{{ asset('storage/' . $donation->receipt_url) }}" alt="Donation Proof" class="max-w-full max-h-60 object-contain rounded mx-auto">
+                                <div class="text-center mt-2">
+                                    <a href="{{ asset('storage/' . $donation->receipt_url) }}" target="_blank" class="text-blue-600 hover:underline text-sm"><i class='bx bx-external-link mr-1'></i>View Full Size</a>
+                                </div>
+                            @elseif(strtolower($ext) === 'pdf')
+                                <div class="text-center">
+                                    <a href="{{ asset('storage/' . $donation->receipt_url) }}" target="_blank" class="text-blue-600 hover:underline text-sm"><i class='bx bx-download mr-1'></i>Download PDF</a>
+                                </div>
+                            @endif
+                        </div>
+                    @elseif($isView && !$donation->receipt_url)
+                        <div class="text-gray-400 italic text-xs">No proof uploaded.</div>
+                    @else
+                        <x-form.input-upload name="receipt" id="receipt" accept="image/jpeg,image/png,application/pdf">
+                            Supported formats: JPEG, PNG, PDF
+                        </x-form.input-upload>
+                    @endif
             </div>
         </x-modal.body>
         <x-modal.footer>

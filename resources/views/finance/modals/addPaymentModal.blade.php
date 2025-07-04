@@ -58,17 +58,17 @@
                         <div>
                             @if($payment && $status !== 'pending')
                                 <x-form.label>
-                                    <i class='bx bx-dollar-circle mr-1 text-green-600'></i>
-                                    Amount
-                                </x-form.label>
+                                <i class='bx bx-dollar-circle mr-1 text-green-600'></i>
+                                Amount
+                            </x-form.label>
                                 <x-form.readonly>₱{{ number_format($payment->amount, 2) }}</x-form.readonly>
-                            @else
+                                @else
                                 <div class="space-y-2">
                                     <x-form.input
                                         name="amount"
                                         type="number"
                                         step="0.01"
-                                        placeholder="0.00"
+                                               placeholder="0.00"
                                         :value="$payment ? $payment->amount : ''"
                                         required
                                         class="pl-8"
@@ -92,8 +92,8 @@
                                             Quick Amount: ₱500.00
                                         </label>
                                     </div>
-                                </div>
-                            @endif
+                                    </div>
+                                @endif
                         </div>
 
                         {{-- Payment Method --}}
