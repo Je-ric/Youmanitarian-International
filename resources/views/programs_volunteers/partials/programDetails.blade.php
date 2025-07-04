@@ -35,13 +35,14 @@
             <div class="xl:col-span-2 space-y-6">
                 
                 <!-- Basic Information -->
-                <x-card 
-                    title="Basic Information" 
-                    icon="bx-info-circle"
-                    headerColor="bg-[#1a2235] text-white"
-                    borderColor="border-[#ffb51b]"
-                >
-                    <div class="space-y-6">
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <div class="px-6 py-4 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-[#1a2235] flex items-center">
+                            <i class='bx bx-info-circle mr-2'></i>
+                            Basic Information
+                        </h3>
+                    </div>
+                    <div class="p-6 space-y-6">
                         <!-- Program Title -->
                         <div>
                             <x-form.label for="title"><i class='bx bx-info-circle mr-1 text-blue-500'></i>Program Title</x-form.label>
@@ -82,20 +83,21 @@
                             />
                         </div>
                     </div>
-                </x-card>
+                </div>
             </div>
 
             <!-- Right Column - Schedule & Settings -->
             <div class="xl:col-span-1 space-y-6">
                 
                 <!-- Schedule -->
-                <x-card 
-                    title="Schedule" 
-                    icon="bx-calendar"
-                    headerColor="bg-[#ffb51b] text-[#1a2235]"
-                    borderColor="border-[#1a2235]"
-                >
-                    <div class="space-y-4">
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <div class="px-6 py-4 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-[#1a2235] flex items-center">
+                            <i class='bx bx-calendar mr-2'></i>
+                            Schedule
+                        </h3>
+                    </div>
+                    <div class="p-6 space-y-4">
                         <!-- Date -->
                         <div>
                             <x-form.label for="date"><i class='bx bx-calendar mr-1 text-purple-600'></i>Date</x-form.label>
@@ -136,15 +138,18 @@
                             </div>
                         </div>
                     </div>
-                </x-card>
+                </div>
 
                 <!-- Program Settings -->
-                <x-card 
-                    title="Settings" 
-                    icon="bx-cog"
-                    headerColor="bg-[#1a2235] text-white"
-                    borderColor="border-[#ffb51b]"
-                >
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+                    <div class="px-6 py-4 border-b border-gray-100">
+                        <h3 class="text-lg font-semibold text-[#1a2235] flex items-center">
+                            <i class='bx bx-cog mr-2'></i>
+                            Settings
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <!-- Volunteers Needed -->
                         <div>
                             <x-form.label for="volunteer_count"><i class='bx bx-group mr-1 text-pink-500'></i>Volunteers Needed</x-form.label>
                             <x-form.input
@@ -158,7 +163,8 @@
                                 class="program-field"
                             />
                         </div>
-                </x-card>
+                    </div>
+                </div>
 
                 <!-- Program Status (Read-only info) -->
                 <div class="bg-gray-50 border border-gray-200 rounded-lg">
@@ -210,9 +216,6 @@
     </form>
 </div>
 
-@extends('layouts.sidebar_final')
-
-@section('content')
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
     <!-- Page Header -->
@@ -458,7 +461,6 @@
         </div>
     </div>
 </div>
-@endsection
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
