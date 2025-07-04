@@ -31,7 +31,16 @@ class DonationController extends Controller
     {
         $validated = $request->validate([
             'donor_name' => 'required|string|max:255',
-            'donor_email' => 'required|email|max:255',
+            'donor_email' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if ($value !== 'N/A' && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        $fail('The email must be either "N/A" or a valid email address.');
+                    }
+                },
+            ],
             'amount' => 'required|numeric|min:1',
             'payment_method' => 'required|string|max:100',
             'donation_date' => 'required|date',
@@ -60,6 +69,7 @@ class DonationController extends Controller
             'receipt_url' => $receiptPath,
             'status' => 'Pending',
         ]);
+        // Pending status are donations that have been reported/entered but not yet verified or received.
 
         return redirect()->route('finance.index')->with('success', 'Donation added successfully!');
     }

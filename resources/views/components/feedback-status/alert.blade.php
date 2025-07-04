@@ -2,7 +2,11 @@
     'type' => 'info', // success, error, info, warning
     'icon' => 'bx bx-info-circle',
     'message' => '',
-    'variant' => 'default', // default or attendance
+    'variant' => 'default', // default, attendance, or flexible
+    'bgColor' => '', // custom background color class for flexible variant
+    'textColor' => '', // custom text color class for flexible variant
+    'borderColor' => '', // custom border color class for flexible variant
+    'iconColor' => '', // custom icon color class for flexible variant
 ])
 
 @php
@@ -25,6 +29,15 @@
             </div>
         </div>
     </div>
+@elseif($variant === 'flexible')
+    <div class="{{ $bgColor ?: 'bg-gray-50' }} border {{ $borderColor ?: 'border-gray-200' }} rounded-lg p-4 mb-4">
+        <div class="flex items-start gap-3">
+            <i class="{{ $icon }} {{ $iconColor ?: 'text-gray-500' }} mt-0.5"></i>
+            <div class="text-sm {{ $textColor ?: 'text-gray-700' }}">
+                {!! $message !!}
+            </div>
+        </div>
+    </div>
 @else
     <div class="text-sm flex items-center gap-2 justify-center py-3 px-4 border rounded-lg {{ $classes }}">
         <i class="{{ $icon }}"></i>
@@ -33,9 +46,20 @@
 @endif
 
 {{--
-Usage: <x-feedback-status.alert type="success" message="Operation completed successfully!" />
-       <x-feedback-status.alert type="error" message="Something went wrong!" />
-       <x-feedback-status.alert type="warning" message="Please review your input." variant="attendance" />
+Usage: 
+<x-feedback-status.alert type="success" message="Operation completed successfully!" />
+<x-feedback-status.alert type="error" message="Something went wrong!" />
+<x-feedback-status.alert type="warning" message="Please review your input." variant="attendance" />
+
+Flexible variant with custom colors:
+<x-feedback-status.alert 
+    variant="flexible" 
+    message="Custom colored alert" 
+    bgColor="bg-purple-50" 
+    textColor="text-purple-700" 
+    borderColor="border-purple-200" 
+    iconColor="text-purple-500" 
+/>
 
 Used in:
 - resources/views/roles/partials/assign_rolesModal.blade.php

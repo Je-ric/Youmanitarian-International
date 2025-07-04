@@ -56,45 +56,73 @@
                     <div class="space-y-4">
                         {{-- Amount --}}
                         <div>
-                            <x-form.label for="amount">
-                                <i class='bx bx-dollar-circle mr-1 text-green-600'></i>
-                                Amount
-                            </x-form.label>
-                            <div class="relative">
-                                @if($payment && $status !== 'pending')
-                                    <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
-                                        <span class="font-medium">₱{{ number_format($payment->amount, 2) }}</span>
+                            @if($payment && $status !== 'pending')
+                                <x-form.label>
+                                    <i class='bx bx-dollar-circle mr-1 text-green-600'></i>
+                                    Amount
+                                </x-form.label>
+                                <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
+                                    <span class="font-medium">₱{{ number_format($payment->amount, 2) }}</span>
+                                </div>
+                            @else
+                                <div class="space-y-2">
+                                    <x-form.input
+                                        name="amount"
+                                        type="number"
+                                        step="0.01"
+                                        placeholder="0.00"
+                                        :value="$payment ? $payment->amount : ''"
+                                        required
+                                        class="pl-8"
+                                        label="Amount"
+                                    >
+                                        <x-slot name="label">
+                                            <i class='bx bx-dollar-circle mr-1 text-green-600'></i>
+                                            Amount
+                                        </x-slot>
+                                    </x-form.input>
+                                    
+                                    {{-- Quick Amount Checkbox --}}
+                                    <div class="flex items-center space-x-2">
+                                        <x-form.checkbox 
+                                            id="quick_amount" 
+                                            name="quick_amount" 
+                                            value="500.00"
+                                            onchange="document.getElementById('amount').value = this.checked ? this.value : ''"
+                                        />
+                                        <label for="quick_amount" class="text-sm text-gray-700 font-medium">
+                                            Quick Amount: ₱500.00
+                                        </label>
                                     </div>
-                                @else
-                                    <div class="relative">
-                                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">₱</span>
-                                        <input type="number" step="0.01" name="amount" id="amount" required
-                                               class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                                               placeholder="0.00"
-                                               value="{{ $payment ? $payment->amount : '' }}">
-                                    </div>
-                                @endif
-                            </div>
+                                </div>
+                            @endif
                         </div>
 
                         {{-- Payment Method --}}
                         <div>
-                            <x-form.label for="payment_method">
+                            @if($payment && $status !== 'pending')
+                                <x-form.label>
                                 <i class='bx bx-credit-card mr-1 text-blue-600'></i>
                                 Payment Method
                             </x-form.label>
-                            @if($payment && $status !== 'pending')
                                 <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
                                     <span class="font-medium">{{ $paymentMethods[$payment->payment_method] ?? ucfirst(str_replace('_', ' ', $payment->payment_method)) }}</span>
                                 </div>
                             @else
-                                <select name="payment_method" id="payment_method" required
-                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                <x-form.select-option
+                                    name="payment_method"
+                                    label="Payment Method"
+                                    required
+                                >
+                                    <x-slot name="label">
+                                        <i class='bx bx-credit-card mr-1 text-blue-600'></i>
+                                        Payment Method
+                                    </x-slot>
                                     <option value="">Select payment method</option>
                                     @foreach($paymentMethods as $value => $label)
                                         <option value="{{ $value }}" {{ (isset($payment) && $payment->payment_method == $value) ? 'selected' : '' }}>{{ $label }}</option>
                                     @endforeach
-                                </select>
+                                </x-form.select-option>
                             @endif
                         </div>
                     </div>
@@ -134,30 +162,35 @@
 
                 {{-- Notes Section --}}
                 <div>
-                    <x-form.label for="notes">
-                        <i class='bx bx-note mr-1 text-orange-600'></i>
-                        Notes
-                        <span class="text-xs font-normal text-gray-500">(Required)</span>
-                    </x-form.label>
                     @if($payment && $status !== 'pending')
+                        <x-form.label>
+                            <i class='bx bx-note mr-1 text-orange-600'></i>
+                            Notes
+                        </x-form.label>
                         <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900 min-h-[80px]">
                             {{ $payment->notes ?: 'No notes provided' }}
                         </div>
                     @else
                         <x-form.textarea
                             name="notes"
-                            id="notes"
                             rows="3"
-                            :value="old('notes', $payment ? $payment->notes : '')"
+                            :value="$payment ? $payment->notes : ''"
                             placeholder="Add any additional notes about the payment..."
                             required
-                        />
+                            label="Notes"
+                        >
+                            <x-slot name="label">
+                                <i class='bx bx-note mr-1 text-orange-600'></i>
+                                Notes
+                                <span class="text-xs font-normal text-gray-500">(Required)</span>
+                            </x-slot>
+                        </x-form.textarea>
                     @endif
                 </div>
 
                 {{-- Receipt/Proof Section --}}
                 <div>
-                    <x-form.label for="receipt">
+                    <x-form.label>
                         <i class='bx bx-receipt mr-1 text-indigo-600'></i>
                         Receipt/Proof
                         <span class="text-xs font-normal text-gray-500">(Required)</span>
@@ -192,7 +225,7 @@
                             @endif
                         </div>
                     @else
-                        <x-form.input-upload name="receipt" id="receipt" accept="image/*,.pdf" required>
+                        <x-form.input-upload name="receipt" accept="image/*,.pdf" required>
                             PNG, JPG, PDF up to 10MB
                         </x-form.input-upload>
                     @endif
