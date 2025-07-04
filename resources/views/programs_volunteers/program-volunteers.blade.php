@@ -57,5 +57,4 @@
             ])
         </x-slot>
     </x-navigation-layout.tabs-modern>
-</div>
 @endsection

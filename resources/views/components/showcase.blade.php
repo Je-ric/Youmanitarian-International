@@ -372,4 +372,102 @@ defaultTab="modern1"
             </div>
         </div>
     </section>
+
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-[#1a2235] mb-2">Card Component Showcase</h1>
+            <p class="text-gray-600">Professional card designs for organizational use</p>
+        </div>
+    
+        <!-- Card Variants Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-12">
+            
+            <!-- Default Variant -->
+            <x-card title="Default Professional" icon="bx-info-circle" variant="default">
+                <div class="space-y-3">
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        Clean, professional design with subtle gradients and proper contrast ratios.
+                    </p>
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <i class='bx bx-check-circle text-green-500'></i>
+                        <span>Perfect for general content</span>
+                    </div>
+                </div>
+            </x-card>
+    
+            <!-- Gradient Variant -->
+            <x-card title="Gradient Accent" icon="bx-palette" variant="gradient">
+                <div class="space-y-3">
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        Eye-catching gradient design that draws attention while maintaining professionalism.
+                    </p>
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <i class='bx bx-star text-[#ffb51b]'></i>
+                        <span>Great for featured content</span>
+                    </div>
+                </div>
+            </x-card>
+    
+            <!-- Minimal Variant -->
+            <x-card title="Minimal Clean" icon="bx-minimize" variant="minimal">
+                <div class="space-y-3">
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        Clean, minimal design with accent border for subtle emphasis.
+                    </p>
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <i class='bx bx-layout text-blue-500'></i>
+                        <span>Ideal for data displays</span>
+                    </div>
+                </div>
+            </x-card>
+    
+            <!-- Elevated Variant -->
+            <x-card title="Elevated Premium" icon="bx-crown" variant="elevated" size="default">
+                <div class="space-y-3">
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        Premium design with enhanced shadows and decorative elements for important content.
+                    </p>
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <i class='bx bx-award text-purple-500'></i>
+                        <span>Perfect for highlights</span>
+                    </div>
+                </div>
+            </x-card>
+    
+            <!-- Bordered Variant -->
+            <x-card title="Bordered Formal" icon="bx-border-all" variant="bordered">
+                <div class="space-y-3">
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        Formal design with defined borders, perfect for official documentation.
+                    </p>
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <i class='bx bx-file text-indigo-500'></i>
+                        <span>Great for forms & docs</span>
+                    </div>
+                </div>
+            </x-card>
+    
+            <!-- Custom Example -->
+            <x-card 
+                title="Custom Colors" 
+                icon="bx-customize" 
+                variant="default"
+                headerColor="bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
+                bodyColor="bg-emerald-50"
+            >
+                <div class="space-y-3">
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        Fully customizable with your own color schemes and branding.
+                    </p>
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <i class='bx bx-color text-emerald-500'></i>
+                        <span>Unlimited customization</span>
+                    </div>
+                </div>
+            </x-card>
+        </div>
+    </div>
     @endsection

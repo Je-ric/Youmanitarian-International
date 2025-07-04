@@ -35,14 +35,8 @@
             <div class="xl:col-span-2 space-y-6">
                 
                 <!-- Basic Information -->
-                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
-                    <div class="px-6 py-4 border-b border-gray-100">
-                        <h3 class="text-lg font-semibold text-[#1a2235] flex items-center">
-                            <i class='bx bx-info-circle mr-2'></i>
-                            Basic Information
-                        </h3>
-                    </div>
-                    <div class="p-6 space-y-6">
+                <x-card title="Basic Information" icon="bx-info-circle" variant="default">
+                    <div class="space-y-6">
                         <!-- Program Title -->
                         <div>
                             <x-form.label for="title"><i class='bx bx-info-circle mr-1 text-blue-500'></i>Program Title</x-form.label>
@@ -83,21 +77,15 @@
                             />
                         </div>
                     </div>
-                </div>
+                </x-card>
             </div>
 
             <!-- Right Column - Schedule & Settings -->
             <div class="xl:col-span-1 space-y-6">
                 
                 <!-- Schedule -->
-                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
-                    <div class="px-6 py-4 border-b border-gray-100">
-                        <h3 class="text-lg font-semibold text-[#1a2235] flex items-center">
-                            <i class='bx bx-calendar mr-2'></i>
-                            Schedule
-                        </h3>
-                    </div>
-                    <div class="p-6 space-y-4">
+                <x-card title="Schedule" icon="bx-calendar" variant="gradient">
+                    <div class="space-y-4">
                         <!-- Date -->
                         <div>
                             <x-form.label for="date"><i class='bx bx-calendar mr-1 text-purple-600'></i>Date</x-form.label>
@@ -138,17 +126,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </x-card>
 
                 <!-- Program Settings -->
-                <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
-                    <div class="px-6 py-4 border-b border-gray-100">
-                        <h3 class="text-lg font-semibold text-[#1a2235] flex items-center">
-                            <i class='bx bx-cog mr-2'></i>
-                            Settings
-                        </h3>
-                    </div>
-                    <div class="p-6">
+                <x-card title="Settings" icon="bx-cog" variant="gradient">
+                    <div>
                         <!-- Volunteers Needed -->
                         <div>
                             <x-form.label for="volunteer_count"><i class='bx bx-group mr-1 text-pink-500'></i>Volunteers Needed</x-form.label>
@@ -164,32 +146,29 @@
                             />
                         </div>
                     </div>
-                </div>
+                </x-card>
 
                 <!-- Program Status (Read-only info) -->
-                <div class="bg-gray-50 border border-gray-200 rounded-lg">
-                    <div class="p-6">
-                        <h4 class="text-sm font-medium text-gray-700 mb-3">Program Status</h4>
-                        <div class="space-y-3 text-sm">
-                            <div class="flex items-center justify-between">
-                                <span class="text-gray-600">Status:</span>
-                                <x-feedback-status.programProgress :program="$program" />
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Created:</span>
-                                <span class="text-gray-900">{{ $program->created_at->format('M d, Y') }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Last Updated:</span>
-                                <span class="text-gray-900">{{ $program->updated_at->format('M d, Y') }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-600">Volunteers:</span>
-                                <span class="text-gray-900">{{ $program->volunteers->count() }} participants</span>
-                            </div>
+                <x-card title="Program Status" icon="bx-bar-chart" variant="minimal">
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600">Status:</span>
+                            <x-feedback-status.programProgress :program="$program" />
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Created:</span>
+                            <span class="text-gray-900">{{ $program->created_at->format('M d, Y') }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Last Updated:</span>
+                            <span class="text-gray-900">{{ $program->updated_at->format('M d, Y') }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Volunteers:</span>
+                            <span class="text-gray-900">{{ $program->volunteers->count() }} participants</span>
                         </div>
                     </div>
-                </div>
+                </x-card>
             </div>
         </div>
 
@@ -214,252 +193,6 @@
             </div>
         </div>
     </form>
-</div>
-
-<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    
-    <!-- Page Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-[#1a2235] mb-2">Card Component Showcase</h1>
-        <p class="text-gray-600">Professional card designs for organizational use</p>
-    </div>
-
-    <!-- Card Variants Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-12">
-        
-        <!-- Default Variant -->
-        <x-card title="Default Professional" icon="bx-info-circle" variant="default">
-            <div class="space-y-3">
-                <p class="text-gray-700 text-sm leading-relaxed">
-                    Clean, professional design with subtle gradients and proper contrast ratios.
-                </p>
-                <div class="flex items-center gap-2 text-xs text-gray-500">
-                    <i class='bx bx-check-circle text-green-500'></i>
-                    <span>Perfect for general content</span>
-                </div>
-            </div>
-        </x-card>
-
-        <!-- Gradient Variant -->
-        <x-card title="Gradient Accent" icon="bx-palette" variant="gradient">
-            <div class="space-y-3">
-                <p class="text-gray-700 text-sm leading-relaxed">
-                    Eye-catching gradient design that draws attention while maintaining professionalism.
-                </p>
-                <div class="flex items-center gap-2 text-xs text-gray-500">
-                    <i class='bx bx-star text-[#ffb51b]'></i>
-                    <span>Great for featured content</span>
-                </div>
-            </div>
-        </x-card>
-
-        <!-- Minimal Variant -->
-        <x-card title="Minimal Clean" icon="bx-minimize" variant="minimal">
-            <div class="space-y-3">
-                <p class="text-gray-700 text-sm leading-relaxed">
-                    Clean, minimal design with accent border for subtle emphasis.
-                </p>
-                <div class="flex items-center gap-2 text-xs text-gray-500">
-                    <i class='bx bx-layout text-blue-500'></i>
-                    <span>Ideal for data displays</span>
-                </div>
-            </div>
-        </x-card>
-
-        <!-- Elevated Variant -->
-        <x-card title="Elevated Premium" icon="bx-crown" variant="elevated" size="default">
-            <div class="space-y-3">
-                <p class="text-gray-700 text-sm leading-relaxed">
-                    Premium design with enhanced shadows and decorative elements for important content.
-                </p>
-                <div class="flex items-center gap-2 text-xs text-gray-500">
-                    <i class='bx bx-award text-purple-500'></i>
-                    <span>Perfect for highlights</span>
-                </div>
-            </div>
-        </x-card>
-
-        <!-- Bordered Variant -->
-        <x-card title="Bordered Formal" icon="bx-border-all" variant="bordered">
-            <div class="space-y-3">
-                <p class="text-gray-700 text-sm leading-relaxed">
-                    Formal design with defined borders, perfect for official documentation.
-                </p>
-                <div class="flex items-center gap-2 text-xs text-gray-500">
-                    <i class='bx bx-file text-indigo-500'></i>
-                    <span>Great for forms & docs</span>
-                </div>
-            </div>
-        </x-card>
-
-        <!-- Custom Example -->
-        <x-card 
-            title="Custom Colors" 
-            icon="bx-customize" 
-            variant="default"
-            headerColor="bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
-            bodyColor="bg-emerald-50"
-        >
-            <div class="space-y-3">
-                <p class="text-gray-700 text-sm leading-relaxed">
-                    Fully customizable with your own color schemes and branding.
-                </p>
-                <div class="flex items-center gap-2 text-xs text-gray-500">
-                    <i class='bx bx-color text-emerald-500'></i>
-                    <span>Unlimited customization</span>
-                </div>
-            </div>
-        </x-card>
-    </div>
-
-    <!-- Size Variations -->
-    <div class="mb-12">
-        <h2 class="text-2xl font-bold text-[#1a2235] mb-6">Size Variations</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            <x-card title="Small Size" icon="bx-minus" variant="gradient" size="small">
-                <p class="text-sm text-gray-600">Compact design for tight spaces and sidebar content.</p>
-            </x-card>
-
-            <x-card title="Default Size" icon="bx-square" variant="default" size="default">
-                <p class="text-sm text-gray-600">Standard size perfect for most content areas and general use.</p>
-            </x-card>
-
-            <x-card title="Large Size" icon="bx-plus" variant="elevated" size="large">
-                <p class="text-sm text-gray-600">Spacious design for important content that needs more visual weight.</p>
-            </x-card>
-        </div>
-    </div>
-
-    <!-- Real-world Examples -->
-    <div class="mb-12">
-        <h2 class="text-2xl font-bold text-[#1a2235] mb-6">Real-world Examples</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
-            <!-- Statistics Card -->
-            <x-card title="Monthly Statistics" icon="bx-bar-chart" variant="gradient">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="text-center">
-                        <div class="text-2xl font-bold text-[#1a2235]">1,247</div>
-                        <div class="text-sm text-gray-500">Total Users</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-2xl font-bold text-[#ffb51b]">89%</div>
-                        <div class="text-sm text-gray-500">Satisfaction</div>
-                    </div>
-                </div>
-            </x-card>
-
-            <!-- Task Management -->
-            <x-card title="Task Overview" icon="bx-task" variant="minimal">
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-600">Completed Tasks</span>
-                        <span class="text-sm font-semibold text-green-600">24/30</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div class="bg-green-500 h-2 rounded-full" style="width: 80%"></div>
-                    </div>
-                    <div class="text-xs text-gray-500">6 tasks remaining</div>
-                </div>
-            </x-card>
-
-            <!-- Notification Card -->
-            <x-card title="Recent Activity" icon="bx-bell" variant="elevated">
-                <div class="space-y-3">
-                    <div class="flex items-start gap-3">
-                        <div class="w-2 h-2 bg-[#ffb51b] rounded-full mt-2 flex-shrink-0"></div>
-                        <div>
-                            <p class="text-sm text-gray-700">New volunteer application received</p>
-                            <p class="text-xs text-gray-500">2 minutes ago</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3">
-                        <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <div>
-                            <p class="text-sm text-gray-700">Program schedule updated</p>
-                            <p class="text-xs text-gray-500">1 hour ago</p>
-                        </div>
-                    </div>
-                </div>
-            </x-card>
-
-            <!-- Settings Card -->
-            <x-card title="System Settings" icon="bx-cog" variant="bordered">
-                <div class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-700">Email Notifications</span>
-                        <div class="w-10 h-6 bg-[#ffb51b] rounded-full relative">
-                            <div class="w-4 h-4 bg-white rounded-full absolute top-1 right-1 shadow-sm"></div>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm text-gray-700">Auto-save</span>
-                        <div class="w-10 h-6 bg-gray-300 rounded-full relative">
-                            <div class="w-4 h-4 bg-white rounded-full absolute top-1 left-1 shadow-sm"></div>
-                        </div>
-                    </div>
-                </div>
-            </x-card>
-        </div>
-    </div>
-
-    <!-- Usage Guidelines -->
-    <div class="bg-gradient-to-r from-slate-50 to-gray-50 rounded-2xl p-8">
-        <h2 class="text-2xl font-bold text-[#1a2235] mb-6">Usage Guidelines</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-                <h3 class="text-lg font-semibold text-[#1a2235] mb-3">When to Use Each Variant</h3>
-                <ul class="space-y-2 text-sm text-gray-700">
-                    <li class="flex items-start gap-2">
-                        <i class='bx bx-check text-green-500 mt-0.5'></i>
-                        <span><strong>Default:</strong> General content, forms, standard information</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i class='bx bx-check text-green-500 mt-0.5'></i>
-                        <span><strong>Gradient:</strong> Featured content, call-to-actions, highlights</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i class='bx bx-check text-green-500 mt-0.5'></i>
-                        <span><strong>Minimal:</strong> Data displays, statistics, clean layouts</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i class='bx bx-check text-green-500 mt-0.5'></i>
-                        <span><strong>Elevated:</strong> Important notices, premium content</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i class='bx bx-check text-green-500 mt-0.5'></i>
-                        <span><strong>Bordered:</strong> Forms, documentation, formal content</span>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="text-lg font-semibold text-[#1a2235] mb-3">Best Practices</h3>
-                <ul class="space-y-2 text-sm text-gray-700">
-                    <li class="flex items-start gap-2">
-                        <i class='bx bx-bulb text-[#ffb51b] mt-0.5'></i>
-                        <span>Use consistent variants within the same section</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i class='bx bx-bulb text-[#ffb51b] mt-0.5'></i>
-                        <span>Choose appropriate sizes based on content importance</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i class='bx bx-bulb text-[#ffb51b] mt-0.5'></i>
-                        <span>Maintain proper spacing between cards</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i class='bx bx-bulb text-[#ffb51b] mt-0.5'></i>
-                        <span>Use icons that relate to the card content</span>
-                    </li>
-                    <li class="flex items-start gap-2">
-                        <i class='bx bx-bulb text-[#ffb51b] mt-0.5'></i>
-                        <span>Test readability across different screen sizes</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script>

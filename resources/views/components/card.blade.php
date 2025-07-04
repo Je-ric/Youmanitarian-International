@@ -1,100 +1,69 @@
 @props([
     'title' => null,
     'icon' => null,
-    'variant' => 'default', // default, gradient, minimal, elevated, bordered
-    'size' => 'default', // small, default, large
+    'variant' => 'default',
     'headerColor' => null,
     'bodyColor' => null,
     'borderColor' => null,
-    'shadow' => null,
-    'rounded' => null,
     'headerClass' => '',
     'bodyClass' => '',
 ])
 
 @php
-    // Define 5 different card variants
     $variants = [
         'default' => [
-            'container' => 'bg-white border border-gray-200 shadow-lg hover:shadow-xl',
+            'container' => 'bg-white border border-gray-200',
+            'shadow' => 'shadow-lg',
             'header' => 'bg-gradient-to-r from-[#1a2235] to-[#2a3441] text-white',
             'body' => 'bg-white',
             'iconBg' => 'bg-white/20 backdrop-blur-sm',
             'iconColor' => 'text-white',
-            'rounded' => 'rounded-xl',
         ],
         'gradient' => [
-            'container' => 'bg-gradient-to-br from-white via-slate-50 to-gray-100 border border-gray-200/50 shadow-lg hover:shadow-2xl',
+            'container' => 'bg-gradient-to-br from-white via-slate-50 to-gray-100 border border-gray-200/50',
+            'shadow' => 'shadow-lg',
             'header' => 'bg-gradient-to-r from-[#ffb51b] via-[#f0a500] to-[#e6a017] text-[#1a2235]',
             'body' => 'bg-gradient-to-b from-white to-slate-50/50',
             'iconBg' => 'bg-[#1a2235]/10 backdrop-blur-sm',
             'iconColor' => 'text-[#1a2235]',
-            'rounded' => 'rounded-2xl',
         ],
         'minimal' => [
-            'container' => 'bg-white border-l-4 border-l-[#ffb51b] shadow-sm hover:shadow-md',
-            'header' => 'bg-slate-50/80 text-[#1a2235] border-b border-gray-100',
-            'body' => 'bg-white',
-            'iconBg' => 'bg-[#ffb51b]/10',
-            'iconColor' => 'text-[#ffb51b]',
-            'rounded' => 'rounded-lg',
+            'container' => 'bg-slate-50 border border-gray-200',
+            'shadow' => 'shadow',
+            'header' => 'bg-white text-[#1a2235] border-b border-gray-100',
+            'body' => 'bg-slate-50',
+            'iconBg' => 'bg-[#1a2235]/5',
+            'iconColor' => 'text-[#1a2235]',
         ],
         'elevated' => [
-            'container' => 'bg-white shadow-2xl hover:shadow-3xl border border-gray-100',
+            'container' => 'bg-white border border-gray-100',
+            'shadow' => 'shadow-2xl',
             'header' => 'bg-gradient-to-r from-[#1a2235] via-[#243447] to-[#1a2235] text-white relative overflow-hidden',
             'body' => 'bg-gradient-to-b from-white to-slate-50/30',
-            'iconBg' => 'bg-gradient-to-br from-[#ffb51b] to-[#f0a500] shadow-lg',
+            'iconBg' => 'bg-gradient-to-br from-[#ffb51b] to-[#f0a500]',
             'iconColor' => 'text-white',
-            'rounded' => 'rounded-2xl',
         ],
         'bordered' => [
-            'container' => 'bg-white border-2 border-[#1a2235]/20 hover:border-[#ffb51b]/50 shadow-md hover:shadow-lg',
+            'container' => 'bg-white border-2 border-[#1a2235]/20 hover:border-[#ffb51b]/50',
+            'shadow' => 'shadow-lg',
             'header' => 'bg-gradient-to-r from-[#1a2235]/5 to-[#ffb51b]/5 text-[#1a2235] border-b-2 border-[#ffb51b]/20',
             'body' => 'bg-white',
             'iconBg' => 'bg-gradient-to-br from-[#1a2235] to-[#2a3441]',
             'iconColor' => 'text-white',
-            'rounded' => 'rounded-xl',
-        ],
-    ];
-
-    // Size configurations
-    $sizes = [
-        'small' => [
-            'headerPadding' => 'px-4 py-3',
-            'bodyPadding' => 'p-4',
-            'iconSize' => 'w-6 h-6',
-            'iconText' => 'text-sm',
-            'titleText' => 'text-base font-medium',
-        ],
-        'default' => [
-            'headerPadding' => 'px-6 py-4',
-            'bodyPadding' => 'p-6',
-            'iconSize' => 'w-8 h-8',
-            'iconText' => 'text-lg',
-            'titleText' => 'text-lg font-semibold',
-        ],
-        'large' => [
-            'headerPadding' => 'px-8 py-6',
-            'bodyPadding' => 'p-8',
-            'iconSize' => 'w-10 h-10',
-            'iconText' => 'text-xl',
-            'titleText' => 'text-xl font-bold',
         ],
     ];
 
     $config = $variants[$variant] ?? $variants['default'];
-    $sizeConfig = $sizes[$size] ?? $sizes['default'];
 
-    // Override with custom props if provided
     $containerClass = $config['container'];
+    $shadowClass = $config['shadow'];
     $headerClass = $headerColor ?? $config['header'];
     $bodyClass = $bodyColor ?? $config['body'];
-    $roundedClass = $rounded ?? $config['rounded'];
 @endphp
 
-<div class="w-full {{ $containerClass }} {{ $roundedClass }} overflow-hidden transition-all duration-300 group">
+<div class="w-full {{ $containerClass }} {{ $shadowClass }} rounded-xl overflow-hidden transition-all duration-300 group">
     @if($title || $icon)
-        <div class="flex items-center gap-3 {{ $sizeConfig['headerPadding'] }} {{ $headerClass }} {{ $headerClass }} relative">
+        <div class="flex items-center gap-3 px-6 py-4 {{ $headerClass }} {{ $headerClass }} relative">
             
             @if($variant === 'elevated')
                 <!-- Decorative background pattern for elevated variant -->
@@ -105,13 +74,13 @@
             @endif
 
             @if($icon)
-                <span class="relative inline-flex items-center justify-center {{ $sizeConfig['iconSize'] }} {{ $config['iconBg'] }} {{ $config['rounded'] }} transition-transform duration-300 group-hover:scale-110">
-                    <i class="bx {{ $icon }} {{ $sizeConfig['iconText'] }} {{ $config['iconColor'] }}"></i>
+                <span class="relative inline-flex items-center justify-center w-8 h-8 {{ $config['iconBg'] }} rounded-xl transition-transform duration-300 group-hover:scale-110">
+                    <i class="bx {{ $icon }} text-lg {{ $config['iconColor'] }}"></i>
                 </span>
             @endif
             
             @if($title)
-                <h3 class="relative {{ $sizeConfig['titleText'] }} tracking-tight flex-1">
+                <h3 class="relative text-lg font-semibold tracking-tight flex-1">
                     {{ $title }}
                 </h3>
             @endif
@@ -123,12 +92,7 @@
         </div>
     @endif
     
-    <div class="{{ $sizeConfig['bodyPadding'] }} {{ $bodyClass }} {{ $bodyClass }} relative">
-        @if($variant === 'minimal')
-            <!-- Subtle accent line for minimal variant -->
-            <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-[#ffb51b]/30 via-[#ffb51b]/10 to-transparent"></div>
-        @endif
-        
+    <div class="p-6 {{ $bodyClass }} {{ $bodyClass }} relative">
         {{ $slot }}
     </div>
 </div>
@@ -147,12 +111,12 @@ Usage Examples:
 </x-card>
 
 <!-- Minimal Clean Card -->
-<x-card title="Statistics" icon="bx-bar-chart" variant="minimal" size="small">
+<x-card title="Statistics" icon="bx-bar-chart" variant="minimal">
     <p>Your content here...</p>
 </x-card>
 
 <!-- Elevated Premium Card -->
-<x-card title="Important Notice" icon="bx-bell" variant="elevated" size="large">
+<x-card title="Important Notice" icon="bx-bell" variant="elevated">
     <p>Your content here...</p>
 </x-card>
 

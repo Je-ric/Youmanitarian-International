@@ -38,8 +38,9 @@
             @endforeach
         </nav>
     </div>
-
-    <div class="mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6">
+    
+    {{-- still undecided kung may bg --}}
+    <div class="mx-auto bg-[#f4f5f7] px-2 sm:px-4 md:px-6 py-4 sm:py-6">
         @foreach($tabIds as $tabId)
             <div x-show="activeTab === '{{ $tabId }}'"
                 x-transition:enter="transition ease-out duration-200"
