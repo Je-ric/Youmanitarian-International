@@ -10,19 +10,25 @@ class DonationController extends Controller
 {
     public function index()
     {
-        $totalDonations = Donation::where('status', 'Confirmed')->sum('amount');
+        $totalConfirmedDonations = Donation::where('status', 'Confirmed')->sum('amount');
+        $confirmedDonations = Donation::where('status', 'Confirmed')->count();
+        $totalPendingDonations = Donation::where('status', 'Pending')->sum('amount');
         $pendingDonations = Donation::where('status', 'Pending')->count();
         $donations = Donation::latest()->paginate(10);
 
         return view('finance.donations', compact(
-            'totalDonations',
-            'pendingDonations',
+            'totalConfirmedDonations',
+            'confirmedDonations',
+                        'totalPendingDonations',
+                        'pendingDonations',
             'donations'
         ));
     }
 
     public function updateDonationStatus(Donation $donation)
     {
+        // Still undecided kung magdadagdag pa ng status na Decline? Rejected? Cancelled?
+        // Ang purpose lang naman kase pag confirm is indicator na talagang nareceived na yung donation.
         $donation->update(['status' => 'Confirmed']);
         return redirect()->back()->with('success', 'Donation status updated successfully');
     }
@@ -38,7 +44,7 @@ class DonationController extends Controller
                 function ($attribute, $value, $fail) {
                     if ($value !== 'N/A' && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
                         $fail('The email must be either "N/A" or a valid email address.');
-                    }
+                    } // dapat real-time (sana malaman - frontend side)
                 },
             ],
             'amount' => 'required|numeric|min:1',

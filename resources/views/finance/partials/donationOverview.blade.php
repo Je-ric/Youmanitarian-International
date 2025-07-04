@@ -1,17 +1,31 @@
 <x-overview.stat-card-group>
     <x-overview.stat-card
         icon="bx-money"
-        title="Total Donations"
-        :value="'₱' . number_format($totalDonations, 2)"
-        bgColor="bg-blue-50"
-        iconColor="text-blue-500"
+        title="Total Confirmed Donations"
+        :value="'₱' . number_format($totalConfirmedDonations, 2)"
+        bgColor="bg-green-100"
+        iconColor="text-green-700"
     />
     <x-overview.stat-card
-        icon="bx-time"
+        icon="bx-badge-check"
+        title="Confirmed Donations"
+        :value="$confirmedDonations"
+        bgColor="bg-blue-100"
+        iconColor="text-blue-700"
+    />
+    <x-overview.stat-card
+        icon="bx-hourglass"
+        title="Total Pending Donations"
+        :value="'₱' . number_format($totalPendingDonations, 2)"
+        bgColor="bg-amber-100"
+        iconColor="text-amber-700"
+    />
+    <x-overview.stat-card
+        icon="bx-time-five"
         title="Pending Donations"
         :value="$pendingDonations"
-        bgColor="bg-yellow-50"
-        iconColor="text-yellow-500"
+        bgColor="bg-purple-100"
+        iconColor="text-purple-700"
     />
 </x-overview.stat-card-group>
 
@@ -30,12 +44,12 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Donations</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₱{{ number_format($totalDonations, 2) }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₱{{ number_format($totalConfirmedDonations + $totalPendingDonations, 2) }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">100%</td>
                 </tr>
                 <tr class="bg-gray-50">
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">Total Revenue</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">₱{{ number_format($totalDonations, 2) }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">₱{{ number_format($totalConfirmedDonations + $totalPendingDonations, 2) }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">100%</td>
                 </tr>
             </tbody>
