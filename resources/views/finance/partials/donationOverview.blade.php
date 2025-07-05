@@ -5,7 +5,7 @@
         :value="'₱' . number_format($totalConfirmedDonations, 2)"
         bgColor="bg-green-100"
         iconColor="text-green-700"
-        cardColor="bg-green-50"
+        cardGradient="bg-gradient-to-br from-green-50 to-emerald-100"
     />
     <x-overview.stat-card
         icon="bx-badge-check"
@@ -13,7 +13,7 @@
         :value="$confirmedDonations"
         bgColor="bg-blue-100"
         iconColor="text-blue-700"
-        cardColor="bg-blue-50"
+        cardGradient="bg-gradient-to-br from-blue-50 to-indigo-100"
     />
     <x-overview.stat-card
         icon="bx-hourglass"
@@ -21,7 +21,7 @@
         :value="'₱' . number_format($totalPendingDonations, 2)"
         bgColor="bg-amber-100"
         iconColor="text-amber-700"
-        cardColor="bg-amber-50"
+        cardGradient="bg-gradient-to-br from-amber-50 to-orange-100"
     />
     <x-overview.stat-card
         icon="bx-time-five"
@@ -29,7 +29,7 @@
         :value="$pendingDonations"
         bgColor="bg-purple-100"
         iconColor="text-purple-700"
-        cardColor="bg-purple-50"
+        cardGradient="bg-gradient-to-br from-purple-50 to-violet-100"
     />
 </x-overview.stat-card-group>
 

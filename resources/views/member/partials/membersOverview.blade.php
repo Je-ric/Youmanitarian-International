@@ -5,7 +5,7 @@
         :value="$totalMembersCount"
         bgColor="bg-blue-100"
         iconColor="text-blue-500"
-        cardColor="bg-blue-50"
+        cardGradient="bg-gradient-to-br from-blue-50 to-indigo-100"
     />
     <x-overview.stat-card
         icon="bx-user-check"
@@ -13,7 +13,7 @@
         :value="$activeMembersCount"
         bgColor="bg-green-100"
         iconColor="text-green-500"
-        cardColor="bg-green-50"
+        cardGradient="bg-gradient-to-br from-green-50 to-emerald-100"
     />
     <x-overview.stat-card
         icon="bx-star"
@@ -21,7 +21,7 @@
         :value="$fullPledgeMembersCount"
         bgColor="bg-yellow-100"
         iconColor="text-yellow-500"
-        cardColor="bg-yellow-50"
+        cardGradient="bg-gradient-to-br from-yellow-50 to-amber-100"
     />
     <x-overview.stat-card
         icon="bx-award"
@@ -29,7 +29,7 @@
         :value="$honoraryMembersCount"
         bgColor="bg-purple-100"
         iconColor="text-purple-500"
-        cardColor="bg-purple-50"
+        cardGradient="bg-gradient-to-br from-purple-50 to-violet-100"
     />
 </x-overview.stat-card-group>
 

@@ -35,11 +35,11 @@
             <div class="xl:col-span-2 space-y-6">
                 
                 <!-- Basic Information -->
-                <x-card title="Basic Information" icon="bx-info-circle" variant="default">
+                <x-card title="Basic Information" icon="bx-info-circle" variant="elevated">
                     <div class="space-y-6">
                         <!-- Program Title -->
                         <div>
-                            <x-form.label for="title"><i class='bx bx-info-circle mr-1 text-blue-500'></i>Program Title</x-form.label>
+                            <x-form.label for="title"><i class='bx bx-bookmark mr-1 text-blue-500'></i>Program Title</x-form.label>
                             <x-form.input
                                 id="title"
                                 name="title"
@@ -52,7 +52,7 @@
 
                         <!-- Description -->
                         <div>
-                            <x-form.label for="description"><i class='bx bx-info-circle mr-1 text-blue-500'></i>Description</x-form.label>
+                            <x-form.label for="description"><i class='bx bx-text mr-1 text-green-500'></i>Description</x-form.label>
                             <x-form.textarea
                                 id="description"
                                 name="description"
@@ -66,7 +66,7 @@
 
                         <!-- Location -->
                         <div>
-                            <x-form.label for="location"><i class='bx bx-map mr-1 text-green-600'></i>Location <span class='text-gray-400 text-xs'>(Optional)</span></x-form.label>
+                            <x-form.label for="location"><i class='bx bx-map-pin mr-1 text-red-500'></i>Location <span class='text-gray-400 text-xs'>(Optional)</span></x-form.label>
                             <x-form.input
                                 id="location"
                                 name="location"
@@ -84,11 +84,11 @@
             <div class="xl:col-span-1 space-y-6">
                 
                 <!-- Schedule -->
-                <x-card title="Schedule" icon="bx-calendar" variant="gradient">
+                <x-card title="Schedule" icon="bx-calendar" variant="elevated">
                     <div class="space-y-4">
                         <!-- Date -->
                         <div>
-                            <x-form.label for="date"><i class='bx bx-calendar mr-1 text-purple-600'></i>Date</x-form.label>
+                            <x-form.label for="date"><i class='bx bx-calendar-check mr-1 text-purple-500'></i>Date</x-form.label>
                             <x-form.date-picker
                                 id="date"
                                 name="date"
@@ -102,7 +102,7 @@
                         <!-- Time Range -->
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <x-form.label for="start_time"><i class='bx bx-time-five mr-1 text-green-600'></i>Start</x-form.label>
+                                <x-form.label for="start_time"><i class='bx bx-play-circle mr-1 text-green-500'></i>Start</x-form.label>
                                 <x-form.time-picker
                                     id="start_time"
                                     name="start_time"
@@ -114,7 +114,7 @@
                             </div>
 
                             <div>
-                                <x-form.label for="end_time"><i class='bx bx-time-five mr-1 text-red-600'></i>End</x-form.label>
+                                <x-form.label for="end_time"><i class='bx bx-stop-circle mr-1 text-red-500'></i>End</x-form.label>
                                 <x-form.time-picker
                                     id="end_time"
                                     name="end_time"
@@ -129,11 +129,11 @@
                 </x-card>
 
                 <!-- Program Settings -->
-                <x-card title="Settings" icon="bx-cog" variant="gradient">
+                <x-card title="Settings" icon="bx-cog" variant="elevated">
                     <div>
                         <!-- Volunteers Needed -->
                         <div>
-                            <x-form.label for="volunteer_count"><i class='bx bx-group mr-1 text-pink-500'></i>Volunteers Needed</x-form.label>
+                            <x-form.label for="volunteer_count"><i class='bx bx-user-plus mr-1 text-indigo-500'></i>Volunteers Needed</x-form.label>
                             <x-form.input
                                 id="volunteer_count"
                                 name="volunteer_count"

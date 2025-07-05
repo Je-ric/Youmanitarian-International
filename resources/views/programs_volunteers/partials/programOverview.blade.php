@@ -5,7 +5,7 @@
         :value="$totalVolunteersCount"
         bgColor="bg-blue-100"
         iconColor="text-purple-500"
-        cardColor="bg-blue-50"
+        cardGradient="bg-gradient-to-br from-blue-50 to-indigo-100"
     />
     <x-overview.stat-card
         icon="bx-task"
@@ -13,7 +13,7 @@
         :value="$activeTasksCount"
         bgColor="bg-yellow-100"
         iconColor="text-yellow-500"
-        cardColor="bg-yellow-50"
+        cardGradient="bg-gradient-to-br from-yellow-50 to-amber-100"
     />
     <x-overview.stat-card
         icon="bx-check-circle"
@@ -21,7 +21,7 @@
         :value="$completedTasksCount"
         bgColor="bg-green-100"
         iconColor="text-green-500"
-        cardColor="bg-green-50"
+        cardGradient="bg-gradient-to-br from-green-50 to-emerald-100"
     />
     <x-overview.stat-card
         icon="bx-star"
@@ -29,12 +29,12 @@
         :value="number_format($averageRating, 1) . '/5'"
         bgColor="bg-purple-100"
         iconColor="text-purple-500"
-        cardColor="bg-purple-50"
+        cardGradient="bg-gradient-to-br from-purple-50 to-violet-100"
     />
 </x-overview.stat-card-group>
 
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-6">
-    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm">
+    <x-overview.main-card>
         <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Attendance Overview</h3>
         <div class="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:space-y-4">
             <x-overview.count-alert
@@ -76,7 +76,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </x-overview.main-card>
 
     <x-overview.summary-card title="Recent Activity" maxHeight="300px">
     <div class="overflow-y-auto pr-2">

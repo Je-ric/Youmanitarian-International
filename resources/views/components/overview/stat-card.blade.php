@@ -9,11 +9,12 @@
     'bgColor' => 'bg-accent/10',
     'iconColor' => 'text-accent',
     'cardColor' => 'bg-white',
+    'cardGradient' => null,
     'note' => null,
 ])
 
 <a href="{{ $href }}"
-   class="relative block p-3 sm:p-4 {{ $cardColor }} rounded-lg shadow-lg hover:shadow-sm hover:border-primary transition-all duration-300 ease-in-out">
+   class="relative block p-3 sm:p-4 {{ $cardGradient ?? $cardColor }} rounded-lg shadow-lg hover:shadow-sm hover:border-primary transition-all duration-300 ease-in-out">
     <div class="flex items-center justify-between">
         <div>
             <p class="text-xs sm:text-sm text-gray-600">{{ $title }}</p>
@@ -52,6 +53,11 @@
 Usage: <x-overview.stat-card icon="bx-users" title="Total Users" value="1,234" href="/users" />
        <x-overview.stat-card icon="bx-dollar" title="Revenue" value="$12,345" percentage="12%" period="vs last month" />
        <x-overview.stat-card icon="bx-chart" title="Growth" value="23%" percentage="5%" percentage_type="decrease" note="From last week" />
+       
+       With gradients:
+       <x-overview.stat-card icon="bx-users" title="Total Users" value="1,234" cardGradient="bg-gradient-to-br from-blue-50 to-indigo-100" />
+       <x-overview.stat-card icon="bx-dollar" title="Revenue" value="$12,345" cardGradient="bg-gradient-to-br from-green-50 to-emerald-100" />
+       <x-overview.stat-card icon="bx-chart" title="Growth" value="23%" cardGradient="bg-gradient-to-br from-purple-50 to-violet-100" />
 
 Used in:
 - resources/views/dashboard.blade.php
