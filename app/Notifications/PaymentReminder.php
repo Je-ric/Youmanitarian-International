@@ -4,10 +4,9 @@ namespace App\Notifications;
 
 use App\Models\PaymentReminder as PaymentReminderModel;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
-class PaymentReminder extends Notification implements ShouldQueue
+class PaymentReminder extends Notification
 {
     use Queueable;
 
@@ -45,7 +44,6 @@ class PaymentReminder extends Notification implements ShouldQueue
     {
         $payment = $this->reminder->membershipPayment;
         $period = $payment->payment_period . ' ' . $payment->payment_year;
-        
         
         return [
             'title' => 'Payment Reminder',

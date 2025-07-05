@@ -227,7 +227,9 @@
             </x-modal.body>
             <x-modal.footer>
                 <x-modal.close-button :modalId="$modalId" text="Cancel" variant="cancel" />
-                @if(!$payment)
+                {{-- if walang record --}}
+                {{-- may record but pending and 0 amount --}}
+                @if(!$payment || ($payment && $payment->payment_status === 'pending' && $payment->amount == 0))
                     <x-button type="submit" variant="save-entry" class="w-full sm:w-auto order-1 sm:order-2">
                         <i class='bx bx-save mr-1'></i>
                         Save Payment

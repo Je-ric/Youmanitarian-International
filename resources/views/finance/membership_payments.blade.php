@@ -86,7 +86,7 @@
                                                     $iconColor = 'text-white';
                                                 }
                                             } else {
-                                                $icon = 'bx-time'; // treat as pending for add payment
+                                                $icon = 'bx-time'; 
                                                 $bg = 'bg-yellow-400';
                                                 $iconColor = 'text-white';
                                             }
@@ -158,7 +158,7 @@
                         </x-table.tbody>
                     </x-table.table>
                 <div class="px-6 py-4 border-t border-gray-200">
-                    {{ $members->links() }}
+                    {{ $members->appends(['tab' => 'members'])->links() }}
             </div>
             </x-slot>
         </x-navigation-layout.tabs-modern>
