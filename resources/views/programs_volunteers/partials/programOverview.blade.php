@@ -33,16 +33,10 @@
     />
 </x-overview.stat-card-group>
 
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-6">
-    <x-overview.main-card 
-        title="Attendance Overview" 
-        icon="bx-time" 
-        iconColor="text-blue-600" 
-        iconBg="bg-blue-100"
-        {{-- cardGradient="bg-gradient-to-br from-slate-50 to-gray-100" --}}
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-6">
+    <x-overview.card title="Attendance Overview" icon="bx-time" variant="default"
     >
         <div class="space-y-4">
-            <!-- Main Stats Row -->
             <div class="grid grid-cols-2 gap-3">
                 <x-overview.count-alert
                     :count="$attendanceOverview['totalAttendanceRecords']"
@@ -60,7 +54,6 @@
                 />
             </div>
             
-            <!-- Status Breakdown -->
             <div>
                 <h4 class="text-xs sm:text-sm font-medium text-gray-700 mb-3">Status Breakdown</h4>
                 <div class="grid grid-cols-3 gap-2">
@@ -85,9 +78,10 @@
                 </div>
             </div>
         </div>
-    </x-overview.main-card>
+    </x-overview.card>
 
-    <x-overview.summary-card title="Recent Activity" maxHeight="300px">
+    <x-overview.card title="Recent Activity" icon="bx-time" variant="default"
+    >
         <div class="overflow-y-auto pr-2">
             @forelse($recentActivities as $activity)
                 <x-overview.summary-list-item>
@@ -103,6 +97,6 @@
                 <p class="text-gray-600 text-center py-4">No recent activity</p>
             @endforelse
         </div>
-    </x-overview.summary-card>
+    </x-overview.card>
 </div>
 

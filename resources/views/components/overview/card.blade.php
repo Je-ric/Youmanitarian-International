@@ -100,32 +100,32 @@
 Usage Examples:
 
 <!-- Default Professional Card -->
-<x-card title="Basic Information" icon="bx-info-circle">
+<x-overview.card title="Basic Information" icon="bx-info-circle">
     <p>Your content here...</p>
-</x-card>
+</x-overview.card>
 
 <!-- Gradient Accent Card -->
-<x-card title="Schedule" icon="bx-calendar" variant="gradient">
+<x-overview.card title="Schedule" icon="bx-calendar" variant="gradient">
     <p>Your content here...</p>
-</x-card>
+</x-overview.card>
 
 <!-- Minimal Clean Card -->
-<x-card title="Statistics" icon="bx-bar-chart" variant="minimal">
+<x-overview.card title="Statistics" icon="bx-bar-chart" variant="minimal">
     <p>Your content here...</p>
-</x-card>
+</x-overview.card>
 
 <!-- Elevated Premium Card -->
-<x-card title="Important Notice" icon="bx-bell" variant="elevated">
+<x-overview.card title="Important Notice" icon="bx-bell" variant="elevated">
     <p>Your content here...</p>
-</x-card>
+</x-overview.card>
 
 <!-- Bordered Formal Card -->
-<x-card title="Documents" icon="bx-file" variant="bordered">
+<x-overview.card title="Documents" icon="bx-file" variant="bordered">
     <p>Your content here...</p>
-</x-card>
+</x-overview.card>
 
 <!-- Custom Colors -->
-<x-card 
+<x-overview.card 
     title="Custom Card" 
     icon="bx-star" 
     variant="default"
@@ -133,5 +133,10 @@ Usage Examples:
     bodyColor="bg-emerald-50"
 >
     <p>Your content here...</p>
-</x-card>
---}}
+</x-overview.card>
+
+Used in:
+- resources/views/member/partials/membersOverview.blade.php
+- resources/views/programs_volunteers/partials/programOverview.blade.php
+- resources/views/components/showcase.blade.php
+--}} 

@@ -386,7 +386,7 @@ defaultTab="modern1"
         <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-12">
             
             <!-- Default Variant -->
-            <x-card title="Default Professional" icon="bx-info-circle" variant="default">
+            <x-overview.card title="Default Professional" icon="bx-info-circle" variant="default">
                 <div class="space-y-3">
                     <p class="text-gray-700 text-sm leading-relaxed">
                         Clean, professional design with subtle gradients and proper contrast ratios.
@@ -396,10 +396,10 @@ defaultTab="modern1"
                         <span>Perfect for general content</span>
                     </div>
                 </div>
-            </x-card>
+            </x-overview.card>
     
             <!-- Gradient Variant -->
-            <x-card title="Gradient Accent" icon="bx-palette" variant="gradient">
+            <x-overview.card title="Gradient Accent" icon="bx-palette" variant="gradient">
                 <div class="space-y-3">
                     <p class="text-gray-700 text-sm leading-relaxed">
                         Eye-catching gradient design that draws attention while maintaining professionalism.
@@ -409,10 +409,10 @@ defaultTab="modern1"
                         <span>Great for featured content</span>
                     </div>
                 </div>
-            </x-card>
+            </x-overview.card>
     
             <!-- Minimal Variant -->
-            <x-card title="Minimal Clean" icon="bx-minimize" variant="minimal">
+            <x-overview.card title="Minimal Clean" icon="bx-minimize" variant="minimal">
                 <div class="space-y-3">
                     <p class="text-gray-700 text-sm leading-relaxed">
                         Clean, minimal design with accent border for subtle emphasis.
@@ -422,10 +422,10 @@ defaultTab="modern1"
                         <span>Ideal for data displays</span>
                     </div>
                 </div>
-            </x-card>
+            </x-overview.card>
     
             <!-- Elevated Variant -->
-            <x-card title="Elevated Premium" icon="bx-crown" variant="elevated" size="default">
+            <x-overview.card title="Elevated Premium" icon="bx-crown" variant="elevated" size="default">
                 <div class="space-y-3">
                     <p class="text-gray-700 text-sm leading-relaxed">
                         Premium design with enhanced shadows and decorative elements for important content.
@@ -435,10 +435,10 @@ defaultTab="modern1"
                         <span>Perfect for highlights</span>
                     </div>
                 </div>
-            </x-card>
+            </x-overview.card>
     
             <!-- Bordered Variant -->
-            <x-card title="Bordered Formal" icon="bx-border-all" variant="bordered">
+            <x-overview.card title="Bordered Formal" icon="bx-border-all" variant="bordered">
                 <div class="space-y-3">
                     <p class="text-gray-700 text-sm leading-relaxed">
                         Formal design with defined borders, perfect for official documentation.
@@ -448,10 +448,10 @@ defaultTab="modern1"
                         <span>Great for forms & docs</span>
                     </div>
                 </div>
-            </x-card>
+            </x-overview.card>
     
             <!-- Custom Example -->
-            <x-card 
+            <x-overview.card 
                 title="Custom Colors" 
                 icon="bx-customize" 
                 variant="default"
@@ -467,8 +467,153 @@ defaultTab="modern1"
                         <span>Unlimited customization</span>
                     </div>
                 </div>
-            </x-card>
+            </x-overview.card>
         </div>
+    </div>
+
+    <!-- Stat Card Variants Section -->
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-[#1a2235] mb-2">Stat Card Gradient Variants</h1>
+            <p class="text-gray-600">Beautiful gradient variants for dashboard statistics</p>
+        </div>
+
+        <!-- Stat Card Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+            
+            <!-- Original Variants -->
+            <x-overview.stat-card icon="bx-users" title="Total Users" value="1,234" gradientVariant="emerald" />
+            <x-overview.stat-card icon="bx-dollar" title="Revenue" value="$12,345" gradientVariant="rose" />
+            <x-overview.stat-card icon="bx-chart" title="Growth" value="23%" gradientVariant="indigo" />
+            <x-overview.stat-card icon="bx-activity" title="Active Sessions" value="867" gradientVariant="sky" />
+            <x-overview.stat-card icon="bx-trending-up" title="Conversion" value="2.4%" gradientVariant="amber" />
+            <x-overview.stat-card icon="bx-clock" title="Response Time" value="320ms" gradientVariant="lime" />
+            <x-overview.stat-card icon="bx-bar-chart" title="MRR Growth" value="6.7%" gradientVariant="purple" />
+            <x-overview.stat-card icon="bx-check-circle" title="Tickets Resolved" value="324" gradientVariant="fuchsia" />
+            
+            <!-- Brand Gradient -->
+            <x-overview.stat-card icon="bx-user-plus" title="New Signups" value="157" gradientVariant="brand" />
+            
+            <!-- New Dark Variants -->
+            <x-overview.stat-card icon="bx-file-text" title="Open Invoices" value="24" gradientVariant="slate" />
+            <x-overview.stat-card icon="bx-bug" title="Error Rate" value="0.7%" gradientVariant="deep-rose" />
+            <x-overview.stat-card icon="bx-shopping-cart" title="Pending Orders" value="73" gradientVariant="sunset" />
+            
+            <!-- New Light Variants -->
+            <x-overview.stat-card icon="bx-eye" title="Daily Visitors" value="4,560" gradientVariant="teal" />
+            <x-overview.stat-card icon="bx-database" title="Storage Used" value="68%" gradientVariant="glassmorphism" />
+            <x-overview.stat-card icon="bx-rotate-ccw" title="Refund Rate" value="1.2%" gradientVariant="cyan" />
+            
+        </div>
+
+        <!-- Variant Descriptions -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Light Variants -->
+            <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+                <h3 class="text-lg font-semibold text-[#1a2235] mb-4">Light Variants (Dark Text)</h3>
+                <div class="space-y-3 text-sm text-gray-600">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                        <span><strong>emerald:</strong> Green gradient for success metrics</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-rose-500 rounded-full"></div>
+                        <span><strong>rose:</strong> Red gradient for alerts/warnings</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-indigo-500 rounded-full"></div>
+                        <span><strong>indigo:</strong> Blue gradient for user metrics</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-sky-500 rounded-full"></div>
+                        <span><strong>sky:</strong> Light blue for activity metrics</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-amber-500 rounded-full"></div>
+                        <span><strong>amber:</strong> Orange for conversion metrics</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-lime-500 rounded-full"></div>
+                        <span><strong>lime:</strong> Light green for performance</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                        <span><strong>purple:</strong> Purple for growth metrics</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-fuchsia-500 rounded-full"></div>
+                        <span><strong>fuchsia:</strong> Pink for support metrics</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-teal-500 rounded-full"></div>
+                        <span><strong>teal:</strong> Fresh teal for visitor metrics</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-cyan-500 rounded-full"></div>
+                        <span><strong>cyan:</strong> Cool cyan for tech metrics</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-gray-400 rounded-full"></div>
+                        <span><strong>glassmorphism:</strong> Translucent glass effect</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dark Variants -->
+            <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+                <h3 class="text-lg font-semibold text-[#1a2235] mb-4">Dark Variants (White Text)</h3>
+                <div class="space-y-3 text-sm text-gray-600">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-gradient-to-r from-[#1a2235] to-[#ffb51b] rounded-full"></div>
+                        <span><strong>brand:</strong> Your brand gradient</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-slate-600 rounded-full"></div>
+                        <span><strong>slate:</strong> Professional dark gradient</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-red-700 rounded-full"></div>
+                        <span><strong>deep-rose:</strong> Intense red for alerts</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 bg-gradient-to-r from-orange-600 to-amber-400 rounded-full"></div>
+                        <span><strong>sunset:</strong> Warm orange gradient</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Usage Examples -->
+        <div class="mt-8 bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+            <h3 class="text-lg font-semibold text-[#1a2235] mb-4">Usage Examples</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="text-md font-medium text-gray-700 mb-2">Basic Usage</h4>
+                    <pre class="bg-gray-100 p-3 rounded text-xs overflow-x-auto"><code>&lt;x-overview.stat-card 
+    icon="bx-users" 
+    title="Total Users" 
+    value="1,234" 
+    gradientVariant="emerald" 
+/&gt;</code></pre>
+                </div>
+                <div>
+                    <h4 class="text-md font-medium text-gray-700 mb-2">With Percentage</h4>
+                    <pre class="bg-gray-100 p-3 rounded text-xs overflow-x-auto"><code>&lt;x-overview.stat-card 
+    icon="bx-dollar" 
+    title="Revenue" 
+    value="$12,345" 
+    gradientVariant="rose"
+    percentage="12%" 
+    period="vs last month" 
+/&gt;</code></pre>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     

@@ -25,42 +25,52 @@
         'purple' => 'bg-gradient-to-br from-purple-50 via-purple-100 to-white',
         'fuchsia' => 'bg-gradient-to-br from-fuchsia-50 via-fuchsia-100 to-white',
         'brand' => 'bg-gradient-to-br from-[#1a2235] to-[#ffb51b]',
+        'slate' => 'bg-gradient-to-br from-slate-700 to-slate-500',
+        'deep-rose' => 'bg-gradient-to-br from-red-800 to-rose-600',
+        'teal' => 'bg-gradient-to-br from-teal-50 via-teal-100 to-white',
+        'glassmorphism' => 'bg-white/60 backdrop-blur-lg ring-1 ring-black/5',
+        'sunset' => 'bg-gradient-to-br from-orange-600 to-amber-400',
+        'cyan' => 'bg-gradient-to-br from-cyan-50 via-cyan-100 to-white',
     ];
     
     $selectedGradient = $cardGradient ?? ($gradientVariant ? ($gradientVariants[$gradientVariant] ?? null) : null);
+    
+    // Dark variants that need white text
+    $darkVariants = ['brand', 'slate', 'deep-rose', 'sunset'];
+    $isDarkVariant = in_array($gradientVariant, $darkVariants);
 @endphp
 
 <a href="{{ $href }}"
-   class="relative block p-3 sm:p-4 {{ $selectedGradient ?? $cardColor }} rounded-lg shadow-lg hover:shadow-sm hover:border-primary transition-all duration-300 ease-in-out {{ $gradientVariant === 'brand' ? 'text-white' : '' }}">
+   class="relative block p-3 sm:p-4 {{ $selectedGradient ?? $cardColor }} rounded-lg shadow-lg hover:shadow-sm hover:border-primary transition-all duration-300 ease-in-out {{ $isDarkVariant ? 'text-white' : '' }}">
     <div class="flex items-center justify-between">
         <div>
-            <p class="text-xs sm:text-sm {{ $gradientVariant === 'brand' ? 'text-white/80' : 'text-gray-600' }}">{{ $title }}</p>
-            <h3 class="text-lg sm:text-2xl font-bold {{ $gradientVariant === 'brand' ? 'text-white' : 'text-[#1a2235]' }}">{{ $value }}</h3>
+            <p class="text-xs sm:text-sm {{ $isDarkVariant ? 'text-white/80' : 'text-gray-600' }}">{{ $title }}</p>
+            <h3 class="text-lg sm:text-2xl font-bold {{ $isDarkVariant ? 'text-white' : 'text-[#1a2235]' }}">{{ $value }}</h3>
             @if ($note)
-                <p class="text-xs {{ $gradientVariant === 'brand' ? 'text-white/80' : 'text-gray-500' }} mt-1">
+                <p class="text-xs {{ $isDarkVariant ? 'text-white/80' : 'text-gray-500' }} mt-1">
                     {{ $note }}
                 </p>
             @endif
         </div>
-        <div class="flex-shrink-0 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full {{ $gradientVariant === 'brand' ? 'bg-white/20 text-white' : $bgColor . ' ' . $iconColor }}">
+        <div class="flex-shrink-0 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full {{ $isDarkVariant ? 'bg-white/10 text-white' : $bgColor . ' ' . $iconColor }}">
             <i class="bx {{ $icon }} text-xl sm:text-2xl"></i>
         </div>
     </div>
     @if($percentage)
         <div class="mt-4 flex items-center space-x-2 text-sm">
             @if($percentage_type === 'increase')
-                <span class="flex items-center {{ $gradientVariant === 'brand' ? 'text-white' : 'text-green-600' }} font-semibold">
+                <span class="flex items-center {{ $isDarkVariant ? 'text-white' : 'text-green-600' }} font-semibold">
                     <i class='bx bx-up-arrow-alt'></i>
                     <span>{{ $percentage }}</span>
                 </span>
             @else
-                <span class="flex items-center {{ $gradientVariant === 'brand' ? 'text-white' : 'text-red-600' }} font-semibold">
+                <span class="flex items-center {{ $isDarkVariant ? 'text-white' : 'text-red-600' }} font-semibold">
                     <i class='bx bx-down-arrow-alt'></i>
                     <span>{{ $percentage }}</span>
                 </span>
             @endif
             @if($period)
-                <span class="{{ $gradientVariant === 'brand' ? 'text-white/80' : 'text-gray-500' }}">{{ $period }}</span>
+                <span class="{{ $isDarkVariant ? 'text-white/80' : 'text-gray-500' }}">{{ $period }}</span>
             @endif
         </div>
     @endif
@@ -89,6 +99,14 @@ With gradient variants:
 
 Brand gradient:
 <x-overview.stat-card icon="bx-user-plus" title="New Signups" value="157" gradientVariant="brand" />
+
+New gradient variants:
+<x-overview.stat-card icon="bx-file-text" title="Open Invoices" value="24" gradientVariant="slate" />
+<x-overview.stat-card icon="bx-bug" title="Error Rate" value="0.7%" gradientVariant="deep-rose" />
+<x-overview.stat-card icon="bx-eye" title="Daily Visitors" value="4,560" gradientVariant="teal" />
+<x-overview.stat-card icon="bx-database" title="Storage Used" value="68%" gradientVariant="glassmorphism" />
+<x-overview.stat-card icon="bx-shopping-cart" title="Pending Orders" value="73" gradientVariant="sunset" />
+<x-overview.stat-card icon="bx-rotate-ccw" title="Refund Rate" value="1.2%" gradientVariant="cyan" />
 
 Custom gradients:
 <x-overview.stat-card icon="bx-users" title="Total Users" value="1,234" cardGradient="bg-gradient-to-br from-blue-50 to-indigo-100" />

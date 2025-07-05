@@ -35,7 +35,7 @@
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     {{-- Recently Joined Members --}}
-    <x-overview.summary-card title="Recently Joined Members">
+    <x-overview.card title="Recently Joined Members" variant="minimal">
         @forelse($recentlyJoinedMembers as $member)
             <x-overview.summary-list-item :imageUrl="$member->user->profile_photo_url">
                 <x-slot:title>{{ $member->user->name }}</x-slot:title>
@@ -47,10 +47,10 @@
         @empty
             <p class="text-gray-500 text-center py-4">No recently joined members.</p>
         @endforelse
-    </x-overview.summary-card>
+    </x-overview.card>
 
     {{-- Oldest Pending Invitations --}}
-    <x-overview.summary-card title="Oldest Pending Invitations">
+    <x-overview.card title="Oldest Pending Invitations" variant="minimal">
         @forelse($oldestPendingInvitations as $member)
             <x-overview.summary-list-item :imageUrl="$member->user->profile_photo_url">
                 <x-slot:title>{{ $member->user->name }}</x-slot:title>
@@ -65,5 +65,5 @@
         @empty
             <p class="text-gray-500 text-center py-4">No pending invitations.</p>
         @endforelse
-    </x-overview.summary-card>
+    </x-overview.card>
 </div> 

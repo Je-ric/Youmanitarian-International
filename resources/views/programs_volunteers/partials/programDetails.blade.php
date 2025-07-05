@@ -35,7 +35,7 @@
             <div class="xl:col-span-2 space-y-6">
                 
                 <!-- Basic Information -->
-                <x-card title="Basic Information" icon="bx-info-circle" variant="elevated">
+                <x-overview.card title="Basic Information" icon="bx-info-circle" variant="elevated">
                     <div class="space-y-6">
                         <!-- Program Title -->
                         <div>
@@ -77,14 +77,14 @@
                             />
                         </div>
                     </div>
-                </x-card>
+                </x-overview.card>
             </div>
 
             <!-- Right Column - Schedule & Settings -->
             <div class="xl:col-span-1 space-y-6">
                 
                 <!-- Schedule -->
-                <x-card title="Schedule" icon="bx-calendar" variant="elevated">
+                <x-overview.card title="Schedule" icon="bx-calendar" variant="elevated">
                     <div class="space-y-4">
                         <!-- Date -->
                         <div>
@@ -126,10 +126,10 @@
                             </div>
                         </div>
                     </div>
-                </x-card>
+                </x-overview.card>
 
                 <!-- Program Settings -->
-                <x-card title="Settings" icon="bx-cog" variant="elevated">
+                <x-overview.card title="Settings" icon="bx-cog" variant="elevated">
                     <div>
                         <!-- Volunteers Needed -->
                         <div>
@@ -146,10 +146,10 @@
                             />
                         </div>
                     </div>
-                </x-card>
+                </x-overview.card>
 
                 <!-- Program Status (Read-only info) -->
-                <x-card title="Program Status" icon="bx-bar-chart" variant="minimal">
+                <x-overview.card title="Program Status" icon="bx-bar-chart" variant="minimal">
                     <div class="space-y-3 text-sm">
                         <div class="flex items-center justify-between">
                             <span class="text-gray-600">Status:</span>
@@ -168,7 +168,7 @@
                             <span class="text-gray-900">{{ $program->volunteers->count() }} participants</span>
                         </div>
                     </div>
-                </x-card>
+                </x-overview.card>
             </div>
         </div>
 

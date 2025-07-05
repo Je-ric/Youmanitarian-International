@@ -10,7 +10,7 @@
     'headerPadding' => 'pb-4',
 ])
 
-<div class="relative block {{ $cardGradient ?? $cardColor }} rounded-xl border border-gray-200/50 shadow-lg hover:shadow-md transition-all duration-300 ease-in-out overflow-hidden">
+<div class="relative block {{ $cardGradient ?? $cardColor }} rounded-xl border border-gray-200/50 shadow-lg hover:shadow-sm transition-all duration-300 ease-in-out overflow-hidden">
     @if($title || $icon)
         <div class="flex items-center justify-between {{ $padding }} {{ $headerPadding }} border-b border-gray-200 bg-gradient-to-br from-indigo-50 via-indigo-100 to-white">
             <div class="flex-grow">
