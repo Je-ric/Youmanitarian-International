@@ -110,7 +110,7 @@ class User extends Authenticatable
 
     public function isVolunteer()
     {
-        return $this->volunteer && $this->volunteer->status === 'active';
+        return $this->volunteer && $this->volunteer->application_status === 'approved';
     }
 
     public function isMember()

@@ -6,31 +6,35 @@
             title="Total Users"
             :value="$users->count()"
             href="{{ route('roles.index', ['tab' => 'users']) }}"
-            bgColor="bg-blue-50"
+            bgColor="bg-blue-100"
             iconColor="text-blue-500"
+            cardColor="bg-blue-50"
         />
         <x-overview.stat-card
             icon="bx-shield-quarter"
             title="Total Roles"
             :value="$roles->count()"
-            bgColor="bg-green-50"
+            bgColor="bg-green-100"
             iconColor="text-green-500"
+            cardColor="bg-green-50"
         />
         <x-overview.stat-card
             icon="bx-user-plus"
             title="Users Without Roles"
             :value="$usersWithoutRoles->count()"
             href="{{ route('roles.index', ['tab' => 'users']) }}"
-            bgColor="bg-yellow-50"
+            bgColor="bg-yellow-100"
             iconColor="text-yellow-500"
+            cardColor="bg-yellow-50"
         />
         <x-overview.stat-card
             icon="bx-user-check"
             title="Active Users"
             :value="$activeUsers->count()"
             href="{{ route('roles.index', ['tab' => 'users']) }}"
-            bgColor="bg-red-50"
+            bgColor="bg-red-100"
             iconColor="text-red-500"
+            cardColor="bg-red-50"
         />
     </x-overview.stat-card-group>
 

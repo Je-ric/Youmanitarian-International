@@ -9,7 +9,7 @@ class Volunteer extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'total_hours', 'status'];
+    protected $fillable = ['user_id', 'total_hours', 'application_status'];
 
     public function user()
     {
@@ -54,6 +54,7 @@ class Volunteer extends Model
 
     public function member()
     {
-        return $this->belongsTo(Member::class);
+        return $this->hasOne(Member::class);
+        // return $this->belongsTo(Member::class);
     }
 }

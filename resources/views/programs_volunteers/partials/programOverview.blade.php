@@ -3,29 +3,33 @@
         icon="bx-group"
         title="Total Volunteers"
         :value="$totalVolunteersCount"
-        bgColor="bg-blue-50"
+        bgColor="bg-blue-100"
         iconColor="text-purple-500"
+        cardColor="bg-blue-50"
     />
     <x-overview.stat-card
         icon="bx-task"
         title="Active Tasks"
         :value="$activeTasksCount"
-        bgColor="bg-yellow-50"
+        bgColor="bg-yellow-100"
         iconColor="text-yellow-500"
+        cardColor="bg-yellow-50"
     />
     <x-overview.stat-card
         icon="bx-check-circle"
         title="Completed Tasks"
         :value="$completedTasksCount"
-        bgColor="bg-green-50"
+        bgColor="bg-green-100"
         iconColor="text-green-500"
+        cardColor="bg-green-50"
     />
     <x-overview.stat-card
         icon="bx-star"
         title="Average Rating"
         :value="number_format($averageRating, 1) . '/5'"
-        bgColor="bg-purple-50"
+        bgColor="bg-purple-100"
         iconColor="text-purple-500"
+        cardColor="bg-purple-50"
     />
 </x-overview.stat-card-group>
 

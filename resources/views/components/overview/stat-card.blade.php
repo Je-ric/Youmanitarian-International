@@ -8,11 +8,12 @@
     'href' => '#',
     'bgColor' => 'bg-accent/10',
     'iconColor' => 'text-accent',
+    'cardColor' => 'bg-white',
     'note' => null,
 ])
 
 <a href="{{ $href }}"
-   class="relative block p-3 sm:p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:border-primary transition-all duration-300 ease-in-out">
+   class="relative block p-3 sm:p-4 {{ $cardColor }} rounded-lg shadow-lg hover:shadow-sm hover:border-primary transition-all duration-300 ease-in-out">
     <div class="flex items-center justify-between">
         <div>
             <p class="text-xs sm:text-sm text-gray-600">{{ $title }}</p>

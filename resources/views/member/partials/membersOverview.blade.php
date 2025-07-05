@@ -3,29 +3,33 @@
         icon="bx-group"
         title="Total Members"
         :value="$totalMembersCount"
-        bgColor="bg-blue-50"
+        bgColor="bg-blue-100"
         iconColor="text-blue-500"
+        cardColor="bg-blue-50"
     />
     <x-overview.stat-card
         icon="bx-user-check"
         title="Active Members"
         :value="$activeMembersCount"
-        bgColor="bg-green-50"
+        bgColor="bg-green-100"
         iconColor="text-green-500"
+        cardColor="bg-green-50"
     />
     <x-overview.stat-card
         icon="bx-star"
         title="Full-Pledge Members"
         :value="$fullPledgeMembersCount"
-        bgColor="bg-yellow-50"
+        bgColor="bg-yellow-100"
         iconColor="text-yellow-500"
+        cardColor="bg-yellow-50"
     />
     <x-overview.stat-card
         icon="bx-award"
         title="Honorary Members"
         :value="$honoraryMembersCount"
-        bgColor="bg-purple-50"
+        bgColor="bg-purple-100"
         iconColor="text-purple-500"
+        cardColor="bg-purple-50"
     />
 </x-overview.stat-card-group>
 

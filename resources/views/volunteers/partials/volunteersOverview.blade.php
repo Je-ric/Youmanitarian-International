@@ -5,32 +5,36 @@
             icon="bx-user"
             title="Total Volunteers"
             :value="$approvedVolunteers->count()"
-            bgColor="bg-blue-50"
+            bgColor="bg-blue-100"
             iconColor="text-blue-500"
+            cardColor="bg-blue-50"
             href="{{ route('volunteers.index', ['tab' => 'approved']) }}"
         />
         <x-overview.stat-card
             icon="bx-time"
             title="Pending Applications"
             :value="$applications->count()"
-            bgColor="bg-yellow-50"
+            bgColor="bg-yellow-100"
             iconColor="text-yellow-500"
+            cardColor="bg-yellow-50"
             href="{{ route('volunteers.index', ['tab' => 'applications']) }}"
         />
         <x-overview.stat-card
             icon="bx-x-circle"
             title="Denied Applications"
             :value="$deniedApplications->count()"
-            bgColor="bg-red-50"
+            bgColor="bg-red-100"
             iconColor="text-red-500"
+            cardColor="bg-red-50"
             href="{{ route('volunteers.index', ['tab' => 'denied']) }}"
         />
         <x-overview.stat-card
             icon="bx-trending-up"
             title="Approval Rate"
             value="{{ $approvalRate }}%"
-            bgColor="bg-green-50"
+            bgColor="bg-green-100"
             iconColor="text-green-500"
+            cardColor="bg-green-50"
         />
     </x-overview.stat-card-group>
 

@@ -16,14 +16,15 @@ class UserSeeder extends Seeder
         $users = User::factory(20)->create();
 
         foreach ($users as $user) {
-            // Create a member for each user
-            $member = Member::factory()->create([
+            // Create a volunteer for each user
+            $volunteer = Volunteer::factory()->create([
                 'user_id' => $user->id,
             ]);
 
-            // Create a volunteer for each member
-            $volunteer = Volunteer::factory()->create([
-                'member_id' => $member->id,
+            // Create a member for each volunteer
+            $member = Member::factory()->create([
+                'user_id' => $user->id,
+                'volunteer_id' => $volunteer->id,
             ]);
 
             // Create a volunteer application for each volunteer

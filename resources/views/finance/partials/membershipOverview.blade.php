@@ -3,29 +3,33 @@
         icon="bx-group"
         title="Total Members"
         :value="$totalMembers"
-        bgColor="bg-blue-50"
+        bgColor="bg-blue-100"
         iconColor="text-blue-500"
+        cardColor="bg-blue-50"
     />
     <x-overview.stat-card
         icon="bx-user-check"
         title="Active Members"
         :value="$activeMembers"
-        bgColor="bg-green-50"
+        bgColor="bg-green-100"
         iconColor="text-green-500"
+        cardColor="bg-green-50"
     />
     <x-overview.stat-card
         icon="bx-wallet"
         title="Membership Revenue"
         :value="'₱' . number_format($totalMembershipRevenue, 2)"
-        bgColor="bg-purple-50"
+        bgColor="bg-purple-100"
         iconColor="text-purple-500"
+        cardColor="bg-purple-50"
     />
     <x-overview.stat-card
         icon="bx-error-circle"
         title="Overdue Payments"
         :value="$overduePayments"
-        bgColor="bg-red-50"
+        bgColor="bg-red-100"
         iconColor="text-red-500"
+        cardColor="bg-red-50"
     />
 </x-overview.stat-card-group>
 

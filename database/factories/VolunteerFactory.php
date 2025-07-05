@@ -14,7 +14,7 @@ class VolunteerFactory extends Factory
     public function definition(): array
     {
         return [
-            'member_id' => Member::factory(),
+            'user_id' => User::factory(),
             'total_hours' => $this->faker->numberBetween(0, 100),
             'application_status' => $this->faker->randomElement(['pending', 'approved', 'denied']),
         ];
