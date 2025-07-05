@@ -38,7 +38,7 @@
         'elevated' => [
             'container' => 'bg-white border border-gray-100',
             'shadow' => 'shadow-lg',
-            'header' => 'bg-gradient-to-r from-[#1a2235] via-[#243447] to-[#1a2235] text-white relative overflow-hidden',
+            'header' => 'bg-gradient-to-r from-[#1a2235] via-[#2a3441] to-[#1a2235] text-white relative overflow-hidden',
             'body' => 'bg-gradient-to-b from-white to-slate-50/30',
             'iconBg' => 'bg-gradient-to-br from-[#ffb51b] to-[#f0a500]',
             'iconColor' => 'text-white',

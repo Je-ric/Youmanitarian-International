@@ -5,7 +5,7 @@
         :value="$totalMembers"
         bgColor="bg-blue-100"
         iconColor="text-blue-500"
-        cardGradient="bg-gradient-to-br from-blue-50 to-indigo-100"
+        gradientVariant="indigo"
     />
     <x-overview.stat-card
         icon="bx-user-check"
@@ -13,7 +13,7 @@
         :value="$activeMembers"
         bgColor="bg-green-100"
         iconColor="text-green-500"
-        cardGradient="bg-gradient-to-br from-green-50 to-emerald-100"
+        gradientVariant="emerald"
     />
     <x-overview.stat-card
         icon="bx-wallet"
@@ -21,7 +21,7 @@
         :value="'₱' . number_format($totalMembershipRevenue, 2)"
         bgColor="bg-purple-100"
         iconColor="text-purple-500"
-        cardGradient="bg-gradient-to-br from-purple-50 to-violet-100"
+        gradientVariant="purple"
     />
     <x-overview.stat-card
         icon="bx-error-circle"
@@ -29,7 +29,7 @@
         :value="$overduePayments"
         bgColor="bg-red-100"
         iconColor="text-red-500"
-        cardGradient="bg-gradient-to-br from-red-50 to-rose-100"
+        gradientVariant="rose"
     />
 </x-overview.stat-card-group>
 
