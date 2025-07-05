@@ -80,7 +80,7 @@
         </div>
     </x-overview.card>
 
-    <x-overview.card title="Recent Activity" icon="bx-time" variant="default"
+    <x-overview.card title="Recent Activity" icon="bx-time" variant="minimal"
     >
         <div class="overflow-y-auto pr-2">
             @forelse($recentActivities as $activity)

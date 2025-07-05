@@ -39,8 +39,7 @@
     </x-overview.stat-card-group>
 
     {{-- Recent Activity --}}
-    <div class="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 shadow-sm mt-6">
-        <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Recent Activity</h3>
+    <x-overview.card title="Recent Activity" icon="bx-activity" variant="minimal">
         <div class="space-y-3 sm:space-y-4">
             @forelse($recentActivities as $volunteer)
                 <div class="flex items-center justify-between border-b pb-2 sm:pb-3 last:border-0">
@@ -69,5 +68,5 @@
                 <p class="text-gray-600 text-center py-4">No recent activity</p>
             @endforelse
         </div>
-    </div>
+    </x-overview.card>
 </div>

@@ -31,6 +31,14 @@
         'glassmorphism' => 'bg-white/60 backdrop-blur-lg ring-1 ring-black/5',
         'sunset' => 'bg-gradient-to-br from-orange-600 to-amber-400',
         'cyan' => 'bg-gradient-to-br from-cyan-50 via-cyan-100 to-white',
+        
+        'aqua' => 'bg-gradient-to-br from-cyan-400 via-blue-200 to-emerald-100',
+        'peach' => 'bg-gradient-to-br from-amber-200 via-orange-100 to-pink-100',
+        'midnight' => 'bg-gradient-to-br from-gray-900 via-slate-800 to-indigo-900',
+        'sunrise' => 'bg-gradient-to-br from-pink-200 via-yellow-100 to-amber-200',
+        'mint' => 'bg-gradient-to-br from-green-200 via-teal-100 to-cyan-100',
+        'lavender' => 'bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100',
+        'fire' => 'bg-gradient-to-br from-red-500 via-orange-400 to-yellow-300',
     ];
     
     $selectedGradient = $cardGradient ?? ($gradientVariant ? ($gradientVariants[$gradientVariant] ?? null) : null);

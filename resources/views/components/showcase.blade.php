@@ -506,112 +506,15 @@ defaultTab="modern1"
             <x-overview.stat-card icon="bx-database" title="Storage Used" value="68%" gradientVariant="glassmorphism" />
             <x-overview.stat-card icon="bx-rotate-ccw" title="Refund Rate" value="1.2%" gradientVariant="cyan" />
             
-        </div>
-
-        <!-- Variant Descriptions -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- New Gradient Variants -->
+            <x-overview.stat-card icon="bx-droplet" title="aqua" value="Aqua" gradientVariant="aqua" />
+            <x-overview.stat-card icon="bx-happy" title="peach" value="Peach" gradientVariant="peach" />
+            <x-overview.stat-card icon="bx-moon" title="midnight" value="Midnight" gradientVariant="midnight" />
+            <x-overview.stat-card icon="bx-sun" title="sunrise" value="Sunrise" gradientVariant="sunrise" />
+            <x-overview.stat-card icon="bx-leaf" title="mint" value="Mint" gradientVariant="mint" />
+            <x-overview.stat-card icon="bx-color" title="lavender" value="Lavender" gradientVariant="lavender" />
+            <x-overview.stat-card icon="bx-fire" title="fire" value="Fire" gradientVariant="fire" />
             
-            <!-- Light Variants -->
-            <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-                <h3 class="text-lg font-semibold text-[#1a2235] mb-4">Light Variants (Dark Text)</h3>
-                <div class="space-y-3 text-sm text-gray-600">
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-emerald-500 rounded-full"></div>
-                        <span><strong>emerald:</strong> Green gradient for success metrics</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-rose-500 rounded-full"></div>
-                        <span><strong>rose:</strong> Red gradient for alerts/warnings</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-indigo-500 rounded-full"></div>
-                        <span><strong>indigo:</strong> Blue gradient for user metrics</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-sky-500 rounded-full"></div>
-                        <span><strong>sky:</strong> Light blue for activity metrics</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-amber-500 rounded-full"></div>
-                        <span><strong>amber:</strong> Orange for conversion metrics</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-lime-500 rounded-full"></div>
-                        <span><strong>lime:</strong> Light green for performance</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
-                        <span><strong>purple:</strong> Purple for growth metrics</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-fuchsia-500 rounded-full"></div>
-                        <span><strong>fuchsia:</strong> Pink for support metrics</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-teal-500 rounded-full"></div>
-                        <span><strong>teal:</strong> Fresh teal for visitor metrics</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-cyan-500 rounded-full"></div>
-                        <span><strong>cyan:</strong> Cool cyan for tech metrics</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-gray-400 rounded-full"></div>
-                        <span><strong>glassmorphism:</strong> Translucent glass effect</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dark Variants -->
-            <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-                <h3 class="text-lg font-semibold text-[#1a2235] mb-4">Dark Variants (White Text)</h3>
-                <div class="space-y-3 text-sm text-gray-600">
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-gradient-to-r from-[#1a2235] to-[#ffb51b] rounded-full"></div>
-                        <span><strong>brand:</strong> Your brand gradient</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-slate-600 rounded-full"></div>
-                        <span><strong>slate:</strong> Professional dark gradient</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-red-700 rounded-full"></div>
-                        <span><strong>deep-rose:</strong> Intense red for alerts</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-gradient-to-r from-orange-600 to-amber-400 rounded-full"></div>
-                        <span><strong>sunset:</strong> Warm orange gradient</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Usage Examples -->
-        <div class="mt-8 bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-            <h3 class="text-lg font-semibold text-[#1a2235] mb-4">Usage Examples</h3>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                    <h4 class="text-md font-medium text-gray-700 mb-2">Basic Usage</h4>
-                    <pre class="bg-gray-100 p-3 rounded text-xs overflow-x-auto"><code>&lt;x-overview.stat-card 
-    icon="bx-users" 
-    title="Total Users" 
-    value="1,234" 
-    gradientVariant="emerald" 
-/&gt;</code></pre>
-                </div>
-                <div>
-                    <h4 class="text-md font-medium text-gray-700 mb-2">With Percentage</h4>
-                    <pre class="bg-gray-100 p-3 rounded text-xs overflow-x-auto"><code>&lt;x-overview.stat-card 
-    icon="bx-dollar" 
-    title="Revenue" 
-    value="$12,345" 
-    gradientVariant="rose"
-    percentage="12%" 
-    period="vs last month" 
-/&gt;</code></pre>
-                </div>
-            </div>
         </div>
 
     </div>

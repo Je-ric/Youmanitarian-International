@@ -40,7 +40,7 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div class="space-y-4">
                                 <div>
-                                    <x-label><i class='bx bx-time mr-1 text-yellow-500'></i>Time Information</x-label>
+                                    <x-form.label><i class='bx bx-time mr-1 text-yellow-500'></i>Time Information</x-form.label>
                                     <div class="space-y-2 bg-gray-50 rounded-lg p-3">
                                         <div class="flex justify-between items-center">
                                             <span class="text-sm text-gray-600"><i class='bx bx-time-five mr-1 text-green-600'></i>Time In:</span>
@@ -88,7 +88,7 @@
 
                             <div class="space-y-4">
                                 <div>
-                                    <x-label><i class='bx bx-image mr-1 text-orange-600'></i>Attendance Proof</x-label>
+                                    <x-form.label><i class='bx bx-image mr-1 text-orange-600'></i>Attendance Proof</x-form.label>
                                     @if ($log->proof_image)
                                         <div class="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
                                             <div class="aspect-video relative">
@@ -112,7 +112,7 @@
                                 </div>
 
                                 <div>
-                                    <x-label><i class='bx bx-task mr-1 text-blue-600'></i>Assigned Tasks</x-label>
+                                    <x-form.label><i class='bx bx-task mr-1 text-blue-600'></i>Assigned Tasks</x-form.label>
                                     @php
                                         $volunteerTasks = $program->tasks()
                                             ->whereHas('assignments', function ($query) use ($volunteer) {

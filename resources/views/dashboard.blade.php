@@ -13,13 +13,12 @@
             <p class="text-gray-600">Welcome back! Here's what's happening with your organization today.</p>
         </div>
 
-        <div class="bg-white p-6 rounded-lg shadow-lg text-center w-full max-w-md mx-auto">
-            <h1 class="text-2xl font-bold text-black">Hello, {{ Auth::user()->name }}!</h1>
-            <p class="text-gray-600">{{ Auth::user()->email }}</p>
+        <x-overview.card title="Welcome, {{ Auth::user()->name }}!" icon="bx-user" variant="elevated" class="text-center w-full max-w-md mx-auto">
+            <p class="text-gray-600 mb-4">{{ Auth::user()->email }}</p>
 
-            <div class="mt-4">
-                <h2 class="text-lg font-semibold text-gray-800">Your Roles:</h2>
-                <div class="flex flex-wrap justify-center gap-2 mt-2">
+            <div class="mb-4">
+                <h2 class="text-lg font-semibold text-gray-800 mb-2">Your Roles:</h2>
+                <div class="flex flex-wrap justify-center gap-2">
                     @if(Auth::user()->roles->isNotEmpty())
                         @foreach(Auth::user()->roles as $role)
                             <span
@@ -34,7 +33,6 @@
             @if(Auth::user()->profile_pic)
                 <img src="{{ Auth::user()->profile_pic }}" alt="Profile Picture" class="mt-4 w-24 h-24 rounded-full mx-auto">
             @endif
-
 
             <div>
                 @if(Auth::user()->volunteer)
@@ -58,12 +56,11 @@
                 @endif
             </div>
 
-
             <form action="{{ route('logout') }}" method="POST" class="mt-6">
                 @csrf
                 <button type="submit" class="btn btn-error w-full">Logout</button>
             </form>
-        </div>
+        </x-overview.card>
 
 
 

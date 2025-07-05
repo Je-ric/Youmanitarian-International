@@ -34,8 +34,7 @@
 </x-overview.stat-card-group>
 
 {{-- Payment Status Chart --}}
-<div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-    <h3 class="text-lg font-semibold text-gray-900 mb-4">Payment Status Overview</h3>
+<x-overview.card title="Payment Status Overview" icon="bx-chart" variant="minimal">
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -61,4 +60,4 @@
             </tbody>
         </table>
     </div>
-</div>
+</x-overview.card>

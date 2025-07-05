@@ -34,8 +34,7 @@
 </x-overview.stat-card-group>
 
 {{-- Financial Summary Chart --}}
-<div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm mb-6">
-    <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Donation Summary</h3>
+<x-overview.card title="Donation Summary" icon="bx-chart" variant="minimal">
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -59,12 +58,11 @@
             </tbody>
         </table>
     </div>
-</div>
+</x-overview.card>
 
 {{-- Recent Activity Section --}}
-<div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-    <h3 class="text-base sm:text-lg font-semibold text-[#1a2235] mb-3 sm:mb-4">Recent Activity</h3>
+<x-overview.card title="Recent Activity" icon="bx-activity" variant="minimal">
     <div class="space-y-3 sm:space-y-4">
         <p class="text-gray-500 text-center py-4">No recent activity to display</p>
     </div>
-</div>
+</x-overview.card>
