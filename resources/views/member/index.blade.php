@@ -23,15 +23,15 @@
         </x-slot:slot_overview>
 
         <x-slot:slot_full_pledge>
-            @include('member.partials.members_table', ['members' => $fullPledgeMembers])
+            @include('member.partials.membersTable', ['members' => $fullPledgeMembers])
         </x-slot>
 
         <x-slot:slot_honorary>
-            @include('member.partials.members_table', ['members' => $honoraryMembers])
+            @include('member.partials.membersTable', ['members' => $honoraryMembers])
         </x-slot>
 
         <x-slot:slot_pending>
-            @include('member.partials.members_table', ['members' => $pendingMembers])
+            @include('member.partials.membersTable', ['members' => $pendingMembers])
         </x-slot>
     </x-navigation-layout.tabs-modern>
 
