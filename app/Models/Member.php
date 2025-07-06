@@ -15,18 +15,22 @@ class Member extends Model
         'membership_status',
         'invitation_status',
         'invited_at',
-        'invitation_expires_at',
+        // 'invitation_expires_at',
         'start_date',
-        'end_date',
-        'board_invited'
+        // 'end_date',
+        // 'board_invited',
+        'profile_photo_url',
+        'invited_by',
     ];
 
     protected $casts = [
         'invited_at' => 'datetime',
-        'invitation_expires_at' => 'datetime',
+        // 'invitation_expires_at' => 'datetime',
         'start_date' => 'datetime',
-        'end_date' => 'datetime',
-        'board_invited' => 'boolean'
+        // 'end_date' => 'datetime',
+        // 'board_invited' => 'boolean',
+        'profile_photo_url' => 'string',
+        'invited_by' => 'integer',
     ];
 
     public function user(): BelongsTo
@@ -67,5 +71,10 @@ class Member extends Model
         if ($month <= 6) return 'Q2';
         if ($month <= 9) return 'Q3';
         return 'Q4';
+    }
+
+    public function inviter()
+    {
+        return $this->belongsTo(User::class, 'invited_by');
     }
 }

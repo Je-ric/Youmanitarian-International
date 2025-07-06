@@ -20,10 +20,8 @@ class MemberFactory extends Factory
             'membership_status' => $this->faker->randomElement(['active', 'inactive']),
             'invitation_status' => $this->faker->randomElement(['pending', 'accepted', 'declined']),
             'invited_at' => $this->faker->optional()->dateTimeThisYear(),
-            'invitation_expires_at' => $this->faker->optional()->dateTimeThisYear(),
             'start_date' => $this->faker->optional()->dateTimeThisYear(),
-            'end_date' => $this->faker->optional()->dateTimeThisYear(),
-            'board_invited' => $this->faker->boolean(20), // 20% chance true
+            'invited_by' => User::factory(),
         ];
     }
 }

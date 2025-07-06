@@ -87,7 +87,7 @@ class MemberController extends Controller
             'user_id' => 'required|exists:users,id',
             'volunteer_id' => 'required|exists:volunteers,id',
             'membership_type' => 'required|in:full_pledge,honorary',
-            'board_invited' => 'boolean',
+            // 'board_invited' => 'boolean',
             'invitation_message' => 'nullable|string|max:500',
         ]);
 
@@ -101,7 +101,7 @@ class MemberController extends Controller
                 'membership_status' => 'inactive',
                 'invitation_status' => 'pending',
                 'invited_at' => now(),
-                'board_invited' => $request->board_invited ?? false
+                // 'board_invited' => $request->board_invited ?? false
             ]);
 
             $invitationMessage = $request->invitation_message;

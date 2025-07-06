@@ -18,14 +18,12 @@ class VolunteerToMemberSeeder extends Seeder
                 Member::create([
                     'user_id' => $volunteer->user_id, 
                     'volunteer_id' => $volunteer->id,
-                    'membership_type' => 'full_pledge',
+                    'membership_type' => ['full_pledge', 'honorary'][array_rand(['full_pledge', 'honorary'])],
                     'membership_status' => 'active',
-                    'invitation_status' => 'accepted',
+                    'invitation_status' => ['pending', 'accepted'][array_rand(['pending', 'accepted'])],
                     'invited_at' => now(),
-                    'invitation_expires_at' => now()->addDays(7),
                     'start_date' => now(),
-                    'end_date' => null,
-                    'board_invited' => false,
+                    'invited_by' => null,
                 ]);
             }
         }

@@ -37,7 +37,7 @@
     {{-- Recently Joined Members --}}
     <x-overview.card title="Recently Joined Members" variant="midnight-header">
         @forelse($recentlyJoinedMembers as $member)
-            <x-overview.summary-list-item :imageUrl="$member->user->profile_photo_url">
+            <x-overview.summary-list-item :imageUrl="$member->profile_photo_url">
                 <x-slot:title>{{ $member->user->name }}</x-slot:title>
                 <x-slot:subtitle>Joined on {{ $member->start_date->format('M d, Y') }}</x-slot:subtitle>
                 <x-slot:action>
@@ -52,7 +52,7 @@
     {{-- Oldest Pending Invitations --}}
     <x-overview.card title="Oldest Pending Invitations" variant="midnight-header">
         @forelse($oldestPendingInvitations as $member)
-            <x-overview.summary-list-item :imageUrl="$member->user->profile_photo_url">
+            <x-overview.summary-list-item :imageUrl="$member->profile_photo_url">
                 <x-slot:title>{{ $member->user->name }}</x-slot:title>
                 <x-slot:subtitle>Invited on {{ $member->invited_at->format('M d, Y') }} ({{ $member->invited_at->diffForHumans() }})</x-slot:subtitle>
                 <x-slot:action>

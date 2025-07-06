@@ -17,13 +17,15 @@ class MembershipPayment extends Model
         'receipt_url',
         'payment_period',
         'payment_year',
-        'notes'
+        'notes',
+        'recorded_by',
     ];
 
     protected $casts = [
         'payment_date' => 'datetime',
         'amount' => 'decimal:2',
-        'payment_year' => 'integer'
+        'payment_year' => 'integer',
+        'recorded_by' => 'integer',
     ];
 
     public function member(): BelongsTo
@@ -37,6 +39,11 @@ class MembershipPayment extends Model
     public function reminders(): HasMany
     {
         return $this->hasMany(PaymentReminder::class, 'membership_payment_id');
+    }
+
+    public function recorder()
+    {
+        return $this->belongsTo(User::class, 'recorded_by');
     }
 
     public function isPaid(): bool
