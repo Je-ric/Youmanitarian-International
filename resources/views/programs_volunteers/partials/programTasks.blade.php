@@ -43,7 +43,7 @@
         @foreach($tasks as $task)
             <div class="bg-white/80 border border-indigo-100 rounded-xl hover:border-indigo-200 transition-all duration-200 shadow-lg hover:shadow-sm overflow-hidden backdrop-blur-sm" data-animate>
 
-                <div class="p-5 border-b border-indigo-100 bg-gradient-to-br from-pink-200 via-yellow-100 to-amber-200">
+                <div class="p-5 border-b border-indigo-100 bg-gradient-to-br from-yellow-400 via-amber-300 to-orange-400">
                     <div class="flex items-center justify-between mb-3">
                         <x-feedback-status.status-indicator :status="$task->status" />
 

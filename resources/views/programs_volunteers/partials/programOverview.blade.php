@@ -5,7 +5,7 @@
         :value="$totalVolunteersCount"
         bgColor="bg-blue-100"
         iconColor="text-purple-500"
-        gradientVariant="indigo"
+        gradientVariant="blue-sky"
     />
     <x-overview.stat-card
         icon="bx-task"
@@ -13,7 +13,7 @@
         :value="$activeTasksCount"
         bgColor="bg-yellow-100"
         iconColor="text-yellow-500"
-        gradientVariant="amber"
+        gradientVariant="sunset-orange"
     />
     <x-overview.stat-card
         icon="bx-check-circle"
@@ -21,7 +21,7 @@
         :value="$completedTasksCount"
         bgColor="bg-green-100"
         iconColor="text-green-500"
-        gradientVariant="emerald"
+        gradientVariant="lime-green"
     />
     <x-overview.stat-card
         icon="bx-star"
@@ -29,7 +29,7 @@
         :value="number_format($averageRating, 1) . '/5'"
         bgColor="bg-purple-100"
         iconColor="text-purple-500"
-        gradientVariant="purple"
+        gradientVariant="violet-purple"
     />
 </x-overview.stat-card-group>
 

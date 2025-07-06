@@ -482,38 +482,38 @@ defaultTab="modern1"
 
         <!-- Stat Card Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
-            
-            <!-- Original Variants -->
-            <x-overview.stat-card icon="bx-users" title="Total Users" value="1,234" gradientVariant="emerald" />
-            <x-overview.stat-card icon="bx-dollar" title="Revenue" value="$12,345" gradientVariant="rose" />
-            <x-overview.stat-card icon="bx-chart" title="Growth" value="23%" gradientVariant="indigo" />
-            <x-overview.stat-card icon="bx-activity" title="Active Sessions" value="867" gradientVariant="sky" />
-            <x-overview.stat-card icon="bx-trending-up" title="Conversion" value="2.4%" gradientVariant="amber" />
-            <x-overview.stat-card icon="bx-clock" title="Response Time" value="320ms" gradientVariant="lime" />
-            <x-overview.stat-card icon="bx-bar-chart" title="MRR Growth" value="6.7%" gradientVariant="purple" />
-            <x-overview.stat-card icon="bx-check-circle" title="Tickets Resolved" value="324" gradientVariant="fuchsia" />
-            
+     
             <!-- Brand Gradient -->
-            <x-overview.stat-card icon="bx-user-plus" title="New Signups" value="157" gradientVariant="brand" />
+            <x-overview.stat-card icon="bx-user-plus" title="brand" value="Brand" gradientVariant="brand" />
             
-            <!-- New Dark Variants -->
-            <x-overview.stat-card icon="bx-file-text" title="Open Invoices" value="24" gradientVariant="slate" />
-            <x-overview.stat-card icon="bx-bug" title="Error Rate" value="0.7%" gradientVariant="deep-rose" />
-            <x-overview.stat-card icon="bx-shopping-cart" title="Pending Orders" value="73" gradientVariant="sunset" />
-            
-            <!-- New Light Variants -->
-            <x-overview.stat-card icon="bx-eye" title="Daily Visitors" value="4,560" gradientVariant="teal" />
-            <x-overview.stat-card icon="bx-database" title="Storage Used" value="68%" gradientVariant="glassmorphism" />
-            <x-overview.stat-card icon="bx-rotate-ccw" title="Refund Rate" value="1.2%" gradientVariant="cyan" />
-            
-            <!-- New Gradient Variants -->
+            <x-overview.stat-card icon="bx-file-text" title="slate" value="Slate" gradientVariant="slate" />
+            <x-overview.stat-card icon="bx-bug" title="deep-rose" value="Deep Rose" gradientVariant="deep-rose" />
+            <x-overview.stat-card icon="bx-shopping-cart" title="sunset" value="Sunset" gradientVariant="sunset" />
             <x-overview.stat-card icon="bx-droplet" title="aqua" value="Aqua" gradientVariant="aqua" />
             <x-overview.stat-card icon="bx-happy" title="peach" value="Peach" gradientVariant="peach" />
             <x-overview.stat-card icon="bx-moon" title="midnight" value="Midnight" gradientVariant="midnight" />
             <x-overview.stat-card icon="bx-sun" title="sunrise" value="Sunrise" gradientVariant="sunrise" />
-            <x-overview.stat-card icon="bx-leaf" title="mint" value="Mint" gradientVariant="mint" />
-            <x-overview.stat-card icon="bx-color" title="lavender" value="Lavender" gradientVariant="lavender" />
-            <x-overview.stat-card icon="bx-fire" title="fire" value="Fire" gradientVariant="fire" />
+           <x-overview.stat-card icon="bx-fire" title="fire" value="Fire" gradientVariant="fire" />
+            <x-overview.stat-card icon="bx-heart" title="cherry" value="Cherry" gradientVariant="cherry" />
+            <x-overview.stat-card icon="bx-water" title="ocean" value="Ocean" gradientVariant="ocean" />
+            <x-overview.stat-card icon="bx-tree" title="forest" value="Forest" gradientVariant="forest" />
+            <x-overview.stat-card icon="bx-sunset" title="sunset-orange" value="Sunset Orange" gradientVariant="sunset-orange" />
+            <x-overview.stat-card icon="bx-flower" title="lavender-purple" value="Lavender Purple" gradientVariant="lavender-purple" />
+            <x-overview.stat-card icon="bx-leaf" title="mint-green" value="Mint Green" gradientVariant="mint-green" />
+            <x-overview.stat-card icon="bx-rose" title="rose-pink" value="Rose Pink" gradientVariant="rose-pink" />
+            <x-overview.stat-card icon="bx-cloud" title="blue-sky" value="Blue Sky" gradientVariant="blue-sky" />
+            <x-overview.stat-card icon="bx-star" title="golden" value="Golden" gradientVariant="golden" />
+            <x-overview.stat-card icon="bx-gem" title="emerald-teal" value="Emerald Teal" gradientVariant="emerald-teal" />
+            <x-overview.stat-card icon="bx-crown" title="violet-purple" value="Violet Purple" gradientVariant="violet-purple" />
+            <x-overview.stat-card icon="bx-fish" title="coral" value="Coral" gradientVariant="coral" />
+            <x-overview.stat-card icon="bx-droplet" title="azure" value="Azure" gradientVariant="azure" />
+            <x-overview.stat-card icon="bx-leaf" title="lime-green" value="Lime Green" gradientVariant="lime-green" />
+            <x-overview.stat-card icon="bx-flower" title="fuchsia-pink" value="Fuchsia Pink" gradientVariant="fuchsia-pink" />
+            <x-overview.stat-card icon="bx-compass" title="indigo-blue" value="Indigo Blue" gradientVariant="indigo-blue" />
+            <x-overview.stat-card icon="bx-sun" title="amber-orange" value="Amber Orange" gradientVariant="amber-orange" />
+            <x-overview.stat-card icon="bx-water" title="teal-cyan" value="Teal Cyan" gradientVariant="teal-cyan" />
+            <x-overview.stat-card icon="bx-crown" title="purple-violet" value="Purple Violet" gradientVariant="purple-violet" />
+            <x-overview.stat-card icon="bx-tree" title="green-emerald" value="Green Emerald" gradientVariant="green-emerald" />
             
         </div>
 

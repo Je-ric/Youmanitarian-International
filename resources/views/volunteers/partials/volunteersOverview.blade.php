@@ -7,7 +7,7 @@
             :value="$approvedVolunteers->count()"
             bgColor="bg-blue-100"
             iconColor="text-blue-500"
-            gradientVariant="indigo"
+            gradientVariant="ocean"
             href="{{ route('volunteers.index', ['tab' => 'approved']) }}"
         />
         <x-overview.stat-card
@@ -16,7 +16,7 @@
             :value="$applications->count()"
             bgColor="bg-yellow-100"
             iconColor="text-yellow-500"
-            gradientVariant="amber"
+            gradientVariant="golden"
             href="{{ route('volunteers.index', ['tab' => 'applications']) }}"
         />
         <x-overview.stat-card
@@ -25,7 +25,7 @@
             :value="$deniedApplications->count()"
             bgColor="bg-red-100"
             iconColor="text-red-500"
-            gradientVariant="rose"
+            gradientVariant="cherry"
             href="{{ route('volunteers.index', ['tab' => 'denied']) }}"
         />
         <x-overview.stat-card
@@ -34,7 +34,7 @@
             value="{{ $approvalRate }}%"
             bgColor="bg-green-100"
             iconColor="text-green-500"
-            gradientVariant="emerald"
+            gradientVariant="forest"
         />
     </x-overview.stat-card-group>
 

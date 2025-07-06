@@ -8,7 +8,7 @@
             href="{{ route('roles.index', ['tab' => 'users']) }}"
             bgColor="bg-blue-100"
             iconColor="text-blue-500"
-            gradientVariant="indigo"
+            gradientVariant="azure"
         />
         <x-overview.stat-card
             icon="bx-shield-quarter"
@@ -16,7 +16,7 @@
             :value="$roles->count()"
             bgColor="bg-green-100"
             iconColor="text-green-500"
-            gradientVariant="emerald"
+            gradientVariant="emerald-teal"
         />
         <x-overview.stat-card
             icon="bx-user-plus"
@@ -25,7 +25,7 @@
             href="{{ route('roles.index', ['tab' => 'users']) }}"
             bgColor="bg-yellow-100"
             iconColor="text-yellow-500"
-            gradientVariant="amber"
+            gradientVariant="amber-orange"
         />
         <x-overview.stat-card
             icon="bx-user-check"
@@ -34,7 +34,7 @@
             href="{{ route('roles.index', ['tab' => 'users']) }}"
             bgColor="bg-red-100"
             iconColor="text-red-500"
-            gradientVariant="rose"
+            gradientVariant="rose-pink"
         />
     </x-overview.stat-card-group>
 
