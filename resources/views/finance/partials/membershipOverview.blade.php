@@ -34,7 +34,7 @@
 </x-overview.stat-card-group>
 
 {{-- Payment Status Chart --}}
-<x-overview.card title="Payment Status Overview" icon="bx-chart" variant="minimal">
+<x-overview.card title="Payment Status Overview" icon="bx-chart" variant="midnight-header">
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">

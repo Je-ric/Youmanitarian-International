@@ -35,7 +35,7 @@
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     {{-- Recently Joined Members --}}
-    <x-overview.card title="Recently Joined Members" variant="minimal">
+    <x-overview.card title="Recently Joined Members" variant="midnight-header">
         @forelse($recentlyJoinedMembers as $member)
             <x-overview.summary-list-item :imageUrl="$member->user->profile_photo_url">
                 <x-slot:title>{{ $member->user->name }}</x-slot:title>
@@ -50,7 +50,7 @@
     </x-overview.card>
 
     {{-- Oldest Pending Invitations --}}
-    <x-overview.card title="Oldest Pending Invitations" variant="minimal">
+    <x-overview.card title="Oldest Pending Invitations" variant="midnight-header">
         @forelse($oldestPendingInvitations as $member)
             <x-overview.summary-list-item :imageUrl="$member->user->profile_photo_url">
                 <x-slot:title>{{ $member->user->name }}</x-slot:title>

@@ -39,7 +39,7 @@
     </x-overview.stat-card-group>
 
     {{-- Recent Activity --}}
-    <x-overview.card title="Recent Activity" icon="bx-activity" variant="minimal">
+    <x-overview.card title="Recent Activity" variant="midnight-header">
         <div class="space-y-3 sm:space-y-4">
             @forelse($recentActivities as $volunteer)
                 <div class="flex items-center justify-between border-b pb-2 sm:pb-3 last:border-0">

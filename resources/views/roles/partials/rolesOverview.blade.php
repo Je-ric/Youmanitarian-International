@@ -39,7 +39,7 @@
     </x-overview.stat-card-group>
 
     {{-- Role Distribution --}}
-    <x-overview.card title="Role Distribution" icon="bx-shield" variant="minimal">
+    <x-overview.card title="Role Distribution" icon="bx-shield" variant="midnight-header">
         <div class="space-y-3 sm:space-y-4">
             @foreach($roles as $role)
                 @php

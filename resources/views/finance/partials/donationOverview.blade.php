@@ -34,7 +34,7 @@
 </x-overview.stat-card-group>
 
 {{-- Financial Summary Chart --}}
-<x-overview.card title="Donation Summary" icon="bx-chart" variant="minimal">
+<x-overview.card title="Donation Summary" icon="bx-chart" variant="midnight-header">
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -61,8 +61,8 @@
 </x-overview.card>
 
 {{-- Recent Activity Section --}}
-<x-overview.card title="Recent Activity" icon="bx-activity" variant="minimal">
+{{-- <x-overview.card title="Recent Activity" variant="midnight-header">
     <div class="space-y-3 sm:space-y-4">
         <p class="text-gray-500 text-center py-4">No recent activity to display</p>
     </div>
-</x-overview.card>
+</x-overview.card> --}}
