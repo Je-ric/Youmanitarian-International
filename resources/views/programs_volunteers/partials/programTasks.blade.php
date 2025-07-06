@@ -43,7 +43,7 @@
         @foreach($tasks as $task)
             <div class="bg-white/80 border border-indigo-100 rounded-xl hover:border-indigo-200 transition-all duration-200 shadow-lg hover:shadow-sm overflow-hidden backdrop-blur-sm" data-animate>
 
-                <div class="p-5 border-b border-indigo-100 bg-gradient-to-br from-yellow-400 via-amber-300 to-orange-400">
+                <div class="p-5 border-b border-slate-600 bg-gradient-to-br from-gray-900 via-slate-800 to-indigo-900">
                     <div class="flex items-center justify-between mb-3">
                         <x-feedback-status.status-indicator :status="$task->status" />
 
@@ -52,7 +52,7 @@
                                 @csrf
                                 @method('PUT')
                                 <x-form.select-option name="status"
-                                    class="text-xs border border-indigo-200 rounded px-2 py-1 bg-white focus:ring-1 focus:ring-[#6366F1] focus:border-[#6366F1]"
+                                    class="text-xs border border-slate-600 rounded px-2 py-1 bg-slate-800 text-slate-100 focus:ring-1 focus:ring-indigo-400 focus:border-indigo-400"
                                     onchange="this.form.submit()" :options="[
                                         ['value' => 'pending', 'label' => 'Pending', 'selected' => $task->status === 'pending'],
                                         ['value' => 'in_progress', 'label' => 'In Progress', 'selected' => $task->status === 'in_progress'],
@@ -63,7 +63,7 @@
                             <form action="{{ route('programs.tasks.destroy', [$program, $task]) }}" method="POST" onsubmit="return confirm('Delete this task?')" class="inline-flex">
                                 @csrf
                                 @method('DELETE')
-                                <button class="text-indigo-300 hover:text-red-600 p-1 hover:bg-red-50 rounded transition-colors">
+                                <button class="text-slate-400 hover:text-red-400 p-1 hover:bg-red-900/20 rounded transition-colors">
                                     <i class='bx bx-trash w-4 h-4'></i>
                                 </button>
                             </form>
@@ -75,17 +75,17 @@
                             @csrf
                             @method('PUT')
                             <div x-show="!editing" class="cursor-pointer group" @click="editing = true">
-                                <p class="text-slate-700 text-sm leading-relaxed font-medium"
+                                <p class="text-slate-100 text-sm leading-relaxed font-medium"
                                    style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">
                                     {{ $task->task_description }}
                                 </p>
-                                <p class="text-xs text-slate-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                                <p class="text-xs text-slate-300 mt-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
                                     <i class='bx bx-edit w-3 h-3'></i>
                                     Click to edit
                                 </p>
                             </div>
                             <div x-show="editing" class="space-y-2">
-                                <x-form.textarea name="task_description" rows="3" required>{{ $task->task_description }}</x-form.textarea>
+                                <x-form.textarea name="task_description" rows="3" required :value="$task->task_description" class="bg-slate-800 text-slate-100 border-slate-600" />
                                 <div class="flex gap-2">
                                     <x-button type="submit" variant="save-entry">
                                         Save

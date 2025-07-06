@@ -35,7 +35,7 @@
             <div class="xl:col-span-2 space-y-6">
                 
                 <!-- Basic Information -->
-                <x-overview.card title="Basic Information" icon="bx-info-circle" variant="elevated">
+                <x-overview.card title="Basic Information" icon="bx-info-circle" variant="midnight-header">
                     <div class="space-y-6">
                         <!-- Program Title -->
                         <div>

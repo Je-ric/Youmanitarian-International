@@ -51,6 +51,14 @@
             'iconBg' => 'bg-gradient-to-br from-[#1a2235] to-[#2a3441]',
             'iconColor' => 'text-white',
         ],
+        'midnight-header' => [
+            'container' => 'bg-white border border-gray-200',
+            'shadow' => 'shadow-lg',
+            'header' => 'bg-gradient-to-r from-gray-900 via-slate-800 to-indigo-900 text-white',
+            'body' => 'bg-white',
+            'iconBg' => 'bg-white/20 backdrop-blur-sm',
+            'iconColor' => 'text-[#ffb51b]',
+        ],
     ];
 
     $config = $variants[$variant] ?? $variants['default'];

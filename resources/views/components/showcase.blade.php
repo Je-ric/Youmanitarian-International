@@ -449,6 +449,19 @@ defaultTab="modern1"
                     </div>
                 </div>
             </x-overview.card>
+
+            <!-- Midnight Header Variant -->
+            <x-overview.card title="Midnight Header" icon="bx-moon" variant="midnight-header">
+                <div class="space-y-3">
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        Dark, elegant header with a golden icon background. Perfect for night mode or premium sections.
+                    </p>
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
+                        <i class='bx bx-moon text-indigo-900'></i>
+                        <span>Great for dark-themed content</span>
+                    </div>
+                </div>
+            </x-overview.card>
     
             <!-- Custom Example -->
             <x-overview.card 

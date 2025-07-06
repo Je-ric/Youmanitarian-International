@@ -34,8 +34,7 @@
 </x-overview.stat-card-group>
 
 <div class="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-6">
-    <x-overview.card title="Attendance Overview" icon="bx-time" variant="default"
-    >
+    <x-overview.card title="Attendance Overview" icon="bx-time" variant="midnight-header">
         <div class="space-y-4">
             <div class="grid grid-cols-2 gap-3">
                 <x-overview.count-alert
@@ -80,8 +79,7 @@
         </div>
     </x-overview.card>
 
-    <x-overview.card title="Recent Activity" icon="bx-time" variant="minimal"
-    >
+     <x-overview.card title="Recent Activity" icon="bx-time" variant="midnight-header">
         <div class="overflow-y-auto pr-2">
             @forelse($recentActivities as $activity)
                 <x-overview.summary-list-item>
