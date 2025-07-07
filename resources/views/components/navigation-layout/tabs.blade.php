@@ -38,7 +38,7 @@
     </div>
 
     <!-- Tab Content -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+    {{-- <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6"> --}}
         @foreach($tabIds as $tabId)
             <div x-show="activeTab === '{{ $tabId }}'"
                 @if($transition)
@@ -50,7 +50,7 @@
                 {{ ${'slot_' . $tabId} ?? '' }}
             </div>
         @endforeach
-    </div>
+    {{-- </div> --}}
 </div>
 
 @push('scripts')

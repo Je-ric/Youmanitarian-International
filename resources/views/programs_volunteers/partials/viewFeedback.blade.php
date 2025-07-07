@@ -10,7 +10,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {{-- Left: Summary Card --}}
         <div class="lg:col-span-1">
-            <div class="bg-white border border-gray-200 rounded-xl p-6">
+            <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-6">
                 <h2 class="text-xl font-semibold text-gray-900 mb-0.5">Feedback Summary</h2>
                 <p class="text-gray-500 text-sm mb-2">Overall program rating</p>
 
@@ -83,7 +83,7 @@
                 <x-slot:slot_all>
                     <div class="space-y-4">
                         @forelse($feedbacks as $feedback)
-                            <div class="bg-white border border-gray-200 rounded-xl p-5 mb-4 shadow-sm">
+                            <div class="bg-white border border-gray-200 rounded-xl p-5 mb-4 shadow-sm hover:shadow-lg transition-shadow duration-200">
                                 <div class="flex items-start justify-between">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">

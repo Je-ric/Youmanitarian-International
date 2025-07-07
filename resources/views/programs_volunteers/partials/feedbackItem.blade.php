@@ -1,4 +1,4 @@
-<div class="bg-white border border-gray-200 rounded-lg p-6 hover:border-gray-300 transition-colors duration-200">
+<div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-200">
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
         <div class="flex items-center space-x-3 mb-2 sm:mb-0">
