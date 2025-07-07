@@ -26,18 +26,12 @@
                         {{ $member->user->name }}
                     </p>
                     <div class="flex flex-wrap items-center gap-2 mt-2">
-                    <span
-                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $statusClass }}">
-                        <div
-                            class="w-1.5 h-1.5 rounded-full mr-1.5 {{ $status === 'paid' ? 'bg-green-500' : ($status === 'overdue' ? 'bg-red-500' : 'bg-yellow-500') }}">
-                        </div>
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $statusClass }}">
+                            <div class="w-1.5 h-1.5 rounded-full mr-1.5 {{ $status === 'paid' ? 'bg-green-500' : ($status === 'overdue' ? 'bg-red-500' : 'bg-yellow-500') }}"></div>
                             {{ ucfirst($status) }}
                         </span>
-                        <span class="text-xs text-gray-500">
-                            {{ now()->format('M j, Y') }}
-                        </span>
-                </div>
                     </div>
+                </div>
         </x-modal.header>
 
         {{-- Main Content --}}
@@ -47,7 +41,7 @@
             <input type="hidden" name="member_id" value="{{ $member->id }}">
             <input type="hidden" name="payment_period" value="{{ $quarter }}">
             <input type="hidden" name="payment_year" value="{{ $year }}">
-            <input type="hidden" name="payment_date" value="{{ now()->format('Y-m-d H:i:s') }}">
+            {{-- <input type="hidden" name="payment_date" value="{{ now()->format('Y-m-d H:i:s') }}"> --}}
             
             <x-modal.body>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
@@ -56,7 +50,7 @@
                     <div class="space-y-4">
                         {{-- Amount --}}
                         <div>
-                            @if($payment && $status !== 'pending')
+                            @if($payment && $status === 'paid')
                                 <x-form.label>
                                 <i class='bx bx-dollar-circle mr-1 text-green-600'></i>
                                 Amount
@@ -99,17 +93,12 @@
 
                         {{-- Payment Method --}}
                         <div>
-                            @if($payment && $status !== 'pending')
+                            @if($payment && $status === 'paid')
                                 <x-form.label>
                                 <i class='bx bx-credit-card mr-1 text-blue-600'></i>
                                 Payment Method
                             </x-form.label>
                                 <x-form.readonly>{{ $paymentMethods[$payment->payment_method] ?? ucfirst(str_replace('_', ' ', $payment->payment_method)) }}</x-form.readonly>
-                                @if($payment && $payment->recorded_by)
-                                    <div class="mt-1 text-xs text-gray-500">
-                                        Recorded by: <span class="font-semibold text-gray-700">{{ optional($payment->recorder)->name ?? 'Unknown' }}</span>
-                                    </div>
-                                @endif
                             @else
                                 <x-form.select-option
                                     name="payment_method"
@@ -125,11 +114,6 @@
                                         <option value="{{ $value }}" {{ (isset($payment) && $payment->payment_method == $value) ? 'selected' : '' }}>{{ $label }}</option>
                                     @endforeach
                                 </x-form.select-option>
-                                @if($payment && $payment->recorded_by)
-                                    <div class="mt-1 text-xs text-gray-500">
-                                        Recorded by: <span class="font-semibold text-gray-700">{{ optional($payment->recorder)->name ?? 'Unknown' }}</span>
-                                    </div>
-                                @endif
                             @endif
                         </div>
                     </div>
@@ -142,10 +126,38 @@
                                 <i class='bx bx-calendar mr-1 text-purple-600'></i>
                                 Payment Date
                             </x-form.label>
-                            <div class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900">
-                                <span class="font-medium">{{ now()->format('F j, Y') }}</span>
-                                <span class="text-sm text-gray-500 ml-2">{{ now()->format('h:i A') }}</span>
-                            </div>
+                            @if($payment && $status === 'paid')
+                                <x-form.readonly>
+                                    {{ $payment->payment_date ? \Carbon\Carbon::parse($payment->payment_date)->format('F j, Y') : 'N/A' }}
+                                </x-form.readonly>
+                                <div class="mt-2 text-xs text-gray-500 flex flex-col gap-1">
+                                    <div>
+                                        <span class="font-semibold">Recorded by:</span>
+                                        <span class="font-semibold text-gray-700">{{ $payment->recorded_by ? (optional($payment->recorder)->name ?? 'Unknown') : 'Unknown' }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-semibold">Recorded in System:</span>
+                                        {{ $payment->created_at ? $payment->created_at->format('F j, Y h:i A') : 'N/A' }}
+                                    </div>
+                                </div>
+                            @else
+                                <x-form.date-picker
+                                    id="payment_date-{{ $modalId }}"
+                                    name="payment_date"
+                                    :value="$payment ? ($payment->payment_date ? \Carbon\Carbon::parse($payment->payment_date)->format('Y-m-d') : '') : (old('payment_date') ?? now()->format('Y-m-d'))"
+                                    required
+                                />
+                                <div class="mt-2 text-xs text-gray-500 flex flex-col gap-1">
+                                    <div>
+                                        <span class="font-semibold">Recorded by:</span>
+                                        <span class="font-semibold text-gray-700">{{ auth()->user()->name ?? 'Unknown' }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-semibold">Recorded in System:</span>
+                                        {{ now()->format('F j, Y h:i A') }}
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
                         {{-- Status Display (if payment exists) --}}
@@ -169,7 +181,7 @@
 
                 {{-- Notes Section --}}
                 <div>
-                    @if($payment && $status !== 'pending')
+                    @if($payment && $status === 'paid')
                         <x-form.label>
                             <i class='bx bx-note mr-1 text-orange-600'></i>
                             Notes
@@ -248,9 +260,4 @@
                 @endif
             </x-modal.footer>
         </form>
-        @if($payment && $payment->recorded_by)
-            <div class="mt-2 text-xs text-gray-500">
-                Recorded by: <span class="font-semibold text-gray-700">{{ optional($payment->recorder)->name ?? 'Unknown' }}</span>
-            </div>
-        @endif
 </x-modal.dialog>

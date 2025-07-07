@@ -48,7 +48,7 @@ class MembershipReminderController extends Controller
                 // remember each pending and overdue are blank records
                 $payment = $member->payments()->create([
                     'amount' => 0, 
-                    'payment_date' => now(),
+                    'payment_date' => null,
                     'payment_status' => 'pending',
                     'payment_method' => 'cash', 
                     'payment_period' => $quarter,
