@@ -15,7 +15,8 @@
                 ['id' => 'program_coordinator', 'label' => 'Program Coordinators (' . $programCoordinatorUsers->count() . ')', 'icon' => 'bx-calendar-event'],
                 ['id' => 'financial_coordinator', 'label' => 'Financial Coordinators (' . $financialCoordinatorUsers->count() . ')', 'icon' => 'bx-wallet'],
                 ['id' => 'content_manager', 'label' => 'Content Managers (' . $contentManagerUsers->count() . ')', 'icon' => 'bx-edit-alt'],
-                ['id' => 'member', 'label' => 'Members (' . $memberUsers->count() . ')', 'icon' => 'bx-group']
+                ['id' => 'member', 'label' => 'Members (' . $memberUsers->count() . ')', 'icon' => 'bx-group'],
+                ['id' => 'no_roles', 'label' => 'No Roles (' . $usersWithoutRoles->count() . ')', 'icon' => 'bx-user-x'],
             ];
         @endphp
 
@@ -61,6 +62,12 @@
                 @include('roles.partials.usersTable', ['users' => $memberUsersPaginated, 
                                                                     'roleName' => 'Member', 
                                                                     'roleType' => 'Member'])
+            </x-slot>
+
+            <x-slot:slot_no_roles>
+                @include('roles.partials.usersTable', ['users' => $usersWithoutRoles, 
+                                                                    'roleName' => 'No Role', 
+                                                                    'roleType' => 'no-role'])
             </x-slot>
         </x-navigation-layout.tabs-modern>
 @endsection 

@@ -22,19 +22,22 @@
             icon="bx-user-plus"
             title="Users Without Roles"
             :value="$usersWithoutRoles->count()"
-            href="{{ route('roles.index', ['tab' => 'users']) }}"
+            href="{{ route('roles.index', ['tab' => 'no_roles']) }}"
             bgColor="bg-yellow-100"
             iconColor="text-yellow-500"
             gradientVariant="amber-orange"
         />
+        @php
+            $usersWithMultipleRoles = $allUsers->filter(fn($user) => $user->roles->count() > 1)->count();
+        @endphp
         <x-overview.stat-card
-            icon="bx-user-check"
-            title="Active Users"
-            :value="$activeUsers->count()"
+            icon="bx-group"
+            title="Users With Multiple Roles"
+            :value="$usersWithMultipleRoles"
             href="{{ route('roles.index', ['tab' => 'users']) }}"
-            bgColor="bg-red-100"
-            iconColor="text-red-500"
-            gradientVariant="rose-pink"
+            bgColor="bg-indigo-100"
+            iconColor="text-indigo-500"
+            gradientVariant="indigo-blue"
         />
     </x-overview.stat-card-group>
 
