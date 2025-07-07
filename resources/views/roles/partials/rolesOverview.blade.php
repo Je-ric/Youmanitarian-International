@@ -1,5 +1,5 @@
 <div class="space-y-6">
-    {{-- Statistics Cards --}}
+    {{-- Statistics Cards Section --}}
     <x-overview.stat-card-group>
         <x-overview.stat-card
             icon="bx-user"
@@ -38,7 +38,7 @@
         />
     </x-overview.stat-card-group>
 
-    {{-- Role Distribution --}}
+    {{-- Role Distribution Section --}}
     <x-overview.card title="Role Distribution" icon="bx-shield" variant="midnight-header">
         <div class="space-y-3 sm:space-y-4">
             @foreach($roles as $role)

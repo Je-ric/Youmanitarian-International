@@ -1,40 +1,5 @@
 <div class="space-y-4">
-    {{-- Role Header --}}
-    <div class="bg-white border border-gray-200 rounded-lg p-4">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                @php
-                    $roleIcon = match($roleName) {
-                        'Volunteer' => 'bx-user',
-                        'Admin' => 'bx-crown',
-                        'Program Coordinator' => 'bx-calendar-event',
-                        'Financial Coordinator' => 'bx-wallet',
-                        'Content Manager' => 'bx-edit-alt',
-                        'Member' => 'bx-group',
-                        default => 'bx-user-circle'
-                    };
-                    $roleColor = match($roleName) {
-                        'Volunteer' => 'bg-blue-100 text-blue-600',
-                        'Admin' => 'bg-purple-100 text-purple-600',
-                        'Program Coordinator' => 'bg-green-100 text-green-600',
-                        'Financial Coordinator' => 'bg-yellow-100 text-yellow-600',
-                        'Content Manager' => 'bg-indigo-100 text-indigo-600',
-                        'Member' => 'bg-orange-100 text-orange-600',
-                        default => 'bg-gray-100 text-gray-600'
-                    };
-                @endphp
-                <div class="w-10 h-10 rounded-full {{ $roleColor }} flex items-center justify-center">
-                    <i class='bx {{ $roleIcon }} text-xl'></i>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900">{{ $roleName }}s</h3>
-                    <p class="text-sm text-gray-600">{{ $users->total() }} users with this role</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Users Table --}}
+    {{-- Users Table Section --}}
     @if($users->count() > 0)
         <x-table.table containerClass="overflow-x-auto" tableClass="min-w-full">
             <x-table.thead>
@@ -104,12 +69,12 @@
             </x-table.tbody>
         </x-table.table>
         
-        {{-- Pagination --}}
+        {{-- Pagination Section --}}
         <div class="mt-4">
             {{ $users->appends(['tab' => request()->query('tab', 'volunteer')])->links() }}
         </div>
     @else
-        {{-- Empty State --}}
+        {{-- Empty State Section --}}
         <div class="text-center py-12">
             <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
                 <i class='bx {{ $roleIcon }} text-gray-400 text-2xl'></i>
