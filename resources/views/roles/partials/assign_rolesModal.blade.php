@@ -87,9 +87,9 @@
                         <i class='bx bx-user-plus mr-2 text-[#ffb51b]'></i>
                         Additional Roles
                     </h4>
-                    
+
                     @php
-                        $additionalRoles = $roles->where('role_name', '!=', 'Volunteer');
+                        $additionalRoles = $roles->whereNotIn('role_name', ['Volunteer', 'Member']);
                     @endphp
                     
                     @if($additionalRoles->isEmpty())
@@ -142,6 +142,14 @@
                         </div>
                     @endif
                 </div>
+
+                <x-feedback-status.alert
+                    class="mb-4 text-xs whitespace-nowrap"
+                    type="info"
+                    icon="bx bx-info-circle"
+                    message="The 'Member' role can only be granted through a membership invitation and cannot be assigned manually."
+                />
+
             </form>
         </x-modal.body>
 

@@ -22,7 +22,7 @@
 }" class="{{ $class }}">
 
     <div class="border-b border-gray-200">
-        <nav class="custom-scrollbar-blue flex overflow-x-auto whitespace-nowrap px-2 sm:px-4 gap-x-2 md:gap-x-4" aria-label="Tabs">
+        <nav class="flex flex-wrap px-2 sm:px-4 gap-x-2 md:gap-x-4" aria-label="Tabs">
             @foreach($tabs as $tab)
                 <button type="button"
                     @click="setTab('{{ $tab['id'] }}')"
