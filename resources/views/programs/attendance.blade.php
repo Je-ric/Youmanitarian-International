@@ -117,33 +117,33 @@
             </section>
 
             <div
-                class="col-span-1 card bg-base-100 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200">
+                class="col-span-1 card bg-gradient-to-br from-gray-900 via-slate-800 to-indigo-900 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200 text-white">
                 <div class="card-body p-4 sm:p-6 space-y-3 sm:space-y-4">
 
                     <div class="mb-3">
-                        <h2 class="text-xl font-bold text-[#1a2235] mb-2">
+                        <h2 class="text-xl font-bold text-white mb-2">
                             Your Attendance
                         </h2>
 
                         {{-- Status Indicator --}}
                         <div class="flex items-center gap-2 mb-3">
-                            <span class="text-sm text-gray-600">Attendance:</span>
+                            <span class="text-sm text-white/80">Attendance:</span>
                             <div class="flex items-center gap-2">
                                 @if($clockInTime && $clockOutTime && $program->progress_status === 'done')
-                                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                    <span class="text-sm font-medium text-green-700">Complete</span>
+                                    <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                                    <span class="text-sm font-medium text-green-200">Complete</span>
                                 @elseif($clockInTime && !$clockOutTime && $program->progress_status === 'done')
-                                    <div class="w-2 h-2 bg-orange-500 rounded-full"></div>
-                                    <span class="text-sm font-medium text-orange-700">Missed Clock Out</span>
+                                    <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
+                                    <span class="text-sm font-medium text-orange-200">Missed Clock Out</span>
                                 @elseif(!$clockInTime && !$clockOutTime && $program->progress_status === 'done')
-                                    <div class="w-2 h-2 bg-red-500 rounded-full"></div>
-                                    <span class="text-sm font-medium text-red-700">No Record</span>
+                                    <div class="w-2 h-2 bg-red-400 rounded-full"></div>
+                                    <span class="text-sm font-medium text-red-200">No Record</span>
                                 @elseif($clockInTime)
-                                    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                    <span class="text-sm font-medium text-blue-700">Clocked In</span>
+                                    <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+                                    <span class="text-sm font-medium text-blue-200">Clocked In</span>
                                 @else
-                                    <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
-                                    <span class="text-sm font-medium text-gray-600">Not Clocked In</span>
+                                    <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+                                    <span class="text-sm font-medium text-white/80">Not Clocked In</span>
                                 @endif
                             </div>
                         </div>
@@ -151,23 +151,23 @@
 
                     {{-- Time Information --}}
                     <div class="space-y-4 mb-6">
-                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-gray-600">Time In</span>
-                            <span class="font-medium text-[#1a2235]">
+                        <div class="flex justify-between items-center py-2 border-b border-white/10">
+                            <span class="text-white/80">Time In</span>
+                            <span class="font-medium text-white">
                                 {{ $clockInTime ? $clockInTime->format('g:ia') : '--:--' }}
                             </span>
                         </div>
 
-                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                            <span class="text-gray-600">Time Out</span>
-                            <span class="font-medium text-[#1a2235]">
+                        <div class="flex justify-between items-center py-2 border-b border-white/10">
+                            <span class="text-white/80">Time Out</span>
+                            <span class="font-medium text-white">
                                 {{ $clockOutTime ? $clockOutTime->format('g:ia') : '--:--' }}
                             </span>
                         </div>
 
                         @if($formattedWorkedTime)
                             <div class="flex justify-between items-center py-2">
-                                <span class="text-gray-600">Total Worked</span>
+                                <span class="text-white/80">Total Worked</span>
                                 <span class="font-medium text-[#ffb51b]">
                                     {{ $formattedWorkedTime }}
                                 </span>
@@ -177,42 +177,32 @@
 
 
                     @if($program->progress_status === 'incoming')
-                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                            <div class="flex items-start gap-3">
-                                <i class='bx bx-info-circle text-blue-500 mt-0.5'></i>
-                                <div class="text-sm text-blue-700">
-                                    <strong>Program hasn't started yet.</strong><br>
-                                    Available on
-                                    {{ \Carbon\Carbon::parse($program->date)->format('F j, Y') }} at
-                                    {{ \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}
-                                </div>
-                            </div>
-                        </div>
+                        <x-feedback-status.alert 
+                            variant="dark" 
+                            icon="bx bx-info-circle" 
+                            message="<strong>Program hasn't started yet.</strong><br>Available on {{ \Carbon\Carbon::parse($program->date)->format('F j, Y') }} at {{ \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}" 
+                        />
 
-                        <x-button variant="disabled" disabled>
+                        <x-button variant="disabled-dark" disabled>
                             <i class='bx bx-log-in-circle'></i> Clock In (Unavailable)
                         </x-button>
 
-                        <x-button variant="disabled" disabled>
+                        <x-button variant="disabled-dark" disabled>
                             <i class='bx bx-log-out-circle'></i> Clock Out (Unavailable)
                         </x-button>
 
                     @elseif($program->progress_status === 'done')
-                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
-                            <div class="flex items-start gap-3">
-                                <i class='bx bx-check-circle text-gray-500 mt-0.5'></i>
-                                <div class="text-sm text-gray-600">
-                                    <strong>Program concluded.</strong><br>
-                                    Attendance is no longer available.
-                                </div>
-                            </div>
-                        </div>
+                        <x-feedback-status.alert 
+                            variant="dark" 
+                            icon="bx bx-check-circle" 
+                            message="<strong>Program concluded.</strong><br>Attendance is no longer available." 
+                        />
 
-                        <x-button variant="disabled" disabled>
+                        <x-button variant="disabled-dark" disabled>
                             <i class='bx bx-log-in-circle'></i> Clock In (Completed)
                         </x-button>
 
-                        <x-button variant="disabled" disabled>
+                        <x-button variant="disabled-dark" disabled>
                             <i class='bx bx-log-out-circle'></i> Clock Out (Completed)
                         </x-button>
 
@@ -222,19 +212,19 @@
                                 <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4"
                                     onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Processing...';">
                                     @csrf
-                                    <x-button type="submit" variant="clock_in" class="w-full">
+                                    <x-button type="submit" variant="attendance-dark" class="w-full">
                                         <i class='bx bx-time-five mr-2'></i>
                                         Clock In
                                     </x-button>
                                 </form>
                             </div>
 
-                            <x-button variant="disabled" disabled>
+                            <x-button variant="disabled-dark" disabled>
                                 <i class='bx bx-log-out-circle'></i> Clock Out (Clock In First)
                             </x-button>
 
                         @elseif($canClockOut)
-                            <x-button variant="disabled" disabled>
+                            <x-button variant="disabled-dark" disabled>
                                 <i class='bx bx-log-in-circle'></i> Clock In (Already Clocked In)
                             </x-button>
 
@@ -242,7 +232,7 @@
                                 <form action="{{ route('programs.clock-in-out', $program) }}" method="POST" class="mt-3 sm:mt-4"
                                     onsubmit="this.querySelector('button').disabled = true; this.querySelector('button').innerHTML = '<i class=\'bx bx-loader-alt animate-spin\'></i> Processing...';">
                                     @csrf
-                                    <x-button type="submit" variant="clock_in" class="w-full">
+                                    <x-button type="submit" variant="attendance-dark" class="w-full">
                                         <i class='bx bx-time-five mr-2'></i>
                                         Clock Out
                                     </x-button>
@@ -250,95 +240,40 @@
                             </div>
 
                         @else
-                            <x-button variant="disabled" disabled>
+                            <x-button variant="disabled-dark" disabled>
                                 <i class='bx bx-check-circle'></i> Clock In (Completed)
                             </x-button>
-                            <x-button variant="disabled" disabled>
+                            <x-button variant="disabled-dark" disabled>
                                 <i class='bx bx-check-circle'></i> Clock Out (Completed)
                             </x-button>
                         @endif
 
                     @else
-                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                            <div class="flex items-start gap-3">
-                                <i class='bx bx-error-circle text-red-500 mt-0.5'></i>
-                                <div class="text-sm text-red-700">
-                                    You are not assigned to this program.
-                                </div>
-                            </div>
-                        </div>
+                        <x-feedback-status.alert 
+                            variant="dark" 
+                            icon="bx bx-error-circle" 
+                            message="You are not assigned to this program." 
+                        />
                     @endif
                 </div>
             </div>
         </div>
 
-        {{-- Attendance Approval Summary --}}
-        @if($attendance && ($attendance->clock_in || $attendance->clock_out))
-            <div class="bg-white border-2 border-gray-200 rounded-2xl p-4 sm:p-5 mt-6">
-                <h3 class="text-lg font-semibold text-[#1a2235] mb-4 pb-3 border-b border-gray-200">Attendance Summary</h3>
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600 font-medium">Approval Status</span>
-                        @if($attendance->approval_status == 'approved')
-                            <span
-                                class="font-medium text-green-600 bg-green-100 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1">
-                                <i class='bx bx-check-circle'></i>
-                                {{ ucfirst($attendance->approval_status) }}
-                            </span>
-                        @elseif($attendance->approval_status == 'rejected')
-                            <span
-                                class="font-medium text-red-600 bg-red-100 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1">
-                                <i class='bx bx-x-circle'></i>
-                                {{ ucfirst($attendance->approval_status) }}
-                            </span>
-                        @else
-                            <span
-                                class="font-medium text-yellow-600 bg-yellow-100 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1">
-                                <i class='bx bx-time-five'></i>
-                                {{ ucfirst($attendance->approval_status) }}
-                            </span>
-                        @endif
-                    </div>
-
-                    @if($attendance->approved_by)
-                        <div class="flex justify-between items-center">
-                            <span class="text-gray-600 font-medium">
-                                {{ ucfirst($attendance->approval_status) }} by
-                            </span>
-                            <span class="font-semibold text-[#1a2235]">
-                                {{ $attendance->approver->name ?? 'N/A' }}
-                            </span>
-                        </div>
-                    @endif
-
-                    @if($attendance->notes)
-                        <div>
-                            <span class="text-gray-600 font-medium">Notes / Reason</span>
-                            <p class="text-gray-800 bg-gray-50 p-3 rounded-lg mt-2 text-sm border border-gray-200">
-                                {{ $attendance->notes }}
-                            </p>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        @endif
-
-        {{-- Volunteer's Assigned Tasks --}}
-        <div class="mt-8">
+        {{-- Lower grid: Assigned Tasks (left) and Attendance Summary (right) --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8">
+            {{-- Assigned Tasks (Card 3) --}}
+            <div class="h-full flex flex-col">
             <h2 class="text-xl font-bold text-[#1a2235] mb-4">Your Assigned Tasks</h2>
             @if($volunteerTasks->isNotEmpty())
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    <div class="flex flex-col lg:flex-row gap-4 flex-1">
                     @foreach($taskData as $data)
-                        <div
-                            class="bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-all duration-200 hover:shadow-sm">
-                            <div class="p-4">
+                            <div class="bg-white border border-gray-200 rounded-lg hover:border-gray-300 transition-all duration-200 hover:shadow-sm flex-1 flex flex-col">
+                                <div class="p-4 flex-1 flex flex-col">
                                 <div class="flex items-center justify-between mb-3">
                                     <x-feedback-status.status-indicator :status="$data['assignment']->status"
                                         :label="ucwords(str_replace('_', ' ', $data['assignment']->status))" />
                                 </div>
-
-                                <p class="text-gray-700 text-sm mb-4">{{ $data['task']->task_description }}</p>
-
+                                    <p class="text-gray-700 text-sm mb-4 flex-1">{{ $data['task']->task_description }}</p>
                                 <form
                                     action="{{ route('programs.tasks.assignments.update-status', [$program, $data['task'], $data['assignment']]) }}"
                                     method="POST" class="inline-flex w-full">
@@ -364,6 +299,58 @@
             @else
                 <x-empty-state icon="bx bx-task" title="No Tasks Assigned"
                     description="You have not been assigned any tasks for this program yet. Please check back later." />
+                @endif
+            </div>
+
+            {{-- Attendance Summary (Card 4) --}}
+            @if($attendance && ($attendance->clock_in || $attendance->clock_out))
+                <div class="h-full flex flex-col">
+                    <div class="bg-white border-2 border-gray-200 rounded-2xl p-4 sm:p-5 flex-1 flex flex-col">
+                        <h3 class="text-lg font-semibold text-[#1a2235] mb-4 pb-3 border-b border-gray-200">Attendance Summary</h3>
+                        <div class="space-y-4 flex-1">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600 font-medium">Approval Status</span>
+                                @if($attendance->approval_status == 'approved')
+                                    <span
+                                        class="font-medium text-green-600 bg-green-100 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1">
+                                        <i class='bx bx-check-circle'></i>
+                                        {{ ucfirst($attendance->approval_status) }}
+                                    </span>
+                                @elseif($attendance->approval_status == 'rejected')
+                                    <span
+                                        class="font-medium text-red-600 bg-red-100 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1">
+                                        <i class='bx bx-x-circle'></i>
+                                        {{ ucfirst($attendance->approval_status) }}
+                                    </span>
+                                @else
+                                    <span
+                                        class="font-medium text-yellow-600 bg-yellow-100 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1">
+                                        <i class='bx bx-time-five'></i>
+                                        {{ ucfirst($attendance->approval_status) }}
+                                    </span>
+                                @endif
+                            </div>
+                            @if($attendance->approved_by)
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600 font-medium">
+                                        {{ ucfirst($attendance->approval_status) }} by
+                                    </span>
+                                    <span class="font-semibold text-[#1a2235]">
+                                        {{ $attendance->approver->name ?? 'N/A' }}
+                                    </span>
+                                </div>
+                            @endif
+                            @if($attendance->notes)
+                                <div>
+                                    <span class="text-gray-600 font-medium">Notes / Reason</span>
+                                    <p class="text-gray-800 bg-gray-50 p-3 rounded-lg mt-2 text-sm border border-gray-200">
+                                        {{ $attendance->notes }}
+                                    </p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
             @endif
         </div>
         {{-- Partial --}}

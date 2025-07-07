@@ -2,7 +2,7 @@
     'type' => 'info', // success, error, info, warning
     'icon' => 'bx bx-info-circle',
     'message' => '',
-    'variant' => 'default', // default, attendance, or flexible
+    'variant' => 'default', // default, attendance, flexible, dark
     'bgColor' => '', // custom background color class for flexible variant
     'textColor' => '', // custom text color class for flexible variant
     'borderColor' => '', // custom border color class for flexible variant
@@ -38,6 +38,25 @@
             </div>
         </div>
     </div>
+@elseif($variant === 'dark')
+    @php
+        $darkBg = [
+            'success' => 'bg-green-900 border-green-400',
+            'error' => 'bg-red-900 border-red-400',
+            'info' => 'bg-slate-800 border-blue-400',
+            'warning' => 'bg-yellow-900 border-yellow-400',
+            'neutral' => 'bg-gray-800 border-gray-500',
+        ];
+        $darkClasses = $darkBg[$type] ?? $darkBg['info'];
+    @endphp
+    <div class="{{ $darkClasses }} border rounded-lg p-4 mb-4">
+        <div class="flex items-start gap-3">
+            <i class="{{ $icon }} text-white mt-0.5"></i>
+            <div class="text-sm text-white/90">
+                {!! $message !!}
+            </div>
+        </div>
+    </div>
 @else
     <div class="text-sm flex items-center gap-2 justify-center py-3 px-4 border rounded-lg {{ $classes }}">
         <i class="{{ $icon }}"></i>
@@ -59,6 +78,13 @@ Flexible variant with custom colors:
     textColor="text-purple-700" 
     borderColor="border-purple-200" 
     iconColor="text-purple-500" 
+/>
+
+Dark variant for dark backgrounds:
+<x-feedback-status.alert 
+    variant="dark" 
+    message="This is a dark alert!" 
+    icon="bx bx-info-circle" 
 />
 
 Used in:
