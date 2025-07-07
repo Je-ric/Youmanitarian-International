@@ -14,6 +14,114 @@
         </x-button>
     </div>
 </x-page-header>
+
+{{-- Button Variants Showcase --}}
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-semibold mb-4">Button Variants Showcase</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-white rounded-lg shadow mb-8">
+        <div>
+            <h3 class="text-lg font-medium mb-3">Basic Variants</h3>
+            <div class="space-y-2">
+                <x-button variant="primary">Primary</x-button>
+                <x-button variant="secondary">Secondary</x-button>
+                <x-button variant="success">Success</x-button>
+                <x-button variant="danger">Danger</x-button>
+                <x-button variant="warning">Warning</x-button>
+                <x-button variant="info">Info</x-button>
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Action Variants</h3>
+            <div class="space-y-2">
+                <x-button variant="manage">Manage</x-button>
+                <x-button variant="restore">Restore</x-button>
+                <x-button variant="approve">Approve</x-button>
+                <x-button variant="delete">Delete</x-button>
+                <x-button variant="cancel">Cancel</x-button>
+                <x-button variant="test">Test</x-button>
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Attendance & Table</h3>
+            <div class="space-y-2 bg-gradient-to-br from-gray-900 via-slate-800 to-indigo-900 p-4 rounded-lg">
+                <x-button variant="attendance">Attendance</x-button>
+                <x-button variant="attendance-dark">Attendance Dark</x-button>
+                <x-button variant="disabled" disabled>Disabled</x-button>
+                <x-button variant="disabled-dark" disabled>Disabled Dark</x-button>
+                <x-button variant="save-entry">Save Entry</x-button>
+                <x-button variant="manual-entry">Manual Entry</x-button>
+                <x-button variant="review-attendance">Review Attendance</x-button>
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Task & Table Actions</h3>
+            <div class="space-x-2 flex items-center">
+                <x-button variant="task-primary">Task Primary</x-button>
+                <x-button variant="task-secondary">Task Secondary</x-button>
+                <x-button variant="table-action-view"><i class="bx bx-show"></i></x-button>
+                <x-button variant="table-action-manage"><i class="bx bx-cog"></i></x-button>
+                <x-button variant="table-action-edit"><i class="bx bx-edit"></i></x-button>
+                <x-button variant="table-action-danger"><i class="bx bx-trash"></i></x-button>
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Attendance Approve/Reject</h3>
+            <div class="space-y-2">
+                <x-button variant="attendance-approve">Attendance Approve</x-button>
+                <x-button variant="attendance-reject">Attendance Reject</x-button>
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Other States</h3>
+            <div class="space-y-2">
+                <x-button variant="discard">Discard</x-button>
+                <x-button variant="assign">Assign</x-button>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- Alert Variants Showcase --}}
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-semibold mb-4">Alert Variants Showcase</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-white rounded-lg shadow mb-8">
+        <div>
+            <h3 class="text-lg font-medium mb-3">Default Alerts</h3>
+            <div class="space-y-2">
+                <x-feedback-status.alert type="success" message="This is a success alert." />
+                <x-feedback-status.alert type="error" message="This is an error alert." />
+                <x-feedback-status.alert type="info" message="This is an info alert." />
+                <x-feedback-status.alert type="warning" message="This is a warning alert." />
+                <x-feedback-status.alert type="neutral" message="This is a neutral alert." />
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Attendance Alerts</h3>
+            <div class="space-y-2">
+                <x-feedback-status.alert variant="attendance" type="success" message="Attendance success alert." />
+                <x-feedback-status.alert variant="attendance" type="error" message="Attendance error alert." />
+                <x-feedback-status.alert variant="attendance" type="info" message="Attendance info alert." />
+                <x-feedback-status.alert variant="attendance" type="warning" message="Attendance warning alert." />
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Flexible Alerts</h3>
+            <div class="space-y-2">
+                <x-feedback-status.alert variant="flexible" message="Custom flexible alert (purple)" bgColor="bg-purple-50" textColor="text-purple-700" borderColor="border-purple-200" iconColor="text-purple-500" />
+                <x-feedback-status.alert variant="flexible" message="Custom flexible alert (emerald)" bgColor="bg-emerald-50" textColor="text-emerald-700" borderColor="border-emerald-200" iconColor="text-emerald-500" />
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Dark Alerts</h3>
+            <div class="space-y-2 bg-gradient-to-br from-gray-900 via-slate-800 to-indigo-900 p-4 rounded-lg">
+                <x-feedback-status.alert variant="dark" type="success" message="Dark success alert." />
+                <x-feedback-status.alert variant="dark" type="error" message="Dark error alert." />
+                <x-feedback-status.alert variant="dark" type="info" message="Dark info alert." />
+                <x-feedback-status.alert variant="dark" type="warning" message="Dark warning alert." />
+                <x-feedback-status.alert variant="dark" type="neutral" message="Dark neutral alert." />
+            </div>
+        </div>
+    </div>
+</div>
 <x-navigation-layout.tabs-modern
 :tabs="[
     ['id' => 'modern1', 'label' => 'Overview', 'icon' => 'bx-home'],

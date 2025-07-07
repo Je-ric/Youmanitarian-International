@@ -29,123 +29,103 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
 
             <section
-                class="bg-white border-2 border-gray-200 col-span-1 lg:col-span-2 w-full p-4 sm:p-5 bg-neutral-50 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200 flex flex-col gap-4 sm:gap-7">
+                class="bg-white rounded-3xl shadow-xl ring-1 ring-slate-100 col-span-1 lg:col-span-2 w-full p-4 sm:p-6 flex flex-col gap-6 transition hover:shadow-2xl">
 
-                <div
-                    class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-3 pb-3 border-b border-gray-100">
-                    <h2 class="text-xl lg:text-2xl font-bold text-[#1a2235]">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-100 pb-3 mb-2">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                        <i class="bx bx-calendar-event w-6 h-6 text-indigo-600"></i>
                         {{ $program->title }}
                     </h2>
                     <x-feedback-status.programProgress :program="$program" />
                 </div>
 
-                {{-- Description --}}
-                <div class="mb-8">
-                    <h3 class="text-[#1a2235] font-semibold mb-3 flex items-center">
-                        <i class='bx bx-file-blank mr-2 text-lg'></i>
+                <div class="space-y-2">
+                    <x-form.label class="text-slate-700">
+                        <i class="bx bx-file-blank w-5 h-5 text-indigo-600"></i>
                         Description
-                    </h3>
-                    <p class="text-gray-700 leading-relaxed text-justify">
+                    </x-form.label>
+                    <p class="leading-relaxed text-slate-600">
                         {{ $program->description }}
                     </p>
                 </div>
 
-                {{-- Program Details Grid --}}
-                <div class="space-y-4">
-                    <h3 class="text-[#1a2235] font-semibold mb-4 flex items-center">
-                        <i class='bx bx-info-circle mr-2 text-lg'></i>
-                        Program Details
-                    </h3>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {{-- Date --}}
-                        <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class='bx bx-calendar text-[#1a2235]'></i>
-                            </div>
-                            <div>
-                                <div class="font-medium text-[#1a2235] text-sm">Date</div>
-                                <div class="text-gray-700">
-                                    {{ \Carbon\Carbon::parse($program->date)->format('F j, Y') }}
-                                </div>
-                            </div>
+                <div class="pt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {{-- Date --}}
+                    <div class="flex items-start gap-3">
+                        <span class="flex items-center justify-center w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl">
+                            <i class="bx bx-calendar w-5 h-5"></i>
+                        </span>
+                        <div>
+                            <p class="text-sm font-medium text-slate-700">Date</p>
+                            <p class="text-slate-600">{{ \Carbon\Carbon::parse($program->date)->format('F j, Y') }}</p>
                         </div>
+                    </div>
 
-                        {{-- Time --}}
-                        <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class='bx bx-time text-[#1a2235]'></i>
-                            </div>
-                            <div>
-                                <div class="font-medium text-[#1a2235] text-sm">Time</div>
-                                <div class="text-gray-700">
-                                    {{ $program->end_time
-        ? \Carbon\Carbon::parse($program->start_time)->format('g:ia') . ' - ' . \Carbon\Carbon::parse($program->end_time)->format('g:ia')
-        : \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}
-                                </div>
-                            </div>
+                    {{-- Time --}}
+                    <div class="flex items-start gap-3">
+                        <span class="flex items-center justify-center w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl">
+                            <i class="bx bx-time w-5 h-5"></i>
+                        </span>
+                        <div>
+                            <p class="text-sm font-medium text-slate-700">Time</p>
+                            <p class="text-slate-600">
+                                {{ $program->end_time
+                                    ? \Carbon\Carbon::parse($program->start_time)->format('g:ia') . ' - ' . \Carbon\Carbon::parse($program->end_time)->format('g:ia')
+                                    : \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}
+                            </p>
                         </div>
+                    </div>
 
-                        {{-- Location --}}
-                        <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class='bx bx-map text-[#1a2235]'></i>
-                            </div>
-                            <div>
-                                <div class="font-medium text-[#1a2235] text-sm">Location</div>
-                                <div class="text-gray-700">
-                                    {{ $program->location ?? 'N/A' }}
-                                </div>
-                            </div>
+                    {{-- Location --}}
+                    <div class="flex items-start gap-3">
+                        <span class="flex items-center justify-center w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl">
+                            <i class="bx bx-map w-5 h-5"></i>
+                        </span>
+                        <div>
+                            <p class="text-sm font-medium text-slate-700">Location</p>
+                            <p class="text-slate-600">{{ $program->location ?? 'N/A' }}</p>
                         </div>
+                    </div>
 
-                        {{-- Coordinator --}}
-                        <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                <i class='bx bx-user text-[#1a2235]'></i>
-                            </div>
-                            <div>
-                                <div class="font-medium text-[#1a2235] text-sm">Coordinator</div>
-                                <div class="text-gray-700">
-                                    {{ $program->creator->name }}
-                                </div>
-                            </div>
+                    {{-- Coordinator --}}
+                    <div class="flex items-start gap-3">
+                        <span class="flex items-center justify-center w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl">
+                            <i class="bx bx-user w-5 h-5"></i>
+                        </span>
+                        <div>
+                            <p class="text-sm font-medium text-slate-700">Coordinator</p>
+                            <p class="text-slate-600">{{ $program->creator->name }}</p>
                         </div>
                     </div>
                 </div>
-
             </section>
 
             <div
-                class="col-span-1 card bg-gradient-to-br from-gray-900 via-slate-800 to-indigo-900 rounded-2xl outline outline-2 outline-offset-[-2px] outline-neutral-200 text-white">
+                class="col-span-1 card bg-gradient-to-br from-gray-900 via-slate-800 to-indigo-900 rounded-2xl shadow-lg ring-1 ring-slate-100 outline outline-2 outline-offset-[-2px] outline-neutral-200 text-white">
                 <div class="card-body p-4 sm:p-6 space-y-3 sm:space-y-4">
 
-                    <div class="mb-3">
-                        <h2 class="text-xl font-bold text-white mb-2">
+                    <div class="mb-3 flex flex-row justify-between items-center">
+                        <h2 class="text-2xl font-bold text-white mb-2">
                             Your Attendance
                         </h2>
 
-                        {{-- Status Indicator --}}
-                        <div class="flex items-center gap-2 mb-3">
-                            <span class="text-sm text-white/80">Attendance:</span>
-                            <div class="flex items-center gap-2">
-                                @if($clockInTime && $clockOutTime && $program->progress_status === 'done')
-                                    <div class="w-2 h-2 bg-green-400 rounded-full"></div>
-                                    <span class="text-sm font-medium text-green-200">Complete</span>
-                                @elseif($clockInTime && !$clockOutTime && $program->progress_status === 'done')
-                                    <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
-                                    <span class="text-sm font-medium text-orange-200">Missed Clock Out</span>
-                                @elseif(!$clockInTime && !$clockOutTime && $program->progress_status === 'done')
-                                    <div class="w-2 h-2 bg-red-400 rounded-full"></div>
-                                    <span class="text-sm font-medium text-red-200">No Record</span>
-                                @elseif($clockInTime)
-                                    <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
-                                    <span class="text-sm font-medium text-blue-200">Clocked In</span>
-                                @else
-                                    <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
-                                    <span class="text-sm font-medium text-white/80">Not Clocked In</span>
-                                @endif
-                            </div>
+                        <div class="flex items-center gap-2">
+                            @if($clockInTime && $clockOutTime && $program->progress_status === 'done')
+                                <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                                <span class="text-sm font-medium text-green-200">Complete</span>
+                            @elseif($clockInTime && !$clockOutTime && $program->progress_status === 'done')
+                                <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
+                                <span class="text-sm font-medium text-orange-200">Missed Clock Out</span>
+                            @elseif(!$clockInTime && !$clockOutTime && $program->progress_status === 'done')
+                                <div class="w-2 h-2 bg-red-400 rounded-full"></div>
+                                <span class="text-sm font-medium text-red-200">No Record</span>
+                            @elseif($clockInTime)
+                                <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+                                <span class="text-sm font-medium text-blue-200">Clocked In</span>
+                            @else
+                                <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+                                <span class="text-sm font-medium text-white/80">Not Clocked In</span>
+                            @endif
                         </div>
                     </div>
 
@@ -263,7 +243,10 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8">
             {{-- Assigned Tasks (Card 3) --}}
             <div class="h-full flex flex-col">
-            <h2 class="text-xl font-bold text-[#1a2235] mb-4">Your Assigned Tasks</h2>
+                <h2 class="text-2xl font-bold text-[#1a2235] mb-2 flex items-center gap-2">
+                    <i class="bx bx-list-check text-2xl text-indigo-600"></i>
+                    Your Assigned Tasks
+                </h2>
             @if($volunteerTasks->isNotEmpty())
                     <div class="flex flex-col lg:flex-row gap-4 flex-1">
                     @foreach($taskData as $data)
@@ -304,48 +287,31 @@
 
             {{-- Attendance Summary (Card 4) --}}
             @if($attendance && ($attendance->clock_in || $attendance->clock_out))
-                <div class="h-full flex flex-col">
-                    <div class="bg-white border-2 border-gray-200 rounded-2xl p-4 sm:p-5 flex-1 flex flex-col">
-                        <h3 class="text-lg font-semibold text-[#1a2235] mb-4 pb-3 border-b border-gray-200">Attendance Summary</h3>
+                <div class="h-full flex flex-col shadow-lg rounded-2xl ring-1 ring-slate-100 transition hover:shadow-2xl">
+                    <div class="bg-white rounded-2xl p-4 sm:p-5 flex-1 flex flex-col">
+                        <h2 class="text-2xl font-bold text-[#1a2235] mb-2 pb-3 border-b border-gray-200">Attendance Summary</h2>
                         <div class="space-y-4 flex-1">
                             <div class="flex justify-between items-center">
-                                <span class="text-gray-600 font-medium">Approval Status</span>
-                                @if($attendance->approval_status == 'approved')
-                                    <span
-                                        class="font-medium text-green-600 bg-green-100 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1">
-                                        <i class='bx bx-check-circle'></i>
-                                        {{ ucfirst($attendance->approval_status) }}
-                                    </span>
-                                @elseif($attendance->approval_status == 'rejected')
-                                    <span
-                                        class="font-medium text-red-600 bg-red-100 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1">
-                                        <i class='bx bx-x-circle'></i>
-                                        {{ ucfirst($attendance->approval_status) }}
-                                    </span>
-                                @else
-                                    <span
-                                        class="font-medium text-yellow-600 bg-yellow-100 px-3 py-1 rounded-full text-sm inline-flex items-center gap-1">
-                                        <i class='bx bx-time-five'></i>
-                                        {{ ucfirst($attendance->approval_status) }}
-                                    </span>
-                                @endif
+                                <x-form.label class="text-gray-600 font-medium mb-0">Approval Status</x-form.label>
+                                <x-feedback-status.status-indicator 
+                                    :status="$attendance->approval_status" 
+                                    :label="ucfirst($attendance->approval_status)" 
+                                />
                             </div>
-                            @if($attendance->approved_by)
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-600 font-medium">
-                                        {{ ucfirst($attendance->approval_status) }} by
-                                    </span>
-                                    <span class="font-semibold text-[#1a2235]">
-                                        {{ $attendance->approver->name ?? 'N/A' }}
-                                    </span>
-                                </div>
-                            @endif
+                            <div class="flex justify-between items-center">
+                                <x-form.label class="text-gray-600 font-medium mb-0">
+                                    {{ ucfirst($attendance->approval_status) }} by
+                                </x-form.label>
+                                <x-form.readonly class="max-w-xs text-sm text-gray-700 mb-0">
+                                    {{ $attendance->approver->name ?? 'Not yet approved' }}
+                                </x-form.readonly>
+                            </div>
                             @if($attendance->notes)
                                 <div>
-                                    <span class="text-gray-600 font-medium">Notes / Reason</span>
-                                    <p class="text-gray-800 bg-gray-50 p-3 rounded-lg mt-2 text-sm border border-gray-200">
+                                    <x-form.label class="text-gray-600 font-medium mb-0">Notes / Reason </x-form.label>
+                                    <x-form.readonly class="max-w-xs text-sm text-gray-700 mb-0">
                                         {{ $attendance->notes }}
-                                    </p>
+                                    </x-form.readonly>
                                 </div>
                             @endif
                         </div>
