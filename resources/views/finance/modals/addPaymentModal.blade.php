@@ -65,10 +65,11 @@
                                 @else
                                 <div class="space-y-2">
                                     <x-form.input
+                                        id="amount-{{ $modalId }}"
                                         name="amount"
                                         type="number"
                                         step="0.01"
-                                               placeholder="0.00"
+                                        placeholder="0.00"
                                         :value="$payment ? $payment->amount : ''"
                                         required
                                         class="pl-8"
@@ -83,12 +84,12 @@
                                     {{-- Quick Amount Checkbox --}}
                                     <div class="flex items-center space-x-2">
                                         <x-form.checkbox 
-                                            id="quick_amount" 
+                                            id="quick_amount-{{ $modalId }}" 
                                             name="quick_amount" 
                                             value="500.00"
-                                            onchange="document.getElementById('amount').value = this.checked ? this.value : ''"
+                                            onchange="document.getElementById('amount-{{ $modalId }}').value = this.checked ? this.value : ''"
                                         />
-                                        <label for="quick_amount" class="text-sm text-gray-700 font-medium">
+                                        <label for="quick_amount-{{ $modalId }}" class="text-sm text-gray-700 font-medium">
                                             Quick Amount: ₱500.00
                                         </label>
                                     </div>
@@ -104,6 +105,11 @@
                                 Payment Method
                             </x-form.label>
                                 <x-form.readonly>{{ $paymentMethods[$payment->payment_method] ?? ucfirst(str_replace('_', ' ', $payment->payment_method)) }}</x-form.readonly>
+                                @if($payment && $payment->recorded_by)
+                                    <div class="mt-1 text-xs text-gray-500">
+                                        Recorded by: <span class="font-semibold text-gray-700">{{ optional($payment->recorder)->name ?? 'Unknown' }}</span>
+                                    </div>
+                                @endif
                             @else
                                 <x-form.select-option
                                     name="payment_method"
@@ -119,6 +125,11 @@
                                         <option value="{{ $value }}" {{ (isset($payment) && $payment->payment_method == $value) ? 'selected' : '' }}>{{ $label }}</option>
                                     @endforeach
                                 </x-form.select-option>
+                                @if($payment && $payment->recorded_by)
+                                    <div class="mt-1 text-xs text-gray-500">
+                                        Recorded by: <span class="font-semibold text-gray-700">{{ optional($payment->recorder)->name ?? 'Unknown' }}</span>
+                                    </div>
+                                @endif
                             @endif
                         </div>
                     </div>
@@ -219,7 +230,7 @@
                             @endif
                         </div>
                     @else
-                        <x-form.input-upload name="receipt" accept="image/*,.pdf" required>
+                        <x-form.input-upload name="receipt" :id="'receipt-'.$modalId" accept="image/*,.pdf" required>
                             PNG, JPG, PDF up to 10MB
                         </x-form.input-upload>
                     @endif
@@ -237,4 +248,9 @@
                 @endif
             </x-modal.footer>
         </form>
+        @if($payment && $payment->recorded_by)
+            <div class="mt-2 text-xs text-gray-500">
+                Recorded by: <span class="font-semibold text-gray-700">{{ optional($payment->recorder)->name ?? 'Unknown' }}</span>
+            </div>
+        @endif
 </x-modal.dialog>

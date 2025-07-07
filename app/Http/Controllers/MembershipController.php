@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class MembershipController extends Controller
 {
@@ -99,29 +100,67 @@ class MembershipController extends Controller
             ->first();
 
         if ($existingPayment) {
-            return back()->with('error', 'A payment for this period already exists.');
+            // overwrite if payment is pending, overdue, or a virtual/blank record
+            $isVirtual = $existingPayment->amount == 0 && $existingPayment->notes === 'Virtual payment record created for reminder';
+            $canOverwrite = $existingPayment->payment_status === 'pending' || $existingPayment->payment_status === 'overdue' || $isVirtual;
+
+            if ($canOverwrite) {
+                $data = $request->except('receipt');
+                $data['payment_status'] = 'paid';
+                $data['recorded_by'] = Auth::id();
+
+                if ($request->hasFile('receipt')) {
+                    $file = $request->file('receipt');
+                    $sanitizedName = preg_replace('/[^A-Za-z0-9\-]/', '', $member->user->name);
+                    $quarter = $request->payment_period;
+                    $year = $request->payment_year;
+                    $timestamp = time();
+                    $extension = $file->getClientOriginalExtension();
+                    $newFilename = "{$sanitizedName}_{$quarter}_{$year}_{$timestamp}.{$extension}";
+                    $storagePath = $file->storeAs('uploads/membership_proof', $newFilename, 'public');
+                    $data['receipt_url'] = $storagePath;
+                }
+
+                $existingPayment->update($data);
+
+                return back()->with('toast', [
+                    'type' => 'success',
+                    'message' => 'Payment updated successfully.'
+                ]);
+            } else {
+                // If payment is already paid
+                return back()->with('toast', [
+                    'type' => 'error',
+                    'message' => 'A payment for this period already exists and is marked as paid.'
+                ]);
+            }
+        } else {
+            // If no payment exists, create a new one
+            $data = $request->except('receipt');
+            $data['payment_status'] = 'paid';
+            $data['recorded_by'] = Auth::id();
+
+            if ($request->hasFile('receipt')) {
+                $file = $request->file('receipt');
+                $sanitizedName = preg_replace('/[^A-Za-z0-9\-]/', '', $member->user->name);
+                $quarter = $request->payment_period;
+                $year = $request->payment_year;
+                $timestamp = time();
+                $extension = $file->getClientOriginalExtension();
+                $newFilename = "{$sanitizedName}_{$quarter}_{$year}_{$timestamp}.{$extension}";
+                $storagePath = $file->storeAs('uploads/membership_proof', $newFilename, 'public');
+                $data['receipt_url'] = $storagePath;
+            }
+             // [MemberName]_[Quarter]_[Year]_[timestamp].jpg
+            // JericDelaCruz_Q2_2025_1717581234.jpg
+
+            $member->payments()->create($data);
+
+            return back()->with('toast', [
+                'type' => 'success',
+                'message' => 'Payment recorded successfully.'
+            ]);
         }
-
-        $data = $request->except('receipt');
-        $data['payment_status'] = 'paid';
-
-        if ($request->hasFile('receipt')) {
-            $file = $request->file('receipt');
-            $sanitizedName = preg_replace('/[^A-Za-z0-9\-]/', '', $member->user->name);
-            $quarter = $request->payment_period;
-            $year = $request->payment_year;
-            $timestamp = time();
-            $extension = $file->getClientOriginalExtension();
-            $newFilename = "{$sanitizedName}_{$quarter}_{$year}_{$timestamp}.{$extension}";
-            $storagePath = $file->storeAs('uploads/membership_proof', $newFilename, 'public');
-            $data['receipt_url'] = $storagePath;
-        }     
-        // [MemberName]_[Quarter]_[Year]_[timestamp].jpg
-        // JericDelaCruz_Q2_2025_1717581234.jpg
-
-        $member->payments()->create($data);
-
-        return back()->with('success', 'Payment recorded successfully.');
     }
 
     public function updateStatus(MembershipPayment $payment, Request $request)
