@@ -1,5 +1,5 @@
 <!-- Role Assignment Modal -->
-<x-modal.dialog id="assignRolesModal_{{ $user->id }}" maxWidth="max-w-2xl" width="w-full" maxHeight="max-h-[90vh]">
+<x-modal.dialog id="assignRolesModal_{{ $roleType ?? 'default' }}_{{ $user->id }}" maxWidth="max-w-2xl" width="w-full" maxHeight="max-h-[90vh]">
         <!-- Modal Header -->
         <x-modal.header>
             <div class="flex items-center gap-3">
@@ -31,7 +31,7 @@
 
         <!-- Modal Body -->
         <x-modal.body>
-            <form method="POST" action="{{ route('roles.assign') }}" id="roleForm_{{ $user->id }}">
+            <form method="POST" action="{{ route('roles.assign') }}" id="roleForm_{{ $roleType ?? 'default' }}_{{ $user->id }}">
                 @csrf
                 <input type="hidden" name="user_id" value="{{ $user->id }}">
                 
@@ -100,7 +100,7 @@
                     @else
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             @foreach($additionalRoles as $role)
-                                <label for="role_{{ $user->id }}_{{ $role->id }}" 
+                                <label for="role_{{ $roleType ?? 'default' }}_{{ $user->id }}_{{ $role->id }}" 
                                        class="relative flex items-start p-4 bg-white border border-gray-200 rounded-lg hover:border-[#ffb51b] hover:bg-gray-50 transition-all duration-200 cursor-pointer group">
                                     
                                     <!-- Checkbox -->
@@ -108,7 +108,7 @@
                                         <x-form.checkbox
                                             name="roles[]" 
                                             value="{{ $role->id }}" 
-                                            id="role_{{ $user->id }}_{{ $role->id }}"
+                                            id="role_{{ $roleType ?? 'default' }}_{{ $user->id }}_{{ $role->id }}"
                                             :checked="$user->roles->pluck('id')->contains($role->id)"
                                         />
                                     </div>
@@ -147,10 +147,10 @@
 
         <!-- Modal Footer -->
         <x-modal.footer>
-            <x-modal.close-button :modalId="'assignRolesModal_' . $user->id" text="Cancel" variant="cancel" />
+            <x-modal.close-button :modalId="'assignRolesModal_' . ($roleType ?? 'default') . '_' . $user->id" text="Cancel" variant="cancel" />
             <button 
                 type="submit" 
-                form="roleForm_{{ $user->id }}"
+                form="roleForm_{{ $roleType ?? 'default' }}_{{ $user->id }}"
                 class="px-6 py-2 text-sm font-medium text-[#1a2235] bg-[#ffb51b] hover:bg-[#e6a319] rounded-lg transition-colors duration-200 flex items-center gap-2">
                 <i class='bx bx-save'></i>
                 Save Changes

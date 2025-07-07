@@ -14,18 +14,88 @@ class RoleController extends Controller
     public function gotoRolesList()
     {
         $allUsers = User::with('roles')->get();
-        $users = User::with('roles')->paginate(10);
         $roles = Role::all();
+
+        // Get users for each role
+        $volunteerUsers = $allUsers->filter(fn($user) => $user->hasRole('Volunteer'));
+        $adminUsers = $allUsers->filter(fn($user) => $user->hasRole('Admin'));
+        $programCoordinatorUsers = $allUsers->filter(fn($user) => $user->hasRole('Program Coordinator'));
+        $financialCoordinatorUsers = $allUsers->filter(fn($user) => $user->hasRole('Financial Coordinator'));
+        $contentManagerUsers = $allUsers->filter(fn($user) => $user->hasRole('Content Manager'));
+        $memberUsers = $allUsers->filter(fn($user) => $user->hasRole('Member'));
+
+        // Paginate each role's users
+        $perPage = 10;
+        $currentPage = request()->get('page', 1);
+        
+        $volunteerUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+            $volunteerUsers->forPage($currentPage, $perPage),
+            $volunteerUsers->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        $adminUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+            $adminUsers->forPage($currentPage, $perPage),
+            $adminUsers->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        $programCoordinatorUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+            $programCoordinatorUsers->forPage($currentPage, $perPage),
+            $programCoordinatorUsers->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        $financialCoordinatorUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+            $financialCoordinatorUsers->forPage($currentPage, $perPage),
+            $financialCoordinatorUsers->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        $contentManagerUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+            $contentManagerUsers->forPage($currentPage, $perPage),
+            $contentManagerUsers->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        $memberUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+            $memberUsers->forPage($currentPage, $perPage),
+            $memberUsers->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
 
         $activeUsers = $allUsers->filter(fn($user) => $user->is_active);
         $usersWithoutRoles = $allUsers->filter(fn($user) => $user->roles->isEmpty());
 
         return view('roles.index', compact(
-            'users',
             'allUsers',
             'roles',
             'activeUsers',
-            'usersWithoutRoles'
+            'usersWithoutRoles',
+            'volunteerUsers',
+            'adminUsers',
+            'programCoordinatorUsers',
+            'financialCoordinatorUsers',
+            'contentManagerUsers',
+            'memberUsers',
+            'volunteerUsersPaginated',
+            'adminUsersPaginated',
+            'programCoordinatorUsersPaginated',
+            'financialCoordinatorUsersPaginated',
+            'contentManagerUsersPaginated',
+            'memberUsersPaginated'
         ));
     }
 

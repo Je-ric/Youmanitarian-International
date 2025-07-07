@@ -4,7 +4,7 @@
         <x-overview.stat-card
             icon="bx-user"
             title="Total Users"
-            :value="$users->count()"
+            :value="$allUsers->count()"
             href="{{ route('roles.index', ['tab' => 'users']) }}"
             bgColor="bg-blue-100"
             iconColor="text-blue-500"
@@ -43,8 +43,8 @@
         <div class="space-y-3 sm:space-y-4">
             @foreach($roles as $role)
                 @php
-                    $usersWithRole = $users->filter(fn($user) => $user->roles->contains('id', $role->id))->count();
-                    $percentage = $users->count() > 0 ? round(($usersWithRole / $users->count()) * 100) : 0;
+                    $usersWithRole = $allUsers->filter(fn($user) => $user->roles->contains('id', $role->id))->count();
+                    $percentage = $allUsers->count() > 0 ? round(($usersWithRole / $allUsers->count()) * 100) : 0;
                 @endphp
                 <div class="flex items-center justify-between border-b pb-2 sm:pb-3 last:border-0">
                     <div class="flex items-center space-x-2 sm:space-x-3">
