@@ -148,12 +148,9 @@
         {{-- Modal Footer Section --}}
         <x-modal.footer>
             <x-modal.close-button :modalId="'assignRolesModal_' . ($roleType ?? 'default') . '_' . $user->id" text="Cancel" variant="cancel" />
-            <button 
-                type="submit" 
-                form="roleForm_{{ $roleType ?? 'default' }}_{{ $user->id }}"
-                class="px-6 py-2 text-sm font-medium text-[#1a2235] bg-[#ffb51b] hover:bg-[#e6a319] rounded-lg transition-colors duration-200 flex items-center gap-2">
+            <x-button type="submit" form="roleForm_{{ $roleType ?? 'default' }}_{{ $user->id }}" variant="save-entry">
                 <i class='bx bx-save'></i>
                 Save Changes
-            </button>
+            </x-button>
         </x-modal.footer>
 </x-modal.dialog>

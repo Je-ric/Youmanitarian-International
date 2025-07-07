@@ -8,7 +8,6 @@ $variant = [
     'info'    => 'bg-blue-50 text-blue-500',
     'warning' => 'bg-yellow-50 text-yellow-500',
     'danger'  => 'bg-red-50 text-red-500',
-    
     // Program/Volunteer statuses
     'completed' => 'bg-green-100 text-green-700',
     'in_progress' => 'bg-blue-50 text-blue-700',
@@ -16,7 +15,6 @@ $variant = [
     'rejected' => 'bg-red-50 text-red-600',
     'approved' => 'bg-green-50 text-green-600',
     'role' => 'bg-[#1a2235] text-white',
-    
     // Content Types
     'news' => 'bg-blue-100 text-blue-700',
     'program' => 'bg-green-100 text-green-700',
@@ -24,14 +22,19 @@ $variant = [
     'event' => 'bg-purple-100 text-purple-700',
     'article' => 'bg-indigo-100 text-indigo-700',
     'blog' => 'bg-pink-100 text-pink-700',
-    
     // Content Statuses
     'draft' => 'bg-gray-100 text-gray-700',
     'published' => 'bg-green-100 text-green-700',
     'archived' => 'bg-red-100 text-red-700',
-    
     // Approval Statuses
     'needs_revision' => 'bg-orange-100 text-orange-700',
+    // Role-based 
+    'volunteer' => 'bg-blue-600 text-white',
+    'admin' => 'bg-purple-700 text-white',
+    'program-coordinator' => 'bg-green-700 text-white',
+    'financial-coordinator' => 'bg-yellow-600 text-white',
+    'content-manager' => 'bg-indigo-700 text-white',
+    'member' => 'bg-orange-600 text-white',
 ];
 
 $icons = [
@@ -41,7 +44,6 @@ $icons = [
     'info' => 'bx bx-info-circle',
     'warning' => 'bx bx-time',
     'danger' => 'bx bx-x-circle',
-    
     // Program/Volunteer statuses
     'completed' => 'bx bx-check-circle',
     'in_progress' => 'bx bx-time',
@@ -49,7 +51,6 @@ $icons = [
     'rejected' => 'bx bx-x',
     'approved' => 'bx bx-check-double',
     'role' => 'bx bx-check-circle text-xs',
-    
     // Content Types
     'news' => 'bx bx-news',
     'program' => 'bx bx-calendar-event',
@@ -57,14 +58,19 @@ $icons = [
     'event' => 'bx bx-calendar-star',
     'article' => 'bx bx-file-text',
     'blog' => 'bx bx-pencil',
-    
     // Content Statuses
     'draft' => 'bx bx-edit',
     'published' => 'bx bx-check-circle',
     'archived' => 'bx bx-archive',
-    
     // Approval Statuses
     'needs_revision' => 'bx bx-refresh',
+    // Role-based icons
+    'volunteer' => 'bx bx-user',
+    'admin' => 'bx bx-crown',
+    'program-coordinator' => 'bx bx-calendar-event',
+    'financial-coordinator' => 'bx bx-wallet',
+    'content-manager' => 'bx bx-edit-alt',
+    'member' => 'bx bx-group',
 ];
 
 $style = $variant[$status] ?? 'bg-gray-300 text-black';

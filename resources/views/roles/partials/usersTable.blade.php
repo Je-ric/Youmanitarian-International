@@ -1,5 +1,4 @@
 <div class="space-y-4">
-    {{-- Users Table Section --}}
     @if($users->count() > 0)
         <x-table.table containerClass="overflow-x-auto" tableClass="min-w-full">
             <x-table.thead>
@@ -39,19 +38,19 @@
                             <div class="flex flex-wrap gap-2">
                                 @forelse($user->roles as $role)
                                     @php
-                                        $roleBadgeColor = match($role->role_name) {
-                                            'Volunteer' => 'bg-blue-100 text-blue-800',
-                                            'Admin' => 'bg-purple-100 text-purple-800',
-                                            'Program Coordinator' => 'bg-green-100 text-green-800',
-                                            'Financial Coordinator' => 'bg-yellow-100 text-yellow-800',
-                                            'Content Manager' => 'bg-indigo-100 text-indigo-800',
-                                            'Member' => 'bg-orange-100 text-orange-800',
-                                            default => 'bg-gray-100 text-gray-800'
+                                        $variant = match($role->role_name) {
+                                            'Volunteer' => 'volunteer',
+                                            'Admin' => 'admin',
+                                            'Program Coordinator' => 'program-coordinator',
+                                            'Financial Coordinator' => 'financial-coordinator',
+                                            'Content Manager' => 'content-manager',
+                                            'Member' => 'member',
+                                            default => 'role'
                                         };
                                     @endphp
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $roleBadgeColor }}">
-                                        {{ $role->role_name }}
-                                    </span>
+                                    <x-feedback-status.status-indicator 
+                                            :label="$role->role_name" 
+                                            :status="$variant" />
                                 @empty
                                     <span class="text-gray-500 text-sm">No roles assigned</span>
                                 @endforelse
@@ -77,7 +76,7 @@
         {{-- Empty State Section --}}
         <div class="text-center py-12">
             <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                <i class='bx {{ $roleIcon }} text-gray-400 text-2xl'></i>
+                <i class='bx bx-user text-gray-400 text-2xl'></i>
             </div>
             <h3 class="text-lg font-medium text-gray-900 mb-1">No {{ $roleName }}s Found</h3>
             <p class="text-gray-500">There are no users assigned to this role yet.</p>
