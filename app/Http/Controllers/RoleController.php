@@ -13,14 +13,16 @@ class RoleController extends Controller
 {
     public function gotoRolesList()
     {
+        $allUsers = User::with('roles')->get();
         $users = User::with('roles')->paginate(10);
         $roles = Role::all();
 
-        $activeUsers = $users->filter(fn($user) => $user->is_active);
-        $usersWithoutRoles = $users->filter(fn($user) => $user->roles->isEmpty());
+        $activeUsers = $allUsers->filter(fn($user) => $user->is_active);
+        $usersWithoutRoles = $allUsers->filter(fn($user) => $user->roles->isEmpty());
 
         return view('roles.index', compact(
             'users',
+            'allUsers',
             'roles',
             'activeUsers',
             'usersWithoutRoles'

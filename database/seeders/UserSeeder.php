@@ -7,15 +7,29 @@ use App\Models\User;
 use App\Models\VolunteerApplication;
 use App\Models\Volunteer;
 use App\Models\Member;
+use App\Models\Role;
 
 class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create 5 users
+        // Get or create the Volunteer role
+        $volunteerRole = Role::where('role_name', 'Volunteer')->first();
+        
+        if (!$volunteerRole) {
+            throw new \Exception('Volunteer role not found. Please run RoleSeeder first.');
+        }
+
+        // Create 20 users
         $users = User::factory(20)->create();
 
         foreach ($users as $user) {
+            // Assign Volunteer role to each user
+            $user->roles()->attach($volunteerRole->id, [
+                'assigned_by' => null,
+                'assigned_at' => now()
+            ]);
+
             // Create a volunteer for each user
             $volunteer = Volunteer::factory()->create([
                 'user_id' => $user->id,

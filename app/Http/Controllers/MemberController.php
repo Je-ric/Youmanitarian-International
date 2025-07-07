@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\User;
 use App\Models\Volunteer;
 use App\Models\MembershipPayment;
+use App\Models\Role;
 use App\Mail\MemberInvitation;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
@@ -221,14 +222,33 @@ class MemberController extends Controller
 
     public function acceptInvitation(Member $member)
     {
-        $member->update([
-            'membership_status' => 'active',
-            'invitation_status' => 'accepted',
-            'start_date' => now()
-        ]);
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('dashboard')
-            ->with('success', 'You have successfully accepted the membership invitation!');
+            $member->update([
+                'membership_status' => 'active',
+                'invitation_status' => 'accepted',
+                'start_date' => now()
+            ]);
+
+            // Assign Member role if not already assigned
+            $memberRole = Role::where('role_name', 'Member')->first();
+            if ($memberRole && !$member->user->hasRole('Member')) {
+                $member->user->roles()->attach($memberRole->id, [
+                    'assigned_by' => null,
+                    'assigned_at' => now()
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()->route('dashboard')
+                ->with('success', 'You have successfully accepted the membership invitation!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('dashboard')
+                ->with('error', 'Failed to accept membership invitation. Please try again.');
+        }
     }
 
     public function declineInvitation(Member $member)
