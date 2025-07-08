@@ -121,39 +121,10 @@ Route::middleware(['auth', 'role:Content Manager'])->group(function () {
 });
 
 // =================================================================
-// VOLUNTEER (All user are Volunteers - not literally)
-// =================================================================
-
-Route::middleware(['auth', 'role:Volunteer'])->group(function () {
-    
-    // VOLUNTEER APPLICATION
-    Route::get('/volunteers/application-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
-    Route::post('/volunteers/apply', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
-
-    // Program viewing (read-only access)
-    Route::get('/programs/list', [ProgramController::class, 'gotoProgramsList'])->name('programs.index');
-    Route::get('/programs/{program}', [ProgramController::class, 'showDetailsModal'])->name('programs.show');
-
-    // Join/leave programs
-    Route::post('/programs/{program}/volunteers/join', [ProgramVolunteerController::class, 'joinProgram'])->name('programs.join');
-    Route::delete('/programs/{program}/volunteers/{volunteer}/leave', [ProgramVolunteerController::class, 'leaveProgram'])->name('programs.leave');
-
-    // VOLUNTEER ATTENDANCE
-    Route::get('/programs/{program}/attendance', [VolunteerAttendanceController::class, 'show'])->name('programs.view');
-    Route::post('/programs/{program}/attendance/clock', [VolunteerAttendanceController::class, 'clockInOut'])->name('programs.clock-in-out');
-    Route::post('/programs/{program}/attendance/proof', [VolunteerAttendanceController::class, 'uploadProof'])->name('attendance.uploadProof');
-
-    // VOLUNTEER FEEDBACK
-    Route::post('/programs/{program}/feedback/volunteer', [ProgramFeedbackController::class, 'submitVolunteerFeedback'])->name('programs.feedback.submit');
-
-});
-
-// =================================================================
 // PROGRAM COORDINATOR ROUTES
 // =================================================================
 
-Route::middleware(['auth'])->group(function () {
-
+Route::middleware(['auth', 'role:Program Coordinator'])->group(function () {
     // Program CRUD 
     Route::get('/programs/list', [ProgramController::class, 'gotoProgramsList'])->name('programs.index');
     
@@ -194,8 +165,44 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/programs/{program}/chats', [ProgramChatController::class, 'storeChatMessage'])->name('program.chats.store');
     Route::put('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'updateChatMessage'])->name('program.chats.update');
     Route::delete('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'deleteChatMessage'])->name('program.chats.destroy');
-
 });
+
+// =================================================================
+// VOLUNTEER (All user are Volunteers - not literally)
+// =================================================================
+
+Route::middleware(['auth', 'role:Volunteer'])->group(function () {
+    
+    // VOLUNTEER APPLICATION
+    Route::get('/volunteers/application-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
+    Route::post('/volunteers/apply', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
+
+    // Program viewing (read-only access)
+    Route::get('/programs/list', [ProgramController::class, 'gotoProgramsList'])->name('programs.index');
+    // Route::get('/programs/create', [ProgramController::class, 'gotoCreateProgram'])->name('programs.create');
+    Route::get('/programs/{program}', [ProgramController::class, 'showDetailsModal'])->name('programs.show');
+
+    // Join/leave programs
+    Route::post('/programs/{program}/volunteers/join', [ProgramVolunteerController::class, 'joinProgram'])->name('programs.join');
+    Route::delete('/programs/{program}/volunteers/{volunteer}/leave', [ProgramVolunteerController::class, 'leaveProgram'])->name('programs.leave');
+
+    // VOLUNTEER ATTENDANCE
+    Route::get('/programs/{program}/attendance', [VolunteerAttendanceController::class, 'show'])->name('programs.view');
+    Route::post('/programs/{program}/attendance/clock', [VolunteerAttendanceController::class, 'clockInOut'])->name('programs.clock-in-out');
+    Route::post('/programs/{program}/attendance/proof', [VolunteerAttendanceController::class, 'uploadProof'])->name('attendance.uploadProof');
+
+    // VOLUNTEER FEEDBACK
+    Route::post('/programs/{program}/feedback/volunteer', [ProgramFeedbackController::class, 'submitVolunteerFeedback'])->name('programs.feedback.submit');
+
+    Route::get('/members/invitation/{member}/accept', [MemberController::class, 'acceptInvitation'])
+    ->name('member.invitation.accept')
+    ->middleware('signed');
+    Route::get('/members/invitation/{member}/decline', [MemberController::class, 'declineInvitation'])
+    ->name('member.invitation.decline')
+    ->middleware('signed');
+});
+
+
 
 // =================================================================
 // FINANCIAL COORDINATOR (Done - Working Role-Based)
@@ -241,10 +248,5 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/members/invite/{volunteer}', [MemberController::class, 'invite'])->name('members.invite');
     Route::post('/members/{member}/resend-invitation', [MemberController::class, 'resendInvitation'])->name('members.resend-invitation');
     Route::get('members/invitation/{member}', [MemberController::class, 'showInvitation'])->name('member.invitation.show');
-    Route::get('/members/invitation/{member}/accept', [MemberController::class, 'acceptInvitation'])
-        ->name('member.invitation.accept')
-        ->middleware('signed');
-    Route::get('/members/invitation/{member}/decline', [MemberController::class, 'declineInvitation'])
-        ->name('member.invitation.decline')
-        ->middleware('signed');
+
 });
