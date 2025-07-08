@@ -10,7 +10,7 @@
         @php
             $tabs = [
                 ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-stats'],
-                // ['id' => 'volunteer', 'label' => 'Volunteers (' . $volunteerUsers->count() . ')', 'icon' => 'bx-user'],
+                ['id' => 'volunteer', 'label' => 'Volunteers (' . $volunteerUsers->count() . ')', 'icon' => 'bx-user'],
                 ['id' => 'admin', 'label' => 'Admins (' . $adminUsers->count() . ')', 'icon' => 'bx-crown'],
                 ['id' => 'program_coordinator', 'label' => 'Program Coordinators (' . $programCoordinatorUsers->count() . ')', 'icon' => 'bx-calendar-event'],
                 ['id' => 'financial_coordinator', 'label' => 'Financial Coordinators (' . $financialCoordinatorUsers->count() . ')', 'icon' => 'bx-wallet'],
@@ -28,11 +28,11 @@
                 @include('roles.partials.rolesOverview')
             </x-slot>
 
-            {{-- <x-slot:slot_volunteer>
+            <x-slot:slot_volunteer>
                 @include('roles.partials.usersTable', ['users' => $volunteerUsersPaginated, 
                 'roleName' => 'Volunteer', 
                 'roleType' => 'Volunteer'])
-            </x-slot> --}}
+            </x-slot>
 
             <x-slot:slot_admin>
                 @include('roles.partials.usersTable', ['users' => $adminUsersPaginated, 
@@ -65,7 +65,11 @@
             </x-slot> --}}
 
             <x-slot:slot_no_roles>
-                @include('roles.partials.usersTable', ['users' => $usersWithoutRoles, 'roleName' => 'No Role', 'roleType' => 'no-role'])
+                @include('roles.partials.usersTable', [
+                    'users' => $usersWithoutRoles, 
+                    'roleName' => 'No Role', 
+                    'roleType' => 'no-role'
+                ])
             </x-slot>
         </x-navigation-layout.tabs-modern>
 @endsection 

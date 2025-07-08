@@ -74,6 +74,8 @@
                     </ul>
                 </div>
 
+                {{-- Content Management Section (Content Manager Role) --}}
+                @if(Auth::user()->hasRole('Content Manager'))
                 <div class="mb-4">
                     <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Content</span>
@@ -89,6 +91,19 @@
                                 <span class="ml-3 sidebar-content text-sm">Contents</span>
                             </a>
                         </li>
+                    </ul>
+                </div>
+                @endif
+
+                {{-- Programs Section (Program Coordinator Role) --}}
+                @if(Auth::user()->hasRole('Program Coordinator'))
+                <div class="mb-4">
+                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
+                        <span class="sidebar-content">Programs</span>
+                        <span
+                            class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+                    </h3>
+                    <ul class="space-y-1">
                         <li>
                             <a href="{{ route('programs.index') }}"
                                 class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('programs.*') ? 'active' : '' }}"
@@ -107,7 +122,38 @@
                         </li>
                     </ul>
                 </div>
+                @endif
 
+                {{-- Volunteer Section (All Volunteers) --}}
+                @if(Auth::user()->hasRole('Volunteer'))
+                <div class="mb-4">
+                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
+                        <span class="sidebar-content">Volunteer</span>
+                        <span
+                            class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+                    </h3>
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="{{ route('volunteers.form') }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('volunteers.form') ? 'active' : '' }}"
+                                data-tooltip="Volunteer Application">
+                                <i class="bx bx-user-plus w-5 text-center flex-shrink-0 text-primary"></i>
+                                <span class="ml-3 sidebar-content text-sm">Apply as Volunteer</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('programs.index') }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('programs.index') ? 'active' : '' }}"
+                                data-tooltip="View Programs">
+                                <i class="bx bx-calendar w-5 text-center flex-shrink-0 text-primary"></i>
+                                <span class="ml-3 sidebar-content text-sm">View Programs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                @endif
+
+                {{-- User Management Section --}}
                 <div class="mb-4">
                     <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">User</span>
@@ -115,6 +161,8 @@
                             class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
                     </h3>
                     <ul class="space-y-1">
+                        {{-- Volunteers (Program Coordinator Role) --}}
+                        @if(Auth::user()->hasRole('Program Coordinator'))
                         <li>
                             <a href="{{ route('volunteers.index') }}"
                                 class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('volunteers.*') ? 'active' : '' }}"
@@ -123,6 +171,8 @@
                                 <span class="ml-3 sidebar-content text-sm">Volunteers</span>
                             </a>
                         </li>
+                        @endif
+                        @if(Auth::user()->hasRole('Admin'))
                         <li>
                             <a href="{{ route('members.index') }}"
                                 class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item"
@@ -131,6 +181,10 @@
                                 <span class="ml-3 sidebar-content text-sm">Members</span>
                             </a>
                         </li>
+                        @endif
+
+                        {{-- Role Management (Admin Role) --}}
+                        @if(Auth::user()->hasRole('Admin'))
                         <li>
                             <a href="{{ route('roles.index') }}"
                                 class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('roles.*') ? 'active' : '' }}"
@@ -139,9 +193,12 @@
                                 <span class="ml-3 sidebar-content text-sm">Assign Roles</span>
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </div>
 
+                {{-- Financial Section (Financial Coordinator Role) --}}
+                @if(Auth::user()->hasRole('Financial Coordinator'))
                 <div class="mb-4">
                     <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Financial</span>
@@ -167,9 +224,10 @@
                         </li>
                     </ul>
                 </div>
+                @endif
 
                 <div class="mb-4">
-                    <button class="flex items-center gap-3 w-full beautiful-shadow text-white bg-gradient-to-tl from-teal-400 to-blue-500 rounded-xl pt-3 pr-4 pb-3 pl-4">
+                    {{-- <button class="flex items-center gap-3 w-full beautiful-shadow text-white bg-gradient-to-tl from-teal-400 to-blue-500 rounded-xl pt-3 pr-4 pb-3 pl-4">
                         <span class="w-2 h-2 rounded-full bg-white"></span>
                         <span class="font-medium">Mobile App</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" class="lucide lucide-star w-4 h-4 ml-auto"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
@@ -178,7 +236,7 @@
                         .beautiful-shadow {
     box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.06), 0px 1px 1px -0.5px rgba(0,0,0,0.06), 0px 3px 3px -1.5px rgba(0,0,0,0.06), 0px 6px 6px -3px rgba(0,0,0,0.06), 0px 12px 12px -6px rgba(0,0,0,0.06), 0px 24px 24px -12px rgba(0,0,0,0.06);
   }
-                      </style>
+                      </style> --}}
                     <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Tools</span>
                         <span

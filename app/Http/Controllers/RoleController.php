@@ -77,7 +77,16 @@ class RoleController extends Controller
         );
 
         $activeUsers = $allUsers->filter(fn($user) => $user->is_active);
-        $usersWithoutRoles = $allUsers->filter(fn($user) => $user->roles->isEmpty());
+
+        // Fix for users without roles
+        $usersWithoutRolesCollection = $allUsers->filter(fn($user) => $user->roles->isEmpty());
+        $usersWithoutRoles = new \Illuminate\Pagination\LengthAwarePaginator(
+            $usersWithoutRolesCollection->forPage($currentPage, $perPage),
+            $usersWithoutRolesCollection->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
 
         return view('roles.index', compact(
             'allUsers',
