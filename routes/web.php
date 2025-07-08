@@ -198,27 +198,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // =================================================================
-// MEMBERSHIP COORDINATOR ROUTES
-// =================================================================
-
-Route::middleware(['auth'])->group(function () {
-
-    Route::get('members/list', [MemberController::class, 'index'])->name('members.index');
-    Route::post('/members/create', [MemberController::class, 'store'])->name('members.store');
-    Route::patch('/members/{member}/status', [MemberController::class, 'updateStatus'])->name('members.status');
-    Route::post('/members/invite/{volunteer}', [MemberController::class, 'invite'])->name('members.invite');
-    Route::post('/members/{member}/resend-invitation', [MemberController::class, 'resendInvitation'])->name('members.resend-invitation');
-    Route::get('members/invitation/{member}', [MemberController::class, 'showInvitation'])->name('member.invitation.show');
-    Route::get('/members/invitation/{member}/accept', [MemberController::class, 'acceptInvitation'])
-        ->name('member.invitation.accept')
-        ->middleware('signed');
-    Route::get('/members/invitation/{member}/decline', [MemberController::class, 'declineInvitation'])
-        ->name('member.invitation.decline')
-        ->middleware('signed');
-
-});
-
-// =================================================================
 // FINANCIAL COORDINATOR (Done - Working Role-Based)
 // =================================================================
 
@@ -255,4 +234,17 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::get('/roles/assign', [RoleController::class, 'showAssignForm'])->name('roles.assign.form');
     Route::post('/roles/assign', [RoleController::class, 'assign'])->name('roles.assign');
 
+
+    Route::get('members/list', [MemberController::class, 'index'])->name('members.index');
+    Route::post('/members/create', [MemberController::class, 'store'])->name('members.store');
+    Route::patch('/members/{member}/status', [MemberController::class, 'updateStatus'])->name('members.status');
+    Route::post('/members/invite/{volunteer}', [MemberController::class, 'invite'])->name('members.invite');
+    Route::post('/members/{member}/resend-invitation', [MemberController::class, 'resendInvitation'])->name('members.resend-invitation');
+    Route::get('members/invitation/{member}', [MemberController::class, 'showInvitation'])->name('member.invitation.show');
+    Route::get('/members/invitation/{member}/accept', [MemberController::class, 'acceptInvitation'])
+        ->name('member.invitation.accept')
+        ->middleware('signed');
+    Route::get('/members/invitation/{member}/decline', [MemberController::class, 'declineInvitation'])
+        ->name('member.invitation.decline')
+        ->middleware('signed');
 });
