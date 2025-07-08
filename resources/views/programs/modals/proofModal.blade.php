@@ -10,7 +10,7 @@
 
 <x-modal.dialog id="uploadProofModal" maxWidth="max-w-lg" width="w-11/12" maxHeight="max-h-[90vh]">
         <x-modal.header>
-            <h3 class="text-2xl font-bold text-slate-900 tracking-tight">Upload Proof of Attendance</h3>
+            <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Upload Proof of Attendance</h2>
         </x-modal.header>
 
         @if ($proofPath)

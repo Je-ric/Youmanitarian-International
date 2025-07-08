@@ -24,76 +24,75 @@
 
     @include('programs.modals.feedbackModal', ['program' => $program, 'userFeedback' => $userFeedback])
     @include('programs.modals.proofModal', ['program' => $program, 'volunteerAttendance' => $volunteerAttendance,])
-
+    @include('programs.modals.attendanceStatusModal', ['attendance' => $attendance])
+    
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-            <!-- Program Details (Left, spans 2 columns on lg) -->
-            <section class="bg-white rounded-3xl shadow-lg ring-1 ring-slate-100 col-span-1 lg:col-span-2 w-full p-4 sm:p-6 flex flex-col gap-6 transition hover:shadow-md">
-
-                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-100 pb-3 mb-2">
-                    <h2 class="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 items-start">
+            <!-- Program Details -->
+            <section class="col-span-1 lg:col-span-2 w-full p-6 sm:p-8 bg-slate-50 flex flex-col gap-6 rounded-2xl">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3 mb-2">
+                    <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
                         <i class="bx bx-calendar-event w-6 h-6 text-indigo-600"></i>
                         {{ $program->title }}
                     </h2>
                     <x-feedback-status.programProgress :program="$program" />
                 </div>
-
-                <div class="space-y-2">
-                    <x-form.label class="text-slate-700">
-                        <i class="bx bx-file-blank w-5 h-5 text-indigo-600"></i>
+                <hr class="border-t border-slate-200 mb-4" />
+                <div class="space-y-2 mb-6">
+                    <x-form.label class="text-slate-700 font-medium flex items-center gap-1">
+                        <i class="bx bx-file-blank w-5 h-5 text-indigo-600 mr-1"></i>
                         Description
                     </x-form.label>
-                    <p class="leading-relaxed text-slate-600">
+                    <p class="leading-relaxed text-slate-800 font-semibold">
                         {{ $program->description }}
                     </p>
                 </div>
-
-                <div class="pt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <hr class="border-t border-slate-200 mb-4" />
+                <div class="pt-2 grid grid-cols-1 md:grid-cols-2 gap-6">
                     {{-- Date --}}
-                    <div class="flex items-start gap-3">
+                    <div class="flex items-start gap-4">
                         <span class="flex items-center justify-center w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl">
                             <i class="bx bx-calendar w-5 h-5"></i>
                         </span>
                         <div>
-                            <p class="text-sm font-medium text-slate-700">Date</p>
-                            <p class="text-slate-600">{{ \Carbon\Carbon::parse($program->date)->format('F j, Y') }}</p>
+                            <x-form.label class="text-slate-700 font-medium mb-0">Date</x-form.label>
+                            <p class="text-slate-800 font-semibold">
+                                {{ \Carbon\Carbon::parse($program->date)->format('F j, Y') }}
+                            </p>
                         </div>
                     </div>
-
                     {{-- Time --}}
-                    <div class="flex items-start gap-3">
+                    <div class="flex items-start gap-4">
                         <span class="flex items-center justify-center w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl">
                             <i class="bx bx-time w-5 h-5"></i>
                         </span>
                         <div>
-                            <p class="text-sm font-medium text-slate-700">Time</p>
-                            <p class="text-slate-600">
+                            <x-form.label class="text-slate-700 font-medium mb-0">Time</x-form.label>
+                            <p class="text-slate-800 font-semibold">
                                 {{ $program->end_time
                                     ? \Carbon\Carbon::parse($program->start_time)->format('g:ia') . ' - ' . \Carbon\Carbon::parse($program->end_time)->format('g:ia')
                                     : \Carbon\Carbon::parse($program->start_time)->format('g:ia') }}
                             </p>
                         </div>
                     </div>
-
                     {{-- Location --}}
-                    <div class="flex items-start gap-3">
+                    <div class="flex items-start gap-4">
                         <span class="flex items-center justify-center w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl">
                             <i class="bx bx-map w-5 h-5"></i>
                         </span>
                         <div>
-                            <p class="text-sm font-medium text-slate-700">Location</p>
-                            <p class="text-slate-600">{{ $program->location ?? 'N/A' }}</p>
+                            <x-form.label class="text-slate-700 font-medium mb-0">Location</x-form.label>
+                            <p class="text-slate-800 font-semibold">{{ $program->location ?? 'N/A' }}</p>
                         </div>
                     </div>
-
                     {{-- Coordinator --}}
-                    <div class="flex items-start gap-3">
+                    <div class="flex items-start gap-4">
                         <span class="flex items-center justify-center w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl">
                             <i class="bx bx-user w-5 h-5"></i>
                         </span>
                         <div>
-                            <p class="text-sm font-medium text-slate-700">Coordinator</p>
-                            <p class="text-slate-600">{{ $program->creator->name }}</p>
+                            <x-form.label class="text-slate-700 font-medium mb-0">Coordinator</x-form.label>
+                            <p class="text-slate-800 font-semibold">{{ $program->creator->name }}</p>
                         </div>
                     </div>
                 </div>
@@ -105,12 +104,17 @@
                 <div class="card bg-gradient-to-br from-gray-900 via-slate-800 to-indigo-900 rounded-2xl shadow-lg ring-1 ring-slate-100 outline outline-2 outline-offset-[-2px] outline-neutral-200 text-white">
                     <div class="card-body p-4 sm:p-6 space-y-3 sm:space-y-4">
 
-                        <div class="mb-3 flex flex-row justify-between items-center">
-                            <h2 class="text-2xl font-bold text-white mb-2">
-                                Your Attendance
-                            </h2>
-
-                            <div class="flex items-center gap-2">
+                        <div class="mb-3">
+                            <div class="flex items-center justify-between mb-1">
+                                <h2 class="text-2xl font-bold text-white">
+                                    Your Attendance
+                                </h2>
+                                <x-button variant="secondary" size="sm"
+                                    onclick="document.getElementById('attendanceStatusModal').showModal();">
+                                    <i class='bx bx-info-circle'></i>
+                                </x-button>
+                            </div>
+                            <div class="flex items-center gap-2 mb-2">
                                 @if($clockInTime && $clockOutTime && $program->progress_status === 'done')
                                     <div class="w-2 h-2 bg-green-400 rounded-full"></div>
                                     <span class="text-sm font-medium text-green-200">Complete</span>
@@ -238,42 +242,15 @@
                         @endif
                     </div>
                 </div>
-                <!-- Attendance Summary Card (smaller) -->
-                @if($attendance && ($attendance->clock_in || $attendance->clock_out))
-                <div class="flex flex-col shadow-lg rounded-2xl ring-1 ring-slate-100 transition hover:shadow-md bg-white p-4 sm:p-5">
-                    <h2 class="text-lg font-bold text-[#1a2235] mb-2 pb-2 border-b border-gray-200">Attendance Summary</h2>
-                    <div class="space-y-4 flex-1">
-                        <div class="flex justify-between items-center">
-                            <x-form.label class="text-gray-600 font-medium mb-0">Approval Status</x-form.label>
-                            <x-feedback-status.status-indicator 
-                                :status="$attendance->approval_status" 
-                                :label="ucfirst($attendance->approval_status)" 
-                            />
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <x-form.label class="text-gray-600 font-medium mb-0">
-                                {{ ucfirst($attendance->approval_status) }} by
-                            </x-form.label>
-                            <x-form.readonly class="max-w-xs text-sm text-gray-700 mb-0">
-                                {{ $attendance->approver->name ?? 'Not yet approved' }}
-                            </x-form.readonly>
-                        </div>
-                        @if($attendance->notes)
-                            <div>
-                                <x-form.label class="text-gray-600 font-medium mb-0">Notes / Reason </x-form.label>
-                                <x-form.readonly class="max-w-xs text-sm text-gray-700 mb-0">
-                                    {{ $attendance->notes }}
-                                </x-form.readonly>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-                @endif
             </div>
         </div>
 
-        @include('programs.partials.volunteerTasks')
-        @include('programs.partials.attendanceReminders')
+        <div class="mt-10 border-t border-slate-200 pt-8">
+            @include('programs.partials.volunteerTasks')
+        </div>
+        <div class="mt-10">
+            @include('programs.partials.attendanceReminders')
+        </div>
     </div>
 
 @endsection
