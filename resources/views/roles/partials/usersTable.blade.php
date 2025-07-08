@@ -63,14 +63,25 @@
                         </x-table.td>
                     </x-table.tr>
 
-                    @include('roles.partials.assign_rolesModal', ['roleType' => $roleName])
+                    @include('roles.partials.assign_rolesModal', ['roleType' => $roleType, 'roles' => $roles])
                 @endforeach
             </x-table.tbody>
         </x-table.table>
         
-        {{-- Pagination Section --}}
         <div class="mt-4">
-            {{ $users->appends(['tab' => request()->query('tab', 'volunteer')])->links() }}
+            @php
+                $pageName = $pageName ?? match($roleType ?? '') {
+                    'Volunteer' => 'volunteer_page',
+                    'Admin' => 'admin_page',
+                    'Program Coordinator' => 'program_coordinator_page',
+                    'Financial Coordinator' => 'financial_coordinator_page',
+                    'Content Manager' => 'content_manager_page',
+                    'Member' => 'member_page',
+                    'no-role' => 'no_role_page',
+                    default => 'page',
+                };
+            @endphp
+            {{ $users->appends(array_merge(request()->except($pageName), ['tab' => request()->query('tab', $roleType), $pageName => $users->currentPage()]))->links() }}
         </div>
     @else
         {{-- Empty State Section --}}

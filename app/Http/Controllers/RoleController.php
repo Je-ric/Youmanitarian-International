@@ -26,66 +26,72 @@ class RoleController extends Controller
 
         // Paginate each role's users
         $perPage = 10;
-        $currentPage = request()->get('page', 1);
+        
+        $volunteerCurrentPage = request()->get('volunteer_page', 1);
+        $adminCurrentPage = request()->get('admin_page', 1);
+        $programCoordinatorCurrentPage = request()->get('program_coordinator_page', 1);
+        $financialCoordinatorCurrentPage = request()->get('financial_coordinator_page', 1);
+        $contentManagerCurrentPage = request()->get('content_manager_page', 1);
+        $memberCurrentPage = request()->get('member_page', 1);
+        $noRoleCurrentPage = request()->get('no_role_page', 1);
         
         $volunteerUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
-            $volunteerUsers->forPage($currentPage, $perPage),
+            $volunteerUsers->forPage($volunteerCurrentPage, $perPage),
             $volunteerUsers->count(),
             $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
+            $volunteerCurrentPage,
+            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'volunteer_page']
         );
 
         $adminUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
-            $adminUsers->forPage($currentPage, $perPage),
+            $adminUsers->forPage($adminCurrentPage, $perPage),
             $adminUsers->count(),
             $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
+            $adminCurrentPage,
+            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'admin_page']
         );
 
         $programCoordinatorUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
-            $programCoordinatorUsers->forPage($currentPage, $perPage),
+            $programCoordinatorUsers->forPage($programCoordinatorCurrentPage, $perPage),
             $programCoordinatorUsers->count(),
             $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
+            $programCoordinatorCurrentPage,
+            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'program_coordinator_page']
         );
 
         $financialCoordinatorUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
-            $financialCoordinatorUsers->forPage($currentPage, $perPage),
+            $financialCoordinatorUsers->forPage($financialCoordinatorCurrentPage, $perPage),
             $financialCoordinatorUsers->count(),
             $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
+            $financialCoordinatorCurrentPage,
+            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'financial_coordinator_page']
         );
 
         $contentManagerUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
-            $contentManagerUsers->forPage($currentPage, $perPage),
+            $contentManagerUsers->forPage($contentManagerCurrentPage, $perPage),
             $contentManagerUsers->count(),
             $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
+            $contentManagerCurrentPage,
+            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'content_manager_page']
         );
 
         $memberUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
-            $memberUsers->forPage($currentPage, $perPage),
+            $memberUsers->forPage($memberCurrentPage, $perPage),
             $memberUsers->count(),
             $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
+            $memberCurrentPage,
+            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'member_page']
         );
 
         $activeUsers = $allUsers->filter(fn($user) => $user->is_active);
 
-        // Fix for users without roles
         $usersWithoutRolesCollection = $allUsers->filter(fn($user) => $user->roles->isEmpty());
         $usersWithoutRoles = new \Illuminate\Pagination\LengthAwarePaginator(
-            $usersWithoutRolesCollection->forPage($currentPage, $perPage),
+            $usersWithoutRolesCollection->forPage($noRoleCurrentPage, $perPage),
             $usersWithoutRolesCollection->count(),
             $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
+            $noRoleCurrentPage,
+            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'no_role_page']
         );
 
         return view('roles.index', compact(
