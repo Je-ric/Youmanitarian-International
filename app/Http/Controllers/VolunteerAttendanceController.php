@@ -227,8 +227,15 @@ class VolunteerAttendanceController extends Controller
         ]);
 
         $attendance = VolunteerAttendance::findOrFail($attendanceId);
+        $program = $attendance->program;
+
+        // Only the program coordinator can approve/reject
+        if (Auth::id() !== $program->created_by) {
+            abort(403, 'You are not authorized to approve/reject attendance for this program.');
+        }
+
         $attendance->approval_status = $request->status;
-        $attendance->approved_by = Auth::user()->volunteer?->id;
+        $attendance->approved_by = $program->created_by; // always set the coordinator
         $attendance->notes = $request->input('notes', $attendance->notes);
         $attendance->save();
 

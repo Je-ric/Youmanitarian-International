@@ -105,7 +105,7 @@ Route::middleware(['auth'])->group(function () {
 // =================================================================
 
 Route::middleware(['auth', 'role:Program Coordinator'])->group(function () {
-    // Program CRUD 
+// Program CRUD
     Route::get('/programs/list', [ProgramController::class, 'gotoProgramsList'])->name('programs.index');
     
     Route::get('/programs/create', [ProgramController::class, 'gotoCreateProgram'])->name('programs.create');
@@ -194,7 +194,7 @@ Route::middleware(['auth', 'role:Financial Coordinator'])->group(function () {
     Route::get('/finance/donations', [DonationController::class, 'index'])->name('finance.index');
     Route::post('/finance/donations', [DonationController::class, 'store'])->name('finance.donations.store');
     Route::patch('/finance/donations/{donation}/status', [DonationController::class, 'updateDonationStatus'])->name('finance.donations.status');
-
+    
     // Membership payments
     Route::get('/finance/membership/payments', [MembershipController::class, 'index'])->name('finance.membership.payments');
     Route::post('/finance/membership/payments', [MembershipController::class, 'store'])->name('finance.membership.payments.store');
