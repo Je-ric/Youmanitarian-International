@@ -152,9 +152,11 @@ Route::middleware(['auth', 'role:Volunteer'])->group(function () {
 // PROGRAM COORDINATOR ROUTES
 // =================================================================
 
-Route::middleware(['auth', 'role:Program Coordinator'])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     // Program CRUD 
+    Route::get('/programs/list', [ProgramController::class, 'gotoProgramsList'])->name('programs.index');
+    
     Route::get('/programs/create', [ProgramController::class, 'gotoCreateProgram'])->name('programs.create');
     Route::post('/programs/create', [ProgramController::class, 'storeProgram'])->name('programs.store');
     Route::put('/programs/{program}', [ProgramController::class, 'updateProgram'])->name('programs.update');
@@ -217,7 +219,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // =================================================================
-// FINANCIAL COORDINATOR ROUTES (Donations and membership payments)
+// FINANCIAL COORDINATOR (Done - Working Role-Based)
 // =================================================================
 
 Route::middleware(['auth', 'role:Financial Coordinator'])->group(function () {

@@ -125,7 +125,7 @@
                 @endif
 
                 {{-- Volunteer Section (All Volunteers) --}}
-                @if(Auth::user()->hasRole('Volunteer'))
+                {{-- @if(Auth::user()->hasRole('Volunteer'))
                 <div class="mb-4">
                     <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Volunteer</span>
@@ -151,7 +151,7 @@
                         </li>
                     </ul>
                 </div>
-                @endif
+                @endif --}}
 
                 {{-- User Management Section --}}
                 <div class="mb-4">
