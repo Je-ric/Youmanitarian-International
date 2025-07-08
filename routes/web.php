@@ -34,7 +34,6 @@ use Illuminate\Notifications\DatabaseNotification;
 // =================================================================
 
 Route::get('/', [WebsiteController::class, 'index'])->name('website.index');
-Route::get('/content/{slug}', [WebsiteController::class, 'viewContent'])->name('website.view-content');
 Route::get('/news', [WebsiteController::class, 'news'])->name('website.news');
 Route::get('/programs', [WebsiteController::class, 'programs'])->name('website.programs');
 Route::get('/sponsors', [WebsiteController::class, 'sponsors'])->name('website.sponsors');
@@ -100,25 +99,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-// =================================================================
-// CONTENT MANAGER ROUTES
-// =================================================================
-
-Route::middleware(['auth', 'role:Content Manager'])->group(function () {
-
-    // Content CRUD
-    Route::get('/content/create', [ContentController::class, 'create'])->name('content.create');
-    Route::post('/content/store', [ContentController::class, 'store'])->name('content.store');
-    Route::get('/content/{content}/edit', [ContentController::class, 'edit'])->name('content.edit');
-    Route::put('/content/{content}', [ContentController::class, 'update'])->name('content.update');
-    Route::delete('/content/{content}', [ContentController::class, 'destroy'])->name('content.destroy');
-    Route::get('/content/list', [ContentController::class, 'content_index'])->name('content.index');
-    Route::get('/content/{content}/archive', [ContentController::class, 'archiveContent'])->name('content.archive');
-
-    // Gallery image delete (for deleting individual images, not content)
-    Route::delete('/content/images/{id}', [ContentController::class, 'destroyImage'])->name('content_images.destroy');
-
-});
 
 // =================================================================
 // PROGRAM COORDINATOR ROUTES
@@ -250,3 +230,27 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::get('members/invitation/{member}', [MemberController::class, 'showInvitation'])->name('member.invitation.show');
 
 });
+
+
+
+// =================================================================
+// CONTENT MANAGER ROUTES
+// =================================================================
+
+Route::middleware(['auth', 'role:Content Manager'])->group(function () {
+
+    // Content CRUD
+    Route::get('/content/list', [ContentController::class, 'index'])->name('content.index');
+    Route::get('/content/create', [ContentController::class, 'create'])->name('content.create');
+    Route::post('/content/store', [ContentController::class, 'store'])->name('content.store');
+    Route::get('/content/{content}/edit', [ContentController::class, 'edit'])->name('content.edit');
+    Route::put('/content/{content}', [ContentController::class, 'update'])->name('content.update');
+    Route::delete('/content/{content}', [ContentController::class, 'destroy'])->name('content.destroy');
+    Route::get('/content/{content}/archive', [ContentController::class, 'archiveContent'])->name('content.archive');
+
+    // Gallery image delete (for deleting individual images, not content)
+    Route::delete('/content/images/{id}', [ContentController::class, 'destroyImage'])->name('content_images.destroy');
+
+});
+
+Route::get('/content/{slug}', [WebsiteController::class, 'viewContent'])->name('website.view-content');
