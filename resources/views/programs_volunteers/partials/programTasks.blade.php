@@ -35,9 +35,9 @@
 
 @if($tasks->isEmpty())
     <x-empty-state 
-        icon="circle-check" 
-        title="No tasks created yet"    
-        description="Create your first task to get started" />
+        icon="bx bx-task"
+        title="No Tasks Yet"
+        description="Create your first task to get started." />
 @else
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         @foreach($tasks as $task)

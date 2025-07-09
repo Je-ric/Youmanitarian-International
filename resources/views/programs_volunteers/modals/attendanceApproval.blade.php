@@ -74,15 +74,19 @@
                                 </div>
 
                                 <div>
-                                    <x-form.textarea
-                                        id="notes_{{ $log->id }}"
-                                        name="notes"
-                                        :value="old('notes', $log->notes)"
-                                        :disabled="$disabled"
-                                        label="Notes"
-                                        placeholder="Add any comments about this attendance record..."
-                                        rows="3"
-                                    />
+                                    <x-form.label>Notes</x-form.label>
+                                    <x-form.readonly>
+                                        @if(empty($log->notes))
+                                            <x-empty-state 
+                                                icon="bx bx-message-square-dots"
+                                                title="No Notes"
+                                                description="No notes provided for this record."
+                                                size="small"
+                                            />
+                                        @else
+                                            {{ $log->notes }}
+                                        @endif
+                                    </x-form.readonly>
                                 </div>
                             </div>
 
@@ -103,11 +107,14 @@
                                             </div>
                                         </div>
                                     @else
-                                        <div
-                                            class="border border-gray-200 rounded-lg bg-gray-50 p-6 flex flex-col items-center justify-center text-gray-400">
-                                            <i class='bx bx-image text-3xl mb-2'></i>
-                                            <p class="text-sm">No proof image uploaded</p>
-                                        </div>
+                                       <x-form.readonly>
+                                            <x-empty-state 
+                                                icon="bx bx-image"
+                                                title="No Proof"
+                                                description="No proof image uploaded"
+                                                size="small"
+                                            />
+                                       </x-form.readonly>
                                     @endif
                                 </div>
 
@@ -148,11 +155,14 @@
                                             @endforeach
                                         </div>
                                     @else
-                                        <div
-                                            class="border border-gray-200 rounded-lg bg-gray-50 p-4 flex items-center justify-center text-gray-400">
-                                            <i class='bx bx-task text-xl mr-2'></i>
-                                            <p class="text-sm">No tasks assigned</p>
-                                        </div>
+                                       <x-form.readonly>
+                                            <x-empty-state 
+                                                icon="bx bx-task"
+                                                title="No Tasks Assigned"
+                                                description="No volunteers assigned to this task"
+                                                size="small"
+                                            />
+                                       </x-form.readonly>
                                     @endif
                                 </div>
                             </div>
@@ -194,28 +204,20 @@
                     @endif
                 </div>
             @empty
-                <!-- Empty State -->
-                <div class="flex flex-col items-center justify-center py-16 text-center">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                        <i class='bx bx-time text-2xl text-gray-400'></i>
-                    </div>
-                    <h4 class="text-lg font-semibold text-gray-700 mb-2">No Attendance Records</h4>
-                    <p class="text-gray-500 max-w-sm text-sm leading-relaxed">
-                        This volunteer hasn't logged any attendance for this program yet. Records will appear here once they
-                        clock in.
-                    </p>
-                </div>
+                    <x-empty-state 
+                        icon="bx bx-calendar-check"
+                        title="No Attendance Yet"
+                        description="This volunteer has not logged any attendance for this program."
+                    />
             @endforelse
         </x-modal.body>
 
-        <!-- Modal Footer -->
         <x-modal.footer>
             <x-modal.close-button :modalId="'attendanceModal_' . $volunteer->id" text="Close" />
         </x-modal.footer>
 </x-modal.dialog>
 
 <style>
-    /* Line clamp utility for task descriptions */
     .line-clamp-2 {
         display: -webkit-box;
         -webkit-line-clamp: 2;

@@ -111,13 +111,11 @@
                                 <p class="mt-3 text-gray-600">{{ $feedback->feedback }}</p>
                             </div>
                         @empty
-                            <div class="text-center py-8">
-                                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                                    <i class='bx bx-message-square-dots text-gray-400 text-2xl'></i>
-                                </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-1">No Feedback Yet</h3>
-                                <p class="text-gray-500">There are no feedback entries for this category.</p>
-                            </div>
+                            <x-empty-state
+                                icon="bx bx-message-square-dots"
+                                title="No Feedback Yet"
+                                description="There are no feedback entries for this category."
+                            />
                         @endforelse
                     </div>
                 </x-slot>
@@ -125,10 +123,11 @@
                 <x-slot:slot_positive>
                     <div class="space-y-4">
                     @if($feedbacks->whereIn('rating', [4, 5])->isEmpty())
-                        <div class="text-center py-8">
-                            <i class='bx bx-smile text-3xl text-gray-300 mb-2'></i>
-                            <p class="text-gray-500">No positive feedback yet.</p>
-                        </div>
+                        <x-empty-state
+                            icon="bx bx-smile"
+                            title="No Positive Feedback"
+                            description="No positive feedback yet."
+                        />
                         @else
                             @foreach($feedbacks->whereIn('rating', [4, 5]) as $feedback)
                                 @include('programs_volunteers.partials.feedbackItem', ['feedback' => $feedback])
@@ -140,10 +139,11 @@
                 <x-slot:slot_neutral>
                     <div class="space-y-4">
                     @if($feedbacks->where('rating', 3)->isEmpty())
-                        <div class="text-center py-8">
-                            <i class='bx bx-meh text-3xl text-gray-300 mb-2'></i>
-                            <p class="text-gray-500">No neutral feedback yet.</p>
-                        </div>
+                        <x-empty-state
+                            icon="bx bx-meh"
+                            title="No Neutral Feedback"
+                            description="No neutral feedback yet."
+                        />
                         @else
                             @foreach($feedbacks->where('rating', 3) as $feedback)
                                 @include('programs_volunteers.partials.feedbackItem', ['feedback' => $feedback])
@@ -155,10 +155,11 @@
                 <x-slot:slot_needs_improvement>
                     <div class="space-y-4">
                     @if($feedbacks->whereIn('rating', [1, 2])->isEmpty())
-                        <div class="text-center py-8">
-                            <i class='bx bx-sad text-3xl text-gray-300 mb-2'></i>
-                            <p class="text-gray-500">No critical feedback yet.</p>
-                        </div>
+                        <x-empty-state
+                            icon="bx bx-sad"
+                            title="No Critical Feedback"
+                            description="No critical feedback yet."
+                        />
                         @else
                             @foreach($feedbacks->whereIn('rating', [1, 2]) as $feedback)
                                 @include('programs_volunteers.partials.feedbackItem', ['feedback' => $feedback])
