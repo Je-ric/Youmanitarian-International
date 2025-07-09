@@ -29,30 +29,50 @@
         <x-modal.body>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-4">
+                    {{-- Anonymous Checkbox --}}
+                    @if(!$isView)
+                        <div class="flex items-center space-x-2 mb-4 p-3 bg-gray-50 rounded-lg">
+                            <x-form.checkbox 
+                                id="is_anonymous" 
+                                name="is_anonymous" 
+                                value="1"
+                                :checked="old('is_anonymous')"
+                                onchange="if(this.checked) { document.getElementById('donor_name').value = 'Anonymous'; } else { document.getElementById('donor_name').value = ''; }"
+                            />
+                            <label for="is_anonymous" class="text-sm font-medium text-gray-700 cursor-pointer">
+                                Mark this donation as anonymous
+                            </label>
+                            <span class="text-xs text-gray-500 ml-2">(Will display as "Anonymous" publicly)</span>
+                        </div>
+                    @endif
+
                     {{-- Donor Name --}}
                     <div class="flex items-center justify-between mb-0">
                         <x-form.label for="donor_name" class="mb-0">
                             <i class='bx bx-user mr-1 text-blue-600'></i>
                             Donor Name
+                            <span class="text-xs text-gray-500 ml-2">(Optional)</span>
                         </x-form.label>
-                        @if(!$isView)
-                            <div class="flex items-center space-x-2">
-                                <x-form.checkbox 
-                                    id="quick_anonymous" 
-                                    name="quick_anonymous" 
-                                    value="Anonymous"
-                                    onchange="document.getElementById('donor_name').value = this.checked ? this.value : ''"
-                                />
-                                <label for="quick_anonymous" class="text-xs text-gray-500 font-normal cursor-pointer">
-                                    Anonymous
-                                </label>
-                            </div>
+                        
+                        @if($isView && $donation->is_anonymous)
+                            <x-feedback-status.status-indicator status="role" label="Anonymous" />
                         @endif
                     </div>
                     @if($isView)
-                        <x-form.readonly>{{ $donation->donor_name }}</x-form.readonly>
+                        <x-form.readonly>
+                            @if($donation->is_anonymous && !$donation->donor_name)
+                                Anonymous
+                            @else
+                                {{ $donation->donor_name ?? 'Not provided' }}
+                            @endif
+                        </x-form.readonly>
                     @else
-                        <x-form.input name="donor_name" label="" placeholder="Donor Name" value="{{ old('donor_name') }}" required />
+                        <x-form.input 
+                            name="donor_name" 
+                            label="" 
+                            placeholder="Donor Name (optional)" 
+                            value="{{ old('is_anonymous') ? 'Anonymous' : (old('donor_name') ?? '') }}" 
+                        />
                     @endif
 
                     {{-- Donor Email --}}
@@ -77,12 +97,9 @@
                         @endif
                     </div>
                     @if($isView)
-                        <x-form.readonly>{{ $donation->donor_email }}</x-form.readonly>
+                        <x-form.readonly>{{ $donation->donor_email ?? 'Not provided' }}</x-form.readonly>
                     @else
-                        <x-form.input name="donor_email" type="text" label="" placeholder="Donor Email" value="{{ old('donor_email') }}" required />
-                        @error('donor_email')
-                            <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span>
-                        @enderror
+                        <x-form.input name="donor_email" type="text" label="" placeholder="Donor Email (optional)" value="{{ old('donor_email') }}" />
                     @endif
 
                     {{-- Amount --}}
@@ -126,7 +143,7 @@
                             Status
                         </x-form.label>
                         @if($isView)
-                            <x-feedback-status.status-indicator :status="$donation->status === 'Confirmed' ? 'approved' : 'pending'" />
+                            <x-feedback-status.status-indicator :status="$donation->status === 'Confirmed' ? 'completed' : 'pending'" />
                         @else
                             <x-feedback-status.status-indicator status="pending" />
                         @endif
@@ -155,37 +172,101 @@
                 </div>
             </div>
 
+            {{-- Notes Section (Full Width) --}}
+            <div class="mt-6">
+                <x-form.label for="notes">
+                    <i class='bx bx-note mr-1 text-gray-600'></i>
+                    Notes (Optional)
+                </x-form.label>
+                @if($isView)
+                    <x-form.readonly>{{ $donation->notes ?? 'No notes added' }}</x-form.readonly>
+                @else
+                    <x-form.textarea 
+                        name="notes" 
+                        id="notes" 
+                        label="" 
+                        placeholder="Add any additional notes about this donation..." 
+                        rows="3"
+                        value="{{ old('notes') }}"
+                    />
+                @endif
+            </div>
+
             {{-- Receipt/Proof Section (Full Width Below Columns) --}}
             <div class="mt-6">
                 <x-form.label for="receipt">
                     <i class='bx bx-receipt mr-1 text-indigo-600'></i>
                     Receipt/Proof (Optional)
                 </x-form.label>
-                    <p class="text-gray-500 text-xs mb-2">You may include an image related to the donation if necessary.</p>
-                    @if($isView && $donation->receipt_url)
-                        @php
-                            $ext = pathinfo($donation->receipt_url, PATHINFO_EXTENSION);
-                        @endphp
-                        <div class="border border-gray-200 rounded-lg overflow-hidden bg-gray-50 p-4">
-                            @if(in_array(strtolower($ext), ['jpg','jpeg','png','gif']))
-                                <img src="{{ asset('storage/' . $donation->receipt_url) }}" alt="Donation Proof" class="max-w-full max-h-60 object-contain rounded mx-auto">
-                                <div class="text-center mt-2">
-                                    <a href="{{ asset('storage/' . $donation->receipt_url) }}" target="_blank" class="text-blue-600 hover:underline text-sm"><i class='bx bx-external-link mr-1'></i>View Full Size</a>
-                                </div>
-                            @elseif(strtolower($ext) === 'pdf')
-                                <div class="text-center">
-                                    <a href="{{ asset('storage/' . $donation->receipt_url) }}" target="_blank" class="text-blue-600 hover:underline text-sm"><i class='bx bx-download mr-1'></i>Download PDF</a>
-                                </div>
-                            @endif
-                        </div>
-                    @elseif($isView && !$donation->receipt_url)
-                        <div class="text-gray-400 italic text-xs">No proof uploaded.</div>
-                    @else
-                        <x-form.input-upload name="receipt" id="receipt" accept="image/jpeg,image/png,application/pdf">
-                            Supported formats: JPEG, PNG, PDF
-                        </x-form.input-upload>
-                    @endif
+                <p class="text-gray-500 text-xs mb-2">You may include an image related to the donation if necessary.</p>
+                @if($isView && $donation->receipt_url)
+                    @php
+                        $ext = pathinfo($donation->receipt_url, PATHINFO_EXTENSION);
+                    @endphp
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        @if(in_array(strtolower($ext), ['jpg','jpeg','png','gif']))
+                            <img src="{{ asset('storage/' . $donation->receipt_url) }}" alt="Donation Proof" class="w-full max-w-sm rounded-lg border border-gray-300 mb-4 object-contain mx-auto">
+                            <div class="text-center">
+                                <a href="{{ asset('storage/' . $donation->receipt_url) }}" target="_blank" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200">
+                                    <i class='bx bx-external-link'></i>
+                                    View Full Size
+                                </a>
+                            </div>
+                        @elseif(strtolower($ext) === 'pdf')
+                            <div class="text-center">
+                                <a href="{{ asset('storage/' . $donation->receipt_url) }}" target="_blank" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200">
+                                    <i class='bx bx-download'></i>
+                                    Download PDF
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                @elseif($isView && !$donation->receipt_url)
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
+                        <i class='bx bx-image text-gray-400 text-4xl mb-2'></i>
+                        <p class="text-gray-500 text-sm">No proof uploaded</p>
+                    </div>
+                @else
+                    <x-form.input-upload name="receipt" id="receipt" accept="image/jpeg,image/png,application/pdf">
+                        Supported formats: JPEG, PNG, PDF
+                    </x-form.input-upload>
+                @endif
             </div>
+
+            {{-- Recorded By Information (Full Width) --}}
+            @if($isView)
+                <div class="mt-6 pt-4 border-t border-gray-200">
+                    <div class="text-xs text-gray-500 flex flex-col gap-1">
+                        <div>
+                            <span class="font-semibold">Recorded by:</span>
+                            <span class="font-semibold text-gray-700">{{ $donation->recorded_by ? (optional($donation->recorder)->name ?? 'Unknown') : 'Unknown' }}</span>
+                        </div>
+                        <div>
+                            <span class="font-semibold">Recorded in System:</span>
+                            {{ $donation->created_at ? $donation->created_at->format('F j, Y h:i A') : 'N/A' }}
+                        </div>
+                        @if($donation->confirmed_at)
+                            <div>
+                                <span class="font-semibold">Confirmed on:</span>
+                                {{ $donation->confirmed_at->format('F j, Y h:i A') }}
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @else
+                <div class="mt-6 pt-4 border-t border-gray-200">
+                    <div class="text-xs text-gray-500 flex flex-col gap-1">
+                        <div>
+                            <span class="font-semibold">Recorded by:</span>
+                            <span class="font-semibold text-gray-700">{{ auth()->user()->name ?? 'Unknown' }}</span>
+                        </div>
+                        <div>
+                            <span class="font-semibold">Recorded in System:</span>
+                            {{ now()->format('F j, Y h:i A') }}
+                        </div>
+                    </div>
+                </div>
+            @endif
         </x-modal.body>
         <x-modal.footer>
             <x-modal.close-button :modalId="$modalId" text="Cancel" variant="cancel" />

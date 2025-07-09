@@ -19,18 +19,18 @@
         {{-- Header --}}
         <x-modal.header>
                 <div class="flex-1 flex-row min-w-0">
-                    <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">
-                        {{ $quarter }} {{ $year }} Payment
-                    </h3>
+                    <div class="flex items-center gap-3">
+                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">
+                            {{ $quarter }} {{ $year }} Payment
+                        </h3>
+                        <x-feedback-status.status-indicator 
+                            :status="$status === 'paid' ? 'success' : ($status === 'overdue' ? 'danger' : 'warning')" 
+                            :label="ucfirst($status)"
+                        />
+                    </div>
                     <p class="text-sm text-gray-600 truncate mt-1">
                         {{ $member->user->name }}
                     </p>
-                    <div class="flex flex-wrap items-center gap-2 mt-2">
-                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $statusClass }}">
-                            <div class="w-1.5 h-1.5 rounded-full mr-1.5 {{ $status === 'paid' ? 'bg-green-500' : ($status === 'overdue' ? 'bg-red-500' : 'bg-yellow-500') }}"></div>
-                            {{ ucfirst($status) }}
-                        </span>
-                    </div>
                 </div>
         </x-modal.header>
 
