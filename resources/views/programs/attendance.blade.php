@@ -55,7 +55,7 @@
                             <i class="bx bx-calendar w-5 h-5"></i>
                         </span>
                         <div>
-                            <x-form.label class="text-slate-700 font-medium mb-0">Date</x-form.label>
+                            <x-form.label class="text-slate-700 font-medium mb-0" variant="date">Date</x-form.label>
                             <p class="text-slate-800 font-semibold">
                                 {{ \Carbon\Carbon::parse($program->date)->format('F j, Y') }}
                             </p>
@@ -67,7 +67,7 @@
                             <i class="bx bx-time w-5 h-5"></i>
                         </span>
                         <div>
-                            <x-form.label class="text-slate-700 font-medium mb-0">Time</x-form.label>
+                            <x-form.label class="text-slate-700 font-medium mb-0" variant="time">Time</x-form.label>
                             <p class="text-slate-800 font-semibold">
                                 {{ $program->end_time
                                     ? \Carbon\Carbon::parse($program->start_time)->format('g:ia') . ' - ' . \Carbon\Carbon::parse($program->end_time)->format('g:ia')
@@ -81,7 +81,7 @@
                             <i class="bx bx-map w-5 h-5"></i>
                         </span>
                         <div>
-                            <x-form.label class="text-slate-700 font-medium mb-0">Location</x-form.label>
+                            <x-form.label class="text-slate-700 font-medium mb-0" variant="location">Location</x-form.label>
                             <p class="text-slate-800 font-semibold">{{ $program->location ?? 'N/A' }}</p>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                             <i class="bx bx-user w-5 h-5"></i>
                         </span>
                         <div>
-                            <x-form.label class="text-slate-700 font-medium mb-0">Coordinator</x-form.label>
+                            <x-form.label class="text-slate-700 font-medium mb-0" variant="coordinator">Coordinator</x-form.label>
                             <p class="text-slate-800 font-semibold">{{ $program->creator->name }}</p>
                         </div>
                     </div>

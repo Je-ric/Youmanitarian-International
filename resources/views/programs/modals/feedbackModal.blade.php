@@ -30,7 +30,7 @@
 
                     <div class="space-y-4">
                         <div class="border-b pb-4">
-                            <x-form.label>Rating</x-form.label>
+                            <x-form.label variant="rating">Rating</x-form.label>
                         </div>
 
                         <div class="bg-slate-50 border rounded-lg p-6">
@@ -51,7 +51,7 @@
 
                     <div class="space-y-4">
                         <div class="border-b border-slate-200 pb-4">
-                            <x-form.label>Your Feedback</x-form.label>
+                            <x-form.label variant="your-feedback">Your Feedback</x-form.label>
                         </div>
 
                         <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">

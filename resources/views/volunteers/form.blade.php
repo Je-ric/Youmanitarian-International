@@ -9,7 +9,7 @@
 
         <!-- Section 1: Personal Motivation -->
         <div class="mb-6">
-            <x-form.label for="why_volunteer">Why do you want to volunteer?</x-form.label>
+            <x-form.label for="why_volunteer" variant="why-volunteer">Why do you want to volunteer?</x-form.label>
             <textarea name="why_volunteer" class="textarea textarea-bordered w-full" maxlength="500" required></textarea>
         </div>
 
@@ -56,7 +56,7 @@
         </div>
 
         <div class="mb-6">
-            <x-form.label for="short_bio">Short Bio</x-form.label>
+            <x-form.label for="short_bio" variant="short-bio">Short Bio</x-form.label>
             <textarea name="short_bio" class="textarea textarea-bordered w-full" maxlength="500"></textarea>
         </div>
 

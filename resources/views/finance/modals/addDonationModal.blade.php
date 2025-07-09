@@ -48,11 +48,7 @@
 
                     {{-- Donor Name --}}
                     <div class="flex items-center justify-between mb-0">
-                        <x-form.label for="donor_name" class="mb-0">
-                            <i class='bx bx-user mr-1 text-blue-600'></i>
-                            Donor Name
-                            <span class="text-xs text-gray-500 ml-2">(Optional)</span>
-                        </x-form.label>
+                        <x-form.label for="donor_name" class="mb-0" variant="donor-name">Donor Name</x-form.label>
                         
                         @if($isView && $donation->is_anonymous)
                             <x-feedback-status.status-indicator status="role" label="Anonymous" />
@@ -77,11 +73,7 @@
 
                     {{-- Donor Email --}}
                     <div class="flex items-center justify-between mb-1">
-                        <x-form.label for="donor_email" class="mb-0">
-                            <i class='bx bx-envelope mr-1 text-indigo-600'></i>
-                            Donor Email
-                            <span class="text-xs text-gray-500 ml-2">(Enter N/A if not available)</span>
-                        </x-form.label>
+                        <x-form.label for="donor_email" class="mb-0" variant="donor-email">Donor Email</x-form.label>
                         @if(!$isView)
                             <div class="flex items-center space-x-2">
                                 <x-form.checkbox 
@@ -103,10 +95,7 @@
                     @endif
 
                     {{-- Amount --}}
-                    <x-form.label for="amount">
-                        <i class='bx bx-dollar-circle mr-1 text-green-600'></i>
-                        Donation Amount (₱)
-                    </x-form.label>
+                    <x-form.label for="amount" variant="amount">Amount</x-form.label>
                     @if($isView)
                         <x-form.readonly>₱{{ number_format($donation->amount, 2) }}</x-form.readonly>
                     @else
@@ -115,10 +104,7 @@
                 </div>
                 <div class="space-y-4">
                     {{-- Mode of Donation --}}
-                    <x-form.label for="payment_method">
-                        <i class='bx bx-credit-card mr-1 text-blue-600'></i>
-                        Mode of Donation
-                    </x-form.label>
+                    <x-form.label for="payment_method" variant="payment-method">Payment Method</x-form.label>
                     @if($isView)
                         <x-form.readonly>{{ collect($donationMethods)->firstWhere('value', $donation->payment_method)['label'] ?? $donation->payment_method }}</x-form.readonly>
                     @else
@@ -126,10 +112,7 @@
                     @endif
 
                     {{-- Date --}}
-                    <x-form.label for="donation_date">
-                        <i class='bx bx-calendar mr-1 text-purple-600'></i>
-                        Date
-                    </x-form.label>
+                    <x-form.label for="donation_date" variant="donation-date">Donation Date</x-form.label>
                     @if($isView)
                         <x-form.readonly>{{ $donation->donation_date ? $donation->donation_date->format('M d, Y') : '' }}</x-form.readonly>
                     @else
@@ -138,10 +121,7 @@
 
                     {{-- Status --}}
                     <div class="flex items-center justify-between mb-1">
-                        <x-form.label for="status" class="mb-0">
-                            <i class='bx bx-info-circle mr-1 text-yellow-600'></i>
-                            Status
-                        </x-form.label>
+                        <x-form.label for="status" class="mb-0" variant="status">Status</x-form.label>
                         @if($isView)
                             <x-feedback-status.status-indicator :status="$donation->status === 'Confirmed' ? 'completed' : 'pending'" />
                         @else
@@ -174,10 +154,7 @@
 
             {{-- Notes Section (Full Width) --}}
             <div class="mt-6">
-                <x-form.label for="notes">
-                    <i class='bx bx-note mr-1 text-gray-600'></i>
-                    Notes (Optional)
-                </x-form.label>
+                <x-form.label for="notes" variant="notes">Notes</x-form.label>
                 @if($isView)
                     <x-form.readonly>{{ $donation->notes ?? 'No notes added' }}</x-form.readonly>
                 @else
@@ -194,10 +171,7 @@
 
             {{-- Receipt/Proof Section (Full Width Below Columns) --}}
             <div class="mt-6">
-                <x-form.label for="receipt">
-                    <i class='bx bx-receipt mr-1 text-indigo-600'></i>
-                    Receipt/Proof (Optional)
-                </x-form.label>
+                <x-form.label for="receipt" variant="receipt">Receipt</x-form.label>
                 <p class="text-gray-500 text-xs mb-2">You may include an image related to the donation if necessary.</p>
                 @if($isView && $donation->receipt_url)
                     @php

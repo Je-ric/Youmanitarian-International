@@ -51,10 +51,7 @@
                         {{-- Amount --}}
                         <div>
                             @if($payment && $status === 'paid')
-                                <x-form.label>
-                                <i class='bx bx-dollar-circle mr-1 text-green-600'></i>
-                                Amount
-                            </x-form.label>
+                                <x-form.label for="amount" variant="amount">Amount</x-form.label>
                                 <x-form.readonly>₱{{ number_format($payment->amount, 2) }}</x-form.readonly>
                                 @else
                                 <div class="space-y-2">
@@ -94,10 +91,7 @@
                         {{-- Payment Method --}}
                         <div>
                             @if($payment && $status === 'paid')
-                                <x-form.label>
-                                <i class='bx bx-credit-card mr-1 text-blue-600'></i>
-                                Payment Method
-                            </x-form.label>
+                                <x-form.label for="payment_method" variant="payment-method">Payment Method</x-form.label>
                                 <x-form.readonly>{{ $paymentMethods[$payment->payment_method] ?? ucfirst(str_replace('_', ' ', $payment->payment_method)) }}</x-form.readonly>
                             @else
                                 <x-form.select-option
@@ -122,10 +116,7 @@
                     <div class="space-y-4">
                         {{-- Payment Date --}}
                         <div>
-                            <x-form.label>
-                                <i class='bx bx-calendar mr-1 text-purple-600'></i>
-                                Payment Date
-                            </x-form.label>
+                            <x-form.label for="payment_date" variant="payment-date">Payment Date</x-form.label>
                             @if($payment && $status === 'paid')
                                 <x-form.readonly>
                                     {{ $payment->payment_date ? \Carbon\Carbon::parse($payment->payment_date)->format('F j, Y') : 'N/A' }}
@@ -182,10 +173,7 @@
                 {{-- Notes Section --}}
                 <div>
                     @if($payment && $status === 'paid')
-                        <x-form.label>
-                            <i class='bx bx-note mr-1 text-orange-600'></i>
-                            Notes
-                        </x-form.label>
+                        <x-form.label for="notes" variant="notes">Notes</x-form.label>
                         <x-form.readonly>{{ $payment->notes ?: 'No notes provided' }}</x-form.readonly>
                     @else
                         <x-form.textarea
@@ -207,11 +195,7 @@
 
                 {{-- Receipt/Proof Section --}}
                 <div>
-                    <x-form.label>
-                        <i class='bx bx-receipt mr-1 text-indigo-600'></i>
-                        Receipt/Proof
-                        <span class="text-xs font-normal text-gray-500">(Required)</span>
-                    </x-form.label>
+                    <x-form.label for="receipt" variant="receipt">Receipt</x-form.label>
                     
                     @if($payment && $payment->receipt_url && $status !== 'pending')
                         @php

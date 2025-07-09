@@ -39,7 +39,7 @@
                     <div class="space-y-6">
                         <!-- Program Title -->
                         <div>
-                            <x-form.label for="title"><i class='bx bx-bookmark mr-1 text-blue-500'></i>Program Title</x-form.label>
+                            <x-form.label for="title" variant="title">Program Title</x-form.label>
                             <x-form.input
                                 id="title"
                                 name="title"
@@ -52,7 +52,7 @@
 
                         <!-- Description -->
                         <div>
-                            <x-form.label for="description"><i class='bx bx-text mr-1 text-green-500'></i>Description</x-form.label>
+                            <x-form.label for="description" variant="description">Description</x-form.label>
                             <x-form.textarea
                                 id="description"
                                 name="description"
@@ -66,7 +66,7 @@
 
                         <!-- Location -->
                         <div>
-                            <x-form.label for="location"><i class='bx bx-map-pin mr-1 text-red-500'></i>Location <span class='text-gray-400 text-xs'>(Optional)</span></x-form.label>
+                            <x-form.label for="location" variant="location">Location <span class='text-gray-400 text-xs'>(Optional)</span></x-form.label>
                             <x-form.input
                                 id="location"
                                 name="location"
@@ -88,7 +88,7 @@
                     <div class="space-y-4">
                         <!-- Date -->
                         <div>
-                            <x-form.label for="date"><i class='bx bx-calendar-check mr-1 text-purple-500'></i>Date</x-form.label>
+                            <x-form.label for="date" variant="date">Date</x-form.label>
                             <x-form.date-picker
                                 id="date"
                                 name="date"
@@ -102,7 +102,7 @@
                         <!-- Time Range -->
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <x-form.label for="start_time"><i class='bx bx-play-circle mr-1 text-green-500'></i>Start</x-form.label>
+                                <x-form.label for="start_time" variant="start-time">Start</x-form.label>
                                 <x-form.time-picker
                                     id="start_time"
                                     name="start_time"
@@ -114,7 +114,7 @@
                             </div>
 
                             <div>
-                                <x-form.label for="end_time"><i class='bx bx-stop-circle mr-1 text-red-500'></i>End</x-form.label>
+                                <x-form.label for="end_time" variant="end-time">End</x-form.label>
                                 <x-form.time-picker
                                     id="end_time"
                                     name="end_time"
@@ -133,7 +133,7 @@
                     <div>
                         <!-- Volunteers Needed -->
                         <div>
-                            <x-form.label for="volunteer_count"><i class='bx bx-user-plus mr-1 text-indigo-500'></i>Volunteers Needed</x-form.label>
+                            <x-form.label for="volunteer_count" variant="volunteer-count">Volunteers Needed</x-form.label>
                             <x-form.input
                                 id="volunteer_count"
                                 name="volunteer_count"

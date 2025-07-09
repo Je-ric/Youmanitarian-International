@@ -14,7 +14,7 @@
 
                 <div class="space-y-6">
                     <div>
-                        <x-form.label for="title"><i class="bx bx-book"></i>Program Title</x-form.label>
+                        <x-form.label for="title" variant="title">Program Title</x-form.label>
                         <x-form.input
                             id="title"
                             name="title"
@@ -28,7 +28,7 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                         <div>
-                            <x-form.label for="date"><i class="bx bx-calendar"></i>Date</x-form.label>
+                            <x-form.label for="date" variant="date">Date</x-form.label>
                             <x-form.date-picker
                                 id="date"
                                 name="date"
@@ -38,7 +38,7 @@
                         </div>
 
                         <div>
-                            <x-form.label for="start_time"><i class="bx bx-time-five"></i>Start Time</x-form.label>
+                            <x-form.label for="start_time" variant="start-time">Start Time</x-form.label>
                             <x-form.time-picker
                                 id="start_time"
                                 name="start_time"
@@ -48,7 +48,7 @@
                         </div>
 
                         <div>
-                            <x-form.label for="end_time"><i class="bx bx-time-five"></i>End Time</x-form.label>
+                            <x-form.label for="end_time" variant="end-time">End Time</x-form.label>
                             <x-form.time-picker
                                 id="end_time"
                                 name="end_time"
@@ -60,7 +60,7 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <x-form.label for="location"><i class="bx bx-map"></i>Location (Optional)</x-form.label>
+                            <x-form.label for="location" variant="location">Location (Optional)</x-form.label>
                             <input
                                 type="text"
                                 id="location"
@@ -72,7 +72,7 @@
                         </div>
 
                         <div>
-                            <x-form.label for="volunteer_count"><i class="bx bx-group"></i>Volunteers Needed</x-form.label>
+                            <x-form.label for="volunteer_count" variant="volunteer-count">Volunteers Needed</x-form.label>
                             <input
                                 type="number"
                                 id="volunteer_count"
@@ -86,7 +86,7 @@
                     </div>
 
                     <div>
-                        <x-form.label for="description"><i class="bx bx-align-left"></i>Description</x-form.label>
+                        <x-form.label for="description" variant="description">Description</x-form.label>
                         <x-form.textarea
                             id="description"
                             name="description"

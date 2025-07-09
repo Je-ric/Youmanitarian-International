@@ -21,7 +21,7 @@
 
                 <div class="p-6 space-y-6">
                     <div class="space-y-1.5">
-                        <x-form.label><i class='bx bx-user text-blue-500'></i>Volunteer Name:</x-form.label>
+                        <x-form.label variant="volunteer-name">Volunteer Name:</x-form.label>
                         <div class="flex items-center space-x-2 px-3 py-2 bg-gray-50 rounded-md border border-gray-200">
                             <span class="text-sm text-gray-900">{{ $selectedVolunteer->user->name ?? 'No Name' }}</span>
                         </div>
@@ -35,7 +35,7 @@
                     <!-- Time Inputs -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div class="space-y-1.5">
-                            <x-form.label><i class='bx bx-time-five mr-1 text-green-600'></i>Time In</x-form.label>
+                            <x-form.label for="clock_in" variant="time-in">Time In</x-form.label>
                             <div class="relative flex items-center">
                                 {{-- <i class='bx bx-time-five absolute left-3 text-gray-400'></i> --}}
                                 @if($clockIn)
@@ -54,7 +54,7 @@
                             </div>
                         </div>
                         <div class="space-y-1.5">
-                            <x-form.label><i class='bx bx-time-five mr-1 text-red-600'></i>Time Out</x-form.label>
+                            <x-form.label for="clock_out" variant="time-out">Time Out</x-form.label>
                             <div class="relative flex items-center">
                                 {{-- <i class='bx bx-time-five absolute left-3 text-gray-400'></i> --}}
                                 @if($clockOut)
