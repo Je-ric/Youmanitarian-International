@@ -2,7 +2,7 @@
     'icon' => 'bx bx-info-circle',
     'title' => 'Nothing Here',
     'description' => 'There is no information to display.',
-    'size' => 'default', // 'default' or 'small'
+    'size' => 'default',
 ])
 
 @php

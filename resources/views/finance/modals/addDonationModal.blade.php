@@ -169,7 +169,6 @@
                 @endif
             </div>
 
-            {{-- Receipt/Proof Section (Full Width Below Columns) --}}
             <div class="mt-6">
                 <x-form.label for="receipt" variant="receipt">Receipt</x-form.label>
                 <p class="text-gray-500 text-xs mb-2">You may include an image related to the donation if necessary.</p>
@@ -182,8 +181,7 @@
                             <img src="{{ asset('storage/' . $donation->receipt_url) }}" alt="Donation Proof" class="w-full max-w-sm rounded-lg border border-gray-300 mb-4 object-contain mx-auto">
                             <div class="text-center">
                                 <a href="{{ asset('storage/' . $donation->receipt_url) }}" target="_blank" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200">
-                                    <i class='bx bx-external-link'></i>
-                                    View Full Size
+                                    <i class='bx bx-fullscreen mr-1'></i> View Full Size
                                 </a>
                             </div>
                         @elseif(strtolower($ext) === 'pdf')

@@ -41,7 +41,6 @@
                     <div class="space-y-1.5">
                         <x-form.label for="clock_in" variant="time-in">Time In</x-form.label>
                         <div class="relative flex items-center">
-                            {{-- <i class='bx bx-time-five absolute left-3 text-gray-400'></i> --}}
                             @if($clockIn)
                                 <input type="text" readonly
                                     class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 bg-gray-100 text-gray-700 focus:outline-none"

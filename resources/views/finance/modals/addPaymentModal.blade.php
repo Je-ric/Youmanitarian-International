@@ -201,29 +201,16 @@
                         @php
                             $extension = pathinfo($payment->receipt_url, PATHINFO_EXTENSION);
                         @endphp
-                        <div class="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
-                            @if(in_array(strtolower($extension), ['jpg', 'jpeg', 'png', 'gif']))
-                                <div class="aspect-video bg-gray-100 flex items-center justify-center">
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
                                     <img src="{{ Storage::url($payment->receipt_url) }}" alt="Payment Receipt"
-                                         class="max-w-full max-h-full object-contain rounded">
-                                </div>
-                                <div class="p-3 bg-white border-t border-gray-200">
+                                    class="w-full max-w-sm rounded-lg border border-gray-300 mb-4 object-contain mx-auto">
+                                <div class="text-center">
                                     <a href="{{ Storage::url($payment->receipt_url) }}" target="_blank"
-                                       class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 font-medium">
-                                        <i class='bx bx-external-link mr-1'></i>
-                                        View Full Size
+                                        class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200">
+                                        <i class='bx bx-fullscreen mr-1'></i> View Full Size
                                     </a>
                                 </div>
-                            @else
-                                <div class="p-4 text-center">
-                                    <i class='bx bx-file text-3xl text-gray-400 mb-2'></i>
-                                    <a href="{{ Storage::url($payment->receipt_url) }}" target="_blank"
-                                       class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
-                                        <i class='bx bx-download mr-1'></i>
-                                        Download Receipt
-                                    </a>
-                                </div>
-                            @endif
+                    
                         </div>
                     @else
                         <x-form.input-upload name="receipt" :id="'receipt-'.$modalId" accept="image/*,.pdf" required>
