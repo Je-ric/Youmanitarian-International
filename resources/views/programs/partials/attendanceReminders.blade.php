@@ -1,4 +1,4 @@
-<section class="max-w-7xl mx-auto px-4 py-6 sm:px-6 sm:py-8 bg-yellow-50 rounded-2xl border-2 border-amber-400 mt-6">
+<section class="mx-auto px-4 py-6 sm:px-6 sm:py-8 bg-yellow-50 rounded-2xl border-2 border-amber-400 mt-6">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {{-- Reminders --}}
         <div>

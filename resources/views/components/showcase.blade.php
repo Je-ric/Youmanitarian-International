@@ -108,6 +108,8 @@
             <div class="space-y-2">
                 <x-feedback-status.alert variant="flexible" message="Custom flexible alert (purple)" bgColor="bg-purple-50" textColor="text-purple-700" borderColor="border-purple-200" iconColor="text-purple-500" />
                 <x-feedback-status.alert variant="flexible" message="Custom flexible alert (emerald)" bgColor="bg-emerald-50" textColor="text-emerald-700" borderColor="border-emerald-200" iconColor="text-emerald-500" />
+                <x-feedback-status.alert variant="flexible" message="Custom flexible alert (orange)" bgColor="bg-orange-50" textColor="text-orange-700" borderColor="border-orange-200" iconColor="text-orange-500" />
+                <x-feedback-status.alert variant="flexible" message="Custom flexible alert (pink)" bgColor="bg-pink-50" textColor="text-pink-700" borderColor="border-pink-200" iconColor="text-pink-500" />
             </div>
         </div>
         <div>
@@ -118,6 +120,176 @@
                 <x-feedback-status.alert variant="dark" type="info" message="Dark info alert." />
                 <x-feedback-status.alert variant="dark" type="warning" message="Dark warning alert." />
                 <x-feedback-status.alert variant="dark" type="neutral" message="Dark neutral alert." />
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Status Indicator Variants Showcase --}}
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-semibold mb-4">Status Indicator Variants Showcase</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-white rounded-lg shadow mb-8">
+        <div>
+            <h3 class="text-lg font-medium mb-3">General Statuses</h3>
+            <div class="space-y-2">
+                <x-feedback-status.status-indicator status="success" />
+                <x-feedback-status.status-indicator status="neutral" />
+                <x-feedback-status.status-indicator status="info" />
+                <x-feedback-status.status-indicator status="warning" />
+                <x-feedback-status.status-indicator status="danger" />
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Program/Volunteer Statuses</h3>
+            <div class="space-y-2">
+                <x-feedback-status.status-indicator status="completed" />
+                <x-feedback-status.status-indicator status="in_progress" />
+                <x-feedback-status.status-indicator status="pending" />
+                <x-feedback-status.status-indicator status="rejected" />
+                <x-feedback-status.status-indicator status="approved" />
+                <x-feedback-status.status-indicator status="role" />
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Content Types</h3>
+            <div class="space-y-2">
+                <x-feedback-status.status-indicator status="news" />
+                <x-feedback-status.status-indicator status="program" />
+                <x-feedback-status.status-indicator status="announcement" />
+                <x-feedback-status.status-indicator status="event" />
+                <x-feedback-status.status-indicator status="article" />
+                <x-feedback-status.status-indicator status="blog" />
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Content Statuses</h3>
+            <div class="space-y-2">
+                <x-feedback-status.status-indicator status="draft" />
+                <x-feedback-status.status-indicator status="published" />
+                <x-feedback-status.status-indicator status="archived" />
+                <x-feedback-status.status-indicator status="needs_revision" />
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Role-based Statuses</h3>
+            <div class="space-y-2">
+                <x-feedback-status.status-indicator status="volunteer" />
+                <x-feedback-status.status-indicator status="admin" />
+                <x-feedback-status.status-indicator status="program-coordinator" />
+                <x-feedback-status.status-indicator status="financial-coordinator" />
+                <x-feedback-status.status-indicator status="content-manager" />
+                <x-feedback-status.status-indicator status="member" />
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Custom Labels</h3>
+            <div class="space-y-2">
+                <x-feedback-status.status-indicator status="success" label="Custom Success" />
+                <x-feedback-status.status-indicator status="pending" label="Awaiting Approval" />
+                <x-feedback-status.status-indicator status="completed" label="Task Finished" />
+                <x-feedback-status.status-indicator status="in_progress" label="Currently Working" />
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Toast Variants Showcase --}}
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-semibold mb-4">Toast Variants Showcase</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-white rounded-lg shadow mb-8">
+        <div>
+            <h3 class="text-lg font-medium mb-3">Toast Types</h3>
+            <div class="space-y-2">
+                <div class="p-3 border rounded-lg bg-green-100 text-green-800">
+                    <strong>Success Toast:</strong> "Your action was completed successfully!"
+                </div>
+                <div class="p-3 border rounded-lg bg-red-100 text-red-800">
+                    <strong>Error Toast:</strong> "An error occurred. Please try again."
+                </div>
+                <div class="p-3 border rounded-lg bg-blue-100 text-blue-800">
+                    <strong>Info Toast:</strong> "Here's some important information."
+                </div>
+                <div class="p-3 border rounded-lg bg-yellow-100 text-yellow-800">
+                    <strong>Warning Toast:</strong> "Please review your input before proceeding."
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 mt-2">Note: Toasts automatically disappear after 3.5 seconds and can be manually closed.</p>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Toast Features</h3>
+            <div class="space-y-2 text-sm">
+                <div class="flex items-center gap-2">
+                    <i class="bx bx-check-circle text-green-500"></i>
+                    <span>Auto-dismiss after 3.5 seconds</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="bx bx-x-circle text-blue-500"></i>
+                    <span>Manual close button</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="bx bx-move text-yellow-500"></i>
+                    <span>Smooth slide-in animation</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="bx bx-palette text-purple-500"></i>
+                    <span>Color-coded by type</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Program Progress Variants Showcase --}}
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-semibold mb-4">Program Progress Variants Showcase</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-white rounded-lg shadow mb-8">
+        <div>
+            <h3 class="text-lg font-medium mb-3">Program Status Types</h3>
+            <div class="space-y-2">
+                <div class="inline-flex items-center gap-2 px-3 py-1 text-xs rounded-full font-semibold bg-blue-50 text-blue-700">
+                    <i class='bx bx-calendar-event text-lg text-blue-500'></i>
+                    <span>Incoming</span>
+                </div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 text-xs rounded-full font-semibold bg-green-50 text-green-700">
+                    <i class='bx bx-play-circle text-lg text-green-500'></i>
+                    <span>Ongoing</span>
+                </div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 text-xs rounded-full font-semibold bg-gray-50 text-gray-700">
+                    <i class='bx bx-check-circle text-lg text-gray-500'></i>
+                    <span>Done</span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Usage Example</h3>
+            <div class="space-y-2 text-sm text-gray-600">
+                <p><code>&lt;x-feedback-status.programProgress :program="$program" /&gt;</code></p>
+                <p>Requires a program model with:</p>
+                <ul class="list-disc list-inside space-y-1">
+                    <li>progress_status attribute</li>
+                    <li>progress_status_with_style attribute</li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <h3 class="text-lg font-medium mb-3">Features</h3>
+            <div class="space-y-2 text-sm">
+                <div class="flex items-center gap-2">
+                    <i class="bx bx-check text-green-500"></i>
+                    <span>Automatic status detection</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="bx bx-palette text-blue-500"></i>
+                    <span>Color-coded by status</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="bx bx-mobile text-yellow-500"></i>
+                    <span>Responsive design</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="bx bx-icons text-purple-500"></i>
+                    <span>Status-specific icons</span>
+                </div>
             </div>
         </div>
     </div>

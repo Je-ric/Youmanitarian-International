@@ -26,7 +26,7 @@
     @include('programs.modals.proofModal', ['program' => $program, 'volunteerAttendance' => $volunteerAttendance,])
     @include('programs.modals.attendanceStatusModal', ['attendance' => $attendance])
     
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 items-start">
             <!-- Program Details -->
             <section class="col-span-1 lg:col-span-2 w-full p-6 sm:p-8 bg-slate-50 flex flex-col gap-6 rounded-2xl">
