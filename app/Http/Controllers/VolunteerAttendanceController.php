@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\ProgramTasksController;
 use App\Notifications\AttendanceStatusUpdated;
+use Illuminate\Validation\ValidationException;
 
 class VolunteerAttendanceController extends Controller
 {
@@ -280,6 +281,32 @@ class VolunteerAttendanceController extends Controller
         }
         $rules['clock_out'] = 'nullable'; // Clock_out is always optional.        
         $request->validate($rules);
+
+        
+        // ---------------------------------------------------------------
+        // Get program start and end times
+        $date = Carbon::parse($program->date)->format('Y-m-d');
+        $programStart = Carbon::parse($date . ' ' . $program->start_time);
+        $programEnd = Carbon::parse($date . ' ' . $program->end_time);
+
+        // Parse submitted times
+        $clockIn = $request->clock_in ? Carbon::parse($request->date . ' ' . $request->clock_in) : null;
+        $clockOut = $request->clock_out ? Carbon::parse($request->date . ' ' . $request->clock_out) : null;
+
+        // Validate clock_in is not before program start
+        if ($clockIn && $clockIn->lt($programStart)) {
+            throw ValidationException::withMessages([
+                'clock_in' => 'Time in cannot be before the program start time (' . $programStart->format('H:i') . ').'
+            ]);
+        }
+
+        // Validate clock_out is not before clock_in
+        if ($clockIn && $clockOut && $clockOut->lt($clockIn)) {
+            throw ValidationException::withMessages([
+                'clock_out' => 'Time out cannot be before time in.'
+            ]);
+        }
+        // ---------------------------------------------------------------
 
         // Update clock_in only if meron na, to avoid overwriting existing data.
         if ($request->has('clock_in')) {

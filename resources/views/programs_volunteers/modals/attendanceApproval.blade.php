@@ -20,150 +20,145 @@
                 $disabled = ($log->approval_status === 'approved' || $log->approval_status === 'rejected');
             @endphp
 
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium text-gray-700">Status:</span>
-                    <x-feedback-status.status-indicator :status="$log->approval_status ?? 'pending'" />
-                </div>
-                <div class="text-sm text-gray-500">
-                    {{ \Carbon\Carbon::parse($log->created_at)->format('M j, Y') }}
-                </div>
+            <div class="mb-4 flex items-center gap-2">
+                <span class="text-sm font-medium text-gray-700">Attendance Approval Status:</span>
+                <x-feedback-status.status-indicator :status="$log->approval_status ?? 'pending'" />
             </div>
 
-            <div class="p-4">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="space-y-4">
-                        <div>
-                            <x-form.label variant="time-info">Time Information</x-form.label>
-                            <div class="space-y-2 bg-gray-50 rounded-lg p-3">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-gray-600"><i class='bx bx-time-five mr-1 text-green-600'></i>Time In:</span>
-                                    <span class="font-medium text-[#1a2235]">
-                                        {{ $log->clock_in ? \Carbon\Carbon::parse($log->clock_in)->format('h:i A') : '--:--' }}
-                                    </span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-gray-600"><i class='bx bx-time-five mr-1 text-red-600'></i>Time Out:</span>
-                                    <span class="font-medium text-[#1a2235]">
-                                        {{ $log->clock_out ? \Carbon\Carbon::parse($log->clock_out)->format('h:i A') : '--:--' }}
-                                    </span>
-                                </div>
-
-                                @if($log->clock_in && $log->clock_out)
-                                    @php
-                                        $clockIn = \Carbon\Carbon::parse($log->clock_in);
-                                        $clockOut = \Carbon\Carbon::parse($log->clock_out);
-                                        $duration = $clockIn->diff($clockOut);
-                                        $hours = $duration->h + ($duration->days * 24);
-                                        $minutes = $duration->i;
-                                    @endphp
-                                    <div class="flex justify-between items-center pt-2 border-t border-gray-200">
-                                        <span class="text-sm text-gray-600">Duration:</span>
-                                        <span class="font-medium text-[#ffb51b]">
-                                            {{ $hours }}h {{ $minutes }}m
-                                        </span>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="space-y-4">
-                        <div>
-                            <x-form.label variant="assigned-tasks">Assigned Tasks</x-form.label>
-                            @php
-                                $volunteerTasks = $program->tasks()
-                                    ->whereHas('assignments', function ($query) use ($volunteer) {
-                                        $query->where('volunteer_id', $volunteer->id);
-                                    })
-                                    ->with([
-                                        'assignments' => function ($query) use ($volunteer) {
-                                            $query->where('volunteer_id', $volunteer->id);
-                                        }
-                                    ])
-                                    ->get();
-                            @endphp
-
-                            @if($volunteerTasks->isNotEmpty())
-                                <div class="space-y-2 max-h-40 overflow-y-auto">
-                                    @foreach($volunteerTasks as $task)
-                                        @php
-                                            $assignment = $task->assignments->first();
-                                            $taskStatusConfig = match ($assignment?->status ?? 'pending') {
-                                                'completed' => ['bg-green-100', 'text-green-800', 'bx-check', 'Completed'],
-                                                'in_progress' => ['bg-blue-100', 'text-blue-800', 'bx-time', 'In Progress'],
-                                                default => ['bg-gray-100', 'text-gray-800', 'bx-hourglass', 'Pending'],
-                                            };
-                                        @endphp
-                                        <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
-                                            <div class="flex items-start justify-between gap-2">
-                                                <p class="text-sm text-gray-700 line-clamp-2 flex-1">
-                                                    {{ $task->task_description }}
-                                                </p>
-                                                <x-feedback-status.status-indicator :status="$assignment?->status ?? 'pending'" />
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @else
-                                <x-form.readonly>
-                                    <x-empty-state 
-                                        icon="bx bx-task"
-                                        title="No Tasks Assigned"
-                                        description="No volunteers assigned to this task"
-                                        size="small"
-                                    />
-                                </x-form.readonly>
-                            @endif
-                        </div>
-                    </div>
-
-                </div>
-                
-                <div class="mt-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="space-y-4">
                     <div>
-                        <x-form.label for="notes" variant="notes">Notes</x-form.label>
-                        <x-form.readonly>
-                            @if(empty($log->notes))
-                                <x-empty-state 
-                                    icon="bx bx-message-square-dots"
-                                    title="No Notes"
-                                    description="No notes provided for this record."
-                                    size="small"
-                                />
-                            @else
-                                {{ $log->notes }}
+                        <x-form.label variant="time-info">Time Information</x-form.label>
+                        <div class="bg-gray-50 rounded-lg p-3 flex flex-col gap-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Time In</span>
+                                <span class="font-medium text-[#1a2235]">
+                                    {{ $log->clock_in ? \Carbon\Carbon::parse($log->clock_in)->format('h:i A') : '--:--' }}
+                                </span>
+                            </div>
+                            <hr class="my-1 border-gray-200">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Time Out</span>
+                                <span class="font-medium text-[#1a2235]">
+                                    {{ $log->clock_out ? \Carbon\Carbon::parse($log->clock_out)->format('h:i A') : '--:--' }}
+                                </span>
+                            </div>
+                            @if($log->clock_in && $log->clock_out)
+                                <hr class="my-1 border-gray-200">
+                                @php
+                                    $clockIn = \Carbon\Carbon::parse($log->clock_in);
+                                    $clockOut = \Carbon\Carbon::parse($log->clock_out);
+                                    $duration = $clockIn->diff($clockOut);
+                                    $hours = $duration->h + ($duration->days * 24);
+                                    $minutes = $duration->i;
+                                @endphp
+                                <div class="flex justify-between items-center pt-1">
+                                    <span class="text-sm text-gray-600">Duration</span>
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold">
+                                        {{ $hours > 0 ? $hours . ' hour' . ($hours > 1 ? 's' : '') : '' }}
+                                        {{ $minutes > 0 ? $minutes . ' min' . ($minutes > 1 ? 's' : '') : '' }}
+                                    </span>
+                                </div>
                             @endif
-                        </x-form.readonly>
+                        </div>
                     </div>
+
                 </div>
 
-                <div class="mt-6">
-                    <x-form.label variant="attendance-proof">Attendance Proof</x-form.label>
-                        @if ($log->proof_image)
-                            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                                <img src="{{ asset('storage/' . $log->proof_image) }}" alt="Proof of Attendance"
-                                class="w-full max-w-sm rounded-lg border border-gray-300 mb-4 object-contain mx-auto" />
-                                <div class="text-center">
-                                    <a href="{{ asset('storage/' . $log->proof_image) }}" target="_blank" 
-                                        class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200">
-                                        <i class='bx bx-fullscreen mr-1'></i> View Full Size
-                                    </a>
-                                </div>
+                <div class="space-y-4">
+                    <div>
+                        <x-form.label variant="assigned-tasks">Assigned Tasks</x-form.label>
+                        @php
+                            $volunteerTasks = $program->tasks()
+                                ->whereHas('assignments', function ($query) use ($volunteer) {
+                                    $query->where('volunteer_id', $volunteer->id);
+                                })
+                                ->with([
+                                    'assignments' => function ($query) use ($volunteer) {
+                                        $query->where('volunteer_id', $volunteer->id);
+                                    }
+                                ])
+                                ->get();
+                        @endphp
+
+                        @if($volunteerTasks->isNotEmpty())
+                            <div class="space-y-2 max-h-40 overflow-y-auto">
+                                @foreach($volunteerTasks as $task)
+                                    @php
+                                        $assignment = $task->assignments->first();
+                                        $taskStatusConfig = match ($assignment?->status ?? 'pending') {
+                                            'completed' => ['bg-green-100', 'text-green-800', 'bx-check', 'Completed'],
+                                            'in_progress' => ['bg-blue-100', 'text-blue-800', 'bx-time', 'In Progress'],
+                                            default => ['bg-gray-100', 'text-gray-800', 'bx-hourglass', 'Pending'],
+                                        };
+                                    @endphp
+                                    <div class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                        <div class="flex items-start justify-between gap-2">
+                                            <p class="text-sm text-gray-700 line-clamp-2 flex-1">
+                                                {{ $task->task_description }}
+                                            </p>
+                                            <x-feedback-status.status-indicator :status="$assignment?->status ?? 'pending'" />
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
                         @else
                             <x-form.readonly>
                                 <x-empty-state 
-                                    icon="bx bx-image"
-                                    title="No Proof"
-                                    description="No proof image uploaded"
+                                    icon="bx bx-task"
+                                    title="No Tasks Assigned"
+                                    description="No volunteers assigned to this task"
                                     size="small"
                                 />
                             </x-form.readonly>
                         @endif
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="mt-6">
+                <div>
+                    <x-form.label for="notes" variant="notes">Notes</x-form.label>
+                    <x-form.readonly>
+                        @if(empty($log->notes))
+                            <x-empty-state 
+                                icon="bx bx-message-square-dots"
+                                title="No Notes"
+                                description="No notes provided for this record."
+                                size="small"
+                            />
+                        @else
+                            {{ $log->notes }}
+                        @endif
+                    </x-form.readonly>
                 </div>
             </div>
+
+            <div class="mt-6">
+                <x-form.label variant="attendance-proof">Attendance Proof</x-form.label>
+                    @if ($log->proof_image)
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <img src="{{ asset('storage/' . $log->proof_image) }}" alt="Proof of Attendance"
+                            class="w-full max-w-sm rounded-lg border border-gray-300 mb-4 object-contain mx-auto" />
+                            <div class="text-center">
+                                <a href="{{ asset('storage/' . $log->proof_image) }}" target="_blank" 
+                                    class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200">
+                                    <i class='bx bx-fullscreen mr-1'></i> View Full Size
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <x-form.readonly>
+                            <x-empty-state 
+                                icon="bx bx-image"
+                                title="No Proof"
+                                description="No proof image uploaded"
+                                size="small"
+                            />
+                        </x-form.readonly>
+                    @endif
+                </div>
 
             @if(!$disabled)
                 <div class="flex flex-col sm:flex-row gap-2">
