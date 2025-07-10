@@ -139,8 +139,12 @@
                 // Enable Pusher logging in development
                 Pusher.logToConsole = true;
 
+                // Global variables
+                let isSubmitting = false;
+                let currentEditId = null;
+
                 // Initialize Laravel Echo
-                window.Echo.join(`program.{{ $program->id }}`)
+                window.Echo.channel(`program.{{ $program->id }}`)
                     .listen('NewChatMessage', (e) => {
                         console.log('Received message:', e); // Debug log
                         const chat = e.chat;
@@ -151,6 +155,7 @@
                             const messageToRemove = document.querySelector(`[data-message-id="${chat.id}"]`);
                             if (messageToRemove) {
                                 messageToRemove.remove();
+                                showToast('Message deleted', 'success');
                             }
                             return;
                         }
@@ -168,7 +173,7 @@
                         
                         messageDiv.innerHTML = `
                             <div class="flex-shrink-0">
-                                <img src="${chat.sender.profile_pic || '/images/default-avatar.png'}" 
+                                <img src="${chat.sender.profile_pic ? chat.sender.profile_pic : '/images/default-avatar.png'}" 
                                      alt="${chat.sender.name}"
                                      class="w-10 h-10 rounded-full">
                             </div>
@@ -183,7 +188,7 @@
                                 </div>
                                 ${chat.sender_id === {{ Auth::id() }} ? `
                                     <div class="flex items-center gap-2 mt-1 justify-end">
-                                        <button onclick="editMessage(${chat.id}, '${chat.message}')" 
+                                        <button onclick="editMessage(${chat.id}, '${chat.message.replace(/'/g, "\\'")}')" 
                                                 class="text-xs text-gray-500 hover:text-gray-700">
                                             <i class="bx bx-edit"></i> Edit
                                         </button>
@@ -201,16 +206,29 @@
                         
                         // Scroll to bottom
                         chatMessages.scrollTop = chatMessages.scrollHeight;
+                    })
+                    .error((error) => {
+                        console.error('Echo connection error:', error);
+                        showToast('Connection error. Messages may not update in real-time.', 'error');
                     });
 
                 // Handle form submission
                 document.getElementById('chatForm').addEventListener('submit', async function(e) {
                     e.preventDefault();
                     
+                    if (isSubmitting) return;
+                    
                     const messageInput = document.getElementById('messageInput');
+                    const submitButton = this.querySelector('button[type="submit"]');
                     const message = messageInput.value.trim();
                     
                     if (!message) return;
+
+                    // Show loading state
+                    isSubmitting = true;
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
+                    messageInput.disabled = true;
 
                     try {
                         const response = await fetch('{{ route("program.chats.store", $program) }}', {
@@ -222,23 +240,41 @@
                             },
                             body: JSON.stringify({ message })
                         });
+                        
 
                         const data = await response.json();
 
-                        if (response.ok) {
+                        if (response.ok && data.success) {
                             messageInput.value = '';
-                            console.log('Message sent successfully:', data); // Debug log
+                            showToast('Message sent successfully!', 'success');
                         } else {
-                            console.error('Failed to send message:', data.error);
+                            showToast(data.error ? data.error : 'Failed to send message', 'error');
                         }
                     } catch (error) {
                         console.error('Error:', error);
+                        showToast('Network error. Please try again.', 'error');
+                    } finally {
+                        // Reset loading state
+                        isSubmitting = false;
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = '<i class="bx bx-send"></i>';
+                        messageInput.disabled = false;
+                        messageInput.focus();
                     }
                 });
 
                 // Handle message deletion
                 async function deleteMessage(messageId) {
                     if (!confirm('Are you sure you want to delete this message?')) return;
+
+                    const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+                    if (!messageElement) return;
+
+                    // Show loading state
+                    const deleteButton = messageElement.querySelector('button[onclick*="deleteMessage"]');
+                    const originalContent = deleteButton.innerHTML;
+                    deleteButton.disabled = true;
+                    deleteButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
 
                     try {
                         const response = await fetch(`/programs/{{ $program->id }}/chats/${messageId}`, {
@@ -251,20 +287,39 @@
 
                         const data = await response.json();
 
-                        if (!response.ok) {
-                            console.error('Failed to delete message:', data.error);
+                        if (response.ok && data.success) {
+                            messageElement.remove();
+                            showToast('Message deleted successfully!', 'success');
                         } else {
-                            console.log('Message deleted successfully:', data); // Debug log
+                            showToast(data.error ? data.error : 'Failed to delete message', 'error');
+                            // Reset button state
+                            deleteButton.disabled = false;
+                            deleteButton.innerHTML = originalContent;
                         }
                     } catch (error) {
                         console.error('Error:', error);
+                        showToast('Network error. Please try again.', 'error');
+                        // Reset button state
+                        deleteButton.disabled = false;
+                        deleteButton.innerHTML = originalContent;
                     }
                 }
 
                 // Handle message editing
                 async function editMessage(messageId, currentMessage) {
+                    if (currentEditId) return; // Prevent multiple edits
+
                     const newMessage = prompt('Edit your message:', currentMessage);
                     if (!newMessage || newMessage === currentMessage) return;
+
+                    currentEditId = messageId;
+                    const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+                    const editButton = messageElement.querySelector('button[onclick*="editMessage"]');
+                    const originalContent = editButton.innerHTML;
+                    
+                    // Show loading state
+                    editButton.disabled = true;
+                    editButton.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>';
 
                     try {
                         const response = await fetch(`/programs/{{ $program->id }}/chats/${messageId}`, {
@@ -279,15 +334,110 @@
 
                         const data = await response.json();
 
-                        if (!response.ok) {
-                            console.error('Failed to update message:', data.error);
+                        if (response.ok && data.success) {
+                            // Update the message content in the DOM
+                            const messageText = messageElement.querySelector('p');
+                            messageText.textContent = newMessage;
+                            
+                            // Add edited badge if not present
+                            const bubble = messageElement.querySelector('.rounded-lg');
+                            if (!bubble.querySelector('.text-xs')) {
+                                bubble.innerHTML += '<span class="text-xs text-gray-500 mt-1 block">(edited)</span>';
+                            }
+                            
+                            showToast('Message updated successfully!', 'success');
                         } else {
-                            console.log('Message updated successfully:', data); // Debug log
+                            showToast(data.error ? data.error : 'Failed to update message', 'error');
                         }
                     } catch (error) {
                         console.error('Error:', error);
+                        showToast('Network error. Please try again.', 'error');
+                    } finally {
+                        // Reset button state
+                        editButton.disabled = false;
+                        editButton.innerHTML = originalContent;
+                        currentEditId = null;
                     }
                 }
+
+                // Toast notification function
+                function showToast(message, type) {
+                    // Set default type if not provided
+                    type = type || 'info';
+                    
+                    // Create toast element
+                    const toast = document.createElement('div');
+                    toast.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+                    
+                    let bgColor = 'bg-blue-500';
+                    if (type === 'success') {
+                        bgColor = 'bg-green-500';
+                    } else if (type === 'error') {
+                        bgColor = 'bg-red-500';
+                    } else if (type === 'warning') {
+                        bgColor = 'bg-yellow-500';
+                    }
+                    
+                    toast.className += ` ${bgColor} text-white`;
+                    
+                    toast.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <i class="bx ${type === 'success' ? 'bx-check-circle' : 
+                                          type === 'error' ? 'bx-error-circle' : 
+                                          type === 'warning' ? 'bx-warning' : 'bx-info-circle'}"></i>
+                            <span>${message}</span>
+                            <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">
+                                <i class="bx bx-x"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(toast);
+                    
+                    // Animate in
+                    setTimeout(() => {
+                        toast.classList.remove('translate-x-full');
+                    }, 100);
+                    
+                    // Auto remove after 5 seconds
+                    setTimeout(() => {
+                        toast.classList.add('translate-x-full');
+                        setTimeout(() => {
+                            if (toast.parentElement) {
+                                toast.remove();
+                            }
+                        }, 300);
+                    }, 5000);
+                }
+
+                // Add keyboard shortcuts
+                document.addEventListener('keydown', function(e) {
+                    const messageInput = document.getElementById('messageInput');
+                    
+                    // Ctrl+Enter to send message
+                    if (e.ctrlKey && e.key === 'Enter' && document.activeElement === messageInput) {
+                        e.preventDefault();
+                        document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+                    }
+                    
+                    // Escape to cancel edit
+                    if (e.key === 'Escape' && currentEditId) {
+                        currentEditId = null;
+                        const editButton = document.querySelector(`[data-message-id="${currentEditId}"] button[onclick*="editMessage"]`);
+                        if (editButton) {
+                            editButton.disabled = false;
+                            editButton.innerHTML = '<i class="bx bx-edit"></i> Edit';
+                        }
+                    }
+                });
+
+                // Focus message input on page load
+                document.addEventListener('DOMContentLoaded', function() {
+                    const messageInput = document.getElementById('messageInput');
+                    if (messageInput) {
+                        messageInput.focus();
+                    }
+                });
             </script>
             @endpush
         @endif

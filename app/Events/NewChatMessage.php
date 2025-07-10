@@ -32,7 +32,7 @@ class NewChatMessage implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel('program.' . (is_object($this->chat) ? $this->chat->program_id : $this->chat['program_id'])),
+            new Channel('program.' . (is_object($this->chat) ? $this->chat->program_id : $this->chat['program_id'])),
         ];
     }
 

@@ -95,8 +95,7 @@
                 </div>
                 @endif
 
-                {{-- Programs Section (Program Coordinator Role) --}}
-                @if(Auth::user()->hasRole('Program Coordinator'))
+                @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Volunteer'))
                 <div class="mb-4">
                     <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Programs</span>

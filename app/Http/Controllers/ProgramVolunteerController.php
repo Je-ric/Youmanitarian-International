@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Program;
 use App\Models\Volunteer;
+use App\Models\ProgramChat;
 use Illuminate\Http\Request;
 use App\Models\ProgramFeedback;
 use App\Notifications\VolunteerJoinedProgram;
@@ -174,10 +175,10 @@ class ProgramVolunteerController extends Controller
                 $programCoordinator->notify(new VolunteerJoinedProgram($program, $user));
             }
 
-            // Create a welcome message in the program chat
+            // message when joining
             $program->chats()->create([
                 'sender_id' => Auth::id(),
-                'message' => "Welcome {$user->name} to the {$program->title} program! We're excited to have you join us.",
+                'message' => "Welcome {$user->name} to the {$program->title} program!",
                 'message_type' => 'system'
             ]);
         }
@@ -207,6 +208,18 @@ class ProgramVolunteerController extends Controller
 
             return back()->with('error', $message);
         }
+
+        // Remove volunteers messages from program chat (pero pwede sigurong hindi?) UNDECIDED!!!
+        // $program->chats()
+        //     ->where('sender_id', $volunteer->user_id)
+        //     ->delete();
+
+        // message na nagleave
+        $program->chats()->create([
+            'sender_id' => Auth::id(),
+            'message' => "{$volunteer->user->name} has left the {$program->title} program.",
+            'message_type' => 'system'
+        ]);
 
         // Detach volunteer from program
         $program->volunteers()->detach($volunteer->id);

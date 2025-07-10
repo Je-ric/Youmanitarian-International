@@ -288,8 +288,7 @@ class VolunteerAttendanceController extends Controller
         $date = Carbon::parse($program->date)->format('Y-m-d');
         $programStart = Carbon::parse($date . ' ' . $program->start_time);
         $programEnd = Carbon::parse($date . ' ' . $program->end_time);
-
-        // Parse submitted times
+        // Parse 
         $clockIn = $request->clock_in ? Carbon::parse($request->date . ' ' . $request->clock_in) : null;
         $clockOut = $request->clock_out ? Carbon::parse($request->date . ' ' . $request->clock_out) : null;
 

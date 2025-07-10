@@ -138,13 +138,6 @@ Route::middleware(['auth', 'role:Program Coordinator'])->group(function () {
     Route::post('/volunteers/{id}/approve', [VolunteerApprovalController::class, 'approve'])->name('volunteers.approve');
     Route::post('/volunteers/{id}/deny', [VolunteerApprovalController::class, 'deny'])->name('volunteers.deny');
     Route::post('/volunteers/{id}/restore', [VolunteerApprovalController::class, 'restore'])->name('volunteers.restore');
-
-    // Program Chat
-    Route::get('/programs/chats/list', [ProgramChatController::class, 'gotoChatsList'])->name('program.chats.index');
-    Route::get('/programs/{program}/chats', [ProgramChatController::class, 'gotoProgramChat'])->name('program.chats.show');
-    Route::post('/programs/{program}/chats', [ProgramChatController::class, 'storeChatMessage'])->name('program.chats.store');
-    Route::put('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'updateChatMessage'])->name('program.chats.update');
-    Route::delete('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'deleteChatMessage'])->name('program.chats.destroy');
 });
 
 // =================================================================
@@ -180,6 +173,13 @@ Route::middleware(['auth', 'role:Volunteer'])->group(function () {
     Route::get('/members/invitation/{member}/decline', [MemberController::class, 'declineInvitation'])
     ->name('member.invitation.decline')
     ->middleware('signed');
+
+    // Program Chat
+    Route::get('/programs/chats/list', [ProgramChatController::class, 'gotoChatsList'])->name('program.chats.index');
+    Route::get('/programs/{program}/chats', [ProgramChatController::class, 'gotoProgramChat'])->name('program.chats.show');
+    Route::post('/programs/{program}/chats', [ProgramChatController::class, 'storeChatMessage'])->name('program.chats.store');
+    Route::put('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'updateChatMessage'])->name('program.chats.update');
+    Route::delete('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'deleteChatMessage'])->name('program.chats.destroy');
 });
 
 
