@@ -17,7 +17,8 @@ class ProgramChat extends Model
         'message_type',
         'is_pinned',
         'is_edited',
-        'edited_at'
+        'edited_at',
+        'sent_at'
     ];
 
     protected $casts = [

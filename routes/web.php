@@ -175,13 +175,12 @@ Route::middleware(['auth', 'role:Volunteer'])->group(function () {
     ->middleware('signed');
 
     // Program Chat
-    Route::get('/programs/chats/list', [ProgramChatController::class, 'gotoChatsList'])->name('program.chats.index');
-    Route::get('/programs/{program}/chats', [ProgramChatController::class, 'gotoProgramChat'])->name('program.chats.show');
-    Route::post('/programs/{program}/chats', [ProgramChatController::class, 'storeChatMessage'])->name('program.chats.store');
-    Route::put('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'updateChatMessage'])->name('program.chats.update');
-    Route::delete('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'deleteChatMessage'])->name('program.chats.destroy');
+    Route::get('/programs/chats/list', [ProgramChatController::class, 'index'])->name('program.chats.index');
+    Route::get('/programs/{program}/chats', [ProgramChatController::class, 'show'])->name('program.chats.show');
+    Route::post('/programs/{program}/chats', [ProgramChatController::class, 'store'])->name('program.chats.store');
+    Route::put('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'update'])->name('program.chats.update');
+    Route::delete('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'destroy'])->name('program.chats.destroy');
 });
-
 
 
 // =================================================================
