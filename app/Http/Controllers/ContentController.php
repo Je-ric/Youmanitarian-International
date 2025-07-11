@@ -88,6 +88,12 @@ class ContentController extends Controller
             $validated['image_content'] = $image_path;
         }
 
+        // Prepare boolean fields - handle unchecked checkboxes properly
+        $enable_likes = $request->has('enable_likes') ? true : false;
+        $enable_comments = $request->has('enable_comments') ? true : false;
+        $enable_bookmark = $request->has('enable_bookmark') ? true : false;
+        $is_featured = $request->has('is_featured') ? true : false;
+
         $content = Content::create([
             'title' => $validated['title'],
             'slug' => $validated['slug'],
@@ -100,11 +106,11 @@ class ContentController extends Controller
             'approved_by' => null,
             'approved_at' => null,
             'views' => 0,
-            'enable_likes' => $request->has('enable_likes'),
-            'enable_comments' => $request->has('enable_comments'),
-            'enable_bookmark' => $request->has('enable_bookmark'),
+            'enable_likes' => $enable_likes,
+            'enable_comments' => $enable_comments,
+            'enable_bookmark' => $enable_bookmark,
             'published_at' => $validated['published_at'] ?? null,
-            'is_featured' => $request->has('is_featured'),
+            'is_featured' => $is_featured,
             'meta_title' => $validated['meta_title'] ?? null,
             'meta_description' => $validated['meta_description'] ?? null,
         ]);
@@ -144,8 +150,10 @@ class ContentController extends Controller
         ]);
 
         $content = Content::findOrFail($id);
-        // Single Image 
+        
+        // Single Image - Only update if new image is uploaded
         if ($request->hasFile('image')) {
+            // Delete old image if exists
             if ($content->image_content) {
                 Storage::disk('public')->delete($content->image_content);
             }
@@ -162,6 +170,13 @@ class ContentController extends Controller
             $validated['image_content'] = $content->image_content; // Keep old image if no new one uploaded
         }
 
+        // Prepare boolean fields - handle unchecked checkboxes properly
+        $enable_likes = $request->has('enable_likes') ? true : false;
+        $enable_comments = $request->has('enable_comments') ? true : false;
+        $enable_bookmark = $request->has('enable_bookmark') ? true : false;
+        $is_featured = $request->has('is_featured') ? true : false;
+
+        // Update content with proper boolean handling
         $content->update([
             'title' => $validated['title'],
             'slug' => $validated['slug'],
@@ -169,11 +184,11 @@ class ContentController extends Controller
             'body' => $validated['body'],
             'content_status' => $validated['content_status'],
             'image_content' => $validated['image_content'],
-            'enable_likes' => $request->has('enable_likes'),
-            'enable_comments' => $request->has('enable_comments'),
-            'enable_bookmark' => $request->has('enable_bookmark'),
+            'enable_likes' => $enable_likes,
+            'enable_comments' => $enable_comments,
+            'enable_bookmark' => $enable_bookmark,
             'published_at' => $validated['published_at'] ?? null,
-            'is_featured' => $request->has('is_featured'),
+            'is_featured' => $is_featured,
             'meta_title' => $validated['meta_title'] ?? null,
             'meta_description' => $validated['meta_description'] ?? null,
         ]);
@@ -261,22 +276,22 @@ class ContentController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    public function destroy(Content $content)
-    {
-        if ($content->image_content) {
-            Storage::disk('public')->delete($content->image_content);
-        }
+    // public function destroy(Content $content)
+    // {
+    //     if ($content->image_content) {
+    //         Storage::disk('public')->delete($content->image_content);
+    //     }
     
-        foreach ($content->images as $image) {
-            Storage::disk('public')->delete($image->image_path);
-            $image->delete();
-        }
+    //     foreach ($content->images as $image) {
+    //         Storage::disk('public')->delete($image->image_path);
+    //         $image->delete();
+    //     }
     
-        $content->delete();
+    //     $content->delete();
     
-        return redirect()->route('content.index')->with('toast', [
-            'message' => 'Content deleted successfully!',
-            'type' => 'success'
-        ]);
-    }
+    //     return redirect()->route('content.index')->with('toast', [
+    //         'message' => 'Content deleted successfully!',
+    //         'type' => 'success'
+    //     ]);
+    // }
 }

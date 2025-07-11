@@ -47,14 +47,14 @@
                                 <i class='bx bx-archive'></i>
                             </x-button>
 
-                            <form action="{{ route('content.destroy', $content->id) }}" method="POST" class="inline">
+                            {{-- <form action="{{ route('content.destroy', $content->id) }}" method="POST" class="inline">
                                 @csrf @method('DELETE')
                                 <x-button type="submit" variant="danger" size="sm"
                                     onclick="return confirm('Are you sure you want to delete this content?')" class="tooltip"
                                     data-tip="Delete">
                                     <i class='bx bx-trash'></i>
                                 </x-button>
-                            </form>
+                            </form> --}}
                         </div>
                     </x-table.td>
                 </x-table.tr>

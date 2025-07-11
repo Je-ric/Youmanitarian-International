@@ -244,7 +244,7 @@ Route::middleware(['auth', 'role:Content Manager'])->group(function () {
     Route::post('/content/store', [ContentController::class, 'store'])->name('content.store');
     Route::get('/content/{content}/edit', [ContentController::class, 'edit'])->name('content.edit');
     Route::put('/content/{content}', [ContentController::class, 'update'])->name('content.update');
-    Route::delete('/content/{content}', [ContentController::class, 'destroy'])->name('content.destroy');
+    // Route::delete('/content/{content}', [ContentController::class, 'destroy'])->name('content.destroy');
     Route::get('/content/{content}/archive', [ContentController::class, 'archiveContent'])->name('content.archive');
 
     // Gallery image delete (for deleting individual images, not content)

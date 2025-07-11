@@ -97,15 +97,11 @@
                                         <div class="relative border p-2">
                                             <img src="{{ asset('storage/' . $image->image_path) }}" alt="Gallery Image"
                                                 class="w-full h-24 object-cover rounded-lg">
-                                            <form action="{{ route('content_images.destroy', $image->id) }}" method="POST" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="px-3 py-1.5 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors flex items-center mt-1"
-                                                    onclick="return confirm('Are you sure?')">
-                                                    <i class='bx bx-trash mr-2'></i> Delete
-                                                </button>
-                                            </form>
+                                            <button type="button"
+                                                class="px-3 py-1.5 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors flex items-center mt-1"
+                                                onclick="deleteGalleryImage({{ $image->id }})">
+                                                <i class='bx bx-trash mr-2'></i> Delete
+                                            </button>
                                         </div>
                                     @endforeach
                                 </div>
@@ -147,7 +143,6 @@
                         <textarea id="editor"
                             class="textarea textarea-bordered w-full h-96 bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]"
                             name="body">{{ old('body', $content->body ?? '') }}</textarea>
-                        <input type="hidden" name="body" id="body" value="{{ old('body', $content->body ?? '') }}">
                     </div>
                 </div>
             </div>
@@ -161,12 +156,11 @@
                         placeholder: 'Write your content here...',
                         callbacks: {
                             onChange: function (contents, $editable) {
-                                $('#body').val(contents);
+                                // Update the textarea directly
+                                $('#editor').val(contents);
                             }
                         }
                     });
-                    // Set initial value
-                    $('#body').val($('#editor').summernote('code'));
 
                     // Auto-generate slug from title
                     $('input[name="title"]').on('input', function() {
@@ -201,4 +195,34 @@
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script type="module" src="{{ asset('js/app.js') }}"></script>
+
+    <!-- Gallery Image Delete Function -->
+    <script>
+        function deleteGalleryImage(imageId) {
+            if (confirm('Are you sure you want to delete this image?')) {
+                // Create a temporary form to submit the delete request
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/content/images/${imageId}`;
+                
+                // Add CSRF token
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = '_token';
+                csrfToken.value = '{{ csrf_token() }}';
+                form.appendChild(csrfToken);
+                
+                // Add method override
+                const methodField = document.createElement('input');
+                methodField.type = 'hidden';
+                methodField.name = '_method';
+                methodField.value = 'DELETE';
+                form.appendChild(methodField);
+                
+                // Submit the form
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
 @endsection
