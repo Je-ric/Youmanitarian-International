@@ -11,14 +11,18 @@
         </x-button>
     </x-page-header>
 
-    <!-- Tab Bar -->
-    <div class="mb-6 flex border-b border-gray-200">
-        <button id="editTab" type="button" class="px-6 py-2 -mb-px border-b-2 border-[#ffb51b] text-[#ffb51b] font-semibold focus:outline-none" onclick="showTab('edit')">Edit</button>
-        <button id="previewTab" type="button" class="px-6 py-2 -mb-px border-b-2 border-transparent text-gray-500 font-semibold focus:outline-none" onclick="showTab('preview')">Preview</button>
-    </div>
-
-    <!-- Form Section -->
-    <div id="formSection" class="w-full bg-white p-8 rounded-lg">
+    <x-navigation-layout.tabs-modern 
+        :tabs="[
+            ['id' => 'edit', 'label' => 'Edit', 'icon' => 'bx-edit'],
+            ['id' => 'preview', 'label' => 'Preview', 'icon' => 'bx-show']
+        ]" 
+        defaultTab="edit"
+        :preserveState="false"
+        class="mb-6">
+        
+        <x-slot name="slot_edit">
+            <!-- Form Section -->
+            <div class="w-full bg-white p-8 rounded-lg">
         <form id="contentForm"
             action="{{ isset($content) ? route('content.update', $content->id) : route('content.store') }}" method="POST"
             enctype="multipart/form-data">
@@ -178,51 +182,23 @@
             </script>
         </form>
     </div>
+        </x-slot>
 
-    <!-- Preview Section -->
-    <div id="previewSection" class="w-full bg-white rounded-lg" style="display: none;">
-        @include('content.partials.preview', [
-            'title' => old('title', $content->title ?? ''),
-            'body' => old('body', $content->body ?? ''),
-            'content_type' => old('content_type', $content->content_type ?? ''),
-            'image_content' => isset($content) && $content->image_content ? $content->image_content : null,
-            'is_featured' => old('is_featured', $content->is_featured ?? false),
-            'enable_likes' => old('enable_likes', $content->enable_likes ?? true),
-            'enable_comments' => old('enable_comments', $content->enable_comments ?? true),
-            'enable_bookmark' => old('enable_bookmark', $content->enable_bookmark ?? true),
-            'gallery_images' => isset($content) && $content->images ? $content->images->pluck('image_path')->toArray() : []
-        ])
-    </div>
+        <x-slot name="slot_preview">
+            @include('content.partials.preview', [
+                'title' => old('title', $content->title ?? ''),
+                'body' => old('body', $content->body ?? ''),
+                'content_type' => old('content_type', $content->content_type ?? ''),
+                'image_content' => isset($content) && $content->image_content ? $content->image_content : null,
+                'is_featured' => old('is_featured', $content->is_featured ?? false),
+                'enable_likes' => old('enable_likes', $content->enable_likes ?? true),
+                'enable_comments' => old('enable_comments', $content->enable_comments ?? true),
+                'enable_bookmark' => old('enable_bookmark', $content->enable_bookmark ?? true),
+                'gallery_images' => isset($content) && $content->images ? $content->images->pluck('image_path')->toArray() : []
+            ])
+        </x-slot>
+    </x-navigation-layout.tabs-modern>
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script type="module" src="{{ asset('js/app.js') }}"></script>
-
-    <!-- Tab Switch Script -->
-    <script>
-        function showTab(tab) {
-            const formSection = document.getElementById('formSection');
-            const previewSection = document.getElementById('previewSection');
-            const editTab = document.getElementById('editTab');
-            const previewTab = document.getElementById('previewTab');
-            if (tab === 'edit') {
-                formSection.style.display = 'block';
-                previewSection.style.display = 'none';
-                editTab.classList.add('border-[#ffb51b]', 'text-[#ffb51b]');
-                editTab.classList.remove('border-transparent', 'text-gray-500');
-                previewTab.classList.remove('border-[#ffb51b]', 'text-[#ffb51b]');
-                previewTab.classList.add('border-transparent', 'text-gray-500');
-            } else {
-                formSection.style.display = 'none';
-                previewSection.style.display = 'block';
-                previewTab.classList.add('border-[#ffb51b]', 'text-[#ffb51b]');
-                previewTab.classList.remove('border-transparent', 'text-gray-500');
-                editTab.classList.remove('border-[#ffb51b]', 'text-[#ffb51b]');
-                editTab.classList.add('border-transparent', 'text-gray-500');
-            }
-        }
-        // Default to Edit tab
-        document.addEventListener('DOMContentLoaded', function() {
-            showTab('edit');
-        });
-    </script>
 @endsection
