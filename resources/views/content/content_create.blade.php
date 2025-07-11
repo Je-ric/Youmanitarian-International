@@ -5,25 +5,27 @@
         icon="bx-file" 
         title="{{ isset($content) ? 'Edit Content' : 'Create New Content' }}"
         desc="Fill out the form to create or edit content.">
-
         <x-button variant="add-create" type="submit" form="contentForm">
             <i class='bx {{ isset($content) ? 'bx-edit' : 'bx-save' }} mr-2'></i>
             {{ isset($content) ? 'Update Content' : 'Save Content' }}
         </x-button>
-
     </x-page-header>
 
-    <div class="w-full bg-white p-8 rounded-lg">
+    <!-- Tab Bar -->
+    <div class="mb-6 flex border-b border-gray-200">
+        <button id="editTab" type="button" class="px-6 py-2 -mb-px border-b-2 border-[#ffb51b] text-[#ffb51b] font-semibold focus:outline-none" onclick="showTab('edit')">Edit</button>
+        <button id="previewTab" type="button" class="px-6 py-2 -mb-px border-b-2 border-transparent text-gray-500 font-semibold focus:outline-none" onclick="showTab('preview')">Preview</button>
+    </div>
 
+    <!-- Form Section -->
+    <div id="formSection" class="w-full bg-white p-8 rounded-lg">
         <form id="contentForm"
             action="{{ isset($content) ? route('content.update', $content->id) : route('content.store') }}" method="POST"
             enctype="multipart/form-data">
-
             @csrf
             @if(isset($content)) @method('PUT') @endif
-
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Left Column -->
+                <!-- Left -->
                 <div class="lg:col-span-1 space-y-6">
                     <div>
                         <x-form.label>Content Title</x-form.label>
@@ -134,7 +136,7 @@
                             value="{{ old('meta_description', $content->meta_description ?? '') }}" />
                     </div>
                 </div>
-                <!-- Right Column (Body/Editor) -->
+                <!-- Right  -->
                 <div class="lg:col-span-2 flex flex-col h-full">
                     <div class="flex-1">
                         <x-form.label>Body</x-form.label>
@@ -145,7 +147,6 @@
                     </div>
                 </div>
             </div>
-
             <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
             <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
@@ -178,7 +179,50 @@
         </form>
     </div>
 
+    <!-- Preview Section -->
+    <div id="previewSection" class="w-full bg-white rounded-lg" style="display: none;">
+        @include('content.partials.preview', [
+            'title' => old('title', $content->title ?? ''),
+            'body' => old('body', $content->body ?? ''),
+            'content_type' => old('content_type', $content->content_type ?? ''),
+            'image_content' => isset($content) && $content->image_content ? $content->image_content : null,
+            'is_featured' => old('is_featured', $content->is_featured ?? false),
+            'enable_likes' => old('enable_likes', $content->enable_likes ?? true),
+            'enable_comments' => old('enable_comments', $content->enable_comments ?? true),
+            'enable_bookmark' => old('enable_bookmark', $content->enable_bookmark ?? true),
+            'gallery_images' => isset($content) && $content->images ? $content->images->pluck('image_path')->toArray() : []
+        ])
+    </div>
+
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script type="module" src="{{ asset('js/app.js') }}"></script>
 
+    <!-- Tab Switch Script -->
+    <script>
+        function showTab(tab) {
+            const formSection = document.getElementById('formSection');
+            const previewSection = document.getElementById('previewSection');
+            const editTab = document.getElementById('editTab');
+            const previewTab = document.getElementById('previewTab');
+            if (tab === 'edit') {
+                formSection.style.display = 'block';
+                previewSection.style.display = 'none';
+                editTab.classList.add('border-[#ffb51b]', 'text-[#ffb51b]');
+                editTab.classList.remove('border-transparent', 'text-gray-500');
+                previewTab.classList.remove('border-[#ffb51b]', 'text-[#ffb51b]');
+                previewTab.classList.add('border-transparent', 'text-gray-500');
+            } else {
+                formSection.style.display = 'none';
+                previewSection.style.display = 'block';
+                previewTab.classList.add('border-[#ffb51b]', 'text-[#ffb51b]');
+                previewTab.classList.remove('border-transparent', 'text-gray-500');
+                editTab.classList.remove('border-[#ffb51b]', 'text-[#ffb51b]');
+                editTab.classList.add('border-transparent', 'text-gray-500');
+            }
+        }
+        // Default to Edit tab
+        document.addEventListener('DOMContentLoaded', function() {
+            showTab('edit');
+        });
+    </script>
 @endsection
