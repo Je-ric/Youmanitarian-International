@@ -35,6 +35,11 @@ $variant = [
     'financial-coordinator' => 'bg-yellow-600 text-white',
     'content-manager' => 'bg-indigo-700 text-white',
     'member' => 'bg-orange-600 text-white',
+    // Account Statuses
+    'verified' => 'bg-emerald-100 text-emerald-800',
+    'not_verified' => 'bg-red-100 text-red-800',
+    'connected' => 'bg-blue-100 text-blue-800',
+    'not_connected' => 'bg-gray-100 text-gray-600',
 ];
 
 $icons = [
@@ -71,6 +76,11 @@ $icons = [
     'financial-coordinator' => 'bx bx-wallet',
     'content-manager' => 'bx bx-edit-alt',
     'member' => 'bx bx-group',
+    // Account Status icons
+    'verified' => 'bx bx-check-circle',
+    'not_verified' => 'bx bx-x-circle',
+    'connected' => 'bx bxl-google',
+    'not_connected' => 'bx bx-x',
 ];
 
 $style = $variant[$status] ?? 'bg-gray-300 text-black';
