@@ -1,5 +1,8 @@
-<x-modal.dialog id="attendanceModal_{{ $volunteer->id }}" maxWidth="max-w-4xl" width="w-full" maxHeight="max-h-[90vh]">
-    <!-- Modal Header -->
+{{-- 
+    Kung may custom modalId, gamitin yun (viewUser-details)
+    Kung wala, gamitin yung default volunteer modal ID (programVolunteers folder)
+--}}
+<x-modal.dialog id="{{ $modalId ?? 'attendanceModal_' . $volunteer->id }}" maxWidth="max-w-4xl" width="w-full" maxHeight="max-h-[90vh]">
     <x-modal.header>
         <div>
             <h3 class="text-lg sm:text-xl font-semibold text-[#1a2235] flex items-center">
@@ -13,7 +16,6 @@
         </div>
     </x-modal.header>
 
-    <!-- Modal Body -->
     <x-modal.body>
         @forelse ($volunteerLogs as $log)
             @php
@@ -160,7 +162,7 @@
                     @endif
                 </div>
 
-            @if(!$disabled)
+            @if(!$disabled && !($readOnly ?? false))
                 <div class="flex flex-col sm:flex-row gap-2">
                     <form action="{{ route('attendance.status', $log->id) }}" method="POST" class="flex-1">
                         @csrf
@@ -182,12 +184,20 @@
                         </x-button>
                     </form>
                 </div>
-            @else
+            @elseif($disabled)
                 <x-feedback-status.alert 
                     class="items-center"
                     type="info"
                     icon="bx bx-lock-alt"
                     message="This attendance record has already been reviewed."
+                    variant="attendance"
+                />
+            @elseif($readOnly ?? false)
+                <x-feedback-status.alert 
+                    class="items-center"
+                    type="info"
+                    icon="bx bx-eye"
+                    message="This is a read-only view. Only program coordinators can approve or reject attendance."
                     variant="attendance"
                 />
             @endif
@@ -201,7 +211,7 @@
     </x-modal.body>
 
     <x-modal.footer>
-        <x-modal.close-button :modalId="'attendanceModal_' . $volunteer->id" text="Close" />
+        <x-modal.close-button :modalId="$modalId ?? 'attendanceModal_' . $volunteer->id" text="Close" />
     </x-modal.footer>
 </x-modal.dialog>
 
@@ -213,7 +223,6 @@
         overflow: hidden;
     }
 
-    /* Responsive modal adjustments */
     @media (max-width: 640px) {
         .modal-box {
             margin: 1rem;
@@ -221,12 +230,10 @@
         }
     }
 
-    /* Aspect ratio for images */
     .aspect-video {
         aspect-ratio: 16 / 9;
     }
 
-    /* Custom scrollbar for tasks list */
     .max-h-40::-webkit-scrollbar {
         width: 4px;
     }

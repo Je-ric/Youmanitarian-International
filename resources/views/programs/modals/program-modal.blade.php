@@ -1,19 +1,16 @@
 {{-- <div id="modal-overlay-{{ $program->id }}" class="fixed inset-0 bg-slate-900/20 backdrop-blur-sm hidden z-40"></div> --}}
 
 <x-modal.dialog id="modal_{{ $program->id }}" maxWidth="max-w-6xl" width="w-11/12" maxHeight="max-h-[90vh]">
-        {{-- Header --}}
         <x-modal.header>
             <h2 id="modal-title-{{ $program->id }}" class="text-2xl font-bold text-slate-900 tracking-tight">
                 {{ $program->title }}
             </h2>
         </x-modal.header>
-        {{-- Main Content - Scrollable --}}
         <x-modal.body :padded="false">
             <div class="flex flex-col lg:flex-row flex-1 min-h-0 overflow-hidden">
-                {{-- Left Content --}}
+                {{-- Left --}}
                 <div class="lg:w-2/3 w-full p-6 space-y-6 overflow-y-auto">
 
-                    {{-- Description --}}
                     <article>
                         <h3 class="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
                             <i class='bx bx-book-open text-slate-600'></i>
@@ -118,7 +115,7 @@
 
                 </div>
 
-                {{-- Right Details --}}
+                {{-- Right --}}
                 <aside class="lg:w-1/3 w-full bg-slate-50 border-l border-slate-200 p-6 space-y-5 overflow-y-auto">
                     <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 pb-2 border-b border-slate-300">
                         <i class='bx bx-detail text-slate-600'></i>

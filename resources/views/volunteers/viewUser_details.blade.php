@@ -7,6 +7,12 @@
         desc="Complete information about {{ $volunteer->user->name }}">
     </x-page-header>
 
+    <div x-data="{ 
+        openModal(id) {
+            document.getElementById('modal_' + id).showModal();
+        }
+    }">
+
     <x-navigation-layout.tabs-modern 
         :tabs="[
             ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-user-circle'],
@@ -169,12 +175,12 @@
                                         </p>
                                     </div>
                                 </div>
-                            @endforeach
+                    @endforeach
                         </div>
                     @else
                         <p class="text-gray-500">No roles assigned.</p>
-                    @endif
-                </div>
+            @endif
+        </div>
 
                 <!-- Member Information -->
                 @if($volunteer->member)
@@ -377,45 +383,7 @@
         <!-- Programs & Attendance Tab -->
         <x-slot name="slot_programs">
             <div class="space-y-6">
-                <!-- Programs Section -->
-                <div class="bg-white shadow-lg rounded-lg p-6">
-                    <h2 class="text-xl font-semibold text-[#1a2235] mb-4 flex items-center">
-                        <i class='bx bx-calendar text-[#ffb51b] mr-2'></i>
-                        Assigned Programs
-                    </h2>
-                    @if ($volunteer->programs->isNotEmpty())
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    @foreach ($volunteer->programs as $program)
-                                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                                    <h3 class="font-semibold text-[#1a2235] mb-2">{{ $program->title }}</h3>
-                                    <div class="space-y-2 text-sm">
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Start Date:</span>
-                                            <span class="text-gray-900">{{ \Carbon\Carbon::parse($program->start_date)->format('M d, Y') }}</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">End Date:</span>
-                                            <span class="text-gray-900">
-                                {{ $program->end_date ? \Carbon\Carbon::parse($program->end_date)->format('M d, Y') : 'Ongoing' }}
-                                            </span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Status:</span>
-                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                                @if($program->pivot->status === 'active') bg-green-100 text-green-800
-                                                @elseif($program->pivot->status === 'completed') bg-blue-100 text-blue-800
-                                                @else bg-gray-100 text-gray-800 @endif">
-                                                {{ ucfirst($program->pivot->status) }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                    @endforeach
-                        </div>
-                    @else
-                        <p class="text-gray-500">No programs assigned yet.</p>
-            @endif
-        </div>
+
 
                 <!-- Attendance Logs Section -->
                 <div class="bg-white shadow-lg rounded-lg p-6">
@@ -424,68 +392,99 @@
                         Attendance Logs
                     </h2>
                     @if ($volunteer->attendanceLogs->isNotEmpty())
-                        <div class="overflow-x-auto">
-                            <table class="w-full table-auto border-collapse">
-                    <thead>
-                                    <tr class="bg-gray-50 border-b border-gray-200">
-                                        <th class="p-3 text-left font-medium text-gray-700">Program</th>
-                                        <th class="p-3 text-left font-medium text-gray-700">Clock In</th>
-                                        <th class="p-3 text-left font-medium text-gray-700">Clock Out</th>
-                                        <th class="p-3 text-left font-medium text-gray-700">Total Time</th>
-                                        <th class="p-3 text-left font-medium text-gray-700">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach ($volunteer->attendanceLogs as $log)
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50">
-                                <td class="p-3">
-                                                <span class="font-medium text-[#1a2235]">
+                                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h3 class="text-lg font-semibold text-[#1a2235]">
                                     {{ $log->program->title ?? 'No Program Assigned' }}
-                                                </span>
-                                </td>
-                                <td class="p-3">
-                                                <span class="text-gray-900">
-                                    {{ \Carbon\Carbon::parse($log->clock_in)->format('M d, Y h:i A') }}
-                                                </span>
-                                </td>
-                                <td class="p-3">
+                                        </h3>
+                                        @if($log->program)
+                                            <div class="flex gap-2">
+                                                <button 
+                                                    @click="openModal({{ $log->program->id }})"
+                                                    class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                                                    <i class='bx bx-show mr-1'></i>
+                                                    View Details
+                                                </button>
+                                                <button 
+                                                    onclick="document.getElementById('attendanceModal_{{ $volunteer->id }}_{{ $log->program->id }}').showModal()"
+                                                    class="inline-flex items-center px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                                                    <i class='bx bx-clipboard-check mr-1'></i>
+                                                    Review Attendance
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-gray-600">Date:</span>
+                                            <span class="text-gray-900">{{ \Carbon\Carbon::parse($log->clock_in)->format('M d, Y') }}</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-gray-600">Time In:</span>
+                                            <span class="text-gray-900">{{ \Carbon\Carbon::parse($log->clock_in)->format('h:i A') }}</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-gray-600">Time Out:</span>
                                     @if ($log->clock_out)
-                                                    <span class="text-gray-900">
-                                        {{ \Carbon\Carbon::parse($log->clock_out)->format('M d, Y h:i A') }}
-                                                    </span>
+                                                <span class="text-gray-900">{{ \Carbon\Carbon::parse($log->clock_out)->format('h:i A') }}</span>
                                     @else
-                                                    <span class="text-red-500 font-medium">Still Clocked In</span>
+                                                <span class="text-red-500 font-medium">Still Clocked In</span>
                                     @endif
-                                </td>
-                                <td class="p-3">
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-gray-600">Total Time:</span>
                                     @if ($log->clock_out)
                                         @php
                                             $diff = \Carbon\Carbon::parse($log->clock_in)->diff(\Carbon\Carbon::parse($log->clock_out));
                                         @endphp
-                                                    <span class="font-medium text-gray-900">
-                                        {{ $diff->h }}h {{ $diff->i }}m {{ $diff->s }}s
-                                                    </span>
+                                                <span class="font-medium text-gray-900">{{ $diff->h }}h {{ $diff->i }}m</span>
                                     @else
-                                                    <span class="text-red-500 font-medium">Ongoing</span>
-                                    @endif
-                                </td>
-                                            <td class="p-3">
-                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                                    @if($log->clock_out) bg-green-100 text-green-800
-                                                    @else bg-yellow-100 text-yellow-800 @endif">
-                                                    {{ $log->clock_out ? 'Completed' : 'Active' }}
-                                                </span>
-                                            </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                                <span class="text-red-500 font-medium">Ongoing</span>
+            @endif
+        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm font-medium text-gray-600">Status:</span>
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
+                                                @if($log->clock_out) bg-green-100 text-green-800
+                                                @else bg-yellow-100 text-yellow-600 @endif">
+                                                {{ $log->clock_out ? 'Completed' : 'Active' }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     @else
                         <p class="text-gray-500">No attendance logs available.</p>
-            @endif
+                    @endif
                 </div>
+
+                <!-- Program Modal -->
+                @foreach ($volunteer->attendanceLogs as $log)
+                    @if($log->program)
+                        @include('programs.modals.program-modal', ['program' => $log->program])
+                    @endif
+                @endforeach
+
+                <!-- Attendance Approval Modals -->
+                @foreach ($volunteer->attendanceLogs as $log)
+                    @if($log->program)
+                        @php
+                            $programLogs = $volunteer->attendanceLogs->where('program_id', $log->program->id);
+                        @endphp
+                        @include('programs_volunteers.modals.attendanceApproval', [
+                            'volunteer' => $volunteer, 
+                            'volunteerLogs' => $programLogs,
+                            'program' => $log->program,
+                            'readOnly' => true,
+                            'modalId' => 'attendanceModal_' . $volunteer->id . '_' . $log->program->id
+                        ])
+                    @endif
+                @endforeach
             </div>
         </x-slot>
     </x-navigation-layout.tabs-modern>
+    </div>
 @endsection
