@@ -51,45 +51,32 @@
                                             <i class='bx bx-user text-white text-3xl sm:text-4xl'></i>
                                         </div>
                                     @endif
-                                    <!-- Status Dot -->
-                                    <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md">
+                                    {{-- <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md">
                                         <div class="w-3 h-3 rounded-full 
                                             @if($volunteer->application_status === 'approved') bg-emerald-500
                                             @elseif($volunteer->application_status === 'denied') bg-red-500
                                             @else bg-amber-500 @endif">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 
                                 <!-- Profile Info -->
                                 <div class="space-y-2">
                                     <h1 class="text-2xl sm:text-3xl font-bold text-[#1a2235] tracking-tight">{{ $volunteer->user->name }}</h1>
                                     <p class="text-gray-600 text-sm sm:text-base">{{ $volunteer->user->email }}</p>
-                                    <div class="flex items-center gap-2 text-sm text-gray-500">
-                                        <i class='bx bx-calendar text-[#ffb51b]'></i>
-                                        <span>Volunteer since {{ $volunteer->created_at->format('M Y') }}</span>
-                                    </div>
                                 </div>
                             </div>
                             
                             <!-- Status Badge -->
                             <div class="flex flex-col items-start sm:items-end gap-3">
-                                <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold shadow-sm
-                                    @if($volunteer->application_status === 'approved') bg-emerald-100 text-emerald-800 border border-emerald-200
-                                    @elseif($volunteer->application_status === 'denied') bg-red-100 text-red-800 border border-red-200
-                                    @else bg-amber-100 text-amber-800 border border-amber-200 @endif">
-                                    <i class='bx 
-                                        @if($volunteer->application_status === 'approved') bx-check-circle
-                                        @elseif($volunteer->application_status === 'denied') bx-x-circle
-                                        @else bx-time @endif mr-2'>
-                                    </i>
-                                    {{ ucfirst($volunteer->application_status) }}
-                                </span>
+                                <x-feedback-status.status-indicator 
+                                    :status="$volunteer->application_status" 
+                                    :label="ucfirst($volunteer->application_status)" />
                                 
                                 <!-- Quick Stats -->
                                 <div class="flex gap-4 text-center">
                                     <div class="text-center">
-                                        <div class="text-lg sm:text-xl font-bold text-[#1a2235]">{{ $volunteer->total_hours }}</div>
+                                        <div class="text-lg sm:text-xl font-bold text-[#1a2235]">{{ $volunteer->calculated_total_hours }}</div>
                                         <div class="text-xs text-gray-500">Hours</div>
                                     </div>
                                     <div class="text-center">
@@ -157,7 +144,7 @@
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-100">
                                     <span class="font-medium text-gray-700 text-sm">Total Hours</span>
-                                    <span class="text-gray-900 font-bold text-lg">{{ $volunteer->total_hours }}h</span>
+                                    <span class="text-gray-900 font-bold text-lg">{{ $volunteer->calculated_total_hours }}h</span>
                                 </div>
                                 <div class="flex justify-between items-center py-3 border-b border-gray-100">
                                     <span class="font-medium text-gray-700 text-sm">Joined Date</span>
@@ -435,8 +422,8 @@
                                                 </h3>
                                                 <div class="flex items-center gap-2 mt-1">
                                                     <x-feedback-status.status-indicator 
-                                                        :status="$log->clock_out ? 'completed' : 'in_progress'" 
-                                                        :label="$log->clock_out ? 'Completed' : 'Active'" />
+                                                        :status="$log->approval_status" 
+                                                        :label="ucfirst($log->approval_status)" />
                                                 </div>
                                             </div>
                                         </div>

@@ -135,6 +135,10 @@ class VolunteerAttendanceController extends Controller
             $attendance->hours_logged = round($clock_in->floatDiffInHours($clock_out), 2);
             $attendance->save();
 
+            // Update volunteer's total hours
+            $volunteer = $attendance->volunteer;
+            $volunteer->updateTotalHours();
+
             return redirect()->back()->with('toast', [
                 'message' => 'Clocked out successfully.',
                 'type' => 'success',
@@ -240,6 +244,10 @@ class VolunteerAttendanceController extends Controller
         $attendance->notes = $request->input('notes', $attendance->notes);
         $attendance->save();
 
+        // Update volunteer's total hours when attendance status changes
+        $volunteer = $attendance->volunteer;
+        $volunteer->updateTotalHours();
+
         // Send notification sa volunteer kung approved or reject yung attendance \Notifications\AttendanceStatusUpdated.php
         $volunteerUser = $attendance->volunteer->user;
         $program = $attendance->program;
@@ -328,6 +336,10 @@ class VolunteerAttendanceController extends Controller
         }
 
         $attendance->save();
+
+        // Update volunteer's total hours
+        $volunteer = $attendance->volunteer;
+        $volunteer->updateTotalHours();
 
         return redirect()->back()->with('toast', [
             'message' => 'Attendance record updated successfully!',

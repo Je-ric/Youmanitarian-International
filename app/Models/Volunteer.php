@@ -57,4 +57,22 @@ class Volunteer extends Model
         return $this->hasOne(Member::class);
         // return $this->belongsTo(Member::class);
     }
+
+    public function updateTotalHours()
+    {
+        $totalHours = $this->attendanceLogs()
+            ->where('approval_status', 'approved')
+            ->sum('hours_logged');
+        
+        $this->update(['total_hours' => $totalHours]);
+        
+        return $totalHours;
+    }
+
+    public function getCalculatedTotalHoursAttribute()
+    {
+        return $this->attendanceLogs()
+            ->where('approval_status', 'approved')
+            ->sum('hours_logged');
+    }
 }
