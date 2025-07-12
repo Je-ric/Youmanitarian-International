@@ -22,7 +22,7 @@
         
         <x-slot name="slot_edit">
             <!-- Form Section -->
-            <div class="w-full bg-white p-8 rounded-lg">
+    <div class="w-full bg-white p-8 rounded-lg">
         <form id="contentForm"
             action="{{ isset($content) ? route('content.update', $content->id) : route('content.store') }}" method="POST"
             enctype="multipart/form-data">
@@ -98,10 +98,10 @@
                                             <img src="{{ asset('storage/' . $image->image_path) }}" alt="Gallery Image"
                                                 class="w-full h-24 object-cover rounded-lg">
                                             <button type="button"
-                                                class="px-3 py-1.5 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors flex items-center mt-1"
+                                                    class="px-3 py-1.5 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors flex items-center mt-1"
                                                 onclick="deleteGalleryImage({{ $image->id }})">
-                                                <i class='bx bx-trash mr-2'></i> Delete
-                                            </button>
+                                                    <i class='bx bx-trash mr-2'></i> Delete
+                                                </button>
                                         </div>
                                     @endforeach
                                 </div>
