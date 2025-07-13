@@ -134,7 +134,7 @@ Route::middleware(['auth', 'role:Program Coordinator'])->group(function () {
     
     // Volunteer management
     Route::get('/volunteers/list', [VolunteerController::class, 'gotoVolunteersList'])->name('volunteers.index');
-    Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'gotoVolunteerDetails'])->name('volunteers.viewUser_details');
+    Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'gotoVolunteerDetails'])->name('volunteers.volunteer-details');
     Route::post('/volunteers/{id}/approve', [VolunteerApprovalController::class, 'approve'])->name('volunteers.approve');
     Route::post('/volunteers/{id}/deny', [VolunteerApprovalController::class, 'deny'])->name('volunteers.deny');
     Route::post('/volunteers/{id}/restore', [VolunteerApprovalController::class, 'restore'])->name('volunteers.restore');

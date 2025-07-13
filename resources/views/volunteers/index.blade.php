@@ -52,7 +52,7 @@
                                     <x-table.td>{{ $volunteer->user->email }}</x-table.td>
                                     <x-table.td>
                                             <div class="flex flex-wrap gap-2">
-                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                                <x-button href="{{ route('volunteers.volunteer-details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
                                                     <i class='bx bx-show'></i>
                                                 </x-button>
 
@@ -100,7 +100,7 @@
                                     <x-table.td>{{ $volunteer->user->email }}</x-table.td>
                                     <x-table.td>
                                             <div class="flex flex-wrap gap-2">
-                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                                <x-button href="{{ route('volunteers.volunteer-details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
                                                     <i class='bx bx-show'></i>
                                                 </x-button>
 
@@ -143,7 +143,7 @@
                                     <x-table.td>{{ $volunteer->created_at->format('M d, Y') }}</x-table.td>
                                     <x-table.td>
                                             <div class="flex flex-wrap gap-2">
-                                                <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                                <x-button href="{{ route('volunteers.volunteer-details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
                                                     <i class='bx bx-show'></i>
                                                 </x-button>
 

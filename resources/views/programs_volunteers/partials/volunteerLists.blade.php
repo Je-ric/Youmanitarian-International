@@ -73,7 +73,7 @@
                                 $hasLogs = !$volunteerLogs->isEmpty();
                                 $allReviewed = $hasLogs && $volunteerLogs->every(fn($log) => in_array($log->approval_status, ['approved', 'rejected']));
                             @endphp
-                            <x-button href="{{ route('volunteers.viewUser_details', $volunteer->id) }}" variant="table-action-view">
+                            <x-button href="{{ route('volunteers.volunteer-details', $volunteer->id) }}" variant="table-action-view">
                                 <i class='bx bx-show'></i>
                             </x-button>
                              @php
