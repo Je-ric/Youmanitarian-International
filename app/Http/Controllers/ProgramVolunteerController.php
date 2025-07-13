@@ -164,6 +164,25 @@ class ProgramVolunteerController extends Controller
                 'type' => 'error'
             ]);
         }
+        
+        // If program is full (theres cases na baka mabypass yung condition sa blade, sana hindi pa den)
+        // Parang double layer of protection
+        $approvedCount = $program->volunteers()->where('program_volunteers.status', 'approved')->count();
+        if ($approvedCount >= $program->volunteer_count) {
+            return redirect()->back()->with('toast', [
+                'message' => 'This program is full.',
+                'type' => 'error'
+            ]);
+        }
+
+        // Same dito, meron naman sa blade (naha-hide naman buttons)
+        if ($program->progress_status === 'done') {
+            return redirect()->back()->with('toast', [
+                'message' => 'This program is already completed.',
+                'type' => 'error'
+            ]);
+        }
+
 
         // Avoid duplicate entry
         if (!$program->volunteers->contains($volunteer->id)) {
