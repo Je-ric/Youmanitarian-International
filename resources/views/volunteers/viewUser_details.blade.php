@@ -406,10 +406,8 @@
 
         <!-- Programs & Attendance Tab -->
         <x-slot name="slot_programs">
-            <div class="space-y-6">
-                <!-- All Programs Section -->
-                <x-overview.card title="All Programs" icon="bx-calendar" variant="gradient">
                     <div class="p-6">
+                        <h1>Programs Participated?</h1>
                         @if ($volunteer->programs->isNotEmpty())
                             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                                 @foreach ($volunteer->programs as $program)
@@ -458,62 +456,41 @@
                                                     @endif
                                                 </span>
                                             </div>
-                                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                                <span class="text-sm font-medium text-gray-600">Location</span>
-                                                <span class="text-sm text-gray-900 font-medium">{{ $program->location ?? 'TBD' }}</span>
-                                            </div>
-                                            <div class="flex justify-between items-center py-2">
-                                                <span class="text-sm font-medium text-gray-600">Status</span>
-                                                <span class="text-sm font-medium">
-                                                    @if($volunteer->programs->where('id', $program->id)->first()->pivot->status === 'approved')
-                                                        <span class="text-green-600">Approved</span>
-                                                    @elseif($volunteer->programs->where('id', $program->id)->first()->pivot->status === 'pending')
-                                                        <span class="text-amber-600">Pending</span>
+                                            @if($hasAttendance)
+                                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                                    <span class="text-sm font-medium text-gray-600">Time In</span>
+                                                    <span class="text-sm text-gray-900 font-medium">{{ \Carbon\Carbon::parse($attendance->clock_in)->format('h:i A') }}</span>
+                                                </div>
+                                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                                    <span class="text-sm font-medium text-gray-600">Time Out</span>
+                                                    @if ($attendance->clock_out)
+                                                        <span class="text-sm text-gray-900 font-medium">{{ \Carbon\Carbon::parse($attendance->clock_out)->format('h:i A') }}</span>
                                                     @else
-                                                        <span class="text-red-600">Denied</span>
+                                                        <span class="text-sm text-amber-600 font-medium">Still Clocked In</span>
                                                     @endif
-                                                </span>
-                                            </div>
+                                                </div>
+                                                <div class="flex justify-between items-center py-2">
+                                                    <span class="text-sm font-medium text-gray-600">Total Hours</span>
+                                                    @if ($attendance->clock_out)
+                                                        @php
+                                                            $diff = \Carbon\Carbon::parse($attendance->clock_in)->diff(\Carbon\Carbon::parse($attendance->clock_out));
+                                                        @endphp
+                                                        <span class="text-sm font-bold text-[#1a2235]">{{ $diff->h }}h {{ $diff->i }}m</span>
+                                                    @else
+                                                        <span class="text-sm text-amber-600 font-medium">Ongoing</span>
+                                                    @endif
+                                                </div>
+                                            @else
+                                                <div class="bg-amber-50 rounded-lg p-3 mt-3">
+                                                    <div class="flex items-center gap-2">
+                                                        <i class='bx bx-time text-amber-500'></i>
+                                                        <span class="text-sm text-amber-700 font-medium">No attendance record yet</span>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
 
-                                        <!-- Attendance Details (if exists) -->
-                                        @if($hasAttendance)
-                                            <div class="bg-gray-50 rounded-lg p-3 mb-4">
-                                                <h4 class="text-sm font-semibold text-gray-700 mb-2">Attendance Details</h4>
-                                                <div class="space-y-2">
-                                                    <div class="flex justify-between items-center">
-                                                        <span class="text-xs font-medium text-gray-600">Time In</span>
-                                                        <span class="text-xs text-gray-900 font-medium">{{ \Carbon\Carbon::parse($attendance->clock_in)->format('h:i A') }}</span>
-                                                    </div>
-                                                    <div class="flex justify-between items-center">
-                                                        <span class="text-xs font-medium text-gray-600">Time Out</span>
-                                                        @if ($attendance->clock_out)
-                                                            <span class="text-xs text-gray-900 font-medium">{{ \Carbon\Carbon::parse($attendance->clock_out)->format('h:i A') }}</span>
-                                                        @else
-                                                            <span class="text-xs text-amber-600 font-medium">Still Clocked In</span>
-                                                        @endif
-                                                    </div>
-                                                    <div class="flex justify-between items-center">
-                                                        <span class="text-xs font-medium text-gray-600">Total Time</span>
-                                                        @if ($attendance->clock_out)
-                                                            @php
-                                                                $diff = \Carbon\Carbon::parse($attendance->clock_in)->diff(\Carbon\Carbon::parse($attendance->clock_out));
-                                                            @endphp
-                                                            <span class="text-xs font-bold text-[#1a2235]">{{ $diff->h }}h {{ $diff->i }}m</span>
-                                                        @else
-                                                            <span class="text-xs text-amber-600 font-medium">Ongoing</span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <div class="bg-amber-50 rounded-lg p-3 mb-4">
-                                                <div class="flex items-center gap-2">
-                                                    <i class='bx bx-time text-amber-500'></i>
-                                                    <span class="text-sm text-amber-700 font-medium">No attendance record yet</span>
-                                                </div>
-                                            </div>
-                                        @endif
+
 
                                         <!-- Action Buttons -->
                                         <div class="flex gap-2">
@@ -530,13 +507,6 @@
                                                     <i class='bx bx-clipboard-check mr-1'></i>
                                                     Review
                                                 </button>
-                                            @else
-                                                <button
-                                                    onclick="window.location.href='{{ route('programs.view', $program) }}'"
-                                                    class="flex-1 inline-flex items-center justify-center px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                                                    <i class='bx bx-log-in-circle mr-1'></i>
-                                                    Attend
-                                                </button>
                                             @endif
                                         </div>
                                     </div>
@@ -552,7 +522,6 @@
                             </div>
                         @endif
                     </div>
-                </x-overview.card>
 
                 <!-- Program Modals -->
                 @foreach ($volunteer->programs as $program)
@@ -574,7 +543,6 @@
                         ])
                     @endif
                 @endforeach
-            </div>
         </x-slot>
     </x-navigation-layout.tabs-modern>
     </div>
