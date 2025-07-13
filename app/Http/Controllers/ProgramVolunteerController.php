@@ -183,7 +183,6 @@ class ProgramVolunteerController extends Controller
             ]);
         }
 
-
         // Avoid duplicate entry
         if (!$program->volunteers->contains($volunteer->id)) {
             $program->volunteers()->attach($volunteer->id, ['status' => 'approved']);
