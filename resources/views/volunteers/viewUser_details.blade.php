@@ -425,16 +425,14 @@
                                                     {{ $program->title }}
                                                 </h3>
                                                 <div class="flex items-center gap-2 mt-1">
-                                                    <x-feedback-status.status-indicator 
-                                                        :status="$program->progress_status" 
-                                                        :label="ucfirst($program->progress_status)" />
+                                                    <x-feedback-status.programProgress :program="$program" />
                                                     @if($hasAttendance)
                                                         <x-feedback-status.status-indicator 
                                                             :status="$attendance->approval_status" 
                                                             :label="ucfirst($attendance->approval_status)" />
                                                     @else
                                                         <x-feedback-status.status-indicator 
-                                                            status="no_record" 
+                                                            status="warning" 
                                                             label="No Attendance" />
                                                     @endif
                                                 </div>
@@ -447,27 +445,17 @@
                                                 <span class="text-sm font-medium text-gray-600">Date</span>
                                                 <span class="text-sm text-gray-900 font-medium">{{ \Carbon\Carbon::parse($program->date)->format('M d, Y') }}</span>
                                             </div>
-                                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                                <span class="text-sm font-medium text-gray-600">Time</span>
-                                                <span class="text-sm text-gray-900 font-medium">
-                                                    {{ \Carbon\Carbon::parse($program->start_time)->format('h:i A') }}
-                                                    @if($program->end_time)
-                                                        - {{ \Carbon\Carbon::parse($program->end_time)->format('h:i A') }}
-                                                    @endif
-                                                </span>
-                                            </div>
                                             @if($hasAttendance)
                                                 <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                                    <span class="text-sm font-medium text-gray-600">Time In</span>
-                                                    <span class="text-sm text-gray-900 font-medium">{{ \Carbon\Carbon::parse($attendance->clock_in)->format('h:i A') }}</span>
-                                                </div>
-                                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                                    <span class="text-sm font-medium text-gray-600">Time Out</span>
-                                                    @if ($attendance->clock_out)
-                                                        <span class="text-sm text-gray-900 font-medium">{{ \Carbon\Carbon::parse($attendance->clock_out)->format('h:i A') }}</span>
-                                                    @else
-                                                        <span class="text-sm text-amber-600 font-medium">Still Clocked In</span>
-                                                    @endif
+                                                    <span class="text-sm font-medium text-gray-600">Time In/Out</span>
+                                                    <span class="text-sm text-gray-900 font-medium">
+                                                        {{ \Carbon\Carbon::parse($attendance->clock_in)->format('h:i A') }}
+                                                        @if ($attendance->clock_out)
+                                                            - {{ \Carbon\Carbon::parse($attendance->clock_out)->format('h:i A') }}
+                                                        @else
+                                                            - <span class="text-amber-600">Still Clocked In</span>
+                                                        @endif
+                                                    </span>
                                                 </div>
                                                 <div class="flex justify-between items-center py-2">
                                                     <span class="text-sm font-medium text-gray-600">Total Hours</span>
@@ -481,16 +469,13 @@
                                                     @endif
                                                 </div>
                                             @else
-                                                <div class="bg-amber-50 rounded-lg p-3 mt-3">
-                                                    <div class="flex items-center gap-2">
-                                                        <i class='bx bx-time text-amber-500'></i>
-                                                        <span class="text-sm text-amber-700 font-medium">No attendance record yet</span>
-                                                    </div>
-                                                </div>
+                                                <x-feedback-status.alert 
+                                                    variant="warning" 
+                                                    icon="bx bx-time" 
+                                                    message="No attendance record yet" 
+                                                />
                                             @endif
                                         </div>
-
-
 
                                         <!-- Action Buttons -->
                                         <div class="flex gap-2">
@@ -513,13 +498,11 @@
                                 @endforeach
                             </div>
                         @else
-                            <div class="text-center py-12">
-                                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <i class='bx bx-calendar text-gray-400 text-2xl'></i>
-                                </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-1">No Programs Joined</h3>
-                                <p class="text-gray-500">This volunteer hasn't joined any programs yet.</p>
-                            </div>
+                            <x-feedback-status.alert 
+                                variant="info" 
+                                icon="bx bx-calendar" 
+                                message="This volunteer hasn't joined any programs yet." 
+                            />
                         @endif
                     </div>
 
