@@ -32,6 +32,10 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Left -->
                 <div class="lg:col-span-1 space-y-6">
+                    <x-button href="{{ route('content.index') }}"
+                                variant="cancel">
+                        BACKKKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!
+                    </x-button>
                     <div>
                         <x-form.label>Content Title</x-form.label>
                         <x-form.input type="text" name="title" placeholder="What's the title???"
