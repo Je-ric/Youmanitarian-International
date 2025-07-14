@@ -41,9 +41,9 @@
                                 <i class='bx bx-edit'></i>
                             </x-button>
 
-                            <x-button href="{{ route('content.archive', $content->id) }}" variant="secondary" size="sm"
+                            <x-button variant="secondary" size="sm"
                                 class="tooltip" data-tip="Archive"
-                                onclick="return confirm('Are you sure you want to archive this content?')">
+                                onclick="document.getElementById('archive-modal-{{ $content->id }}').showModal(); return false;">
                                 <i class='bx bx-archive'></i>
                             </x-button>
 
@@ -61,6 +61,10 @@
             @endforeach
         </x-table.tbody>
     </x-table.table>
+
+        @foreach($contents as $content)
+            @include('content.modals.archiveContentModal', ['content' => $content])
+        @endforeach
 
     <div class="mt-6">
         {{ $contents->links() }}
