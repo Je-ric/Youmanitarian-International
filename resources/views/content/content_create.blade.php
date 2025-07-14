@@ -1,4 +1,4 @@
-@extends('layouts.sidebar_final')
+@extends('layouts.content_create')
 
 @section('content')
     <x-page-header 
