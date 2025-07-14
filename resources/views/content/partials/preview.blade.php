@@ -1,9 +1,11 @@
-<div class="flex flex-col sm:py-10 lg:py-12">
-    <!-- Top section: gray background -->
-    <div class="bg-gray-100 px-20 py-6">
+<div class="flex flex-col">
+    
+    {{-- px-20 == 80px and since may tabs-modern (24px) - 80-24 = 56 --}}
+    {{-- Kinomment ko lang, kase nakakaproud HAHAHAHAHA --}}
+    <div class="px-[56px] py-2">
         <div class="pt-16 px-4 sm:px-7">
             <div class="flex flex-col gap-4">
-                <!-- Title -->
+
                 <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1a2235] leading-tight">
                     @if(isset($title) && $title)
                         {{ $title }}
@@ -12,7 +14,6 @@
                     @endif
                 </h1>
                 
-                <!-- Meta info -->
                 <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
                     <div class="flex items-center gap-2">
                         <i class='bx bx-calendar text-[#ffb51b]'></i>
@@ -24,7 +25,6 @@
                     </div>
                 </div>
                 
-                <!-- Tags -->
                 <div class="flex flex-wrap items-center gap-3">
                     @if(isset($content_type) && $content_type)
                         <span class="inline-flex items-center px-3 py-1 bg-[#ffb51b] text-white text-sm font-semibold">
@@ -41,7 +41,6 @@
                     @endif
                 </div>
                 
-                <!-- Featured Image -->
                 @if(isset($image_content) && $image_content)
                     <div class="relative">
                         <img src="{{ asset('storage/' . $image_content) }}" 
@@ -63,7 +62,6 @@
         </div>
     </div>
 
-    <!-- Main content: white background -->
     <div class="flex flex-col xl:flex-row gap-6 lg:gap-8 bg-white px-10">
         <article class="xl:w-2/3">
             <div class="overflow-hidden">
@@ -84,7 +82,6 @@
                     </div>
                 </div>
 
-                <!-- Gallery Section -->
                 <div class="px-6 sm:px-8 lg:px-10 pb-6 sm:pb-8">
                     <div class="border-t border-gray-200 pt-6 sm:pt-8">
                         <h3 class="text-xl sm:text-2xl font-semibold text-[#1a2235] mb-6 flex items-center gap-2">
@@ -119,7 +116,6 @@
                     </div>
                 </div>
 
-                <!-- Engagement Section -->
                 @if((isset($enable_likes) && $enable_likes) || (isset($enable_comments) && $enable_comments) || (isset($enable_bookmark) && $enable_bookmark))
                     <div class="px-6 sm:px-8 lg:px-10 py-6 border-t border-gray-200 bg-gray-50">
                         <div class="flex flex-wrap items-center justify-between gap-4">
@@ -152,7 +148,6 @@
             </div>
         </article>
 
-        <!-- Sidebar -->
         <aside class="xl:w-1/3">
             <div class="bg-white border border-gray-200 sticky top-6 max-h-[calc(100vh-3rem)] overflow-hidden">
                 <div class="p-6 border-b border-gray-200">
@@ -164,7 +159,7 @@
 
                 <div class="overflow-y-auto max-h-[calc(100vh-12rem)]">
                     <div class="p-6 space-y-4">
-                        <!-- Skeleton for related content -->
+
                         @for($i = 0; $i < 3; $i++)
                             <div class="p-4 border border-gray-200">
                                 <div class="flex gap-4">
