@@ -1,3 +1,4 @@
+{{-- @extends('layouts.sidebar_final') --}}
 @extends('layouts.content_create')
 
 @section('content')
@@ -21,8 +22,8 @@
         class="mb-6">
         
         <x-slot name="slot_edit">
-            <!-- Form Section -->
-    <div class="w-full bg-white p-8 rounded-lg">
+            <!-- Form  -->
+    <div class="w-full rounded-lg">
         <form id="contentForm"
             action="{{ isset($content) ? route('content.update', $content->id) : route('content.store') }}" method="POST"
             enctype="multipart/form-data">

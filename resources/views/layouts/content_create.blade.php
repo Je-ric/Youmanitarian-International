@@ -19,7 +19,7 @@
     @livewireStyles 
 </head>
 <body class="font-sans antialiased bg-gray-100">
-    <main class="min-h-screen flex flex-col items-center justify-start py-8">
+    <main class="min-h-screen py-2">
         @yield('content')
     </main>
     @stack('modals')
