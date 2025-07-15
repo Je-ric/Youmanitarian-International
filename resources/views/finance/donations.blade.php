@@ -62,14 +62,14 @@
                                 <x-table.td>
                                     <x-button variant="table-action-view"
                                         onclick="document.getElementById('viewDonationModal-{{ $donation->id }}').showModal()">
-                                        <i class='bx bx-show'></i>
+                                        <i class='bx bx-dots-horizontal-rounded'></i>
                                     </x-button>
                                     @if($donation->status === 'Pending')
                                         <form action="{{ route('finance.donations.status', $donation) }}" method="POST"
                                             class="inline">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="text-green-600 hover:text-green-900">Confirm</button>
+                                            <x-button type="submit" variant="table-action-manage">Confirm</x-button>
                                         </form>
                                     @endif
                                 </x-table.td>

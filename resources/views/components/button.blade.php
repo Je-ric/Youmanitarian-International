@@ -46,10 +46,10 @@
         'task-primary' => 'px-3 py-1 text-sm bg-[#ffb51b] text-[#1a2235] rounded-md hover:bg-[#e6a319] font-semibold transition-colors',
         'task-secondary' => 'px-3 py-1 text-sm bg-[#1a2235] text-white rounded-md hover:bg-[#2a3245] font-semibold transition-colors',
     
-        'table-action-view' => 'w-9 h-9 flex items-center justify-center bg-blue-50 border border-blue-100 rounded-md hover:bg-blue-100 hover:border-blue-300 text-[#1a2235] text-xl p-0 shadow-sm focus:ring-2 focus:ring-blue-200 transition',
-        'table-action-manage' => 'w-9 h-9 flex items-center justify-center bg-green-50 border border-green-100 rounded-md hover:bg-green-100 hover:border-green-300 text-green-600 text-xl p-0 shadow-sm focus:ring-2 focus:ring-green-200 transition',
-        'table-action-edit' => 'w-9 h-9 flex items-center justify-center bg-yellow-50 border border-yellow-100 rounded-md hover:bg-yellow-100 hover:border-yellow-300 text-yellow-500 text-xl p-0 shadow-sm focus:ring-2 focus:ring-yellow-200 transition',
-        'table-action-danger' => 'w-9 h-9 flex items-center justify-center bg-red-50 border border-red-100 rounded-md hover:bg-red-100 hover:border-red-300 text-red-500 text-xl p-0 shadow-sm focus:ring-2 focus:ring-red-200 transition',
+        'table-action-view' => 'flex items-center justify-center bg-blue-50 border border-blue-100 rounded-md hover:bg-blue-100 hover:border-blue-300 text-[#1a2235] text-sm px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-200 transition gap-2',
+        'table-action-manage' => 'flex items-center justify-center bg-green-50 border border-green-100 rounded-md hover:bg-green-100 hover:border-green-300 text-green-600 text-sm px-3 py-2 shadow-sm focus:ring-2 focus:ring-green-200 transition gap-2',
+        'table-action-edit' => 'flex items-center justify-center bg-yellow-50 border border-yellow-100 rounded-md hover:bg-yellow-100 hover:border-yellow-300 text-yellow-500 text-sm px-3 py-2 shadow-sm focus:ring-2 focus:ring-yellow-200 transition gap-2',
+        'table-action-danger' => 'flex items-center justify-center bg-red-50 border border-red-100 rounded-md hover:bg-red-100 hover:border-red-300 text-red-500 text-sm px-3 py-2 shadow-sm focus:ring-2 focus:ring-red-200 transition gap-2',
         
         'save-entry' => 'btn px-6 py-2 text-sm font-semibold flex items-center gap-2 bg-[#283658] hover:bg-[#313849] text-[#FFB51B] rounded shadow active:scale-95 transition-transform duration-200 border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#283658]',
         'manual-entry' => 'btn bg-[#FFB51B] hover:bg-[#FFCB5F] text-white font-semibold px-2 py-1 text-xs rounded shadow active:scale-95 transition-transform duration-200 border-0 outline-none focus:outline-none focus:ring-2 focus:ring-[#FFB51B]',

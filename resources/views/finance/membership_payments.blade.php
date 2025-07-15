@@ -129,7 +129,7 @@
                                             @php $reminderModalId = 'reminderModal_' . $member->id; @endphp
                                             <button type="button" 
                                                 onclick="document.getElementById('{{ $reminderModalId }}').showModal()"
-                                                class="flex items-center gap-1 text-orange-600 hover:text-orange-700"
+                                                class="flex items-center gap-1 text-blue-600 hover:underline bg-transparent p-0 border-0 focus:outline-none"
                                                 title="Send Payment Reminder">
                                                 <i class='bx bx-bell'></i>
                                                 <span>Remind</span>

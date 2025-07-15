@@ -43,7 +43,7 @@
                         <x-button @click="openModal({{ $program->id }})" {{-- Pass ID to the function --}}
                             variant="table-action-view" class="tooltip" data-tip="View Details"
                             aria-label="View Details for {{ $program->title }}">
-                            <i class='bx bx-show'></i>
+                            <i class='bx bx-dots-horizontal-rounded'></i>
                         </x-button>
 
                         @if(Auth::user()->hasRole('Volunteer'))

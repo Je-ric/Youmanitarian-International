@@ -53,20 +53,20 @@
                                     <x-table.td>
                                             <div class="flex flex-wrap gap-2">
                                                 <x-button href="{{ route('volunteers.volunteer-details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
-                                                    <i class='bx bx-show'></i>
+                                                    <i class='bx bx-dots-horizontal-rounded'></i>
                                                 </x-button>
 
                                                 <form action="{{ route('volunteers.approve', $volunteer->id) }}" method="POST" class="inline">
                                                     @csrf
                                                     <x-button type="submit" variant="table-action-manage" class="tooltip" data-tip="Approve">
-                                                        <i class='bx bx-check'></i>
+                                                        <i class='bx bx-check'></i> Approve
                                                     </x-button>
                                                 </form>
 
                                                 <form action="{{ route('volunteers.deny', $volunteer->id) }}" method="POST" class="inline">
                                                     @csrf
                                                     <x-button type="submit" variant="table-action-danger" class="tooltip" data-tip="Deny">
-                                                        <i class='bx bx-x'></i>
+                                                        <i class='bx bx-x'></i> Deny
                                                     </x-button>
                                                 </form>
                                             </div>
@@ -101,13 +101,13 @@
                                     <x-table.td>
                                             <div class="flex flex-wrap gap-2">
                                                 <x-button href="{{ route('volunteers.volunteer-details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
-                                                    <i class='bx bx-show'></i>
+                                                    <i class='bx bx-dots-horizontal-rounded'></i>
                                                 </x-button>
 
                                                 <form action="{{ route('volunteers.restore', $volunteer->id) }}" method="POST" class="inline">
                                                     @csrf
                                                     <x-button type="submit" variant="table-action-edit" class="tooltip" data-tip="Restore to Pending">
-                                                        <i class='bx bx-reset'></i>
+                                                        <i class='bx bx-reset'></i> Restore
                                                     </x-button>
                                                 </form>
                                             </div>
@@ -144,7 +144,7 @@
                                     <x-table.td>
                                             <div class="flex flex-wrap gap-2">
                                                 <x-button href="{{ route('volunteers.volunteer-details', $volunteer->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
-                                                    <i class='bx bx-show'></i>
+                                                    <i class='bx bx-dots-horizontal-rounded'></i>
                                                 </x-button>
 
                                             @if($volunteer->user && $volunteer->user->member)
