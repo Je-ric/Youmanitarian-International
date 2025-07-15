@@ -56,20 +56,25 @@
                                                     <i class='bx bx-dots-horizontal-rounded'></i>
                                                 </x-button>
 
-                                                <form action="{{ route('volunteers.approve', $volunteer->id) }}" method="POST" class="inline">
+                                                {{-- <form action="{{ route('volunteers.approve', $volunteer->id) }}" method="POST" class="inline">
                                                     @csrf
                                                     <x-button type="submit" variant="table-action-manage" class="tooltip" data-tip="Approve">
                                                         <i class='bx bx-check'></i> Approve
                                                     </x-button>
-                                                </form>
+                                                </form> --}}
+                                                <x-button type="button" variant="table-action-manage" class="tooltip" data-tip="Approve"
+                                                    onclick="document.getElementById('approveVolunteerModal-{{ $volunteer->id }}').showModal()">
+                                                    <i class='bx bx-check'></i> Approve
+                                                </x-button>
 
-                                                <form action="{{ route('volunteers.deny', $volunteer->id) }}" method="POST" class="inline">
-                                                    @csrf
-                                                    <x-button type="submit" variant="table-action-danger" class="tooltip" data-tip="Deny">
-                                                        <i class='bx bx-x'></i> Deny
-                                                    </x-button>
-                                                </form>
-                                            </div>
+                                            <form action="{{ route('volunteers.deny', $volunteer->id) }}" method="POST" class="inline">
+                                                @csrf
+                                                <x-button type="submit" variant="table-action-danger" class="tooltip" data-tip="Deny">
+                                                    <i class='bx bx-x'></i> Deny
+                                                </x-button>
+                                            </form>
+                                        </div>
+                                        @include('volunteers.modals.approveVolunteerModal', ['volunteer' => $volunteer])
                                     </x-table.td>
                                 </x-table.tr>
                                 @endforeach
