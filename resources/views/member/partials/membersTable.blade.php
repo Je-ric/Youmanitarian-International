@@ -34,21 +34,19 @@
                         {{ $member->start_date ? $member->start_date->format('M d, Y') : 'N/A' }}</div>
                 </x-table.td>
                 <x-table.td>
-                    <span
-                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                {{ $member->membership_status === 'active' ? 'bg-green-100 text-green-800' :
-            ($member->invitation_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                        {{ $member->invitation_status === 'pending' ? 'Pending Invitation' : ucfirst($member->membership_status) }}
-                    </span>
+                    <x-feedback-status.status-indicator 
+                        :status="$member->invitation_status === 'pending' ? 'pending' : ($member->membership_status === 'active' ? 'success' : 'danger')"
+                        :label="$member->invitation_status === 'pending' ? 'Pending Invitation' : ucfirst($member->membership_status)"
+                    />
                 </x-table.td>
                 <x-table.td>
                     <div class="flex space-x-2">
                         @if($member->invitation_status === 'pending')
                             <form action="{{ route('members.resend-invitation', $member) }}" method="POST" class="inline">
                                 @csrf
-                                <button type="submit" class="text-indigo-600 hover:text-indigo-900">
+                                <x-button type="submit" variant="table-action-view">
                                     <i class='bx bx-refresh'></i> Resend Invitation
-                                </button>
+                                </x-button>
                             </form>
                         @endif
                         @if($member->membership_status === 'inactive' && $member->invitation_status !== 'pending')
@@ -56,9 +54,9 @@
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="membership_status" value="active">
-                                <button type="submit" class="text-green-600 hover:text-green-900">
+                                <x-button type="submit" variant="table-action-manage">
                                     <i class='bx bx-check'></i> Activate
-                                </button>
+                                </x-button>
                             </form>
                         @endif
                         @if($member->membership_status === 'active')
@@ -66,9 +64,9 @@
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="membership_status" value="inactive">
-                                <button type="submit" class="text-red-600 hover:text-red-900">
+                                <x-button type="submit" variant="table-action-danger">
                                     <i class='bx bx-x'></i> Deactivate
-                                </button>
+                                </x-button>
                             </form>
                         @endif
                     </div>

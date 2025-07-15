@@ -41,7 +41,6 @@ class MemberController extends Controller
             ->latest()
             ->paginate(10, ['*'], 'pending_page');
 
-        // Data for overview
         $totalMembersCount = Member::count();
         $activeMembersCount = Member::where('membership_status', 'active')->count();
         $fullPledgeMembersCount = Member::where('membership_type', 'full_pledge')->count();
@@ -126,7 +125,7 @@ class MemberController extends Controller
             DB::commit();
 
             return redirect()->route('members.index')
-                ->with('success', 'Member created successfully and invitation sent!');
+                ->with('toast', ['type' => 'success', 'message' => 'Member created successfully and invitation sent!']);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Member creation failed', [
@@ -136,7 +135,7 @@ class MemberController extends Controller
             
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Failed to create member. Please try again.');
+                ->with('toast', ['type' => 'error', 'message' => 'Failed to create member. Please try again.']);
         }
     }
 
@@ -149,7 +148,7 @@ class MemberController extends Controller
         $member->update($validated);
         
         return redirect()->back()
-            ->with('success', 'Member status updated successfully');
+            ->with('toast', ['type' => 'success', 'message' => 'Member status updated successfully']);
     }
 
     public function invite(Request $request, Volunteer $volunteer)
@@ -167,12 +166,12 @@ class MemberController extends Controller
                     'volunteer_id' => $volunteer->id
                 ]);
                 return redirect()->back()
-                    ->with('error', 'Error: User not found for this volunteer.');
+                    ->with('toast', ['type' => 'error', 'message' => 'Error: User not found for this volunteer.']);
             }
 
             if ($volunteer->user->member) {
                 return redirect()->back()
-                    ->with('error', 'This volunteer is already a member.');
+                    ->with('toast', ['type' => 'error', 'message' => 'This volunteer is already a member.']);
             }
 
             // Create member record
@@ -198,7 +197,7 @@ class MemberController extends Controller
                 ]);
 
                 return redirect()->back()
-                    ->with('success', 'Member invitation sent successfully');
+                    ->with('toast', ['type' => 'success', 'message' => 'Member invitation sent successfully']);
             } catch (\Exception $e) {
                 Log::error('Failed to send invitation email', [
                     'error' => $e->getMessage(),
@@ -207,7 +206,7 @@ class MemberController extends Controller
                 ]);
                 
                 return redirect()->back()
-                    ->with('warning', 'Member created but failed to send invitation email. Please try sending the invitation again.');
+                    ->with('toast', ['type' => 'warning', 'message' => 'Member created but failed to send invitation email. Please try sending the invitation again.']);
             }
         } catch (\Exception $e) {
             Log::error('Error in member invitation process', [
@@ -216,7 +215,7 @@ class MemberController extends Controller
             ]);
             
             return redirect()->back()
-                ->with('error', 'Error creating member. Please try again.');
+                ->with('toast', ['type' => 'error', 'message' => 'Error creating member. Please try again.']);
         }
     }
 
@@ -243,11 +242,11 @@ class MemberController extends Controller
             DB::commit();
 
             return redirect()->route('dashboard')
-                ->with('success', 'You have successfully accepted the membership invitation!');
+                ->with('toast', ['type' => 'success', 'message' => 'You have successfully accepted the membership invitation!']);
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('dashboard')
-                ->with('error', 'Failed to accept membership invitation. Please try again.');
+                ->with('toast', ['type' => 'error', 'message' => 'Failed to accept membership invitation. Please try again.']);
         }
     }
 
@@ -259,14 +258,14 @@ class MemberController extends Controller
         ]);
 
         return redirect()->route('dashboard')
-            ->with('info', 'You have declined the membership invitation.');
+            ->with('toast', ['type' => 'info', 'message' => 'You have declined the membership invitation.']);
     }
 
     public function resendInvitation(Member $member)
     {
         if ($member->isActive()) {
             return redirect()->back()
-                ->with('error', 'Cannot resend invitation to an active member.');
+                ->with('toast', ['type' => 'error', 'message' => 'Cannot resend invitation to an active member.']);
         }
 
         try {
@@ -275,6 +274,10 @@ class MemberController extends Controller
                 'invited_at' => now(),
             ]);
 
+            // send also notif
+            $member->user->notify(new MemberInvited($member));
+
+            // Send email
             Mail::to($member->user->email)->send(new MemberInvitation($member));
             
             Log::info('Member invitation resent successfully', [
@@ -283,7 +286,7 @@ class MemberController extends Controller
             ]);
 
             return redirect()->back()
-                ->with('success', 'Invitation resent successfully.');
+                ->with('toast', ['type' => 'success', 'message' => 'Invitation resent successfully.']);
         } catch (\Exception $e) {
             Log::error('Failed to resend invitation', [
                 'error' => $e->getMessage(),
@@ -291,7 +294,7 @@ class MemberController extends Controller
             ]);
 
             return redirect()->back()
-                ->with('error', 'Failed to resend invitation. Please try again.');
+                ->with('toast', ['type' => 'error', 'message' => 'Failed to resend invitation. Please try again.']);
         }
     }
 
