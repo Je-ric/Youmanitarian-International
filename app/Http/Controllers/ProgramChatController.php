@@ -47,42 +47,10 @@ class ProgramChatController extends Controller
         $message->load('sender:id,name,profile_pic');
 
         if ($request->ajax()) {
-            return response()->json(['success' => true, 'chat' => $message]);
+            $deleteUrl = route('program.chats.destroy', [$program, $message]);
+            return response()->json(['success' => true, 'chat' => $message, 'delete_url' => $deleteUrl]);
         }
         return redirect()->route('program.chats.show', $program)->with('success', 'Message sent!');
-    }
-
-    public function update(Request $request, Program $program, ProgramChat $message)
-    {
-        if ($message->program_id !== $program->id) {
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'error' => 'Message not found in this program.'], 404);
-            }
-            return redirect()->route('program.chats.show', $program)->with('error', 'Message not found in this program.');
-        }
-        if ($message->sender_id !== Auth::id()) {
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'error' => 'You can only edit your own messages.'], 403);
-            }
-            return redirect()->route('program.chats.show', $program)->with('error', 'You can only edit your own messages.');
-        }
-
-        $request->validate([
-            'message' => 'required|string|max:1000',
-        ]);
-
-        $message->update([
-            'message' => $request->message,
-            'is_edited' => true,
-            'edited_at' => now()
-        ]);
-
-        $message->load('sender:id,name,profile_pic');
-
-        if ($request->ajax()) {
-            return response()->json(['success' => true, 'chat' => $message]);
-        }
-        return redirect()->route('program.chats.show', $program)->with('success', 'Message updated!');
     }
 
     public function destroy(Request $request, Program $program, ProgramChat $message)
