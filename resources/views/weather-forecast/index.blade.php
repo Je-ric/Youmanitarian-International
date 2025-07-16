@@ -1,127 +1,117 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/daisyui@1.0.0/dist/full.js"></script>
-</head>
-<body class="bg-gradient-to-r from-green-100 to-green-200 text-green-800 p-5 min-h-screen">
-    <div class="container mx-auto max-w-6xl">
-        <h1 class="text-3xl font-bold text-center mb-8 text-green-900"><i class='bx bx-leaf'></i> Weather App</h1>
-        <!-- Weather Form -->
-        <div class="bg-white/90 p-6 rounded-xl shadow-lg mb-6">
-            <form id="weatherForm" class="flex flex-col md:flex-row gap-3 mb-4">
-                <input type="text" id="cityInput" class="border border-green-500 rounded-lg px-4 py-2 flex-grow" placeholder="Enter a city">
-                <input type="text" id="provinceInput" class="border border-green-500 rounded-lg px-4 py-2 flex-grow" placeholder="Enter a Province">
-                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                    <i class='bx bx-search'></i> Search
-                </button>
-                <button id="locationBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                    <i class='bx bx-current-location'></i> Use My Location
-                </button>
-            </form>
-        </div>
+@extends('layouts.sidebar_final')
 
-        <!-- Weather Results -->
-        <div class="grid md:grid-cols-2 gap-4 mb-6">
-            <div class="bg-white/90 p-6 rounded-xl shadow-lg" id="weatherResults"></div>
-            <div class="bg-white/90 p-6 rounded-xl shadow-lg" id="weatherResults2"></div>
-        </div>
-
-        <!-- Farming Advisory -->
-        <div class="bg-amber-100/90 p-4 rounded-xl shadow-lg mb-6">
-            <div class="flex items-center gap-2">
-                <i class='bx bx-info-circle text-xl'></i>
-                <strong class="text-lg">Farming Advisory:</strong>
-                <span id="advisory" class="font-medium">Select location to view advisories</span>
-            </div>
-        </div>
-
-        <h3 class="text-xl font-semibold mb-4"><i class='bx bx-calendar'></i> 7-Day Forecast</h3>
-        <div class="grid grid-cols-2 md:grid-cols-6 gap-3" id="weeklyForecast"></div>
-
-        <h2 class="text-xl font-bold text-center mt-4"><i class='bx bx-calendar'></i> Hourly Forecast</h2>
-        <div class="flex overflow-x-auto space-x-4 p-4"  id="hourlyForecast"></div>
-
-        <div class="bg-white/90 p-6 rounded-xl shadow-lg mt-6 max-w-md mx-auto">
-            <h3 class="text-2xl font-bold text-green-800 flex items-center space-x-2">
-                <i class="bx bx-pin text-xl"></i>
-                <span>Pinned Locations</span>
-            </h3>
-            <div id="pinnedLocations" class="mt-4 space-y-4">
-                {{-- Display --}}
-            </div>
-        </div>
-
-
-        <div class="bg-white/90 p-6 rounded-xl shadow-lg mt-6">
-            <h3 class="text-xl font-bold text-green-800">🌡️ Weather Terminology Guide</h3>
-        
-            <div class="mt-4">
-                <h4 class="text-lg font-semibold text-green-700">📌 Atmospheric Pressure (hPa)</h4>
-                <p class="text-gray-700 text-sm">Atmospheric pressure helps predict weather conditions.</p>
-                <ul class="text-sm text-gray-600 list-disc ml-5 mt-2">
-                    <li><strong>🔻 Below 1000 hPa:</strong> Low pressure → Rain or storms are likely.</li>
-                    <li><strong>🔺 Above 1015 hPa:</strong> High pressure → Clear and dry weather.</li>
-                </ul>
-            </div>
-        
-            <div class="mt-4">
-                <h4 class="text-lg font-semibold text-green-700">💧 Humidity (%)</h4>
-                <p class="text-gray-700 text-sm">Humidity affects plant health and human comfort.</p>
-                <ul class="text-sm text-gray-600 list-disc ml-5 mt-2">
-                    <li><strong>🌿 Below 40%:</strong> Dry air, plants lose moisture quickly.</li>
-                    <li><strong>🌧️ Above 80%:</strong> High risk of mold, fungus, and plant diseases.</li>
-                </ul>
-            </div>
-        
-            <div class="mt-4">
-                <h4 class="text-lg font-semibold text-green-700">🌦️ Precipitation (mm)</h4>
-                <p class="text-gray-700 text-sm">Precipitation measures how much water falls from the sky, including rain, snow, or hail.</p>
-                <ul class="text-sm text-gray-600 list-disc ml-5 mt-2">
-                    <li><strong>0 mm:</strong> No rain expected.</li>
-                    <li><strong>1-5 mm:</strong> Light rain, may slightly wet the ground.</li>
-                    <li><strong>10-20 mm:</strong> Moderate rain, noticeable wet conditions.</li>
-                    <li><strong>20+ mm:</strong> Heavy rain, possible flooding risks.</li>
-                </ul>
-            </div>
-
-            <div class="mt-4">
-                <h4 class="text-lg font-semibold text-green-700">🌧️ Rain Chance (%)</h4>
-                <p class="text-gray-700 text-sm">Rain chance indicates how likely it is to rain in a given period.</p>
-                <ul class="text-sm text-gray-600 list-disc ml-5 mt-2">
-                    <li><strong>0-20%:</strong> Very unlikely to rain.</li>
-                    <li><strong>30-50%:</strong> Possible scattered showers.</li>
-                    <li><strong>60-80%:</strong> Likely to rain, bring an umbrella! ☂️</li>
-                    <li><strong>90-100%:</strong> Almost certain rain or storms expected.</li>
-                </ul>
-            </div>
-
-            <div class="mt-4">
-                <h4 class="text-lg font-semibold text-green-700">📊 Rain Chance vs. Precipitation</h4>
-                <p class="text-gray-700 text-sm"><strong>🔹 Are they the same? No!</strong></p>
-                <ul class="text-sm text-gray-600 list-disc ml-5 mt-2">
-                    <li>✔ <strong>Precipitation (mm)</strong> → How much rain will fall.</li>
-                    <li>✔ <strong>Rain Chance (%)</strong> → How likely it is to rain.</li>
-                </ul>
-                <p class="text-sm text-gray-700 font-medium mt-3">💡Examples:</p>
-                <ul class="text-sm text-gray-600 list-disc ml-5 mt-2">
-                    <li>🌥️ <strong>20% Rain Chance & 0 mm Precipitation</strong> → Clouds present, but very low chance of rain.</li>
-                    <li>🌦️ <strong>80% Rain Chance & 5 mm Precipitation</strong> → High chance of light rain.</li>
-                    <li>⛈️ <strong>90% Rain Chance & 30 mm Precipitation</strong> → Very likely and heavy rain expected!</li>
-                </ul>
-            </div>
-        </div>
-        
-        
+@section('content')
+<div class="container mx-auto max-w-6xl">
+    <h1 class="text-3xl font-bold text-center mb-8 text-green-900"><i class='bx bx-leaf'></i> Weather App</h1>
+    <!-- Weather Form -->
+    <div class="bg-white/90 p-6 rounded-xl shadow-lg mb-6">
+        <form id="weatherForm" class="flex flex-col md:flex-row gap-3 mb-4">
+            <input type="text" id="cityInput" class="border border-green-500 rounded-lg px-4 py-2 flex-grow" placeholder="Enter a city">
+            <input type="text" id="provinceInput" class="border border-green-500 rounded-lg px-4 py-2 flex-grow" placeholder="Enter a Province">
+            <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                <i class='bx bx-search'></i> Search
+            </button>
+            <button id="locationBtn" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                <i class='bx bx-current-location'></i> Use My Location
+            </button>
+        </form>
     </div>
 
-    {{-- <pre>{{ dd($OPEN_WEATHERMAP_KEY1) }}</pre> --}}
-    <script>
+    <!-- Weather Results -->
+    <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white/90 p-6 rounded-xl shadow-lg" id="weatherResults"></div>
+        <div class="bg-white/90 p-6 rounded-xl shadow-lg" id="weatherResults2"></div>
+    </div>
+
+    <!-- Farming Advisory -->
+    <div class="bg-amber-100/90 p-4 rounded-xl shadow-lg mb-6">
+        <div class="flex items-center gap-2">
+            <i class='bx bx-info-circle text-xl'></i>
+            <strong class="text-lg">Farming Advisory:</strong>
+            <span id="advisory" class="font-medium">Select location to view advisories</span>
+        </div>
+    </div>
+
+    <h3 class="text-xl font-semibold mb-4"><i class='bx bx-calendar'></i> 7-Day Forecast</h3>
+    <div class="grid grid-cols-2 md:grid-cols-6 gap-3" id="weeklyForecast"></div>
+
+    <h2 class="text-xl font-bold text-center mt-4"><i class='bx bx-calendar'></i> Hourly Forecast</h2>
+    <div class="flex overflow-x-auto space-x-4 p-4"  id="hourlyForecast"></div>
+
+    <div class="bg-white/90 p-6 rounded-xl shadow-lg mt-6 max-w-md mx-auto">
+        <h3 class="text-2xl font-bold text-green-800 flex items-center space-x-2">
+            <i class="bx bx-pin text-xl"></i>
+            <span>Pinned Locations</span>
+        </h3>
+        <div id="pinnedLocations" class="mt-4 space-y-4">
+            {{-- Display --}}
+        </div>
+    </div>
+
+    <div class="bg-white/90 p-6 rounded-xl shadow-lg mt-6">
+        <h3 class="text-xl font-bold text-green-800">🌡️ Weather Terminology Guide</h3>
+    
+        <div class="mt-4">
+            <h4 class="text-lg font-semibold text-green-700">📌 Atmospheric Pressure (hPa)</h4>
+            <p class="text-gray-700 text-sm">Atmospheric pressure helps predict weather conditions.</p>
+            <ul class="text-sm text-gray-600 list-disc ml-5 mt-2">
+                <li><strong>🔻 Below 1000 hPa:</strong> Low pressure → Rain or storms are likely.</li>
+                <li><strong>🔺 Above 1015 hPa:</strong> High pressure → Clear and dry weather.</li>
+            </ul>
+        </div>
+    
+        <div class="mt-4">
+            <h4 class="text-lg font-semibold text-green-700">💧 Humidity (%)</h4>
+            <p class="text-gray-700 text-sm">Humidity affects plant health and human comfort.</p>
+            <ul class="text-sm text-gray-600 list-disc ml-5 mt-2">
+                <li><strong>🌿 Below 40%:</strong> Dry air, plants lose moisture quickly.</li>
+                <li><strong>🌧️ Above 80%:</strong> High risk of mold, fungus, and plant diseases.</li>
+            </ul>
+        </div>
+    
+        <div class="mt-4">
+            <h4 class="text-lg font-semibold text-green-700">🌦️ Precipitation (mm)</h4>
+            <p class="text-gray-700 text-sm">Precipitation measures how much water falls from the sky, including rain, snow, or hail.</p>
+            <ul class="text-sm text-gray-600 list-disc ml-5 mt-2">
+                <li><strong>0 mm:</strong> No rain expected.</li>
+                <li><strong>1-5 mm:</strong> Light rain, may slightly wet the ground.</li>
+                <li><strong>10-20 mm:</strong> Moderate rain, noticeable wet conditions.</li>
+                <li><strong>20+ mm:</strong> Heavy rain, possible flooding risks.</li>
+            </ul>
+        </div>
+
+        <div class="mt-4">
+            <h4 class="text-lg font-semibold text-green-700">🌧️ Rain Chance (%)</h4>
+            <p class="text-gray-700 text-sm">Rain chance indicates how likely it is to rain in a given period.</p>
+            <ul class="text-sm text-gray-600 list-disc ml-5 mt-2">
+                <li><strong>0-20%:</strong> Very unlikely to rain.</li>
+                <li><strong>30-50%:</strong> Possible scattered showers.</li>
+                <li><strong>60-80%:</strong> Likely to rain, bring an umbrella! ☂️</li>
+                <li><strong>90-100%:</strong> Almost certain rain or storms expected.</li>
+            </ul>
+        </div>
+
+        <div class="mt-4">
+            <h4 class="text-lg font-semibold text-green-700">📊 Rain Chance vs. Precipitation</h4>
+            <p class="text-gray-700 text-sm"><strong>🔹 Are they the same? No!</strong></p>
+            <ul class="text-sm text-gray-600 list-disc ml-5 mt-2">
+                <li>✔ <strong>Precipitation (mm)</strong> → How much rain will fall.</li>
+                <li>✔ <strong>Rain Chance (%)</strong> → How likely it is to rain.</li>
+            </ul>
+            <p class="text-sm text-gray-700 font-medium mt-3">💡Examples:</p>
+            <ul class="text-sm text-gray-600 list-disc ml-5 mt-2">
+                <li>🌥️ <strong>20% Rain Chance & 0 mm Precipitation</strong> → Clouds present, but very low chance of rain.</li>
+                <li>🌦️ <strong>80% Rain Chance & 5 mm Precipitation</strong> → High chance of light rain.</li>
+                <li>⛈️ <strong>90% Rain Chance & 30 mm Precipitation</strong> → Very likely and heavy rain expected!</li>
+            </ul>
+        </div>
+    </div>
+    
+    
+</div>
+
+{{-- <pre>{{ dd($OPEN_WEATHERMAP_KEY1) }}</pre> --}}
+<script>
         const API_KEY = "{{ $OPEN_WEATHERMAP_KEY1 }}";
         const form = document.getElementById("weatherForm");
         const cityInput = document.getElementById("cityInput");
@@ -560,6 +550,4 @@
 
     document.addEventListener("DOMContentLoaded", displayPinnedLocations);
     </script>
-
-</body>
-</html>
+@endsection
