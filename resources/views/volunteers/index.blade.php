@@ -67,14 +67,19 @@
                                                     <i class='bx bx-check'></i> Approve
                                                 </x-button>
 
-                                            <form action="{{ route('volunteers.deny', $volunteer->id) }}" method="POST" class="inline">
+                                            {{-- <form action="{{ route('volunteers.deny', $volunteer->id) }}" method="POST" class="inline">
                                                 @csrf
                                                 <x-button type="submit" variant="table-action-danger" class="tooltip" data-tip="Deny">
                                                     <i class='bx bx-x'></i> Deny
                                                 </x-button>
-                                            </form>
+                                            </form> --}}
+                                                <x-button type="button" variant="table-action-danger" class="tooltip" data-tip="Deny"
+                                                    onclick="document.getElementById('denyVolunteerModal-{{ $volunteer->id }}').showModal()">
+                                                    <i class='bx bx-x'></i> Deny
+                                                </x-button>
                                         </div>
                                         @include('volunteers.modals.approveVolunteerModal', ['volunteer' => $volunteer])
+                                        @include('volunteers.modals.denyVolunteerModal', ['volunteer' => $volunteer])
                                     </x-table.td>
                                 </x-table.tr>
                                 @endforeach
@@ -109,13 +114,19 @@
                                                     <i class='bx bx-dots-horizontal-rounded'></i>
                                                 </x-button>
 
-                                                <form action="{{ route('volunteers.restore', $volunteer->id) }}" method="POST" class="inline">
+                                                {{-- <form action="{{ route('volunteers.restore', $volunteer->id) }}" method="POST" class="inline">
                                                     @csrf
                                                     <x-button type="submit" variant="table-action-edit" class="tooltip" data-tip="Restore to Pending">
                                                         <i class='bx bx-reset'></i> Restore
                                                     </x-button>
-                                                </form>
+                                                </form> --}}
+                                                <x-button type="button" variant="table-action-edit" class="tooltip" data-tip="Restore"
+                                                    onclick="document.getElementById('restoreVolunteerModal-{{ $volunteer->id }}').showModal()">
+                                                    <i class='bx bx-reset'></i> Restore
+                                                </x-button>
                                             </div>
+                                            
+                                        @include('volunteers.modals.restoreVolunteerModal', ['volunteer' => $volunteer])
                                     </x-table.td>
                                 </x-table.tr>
                                 @endforeach
