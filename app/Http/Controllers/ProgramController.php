@@ -138,6 +138,13 @@ class ProgramController extends Controller
             'volunteer_count' => $request->volunteer_count ?? 0,
         ]);
 
+        // Notify all volunteers in this program about the update
+        // check if may volunteer, para hindi na mag-occur nang error na wala namang sesendan
+        $volunteers = $program->volunteers()->with('user')->get()->pluck('user')->filter();
+        if ($volunteers->isNotEmpty()) {
+            Notification::send($volunteers, NewProgramAvailable::updatedProgram($program));
+        }
+
         return redirect()
             ->route('programs.manage_volunteers', $program->id)
             ->with('toast', [

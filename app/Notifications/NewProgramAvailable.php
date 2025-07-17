@@ -14,16 +14,29 @@ class NewProgramAvailable extends Notification implements ShouldQueue
     use Queueable;
 
     protected $program;
+    protected $mode; // 'new' or 'update'
 
     /**
      * Create a new notification instance.
      *
      * @param  \App\Models\Program  $program
+     * @param  string $mode  // 'new' or 'update'
      * @return void
      */
-    public function __construct(Program $program)
+    public function __construct(Program $program, $mode = 'new')
     {
         $this->program = $program;
+        $this->mode = $mode;
+    }
+
+    // Static helpers for clarity
+    public static function newProgram(Program $program)
+    {
+        return new self($program, 'new');
+    }
+    public static function updatedProgram(Program $program)
+    {
+        return new self($program, 'update');
     }
 
     /**
@@ -45,12 +58,24 @@ class NewProgramAvailable extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        return [
-            'title' => 'New Program Available!',
-            'type' => 'program_update',
-            'message' => "A new program, '{$this->program->title},' is now open for volunteers.",
-            'action_url' => route('programs.index'),
-            'program_id' => $this->program->id,
-        ];
+        if ($this->mode === 'update') {
+            return [
+                'title' => 'Program Updated!',
+                'type' => 'program_update',
+                'message' => "The program '{$this->program->title}' has been updated. Please check for changes.",
+                'action_url' => route('programs.index', [], false) . '?modal=' . $this->program->id,
+                'program_id' => $this->program->id,
+                'mode' => 'update',
+            ];
+        } else {
+            return [
+                'title' => 'New Program Available!',
+                'type' => 'program_update',
+                'message' => "A new program, '{$this->program->title},' is now open for volunteers.",
+                'action_url' => route('programs.index', [], false) . '?modal=' . $this->program->id,
+                'program_id' => $this->program->id,
+                'mode' => 'new',
+            ];
+        }
     }
 } 
