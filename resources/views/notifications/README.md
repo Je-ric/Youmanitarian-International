@@ -10,7 +10,7 @@ The notification system keeps users informed about important events and actions 
 | `payment_reminder`            | A payment reminder is created for a membership fee            | The member/user who owes the payment    |
 | `task_assigned`               | A program coordinator assigns a task to a volunteer           | The volunteer assigned to the task      |
 | `program_volunteer_attendance`| A coordinator approves/rejects a volunteer's attendance       | The volunteer whose attendance is updated|
-| `program_update`              | A new program is created                                      | All users with the Volunteer role       |
+| `program_update`              | A new program is created or an existing program is updated    | All users with the Volunteer role or volunteers assigned to the updated program |
 | `member_invitation`           | A user is invited to become a member                          | The invited user                        |
 | `volunteer_joined`            | A volunteer joins a program                                   | The program's coordinator               |
 | `volunteer_application`       | A volunteer's application is approved or denied               | The volunteer who applied               |
@@ -35,10 +35,16 @@ The notification system keeps users informed about important events and actions 
 - **When/Why:** Sent when a program coordinator approves or rejects a volunteer's attendance record.
 - **Who:** The volunteer whose attendance was updated.
 
-### 4. Program Update (`program_update`)
-- **What:** Announces that a new program is available for volunteers.
-- **When/Why:** Sent when a new program is created in the system.
-- **Who:** All users with the Volunteer role.
+### 4. Program Update (program_update)
+
+- **What is it?**
+  - Notifies volunteers about new programs **and** updates to programs they are part of.
+- **When/why does it appear?**
+  - **New Program:** When a new program is created, all users with the Volunteer role receive this notification.
+  - **Program Updated:** When an existing program is updated, all volunteers assigned to that program receive this notification, alerting them to check for changes.
+- **Who receives it?**
+  - **New Program:** All volunteers in the system.
+  - **Program Updated:** Only volunteers assigned to the updated program.
 
 ### 5. Member Invitation (`member_invitation`)
 - **What:** Invites a user to become a member of the organization.
@@ -77,61 +83,6 @@ Some notifications have a dedicated view page (showing details and actions), whi
 | `volunteer_application`           | No                  | `/programs/list` or `/dashboard` (see `programs.index` or `dashboard` route)              |
 | `role_update`                     | No                  | `/dashboard`                                                                              |
 
-**Explanation:**
-- **Dedicated View Page:** The notification opens a special page showing all details and possible actions (e.g., payment reminder, invitation).
-- **Direct Redirect:** The notification takes the user straight to the relevant resource (e.g., program attendance, dashboard, etc.).
-- **Modal:** For new program notifications, the user is redirected to the program list page, and a modal for the new program can be opened if the view supports it.
-
----
-
-## How Notifications Work
-- **Trigger:** Notifications are sent from the backend (usually in controllers or service classes) when certain events occur (see above).
-- **Delivery:** Most notifications use Laravel's `database` channel, so they are stored in the `notifications` table and shown in the web UI.
-- **Display:** Users see their notifications in the Notifications page (`/notifications/list`). Unread notifications are highlighted.
-- **Interaction:** Clicking a notification marks it as read and redirects the user to a relevant page (e.g., payment details, attendance, program info, etc.).
-
-## How Notifications Are Sent
-Notifications are sent using Laravel's notification system. Example:
-
-```
-// Send a payment reminder
-$user->notify(new \App\Notifications\PaymentReminder($reminder));
-
-// Assign a task to a volunteer
-$volunteer->user->notify(new \App\Notifications\TaskAssigned($task, $program));
-
-// Notify all volunteers of a new program
-foreach ($volunteers as $volunteer) {
-    $volunteer->user->notify(new \App\Notifications\NewProgramAvailable($program));
-}
-```
-
-## Adding a New Notification Type
-1. Create a new notification class in `app/Notifications/`.
-2. Implement the `toArray()` method to include at least:
-    - `type` (string)
-    - `title` (string)
-    - `message` (string)
-    - `action_url` (optional, for custom redirects)
-    - Any IDs needed for routing (e.g., `program_id`)
-3. Update the notification rendering logic in `index.blade.php` if special routing is needed.
-4. Send the notification from your controller or service.
-
-## Example: Creating a Custom Notification
-```
-php artisan make:notification CustomAlert
-```
-Edit the generated file:
-```
-public function toArray($notifiable)
-{
-    return [
-        'type' => 'custom_alert',
-        'title' => 'Custom Alert',
-        'message' => 'This is a custom notification.',
-        'action_url' => route('dashboard'),
-    ];
-}
 ```
 
 ## References

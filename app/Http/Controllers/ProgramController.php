@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\User;
-use App\Notifications\NewProgramAvailable;
+use App\Notifications\ProgramUpdate;
 use Illuminate\Support\Facades\Notification;
 
 class ProgramController extends Controller
@@ -99,7 +99,7 @@ class ProgramController extends Controller
         // Only send notifications if there are volunteers in the system
         // Send notification to all volunteers \Notifications\NewProgramAvailable.php
         if ($volunteers->isNotEmpty()) {
-            Notification::send($volunteers, new NewProgramAvailable($program));
+            Notification::send($volunteers, new ProgramUpdate($program));
         } 
 
         // Create a welcome message in the program chat
@@ -142,7 +142,7 @@ class ProgramController extends Controller
         // check if may volunteer, para hindi na mag-occur nang error na wala namang sesendan
         $volunteers = $program->volunteers()->with('user')->get()->pluck('user')->filter();
         if ($volunteers->isNotEmpty()) {
-            Notification::send($volunteers, NewProgramAvailable::updatedProgram($program));
+            Notification::send($volunteers, ProgramUpdate::updatedProgram($program));
         }
 
         return redirect()
