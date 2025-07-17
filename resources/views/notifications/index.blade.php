@@ -54,89 +54,90 @@
                     default                       => ['bx-info-circle', 'bg-gray-200', 'text-gray-700'],
                 };
 
-                $actionUrl = $notification->data['action_url'] ?? '#';
+                // Determine the correct action URL for each notification type
+                $actionUrl = '#';
                 if ($notificationType === 'payment_reminder') {
                     $actionUrl = route('notifications.show_payment_reminder', ['notification' => $notification->id]);
+                } elseif ($notificationType === 'task_assigned' || $notificationType === 'program_volunteer_attendance') {
+                    $programId = $notification->data['program_id'] ?? ($notification->data['program']['id'] ?? null);
+                    if ($programId) {
+                        $actionUrl = route('programs.view', $programId);
+                    }
+                } elseif ($notificationType === 'program_update') {
+                    $programId = $notification->data['program_id'] ?? null;
+                    if ($programId) {
+                        $actionUrl = route('programs.index', [], false) . '?modal=' . $programId;
+                    } else {
+                        $actionUrl = route('programs.index');
+                    }
+                } elseif ($notificationType === 'member_invitation') {
+                    $memberId = $notification->data['member_id'] ?? null;
+                    if ($memberId) {
+                        $actionUrl = route('member.invitation.show', ['member' => $memberId]);
+                    }
+                } elseif (!empty($notification->data['action_url'])) {
+                    $actionUrl = $notification->data['action_url'];
                 }
             @endphp
-            
             <div class="relative border-b border-gray-100 last:border-b-0 transition-all duration-200 hover:bg-gray-50 {{ $isUnread ? 'bg-gradient-to-r from-[#ffb51b]/5 to-transparent' : '' }}">
-                <!-- Unread Indicator -->
                 @if($isUnread)
                     <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#ffb51b] to-[#ff9500]"></div>
                 @endif
-                
                 <form action="{{ route('notifications.read', $notification->id) }}" method="POST" class="w-full">
                     @csrf
-                    <button type="submit" class="w-full text-left p-6 group focus:outline-none focus:bg-gray-50">
-                        <div class="flex items-start gap-4">
-                            <!-- Icon -->
-                            <div class="flex-shrink-0 w-12 h-12 {{ $iconConfig[1] }} rounded-xl flex items-center justify-center">
-                                <i class='bx {{ $iconConfig[0] }} {{ $iconConfig[2] }} text-xl'></i>
-                            </div>
-                            
-                            <!-- Content -->
-                            <div class="flex-1 min-w-0">
-                                <div class="flex items-start justify-between gap-4">
-                                    <!-- Title -->
-                                    <h3 class="font-semibold text-gray-900 text-base leading-tight {{ $isUnread ? 'text-[#1a2235]' : '' }}">
-                                        {{ $notification->data['title'] ?? 'Notification' }}
-                                        @if($isUnread)
-                                            <span class="inline-block w-2 h-2 bg-[#ffb51b] rounded-full ml-2"></span>
-                                        @endif
-                                    </h3>
-                                    <!-- Timestamp -->
-                                    <div class="flex-shrink-0 text-right">
-                                        <div class="text-xs text-gray-500 font-medium">
-                                            {{ $notification->created_at->diffForHumans() }}
+                    <button type="submit" class="w-full text-left p-0 group focus:outline-none focus:bg-gray-50">
+                        <a href="{{ $actionUrl }}" class="block p-6 w-full h-full no-underline text-inherit">
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0 w-12 h-12 {{ $iconConfig[1] }} rounded-xl flex items-center justify-center">
+                                    <i class='bx {{ $iconConfig[0] }} {{ $iconConfig[2] }} text-xl'></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-start justify-between gap-4">
+                                        <h3 class="font-semibold text-gray-900 text-base leading-tight {{ $isUnread ? 'text-[#1a2235]' : '' }}">
+                                            {{ $notification->data['title'] ?? 'Notification' }}
+                                            @if($isUnread)
+                                                <span class="inline-block w-2 h-2 bg-[#ffb51b] rounded-full ml-2"></span>
+                                            @endif
+                                        </h3>
+                                        <div class="flex-shrink-0 text-right">
+                                            <div class="text-xs text-gray-500 font-medium">
+                                                {{ $notification->created_at->diffForHumans() }}
+                                            </div>
                                         </div>
-                                        {{-- <div class="text-xs text-gray-400 mt-1">
-                                            {{ $notification->created_at->format('M j, g:i A') }}
-                                        </div> --}}
                                     </div>
-                                </div>
-                                
-                                <!-- Message -->
-                                <div class="text-gray-600 text-sm mt-2 leading-relaxed">
-                                    {!! $notification->data['message'] ?? 'You have a new notification.' !!}
-                                </div>
-
-                                <!-- Footer: Actions and Statuses -->
-                                <div class="mt-4 flex items-center justify-between">
-                                    <div class="flex items-center gap-4">
-                                        <!-- View Details -->
-                                        @if(isset($notification->data['action_url']))
+                                    <div class="text-gray-600 text-sm mt-2 leading-relaxed">
+                                        {!! $notification->data['message'] ?? 'You have a new notification.' !!}
+                                    </div>
+                                    <div class="mt-4 flex items-center justify-between">
+                                        <div class="flex items-center gap-4">
                                             <span class="inline-flex items-center text-[#1a2235] text-sm font-medium group-hover:text-[#ffb51b] transition-colors">
                                                 View details
                                                 <i class='bx bx-right-arrow-alt ml-1'></i>
                                             </span>
-                                        @endif
-                                        <!-- Priority Indicator -->
-                                        @if(isset($notification->data['priority']) && $notification->data['priority'] === 'high')
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                                <i class='bx bx-error-circle mr-1'></i>
-                                                High Priority
-                                            </span>
-                                        @endif
-                                    </div>
-                                    
-                                    <!-- Read/Unread Status -->
-                                    <div>
-                                        @if($isUnread)
-                                            <div class="flex items-center text-xs text-blue-600 font-medium">
-                                                <i class='bx bx-mouse mr-1'></i>
-                                                Click to mark as read
-                                            </div>
-                                        @else
-                                            <div class="flex items-center text-xs text-gray-400">
-                                                <i class='bx bx-check mr-1'></i>
-                                                Read
-                                            </div>
-                                        @endif
+                                            @if(isset($notification->data['priority']) && $notification->data['priority'] === 'high')
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                    <i class='bx bx-error-circle mr-1'></i>
+                                                    High Priority
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <div>
+                                            @if($isUnread)
+                                                <div class="flex items-center text-xs text-blue-600 font-medium">
+                                                    <i class='bx bx-mouse mr-1'></i>
+                                                    Click to mark as read
+                                                </div>
+                                            @else
+                                                <div class="flex items-center text-xs text-gray-400">
+                                                    <i class='bx bx-check mr-1'></i>
+                                                    Read
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </button>
                 </form>
             </div>
