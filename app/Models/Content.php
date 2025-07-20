@@ -55,4 +55,9 @@ class Content extends Model
     {
         return $this->hasMany(ContentComment::class, 'content_id')->latest();
     }
+
+    public function reviewComments()
+    {
+        return $this->hasMany(\App\Models\ContentReviewComment::class, 'content_id')->orderBy('created_at', 'asc');
+    }
 }

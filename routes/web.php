@@ -28,6 +28,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\MembershipReminderController;
 use App\Models\MembershipPayment;
 use Illuminate\Notifications\DatabaseNotification;
+use App\Http\Controllers\ContentReviewCommentController;
 
 // =================================================================
 // WEBSITE ROUTES (Public - No Authentication Required)
@@ -64,11 +65,11 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 // =================================================================
 
 Route::middleware(['auth'])->group(function () {
-    
+
     // =================================================================
     // DASHBOARD & COMPONENTS
     // =================================================================
-    
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -107,7 +108,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:Program Coordinator'])->group(function () {
 // Program CRUD
     Route::get('/programs/list', [ProgramController::class, 'gotoProgramsList'])->name('programs.index');
-    
+
     Route::get('/programs/create', [ProgramController::class, 'gotoCreateProgram'])->name('programs.create');
     Route::post('/programs/create', [ProgramController::class, 'storeProgram'])->name('programs.store');
     Route::put('/programs/{program}', [ProgramController::class, 'updateProgram'])->name('programs.update');
@@ -119,19 +120,19 @@ Route::middleware(['auth', 'role:Program Coordinator'])->group(function () {
 
     // Program tasks
     Route::get('/programs/{program}/tasks', [ProgramTasksController::class, 'index'])->name('programs.tasks.index');
-    Route::post('/programs/{program}/tasks', [ProgramTasksController::class, 'storeTask'])->name('programs.tasks.store'); 
-    Route::delete('/programs/{program}/tasks/{task}', [ProgramTasksController::class, 'deleteTask'])->name('programs.tasks.destroy'); 
+    Route::post('/programs/{program}/tasks', [ProgramTasksController::class, 'storeTask'])->name('programs.tasks.store');
+    Route::delete('/programs/{program}/tasks/{task}', [ProgramTasksController::class, 'deleteTask'])->name('programs.tasks.destroy');
     Route::put('/programs/{program}/tasks/{task}', [ProgramTasksController::class, 'updateTask'])->name('programs.tasks.update');
     Route::put('/programs/{program}/tasks/{task}/assignments/{assignment}/status', [ProgramTasksController::class, 'updateAssignmentStatus'])->name('programs.tasks.assignments.update-status');
     Route::delete('/programs/{program}/tasks/{task}/assignments/{assignment}', [ProgramTasksController::class, 'removeVolunteerFromTask'])->name('programs.tasks.assignments.destroy');
     Route::post('/programs/{program}/tasks/{task}/assign', [ProgramTasksController::class, 'assignVolunteerToTask'])->name('programs.tasks.assign');
-    
-    // Attendance management 
+
+    // Attendance management
     Route::get('/programs/{program}/attendance/manual', [VolunteerAttendanceController::class, 'showManualEntryForm'])->name('attendance.manualEntryForm');
     Route::post('/programs/{program}/attendance/manual', [VolunteerAttendanceController::class, 'manualEntry'])->name('attendance.manualEntry');
     Route::post('/programs/attendance/{attendance}/status', [VolunteerAttendanceController::class, 'updateAttendanceStatus'])->name('attendance.status');
     Route::get('/programs/{program}/attendance/volunteers', [VolunteerAttendanceController::class, 'programVolunteers'])->name('programs.volunteers');
-    
+
     // Volunteer management
     Route::get('/volunteers/list', [VolunteerController::class, 'gotoVolunteersList'])->name('volunteers.index');
     Route::get('/volunteers/{volunteer}/details', [VolunteerController::class, 'gotoVolunteerDetails'])->name('volunteers.volunteer-details');
@@ -145,7 +146,7 @@ Route::middleware(['auth', 'role:Program Coordinator'])->group(function () {
 // =================================================================
 
 Route::middleware(['auth', 'role:Volunteer'])->group(function () {
-    
+
     // VOLUNTEER APPLICATION
     Route::get('/volunteers/application-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
     Route::post('/volunteers/apply', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
@@ -193,7 +194,7 @@ Route::middleware(['auth', 'role:Financial Coordinator'])->group(function () {
     Route::get('/finance/donations', [DonationController::class, 'index'])->name('finance.index');
     Route::post('/finance/donations', [DonationController::class, 'store'])->name('finance.donations.store');
     Route::patch('/finance/donations/{donation}/status', [DonationController::class, 'updateDonationStatus'])->name('finance.donations.status');
-    
+
     // Membership payments
     Route::get('/finance/membership/payments', [MembershipController::class, 'index'])->name('finance.membership.payments');
     Route::post('/finance/membership/payments', [MembershipController::class, 'store'])->name('finance.membership.payments.store');
@@ -251,5 +252,8 @@ Route::middleware(['auth', 'role:Content Manager'])->group(function () {
     Route::delete('/content/images/{id}', [ContentController::class, 'destroyImage'])->name('content_images.destroy');
 
 });
+
+Route::post('content-review-comments', [ContentReviewCommentController::class, 'store'])->name('content-review-comments.store');
+Route::delete('content-review-comments/{id}', [ContentReviewCommentController::class, 'destroy'])->name('content-review-comments.destroy');
 
 Route::get('/content/{slug}', [WebsiteController::class, 'viewContent'])->name('website.view-content');
