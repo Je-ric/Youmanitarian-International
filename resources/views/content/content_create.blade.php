@@ -2,8 +2,8 @@
 @extends('layouts.content_create')
 
 @section('content')
-    <x-page-header 
-        icon="bx-file" 
+    <x-page-header
+        icon="bx-file"
         title="{{ isset($content) ? 'Edit Content' : 'Create New Content' }}"
         desc="Fill out the form to create or edit content.">
         <x-button variant="add-create" type="submit" form="contentForm">
@@ -12,15 +12,15 @@
         </x-button>
     </x-page-header>
 
-    <x-navigation-layout.tabs-modern 
+    <x-navigation-layout.tabs-modern
         :tabs="[
             ['id' => 'edit', 'label' => 'Edit', 'icon' => 'bx-edit'],
             ['id' => 'preview', 'label' => 'Preview', 'icon' => 'bx-show']
-        ]" 
+        ]"
         defaultTab="edit"
         :preserveState="false"
         class="mb-6">
-        
+
         <x-slot name="slot_edit">
             <!-- Form  -->
     <div class="w-full rounded-lg">
@@ -36,6 +36,11 @@
                                 variant="cancel">
                         BACKKKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!
                     </x-button>
+<div class="text-center">
+    <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example">
+    Show right drawer
+    </button>
+ </div>
                     <div>
                         <x-form.label>Content Title</x-form.label>
                         <x-form.input type="text" name="title" placeholder="What's the title???"
@@ -112,10 +117,10 @@
                                 </div>
                             </div>
                         @endif
-                        <x-form.input-upload 
-                            name="gallery_images[]" 
-                            id="gallery_images" 
-                            accept="image/png,image/jpeg" 
+                        <x-form.input-upload
+                            name="gallery_images[]"
+                            id="gallery_images"
+                            accept="image/png,image/jpeg"
                             multiple
                         >
                             @if(isset($content) && $content->images && $content->images->count() > 0)
@@ -151,6 +156,9 @@
                     </div>
                 </div>
             </div>
+
+            @include('content.partials.offCanvas')
+
             <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
             <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
@@ -209,21 +217,21 @@
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = `/content/images/${imageId}`;
-                
+
                 // Add CSRF token
                 const csrfToken = document.createElement('input');
                 csrfToken.type = 'hidden';
                 csrfToken.name = '_token';
                 csrfToken.value = '{{ csrf_token() }}';
                 form.appendChild(csrfToken);
-                
+
                 // Add method override
                 const methodField = document.createElement('input');
                 methodField.type = 'hidden';
                 methodField.name = '_method';
                 methodField.value = 'DELETE';
                 form.appendChild(methodField);
-                
+
                 // Submit the form
                 document.body.appendChild(form);
                 form.submit();

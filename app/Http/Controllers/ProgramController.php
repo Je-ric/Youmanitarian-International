@@ -17,17 +17,20 @@ class ProgramController extends Controller
 
     public function gotoProgramsList(Request $request)
     {
-        /** @var \App\Models\User $user */
+        // /** @var \App\Models\User $user */
         $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
         $tab = $request->get('tab', 'all');
 
         $allPrograms = Program::orderBy('date', 'desc')->paginate(10);
 
         // Initialize other program collections with empty paginated collections
-        $joinedPrograms = Program::where('id', 0)->paginate(10); 
+        $joinedPrograms = Program::where('id', 0)->paginate(10);
         $myPrograms = Program::where('id', 0)->paginate(10);
 
-        // Get joined programs for volunteers
+        // joined programs for volunteers
         if ($user->hasRole('Volunteer') && $user->volunteer) {
             $joinedPrograms = Program::whereHas('volunteers', function ($query) use ($user) {
                 $query->where('volunteers.id', $user->volunteer->id)
@@ -35,19 +38,19 @@ class ProgramController extends Controller
             })->orderBy('date', 'desc')->paginate(10);
         }
 
-        // Get programs created by coordinators
+        // programs created by coordinators
         if ($user->hasRole('Program Coordinator') || $user->hasRole('Admin')) {
             $myPrograms = Program::where('created_by', $user->id)
                 ->orderBy('date', 'desc')
                 ->paginate(10);
         }
 
-        return view('programs.index', 
-            compact('allPrograms', 
-            'joinedPrograms', 
+        return view('programs.index',
+            compact('allPrograms',
+            'joinedPrograms',
                         'myPrograms')
                     );
-        
+
         // compact() takes variable names as strings
 
         // return view('programs.index', [
@@ -95,12 +98,12 @@ class ProgramController extends Controller
             $query->where('role_name', 'Volunteer');
         })->get();
 
-        
+
         // Only send notifications if there are volunteers in the system
         // Send notification to all volunteers \Notifications\NewProgramAvailable.php
         if ($volunteers->isNotEmpty()) {
             Notification::send($volunteers, new ProgramUpdate($program));
-        } 
+        }
 
         // Create a welcome message in the program chat
         $program->chats()->create([
@@ -136,6 +139,13 @@ class ProgramController extends Controller
             'end_time' => $request->end_time,
             'location' => $request->location,
             'volunteer_count' => $request->volunteer_count ?? 0,
+            // 'title' => $request->input('title'),
+            // 'description' => $request->input('description'),
+            // 'date' => $request->input('date'),
+            // 'start_time' => $request->input('start_time'),
+            // 'end_time' => $request->input('end_time'),
+            // 'location' => $request->input('location'),
+            // 'volunteer_count' => $request->input('volunteer_count', 0),
         ]);
 
         // Notify all volunteers in this program about the update
