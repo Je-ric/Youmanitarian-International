@@ -71,7 +71,7 @@
                 </div>
 
                 {{-- Content Management Section (Content Manager Role) --}}
-                @if(Auth::user()->hasRole('Content Manager'))
+                @if(Auth::user()->hasRole('Content Manager') || Auth::user()->hasRole('Program Coordinator'))
                 <div class="mb-4">
                     <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Content</span>

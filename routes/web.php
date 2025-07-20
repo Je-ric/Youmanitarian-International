@@ -236,23 +236,24 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
 // =================================================================
 // CONTENT MANAGER ROUTES
 // =================================================================
-
+// Content Manager only (approval, archive)
 Route::middleware(['auth', 'role:Content Manager'])->group(function () {
+    Route::post('/content/{content}/approve', [ContentController::class, 'approveContent'])->name('content.approve');
+    Route::get('/content/{content}/archive', [ContentController::class, 'archiveContent'])->name('content.archive');
+});
 
-    // Content CRUD
+// Shared Content Management (Content Manager & Program Coordinator)
+Route::middleware(['auth', 'role:Program Coordinator,Content Manager'])->group(function () {
     Route::get('/content/list', [ContentController::class, 'index'])->name('content.index');
     Route::get('/content/create', [ContentController::class, 'create'])->name('content.create');
     Route::post('/content/store', [ContentController::class, 'store'])->name('content.store');
     Route::get('/content/{content}/edit', [ContentController::class, 'edit'])->name('content.edit');
     Route::put('/content/{content}', [ContentController::class, 'update'])->name('content.update');
-    Route::post('/content/{content}/approve', [ContentController::class, 'approveContent'])->name('content.approve');
-    // Route::delete('/content/{content}', [ContentController::class, 'destroy'])->name('content.destroy');
-    Route::get('/content/{content}/archive', [ContentController::class, 'archiveContent'])->name('content.archive');
-
     // Gallery image delete (for deleting individual images, not content)
     Route::delete('/content/images/{id}', [ContentController::class, 'destroyImage'])->name('content_images.destroy');
-
 });
+
+
 
 Route::post('content-review-comments', [ContentReviewCommentController::class, 'store'])->name('content-review-comments.store');
 Route::delete('content-review-comments/{id}', [ContentReviewCommentController::class, 'destroy'])->name('content-review-comments.destroy');
