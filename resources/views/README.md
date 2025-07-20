@@ -98,7 +98,36 @@ This section manages user roles and permissions throughout the platform.
     -   Changes are saved only after clicking "Save Changes".
     -   Canceling the modal discards all changes.
 
-### 6. Financial Management (`/finance`)
+### 6. Content Management (`/content`)
+
+This section manages all site content, articles, and media. Both Content Managers and Program Coordinators can create and manage content, but only Content Managers can approve and publish content created by Program Coordinators.
+
+-   **Tabs include:**
+    -   My Content: Content created by the logged-in user. 
+    -   Published: All published content.
+    -   Drafts: User's drafts.
+    -   Archived: User's archived content.
+    -   Rejected/Needs Revision: User's content that was rejected or needs revision.
+    -   Needs Approval: (Visible only to Content Managers) Content from Program Coordinators pending approval.
+-   **Role Permissions:**
+    -   **Content Manager:**
+        -   Can create, edit, publish, archive, and approve content.
+        -   Can approve content created by Program Coordinators.
+        -   Can publish their own content directly.
+    -   **Program Coordinator:**
+        -   Can create and edit content.
+        -   Content they create requires approval from a Content Manager before being published (unless they also have the Content Manager role, in which case they can choose to publish directly or submit for approval).
+        -   Cannot approve or archive content.
+-   **Approval Workflow:**
+    -   Content created by Program Coordinators is saved as a draft and marked as pending approval.
+    -   Content Managers can view all pending content in the "Needs Approval" tab and approve it for publication.
+    -   If a user has both roles, they can choose to publish directly or submit for approval when creating content.
+-   **Other Features:**
+    -   All users can view published content.
+    -   Only the creator or a Content Manager can edit or update content.
+    -   Archived and rejected content is accessible in their respective tabs for reference or revision.
+
+### 7. Financial Management (`/finance`)
 
 This section manages all financial operations including donations and membership payments.
 
@@ -113,7 +142,7 @@ This section manages all financial operations including donations and membership
     -   Handle payment reminders and status updates.
     -   Track payment history and financial records.
 
-### 7. Participant Rules (Attendance, Tasks, and Feedback)
+### 8. Participant Rules (Attendance, Tasks, and Feedback)
 
 -   **Attendance:**
     -   Volunteers can only clock in/out if the program has started and they have joined it.
@@ -126,7 +155,7 @@ This section manages all financial operations including donations and membership
 -   **Feedback:**
     -   Volunteers and guests can only submit feedback/ratings after a program has ended.
 
-### 8. UI/UX Feedback (Toasts and Alerts)
+### 9. UI/UX Feedback (Toasts and Alerts)
 
 -   The system uses toasts and alerts to provide clear feedback for all major actions, such as:
     -   Creating, updating, or deleting programs and tasks.
