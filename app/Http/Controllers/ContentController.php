@@ -12,21 +12,21 @@ use Illuminate\Support\Str;
 
 class ContentController extends Controller
 {
-    
+
     public function index()
     {
         $contents = Content::latest()->paginate(perPage: 5);
         return view('content.index', compact('contents'));
     }
 
-    
+
     public function create()
     {
         return view('content.content_create');
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨��✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
     public function edit(Content $content)
@@ -64,7 +64,7 @@ class ContentController extends Controller
             $baseSlug = Str::slug($validated['title']);
             $slug = $baseSlug;
             $counter = 1;
-            
+
             // Check if slug exists and add number kung may existing na
             while (Content::where('slug', $slug)->exists()) {
                 $slug = $baseSlug . '-' . $counter;
@@ -76,7 +76,7 @@ class ContentController extends Controller
         $user_id = Auth::id();
         $image_path = null;
 
-        //  Single Image 
+        //  Single Image
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $sanitizedName = preg_replace('/[^A-Za-z0-9\-]/', '', $validated['title']);
@@ -150,7 +150,7 @@ class ContentController extends Controller
         ]);
 
         $content = Content::findOrFail($id);
-        
+
         // Single Image - Only update if new image is uploaded
         if ($request->hasFile('image')) {
             // Delete old image if exists
@@ -208,12 +208,12 @@ class ContentController extends Controller
     {
         if ($request->hasFile('gallery_images')) {
             $files = $request->file('gallery_images');
-            
+
             // If only one file is uploaded, $files may not be an array (kase nga isa lang)
             if (!is_array($files)) {
                 $files = [$files];
             }
-            
+
             foreach ($files as $file) {
                 if ($file && $file->isValid()) {
                     $sanitizedName = preg_replace('/[^A-Za-z0-9\-]/', '', $title);
@@ -222,7 +222,7 @@ class ContentController extends Controller
                     $extension = $file->getClientOriginalExtension();
                     $newFilename = "{$sanitizedName}_{$timestamp}_{$uniqueId}.{$extension}";
                     $gallery_path = $file->storeAs('uploads/content_gallery/', $newFilename, 'public');
-                    
+
                     $contentImage = ContentImage::create([
                         'content_id' => $contentId,
                         'image_path' => $gallery_path,
@@ -259,7 +259,7 @@ class ContentController extends Controller
     // ═══════════════════════════════════════════════════════════════════════════════
 
     // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // 🌟✨��✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
     public function archiveContent($id)
@@ -268,6 +268,38 @@ class ContentController extends Controller
         $content->update(['content_status' => 'archived']);
         return redirect()->route('content.index')->with('toast', [
             'message' => 'Content archived successfully!',
+            'type' => 'success'
+        ]);
+    }
+
+    // Approve content
+    public function approveContent($id)
+    {
+        $content = Content::findOrFail($id);
+        $user = Auth::user();
+
+        // Only Content Manager can approve
+        if (!($user->hasRole('Content Manager') || $user->id === $content->created_by)) {
+            abort(403, 'You are not authorized to approve this content.');
+        }
+
+        // only approve if pending
+        if ($content->approval_status !== 'pending') {
+            return redirect()->route('content.index')->with('toast', [
+                'message' => 'Content is not pending approval.',
+                'type' => 'info'
+            ]);
+        }
+
+        $content->update([
+            'approval_status' => 'approved',
+            'approved_by' => $user->id,
+            'approved_at' => now(),
+            'content_status' => 'published',
+        ]);
+
+        return redirect()->route('content.index')->with('toast', [
+            'message' => 'Content approved and published!',
             'type' => 'success'
         ]);
     }
@@ -281,14 +313,14 @@ class ContentController extends Controller
     //     if ($content->image_content) {
     //         Storage::disk('public')->delete($content->image_content);
     //     }
-    
+
     //     foreach ($content->images as $image) {
     //         Storage::disk('public')->delete($image->image_path);
     //         $image->delete();
     //     }
-    
+
     //     $content->delete();
-    
+
     //     return redirect()->route('content.index')->with('toast', [
     //         'message' => 'Content deleted successfully!',
     //         'type' => 'success'
