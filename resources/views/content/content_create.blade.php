@@ -78,6 +78,25 @@
                     <div class="flex items-center gap-8">
                         <x-form.radio-group name="content_type" label="Content Type" :options="['news' => 'News', 'program' => 'Program', 'announcement' => 'Announcement', 'event' => 'Event', 'article' => 'Article', 'blog' => 'Blog']" :selected="old('content_type', $content->content_type ?? '')" />
                     </div>
+                    @php
+                        $user = Auth::user();
+                        $canChoosePublish = $user->hasRole('Content Manager') && $user->hasRole('Program Coordinator') && !isset($content);
+                    @endphp
+                    @if($canChoosePublish)
+                        <div>
+                            <x-form.label>Publishing Option</x-form.label>
+                            <div class="flex flex-col gap-2 mt-2">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="publish_option" value="publish" {{ old('publish_option', 'publish') == 'publish' ? 'checked' : '' }}>
+                                    <span class="ml-2">Publish directly</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="publish_option" value="approval" {{ old('publish_option') == 'approval' ? 'checked' : '' }}>
+                                    <span class="ml-2">Submit for approval</span>
+                                </label>
+                            </div>
+                        </div>
+                    @endif
                     <div>
                         <x-form.label>Content Status</x-form.label>
                         <select name="content_status" class="input input-bordered w-full bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]" required>

@@ -15,8 +15,31 @@ class ContentController extends Controller
 
     public function index()
     {
-        $contents = Content::latest()->paginate(perPage: 5);
-        return view('content.index', compact('contents'));
+        $user = Auth::user();
+        $myContent = Content::where('created_by', $user->id)->latest()->paginate(5, ['*'], 'myContent');
+        $publishedContent = Content::where('content_status', 'published')->latest()->paginate(5, ['*'], 'publishedContent');
+        $drafts = Content::where('created_by', $user->id)->where('content_status', 'draft')->latest()->paginate(5, ['*'], 'drafts');
+        $archived = Content::where('created_by', $user->id)->where('content_status', 'archived')->latest()->paginate(5, ['*'], 'archived');
+        $rejected = Content::where('created_by', $user->id)
+            ->whereIn('approval_status', ['rejected', 'needs_revision'])
+            ->latest()->paginate(5, ['*'], 'rejected');
+        $needsApproval = null;
+        if ($user->hasRole('Content Manager')) {
+            $needsApproval = Content::where('approval_status', 'pending')
+                ->whereHas('user', function($q) {
+                    $q->whereHas('roles', function($qr) {
+                        $qr->where('role_name', 'Program Coordinator');
+                    });
+                })
+                ->latest()->paginate(5, ['*'], 'needsApproval');
+        }
+        return view('content.index',
+        compact('myContent',
+                        'publishedContent',
+                                    'needsApproval',
+                                    'drafts',
+                                    'archived',
+                                    'rejected'));
     }
 
 
@@ -94,17 +117,40 @@ class ContentController extends Controller
         $enable_bookmark = $request->has('enable_bookmark') ? true : false;
         $is_featured = $request->has('is_featured') ? true : false;
 
+        $user = Auth::user();
+        $isDualRole = $user->hasRole('Content Manager') && $user->hasRole('Program Coordinator');
+        $publishOption = $isDualRole ? $request->input('publish_option', 'publish') : null;
+
+        $approval_status = 'pending';
+        $approved_by = null;
+        $approved_at = null;
+        $content_status = $validated['content_status'];
+
+        if ($isDualRole && !$request->has('content')) {
+            if ($publishOption === 'publish') {
+                $approval_status = 'approved';
+                $approved_by = $user->id;
+                $approved_at = now();
+                $content_status = 'published';
+            } else {
+                $approval_status = 'pending';
+                $approved_by = null;
+                $approved_at = null;
+                $content_status = 'draft';
+            }
+        }
+
         $content = Content::create([
             'title' => $validated['title'],
             'slug' => $validated['slug'],
             'content_type' => $validated['content_type'],
             'body' => $validated['body'],
             'created_by' => $user_id,
-            'content_status' => $validated['content_status'],
+            'content_status' => $content_status,
             'image_content' => $image_path,
-            'approval_status' => 'pending',
-            'approved_by' => null,
-            'approved_at' => null,
+            'approval_status' => $approval_status,
+            'approved_by' => $approved_by,
+            'approved_at' => $approved_at,
             'views' => 0,
             'enable_likes' => $enable_likes,
             'enable_comments' => $enable_comments,
@@ -259,7 +305,7 @@ class ContentController extends Controller
     // ═══════════════════════════════════════════════════════════════════════════════
 
     // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨��✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
+    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
     public function archiveContent($id)
