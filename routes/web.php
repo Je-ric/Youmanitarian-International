@@ -232,17 +232,15 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
 });
 
 
-
 // =================================================================
 // CONTENT MANAGER ROUTES
 // =================================================================
-// Content Manager only (approval, archive)
+
 Route::middleware(['auth', 'role:Content Manager'])->group(function () {
     Route::post('/content/{content}/approve', [ContentController::class, 'approveContent'])->name('content.approve');
     Route::get('/content/{content}/archive', [ContentController::class, 'archiveContent'])->name('content.archive');
 });
 
-// Shared Content Management (Content Manager & Program Coordinator)
 Route::middleware(['auth', 'role:Program Coordinator,Content Manager'])->group(function () {
     Route::get('/content/list', [ContentController::class, 'index'])->name('content.index');
     Route::get('/content/create', [ContentController::class, 'create'])->name('content.create');
@@ -252,7 +250,6 @@ Route::middleware(['auth', 'role:Program Coordinator,Content Manager'])->group(f
     // Gallery image delete (for deleting individual images, not content)
     Route::delete('/content/images/{id}', [ContentController::class, 'destroyImage'])->name('content_images.destroy');
 });
-
 
 
 Route::post('content-review-comments', [ContentReviewCommentController::class, 'store'])->name('content-review-comments.store');

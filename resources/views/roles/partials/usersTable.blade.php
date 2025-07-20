@@ -48,8 +48,8 @@
                                             default => 'role'
                                         };
                                     @endphp
-                                    <x-feedback-status.status-indicator 
-                                            :label="$role->role_name" 
+                                    <x-feedback-status.status-indicator
+                                            :label="$role->role_name"
                                             :status="$variant" />
                                 @empty
                                     <span class="text-gray-500 text-sm">No roles assigned</span>
@@ -63,11 +63,11 @@
                         </x-table.td>
                     </x-table.tr>
 
-                    @include('roles.partials.assign_rolesModal', ['roleType' => $roleType, 'roles' => $roles])
+                    @include('roles.partials.assignRolesModal', ['roleType' => $roleType, 'roles' => $roles])
                 @endforeach
             </x-table.tbody>
         </x-table.table>
-        
+
         <div class="mt-4">
             @php
                 $pageName = $pageName ?? match($roleType ?? '') {
@@ -84,7 +84,6 @@
             {{ $users->appends(array_merge(request()->except($pageName), ['tab' => request()->query('tab', $roleType), $pageName => $users->currentPage()]))->links() }}
         </div>
     @else
-        {{-- Empty State Section --}}
         <div class="text-center py-12">
             <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
                 <i class='bx bx-user text-gray-400 text-2xl'></i>
@@ -93,4 +92,4 @@
             <p class="text-gray-500">There are no users assigned to this role yet.</p>
         </div>
     @endif
-</div> 
+</div>
