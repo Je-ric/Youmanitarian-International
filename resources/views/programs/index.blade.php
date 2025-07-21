@@ -9,7 +9,7 @@
         @endif
     </x-page-header>
 
-    <div x-data="{ 
+    <div x-data="{
             openModal(id) {
                 document.getElementById('modal_' + id).showModal();
             }
@@ -31,18 +31,18 @@
 
         <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="all">
             <x-slot:slot_all>
-                @include('programs.partials.programsTable', ['programs' => $allPrograms])
+                @include('programs.partials.programsTable', ['programs' => $allPrograms, 'tab' => 'all'])
                 </x-slot>
 
                 @if(Auth::user()->hasRole('Volunteer'))
                     <x-slot:slot_joined>
-                        @include('programs.partials.programsTable', ['programs' => $joinedPrograms])
+                        @include('programs.partials.programsTable', ['programs' => $joinedPrograms, 'tab' => 'joined'])
                         </x-slot>
                 @endif
 
                     @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
                         <x-slot:slot_my>
-                            @include('programs.partials.programsTable', ['programs' => $myPrograms])
+                            @include('programs.partials.programsTable', ['programs' => $myPrograms, 'tab' => 'my'])
                             </x-slot>
                     @endif
         </x-navigation-layout.tabs-modern>

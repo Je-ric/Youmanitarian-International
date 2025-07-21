@@ -19,7 +19,7 @@
         ];
     @endphp
 
-    <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="{{ request()->query('tab', 'overview') }}">
+    <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="overview">
         <x-slot:slot_overview>
             @include('programs_volunteers.partials.programOverview', [
                 'program' => $program,

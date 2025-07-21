@@ -81,6 +81,6 @@
     </x-table.table>
 
     <div class="mt-6">
-        {{ $programs->appends(Request::except('page'))->links() }}
+        {{ $programs->appends(['tab' => $tab ?? ''])->links() }}
     </div>
-@endif 
+@endif

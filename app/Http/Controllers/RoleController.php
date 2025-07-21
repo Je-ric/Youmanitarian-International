@@ -26,7 +26,7 @@ class RoleController extends Controller
 
         // Paginate each role's users
         $perPage = 10;
-        
+
         $volunteerCurrentPage = request()->get('volunteer_page', 1);
         $adminCurrentPage = request()->get('admin_page', 1);
         $programCoordinatorCurrentPage = request()->get('program_coordinator_page', 1);
@@ -34,7 +34,7 @@ class RoleController extends Controller
         $contentManagerCurrentPage = request()->get('content_manager_page', 1);
         $memberCurrentPage = request()->get('member_page', 1);
         $noRoleCurrentPage = request()->get('no_role_page', 1);
-        
+
         $volunteerUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
             $volunteerUsers->forPage($volunteerCurrentPage, $perPage),
             $volunteerUsers->count(),
@@ -118,13 +118,13 @@ class RoleController extends Controller
     {
         $users = User::all();
         $roles = Role::all();
-        
+
         // If a user is selected, get their current roles
         if ($request->has('user_id')) {
             $selectedUser = User::with('roles')->find($request->user_id);
             return view('roles.assign', compact('users', 'roles', 'selectedUser'));
         }
-        
+
         return view('roles.assign', compact('users', 'roles'));
     }
 
@@ -140,17 +140,17 @@ class RoleController extends Controller
             DB::beginTransaction();
 
             $user = User::findOrFail($request->user_id);
-            
+
             // Get current roles
             $currentRoleIds = $user->roles->pluck('id')->toArray();
             $currentRoleNames = $user->roles->pluck('role_name')->toArray();
 
             // If no roles were selected in the form, treat it as an empty array.
             $selectedRoleIds = $request->roles ?? [];
-            
+
             // Get the volunteer role
             $volunteerRole = Role::where('role_name', 'Volunteer')->first();
-            
+
             // Always ensure volunteer role is included if user has it
             if ($user->hasRole('Volunteer') && !in_array($volunteerRole->id, $selectedRoleIds)) {
                 $selectedRoleIds[] = $volunteerRole->id;
@@ -162,7 +162,7 @@ class RoleController extends Controller
 
             // Only proceed if there are actual changes
             if (!empty($addedRoleIds) || !empty($removedRoleIds)) {
-                
+
                 // Create sync data with pivot information
                 $syncData = collect($selectedRoleIds)->mapWithKeys(function ($roleId) {
                     return [$roleId => [
@@ -170,7 +170,7 @@ class RoleController extends Controller
                         'assigned_at' => now()
                     ]];
                 })->all();
-                
+
                 $user->roles()->sync($syncData);
 
                 // Get role names for notification
@@ -194,4 +194,4 @@ class RoleController extends Controller
             ]);
         }
     }
-} 
+}

@@ -25,23 +25,23 @@
 
     <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="my">
         <x-slot:slot_my>
-            @include('content.partials.contentTable', ['contents' => $myContent])
+            @include('content.partials.contentTable', ['contents' => $myContent, 'tab' => 'my'])
         </x-slot>
         <x-slot:slot_published>
-            @include('content.partials.contentTable', ['contents' => $publishedContent])
+            @include('content.partials.contentTable', ['contents' => $publishedContent, 'tab' => 'published'])
         </x-slot>
         <x-slot:slot_drafts>
-            @include('content.partials.contentTable', ['contents' => $drafts])
+            @include('content.partials.contentTable', ['contents' => $drafts, 'tab' => 'drafts'])
         </x-slot>
         <x-slot:slot_archived>
-            @include('content.partials.contentTable', ['contents' => $archived])
+            @include('content.partials.contentTable', ['contents' => $archived, 'tab' => 'archived'])
         </x-slot>
         <x-slot:slot_rejected>
-            @include('content.partials.contentTable', ['contents' => $rejected])
+            @include('content.partials.contentTable', ['contents' => $rejected, 'tab' => 'rejected'])
         </x-slot>
         @if($user->hasRole('Content Manager'))
             <x-slot:slot_needs_approval>
-                @include('content.partials.contentTable', ['contents' => $needsApproval])
+                @include('content.partials.contentTable', ['contents' => $needsApproval, 'tab' => 'needs_approval'])
             </x-slot>
         @endif
     </x-navigation-layout.tabs-modern>

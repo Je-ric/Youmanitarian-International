@@ -1,11 +1,11 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-<x-page-header 
-    icon="bx-calendar-event" 
-    title="Volunteers" 
+<x-page-header
+    icon="bx-calendar-event"
+    title="Volunteers"
     desc="Manage volunteer applications and volunteers.">
-    
+
 </x-page-header>
 
 
@@ -21,7 +21,7 @@
 
         <x-navigation-layout.tabs-modern
             :tabs="$tabs"
-            default-tab="{{ request()->query('tab', 'overview') }}"
+            default-tab="overview"
         >
             <x-slot:slot_overview>
                 @include('volunteers.partials.volunteersOverview', [
@@ -125,7 +125,7 @@
                                                     <i class='bx bx-reset'></i> Restore
                                                 </x-button>
                                             </div>
-                                            
+
                                         @include('volunteers.modals.restoreVolunteerModal', ['volunteer' => $volunteer])
                                     </x-table.td>
                                 </x-table.tr>
@@ -168,8 +168,8 @@
                                                     <i class='bx bx-user-check'></i>
                                                 </x-button> --}}
                                             @else
-                                                <x-button 
-                                                    variant="table-action-manage" 
+                                                <x-button
+                                                    variant="table-action-manage"
                                                     class="tooltip"
                                                     data-tip="Invite to be Member"
                                                     onclick="
@@ -197,4 +197,4 @@
 
     <style>
     </style>
-@endsection 
+@endsection

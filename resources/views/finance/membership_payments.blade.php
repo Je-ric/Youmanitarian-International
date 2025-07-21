@@ -14,20 +14,19 @@
             ['id' => 'full_pledge', 'label' => 'Full-Pledge', 'icon' => 'bx-user-check'],
             ['id' => 'honorary', 'label' => 'Honorary', 'icon' => 'bx-award'],
         ];
-        $activeTab = $tab ?? 'full_pledge';
     @endphp
 
-    <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="{{ $activeTab }}">
+    <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="overview">
         <x-slot:slot_overview>
             @include('finance.partials.membershipOverview')
         </x-slot:slot_overview>
 
         <x-slot:slot_full_pledge>
-            @include('finance.partials.paymentsTable', ['members' => $fullPledgeMembers])
+            @include('finance.partials.paymentsTable', ['members' => $fullPledgeMembers, 'tab' => 'full_pledge'])
         </x-slot>
 
         <x-slot:slot_honorary>
-            @include('finance.partials.paymentsTable', ['members' => $honoraryMembers])
+            @include('finance.partials.paymentsTable', ['members' => $honoraryMembers, 'tab' => 'honorary'])
         </x-slot>
     </x-navigation-layout.tabs-modern>
 @endsection

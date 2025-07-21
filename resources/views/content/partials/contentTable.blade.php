@@ -65,6 +65,6 @@
 
 @if(method_exists($contents, 'links'))
     <div class="mt-6">
-        {{ $contents->links() }}
+        {{ $contents->appends(['tab' => $tab ?? ''])->links() }}
     </div>
 @endif

@@ -1,7 +1,7 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-    <x-page-header icon="bx-donate-heart" 
+    <x-page-header icon="bx-donate-heart"
                     title="Donations Management"
                     desc="View and manage donations, track financial statistics, and monitor payment activities.">
 
@@ -18,7 +18,7 @@
         ];
     @endphp
 
-    <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="{{ request()->query('tab', 'overview') }}">
+    <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="overview">
         <x-slot:slot_overview>
             @include('finance.partials.donationOverview')
             </x-slot>
@@ -54,7 +54,7 @@
                                 </x-table.td>
                                 <x-table.td>
                                     <span
-                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                                         {{ $donation->status === 'Confirmed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
                                         {{ $donation->status }}
                                     </span>
@@ -92,7 +92,7 @@
     </x-navigation-layout.tabs-modern>
 
     @include('finance.modals.addDonationModal', [
-        'donation' => null, 
+        'donation' => null,
         'modalId' => 'addDonationModal'
         ])
 

@@ -1,8 +1,8 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-    <x-page-header 
-        icon="bx-shield-quarter" 
+    <x-page-header
+        icon="bx-shield-quarter"
         title="Role Management"
         desc="Manage user roles and permissions">
     </x-page-header>
@@ -22,55 +22,55 @@
 
         <x-navigation-layout.tabs-modern
             :tabs="$tabs"
-            default-tab="{{ request()->query('tab', 'overview') }}"
+            default-tab="overview"
         >
             <x-slot:slot_overview>
                 @include('roles.partials.rolesOverview')
             </x-slot>
 
             <x-slot:slot_volunteer>
-                @include('roles.partials.usersTable', ['users' => $volunteerUsersPaginated, 
-                'roleName' => 'Volunteer', 
+                @include('roles.partials.usersTable', ['users' => $volunteerUsersPaginated,
+                'roleName' => 'Volunteer',
                 'roleType' => 'Volunteer',
                 'pageName' => 'volunteer_page',
                 'roles' => $roles])
             </x-slot>
 
             <x-slot:slot_admin>
-                @include('roles.partials.usersTable', ['users' => $adminUsersPaginated, 
-                'roleName' => 'Admin', 
+                @include('roles.partials.usersTable', ['users' => $adminUsersPaginated,
+                'roleName' => 'Admin',
                 'roleType' => 'Admin',
                 'pageName' => 'admin_page',
                 'roles' => $roles])
             </x-slot>
 
             <x-slot:slot_program_coordinator>
-                @include('roles.partials.usersTable', ['users' => $programCoordinatorUsersPaginated, 
-                'roleName' => 'Program Coordinator', 
+                @include('roles.partials.usersTable', ['users' => $programCoordinatorUsersPaginated,
+                'roleName' => 'Program Coordinator',
                 'roleType' => 'Program Coordinator',
                 'pageName' => 'program_coordinator_page',
                 'roles' => $roles])
             </x-slot>
 
             <x-slot:slot_financial_coordinator>
-                @include('roles.partials.usersTable', ['users' => $financialCoordinatorUsersPaginated, 
-                'roleName' => 'Financial Coordinator', 
+                @include('roles.partials.usersTable', ['users' => $financialCoordinatorUsersPaginated,
+                'roleName' => 'Financial Coordinator',
                 'roleType' => 'Financial Coordinator',
                 'pageName' => 'financial_coordinator_page',
                 'roles' => $roles])
             </x-slot>
 
             <x-slot:slot_content_manager>
-                @include('roles.partials.usersTable', ['users' => $contentManagerUsersPaginated, 
-                'roleName' => 'Content Manager', 
+                @include('roles.partials.usersTable', ['users' => $contentManagerUsersPaginated,
+                'roleName' => 'Content Manager',
                 'roleType' => 'Content Manager',
                 'pageName' => 'content_manager_page',
                 'roles' => $roles])
             </x-slot>
 
             {{-- <x-slot:slot_member>
-                @include('roles.partials.usersTable', ['users' => $memberUsersPaginated, 
-                'roleName' => 'Member', 
+                @include('roles.partials.usersTable', ['users' => $memberUsersPaginated,
+                'roleName' => 'Member',
                 'roleType' => 'Member',
                 'pageName' => 'member_page',
                 'roles' => $roles])
@@ -78,12 +78,12 @@
 
             <x-slot:slot_no_roles>
                 @include('roles.partials.usersTable', [
-                    'users' => $usersWithoutRoles, 
-                    'roleName' => 'No Role', 
+                    'users' => $usersWithoutRoles,
+                    'roleName' => 'No Role',
                     'roleType' => 'no-role',
                     'pageName' => 'no_role_page',
                     'roles' => $roles
                 ])
             </x-slot>
         </x-navigation-layout.tabs-modern>
-@endsection 
+@endsection
