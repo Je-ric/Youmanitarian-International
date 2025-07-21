@@ -15,8 +15,12 @@ class MemberFactory extends Factory
     {
         $status = $this->faker->randomElement(['active', 'inactive']);
         $invitationStatus = 'accepted';
+        $startDate = null;
 
-        if ($status === 'inactive') {
+        if ($status === 'active') {
+            $startDate = $this->faker->dateTimeThisYear();
+            $invitationStatus = 'accepted';
+        } else { // inactive
             $invitationStatus = $this->faker->randomElement(['pending', 'declined']);
         }
 
@@ -26,8 +30,8 @@ class MemberFactory extends Factory
             'membership_type' => $this->faker->randomElement(['full_pledge', 'honorary']),
             'membership_status' => $status,
             'invitation_status' => $invitationStatus,
-            'invited_at' => $this->faker->optional()->dateTimeThisYear(),
-            'start_date' => $this->faker->optional()->dateTimeThisYear(),
+            'invited_at' => $this->faker->dateTimeThisYear(),
+            'start_date' => $startDate,
             'invited_by' => User::factory(),
         ];
     }
