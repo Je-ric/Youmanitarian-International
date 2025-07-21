@@ -84,12 +84,10 @@
             {{ $users->appends(array_merge(request()->except($pageName), ['tab' => request()->query('tab', $roleType), $pageName => $users->currentPage()]))->links() }}
         </div>
     @else
-        <div class="text-center py-12">
-            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                <i class='bx bx-user text-gray-400 text-2xl'></i>
-            </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-1">No {{ $roleName }}s Found</h3>
-            <p class="text-gray-500">There are no users assigned to this role yet.</p>
-        </div>
+        <x-empty-state
+            icon="bx bx-user"
+            title="No {{ $roleName }}s Found"
+            description="There are no users assigned to this role yet."
+        />
     @endif
 </div>

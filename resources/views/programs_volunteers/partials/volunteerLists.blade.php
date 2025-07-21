@@ -1,5 +1,9 @@
 @if($program->volunteers->isEmpty())
-    <p class="text-gray-600 text-center py-4">No volunteers assigned to this program.</p>
+    <x-empty-state
+        icon="bx bx-group"
+        title="No Volunteers Assigned"
+        description="There are no volunteers assigned to this program yet."
+    />
 @else
     <x-table.table tableClass="min-w-full bg-white" containerClass="overflow-hidden">
         <x-table.thead>

@@ -3,7 +3,11 @@
 @endphp
 
 @if($programs->isEmpty())
-    <p class="text-gray-600 text-center py-4">No programs found.</p>
+    <x-empty-state
+        icon="bx bx-calendar-event"
+        title="No Programs Found"
+        description="There are no programs to display in this category."
+    />
 @else
     <x-table.table containerClass="overflow-x-auto custom-scrollbar-gold" tableClass="w-full">
         <x-table.thead>

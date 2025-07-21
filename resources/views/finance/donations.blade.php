@@ -76,8 +76,12 @@
                             </x-table.tr>
                         @empty
                             <x-table.tr>
-                                <x-table.td colspan="6" class="text-center text-gray-500">
-                                    No donations found
+                                <x-table.td colspan="6">
+                                    <x-empty-state
+                                        icon="bx bx-donate-heart"
+                                        title="No Donations Found"
+                                        description="There are no donations to display in this category."
+                                    />
                                 </x-table.td>
                             </x-table.tr>
                         @endforelse

@@ -74,8 +74,12 @@
             </x-table.tr>
         @empty
             <tr>
-                <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                    No members found
+                <td colspan="7" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                    <x-empty-state
+                        icon="bx bx-group"
+                        title="No Members Found"
+                        description="There are no members to display in this category."
+                    />
                 </td>
             </tr>
         @endforelse

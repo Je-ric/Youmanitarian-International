@@ -107,7 +107,11 @@
     @empty
         <tr>
             <td colspan="7" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                No active members found
+                <x-empty-state
+                    icon="bx bx-group"
+                    title="No Active Members Found"
+                    description="There are no active members to display in this category."
+                />
             </td>
         </tr>
     @endforelse

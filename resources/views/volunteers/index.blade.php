@@ -33,7 +33,11 @@
 
             <x-slot:slot_applications>
                 @if($applications->isEmpty())
-                    <p class="text-gray-600 text-center py-4">No pending applications found.</p>
+                    <x-empty-state
+                        icon="bx bx-user-plus"
+                        title="No Pending Applications"
+                        description="There are no new volunteer applications at the moment."
+                    />
                 @else
                     <x-table.table containerClass="overflow-x-auto custom-scrollbar-gold" tableClass="w-full min-w-[640px]">
                         <x-table.thead>
@@ -91,7 +95,11 @@
 
             <x-slot:slot_denied>
                 @if($deniedApplications->isEmpty())
-                    <p class="text-gray-600 text-center py-4">No denied applications found.</p>
+                    <x-empty-state
+                        icon="bx bx-x-circle"
+                        title="No Denied Applications"
+                        description="There are no applications that have been denied."
+                    />
                 @else
                     <x-table.table containerClass="overflow-x-auto custom-scrollbar-gold" tableClass="w-full min-w-[640px]">
                         <x-table.thead>
@@ -138,7 +146,11 @@
 
             <x-slot:slot_approved>
                 @if($approvedVolunteers->isEmpty())
-                    <p class="text-gray-600 text-center py-4">No approved volunteers found.</p>
+                    <x-empty-state
+                        icon="bx bx-check-circle"
+                        title="No Approved Volunteers"
+                        description="There are no volunteers who have been approved yet."
+                    />
                 @else
                     <x-table.table containerClass="overflow-x-auto custom-scrollbar-gold" tableClass="w-full min-w-[640px]">
                         <x-table.thead>

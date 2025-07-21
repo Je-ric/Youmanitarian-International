@@ -43,7 +43,7 @@
                     icon="bx-time"
                     type="primary"
                 />
-                
+
                 <x-overview.count-alert
                     :count="$attendanceOverview['noRecordsCount']"
                     title="No Records"
@@ -52,7 +52,7 @@
                     :subtitle="'of ' . $attendanceOverview['totalVolunteers']"
                 />
             </div>
-            
+
             <div>
                 <h4 class="text-xs sm:text-sm font-medium text-gray-700 mb-3">Status Breakdown</h4>
                 <div class="grid grid-cols-3 gap-2">
@@ -92,7 +92,11 @@
                     </x-slot:action>
                 </x-overview.summary-list-item>
             @empty
-                <p class="text-gray-600 text-center py-4">No recent activity</p>
+                <x-empty-state
+                    icon="bx bx-history"
+                    title="No Recent Activity"
+                    description="There is no recent activity to display for this program."
+                />
             @endforelse
         </div>
     </x-overview.card>

@@ -20,7 +20,7 @@
             </p>
         </div>
     </x-modal.header>
-    <form 
+    <form
         @if(!$isView)
             action="{{ route('finance.donations.store') }}" method="POST"
         @endif
@@ -32,9 +32,9 @@
                     {{-- Anonymous Checkbox --}}
                     @if(!$isView)
                         <div class="flex items-center space-x-2 mb-4 p-3 bg-gray-50 rounded-lg">
-                            <x-form.checkbox 
-                                id="is_anonymous" 
-                                name="is_anonymous" 
+                            <x-form.checkbox
+                                id="is_anonymous"
+                                name="is_anonymous"
                                 value="1"
                                 :checked="old('is_anonymous')"
                                 onchange="if(this.checked) { document.getElementById('donor_name').value = 'Anonymous'; } else { document.getElementById('donor_name').value = ''; }"
@@ -49,7 +49,7 @@
                     {{-- Donor Name --}}
                     <div class="flex items-center justify-between mb-0">
                         <x-form.label for="donor_name" class="mb-0" variant="donor-name">Donor Name</x-form.label>
-                        
+
                         @if($isView && $donation->is_anonymous)
                             <x-feedback-status.status-indicator status="role" label="Anonymous" />
                         @endif
@@ -63,11 +63,11 @@
                             @endif
                         </x-form.readonly>
                     @else
-                        <x-form.input 
-                            name="donor_name" 
-                            label="" 
-                            placeholder="Donor Name (optional)" 
-                            value="{{ old('is_anonymous') ? 'Anonymous' : (old('donor_name') ?? '') }}" 
+                        <x-form.input
+                            name="donor_name"
+                            label=""
+                            placeholder="Donor Name (optional)"
+                            value="{{ old('is_anonymous') ? 'Anonymous' : (old('donor_name') ?? '') }}"
                         />
                     @endif
 
@@ -76,9 +76,9 @@
                         <x-form.label for="donor_email" class="mb-0" variant="donor-email">Donor Email</x-form.label>
                         @if(!$isView)
                             <div class="flex items-center space-x-2">
-                                <x-form.checkbox 
-                                    id="quick_na_email" 
-                                    name="quick_na_email" 
+                                <x-form.checkbox
+                                    id="quick_na_email"
+                                    name="quick_na_email"
                                     value="N/A"
                                     onchange="document.getElementById('donor_email').value = this.checked ? this.value : ''"
                                 />
@@ -129,8 +129,8 @@
                         @endif
                     </div>
                     @if($isView)
-                        <x-feedback-status.alert 
-                            variant="flexible" 
+                        <x-feedback-status.alert
+                            variant="flexible"
                             :message="$donation->status === 'Confirmed' ? 'Donation has been confirmed and verified as received.' : 'Donation is pending confirmation and verification.'"
                             :bgColor="$donation->status === 'Confirmed' ? 'bg-green-50' : 'bg-yellow-50'"
                             :textColor="$donation->status === 'Confirmed' ? 'text-green-700' : 'text-yellow-700'"
@@ -139,8 +139,8 @@
                             :icon="$donation->status === 'Confirmed' ? 'bx bx-check-circle' : 'bx bx-time'"
                         />
                     @else
-                        <x-feedback-status.alert 
-                            variant="flexible" 
+                        <x-feedback-status.alert
+                            variant="flexible"
                             message="New donations are marked as pending until confirmed and verified as received."
                             bgColor="bg-yellow-50"
                             textColor="text-yellow-700"
@@ -158,11 +158,11 @@
                 @if($isView)
                     <x-form.readonly>{{ $donation->notes ?? 'No notes added' }}</x-form.readonly>
                 @else
-                    <x-form.textarea 
-                        name="notes" 
-                        id="notes" 
-                        label="" 
-                        placeholder="Add any additional notes about this donation..." 
+                    <x-form.textarea
+                        name="notes"
+                        id="notes"
+                        label=""
+                        placeholder="Add any additional notes about this donation..."
                         rows="3"
                         value="{{ old('notes') }}"
                     />
@@ -194,10 +194,12 @@
                         @endif
                     </div>
                 @elseif($isView && !$donation->receipt_url)
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
-                        <i class='bx bx-image text-gray-400 text-4xl mb-2'></i>
-                        <p class="text-gray-500 text-sm">No proof uploaded</p>
-                    </div>
+                    <x-empty-state
+                        icon="bx bx-image"
+                        title="No Proof Uploaded"
+                        description="There is no proof of donation for this entry."
+                        size="small"
+                    />
                 @else
                     <x-form.input-upload name="receipt" id="receipt" accept="image/jpeg,image/png,application/pdf">
                         Supported formats: JPEG, PNG, PDF
@@ -205,7 +207,6 @@
                 @endif
             </div>
 
-            {{-- Recorded By Information (Full Width) --}}
             @if($isView)
                 <div class="mt-6 pt-4 border-t border-gray-200">
                     <div class="text-xs text-gray-500 flex flex-col gap-1">

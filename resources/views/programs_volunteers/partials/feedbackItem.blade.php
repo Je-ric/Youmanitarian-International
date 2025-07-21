@@ -5,7 +5,7 @@
             <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
                 <i class='bx bx-user text-gray-500 text-lg'></i>
             </div>
-            
+
             <div>
                 <p class="font-medium text-gray-900">
                     {{-- {{ $feedback->volunteer->user->name ?? 'Anonymous Volunteer' }} --}}
@@ -57,6 +57,11 @@
             <p class="text-gray-700 leading-relaxed whitespace-pre-line">{{ $feedback->feedback }}</p>
         </div>
     @else
-        <p class="text-gray-500 italic">No written feedback provided.</p>
+        <x-empty-state
+            icon="bx bx-message-square-x"
+            title="No Written Feedback"
+            description="This feedback entry does not include any written comments."
+            size="small"
+        />
     @endif
 </div>

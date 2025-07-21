@@ -53,7 +53,13 @@
             </x-table.tr>
         @empty
             <x-table.tr>
-                <x-table.td colspan="6" class="text-center text-gray-500">No content found.</x-table.td>
+                <x-table.td colspan="6">
+                    <x-empty-state
+                        icon="bx bx-file"
+                        title="No Content Found"
+                        description="There is no content to display for this category."
+                    />
+                </x-table.td>
             </x-table.tr>
         @endforelse
     </x-table.tbody>
