@@ -71,7 +71,7 @@
                 </div>
 
                 {{-- Content Management Section (Content Manager Role) --}}
-                @if(Auth::user()->hasRole('Content Manager') || Auth::user()->hasRole('Program Coordinator'))
+                @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Content Manager') || Auth::user()->hasRole('Program Coordinator'))
                 <div class="mb-4">
                     <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Content</span>
@@ -91,7 +91,7 @@
                 </div>
                 @endif
 
-                @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Volunteer'))
+                @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Volunteer'))
                 <div class="mb-4">
                     <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Programs</span>
@@ -157,7 +157,7 @@
                     </h3>
                     <ul class="space-y-1">
                         {{-- Volunteers (Program Coordinator Role) --}}
-                        @if(Auth::user()->hasRole('Program Coordinator'))
+                        @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator'))
                         <li>
                             <a href="{{ route('volunteers.index') }}"
                                 class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('volunteers.*') ? 'active' : '' }}"
@@ -193,7 +193,7 @@
                 </div>
 
                 {{-- Financial Section (Financial Coordinator Role) --}}
-                @if(Auth::user()->hasRole('Financial Coordinator'))
+                @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Financial Coordinator'))
                 <div class="mb-4">
                     <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Financial</span>
@@ -246,7 +246,7 @@
                                 <span class="ml-3 sidebar-content text-sm">Weather Forecasts</span>
                             </a>
                         </li>
-                        @if (config('app.env') == 'local')
+                        @if(Auth::user()->hasRole('Admin') || config('app.env') == 'local')
                             <li>
                                 <a href="{{ route('components.showcase') }}"
                                     class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('components.showcase') ? 'active' : '' }}"
