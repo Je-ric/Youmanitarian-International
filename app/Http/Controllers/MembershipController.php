@@ -16,12 +16,21 @@ class MembershipController extends Controller
 {
     public function index()
     {
-        $members = Member::with(['user', 'payments' => function($query) {
+        $fullPledgeMembers = Member::with(['user', 'payments' => function($query) {
             $query->where('payment_year', now()->year);
         }])
         ->where('membership_status', 'active')
+        ->where('membership_type', 'full_pledge')
         ->orderBy('created_at', 'desc')
-        ->paginate(10);
+        ->paginate(10, ['*'], 'full_pledge_page');
+
+        $honoraryMembers = Member::with(['user', 'payments' => function($query) {
+            $query->where('payment_year', now()->year);
+        }])
+        ->where('membership_status', 'active')
+        ->where('membership_type', 'honorary')
+        ->orderBy('created_at', 'desc')
+        ->paginate(10, ['*'], 'honorary_page');
 
         $totalMembers = Member::count();
         $activeMembers = Member::where('membership_status', 'active')->count();
@@ -43,8 +52,13 @@ class MembershipController extends Controller
             }
         }
 
-        return view('finance.membership_payments', 
-        compact('members', 'totalMembers', 'activeMembers', 'totalPayments', 'paymentStatusByQuarter', 'totalMembershipRevenue', 'overduePayments'));
+        return view('finance.membership_payments',
+        compact('fullPledgeMembers',
+        'honoraryMembers',
+        'totalMembers',
+        'activeMembers',
+        'totalPayments',
+        'paymentStatusByQuarter', 'totalMembershipRevenue', 'overduePayments'));
     }
 
     private function getDueDate($quarter)
@@ -58,7 +72,7 @@ class MembershipController extends Controller
         // - This ensures that for any given quarter, the payment is expected by the end of that quarter.
         $currentYear = now()->year;
         $quarterNumber = (int) substr($quarter, 1);
-        
+
         // Set due date to the last day of the quarter
         return Carbon::create($currentYear, $quarterNumber * 3, 1)
             ->endOfMonth();
@@ -92,7 +106,7 @@ class MembershipController extends Controller
         ]);
 
         $member = Member::findOrFail($request->member_id);
-        
+
         // Check if payment already exists
         $existingPayment = $member->payments()
             ->where('payment_period', $request->payment_period)
