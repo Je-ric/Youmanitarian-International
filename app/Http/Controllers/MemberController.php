@@ -24,15 +24,23 @@ class MemberController extends Controller
     {
         $tab = $request->input('tab', 'overview');
 
-        $members = Member::with(['user', 'volunteer'])->latest()->paginate(10, ['*'], 'overview_page');
-        
+        $members = Member::with(['user', 'volunteer'])
+            ->where('membership_status', 'active')
+            ->latest()
+            ->paginate(10, ['*'], 'overview_page');
+
         $fullPledgeMembers = Member::with(['user', 'volunteer'])
             ->where('membership_type', 'full_pledge')
+            ->where('membership_status', 'active')
             ->latest()
             ->paginate(10, ['*'], 'full_pledge_page');
-            
+
+        // dd($fullPledgeMembers);
+        // dd($fullPledgeMembers->pluck('invitation_status'));
+
         $honoraryMembers = Member::with(['user', 'volunteer'])
             ->where('membership_type', 'honorary')
+            ->where('membership_status', 'active')
             ->latest()
             ->paginate(10, ['*'], 'honorary_page');
 
@@ -43,8 +51,8 @@ class MemberController extends Controller
 
         $totalMembersCount = Member::count();
         $activeMembersCount = Member::where('membership_status', 'active')->count();
-        $fullPledgeMembersCount = Member::where('membership_type', 'full_pledge')->count();
-        $honoraryMembersCount = Member::where('membership_type', 'honorary')->count();
+        $fullPledgeMembersCount = Member::where('membership_type', 'full_pledge')->where('membership_status', 'active')->count();
+        $honoraryMembersCount = Member::where('membership_type', 'honorary')->where('membership_status', 'active')->count();
 
         $recentlyJoinedMembers = Member::with('user')
             ->where('membership_status', 'active')
@@ -57,7 +65,7 @@ class MemberController extends Controller
             ->oldest('invited_at')
             ->take(5)
             ->get();
-        
+
         $users = User::whereNotIn('id', function($query) {
             $query->select('user_id')->from('members');
         })->get();
@@ -132,7 +140,7 @@ class MemberController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return redirect()->back()
                 ->withInput()
                 ->with('toast', ['type' => 'error', 'message' => 'Failed to create member. Please try again.']);
@@ -146,7 +154,7 @@ class MemberController extends Controller
         ]);
 
         $member->update($validated);
-        
+
         return redirect()->back()
             ->with('toast', ['type' => 'success', 'message' => 'Member status updated successfully']);
     }
@@ -190,7 +198,7 @@ class MemberController extends Controller
             // Send invitation email
             try {
                 Mail::to($member->user->email)->send(new MemberInvitation($member));
-                
+
                 Log::info('Member invitation email sent successfully', [
                     'member_id' => $member->id,
                     'user_email' => $member->user->email
@@ -204,7 +212,7 @@ class MemberController extends Controller
                     'member_id' => $member->id,
                     'user_email' => $member->user->email
                 ]);
-                
+
                 return redirect()->back()
                     ->with('toast', ['type' => 'warning', 'message' => 'Member created but failed to send invitation email. Please try sending the invitation again.']);
             }
@@ -213,7 +221,7 @@ class MemberController extends Controller
                 'error' => $e->getMessage(),
                 'volunteer_id' => $volunteer->id
             ]);
-            
+
             return redirect()->back()
                 ->with('toast', ['type' => 'error', 'message' => 'Error creating member. Please try again.']);
         }
@@ -279,7 +287,7 @@ class MemberController extends Controller
 
             // Send email
             Mail::to($member->user->email)->send(new MemberInvitation($member));
-            
+
             Log::info('Member invitation resent successfully', [
                 'member_id' => $member->id,
                 'user_email' => $member->user->email

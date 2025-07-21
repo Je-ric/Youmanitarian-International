@@ -13,12 +13,19 @@ class MemberFactory extends Factory
 
     public function definition(): array
     {
+        $status = $this->faker->randomElement(['active', 'inactive']);
+        $invitationStatus = 'accepted';
+
+        if ($status === 'inactive') {
+            $invitationStatus = $this->faker->randomElement(['pending', 'declined']);
+        }
+
         return [
             'user_id' => User::factory(),
             'volunteer_id' => Volunteer::factory(),
             'membership_type' => $this->faker->randomElement(['full_pledge', 'honorary']),
-            'membership_status' => $this->faker->randomElement(['active', 'inactive']),
-            'invitation_status' => $this->faker->randomElement(['pending', 'accepted', 'declined']),
+            'membership_status' => $status,
+            'invitation_status' => $invitationStatus,
             'invited_at' => $this->faker->optional()->dateTimeThisYear(),
             'start_date' => $this->faker->optional()->dateTimeThisYear(),
             'invited_by' => User::factory(),

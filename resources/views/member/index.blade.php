@@ -1,9 +1,9 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-<x-page-header 
-    icon="bx-group" 
-    title="Member Management" 
+<x-page-header
+    icon="bx-group"
+    title="Member Management"
     desc="Manage and view details of all members.">
 </x-page-header>
 
@@ -35,4 +35,4 @@
         </x-slot>
     </x-navigation-layout.tabs-modern>
 
-@endsection 
+@endsection

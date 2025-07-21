@@ -34,7 +34,7 @@
                         {{ $member->start_date ? $member->start_date->format('M d, Y') : 'N/A' }}</div>
                 </x-table.td>
                 <x-table.td>
-                    <x-feedback-status.status-indicator 
+                    <x-feedback-status.status-indicator
                         :status="$member->invitation_status === 'pending' ? 'pending' : ($member->membership_status === 'active' ? 'success' : 'danger')"
                         :label="$member->invitation_status === 'pending' ? 'Pending Invitation' : ucfirst($member->membership_status)"
                     />
