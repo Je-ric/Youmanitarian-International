@@ -41,6 +41,9 @@
                 </x-table.td>
                 <x-table.td>
                     <div class="flex space-x-2">
+                        <x-button href="{{ route('volunteers.volunteer-details', $member->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                            <i class='bx bx-dots-horizontal-rounded'></i>
+                        </x-button>
                         @if($member->invitation_status === 'pending')
                             <form action="{{ route('members.resend-invitation', $member) }}" method="POST" class="inline">
                                 @csrf

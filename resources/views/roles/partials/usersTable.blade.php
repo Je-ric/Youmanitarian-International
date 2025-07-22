@@ -57,6 +57,9 @@
                             </div>
                         </x-table.td>
                         <x-table.td>
+                            <x-button href="{{ route('volunteers.volunteer-details', $user->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
+                                <i class='bx bx-dots-horizontal-rounded'></i>
+                            </x-button>
                             <x-button type="button" variant="table-action-manage" onclick="document.getElementById('assignRolesModal_{{ $roleType }}_{{ $user->id }}').showModal()">
                                 <i class='bx bx-edit-alt'></i>
                             </x-button>
