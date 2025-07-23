@@ -1,0 +1,160 @@
+/* Style the Tiptap content area */
+.ProseMirror {
+    min-height: 300px;
+    padding: 1rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    outline: none;
+    color: #111827;
+  }
+
+  /* Placeholder styling (if you're using the placeholder extension) */
+  .ProseMirror p.is-empty::before {
+    content: attr(data-placeholder);
+    color: #9ca3af;
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
+
+  /* Headings */
+  .ProseMirror h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  .ProseMirror h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Lists */
+  .ProseMirror ul,
+  .ProseMirror ol {
+    padding-left: 1.25rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .ProseMirror li {
+    margin-bottom: 0.25rem;
+  }
+
+  /* Blockquotes */
+  .ProseMirror blockquote {
+    padding-left: 1rem;
+    border-left: 4px solid #e5e7eb;
+    color: #6b7280;
+    margin: 1rem 0;
+  }
+
+  /* Code blocks */
+  .ProseMirror pre {
+    background: #f9fafb;
+    color: #111827;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    font-family: monospace;
+    overflow-x: auto;
+  }
+
+  /* Inline code */
+  .ProseMirror code {
+    background-color: #f3f4f6;
+    color: #ef4444;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+  }
+
+  /* Links */
+  .ProseMirror a {
+    color: #3b82f6;
+    text-decoration: underline;
+  }
+
+  /* Bold, Italic */
+  .ProseMirror strong {
+    font-weight: 600;
+  }
+
+  .ProseMirror em {
+    font-style: italic;
+  }
+
+  .ProseMirror {
+      background-color: #f8fafc; /* light gray */
+  }
+
+  .ProseMirror p.is-empty::before {
+      color: #b91c1c; /* red-700 */
+      font-style: italic;
+      opacity: 0.7;
+  }
+
+  .ProseMirror:focus {
+      border-color: #ffb51b;
+      box-shadow: 0 0 0 2px #ffb51b33;
+  }
+
+/* Modernize Summernote Toolbar */
+.note-toolbar {
+    background: #fff;
+    border-radius: 0.75rem 0.75rem 0 0;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 0.5rem 1rem;
+    margin-bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.note-toolbar .note-btn-group {
+    margin-right: 0.5rem;
+}
+
+.note-toolbar .note-btn {
+    background: #f3f4f6;
+    border: none;
+    color: #374151;
+    border-radius: 0.375rem;
+    padding: 0.4rem 0.7rem;
+    font-size: 1rem;
+    transition: background 0.2s, color 0.2s;
+    box-shadow: none;
+}
+
+.note-toolbar .note-btn:hover,
+.note-toolbar .note-btn:focus {
+    background: #ffb51b;
+    color: #fff;
+    outline: none;
+}
+
+.note-toolbar .note-btn.active {
+    background: #f59e42;
+    color: #fff;
+}
+
+.note-toolbar .dropdown-menu {
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+}
+
+.note-toolbar .note-btn .note-icon-caret {
+    margin-left: 0.3em;
+}
+
+/* Optional: Slightly round the editor frame */
+.note-editor.note-frame {
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}

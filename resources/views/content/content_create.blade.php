@@ -181,6 +181,12 @@
             <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
             <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+            <!-- CSS -->
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
+            <!-- JS + jQuery -->
+            <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
+
             <script>
                 $(document).ready(function () {
                     $('#editor').summernote({
@@ -193,6 +199,20 @@
                             }
                         }
                     });
+                    $('#summernote').summernote({
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'italic', 'underline']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['insert', ['picture', 'link']],
+                        ['view', ['codeview']]
+                    ],
+                    styleTags: [
+                        'p', 'blockquote', 'pre',
+                        'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+                    ]
+                    });
+
 
                     // Auto-generate slug from title
                     $('input[name="title"]').on('input', function() {
