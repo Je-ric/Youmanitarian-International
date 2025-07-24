@@ -82,39 +82,18 @@ class ContentController extends Controller
     //   approval_status = approved (if content manager)
     private function setContentApprovalStatus($request, $user)
     {
-        $approval_status = $request->input('approval_status', 'draft');
-        if ($approval_status === 'submitted') {
-            return [
-                'content_status' => 'draft',
-                'approval_status' => 'submitted',
-                'approved_by' => null,
-                'approved_at' => null,
-            ];
-        } elseif ($approval_status === 'pending') {
-            return [
-                'content_status' => 'draft',
-                'approval_status' => 'pending',
-                'approved_by' => null,
-                'approved_at' => null,
-            ];
-        } elseif ($approval_status === 'approved' && $user->hasRole('Content Manager')) {
+        $publishing_action = $request->input('publishing_action', 'draft');
+        if ($publishing_action === 'published') {
             return [
                 'content_status' => 'published',
                 'approval_status' => 'approved',
                 'approved_by' => $user->id,
                 'approved_at' => now(),
             ];
-        } elseif ($approval_status === 'needs_revision') {
+        } elseif ($publishing_action === 'submitted') {
             return [
                 'content_status' => 'draft',
-                'approval_status' => 'needs_revision',
-                'approved_by' => null,
-                'approved_at' => null,
-            ];
-        } elseif ($approval_status === 'rejected') {
-            return [
-                'content_status' => 'draft',
-                'approval_status' => 'rejected',
+                'approval_status' => 'submitted',
                 'approved_by' => null,
                 'approved_at' => null,
             ];
