@@ -80,9 +80,9 @@
                     </div>
                     @php
                         $user = Auth::user();
-                        $canChoosePublish = $user->hasRole('Content Manager') && $user->hasRole('Program Coordinator') && !isset($content);
+                        $isProgramCoordinator = $user->hasRole('Program Coordinator') && !$user->hasRole('Content Manager');
                     @endphp
-                    @if($canChoosePublish)
+                    @if($isProgramCoordinator)
                         <div>
                             <x-form.label>Publishing Option</x-form.label>
                             <div class="flex flex-col gap-2 mt-2">
@@ -99,13 +99,36 @@
                     @endif
                     <div>
                         <x-form.label>Content Status</x-form.label>
-                        <select name="content_status" class="input input-bordered w-full bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]" required>
-                            <option value="">Select Status</option>
-                            <option value="draft" {{ old('content_status', $content->content_status ?? '') == 'draft' ? 'selected' : '' }}>Draft</option>
-                            <option value="published" {{ old('content_status', $content->content_status ?? '') == 'published' ? 'selected' : '' }}>Published</option>
-                            <option value="archived" {{ old('content_status', $content->content_status ?? '') == 'archived' ? 'selected' : '' }}>Archived</option>
+                        <select name="content_status" class="input input-bordered w-full bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]" required @if($isProgramCoordinator) disabled @endif>
+                            <option value="draft" selected>Draft</option>
+                            @if(!$isProgramCoordinator)
+                                <option value="published" {{ old('content_status', $content->content_status ?? '') == 'published' ? 'selected' : '' }}>Published</option>
+                                {{-- <option value="archived" {{ old('content_status', $content->content_status ?? '') == 'archived' ? 'selected' : '' }}>Archived</option> --}}
+                            @endif
                         </select>
+                        @if($isProgramCoordinator)
+                            <input type="hidden" name="content_status" value="draft">
+                        @endif
                     </div>
+                    @if($isProgramCoordinator)
+                        <div class="flex gap-4 mt-4">
+                            <button type="button" id="saveDraftBtn" class="btn btn-secondary">Save as Draft</button>
+                            <button type="button" id="submitForApprovalBtn" class="btn btn-primary">Submit for Approval</button>
+                            <input type="hidden" name="approval_status" id="approvalStatusInput" value="draft">
+                        </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                document.getElementById('saveDraftBtn').onclick = function() {
+                                    document.getElementById('approvalStatusInput').value = 'draft';
+                                    document.getElementById('contentForm').submit();
+                                };
+                                document.getElementById('submitForApprovalBtn').onclick = function() {
+                                    document.getElementById('approvalStatusInput').value = 'submitted';
+                                    document.getElementById('contentForm').submit();
+                                };
+                            });
+                        </script>
+                    @endif
                     <div>
                         <x-form.label>Allow what applies:</x-form.label>
                         <div class="flex flex-col gap-2 mt-2">

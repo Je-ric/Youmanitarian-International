@@ -18,14 +18,21 @@ class ContentController extends Controller
         $user = Auth::user();
         $myContent = Content::where('created_by', $user->id)->latest()->paginate(5, ['*'], 'myContent');
         $publishedContent = Content::where('content_status', 'published')->latest()->paginate(5, ['*'], 'publishedContent');
-        $drafts = Content::where('created_by', $user->id)->where('content_status', 'draft')->latest()->paginate(5, ['*'], 'drafts');
+        $drafts = Content::where('created_by', $user->id)
+            ->where('content_status', 'draft')
+            ->where('approval_status', 'draft')
+            ->latest()->paginate(5, ['*'], 'drafts');
+        $submitted = Content::where('created_by', $user->id)
+            ->where('content_status', 'draft')
+            ->where('approval_status', 'submitted')
+            ->latest()->paginate(5, ['*'], 'submitted');
         $archived = Content::where('created_by', $user->id)->where('content_status', 'archived')->latest()->paginate(5, ['*'], 'archived');
         $rejected = Content::where('created_by', $user->id)
             ->whereIn('approval_status', ['rejected', 'needs_revision'])
             ->latest()->paginate(5, ['*'], 'rejected');
         $needsApproval = null;
         if ($user->hasRole('Content Manager')) {
-            $needsApproval = Content::where('approval_status', 'pending')
+            $needsApproval = Content::whereIn('approval_status', ['submitted', 'pending'])
                 ->whereHas('user', function($q) {
                     $q->whereHas('roles', function($qr) {
                         $qr->where('role_name', 'Program Coordinator');
@@ -36,10 +43,11 @@ class ContentController extends Controller
         return view('content.index',
         compact('myContent',
                         'publishedContent',
-                                    'needsApproval',
-                                    'drafts',
-                                    'archived',
-                                    'rejected'));
+                        'needsApproval',
+                        'drafts',
+                        'submitted',
+                        'archived',
+                        'rejected'));
     }
 
 
@@ -61,8 +69,68 @@ class ContentController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
+    // When saving as draft:
+    //   content_status = draft
+    //   approval_status = needs_revision
+
+    // When submitting for approval:
+    //   content_status = draft
+    //   approval_status = pending (if content manager)
+
+    // When approved:
+    //   content_status = published
+    //   approval_status = approved (if content manager)
+    private function setContentApprovalStatus($request, $user)
+    {
+        $approval_status = $request->input('approval_status', 'draft');
+        if ($approval_status === 'submitted') {
+            return [
+                'content_status' => 'draft',
+                'approval_status' => 'submitted',
+                'approved_by' => null,
+                'approved_at' => null,
+            ];
+        } elseif ($approval_status === 'pending') {
+            return [
+                'content_status' => 'draft',
+                'approval_status' => 'pending',
+                'approved_by' => null,
+                'approved_at' => null,
+            ];
+        } elseif ($approval_status === 'approved' && $user->hasRole('Content Manager')) {
+            return [
+                'content_status' => 'published',
+                'approval_status' => 'approved',
+                'approved_by' => $user->id,
+                'approved_at' => now(),
+            ];
+        } elseif ($approval_status === 'needs_revision') {
+            return [
+                'content_status' => 'draft',
+                'approval_status' => 'needs_revision',
+                'approved_by' => null,
+                'approved_at' => null,
+            ];
+        } elseif ($approval_status === 'rejected') {
+            return [
+                'content_status' => 'draft',
+                'approval_status' => 'rejected',
+                'approved_by' => null,
+                'approved_at' => null,
+            ];
+        } else {
+            return [
+                'content_status' => 'draft',
+                'approval_status' => 'draft',
+                'approved_by' => null,
+                'approved_at' => null,
+            ];
+        }
+    }
+
     public function store(Request $request)
     {
+        $user = Auth::user();
         $image_max_size = 51200; // 50mb
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -117,28 +185,7 @@ class ContentController extends Controller
         $enable_bookmark = $request->has('enable_bookmark') ? true : false;
         $is_featured = $request->has('is_featured') ? true : false;
 
-        $user = Auth::user();
-        $isDualRole = $user->hasRole('Content Manager') && $user->hasRole('Program Coordinator');
-        $publishOption = $isDualRole ? $request->input('publish_option', 'publish') : null;
-
-        $approval_status = 'pending';
-        $approved_by = null;
-        $approved_at = null;
-        $content_status = $validated['content_status'];
-
-        if ($isDualRole && !$request->has('content')) {
-            if ($publishOption === 'publish') {
-                $approval_status = 'approved';
-                $approved_by = $user->id;
-                $approved_at = now();
-                $content_status = 'published';
-            } else {
-                $approval_status = 'pending';
-                $approved_by = null;
-                $approved_at = null;
-                $content_status = 'draft';
-            }
-        }
+        $statusArr = $this->setContentApprovalStatus($request, $user);
 
         $content = Content::create([
             'title' => $validated['title'],
@@ -146,11 +193,11 @@ class ContentController extends Controller
             'content_type' => $validated['content_type'],
             'body' => $validated['body'],
             'created_by' => $user_id,
-            'content_status' => $content_status,
+            'content_status' => $statusArr['content_status'],
             'image_content' => $image_path,
-            'approval_status' => $approval_status,
-            'approved_by' => $approved_by,
-            'approved_at' => $approved_at,
+            'approval_status' => $statusArr['approval_status'],
+            'approved_by' => $statusArr['approved_by'],
+            'approved_at' => $statusArr['approved_at'],
             'views' => 0,
             'enable_likes' => $enable_likes,
             'enable_comments' => $enable_comments,
@@ -176,6 +223,7 @@ class ContentController extends Controller
 
     public function update(Request $request, $id)
     {
+        $user = Auth::user();
         $image_max_size = 51200; // 50mb
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -222,13 +270,14 @@ class ContentController extends Controller
         $enable_bookmark = $request->has('enable_bookmark') ? true : false;
         $is_featured = $request->has('is_featured') ? true : false;
 
-        // Update content with proper boolean handling
+        $statusArr = $this->setContentApprovalStatus($request, $user);
+
         $content->update([
             'title' => $validated['title'],
             'slug' => $validated['slug'],
             'content_type' => $validated['content_type'],
             'body' => $validated['body'],
-            'content_status' => $validated['content_status'],
+            'content_status' => $statusArr['content_status'],
             'image_content' => $validated['image_content'],
             'enable_likes' => $enable_likes,
             'enable_comments' => $enable_comments,
@@ -299,10 +348,6 @@ class ContentController extends Controller
             'type' => 'success'
         ]);
     }
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨

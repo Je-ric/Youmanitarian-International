@@ -15,6 +15,7 @@
             ['id' => 'my', 'label' => 'My Content', 'icon' => 'bx-user'],
             ['id' => 'published', 'label' => 'Published', 'icon' => 'bx-globe'],
             ['id' => 'drafts', 'label' => 'Drafts', 'icon' => 'bx-edit'],
+            ['id' => 'submitted', 'label' => 'Submitted', 'icon' => 'bx-upload'],
             ['id' => 'archived', 'label' => 'Archived', 'icon' => 'bx-archive'],
             ['id' => 'rejected', 'label' => 'Rejected/Needs Revision', 'icon' => 'bx-x-circle'],
         ];
@@ -32,6 +33,9 @@
         </x-slot>
         <x-slot:slot_drafts>
             @include('content.partials.contentTable', ['contents' => $drafts, 'tab' => 'drafts'])
+        </x-slot>
+        <x-slot:slot_submitted>
+            @include('content.partials.contentTable', ['contents' => $submitted, 'tab' => 'submitted'])
         </x-slot>
         <x-slot:slot_archived>
             @include('content.partials.contentTable', ['contents' => $archived, 'tab' => 'archived'])
