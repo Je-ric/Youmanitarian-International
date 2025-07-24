@@ -181,38 +181,124 @@
             <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
             <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
-            <!-- CSS -->
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
-            <!-- JS + jQuery -->
+            
+            {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
             <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script> --}}
 
             <script>
                 $(document).ready(function () {
                     $('#editor').summernote({
                         height: 300,
                         placeholder: 'Write your content here...',
+                        toolbar: [
+                            ['style', ['style']],
+                            ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                            ['fontname', ['fontname']],
+                            ['fontsize', ['fontsize']],
+                            ['fontsizeunit', ['fontsizeunit']],
+                            ['color', ['color', 'forecolor', 'backcolor']],
+                            ['para', ['ul', 'ol', 'paragraph', 'height']],
+                            ['table', ['table']],
+                            ['insert', ['link', 'picture', 'video', 'hr']],
+                            ['view', ['fullscreen', 'codeview', 'help']],
+                            ['misc', ['undo', 'redo']],
+                            // Example custom button group
+                            ['mybutton', ['hello']]
+                        ],
+                        buttons: {
+                            // Example custom button: inserts 'hello' at cursor
+                            hello: function (context) {
+                                var ui = $.summernote.ui;
+                                var button = ui.button({
+                                    contents: '<i class="fa fa-child"></i> Hello',
+                                    tooltip: 'Insert Hello',
+                                    click: function () {
+                                        context.invoke('editor.insertText', 'hello');
+                                    }
+                                });
+                                return button.render();
+                            }
+                        },
+                        popover: {
+                            image: [
+                                ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+                                ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                                ['remove', ['removeMedia']]
+                            ],
+                            link: [
+                                ['link', ['linkDialogShow', 'unlink']]
+                            ],
+                            table: [
+                                ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
+                                ['delete', ['deleteRow', 'deleteCol', 'deleteTable']]
+                            ],
+                            air: [
+                                ['color', ['color']],
+                                ['font', ['bold', 'underline', 'clear']],
+                                ['para', ['ul', 'paragraph']],
+                                ['table', ['table']],
+                                ['insert', ['link', 'picture']]
+                            ]
+                        },
+                        blockquoteBreakingLevel: 2,
+                        styleTags: [
+                            'p',
+                            { title: 'Blockquote', tag: 'blockquote', className: 'blockquote', value: 'blockquote' },
+                            'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+                        ],
+                        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'],
+                        fontNamesIgnoreCheck: ['Merriweather'],
+                        addDefaultFonts: true,
+                        fontSizeUnits: ['px', 'pt', 'em', 'rem'],
+                        lineHeights: ['0.5', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
+                        inheritPlaceholder: true,
+                        dialogsInBody: true,
+                        dialogsFade: true,
+                        disableDragAndDrop: false,
+                        shortcuts: true,
+                        tabDisable: false,
+                        codeviewFilter: true,
+                        codeviewIframeFilter: true,
+                        spellCheck: true,
+                        disableGrammar: false,
                         callbacks: {
                             onChange: function (contents, $editable) {
-                                // Update the textarea directly
                                 $('#editor').val(contents);
+                            },
+                            // Example advanced callbacks (can be customized or removed)
+                            onInit: function() {
+                                console.log('Summernote is launched');
+                                // Example: show notification in status area
+                                $('.note-status-output').html('<div class="alert alert-info">Editor initialized</div>');
+                            },
+                            onEnter: function() {
+                                console.log('Enter/Return key pressed');
+                            },
+                            onFocus: function() {
+                                console.log('Editable area is focused');
+                            },
+                            onBlur: function() {
+                                console.log('Editable area loses focus');
+                            },
+                            onBlurCodeview: function() {
+                                console.log('Codeview area loses focus');
+                            },
+                            onKeyup: function(e) {
+                                console.log('Key is released:', e.keyCode);
+                            },
+                            onKeydown: function(e) {
+                                console.log('Key is downed:', e.keyCode);
+                            },
+                            onPaste: function(e) {
+                                console.log('Called event paste');
+                            },
+                            onImageLinkInsert: function(url) {
+                                var $img = $('<img>').attr({ src: url });
+                                $('#editor').summernote('insertNode', $img[0]);
                             }
                         }
                     });
-                    $('#summernote').summernote({
-                    toolbar: [
-                        ['style', ['style']],
-                        ['font', ['bold', 'italic', 'underline']],
-                        ['para', ['ul', 'ol', 'paragraph']],
-                        ['insert', ['picture', 'link']],
-                        ['view', ['codeview']]
-                    ],
-                    styleTags: [
-                        'p', 'blockquote', 'pre',
-                        'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
-                    ]
-                    });
-
 
                     // Auto-generate slug from title
                     $('input[name="title"]').on('input', function() {
