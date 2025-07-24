@@ -80,55 +80,34 @@
                     </div>
                     @php
                         $user = Auth::user();
-                        $isProgramCoordinator = $user->hasRole('Program Coordinator') && !$user->hasRole('Content Manager');
+                        $isProgramCoordinator = $user->hasRole('Program Coordinator');
+                        $isContentManager = $user->hasRole('Content Manager');
+                        $hasBothRoles = $isProgramCoordinator && $isContentManager;
                     @endphp
-                    @if($isProgramCoordinator)
-                        <div>
-                            <x-form.label>Publishing Option</x-form.label>
-                            <div class="flex flex-col gap-2 mt-2">
-                                <label class="inline-flex items-center">
-                                    <input type="radio" name="publish_option" value="publish" {{ old('publish_option', 'publish') == 'publish' ? 'checked' : '' }}>
-                                    <span class="ml-2">Publish directly</span>
-                                </label>
-                                <label class="inline-flex items-center">
-                                    <input type="radio" name="publish_option" value="approval" {{ old('publish_option') == 'approval' ? 'checked' : '' }}>
-                                    <span class="ml-2">Submit for approval</span>
-                                </label>
-                            </div>
-                        </div>
-                    @endif
                     <div>
-                        <x-form.label>Content Status</x-form.label>
-                        <select name="content_status" class="input input-bordered w-full bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]" required @if($isProgramCoordinator) disabled @endif>
-                            <option value="draft" selected>Draft</option>
-                            @if(!$isProgramCoordinator)
-                                <option value="published" {{ old('content_status', $content->content_status ?? '') == 'published' ? 'selected' : '' }}>Published</option>
-                                {{-- <option value="archived" {{ old('content_status', $content->content_status ?? '') == 'archived' ? 'selected' : '' }}>Archived</option> --}}
+                        <x-form.label>Publishing Action</x-form.label>
+                        <div class="flex flex-col gap-2 mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="publishing_action" value="draft"
+                                    {{ old('publishing_action', 'draft') == 'draft' ? 'checked' : '' }}>
+                                <span class="ml-2">Save as Draft</span>
+                            </label>
+                            @if($isProgramCoordinator || $hasBothRoles)
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="publishing_action" value="submitted"
+                                    {{ old('publishing_action') == 'submitted' ? 'checked' : '' }}>
+                                <span class="ml-2">Submit for Approval</span>
+                            </label>
                             @endif
-                        </select>
-                        @if($isProgramCoordinator)
-                            <input type="hidden" name="content_status" value="draft">
-                        @endif
-                    </div>
-                    @if($isProgramCoordinator)
-                        <div class="flex gap-4 mt-4">
-                            <button type="button" id="saveDraftBtn" class="btn btn-secondary">Save as Draft</button>
-                            <button type="button" id="submitForApprovalBtn" class="btn btn-primary">Submit for Approval</button>
-                            <input type="hidden" name="approval_status" id="approvalStatusInput" value="draft">
+                            @if($isContentManager || $hasBothRoles)
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="publishing_action" value="published"
+                                    {{ old('publishing_action') == 'published' ? 'checked' : '' }}>
+                                <span class="ml-2">Publish Directly</span>
+                            </label>
+                            @endif
                         </div>
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                document.getElementById('saveDraftBtn').onclick = function() {
-                                    document.getElementById('approvalStatusInput').value = 'draft';
-                                    document.getElementById('contentForm').submit();
-                                };
-                                document.getElementById('submitForApprovalBtn').onclick = function() {
-                                    document.getElementById('approvalStatusInput').value = 'submitted';
-                                    document.getElementById('contentForm').submit();
-                                };
-                            });
-                        </script>
-                    @endif
+                    </div>
                     <div>
                         <x-form.label>Allow what applies:</x-form.label>
                         <div class="flex flex-col gap-2 mt-2">

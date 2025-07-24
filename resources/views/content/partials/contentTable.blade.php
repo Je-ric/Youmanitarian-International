@@ -23,7 +23,14 @@
                     <x-feedback-status.status-indicator status="{{ $content->content_status }}" />
                 </x-table.td>
                 <x-table.td>
-                    <x-feedback-status.status-indicator status="{{ $content->approval_status }}" />
+                    <x-feedback-status.status-indicator 
+                        status="{{ $content->approval_status }}"
+                        @if($content->approval_status === 'submitted')
+                            label="Submitted for Review"
+                        @elseif($content->approval_status === 'draft')
+                            label="Draft"
+                        @endif
+                    />
                 </x-table.td>
                 <x-table.td>{{ $content->updated_at->setTimezone('Asia/Manila')->format('M d, Y h:i A') }}</x-table.td>
                 <x-table.td>
@@ -40,7 +47,7 @@
                             <i class='bx bx-archive'></i>
                         </x-button>
 
-                        @if($content->approval_status === 'pending' && $content->user && $content->user->hasRole('Program Coordinator'))
+                        @if(($content->approval_status === 'pending' || $content->approval_status === 'submitted') && $content->user && $content->user->hasRole('Program Coordinator'))
                             <form action="{{ route('content.approve', $content->id) }}" method="POST" class="inline">
                                 @csrf
                                 <x-button type="submit" variant="table-action-manage" size="sm" class="tooltip" data-tip="Approve">

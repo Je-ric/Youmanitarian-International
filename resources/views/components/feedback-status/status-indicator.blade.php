@@ -28,6 +28,8 @@ $variant = [
     'archived' => 'bg-red-100 text-red-700',
     // Approval Statuses
     'needs_revision' => 'bg-orange-100 text-orange-700',
+    'submitted' => 'bg-blue-100 text-blue-700',
+    // draft - pending
     // Role-based 
     'volunteer' => 'bg-blue-600 text-white',
     'admin' => 'bg-purple-700 text-white',
@@ -69,6 +71,7 @@ $icons = [
     'archived' => 'bx bx-archive',
     // Approval Statuses
     'needs_revision' => 'bx bx-refresh',
+    'submitted' => 'bx bx-upload',
     // Role-based icons
     'volunteer' => 'bx bx-user',
     'admin' => 'bx bx-crown',
