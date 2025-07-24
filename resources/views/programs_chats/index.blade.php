@@ -65,14 +65,16 @@
                                         </div>
                                         @if($message->sender_id === Auth::id())
                                             <div class="flex items-center gap-3 mt-2 justify-end">
-                                                <form action="{{ route('program.chats.destroy', [$program, $message]) }}" method="POST" class="inline chat-delete-form">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" onclick="return confirm('Delete this message?')" class="inline-flex items-center px-3 py-1 text-xs text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-all">
-                                                        <i class="bx bx-trash mr-1"></i>
-                                                        Delete
-                                                    </button>
-                                                </form>
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex items-center px-3 py-1 text-xs text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-all chat-delete-btn"
+                                                    data-message-id="{{ $message->id }}"
+                                                    {{-- data-program-id="{{ $program->id }}" --}}
+                                                    data-program-id="{{ $message->program_id }}"
+                                                >
+                                                    <i class="bx bx-trash mr-1"></i>
+                                                    Delete
+                                                </button>
                                             </div>
                                         @endif
                                     </div>
@@ -239,14 +241,15 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                             ${isOwn ? `
                             <div class="flex items-center gap-3 mt-2 justify-end">
-                                <form action="${data.delete_url}" method="POST" class="inline chat-delete-form">
-                                    <input type="hidden" name="_token" value="${csrfToken}">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button type="submit" class="inline-flex items-center px-3 py-1 text-xs text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-all">
-                                        <i class="bx bx-trash mr-1"></i>
-                                        Delete
-                                    </button>
-                                </form>
+                                <button
+                                    type="button"
+                                    class="inline-flex items-center px-3 py-1 text-xs text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-all chat-delete-btn"
+                                    data-message-id="${chat.id}"
+                                    data-program-id="${chat.program_id}"
+                                >
+                                    <i class="bx bx-trash mr-1"></i>
+                                    Delete
+                                </button>
                             </div>
                             ` : ''}
                         </div>
@@ -262,32 +265,42 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Event delegation for delete
-    document.addEventListener('submit', function(e) {
-        const form = e.target;
-        if (form.classList.contains('chat-delete-form')) {
-            e.preventDefault();
-            if (!confirm('Delete this message?')) return;
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-            fetch(form.action, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
-                }
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    const msgDiv = form.closest('[data-message-id]');
-                    if (msgDiv) msgDiv.remove();
-                } else {
-                    alert(data.error || 'Failed to delete message.');
-                }
-            })
-            .catch(() => alert('Network error. Please try again.'));
+    document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.chat-delete-btn');
+    if (!btn) return;
+
+    const messageId = btn.getAttribute('data-message-id');
+    const programId = btn.getAttribute('data-program-id');
+
+    if (!messageId || !programId) {
+        alert('Missing messageId or programId!');
+        return;
+    }
+
+    if (!confirm('Delete this message?')) return;
+
+    const deleteUrl = `/programs/${programId}/chats/${messageId}`;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+    fetch(deleteUrl, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
         }
-    });
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            const msgDiv = btn.closest('[data-message-id]');
+            if (msgDiv) msgDiv.remove();
+        } else {
+            alert(data.error || 'Failed to delete message.');
+        }
+    })
+    .catch(() => alert('Network error. Please try again.'));
+});
+
 });
 </script>
 @endpush

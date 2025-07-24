@@ -97,6 +97,19 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/content/comments/{commentId}', [ContentCommentController::class, 'destroy']);
     Route::get('/content/{contentId}/comments', [ContentCommentController::class, 'fetchComments']);
 
+    // VOLUNTEER APPLICATION
+    Route::get('/volunteers/application-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
+    Route::post('/volunteers/apply', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
+
+     // Program Chat
+     Route::get('/programs/chats/list', [ProgramChatController::class, 'index'])->name('program.chats.index');
+     Route::get('/programs/{program}/chats', [ProgramChatController::class, 'show'])->name('program.chats.show');
+     Route::post('/programs/{program}/chats', [ProgramChatController::class, 'store'])->name('program.chats.store');
+     Route::put('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'update'])->name('program.chats.update');
+     Route::delete('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'destroy'])->name('program.chats.destroy');
+
+     //  Route::delete('/programs/{program}/chats/{message}', [ProgramChatController::class, 'destroy'])->name('program.chats.destroy');
+
 });
 
 
@@ -147,10 +160,6 @@ Route::middleware(['auth', 'role:Program Coordinator'])->group(function () {
 
 Route::middleware(['auth', 'role:Volunteer'])->group(function () {
 
-    // VOLUNTEER APPLICATION
-    Route::get('/volunteers/application-form', [VolunteerApplicationController::class, 'volunteerForm'])->name('volunteers.form');
-    Route::post('/volunteers/apply', [VolunteerApplicationController::class, 'store'])->name('volunteer.application.store');
-
     // Program viewing (read-only access)
     Route::get('/programs/list', [ProgramController::class, 'gotoProgramsList'])->name('programs.index');
     // Route::get('/programs/create', [ProgramController::class, 'gotoCreateProgram'])->name('programs.create');
@@ -175,12 +184,6 @@ Route::middleware(['auth', 'role:Volunteer'])->group(function () {
     ->name('member.invitation.decline')
     ->middleware('signed');
 
-    // Program Chat
-    Route::get('/programs/chats/list', [ProgramChatController::class, 'index'])->name('program.chats.index');
-    Route::get('/programs/{program}/chats', [ProgramChatController::class, 'show'])->name('program.chats.show');
-    Route::post('/programs/{program}/chats', [ProgramChatController::class, 'store'])->name('program.chats.store');
-    Route::put('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'update'])->name('program.chats.update');
-    Route::delete('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'destroy'])->name('program.chats.destroy');
 });
 
 

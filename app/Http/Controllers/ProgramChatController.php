@@ -53,28 +53,23 @@ class ProgramChatController extends Controller
         return redirect()->route('program.chats.show', $program)->with('success', 'Message sent!');
     }
 
-    public function destroy(Request $request, Program $program, ProgramChat $message)
+    public function destroy(Request $request, Program $program, ProgramChat $chat)
+
     {
-        if ($message->program_id !== $program->id) {
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'error' => 'Message not found in this program.'], 404);
-            }
-            return redirect()->route('program.chats.show', $program)->with('error', 'Message not found in this program.');
-        }
-        if ($message->sender_id !== Auth::id()) {
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'error' => 'You can only delete your own messages.'], 403);
-            }
-            return redirect()->route('program.chats.show', $program)->with('error', 'You can only delete your own messages.');
+        if ($chat->program_id !== $program->id) {
+            return response()->json(['success' => false, 'error' => 'Message not found in this program.'], 404);
         }
 
-        $message->delete();
-
-        if ($request->ajax()) {
-            return response()->json(['success' => true, 'chat_id' => $message->id]);
+        if ($chat->sender_id !== Auth::id()) {
+            return response()->json(['success' => false, 'error' => 'You can only delete your own messages.'], 403);
         }
-        return redirect()->route('program.chats.show', $program)->with('success', 'Message deleted!');
+
+        $chat->delete();
+
+        return response()->json(['success' => true, 'chat_id' => $chat->id]);
     }
+
+
 
     // --- Helper methods ---
     private function getUserPrograms()
@@ -96,4 +91,4 @@ class ProgramChatController extends Controller
                    ->where('program_volunteers.status', 'approved')
                    ->exists();
     }
-} 
+}
