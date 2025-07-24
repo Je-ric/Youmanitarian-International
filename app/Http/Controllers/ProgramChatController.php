@@ -24,6 +24,9 @@ class ProgramChatController extends Controller
         $programs = $this->getUserPrograms();
         $messages = $program->chats()->with(['sender:id,name,profile_pic'])->orderBy('created_at', 'asc')->paginate(20);
 
+        // ProgramChat::withTrashed()->get();
+        // ProgramChat::onlyTrashed()->get();
+
         return view('programs_chats.index', compact('programs', 'program', 'messages'));
     }
 
@@ -65,6 +68,10 @@ class ProgramChatController extends Controller
         }
 
         $chat->delete();
+        // message arent deleted from the db, they are soft deleted (check the model)
+        // naka timestamp deleted_at, and naka hidden
+        // soft delete means it can be restored
+        // $chat->forceDelete(); // delete the message from the db
 
         return response()->json(['success' => true, 'chat_id' => $chat->id]);
     }
