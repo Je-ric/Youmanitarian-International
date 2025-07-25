@@ -15,10 +15,14 @@ class ContentReviewCommentController extends Controller
     public function index(Request $request)
     {
         $contentId = $request->get('content_id');
-        $comments = ContentReviewComment::where('content_id', $contentId)
+        $comments = ContentReviewComment::with('user')
+            ->where('content_id', $contentId)
             ->orderBy('created_at', 'asc')
             ->get();
-        return response()->json($comments);
+
+        // return response()->json($comments);
+        return view('content.partials.contentReviewComments',
+        compact('comments'));
     }
 
     /**
@@ -35,7 +39,7 @@ class ContentReviewCommentController extends Controller
     public function store(Request $request)
     {
         if (!Auth::check()) {
-            return response()->json(['error' => 'You must be logged in to comment'], 401);
+            return redirect()->back()->with('error', 'You must be logged in to comment');
         }
         $data = $request->only(['content_id', 'comment']);
         $data['user_id'] = Auth::id();
@@ -44,10 +48,10 @@ class ContentReviewCommentController extends Controller
             'comment' => 'required|string',
         ]);
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
-        $comment = ContentReviewComment::create($data);
-        return response()->json($comment, 201);
+        ContentReviewComment::create($data);
+        return redirect()->back()->with('success', 'Comment added!');
     }
 
     /**
@@ -80,6 +84,6 @@ class ContentReviewCommentController extends Controller
     {
         $comment = ContentReviewComment::findOrFail($id);
         $comment->delete();
-        return response()->json(['success' => true]);
+        return redirect()->back()->with('success', 'Comment deleted!');
     }
 }

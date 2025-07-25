@@ -5,7 +5,8 @@
     .note-editable h1 { font-size: 2em; margin: 0.67em 0; }
     .note-editable h2 { font-size: 1.5em; margin: 0.75em 0; }
     .note-editable h3 { font-size: 1.17em; margin: 0.83em 0; }
-    .note-editable ul, .note-editable ol { margin-left: 2em; }
+    .note-editable ul,
+    .note-editable ol { margin-left: 2em; }
     .note-editable li { list-style-type: inherit; }
     .note-editable img { max-width: 100%; height: auto; cursor: move; }
     </style>
@@ -27,7 +28,7 @@
                     data-drawer-show="drawer-right-example"
                     data-drawer-placement="right"
                     aria-controls="drawer-right-example"
-                    class="inline-flex items-center px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white font-medium rounded-lg transition-colors duration-200">
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                 <i class='bx bx-cog mr-2'></i>
                 Settings Panel
             </button>
@@ -50,7 +51,7 @@
 
         <x-slot name="slot_edit">
             <div class="relative">
-                <!-- Main Content Form -->
+
                 <form id="contentForm"
                     action="{{ isset($content) ? route('content.update', $content->id) : route('content.store') }}"
                     method="POST"
@@ -373,9 +374,9 @@
                     </div>
                 </form>
 
+                @include('content.partials.contentReviewComments')
             </div>
 
-            @include('content.partials.contentReviewComments')
         </x-slot>
 
         <x-slot name="slot_preview">
@@ -393,7 +394,6 @@
         </x-slot>
     </x-navigation-layout.tabs-modern>
 
-    <!-- Enhanced Summernote Integration -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
@@ -402,6 +402,7 @@
         $(document).ready(function () {
             // Enhanced Summernote Configuration
             $('#editor').summernote({
+                minHeight: 200, // Set your minimum height here (e.g., 200px)
                 height: 400,
                 placeholder: 'Start writing your amazing content here...',
                 toolbar: [
@@ -460,10 +461,12 @@
                     onChange: function(contents, $editable) {
                         $('#editor').val(contents);
                         updateContentStats();
+                        autoResizeEditor();
                     },
                     onInit: function() {
                         console.log('Enhanced Summernote Editor Initialized');
                         updateContentStats();
+                        autoResizeEditor();
                     }
                     // ,
                     // onImageUpload: function(files) {
@@ -510,10 +513,10 @@
             $('#readingTime').text(readingTime + ' min');
         }
 
-        function toggleFullscreen() {
-            $('#editor').summernote('fullscreen.toggle');
-            toggleOffcanvas();
-        }
+        // function toggleFullscreen() {
+        //     $('#editor').summernote('fullscreen.toggle');
+        //     toggleOffcanvas();
+        // }
 
         // Gallery image deletion
         function deleteGalleryImage(imageId) {
@@ -563,6 +566,19 @@
                         break;
                 }
             }
+        });
+
+        function autoResizeEditor() {
+            var $editable = $('.note-editable');
+            $editable.css('height', 'auto'); // Reset height
+            var scrollHeight = $editable[0].scrollHeight;
+            var minHeight = 200; // Match your minHeight
+            $editable.css('height', Math.max(scrollHeight, minHeight) + 'px');
+        }
+
+        // Call on change and init
+        $('#editor').on('summernote.change summernote.init', function() {
+            autoResizeEditor();
         });
     </script>
 

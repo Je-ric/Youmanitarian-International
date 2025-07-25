@@ -58,6 +58,6 @@ class Content extends Model
 
     public function reviewComments()
     {
-        return $this->hasMany(\App\Models\ContentReviewComment::class, 'content_id')->orderBy('created_at', 'asc');
+        return $this->hasMany(ContentReviewComment::class, 'content_id');
     }
 }
