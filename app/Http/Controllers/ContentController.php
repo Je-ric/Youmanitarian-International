@@ -85,6 +85,7 @@ class ContentController extends Controller
     private function setContentApprovalStatus($request, $user)
     {
         $publishing_action = $request->input('publishing_action', 'draft');
+        // If resubmitting from needs_revision, allow transition to submitted/pending
         if ($publishing_action === 'published') {
             return [
                 'content_status' => 'published',
@@ -93,9 +94,11 @@ class ContentController extends Controller
                 'approved_at' => now(),
             ];
         } elseif ($publishing_action === 'submitted') {
+            // If Content Manager, set to pending; else, set to submitted
+            $isContentManager = $user->hasRole('Content Manager');
             return [
                 'content_status' => 'draft',
-                'approval_status' => 'submitted',
+                'approval_status' => $isContentManager ? 'pending' : 'submitted',
                 'approved_by' => null,
                 'approved_at' => null,
             ];
@@ -245,7 +248,7 @@ class ContentController extends Controller
             $validated['image_content'] = $content->image_content; // Keep old image if no new one uploaded
         }
 
-        // Prepare boolean fields - handle unchecked checkboxes properly
+        // prepare
         $enable_likes = $request->has('enable_likes') ? true : false;
         $enable_comments = $request->has('enable_comments') ? true : false;
         $enable_bookmark = $request->has('enable_bookmark') ? true : false;
@@ -253,12 +256,21 @@ class ContentController extends Controller
 
         $statusArr = $this->setContentApprovalStatus($request, $user);
 
+        // If content is being approved, set content_status to published
+        $newApprovalStatus = $statusArr['approval_status'];
+        $newContentStatus = $statusArr['content_status'];
+        if ($newApprovalStatus === 'approved') {
+            $newContentStatus = 'published';
+        }
         $content->update([
             'title' => $validated['title'],
             'slug' => $validated['slug'],
             'content_type' => $validated['content_type'],
             'body' => $validated['body'],
-            'content_status' => $statusArr['content_status'],
+            'content_status' => $newContentStatus,
+            'approval_status' => $newApprovalStatus,
+            'approved_by' => $statusArr['approved_by'] ?? $content->approved_by,
+            'approved_at' => $statusArr['approved_at'] ?? $content->approved_at,
             'image_content' => $validated['image_content'],
             'enable_likes' => $enable_likes,
             'enable_comments' => $enable_comments,
@@ -355,8 +367,8 @@ class ContentController extends Controller
             abort(403, 'You are not authorized to approve this content.');
         }
 
-        // only approve if pending
-        if ($content->approval_status !== 'pending') {
+        // only approve if pending or submitted
+        if (!in_array($content->approval_status, ['pending', 'submitted'])) {
             return redirect()->route('content.index')->with('toast', [
                 'message' => 'Content is not pending approval.',
                 'type' => 'info'
