@@ -51,5 +51,4 @@
     </x-navigation-layout.tabs-modern>
 
 
-
 @endsection

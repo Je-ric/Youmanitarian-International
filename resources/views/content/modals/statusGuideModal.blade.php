@@ -23,8 +23,8 @@
                     <tr>
                         <td class="px-2 sm:px-4 py-2 border-b">Submit for Approval</td>
                         <td class="px-2 sm:px-4 py-2 border-b">draft</td>
-                        <td class="px-2 sm:px-4 py-2 border-b">submitted</td>
-                        <td class="px-2 sm:px-4 py-2 border-b">Waiting for review</td>
+                        <td class="px-2 sm:px-4 py-2 border-b">submitted / pending</td>
+                        <td class="px-2 sm:px-4 py-2 border-b">Waiting for review (pending = Content Manager, submitted = Program Coordinator)</td>
                     </tr>
                     <tr>
                         <td class="px-2 sm:px-4 py-2 border-b">Publish Directly</td>
