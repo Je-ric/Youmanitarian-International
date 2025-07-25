@@ -23,14 +23,32 @@
                     <x-feedback-status.status-indicator status="{{ $content->content_status }}" />
                 </x-table.td>
                 <x-table.td>
-                    <x-feedback-status.status-indicator
-                        status="{{ $content->approval_status }}"
-                        @if($content->approval_status === 'submitted')
-                            label="Submitted for Review"
-                        @elseif($content->approval_status === 'draft')
-                            label="Draft"
-                        @endif
-                    />
+                    @if($content->approval_status === 'pending' || $content->approval_status === 'submitted')
+                        <x-feedback-status.status-indicator
+                            status="{{ $content->approval_status }}"
+                            label="Awaiting Approval"
+                        />
+                    @elseif($content->approval_status === 'approved')
+                        <x-feedback-status.status-indicator
+                            status="approved"
+                            label="Approved"
+                        />
+                    @elseif($content->approval_status === 'needs_revision')
+                        <x-feedback-status.status-indicator
+                            status="needs_revision"
+                            label="Needs Revision"
+                        />
+                    @elseif($content->approval_status === 'rejected')
+                        <x-feedback-status.status-indicator
+                            status="rejected"
+                            label="Rejected"
+                        />
+                    @else
+                        <x-feedback-status.status-indicator
+                            status="{{ $content->approval_status }}"
+                            label="{{ ucfirst(str_replace('_', ' ', $content->approval_status)) }}"
+                        />
+                    @endif
                 </x-table.td>
                 <x-table.td>{{ $content->updated_at->setTimezone('Asia/Manila')->format('M d, Y h:i A') }}</x-table.td>
                 <x-table.td>

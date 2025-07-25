@@ -59,22 +59,22 @@
                     @csrf
                     @if(isset($content)) @method('PUT') @endif
 
-                    <!-- Main Content Area -->
                     <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
-
-                        <!-- Content Editor - Takes most space -->
                         <div class="xl:col-span-3 space-y-6">
-
-                            <!-- Basic Information Card -->
                             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                                <div class="flex items-center gap-3 mb-6">
-                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                        <i class='bx bx-edit text-blue-600 text-xl'></i>
+                                <div class="flex items-center gap-3 mb-6 justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                            <i class='bx bx-edit text-blue-600 text-xl'></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-semibold text-[#1a2235]">Basic Information</h3>
+                                            <p class="text-sm text-gray-600">Essential content details</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 class="text-lg font-semibold text-[#1a2235]">Basic Information</h3>
-                                        <p class="text-sm text-gray-600">Essential content details</p>
-                                    </div>
+                                    @if(isset($content))
+                                        <x-feedback-status.status-indicator status="{{ $content->approval_status }}" />
+                                    @endif
                                 </div>
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -119,7 +119,7 @@
                                 </div>
                             </div>
 
-                            <!-- Content Editor Card -->
+                            <!-- Editor -->
                             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                                 <div class="flex items-center gap-3 mb-6">
                                     <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
@@ -140,7 +140,7 @@
                                 </div>
                             </div>
 
-                            <!-- Media Gallery Card -->
+                            <!-- Media Gallery -->
                             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                                 <div class="flex items-center gap-3 mb-6">
                                     <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -153,7 +153,7 @@
                                 </div>
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <!-- Featured Image -->
+
                                     <div>
                                         <x-form.label for="image">Featured Image</x-form.label>
                                         @if(isset($content) && $content->image_content)
@@ -183,7 +183,6 @@
                                         </x-form.input-upload>
                                     </div>
 
-                                    <!-- Gallery Images -->
                                     <div>
                                         <x-form.label for="gallery_images">Additional Images</x-form.label>
                                         @if(isset($content) && $content->images && $content->images->count() > 0)
@@ -224,10 +223,8 @@
                             </div>
                         </div>
 
-                        <!-- Sidebar Settings - Compact -->
                         <div class="xl:col-span-1 space-y-6">
 
-                            <!-- Publishing Settings -->
                             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
                                 <div class="flex items-center gap-3 mb-4">
                                     <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -278,7 +275,6 @@
                                 </button>
                             </div>
 
-                            <!-- Content Features -->
                             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
                                 <div class="flex items-center gap-3 mb-4">
                                     <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
@@ -310,7 +306,6 @@
                                 </div>
                             </div>
 
-                            <!-- Schedule & SEO -->
                             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
                                 <div class="flex items-center gap-3 mb-4">
                                     <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">

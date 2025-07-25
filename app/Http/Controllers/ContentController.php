@@ -18,36 +18,38 @@ class ContentController extends Controller
         $user = Auth::user();
         $myContent = Content::where('created_by', $user->id)->latest()->paginate(5, ['*'], 'myContent');
         $publishedContent = Content::where('content_status', 'published')->latest()->paginate(5, ['*'], 'publishedContent');
-        $drafts = Content::where('created_by', $user->id)
-            ->where('content_status', 'draft')
-            ->where('approval_status', 'draft')
-            ->latest()->paginate(5, ['*'], 'drafts');
-        $submitted = Content::where('created_by', $user->id)
-            ->where('content_status', 'draft')
-            ->where('approval_status', 'submitted')
-            ->latest()->paginate(5, ['*'], 'submitted');
-        $archived = Content::where('created_by', $user->id)->where('content_status', 'archived')->latest()->paginate(5, ['*'], 'archived');
-        $rejected = Content::where('created_by', $user->id)
-            ->whereIn('approval_status', ['rejected', 'needs_revision'])
-            ->latest()->paginate(5, ['*'], 'rejected');
+        $archived = Content::where('content_status', 'archived')->latest()->paginate(5, ['*'], 'archived');
+
+        $needsRevision = null;
+        if ($user->hasRole('Program Coordinator')) {
+            $needsRevision = Content::where('created_by', $user->id)
+                ->where('approval_status', 'needs_revision')
+                ->latest()->paginate(5, ['*'], 'needsRevision');
+        }
+
         $needsApproval = null;
         if ($user->hasRole('Content Manager')) {
             $needsApproval = Content::whereIn('approval_status', ['submitted', 'pending'])
-                ->whereHas('user', function($q) {
-                    $q->whereHas('roles', function($qr) {
-                        $qr->where('role_name', 'Program Coordinator');
-                    });
-                })
                 ->latest()->paginate(5, ['*'], 'needsApproval');
         }
+
+        $submitted = null;
+        if ($user->hasRole('Program Coordinator')) {
+            $submitted = Content::where('created_by', $user->id)
+                ->whereIn('approval_status', ['submitted', 'pending'])
+                ->latest()->paginate(5, ['*'], 'submitted');
+        }
+        if (!isset($submitted)) {
+            $submitted = null;
+        }
         return view('content.index',
-        compact('myContent',
-                        'publishedContent',
-                                    'needsApproval',
-                                    'drafts',
-                        'submitted',
-                                    'archived',
-                                    'rejected'));
+            compact('myContent',
+                    'publishedContent',
+                    'archived',
+                    'needsApproval',
+                    'needsRevision',
+                    'submitted')
+        );
     }
 
 

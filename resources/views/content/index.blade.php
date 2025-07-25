@@ -14,11 +14,12 @@
         $tabs = [
             ['id' => 'my', 'label' => 'My Content', 'icon' => 'bx-user'],
             ['id' => 'published', 'label' => 'Published', 'icon' => 'bx-globe'],
-            ['id' => 'drafts', 'label' => 'Drafts', 'icon' => 'bx-edit'],
-            ['id' => 'submitted', 'label' => 'Submitted', 'icon' => 'bx-upload'],
             ['id' => 'archived', 'label' => 'Archived', 'icon' => 'bx-archive'],
-            ['id' => 'rejected', 'label' => 'Rejected/Needs Revision', 'icon' => 'bx-x-circle'],
         ];
+        if ($user->hasRole('Program Coordinator')) {
+            $tabs[] = ['id' => 'submitted', 'label' => 'Submitted', 'icon' => 'bx-upload'];
+            $tabs[] = ['id' => 'needs_revision', 'label' => 'Needs Revision', 'icon' => 'bx-refresh'];
+        }
         if ($user->hasRole('Content Manager')) {
             $tabs[] = ['id' => 'needs_approval', 'label' => 'Needs Approval', 'icon' => 'bx-check-circle'];
         }
@@ -31,18 +32,17 @@
         <x-slot:slot_published>
             @include('content.partials.contentTable', ['contents' => $publishedContent, 'tab' => 'published'])
         </x-slot>
-        <x-slot:slot_drafts>
-            @include('content.partials.contentTable', ['contents' => $drafts, 'tab' => 'drafts'])
-        </x-slot>
-        <x-slot:slot_submitted>
-            @include('content.partials.contentTable', ['contents' => $submitted, 'tab' => 'submitted'])
-        </x-slot>
         <x-slot:slot_archived>
             @include('content.partials.contentTable', ['contents' => $archived, 'tab' => 'archived'])
         </x-slot>
-        <x-slot:slot_rejected>
-            @include('content.partials.contentTable', ['contents' => $rejected, 'tab' => 'rejected'])
-        </x-slot>
+        @if($user->hasRole('Program Coordinator'))
+            <x-slot:slot_needs_revision>
+                @include('content.partials.contentTable', ['contents' => $needsRevision, 'tab' => 'needs_revision'])
+            </x-slot>
+            <x-slot:slot_submitted>
+                @include('content.partials.contentTable', ['contents' => $submitted, 'tab' => 'submitted'])
+            </x-slot>
+        @endif
         @if($user->hasRole('Content Manager'))
             <x-slot:slot_needs_approval>
                 @include('content.partials.contentTable', ['contents' => $needsApproval, 'tab' => 'needs_approval'])
