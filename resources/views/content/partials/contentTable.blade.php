@@ -65,15 +65,13 @@
                             <i class='bx bx-archive'></i>
                         </x-button>
 
-                        @if(($content->approval_status === 'pending' || $content->approval_status === 'submitted') && $content->user && $content->user->hasRole('Program Coordinator'))
+                        @if($tab === 'needs_approval' && Auth::user()->hasRole('Content Manager'))
                             <form action="{{ route('content.approve', $content->id) }}" method="POST" class="inline">
                                 @csrf
                                 <x-button type="submit" variant="table-action-manage" size="sm" class="tooltip" data-tip="Approve">
                                     <i class='bx bx-check'></i>
                                 </x-button>
                             </form>
-                        @endif
-                        @if(($content->approval_status === 'pending' || $content->approval_status === 'submitted') && Auth::user()->hasRole('Content Manager'))
                             <form action="{{ route('content.needs_revision', $content->id) }}" method="POST" class="inline">
                                 @csrf
                                 <x-button type="submit" variant="warning" size="sm" class="tooltip" data-tip="Needs Revision">
