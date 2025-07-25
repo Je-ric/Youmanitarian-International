@@ -23,7 +23,7 @@
                     <x-feedback-status.status-indicator status="{{ $content->content_status }}" />
                 </x-table.td>
                 <x-table.td>
-                    <x-feedback-status.status-indicator 
+                    <x-feedback-status.status-indicator
                         status="{{ $content->approval_status }}"
                         @if($content->approval_status === 'submitted')
                             label="Submitted for Review"
@@ -52,6 +52,20 @@
                                 @csrf
                                 <x-button type="submit" variant="table-action-manage" size="sm" class="tooltip" data-tip="Approve">
                                     <i class='bx bx-check'></i>
+                                </x-button>
+                            </form>
+                        @endif
+                        @if(($content->approval_status === 'pending' || $content->approval_status === 'submitted') && Auth::user()->hasRole('Content Manager'))
+                            <form action="{{ route('content.needs_revision', $content->id) }}" method="POST" class="inline">
+                                @csrf
+                                <x-button type="submit" variant="warning" size="sm" class="tooltip" data-tip="Needs Revision">
+                                    <i class='bx bx-refresh'></i>
+                                </x-button>
+                            </form>
+                            <form action="{{ route('content.reject', $content->id) }}" method="POST" class="inline">
+                                @csrf
+                                <x-button type="submit" variant="danger" size="sm" class="tooltip" data-tip="Reject">
+                                    <i class='bx bx-x'></i>
                                 </x-button>
                             </form>
                         @endif

@@ -374,6 +374,62 @@ class ContentController extends Controller
         ]);
     }
 
+    public function needsRevisionContent($id)
+    {
+        $content = Content::findOrFail($id);
+        $user = Auth::user();
+
+        if (!$user->hasRole('Content Manager')) {
+            abort(403, 'You are not authorized to mark this content as needs revision.');
+        }
+
+        // if submitted or pending
+        if (!in_array($content->approval_status, ['submitted', 'pending'])) {
+            return redirect()->route('content.index')->with('toast', [
+                'message' => 'Content is not awaiting review.',
+                'type' => 'info'
+            ]);
+        }
+
+        $content->update([
+            'approval_status' => 'needs_revision',
+            'content_status' => 'draft',
+        ]);
+
+        return redirect()->route('content.index')->with('toast', [
+            'message' => 'Content marked as needing revision.',
+            'type' => 'warning'
+        ]);
+    }
+
+    public function rejectContent($id)
+    {
+        $content = Content::findOrFail($id);
+        $user = Auth::user();
+
+        if (!$user->hasRole('Content Manager')) {
+            abort(403, 'You are not authorized to reject this content.');
+        }
+
+        //  if submitted or pending
+        if (!in_array($content->approval_status, ['submitted', 'pending'])) {
+            return redirect()->route('content.index')->with('toast', [
+                'message' => 'Content is not awaiting review.',
+                'type' => 'info'
+            ]);
+        }
+
+        $content->update([
+            'approval_status' => 'rejected',
+            'content_status' => 'draft',
+        ]);
+
+        return redirect()->route('content.index')->with('toast', [
+            'message' => 'Content rejected.',
+            'type' => 'error'
+        ]);
+    }
+
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
