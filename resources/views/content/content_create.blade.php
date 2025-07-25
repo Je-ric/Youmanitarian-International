@@ -84,9 +84,16 @@
                         $isContentManager = $user->hasRole('Content Manager');
                         $hasBothRoles = $isProgramCoordinator && $isContentManager;
                     @endphp
-                    <div>
+                    <div class="flex items-center gap-2 mb-2">
                         <x-form.label>Publishing Action</x-form.label>
-                        <div class="flex flex-col gap-2 mt-2">
+                        <button type="button"
+                            onclick="document.getElementById('statusGuideModal').showModal();"
+                            class="ml-2 px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 hover:bg-blue-200 transition">
+                            <i class="bx bx-info-circle mr-1"></i>
+                            Status Flow Guide
+                        </button>
+                    </div>
+                    <div class="flex flex-col gap-2 mt-2">
                             <label class="inline-flex items-center">
                                 <input type="radio" name="publishing_action" value="draft"
                                     {{ old('publishing_action', 'draft') == 'draft' ? 'checked' : '' }}>
@@ -183,7 +190,7 @@
             <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
             <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
-            
+
             {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
             <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script> --}}
@@ -365,4 +372,5 @@
             }
         }
     </script>
+    @include('content.modals.statusGuideModal')
 @endsection
