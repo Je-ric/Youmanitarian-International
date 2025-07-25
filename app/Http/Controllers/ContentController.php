@@ -43,11 +43,11 @@ class ContentController extends Controller
         return view('content.index',
         compact('myContent',
                         'publishedContent',
-                        'needsApproval',
-                        'drafts',
+                                    'needsApproval',
+                                    'drafts',
                         'submitted',
-                        'archived',
-                        'rejected'));
+                                    'archived',
+                                    'rejected'));
     }
 
 
@@ -71,7 +71,7 @@ class ContentController extends Controller
 
     // When saving as draft:
     //   content_status = draft
-    //   approval_status = needs_revision
+    //   approval_status = draft
 
     // When submitting for approval:
     //   content_status = draft
@@ -116,7 +116,7 @@ class ContentController extends Controller
             'slug' => 'nullable|string|max:255|unique:contents,slug',
             'content_type' => 'required|string',
             'body' => 'required|string',
-            'content_status' => 'required|in:draft,published,archived',
+            // 'content_status' => 'required|in:draft,published,archived',
             'image' => "nullable|image|mimes:jpeg,png,jpg,gif|max:$image_max_size",
             'gallery_images' => 'nullable|array',
             'gallery_images.*' => "nullable|image|mimes:jpeg,png,jpg,gif|max:$image_max_size",
@@ -208,7 +208,7 @@ class ContentController extends Controller
             'title' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:contents,slug,' . $id,
             'body' => 'required|string',
-            'content_status' => 'required|in:draft,published,archived',
+            // 'content_status' => 'required|in:draft,published,archived',
             'content_type' => 'required|string',
             'image' => "nullable|image|mimes:jpeg,png,jpg,gif|max:$image_max_size",
             'gallery_images' => 'nullable|array',
