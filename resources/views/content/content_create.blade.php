@@ -1,15 +1,42 @@
-{{-- @extends('layouts.sidebar_final') --}}
 @extends('layouts.content_create')
 
 @section('content')
+<style>
+    .note-editable h1 { font-size: 2em; margin: 0.67em 0; }
+    .note-editable h2 { font-size: 1.5em; margin: 0.75em 0; }
+    .note-editable h3 { font-size: 1.17em; margin: 0.83em 0; }
+    .note-editable ul, .note-editable ol { margin-left: 2em; }
+    .note-editable li { list-style-type: inherit; }
+    .note-editable img { max-width: 100%; height: auto; cursor: move; }
+    </style>
+
     <x-page-header
         icon="bx-file"
         title="{{ isset($content) ? 'Edit Content' : 'Create New Content' }}"
         desc="Fill out the form to create or edit content.">
-        <x-button variant="add-create" type="submit" form="contentForm">
-            <i class='bx {{ isset($content) ? 'bx-edit' : 'bx-save' }} mr-2'></i>
-            {{ isset($content) ? 'Update Content' : 'Save Content' }}
-        </x-button>
+
+        <!-- Header Actions -->
+        <div class="flex flex-col sm:flex-row gap-3">
+            <x-button href="{{ route('content.index') }}" variant="cancel">
+                <i class='bx bx-arrow-back mr-2'></i>
+                Back to Content
+            </x-button>
+
+            <button type="button"
+                    data-drawer-target="drawer-right-example"
+                    data-drawer-show="drawer-right-example"
+                    data-drawer-placement="right"
+                    aria-controls="drawer-right-example"
+                    class="inline-flex items-center px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white font-medium rounded-lg transition-colors duration-200">
+                <i class='bx bx-cog mr-2'></i>
+                Settings Panel
+            </button>
+
+            <x-button variant="add-create" type="submit" form="contentForm">
+                <i class='bx {{ isset($content) ? 'bx-edit' : 'bx-save' }} mr-2'></i>
+                {{ isset($content) ? 'Update Content' : 'Save Content' }}
+            </x-button>
+        </div>
     </x-page-header>
 
     <x-navigation-layout.tabs-modern
@@ -22,307 +49,333 @@
         class="mb-6">
 
         <x-slot name="slot_edit">
-            <!-- Form  -->
-    <div class="w-full rounded-lg">
-        <form id="contentForm"
-            action="{{ isset($content) ? route('content.update', $content->id) : route('content.store') }}" method="POST"
-            enctype="multipart/form-data">
-            @csrf
-            @if(isset($content)) @method('PUT') @endif
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Left -->
-                <div class="lg:col-span-1 space-y-6">
-                    <x-button href="{{ route('content.index') }}"
-                                variant="cancel">
-                        BACKKKKKKKKKKKKKKKKKKKKKKKKK!!!!!!!!!
-                    </x-button>
-<div class="text-center">
-    <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example">
-    Show right drawer
-    </button>
- </div>
-                    <div>
-                        <x-form.label>Content Title</x-form.label>
-                        <x-form.input type="text" name="title" placeholder="What's the title???"
-                            class="w-full bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]"
-                            value="{{ old('title', $content->title ?? '') }}" required />
-                    </div>
-                    <div>
-                        <x-form.label>Slug</x-form.label>
-                        <x-form.input type="text" name="slug" placeholder="what's-the-title???"
-                            class="w-full bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]"
-                            value="{{ old('slug', $content->slug ?? '') }}" required />
-                    </div>
-                    <div>
-                        <x-form.label>Featured Image</x-form.label>
-                        @if(isset($content) && $content->image_content)
-                            <div class="mb-4">
-                                <img src="{{ asset('storage/' . $content->image_content) }}" alt="Current Image"
-                                    class="mt-2 max-w-32 h-24 object-cover rounded-lg border">
-                                <div class="mt-2">
-                                    <a href="{{ asset('storage/' . $content->image_content) }}" target="_blank"
-                                        class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors duration-200">
-                                        <i class='bx bx-external-link'></i>
-                                        View Full Size
-                                    </a>
+            <div class="relative">
+                <!-- Main Content Form -->
+                <form id="contentForm"
+                    action="{{ isset($content) ? route('content.update', $content->id) : route('content.store') }}"
+                    method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+                    @if(isset($content)) @method('PUT') @endif
+
+                    <!-- Main Content Area -->
+                    <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+
+                        <!-- Content Editor - Takes most space -->
+                        <div class="xl:col-span-3 space-y-6">
+
+                            <!-- Basic Information Card -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <i class='bx bx-edit text-blue-600 text-xl'></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-[#1a2235]">Basic Information</h3>
+                                        <p class="text-sm text-gray-600">Essential content details</p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="md:col-span-2">
+                                        <x-form.label for="title">Content Title *</x-form.label>
+                                        <x-form.input
+                                            type="text"
+                                            name="title"
+                                            id="title"
+                                            placeholder="Enter your content title..."
+                                            class="w-full"
+                                            value="{{ old('title', $content->title ?? '') }}"
+                                            required />
+                                    </div>
+
+                                    <div>
+                                        <x-form.label for="slug">URL Slug *</x-form.label>
+                                        <x-form.input
+                                            type="text"
+                                            name="slug"
+                                            id="slug"
+                                            placeholder="auto-generated-from-title"
+                                            class="w-full"
+                                            value="{{ old('slug', $content->slug ?? '') }}"
+                                            required />
+                                        <p class="text-xs text-gray-500 mt-1">Auto-generated from title, but you can customize it</p>
+                                    </div>
+
+                                    <div>
+                                        <x-form.label for="content_type">Content Type *</x-form.label>
+                                        <select name="content_type" id="content_type"
+                                                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b]"
+                                                required>
+                                            <option value="">Select content type</option>
+                                            @foreach(['news' => 'News', 'program' => 'Program', 'announcement' => 'Announcement', 'event' => 'Event', 'article' => 'Article', 'blog' => 'Blog'] as $value => $label)
+                                                <option value="{{ $value }}" {{ old('content_type', $content->content_type ?? '') == $value ? 'selected' : '' }}>
+                                                    {{ $label }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        @endif
-                        <x-form.input-upload name="image" id="image" accept="image/png,image/jpeg" class="mb-2">
-                            Supported formats: JPEG, PNG
-                            @if(isset($content) && $content->image_content)
-                                <span class="block text-sm text-gray-500 mt-1">Upload a new image to replace the current one</span>
-                            @endif
-                        </x-form.input-upload>
-                    </div>
-                    <div class="flex items-center gap-8">
-                        <x-form.radio-group name="content_type" label="Content Type" :options="['news' => 'News', 'program' => 'Program', 'announcement' => 'Announcement', 'event' => 'Event', 'article' => 'Article', 'blog' => 'Blog']" :selected="old('content_type', $content->content_type ?? '')" />
-                    </div>
-                    @php
-                        $user = Auth::user();
-                        $isProgramCoordinator = $user->hasRole('Program Coordinator');
-                        $isContentManager = $user->hasRole('Content Manager');
-                        $hasBothRoles = $isProgramCoordinator && $isContentManager;
-                    @endphp
-                    <div class="flex items-center gap-2 mb-2">
-                        <x-form.label>Publishing Action</x-form.label>
-                        <button type="button"
-                            onclick="document.getElementById('statusGuideModal').showModal();"
-                            class="ml-2 px-2 py-1 text-xs rounded bg-blue-100 text-blue-700 hover:bg-blue-200 transition">
-                            <i class="bx bx-info-circle mr-1"></i>
-                            Status Flow Guide
-                        </button>
-                    </div>
-                    <div class="flex flex-col gap-2 mt-2">
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="publishing_action" value="draft"
-                                    {{ old('publishing_action', 'draft') == 'draft' ? 'checked' : '' }}>
-                                <span class="ml-2">Save as Draft</span>
-                            </label>
-                            @if($isProgramCoordinator || $hasBothRoles)
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="publishing_action" value="submitted"
-                                    {{ old('publishing_action') == 'submitted' ? 'checked' : '' }}>
-                                <span class="ml-2">Submit for Approval</span>
-                            </label>
-                            @endif
-                            @if($isContentManager || $hasBothRoles)
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="publishing_action" value="published"
-                                    {{ old('publishing_action') == 'published' ? 'checked' : '' }}>
-                                <span class="ml-2">Publish Directly</span>
-                            </label>
-                            @endif
-                        </div>
-                    </div>
-                    <div>
-                        <x-form.label>Allow what applies:</x-form.label>
-                        <div class="flex flex-col gap-2 mt-2">
-                            <x-form.toggle name="enable_likes" :checked="old('enable_likes', $content->enable_likes ?? true)" label="Enable heart reacts" />
-                            <x-form.toggle name="enable_comments" :checked="old('enable_comments', $content->enable_comments ?? true)" label="Enable Comments" />
-                            <x-form.toggle name="enable_bookmark" :checked="old('enable_bookmark', $content->enable_bookmark ?? true)" label="Enable bookmarks" />
-                            <x-form.toggle name="is_featured" :checked="old('is_featured', $content->is_featured ?? false)"
-                                label="Featured" />
-                        </div>
-                    </div>
-                    <div>
-                        <x-form.label>Upload multiple additional images</x-form.label>
-                        @if(isset($content) && $content->images && $content->images->count() > 0)
-                            <div class="mb-4">
-                                <p class="text-sm text-gray-600 mb-2">Current gallery images:</p>
-                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    @foreach($content->images as $image)
-                                        <div class="relative border p-2">
-                                            <img src="{{ asset('storage/' . $image->image_path) }}" alt="Gallery Image"
-                                                class="w-full h-24 object-cover rounded-lg">
-                                            <button type="button"
-                                                    class="px-3 py-1.5 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition-colors flex items-center mt-1"
-                                                onclick="deleteGalleryImage({{ $image->id }})">
-                                                    <i class='bx bx-trash mr-2'></i> Delete
-                                                </button>
-                                        </div>
-                                    @endforeach
+
+                            <!-- Content Editor Card -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <i class='bx bx-text text-green-600 text-xl'></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-[#1a2235]">Content Body</h3>
+                                        <p class="text-sm text-gray-600">Write your main content here</p>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <x-form.label for="editor">Content Body *</x-form.label>
+                                    <textarea id="editor"
+                                        class="w-full h-96 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b]"
+                                        name="body"
+                                        placeholder="Start writing your content...">{{ old('body', $content->body ?? '') }}</textarea>
                                 </div>
                             </div>
-                        @endif
-                        <x-form.input-upload
-                            name="gallery_images[]"
-                            id="gallery_images"
-                            accept="image/png,image/jpeg"
-                            multiple
-                        >
-                            @if(isset($content) && $content->images && $content->images->count() > 0)
-                                <span class="text-green-600">You can upload more images. Current images are shown above.</span>
-                            @else
-                                PNG, JPG up to 10MB
-                            @endif
-                        </x-form.input-upload>
+
+                            <!-- Media Gallery Card -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                                <div class="flex items-center gap-3 mb-6">
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <i class='bx bx-images text-purple-600 text-xl'></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-[#1a2235]">Media Gallery</h3>
+                                        <p class="text-sm text-gray-600">Upload images for your content</p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Featured Image -->
+                                    <div>
+                                        <x-form.label for="image">Featured Image</x-form.label>
+                                        @if(isset($content) && $content->image_content)
+                                            <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                                                <img src="{{ asset('storage/' . $content->image_content) }}"
+                                                     alt="Current Image"
+                                                     class="w-full h-32 object-cover rounded-lg border mb-2">
+                                                <a href="{{ asset('storage/' . $content->image_content) }}"
+                                                   target="_blank"
+                                                   class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm">
+                                                    <i class='bx bx-external-link'></i>
+                                                    View Full Size
+                                                </a>
+                                            </div>
+                                        @endif
+                                        <x-form.input-upload
+                                            name="image"
+                                            id="image"
+                                            accept="image/png,image/jpeg">
+                                            <div class="text-center">
+                                                <i class='bx bx-cloud-upload text-3xl text-gray-400 mb-2'></i>
+                                                <p class="text-sm text-gray-600">PNG, JPG up to 10MB</p>
+                                                @if(isset($content) && $content->image_content)
+                                                    <p class="text-xs text-gray-500 mt-1">Upload new image to replace current</p>
+                                                @endif
+                                            </div>
+                                        </x-form.input-upload>
+                                    </div>
+
+                                    <!-- Gallery Images -->
+                                    <div>
+                                        <x-form.label for="gallery_images">Additional Images</x-form.label>
+                                        @if(isset($content) && $content->images && $content->images->count() > 0)
+                                            <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                                                <p class="text-sm text-gray-600 mb-3">Current gallery ({{ $content->images->count() }} images):</p>
+                                                <div class="grid grid-cols-3 gap-2">
+                                                    @foreach($content->images->take(6) as $image)
+                                                        <div class="relative group">
+                                                            <img src="{{ asset('storage/' . $image->image_path) }}"
+                                                                 alt="Gallery Image"
+                                                                 class="w-full h-16 object-cover rounded border">
+                                                            <button type="button"
+                                                                    onclick="deleteGalleryImage({{ $image->id }})"
+                                                                    class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                ×
+                                                            </button>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                                @if($content->images->count() > 6)
+                                                    <p class="text-xs text-gray-500 mt-2">+{{ $content->images->count() - 6 }} more images</p>
+                                                @endif
+                                            </div>
+                                        @endif
+                                        <x-form.input-upload
+                                            name="gallery_images[]"
+                                            id="gallery_images"
+                                            accept="image/png,image/jpeg"
+                                            multiple>
+                                            <div class="text-center">
+                                                <i class='bx bx-images text-3xl text-gray-400 mb-2'></i>
+                                                <p class="text-sm text-gray-600">Upload multiple images</p>
+                                                <p class="text-xs text-gray-500">PNG, JPG up to 10MB each</p>
+                                            </div>
+                                        </x-form.input-upload>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar Settings - Compact -->
+                        <div class="xl:col-span-1 space-y-6">
+
+                            <!-- Publishing Settings -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <i class='bx bx-send text-orange-600'></i>
+                                    </div>
+                                    <h3 class="font-semibold text-[#1a2235]">Publishing</h3>
+                                </div>
+
+                                @php
+                                    $user = Auth::user();
+                                    $isProgramCoordinator = $user->hasRole('Program Coordinator');
+                                    $isContentManager = $user->hasRole('Content Manager');
+                                    $hasBothRoles = $isProgramCoordinator && $isContentManager;
+                                @endphp
+
+                                <div class="space-y-3">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="publishing_action" value="draft"
+                                            {{ old('publishing_action', 'draft') == 'draft' ? 'checked' : '' }}
+                                            class="text-[#ffb51b] focus:ring-[#ffb51b]">
+                                        <span class="ml-2 text-sm">Save as Draft</span>
+                                    </label>
+
+                                    @if($isProgramCoordinator || $hasBothRoles)
+                                    <label class="flex items-center">
+                                        <input type="radio" name="publishing_action" value="submitted"
+                                            {{ old('publishing_action') == 'submitted' ? 'checked' : '' }}
+                                            class="text-[#ffb51b] focus:ring-[#ffb51b]">
+                                        <span class="ml-2 text-sm">Submit for Approval</span>
+                                    </label>
+                                    @endif
+
+                                    @if($isContentManager || $hasBothRoles)
+                                    <label class="flex items-center">
+                                        <input type="radio" name="publishing_action" value="published"
+                                            {{ old('publishing_action') == 'published' ? 'checked' : '' }}
+                                            class="text-[#ffb51b] focus:ring-[#ffb51b]">
+                                        <span class="ml-2 text-sm">Publish Directly</span>
+                                    </label>
+                                    @endif
+                                </div>
+
+                                <button type="button"
+                                    onclick="document.getElementById('statusGuideModal').showModal();"
+                                    class="mt-3 w-full px-3 py-2 text-xs bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors">
+                                    <i class="bx bx-info-circle mr-1"></i>
+                                    View Status Guide
+                                </button>
+                            </div>
+
+                            <!-- Content Features -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <i class='bx bx-toggle-left text-green-600'></i>
+                                    </div>
+                                    <h3 class="font-semibold text-[#1a2235]">Features</h3>
+                                </div>
+
+                                <div class="space-y-3">
+                                    <x-form.toggle
+                                        name="enable_likes"
+                                        :checked="old('enable_likes', $content->enable_likes ?? true)"
+                                        label="Heart Reactions" />
+
+                                    <x-form.toggle
+                                        name="enable_comments"
+                                        :checked="old('enable_comments', $content->enable_comments ?? true)"
+                                        label="Comments" />
+
+                                    <x-form.toggle
+                                        name="enable_bookmark"
+                                        :checked="old('enable_bookmark', $content->enable_bookmark ?? true)"
+                                        label="Bookmarks" />
+
+                                    <x-form.toggle
+                                        name="is_featured"
+                                        :checked="old('is_featured', $content->is_featured ?? false)"
+                                        label="Featured Content" />
+                                </div>
+                            </div>
+
+                            <!-- Schedule & SEO -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                        <i class='bx bx-calendar text-indigo-600'></i>
+                                    </div>
+                                    <h3 class="font-semibold text-[#1a2235]">Schedule & SEO</h3>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <div>
+                                        <x-form.label for="published_at" class="text-sm">Publish Date</x-form.label>
+                                        <x-form.input
+                                            type="date"
+                                            name="published_at"
+                                            id="published_at"
+                                            class="w-full"
+                                            value="{{ old('published_at', isset($content->published_at) ? \Illuminate\Support\Carbon::parse($content->published_at)->format('Y-m-d') : '') }}" />
+                                    </div>
+
+                                    <div>
+                                        <x-form.label for="meta_title" class="text-sm">Meta Title</x-form.label>
+                                        <x-form.input
+                                            type="text"
+                                            name="meta_title"
+                                            id="meta_title"
+                                            class="w-full"
+                                            placeholder="SEO title..."
+                                            value="{{ old('meta_title', $content->meta_title ?? '') }}" />
+                                    </div>
+
+                                    <div>
+                                        <x-form.label for="meta_description" class="text-sm">Meta Description</x-form.label>
+                                        <textarea
+                                            name="meta_description"
+                                            id="meta_description"
+                                            rows="3"
+                                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b]"
+                                            placeholder="SEO description...">{{ old('meta_description', $content->meta_description ?? '') }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="font-medium text-[#1a2235] mb-3">Content Stats</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Word Count:</span>
+                                        <span id="wordCount" class="font-medium">0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Character Count:</span>
+                                        <span id="charCount" class="font-medium">0</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Reading Time:</span>
+                                        <span id="readingTime" class="font-medium">0 min</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <x-form.label>Publish Date</x-form.label>
-                        <x-form.input type="date" name="published_at" class="w-full"
-                            value="{{ old('published_at', isset($content->published_at) ? \Illuminate\Support\Carbon::parse($content->published_at)->format('Y-m-d') : '') }}" />
-                    </div>
-                    <div>
-                        <x-form.label>Meta Title</x-form.label>
-                        <x-form.input type="text" name="meta_title" class="w-full"
-                            value="{{ old('meta_title', $content->meta_title ?? '') }}" />
-                    </div>
-                    <div>
-                        <x-form.label>Meta Description</x-form.label>
-                        <x-form.input type="text" name="meta_description" class="w-full"
-                            value="{{ old('meta_description', $content->meta_description ?? '') }}" />
-                    </div>
-                </div>
-                <!-- Right  -->
-                <div class="lg:col-span-2 flex flex-col h-full">
-                    <div class="flex-1">
-                        <x-form.label>Body</x-form.label>
-                        <textarea id="editor"
-                            class="textarea textarea-bordered w-full h-96 bg-gray-50 border border-gray-200 focus:border-[#ffb51b] focus:ring-2 focus:ring-[#ffb51b]"
-                            name="body">{{ old('body', $content->body ?? '') }}</textarea>
-                    </div>
-                </div>
+                </form>
+
             </div>
 
             @include('content.partials.contentReviewComments')
-
-            <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
-            <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
-
-            {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
-            <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script> --}}
-
-            <script>
-                $(document).ready(function () {
-                    $('#editor').summernote({
-                        height: 300,
-                        placeholder: 'Write your content here...',
-                        toolbar: [
-                            ['style', ['style']],
-                            ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-                            ['fontname', ['fontname']],
-                            ['fontsize', ['fontsize']],
-                            ['fontsizeunit', ['fontsizeunit']],
-                            ['color', ['color', 'forecolor', 'backcolor']],
-                            ['para', ['ul', 'ol', 'paragraph', 'height']],
-                            ['table', ['table']],
-                            ['insert', ['link', 'picture', 'video', 'hr']],
-                            ['view', ['fullscreen', 'codeview', 'help']],
-                            ['misc', ['undo', 'redo']],
-                            // Example custom button group
-                            ['mybutton', ['hello']]
-                        ],
-                        buttons: {
-                            // Example custom button: inserts 'hello' at cursor
-                            hello: function (context) {
-                                var ui = $.summernote.ui;
-                                var button = ui.button({
-                                    contents: '<i class="fa fa-child"></i> Hello',
-                                    tooltip: 'Insert Hello',
-                                    click: function () {
-                                        context.invoke('editor.insertText', 'hello');
-                                    }
-                                });
-                                return button.render();
-                            }
-                        },
-                        popover: {
-                            image: [
-                                ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
-                                ['float', ['floatLeft', 'floatRight', 'floatNone']],
-                                ['remove', ['removeMedia']]
-                            ],
-                            link: [
-                                ['link', ['linkDialogShow', 'unlink']]
-                            ],
-                            table: [
-                                ['add', ['addRowDown', 'addRowUp', 'addColLeft', 'addColRight']],
-                                ['delete', ['deleteRow', 'deleteCol', 'deleteTable']]
-                            ],
-                            air: [
-                                ['color', ['color']],
-                                ['font', ['bold', 'underline', 'clear']],
-                                ['para', ['ul', 'paragraph']],
-                                ['table', ['table']],
-                                ['insert', ['link', 'picture']]
-                            ]
-                        },
-                        blockquoteBreakingLevel: 2,
-                        styleTags: [
-                            'p',
-                            { title: 'Blockquote', tag: 'blockquote', className: 'blockquote', value: 'blockquote' },
-                            'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
-                        ],
-                        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Merriweather'],
-                        fontNamesIgnoreCheck: ['Merriweather'],
-                        addDefaultFonts: true,
-                        fontSizeUnits: ['px', 'pt', 'em', 'rem'],
-                        lineHeights: ['0.5', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
-                        inheritPlaceholder: true,
-                        dialogsInBody: true,
-                        dialogsFade: true,
-                        disableDragAndDrop: false,
-                        shortcuts: true,
-                        tabDisable: false,
-                        codeviewFilter: true,
-                        codeviewIframeFilter: true,
-                        spellCheck: true,
-                        disableGrammar: false,
-                        callbacks: {
-                            onChange: function (contents, $editable) {
-                                $('#editor').val(contents);
-                            },
-                            // Example advanced callbacks (can be customized or removed)
-                            onInit: function() {
-                                console.log('Summernote is launched');
-                                // Example: show notification in status area
-                                $('.note-status-output').html('<div class="alert alert-info">Editor initialized</div>');
-                            },
-                            onEnter: function() {
-                                console.log('Enter/Return key pressed');
-                            },
-                            onFocus: function() {
-                                console.log('Editable area is focused');
-                            },
-                            onBlur: function() {
-                                console.log('Editable area loses focus');
-                            },
-                            onBlurCodeview: function() {
-                                console.log('Codeview area loses focus');
-                            },
-                            onKeyup: function(e) {
-                                console.log('Key is released:', e.keyCode);
-                            },
-                            onKeydown: function(e) {
-                                console.log('Key is downed:', e.keyCode);
-                            },
-                            onPaste: function(e) {
-                                console.log('Called event paste');
-                            },
-                            onImageLinkInsert: function(url) {
-                                var $img = $('<img>').attr({ src: url });
-                                $('#editor').summernote('insertNode', $img[0]);
-                            }
-                        }
-                    });
-
-                    // Auto-generate slug from title
-                    $('input[name="title"]').on('input', function() {
-                        var title = $(this).val();
-                        var slug = title.toLowerCase()
-                            .replace(/[^a-z0-9 -]/g, '') // Remove special characters
-                            .replace(/\s+/g, '-') // Replace spaces with hyphens
-                            .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
-                            .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
-                        $('input[name="slug"]').val(slug);
-                    });
-                });
-            </script>
-        </form>
-    </div>
         </x-slot>
 
         <x-slot name="slot_preview">
@@ -340,37 +393,178 @@
         </x-slot>
     </x-navigation-layout.tabs-modern>
 
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script type="module" src="{{ asset('js/app.js') }}"></script>
+    <!-- Enhanced Summernote Integration -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
 
-    <!-- Gallery Image Delete Function -->
     <script>
+        $(document).ready(function () {
+            // Enhanced Summernote Configuration
+            $('#editor').summernote({
+                height: 400,
+                placeholder: 'Start writing your amazing content here...',
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph', 'height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['misc', ['undo', 'redo']],
+                    ['custom', ['wordcount', 'readingtime']]
+                ],
+                buttons: {
+                    wordcount: function(context) {
+                        var ui = $.summernote.ui;
+                        return ui.button({
+                            contents: '<i class="bx bx-text"></i>',
+                            tooltip: 'Word Count',
+                            click: function() {
+                                updateContentStats();
+                            }
+                        }).render();
+                    },
+                    readingtime: function(context) {
+                        var ui = $.summernote.ui;
+                        return ui.button({
+                            contents: '<i class="bx bx-time"></i>',
+                            tooltip: 'Reading Time',
+                            click: function() {
+                                updateContentStats();
+                            }
+                        }).render();
+                    }
+                },
+                styleTags: [
+                    'p',
+                    { title: 'Blockquote', tag: 'blockquote', className: 'blockquote border-l-4 border-gray-300 pl-4 italic', value: 'blockquote' },
+                    'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+                ],
+                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica', 'Impact', 'Tahoma', 'Times New Roman', 'Verdana'],
+                fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '36', '48'],
+                inheritPlaceholder: true,
+                dialogsInBody: true,
+                dialogsFade: true,
+                disableDragAndDrop: false,
+                shortcuts: true,
+                tabDisable: false,
+                codeviewFilter: true,
+                codeviewIframeFilter: true,
+                spellCheck: true,
+                disableGrammar: false,
+                callbacks: {
+                    onChange: function(contents, $editable) {
+                        $('#editor').val(contents);
+                        updateContentStats();
+                    },
+                    onInit: function() {
+                        console.log('Enhanced Summernote Editor Initialized');
+                        updateContentStats();
+                    }
+                    // ,
+                    // onImageUpload: function(files) {
+                    //     // Handle image upload
+                    //     for (let i = 0; i < files.length; i++) {
+                    //         uploadImage(files[i]);
+                    //     }
+                    // }
+                }
+            });
+
+            // Auto-generate slug from title
+            $('#title').on('input', function() {
+                var title = $(this).val();
+                var slug = title.toLowerCase()
+                    .replace(/[^a-z0-9 -]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+                $('#slug').val(slug);
+            });
+
+            // Auto-save functionality
+            let autoSaveTimer;
+            $('#editor, #title, #slug').on('input', function() {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(function() {
+                    // Auto-save logic here
+                    console.log('Auto-saving...');
+                }, 30000); // Auto-save every 30 seconds
+            });
+        });
+
+        // Content Statistics
+        function updateContentStats() {
+            const content = $('#editor').summernote('code');
+            const textContent = $(content).text();
+            const wordCount = textContent.trim().split(/\s+/).length;
+            const charCount = textContent.length;
+            const readingTime = Math.ceil(wordCount / 200); // Average reading speed
+
+            $('#wordCount').text(wordCount);
+            $('#charCount').text(charCount);
+            $('#readingTime').text(readingTime + ' min');
+        }
+
+        function toggleFullscreen() {
+            $('#editor').summernote('fullscreen.toggle');
+            toggleOffcanvas();
+        }
+
+        // Gallery image deletion
         function deleteGalleryImage(imageId) {
             if (confirm('Are you sure you want to delete this image?')) {
-                // Create a temporary form to submit the delete request
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = `/content/images/${imageId}`;
 
-                // Add CSRF token
                 const csrfToken = document.createElement('input');
                 csrfToken.type = 'hidden';
                 csrfToken.name = '_token';
                 csrfToken.value = '{{ csrf_token() }}';
                 form.appendChild(csrfToken);
 
-                // Add method override
                 const methodField = document.createElement('input');
                 methodField.type = 'hidden';
                 methodField.name = '_method';
                 methodField.value = 'DELETE';
                 form.appendChild(methodField);
 
-                // Submit the form
                 document.body.appendChild(form);
                 form.submit();
             }
         }
+
+        // Image upload handler
+        function uploadImage(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('_token', '{{ csrf_token() }}');
+
+            // You can implement AJAX upload here
+            console.log('Uploading image:', file.name);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 's':
+                        e.preventDefault();
+                        saveDraft();
+                        break;
+                    case 'p':
+                        e.preventDefault();
+                        previewContent();
+                        break;
+                }
+            }
+        });
     </script>
+
     @include('content.modals.statusGuideModal')
 @endsection
