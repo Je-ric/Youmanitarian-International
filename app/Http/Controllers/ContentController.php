@@ -466,4 +466,17 @@ class ContentController extends Controller
     //         'type' => 'success'
     //     ]);
     // }
+
+    public function review(Content $content)
+    {
+        // only review if content is pending or submitted
+        if (!in_array($content->approval_status, ['pending', 'submitted'])) {
+            return redirect()->route('content.index')->with('toast', [
+                'message' => 'Content is not awaiting review.',
+                'type' => 'info'
+            ]);
+        }
+        $reviewMode = true;
+        return view('content.content_create', compact('content', 'reviewMode'));
+    }
 }

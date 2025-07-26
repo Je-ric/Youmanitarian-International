@@ -44,28 +44,38 @@
                             label="Rejected"
                         />
                     @else
-                        <x-feedback-status.status-indicator
-                            status="{{ $content->approval_status }}"
+                    <x-feedback-status.status-indicator
+                        status="{{ $content->approval_status }}"
                             label="{{ ucfirst(str_replace('_', ' ', $content->approval_status)) }}"
                         />
-                    @endif
+                        @endif
                 </x-table.td>
                 <x-table.td>{{ $content->updated_at->setTimezone('Asia/Manila')->format('M d, Y h:i A') }}</x-table.td>
                 <x-table.td>
                     <div class="flex items-center space-x-2">
+                        @if(auth()->user())
                         <x-button href="{{ route('content.edit', $content->id) }}"
                             variant="table-action-edit" size="sm"
                             class="tooltip" data-tip="Edit">
                             <i class='bx bx-edit'></i>
                         </x-button>
+                        @endif
 
-                        <x-button variant="table-action-view" size="sm"
-                            class="tooltip" data-tip="Archive"
-                            onclick="document.getElementById('archive-modal-{{ $content->id }}').showModal(); return false;">
-                            <i class='bx bx-archive'></i>
-                        </x-button>
+                        @if($tab === 'published')
+                            <x-button variant="table-action-view" size="sm"
+                                class="tooltip" data-tip="Archive"
+                                onclick="document.getElementById('archive-modal-{{ $content->id }}').showModal(); return false;">
+                                <i class='bx bx-archive'></i>
+                            </x-button>
+                        @endif
 
                         @if($tab === 'needs_approval' && Auth::user()->hasRole('Content Manager'))
+                            <a href="{{ route('content.review', $content->id) }}"
+                               class="inline-block">
+                                <x-button variant="table-action-view" size="sm" class="tooltip" data-tip="Review">
+                                    <i class='bx bx-search'></i>
+                                </x-button>
+                            </a>
                             <form action="{{ route('content.approve', $content->id) }}" method="POST" class="inline">
                                 @csrf
                                 <x-button type="submit" variant="table-action-manage" size="sm" class="tooltip" data-tip="Approve">

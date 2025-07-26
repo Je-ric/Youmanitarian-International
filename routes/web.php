@@ -244,6 +244,7 @@ Route::middleware(['auth', 'role:Content Manager'])->group(function () {
     Route::post('/content/{content}/needs-revision', [ContentController::class, 'needsRevisionContent'])->name('content.needs_revision');
     Route::post('/content/{content}/reject', [ContentController::class, 'rejectContent'])->name('content.reject');
     Route::get('/content/{content}/archive', [ContentController::class, 'archiveContent'])->name('content.archive');
+    Route::get('/content/{content}/review', [ContentController::class, 'review'])->name('content.review');
 });
 
 Route::middleware(['auth', 'role:Program Coordinator,Content Manager'])->group(function () {
@@ -252,7 +253,7 @@ Route::middleware(['auth', 'role:Program Coordinator,Content Manager'])->group(f
     Route::post('/content/store', [ContentController::class, 'store'])->name('content.store');
     Route::get('/content/{content}/edit', [ContentController::class, 'edit'])->name('content.edit');
     Route::put('/content/{content}', [ContentController::class, 'update'])->name('content.update');
-    // Gallery image delete (for deleting individual images, not content)
+    // for deleting individual images, not content
     Route::delete('/content/images/{id}', [ContentController::class, 'destroyImage'])->name('content_images.destroy');
 });
 
