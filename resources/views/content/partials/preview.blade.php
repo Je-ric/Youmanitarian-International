@@ -1,5 +1,5 @@
 <div class="flex flex-col">
-    
+
     {{-- px-20 == 80px and since may tabs-modern (24px) - 80-24 = 56 --}}
     {{-- Kinomment ko lang, kase nakakaproud HAHAHAHAHA --}}
     <div class="px-[56px] py-2">
@@ -13,7 +13,7 @@
                         <div class="h-8 bg-gray-200 rounded animate-pulse"></div>
                     @endif
                 </h1>
-                
+
                 <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
                     <div class="flex items-center gap-2">
                         <i class='bx bx-calendar text-[#ffb51b]'></i>
@@ -24,7 +24,7 @@
                         <span>0 views</span>
                     </div>
                 </div>
-                
+
                 <div class="flex flex-wrap items-center gap-3">
                     @if(isset($content_type) && $content_type)
                         <span class="inline-flex items-center px-3 py-1 bg-[#ffb51b] text-white text-sm font-semibold">
@@ -33,18 +33,18 @@
                     @else
                         <div class="h-6 w-16 bg-gray-200 rounded animate-pulse"></div>
                     @endif
-                    
+
                     @if(isset($is_featured) && $is_featured)
                         <span class="inline-flex items-center px-3 py-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold">
                             <i class='bx bx-star mr-1'></i> Featured
                         </span>
                     @endif
                 </div>
-                
+
                 @if(isset($image_content) && $image_content)
                     <div class="relative">
-                        <img src="{{ asset('storage/' . $image_content) }}" 
-                             alt="Content Image" 
+                        <img src="{{ asset('storage/' . $image_content) }}"
+                             alt="Content Image"
                              class="w-full h-48 sm:h-64 lg:h-80 xl:h-96 object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
@@ -92,7 +92,7 @@
                             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                                 @foreach($gallery_images as $image)
                                     <div class="group relative overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300">
-                                        <img src="{{ asset('storage/' . $image) }}" 
+                                        <img src="{{ asset('storage/' . $image) }}"
                                              class="w-full h-24 sm:h-32 lg:h-40 object-cover"
                                              alt="Gallery Image {{ $loop->iteration }}">
                                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
@@ -178,4 +178,4 @@
             </div>
         </aside>
     </div>
-</div> 
+</div>
