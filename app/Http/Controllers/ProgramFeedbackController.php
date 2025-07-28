@@ -19,8 +19,11 @@ class ProgramFeedbackController extends Controller
             'feedback' => 'nullable|string|max:1000',
         ]);
 
+        // get volunteer record from the user
         $volunteer = Auth::user()->volunteer;
 
+        // check if volunteer record exists
+        // may separate function for not volunteer gaya ng guests, viewers, participants, etc.
         if (!$volunteer) {
             return redirect()->back()->with('toast', [
                 'message' => 'Only volunteers can submit feedback.',
@@ -28,7 +31,8 @@ class ProgramFeedbackController extends Controller
             ]);
         }
 
-        // Check if already submitted
+        // check if already submitted na, once lang per program, if true, no need to submit again
+        // this is to prevent multiple feedbacks from the same volunteer
         $existing = ProgramFeedback::where('program_id', $program->id)
             ->where('volunteer_id', $volunteer->id)
             ->first();
@@ -65,11 +69,12 @@ class ProgramFeedbackController extends Controller
             'feedback' => 'nullable|string|max:1000',
         ]);
 
-        // Optionally, prevent duplicate feedback by email/program
-        $existing = ProgramFeedback::where('program_id', $program->id)
+        // optionally, prevent duplicate feedback by email and program id
+        // pwede din siguro name kaso baka may magkapangalan
+        // or make the email input required para maiwasan ang multiple feedbacks
+        // this is to prevent multiple feedbacks from the same guest
+        $existing = ProgramFeedback::where('program_id', $program->id) 
             ->where('guest_email', $request->guest_email) 
-            // pwede din siguro name kaso baka may magkapangalan
-            // or make the email input required para maiwasan ang multiple feedbacks
             ->first();
 
         if ($existing) {
