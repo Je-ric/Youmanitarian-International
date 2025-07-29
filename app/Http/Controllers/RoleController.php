@@ -13,10 +13,12 @@ class RoleController extends Controller
 {
     public function gotoRolesList()
     {
-        $allUsers = User::with('roles')->get();
-        $roles = Role::all();
+        $allUsers = User::with('roles')->get(); // function to get all users with their roles
+        $roles = Role::all(); // get all roles
 
         // Get users for each role
+        // filter() to return only users with the role, inshort kinukuha lang yung users na may specific role
+        // since meron tayong function na $allUsers, tinatanggal nito yung user na wala namang role (depende sa hinahanap)
         $volunteerUsers = $allUsers->filter(fn($user) => $user->hasRole('Volunteer'));
         $adminUsers = $allUsers->filter(fn($user) => $user->hasRole('Admin'));
         $programCoordinatorUsers = $allUsers->filter(fn($user) => $user->hasRole('Program Coordinator'));
@@ -24,9 +26,15 @@ class RoleController extends Controller
         $contentManagerUsers = $allUsers->filter(fn($user) => $user->hasRole('Content Manager'));
         $memberUsers = $allUsers->filter(fn($user) => $user->hasRole('Member'));
 
-        // Paginate each role's users
         $perPage = 10;
 
+        // request()->get() to get the current page number from the URL
+        // if no page number is provided, default to 1
+        // if page number is provided, use that page number (paginate)
+
+        // Example:
+        // default: http://127.0.0.1:8000/roles/list?tab=volunteer (admin, program_coordinator, financial_coordinator, content_manager, no_roles)
+        // http://127.0.0.1:8000/roles/list?tab=Volunteer&volunteer_page=2
         $volunteerCurrentPage = request()->get('volunteer_page', 1);
         $adminCurrentPage = request()->get('admin_page', 1);
         $programCoordinatorCurrentPage = request()->get('program_coordinator_page', 1);
@@ -34,6 +42,14 @@ class RoleController extends Controller
         $contentManagerCurrentPage = request()->get('content_manager_page', 1);
         $memberCurrentPage = request()->get('member_page', 1);
         $noRoleCurrentPage = request()->get('no_role_page', 1);
+
+        // Example:
+        // Total volunteers: 50
+        // Per page: 10 users
+        // Current page: 1 (Default, show kung ano lang muna)
+        // Current page: 2 (show the 11-20)
+        // Current page: 3 (show the 21-30)
+        // URL: http://127.0.0.1:8000/roles/list?tab=Volunteer&volunteer_page=2
 
         $volunteerUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
             $volunteerUsers->forPage($volunteerCurrentPage, $perPage),
@@ -83,8 +99,7 @@ class RoleController extends Controller
             ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'member_page']
         );
 
-        $activeUsers = $allUsers->filter(fn($user) => $user->is_active);
-
+        // get all users na walang roles
         $usersWithoutRolesCollection = $allUsers->filter(fn($user) => $user->roles->isEmpty());
         $usersWithoutRoles = new \Illuminate\Pagination\LengthAwarePaginator(
             $usersWithoutRolesCollection->forPage($noRoleCurrentPage, $perPage),
@@ -97,7 +112,6 @@ class RoleController extends Controller
         return view('roles.index', compact(
             'allUsers',
             'roles',
-            'activeUsers',
             'usersWithoutRoles',
             'volunteerUsers',
             'adminUsers',
@@ -116,12 +130,14 @@ class RoleController extends Controller
 
     public function showAssignForm(Request $request)
     {
-        $users = User::all();
-        $roles = Role::all();
+        $users = User::all(); // get all users
+        $roles = Role::all(); // get all roles
 
-        // If a user is selected, get their current roles
+        // if a user is selected, get their current roles (show the form)
+        // request()->has() to check if the form was submitted with a user selected
+        // it's checking for form data (modal), not URL parameters.
         if ($request->has('user_id')) {
-            $selectedUser = User::with('roles')->find($request->user_id);
+            $selectedUser = User::with('roles')->find($request->user_id); // get user id with roles
             return view('roles.assign', compact('users', 'roles', 'selectedUser'));
         }
 
@@ -136,31 +152,40 @@ class RoleController extends Controller
             'roles.*' => 'exists:roles,id'
         ]);
 
+        // try-catch to handle kung ano mang uri ng error and may rollback
+        // may error logs din kung sakali
+        // and try-catch can ba used mainly kung may function na mag-iinsert/update sa more than one table
         try {
-            DB::beginTransaction();
+            DB::beginTransaction(); // all changes will be saved or rolled back togerther, again try-catch mainly use because? READ ABOVE
 
+            // findOrFail to get the user id and if not found, throw an error
+            // $request->user_id to get the user id from the form data (kung may user_id sa form) sa modal
             $user = User::findOrFail($request->user_id);
 
-            // Get current roles
+            // get current roles ng selected user
+            // $user->roles to get the roles of the user (from model)
+            // pluck() to get the id/role_name of the roles
+            // toArray() to convert the collection to an array
             $currentRoleIds = $user->roles->pluck('id')->toArray();
             $currentRoleNames = $user->roles->pluck('role_name')->toArray();
 
-            // If no roles were selected in the form, treat it as an empty array.
+            // if no roles were selected in the form, treat it as an empty array.
+            //
             $selectedRoleIds = $request->roles ?? [];
 
-            // Get the volunteer role
-            $volunteerRole = Role::where('role_name', 'Volunteer')->first();
+            // get the volunteer role
+            $volunteerRole = Role::where('role_name', 'Volunteer')->first(); //
 
             // Always ensure volunteer role is included if user has it
             if ($user->hasRole('Volunteer') && !in_array($volunteerRole->id, $selectedRoleIds)) {
                 $selectedRoleIds[] = $volunteerRole->id;
             }
 
-            // Determine what roles were added or removed
+            // determine what roles were added or removed
             $addedRoleIds = array_diff($selectedRoleIds, $currentRoleIds);
             $removedRoleIds = array_diff($currentRoleIds, $selectedRoleIds);
 
-            // Only proceed if there are actual changes
+            // only proceed if there are actual changes
             if (!empty($addedRoleIds) || !empty($removedRoleIds)) {
 
                 // Create sync data with pivot information

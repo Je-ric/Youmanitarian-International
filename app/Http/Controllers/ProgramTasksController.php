@@ -63,8 +63,8 @@ class ProgramTasksController extends Controller
         // if program_tasks status is being updated, update BOTH task and assignments
         if ($request->has('status')) {
             $task->update(['status' => $request->status]);
-            
-            // update all task_assignments 
+
+            // update all task_assignments
             $task->assignments()->update(['status' => $request->status]);
         } else {
             // if not, update only the task description
@@ -96,16 +96,16 @@ class ProgramTasksController extends Controller
 
         // Volunteer: Pending, In Progress (bawal complete)
         // Coordinator: Pending, In Progress and siya lang ang pwedeng mag set na complete
-    
+
         // this is individual tasks_assignment status, not the program_tasks status
         // kaya kung sino lang nagpalit or pinalitan yung assignment status, yung specific volunteer lang na yon affected
 
-        $assignment->update(['status' => $request->status]); 
+        $assignment->update(['status' => $request->status]);
 
         // update main task status based on assignment statuses
         // sa function ko nalang i-explain, basta checker
-        $this->updateMainTaskStatus($task); 
-        
+        $this->updateMainTaskStatus($task);
+
         // Example: task1 = jeric (pending), jozen (in_progress), melgie (in_progress)
         // if si melgie ay tapos na, at pinalitan yung status to completed, siya lang mababago ang status, hindi yung iba
         // Output: tasks1 = jeric (pending), jozen (in_progress), melgie (completed)
@@ -131,7 +131,7 @@ class ProgramTasksController extends Controller
         $existing = TaskAssignment::where('task_id', $task->id)
             ->where('volunteer_id', $request->volunteer_id)
             ->first();
-        
+
         // get(): SELECT * FROM task_assignments WHERE... and returns ALL matching records
         // first(): SELECT * FROM task_assignments WHERE... LIMIT 1 and returns only ONE record
 
@@ -155,7 +155,7 @@ class ProgramTasksController extends Controller
 
         // Send notification sa volunteer na nilagyan ng task \Notifications\TaskAssigned.php
         // check if volunteer record exists and has user record
-        if ($volunteer && $volunteer->user) { 
+        if ($volunteer && $volunteer->user) {
             $volunteer->user->notify(new TaskAssigned($task, $program));
         }
 
@@ -190,12 +190,12 @@ class ProgramTasksController extends Controller
         // gets all volunteer assignments for specific task
         // fn($assignment) is a callback function that will be called for each assignment
         $assignments = $task->assignments;
-        
+
         // if no assignments, return
         if ($assignments->isEmpty()) {
             return;
         }
-        
+
         // Remember, sa first line, were fetching all volunteer assignments for specific task
         // Also remember na may dalawa tayong table, program_tasks and tasks_assignments
         // program_tasks is the main task, and tasks_assignments is the volunteer task
@@ -203,17 +203,17 @@ class ProgramTasksController extends Controller
         // MAGULO? HINDI MALINAW? EXAMPLE? Exampleeee.
 
         // Example:
-        // Task: "Batukan si ______" → status: "in_progress" 
+        // Task: "Batukan si ______" → status: "in_progress"
         // - Jeric: pending
         // - Jozen: in_progress
         // - Melgie: completed
 
-        // Task: "Batukan si ______" → status: "pending" 
+        // Task: "Batukan si ______" → status: "pending"
         // - Jeric: pending
         // - Jozen: pending
         // - Melgie: pending
 
-        // Task: "Batukan si ______" → status: "completed" 
+        // Task: "Batukan si ______" → status: "completed"
         // - Jeric: completed
         // - Jozen: completed
         // - Melgie: completed
@@ -222,11 +222,11 @@ class ProgramTasksController extends Controller
         if ($assignments->every(fn($assignment) => $assignment->status === 'completed')) {
             $task->update(['status' => 'completed']);
         }
-        // If ANYONE (>0) is working (in_progress) -> Task is in progress
+        // If ANYONE (>0) is working -> Task is in progress
         elseif ($assignments->contains(fn($assignment) => $assignment->status === 'in_progress')) {
             $task->update(['status' => 'in_progress']);
         }
-        // If NO ONE is working (0) -> Task is pending
+        // If NO ONE (0) is working -> Task is pending
         else {
             $task->update(['status' => 'pending']);
         }

@@ -17,15 +17,14 @@ class ProgramVolunteerController extends Controller
     // program-volunteers.blade.php (main)
     // viewFeedback.blade.php (partial)
     //      feedbackItem.blade.php (partial)
-    // _form.blade.php (partial) 
+    // _form.blade.php (partial)
     public function gotoManageVolunteers(Program $program)
     {
         $approvedVolunteers = $program->volunteers()->where('program_volunteers.status', 'approved')->get();
         $pendingVolunteers = $program->volunteers()->where('program_volunteers.status', 'pending')->get();
         $approvedCount = $approvedVolunteers->count();
-        $isFull = $approvedCount >= $program->volunteer_count;
+        $isFull = $approvedCount >= $program->volunteer_count; // check kung full
 
-        // Attendance Overview Logic
         $totalVolunteers = $approvedVolunteers->count();
         $totalAttendanceRecords = 0;
         $approvedAttendanceCount = 0;
@@ -33,8 +32,10 @@ class ProgramVolunteerController extends Controller
         $rejectedAttendanceCount = 0;
         $noRecordsCount = 0;
 
-        foreach ($approvedVolunteers as $volunteer) {
-            $attendanceRecords = $volunteer->attendanceLogs()->where('program_id', $program->id)->get();
+        foreach ($approvedVolunteers as $volunteer) { // for each approved volunteer
+            $attendanceRecords = $volunteer->attendanceLogs()
+                ->where('program_id', $program->id)
+                ->get(); // get all attendance records for this program
             if ($attendanceRecords->isEmpty()) {
                 $noRecordsCount++;
             } else {
@@ -64,7 +65,6 @@ class ProgramVolunteerController extends Controller
             'noRecordsCount' => $noRecordsCount,
         ];
 
-        // Recent Activity Logic
         $recentActivities = $program->volunteers()
             ->where('program_volunteers.status', 'approved')
             ->orderBy('program_volunteers.created_at', 'desc')
@@ -157,14 +157,14 @@ class ProgramVolunteerController extends Controller
                 'type' => 'error'
             ]);
         }
-        
+
         if ($volunteer->application_status !== 'approved') { // check kung approved volunteer
             return redirect()->back()->with('toast', [
                 'message' => 'Your volunteer application must be approved before joining a program.',
                 'type' => 'error'
             ]);
         }
-        
+
         // If program is full (theres cases na baka mabypass yung condition sa blade, sana hindi pa den)
         // Parang double layer of protection
         $approvedCount = $program->volunteers()->where('program_volunteers.status', 'approved')->count();
