@@ -169,26 +169,40 @@ class RoleController extends Controller
             $currentRoleIds = $user->roles->pluck('id')->toArray();
             $currentRoleNames = $user->roles->pluck('role_name')->toArray();
 
+            // get selected roles in the form and
             // if no roles were selected in the form, treat it as an empty array.
-            //
+            // ?? is the null coalescing operator, if the left side is null, then use the right side
             $selectedRoleIds = $request->roles ?? [];
 
             // get the volunteer role
-            $volunteerRole = Role::where('role_name', 'Volunteer')->first(); //
+            // kailangan kase natin yung Volunteer role id
+            // para siyang special protection na always include yung volunteer role kung meron man yung selected user
+            $volunteerRole = Role::where('role_name', 'Volunteer')->first();
 
-            // Always ensure volunteer role is included if user has it
+            // always ensure na merong volunteer role
+            // if the user has the volunteer role and the volunteer role is not in the selectedRoleIds, then add it
+            // by default, we didnt allow to include the volunteer role in assigning, kase through application siya
+
+            // Magulo? Explanation? Example? Exampleeeee
+            // Diba pumili ng roles, for example nag-dagdag ng role, then since hindi naka-include yung volunteer role sa option
+            // kung may volunteer role man, ngayon hahanapin yung volunteer role id and ilalagay sa selectedRoleIds
+            // kase by default hindi talaga sya included, and we need something na mag-reremain yung volunteer role.
+            // That's why everytime na may changes, always need to add again yung volunteer role id.
             if ($user->hasRole('Volunteer') && !in_array($volunteerRole->id, $selectedRoleIds)) {
                 $selectedRoleIds[] = $volunteerRole->id;
             }
 
             // determine what roles were added or removed
+            // array_diff() to get the difference between the two arrays
+            // $selectedRoleIds is the new roles and
+            // $currentRoleIds is the current roles
             $addedRoleIds = array_diff($selectedRoleIds, $currentRoleIds);
             $removedRoleIds = array_diff($currentRoleIds, $selectedRoleIds);
 
-            // only proceed if there are actual changes
+            // if theress no changes or theres no additional checkbox, walang mangyayare
+            // if theres changes, then proceed
             if (!empty($addedRoleIds) || !empty($removedRoleIds)) {
 
-                // Create sync data with pivot information
                 $syncData = collect($selectedRoleIds)->mapWithKeys(function ($roleId) {
                     return [$roleId => [
                         'assigned_by' => Auth::id(),
