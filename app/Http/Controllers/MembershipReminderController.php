@@ -29,7 +29,8 @@ class MembershipReminderController extends Controller
             $quarter = $parts[1]; 
             $year = $parts[2];     
             
-            $member = Member::findOrFail($request->member_id); // member
+            // get the member id from the request
+            $member = Member::findOrFail($request->member_id);
             
             // check if kung yung virtual payment record ay existing na
             // this is to prevent multiple duplication ng virtual payment lalo na kung same member, quarter and year
@@ -66,7 +67,7 @@ class MembershipReminderController extends Controller
         $reminder = PaymentReminder::create([
             'membership_payment_id' => $payment->id,
             'sent_by_user_id' => Auth::id(),
-            'content' => $request->content,
+            'content' => $request->content, // message, note
             'status' => 'sent' 
         ]);
 

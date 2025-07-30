@@ -83,11 +83,11 @@ class MembershipController extends Controller
         if (!$payment) {
             return 'pending';
         }
-
+        // 
         if ($payment->payment_status === 'paid') {
             return 'paid';
         }
-
+        // if not paid, check if it's overdue
         $dueDate = $this->getDueDate($quarter);
         return now()->isAfter($dueDate) ? 'overdue' : 'pending';
     }
