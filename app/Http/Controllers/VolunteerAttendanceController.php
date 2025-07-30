@@ -278,6 +278,7 @@ class VolunteerAttendanceController extends Controller
     {
         $volunteers = $program->volunteers()->with('user')->get();
         $selectedVolunteerId = $request->query('volunteer_id');
+
         return view('programs-volunteers.modals.manualAttendanceModal', 
         compact('program', 
         'volunteers', 
@@ -287,13 +288,14 @@ class VolunteerAttendanceController extends Controller
     // programs-volunteers/modals/manualAttendanceModal.blade.php
     public function manualEntry(Request $request, Program $program)
     {
-        // Find an existing attendance record or create a new one
+        // find an existing attendance record or create a new one
         $attendance = VolunteerAttendance::firstOrNew([
             'program_id' => $program->id,
             'volunteer_id' => $request->volunteer_id,
         ]);
 
-        // Define base validation rules.
+        // validation rules lang para sa entry, (undecided kung required notes)
+        // but i plan to set a default notes for manual entry and approving attendance
         $rules = [
             'volunteer_id' => 'required|exists:volunteers,id',
             'date' => 'required|date',
@@ -301,6 +303,7 @@ class VolunteerAttendanceController extends Controller
         ];
 
         // Make clock_in required only for new attendance records.
+        // kung meron na clock in, then no need to validate clock in
         if (!$attendance->clock_in) {
             $rules['clock_in'] = 'required';
         }
@@ -309,7 +312,9 @@ class VolunteerAttendanceController extends Controller
 
 
         // ---------------------------------------------------------------
-        // Get program start and end times
+        // sa enclosed code na toh, plan ko na within the start-end time lang yung pwedeng maselect
+        // for now, di ko pa nagagawa
+        // get program start and end times
         $date = Carbon::parse($program->date)->format('Y-m-d');
         $programStart = Carbon::parse($date . ' ' . $program->start_time);
         $programEnd = Carbon::parse($date . ' ' . $program->end_time);
@@ -354,7 +359,7 @@ class VolunteerAttendanceController extends Controller
 
         $attendance->save();
 
-        // Update volunteer's total hours
+        // update volunteer's total hours
         $volunteer = $attendance->volunteer;
         $volunteer->updateTotalHours();
 
