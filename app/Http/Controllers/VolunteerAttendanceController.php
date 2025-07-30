@@ -109,11 +109,11 @@ class VolunteerAttendanceController extends Controller
     {
         $user = Auth::user();
 
-        // Check if the volunteer is already clocked in for this program (no clock out yet)
+        // hinahanap yung mga recent or latest attendance na may clock in pero walang clock out
         $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id)
             ->where('program_id', $program->id)
-            ->whereNull('clock_out')
-            ->latest()
+            ->whereNull('clock_out') // Only records without clock_out (still clocked in)
+            ->latest() // Get the most recent record
             ->first();
 
         if (!$attendance) {
@@ -121,7 +121,7 @@ class VolunteerAttendanceController extends Controller
             VolunteerAttendance::create([
                 'volunteer_id' => $user->volunteer->id,
                 'program_id' => $program->id,
-                'clock_in' => now(),
+                'clock_in' => now(), // start time
             ]);
 
             return redirect()->back()->with('toast', [
@@ -130,16 +130,19 @@ class VolunteerAttendanceController extends Controller
             ]);
         } else {
             // Already clocked in: set clock out time and calculate hours worked
-            $clock_in = Carbon::parse($attendance->clock_in);
-            $clock_out = Carbon::now();
+            $clock_in = Carbon::parse($attendance->clock_in); // Convert to Carbon object
+            $clock_out = Carbon::now(); // end time
 
+            // Update the attendance record with clock out time
+            // as we can see, naka set lang naman sa clock_out since yun lang ilalagay, similar sa hours_logged
             $attendance->clock_out = $clock_out;
+            // Calculate (rounded to 2 decimal)
             $attendance->hours_logged = round($clock_in->floatDiffInHours($clock_out), 2);
             $attendance->save();
 
-            // Update volunteer's total hours
+            // Update volunteer's total hours across all programs
             $volunteer = $attendance->volunteer;
-            $volunteer->updateTotalHours();
+            $volunteer->updateTotalHours(); // check model
 
             return redirect()->back()->with('toast', [
                 'message' => 'Clocked out successfully.',
@@ -204,25 +207,34 @@ class VolunteerAttendanceController extends Controller
     // volunteers.program-volunteers.blade.php
     public function programVolunteers(Program $program)
     {
+        // set an array to store yung attendance logs for each volunteer
         $logs = [];
 
+        // loop through each volunteer in this program
+        // Para makita yung attendance records at total hours ng bawat volunteer sa program na ito
         foreach ($program->volunteers as $volunteer) {
+            // get all attendance records for this volunteer in this program
             $volunteerLogs = VolunteerAttendance::where('program_id', $program->id)
                 ->where('volunteer_id', $volunteer->id)
                 ->get();
 
+            // calculate total hours worked by this volunteer
             $totalTime = 0;
             foreach ($volunteerLogs as $log) {
-                $totalTime += $log->hours_logged;
+                $totalTime += $log->hours_logged; // Add each attendance record's hours
             }
 
+            // store volunteer's logs and total time in the array
+            // key is volunteer id, at yung value ay logs and total time
             $logs[$volunteer->id] = [
-                'logs' => $volunteerLogs,
-                'totalTime' => $totalTime . ' hours',
+                'logs' => $volunteerLogs, // all attendance records
+                'totalTime' => $totalTime . ' hours', // total hours as string (concat)
             ];
         }
 
-        return view('volunteers.program-volunteers', compact('program', 'logs'));
+        return view('volunteers.program-volunteers', 
+        compact('program', 
+        'logs'));
     }
 
     // volunteers/program-volunteers.blade.php
@@ -266,7 +278,10 @@ class VolunteerAttendanceController extends Controller
     {
         $volunteers = $program->volunteers()->with('user')->get();
         $selectedVolunteerId = $request->query('volunteer_id');
-        return view('programs-volunteers.modals.manualAttendanceModal', compact('program', 'volunteers', 'selectedVolunteerId'));
+        return view('programs-volunteers.modals.manualAttendanceModal', 
+        compact('program', 
+        'volunteers', 
+        'selectedVolunteerId'));
     }
 
     // programs-volunteers/modals/manualAttendanceModal.blade.php
