@@ -6,14 +6,14 @@
 
         <div class="flex flex-wrap gap-2 w-full sm:w-auto">
             {{-- Pag nag clock in, tsaka palang makakapag upload --}}
-            @if($attendance && $attendance->clock_in)
+            @if($latestAttendance && $latestAttendance->clock_in)
                 <x-button variant="secondary" class="w-full sm:w-auto"
                     onclick="document.getElementById('uploadProofModal').showModal();">
                     <i class='bx bx-upload mr-1'></i> Upload Proof
                 </x-button>
             @endif
             {{-- Pag tapos complete attendance, tsaka palang makakapag rate and review --}}
-            @if($attendance && $attendance->clock_in && $attendance->clock_out)
+            @if($latestAttendance && $latestAttendance->clock_in && $latestAttendance->clock_out)
                 <x-button variant="secondary" class="w-full sm:w-auto"
                     onclick="document.getElementById('feedbackModal_{{ $program->id }}').showModal();">
                     <i class='bx bx-star mr-1'></i> Rate & Review
@@ -23,8 +23,8 @@
     </x-page-header>
 
     @include('programs.modals.feedbackModal', ['program' => $program, 'userFeedback' => $userFeedback])
-    @include('programs.modals.proofModal', ['program' => $program, 'volunteerAttendance' => $volunteerAttendance,])
-    @include('programs.modals.attendanceStatusModal', ['attendance' => $attendance])
+    @include('programs.modals.proofModal', ['program' => $program, 'volunteerAttendance' => $anyAttendance,])
+    @include('programs.modals.attendanceStatusModal', ['attendance' => $latestAttendance])
     
     <div class="mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 items-start">

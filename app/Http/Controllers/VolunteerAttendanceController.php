@@ -24,23 +24,25 @@ class VolunteerAttendanceController extends Controller
         $user = Auth::user();
         $now = now()->setTimezone('Asia/Manila');
 
-        // Check if the user has joined the program
+        // validator kung yung user has joined the program
         $isJoined = $program->volunteers()->where('user_id', $user->id)->exists();
 
-        // Get the user's attendance record for this program
-        $attendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id ?? null)
+        // get the latest attendance record for clock in/out status
+        $latestAttendance = VolunteerAttendance::where('volunteer_id', $user->volunteer->id ?? null)
             ->where('program_id', $program->id)
             ->latest()
             ->first();
 
-
-        $volunteerAttendance = VolunteerAttendance::where('program_id', $program->id)
+        // get any attendance record for proof display
+        $anyAttendance = VolunteerAttendance::where('program_id', $program->id)
             ->where('volunteer_id', $user->volunteer?->id)
             ->first();
 
         // If the attendance record exists and has a clock-in/clock-out time, convert it to a Carbon date in Manila timezone
-        $clockInTime = $attendance?->clock_in ? Carbon::parse($attendance->clock_in)->setTimezone('Asia/Manila') : null;
-        $clockOutTime = $attendance?->clock_out ? Carbon::parse($attendance->clock_out)->setTimezone('Asia/Manila') : null;
+        $clockInTime = $latestAttendance?->clock_in ? 
+            Carbon::parse($latestAttendance->clock_in)->setTimezone('Asia/Manila') : null;
+        $clockOutTime = $latestAttendance?->clock_out ? 
+            Carbon::parse($latestAttendance->clock_out)->setTimezone('Asia/Manila') : null;
 
         $formattedWorkedTime = null;
         if ($clockInTime && $clockOutTime) { //If both times ay meron na, calculates the total difference (work hours)
@@ -59,10 +61,10 @@ class VolunteerAttendanceController extends Controller
 
         // canClockIn: ongoing, the user is joined, and hasn't clocked in yet
         // canClockOut: ongoing, the user is joined, has clocked in, but hasn't clocked out yet
-        $canClockIn = $program->progress_status === 'ongoing' && $isJoined && !$attendance?->clock_in;
-        $canClockOut = $program->progress_status === 'ongoing' && $isJoined && $attendance?->clock_in && !$attendance?->clock_out;
+        $canClockIn = $program->progress_status === 'ongoing' && $isJoined && !$latestAttendance?->clock_in;
+        $canClockOut = $program->progress_status === 'ongoing' && $isJoined && $latestAttendance?->clock_in && !$latestAttendance?->clock_out;
 
-        // Get volunteers tasks 
+        // Get volunteers tasks
         $volunteerTasks = $program->tasks()
             ->whereHas('assignments', function ($query) use ($user) {
                 $query->where('volunteer_id', $user->volunteer->id ?? null);
@@ -73,7 +75,7 @@ class VolunteerAttendanceController extends Controller
             ->get();
 
         // creates an array with the task and the volunteers assignment for that task
-        //  para mas madaling idisplay sa blade
+        // para mas madaling idisplay sa blade
         $taskData = $volunteerTasks->map(function ($task) {
             return [
                 'task' => $task,
@@ -87,7 +89,7 @@ class VolunteerAttendanceController extends Controller
 
         return view('programs.attendance', compact(
             'program',
-            'attendance',
+            'latestAttendance',
             'isJoined',
             'clockInTime',
             'clockOutTime',
@@ -97,7 +99,7 @@ class VolunteerAttendanceController extends Controller
             'canClockOut',
             'volunteerTasks',
             'taskData',
-            'volunteerAttendance',
+            'anyAttendance',
             'userFeedback'
         ));
     }
@@ -149,14 +151,14 @@ class VolunteerAttendanceController extends Controller
     // programs/attendance.blade.php
     public function uploadProof(Request $request, $programId)
     {
-        // Get the current volunteer's ID
+        // get the current logged in volunteer id
         $volunteerId = Auth::user()?->volunteer?->id;
 
         if (!$volunteerId) {
             return back()->with(
                 'toast',
                 [
-                    'message' => 'You must be logged in as a volunteer.',
+                    'message' => 'You must be logged in as a volunteer to upload proof.',
                     'type' => 'error'
                 ]
             );
@@ -183,7 +185,7 @@ class VolunteerAttendanceController extends Controller
         // Filename: ProgramName_VolunteerName_timestamp.extension
         $program = Program::findOrFail($programId);
         $volunteer = Volunteer::findOrFail($volunteerId);
-        
+
         // remove any characters that are not letters, numbers, or dashes
         $volunteerName = preg_replace('/[^A-Za-z0-9\-]/', '', $volunteer->user->name);
         $programName = preg_replace('/[^A-Za-z0-9\-]/', '', $program->title);
@@ -287,16 +289,16 @@ class VolunteerAttendanceController extends Controller
         if (!$attendance->clock_in) {
             $rules['clock_in'] = 'required';
         }
-        $rules['clock_out'] = 'nullable'; // Clock_out is always optional.        
+        $rules['clock_out'] = 'nullable'; // Clock_out is always optional.
         $request->validate($rules);
 
-        
+
         // ---------------------------------------------------------------
         // Get program start and end times
         $date = Carbon::parse($program->date)->format('Y-m-d');
         $programStart = Carbon::parse($date . ' ' . $program->start_time);
         $programEnd = Carbon::parse($date . ' ' . $program->end_time);
-        // Parse 
+        // Parse
         $clockIn = $request->clock_in ? Carbon::parse($request->date . ' ' . $request->clock_in) : null;
         $clockOut = $request->clock_out ? Carbon::parse($request->date . ' ' . $request->clock_out) : null;
 
@@ -323,7 +325,7 @@ class VolunteerAttendanceController extends Controller
         if ($request->filled('clock_out')) {
             $attendance->clock_out = $request->date . ' ' . $request->clock_out;
         }
-        
+
         $attendance->notes = $request->notes;
 
         // Calculate total hours worked if both clock_in and clock_out are set.
