@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 class MembershipController extends Controller
 {
+    // finance/membership_payments.blade.php (main)
     public function index()
     {
         $fullPledgeMembers = Member::with(['user', 'payments' => function($query) {
@@ -78,12 +79,13 @@ class MembershipController extends Controller
             ->endOfMonth();
     }
 
+    // finance/membership_payments.blade.php (main)
     public function determinePaymentStatus($quarter, $payment)
     {
         if (!$payment) {
             return 'pending';
         }
-        // 
+        //
         if ($payment->payment_status === 'paid') {
             return 'paid';
         }
@@ -92,6 +94,7 @@ class MembershipController extends Controller
         return now()->isAfter($dueDate) ? 'overdue' : 'pending';
     }
 
+    // finance/modals/addPaymentModal.blade.php (partial)
     public function store(Request $request)
     {
         $request->validate([
@@ -177,6 +180,7 @@ class MembershipController extends Controller
         }
     }
 
+    // finance/membership_payments.blade.php (main)
     public function updateStatus(MembershipPayment $payment, Request $request)
     {
         $validated = $request->validate([

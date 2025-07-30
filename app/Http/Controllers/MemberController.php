@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 
 class MemberController extends Controller
 {
+    // member/index.blade.php (main)
     public function index(Request $request)
     {
         $tab = $request->input('tab', 'overview');
@@ -89,6 +90,7 @@ class MemberController extends Controller
         ));
     }
 
+    // member/index.blade.php (main)
     public function store(Request $request)
     {
         $request->validate([
@@ -147,6 +149,7 @@ class MemberController extends Controller
         }
     }
 
+    // member/index.blade.php (main)
     public function updateStatus(Member $member, Request $request)
     {
         $validated = $request->validate([
@@ -159,6 +162,7 @@ class MemberController extends Controller
             ->with('toast', ['type' => 'success', 'message' => 'Member status updated successfully']);
     }
 
+    // member/index.blade.php (main)
     public function invite(Request $request, Volunteer $volunteer)
     {
         try {
@@ -227,6 +231,7 @@ class MemberController extends Controller
         }
     }
 
+    // notifications/show-invitation.blade.php (main)
     public function acceptInvitation(Member $member)
     {
         try {
@@ -258,6 +263,7 @@ class MemberController extends Controller
         }
     }
 
+    // notifications/show-invitation.blade.php (main)
     public function declineInvitation(Member $member)
     {
         $member->update([
@@ -269,6 +275,7 @@ class MemberController extends Controller
             ->with('toast', ['type' => 'info', 'message' => 'You have declined the membership invitation.']);
     }
 
+    // member/index.blade.php (main)
     public function resendInvitation(Member $member)
     {
         if ($member->isActive()) {
@@ -306,6 +313,7 @@ class MemberController extends Controller
         }
     }
 
+    // notifications/show-invitation.blade.php (main)
     public function showInvitation(Member $member)
     {
         // if ($member->status !== 'invited') {

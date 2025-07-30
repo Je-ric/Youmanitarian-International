@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 class ContentController extends Controller
 {
 
+    // content/index.blade.php (main)
     public function index()
     {
         $user = Auth::user();
@@ -53,6 +54,7 @@ class ContentController extends Controller
     }
 
 
+    // content/content_create.blade.php (main)
     public function create()
     {
         return view('content.content_create');
@@ -62,6 +64,7 @@ class ContentController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
+    // content/content_create.blade.php (main)
     public function edit(Content $content)
     {
         return view('content.content_create', compact('content'));
@@ -112,6 +115,7 @@ class ContentController extends Controller
         }
     }
 
+    // content/content_create.blade.php (main)
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -205,6 +209,7 @@ class ContentController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
+    // content/content_create.blade.php (main)
     public function update(Request $request, $id)
     {
         $user = Auth::user();
@@ -324,6 +329,7 @@ class ContentController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
+    // content/content_create.blade.php (main)
     public function destroyImage($id)
     {
         $image = ContentImage::findOrFail($id);
@@ -346,6 +352,7 @@ class ContentController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
+    // content/index.blade.php (main)
     public function archiveContent($id)
     {
         $content = Content::findOrFail($id);
@@ -356,7 +363,7 @@ class ContentController extends Controller
         ]);
     }
 
-    // Approve content
+    // content/index.blade.php (main)
     public function approveContent($id)
     {
         $content = Content::findOrFail($id);
@@ -388,6 +395,7 @@ class ContentController extends Controller
         ]);
     }
 
+    // content/index.blade.php (main)
     public function needsRevisionContent($id)
     {
         $content = Content::findOrFail($id);
@@ -416,6 +424,7 @@ class ContentController extends Controller
         ]);
     }
 
+    // content/index.blade.php (main)
     public function rejectContent($id)
     {
         $content = Content::findOrFail($id);
@@ -467,6 +476,7 @@ class ContentController extends Controller
     //     ]);
     // }
 
+    // content/content_create.blade.php (main)
     public function review(Content $content)
     {
         // only review if content is pending or submitted

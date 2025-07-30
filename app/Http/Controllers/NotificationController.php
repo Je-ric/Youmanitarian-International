@@ -14,6 +14,7 @@ class NotificationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // notifications/index.blade.php (main)
     public function index(Request $request)
     {
         $user = $request->user();
@@ -31,10 +32,11 @@ class NotificationController extends Controller
      * @param  string  $id
      * @return \Illuminate\Http\RedirectResponse
      */
+    // notifications/index.blade.php (main)
     public function markAsRead(Request $request, $id)
     {
         $notification = $request->user()->notifications()->findOrFail($id);
-        
+
         if(!$notification->read_at) {
             $notification->markAsRead();
         }
@@ -58,6 +60,7 @@ class NotificationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
+    // notifications/index.blade.php (main)
     public function markAllAsRead(Request $request)
     {
         $request->user()->unreadNotifications->markAsRead();
@@ -65,6 +68,7 @@ class NotificationController extends Controller
         return back()->with('success', 'All notifications marked as read.');
     }
 
+    // notifications/paymentReminder.blade.php (main)
     public function showPaymentReminder(Request $request, DatabaseNotification $notification)
     {
         if ($notification->notifiable_id !== $request->user()->id) {

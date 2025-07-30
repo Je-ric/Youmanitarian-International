@@ -12,6 +12,7 @@ use App\Notifications\TaskAssigned;
 
 class ProgramTasksController extends Controller
 {
+    // programs_volunteers/partials/programTasks.blade.php (partial)
     public function storeTask(Request $request, Program $program)
     {
         $request->validate([
@@ -29,6 +30,7 @@ class ProgramTasksController extends Controller
         ]);
     }
 
+    // programs_volunteers/partials/programTasks.blade.php (partial)
     public function deleteTask(Program $program, ProgramTask $task)
     {
         // check if the task belongs to the correct program
@@ -44,6 +46,7 @@ class ProgramTasksController extends Controller
         ]);
     }
 
+    // programs_volunteers/partials/programTasks.blade.php (partial)
     public function updateTask(Request $request, Program $program, ProgramTask $task)
     {
         // check if the task belongs to the correct program
@@ -83,6 +86,7 @@ class ProgramTasksController extends Controller
     }
 
     // Update individual assignment status
+    // programs_volunteers/partials/programTasks.blade.php (partial)
     public function updateAssignmentStatus(Request $request, Program $program, ProgramTask $task, TaskAssignment $assignment)
     {
         // check if the assignment belongs to the correct task and program
@@ -116,6 +120,7 @@ class ProgramTasksController extends Controller
         ]);
     }
 
+    // programs_volunteers/partials/programTasks.blade.php (partial)
     public function assignVolunteerToTask(Request $request, Program $program, ProgramTask $task)
     {
         // Makes sure the task belongs to the correct program
@@ -166,6 +171,7 @@ class ProgramTasksController extends Controller
     }
 
     // Remove a volunteer from a task
+    // programs_volunteers/partials/programTasks.blade.php (partial)
     public function removeVolunteerFromTask(Program $program, ProgramTask $task, TaskAssignment $assignment)
     {
         // check if the assignment belongs to the correct task and program

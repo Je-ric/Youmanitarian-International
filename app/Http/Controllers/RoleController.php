@@ -128,6 +128,7 @@ class RoleController extends Controller
         ));
     }
 
+    // roles/partials/assignRolesModal.blade.php (partial)
     public function showAssignForm(Request $request)
     {
         $users = User::all(); // get all users

@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Auth;
 class ProgramFeedbackController extends Controller
 {
 
-    // attendance.blade.php (main)
-    // feedbackModal.blade.php (partial)
+    // programs/attendance.blade.php (main)
+    // programs/modals/feedbackModal.blade.php (partial)
     public function submitVolunteerFeedback(Request $request, Program $program)
     {
         $request->validate([
@@ -59,7 +59,7 @@ class ProgramFeedbackController extends Controller
         ]);
     }
 
-    // website/programs.blade.php
+    // website/programs.blade.php (main)
     public function submitGuestFeedback(Request $request, Program $program)
     {
         $request->validate([
@@ -73,8 +73,8 @@ class ProgramFeedbackController extends Controller
         // pwede din siguro name kaso baka may magkapangalan
         // or make the email input required para maiwasan ang multiple feedbacks
         // this is to prevent multiple feedbacks from the same guest
-        $existing = ProgramFeedback::where('program_id', $program->id) 
-            ->where('guest_email', $request->guest_email) 
+        $existing = ProgramFeedback::where('program_id', $program->id)
+            ->where('guest_email', $request->guest_email)
             ->first();
 
         if ($existing) {

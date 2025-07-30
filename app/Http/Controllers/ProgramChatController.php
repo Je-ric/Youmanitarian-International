@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ProgramChatController extends Controller
 {
+    // programs_chats/index.blade.php (main)
     public function index()
     {
         $programs = $this->getUserPrograms();
         return view('programs_chats.index', compact('programs'));
     }
 
+    // programs_chats/index.blade.php (main)
     public function show(Program $program)
     {
         if (!$this->canAccessProgram($program)) {
@@ -30,6 +32,7 @@ class ProgramChatController extends Controller
         return view('programs_chats.index', compact('programs', 'program', 'messages'));
     }
 
+    // programs_chats/index.blade.php (main)
     public function store(Request $request, Program $program)
     {
         if (!$this->canAccessProgram($program)) {
@@ -56,6 +59,7 @@ class ProgramChatController extends Controller
         return redirect()->route('program.chats.show', $program)->with('success', 'Message sent!');
     }
 
+    // programs_chats/index.blade.php (main)
     public function destroy(Request $request, Program $program, ProgramChat $chat)
 
     {

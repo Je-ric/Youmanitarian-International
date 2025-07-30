@@ -10,23 +10,24 @@ use App\Models\Volunteer;
 
 class VolunteerController extends Controller
 {
+    // volunteers/index.blade.php (main)
     public function gotoVolunteersList()
     {
         $applications = Volunteer::with('user')
             ->where('application_status', 'pending')
             ->paginate(10);
-            
+
         $deniedApplications = Volunteer::with('user')
             ->where('application_status', 'denied')
             ->paginate(10);
-            
+
         $approvedVolunteers = Volunteer::with('user')
             ->where('application_status', 'approved')
             ->paginate(10);
 
         $total = $approvedVolunteers->count() + $deniedApplications->count();
         $approvalRate = $total > 0 ? round(($approvedVolunteers->count() / $total) * 100) : 0;
-            
+
         $recentActivities = $applications->merge($deniedApplications)->merge($approvedVolunteers)
             ->sortByDesc('updated_at')
             ->take(5);
@@ -34,8 +35,8 @@ class VolunteerController extends Controller
         return view('volunteers.index',
         compact(
             'applications',
-            'deniedApplications', 
-            'approvedVolunteers', 
+            'deniedApplications',
+            'approvedVolunteers',
             'approvalRate',
             'recentActivities'
         ));
@@ -45,6 +46,7 @@ class VolunteerController extends Controller
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
+    // volunteers/volunteer-details.blade.php (main)
     public function gotoVolunteerDetails($id)
     {
         //  volunteer with associated programs

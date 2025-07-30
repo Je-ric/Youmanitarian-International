@@ -21,6 +21,7 @@ class ProgramController extends Controller
      * @param Request $request
      * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
+    // programs/index.blade.php (main)
     public function gotoProgramsList(Request $request)
     {
         // Get authenticated user
@@ -70,16 +71,19 @@ class ProgramController extends Controller
         // ]);
     }
 
+    // programs/show.blade.php (main)
     public function showDetailsModal(Program $program)
     {
         return view('programs.show', compact('program'));
     }
 
+    // programs/create.blade.php (main)
     public function gotoCreateProgram()
     {
         return view('programs.create');
     }
 
+    // programs/create.blade.php (main)
     public function storeProgram(Request $request)
     {
         $request->validate([
@@ -132,6 +136,7 @@ class ProgramController extends Controller
         ]);
     }
 
+    // programs_volunteers/partials/programDetails.blade.php (partial)
     public function updateProgram(Request $request, Program $program)
     {
         $request->validate([
@@ -171,7 +176,7 @@ class ProgramController extends Controller
         // kase again, wala naman sa volunteer data yung personal info like name, email and etc.
         // filter() is to remove null user values from the collection, useful for notification sending
             // causes ng null values:
-            // - may volunteer record pero walang user record (pwedeng dahil sa soft or hard user record delete) 
+            // - may volunteer record pero walang user record (pwedeng dahil sa soft or hard user record delete)
             // example: volunteer1(user1) -> volunteer2(user2) -> volunteer3(null) -> volunteer4(user4)
             // output: user1, user2, user4
         $volunteers = $program->volunteers()
@@ -179,7 +184,7 @@ class ProgramController extends Controller
                     ->get()
                     ->pluck('user')
                     ->filter();
-                    
+
         if ($volunteers->isNotEmpty()) {
             Notification::send($volunteers, ProgramUpdate::updatedProgram($program));
         }
@@ -192,6 +197,7 @@ class ProgramController extends Controller
             ]);
     }
 
+    // programs/index.blade.php (main)
     public function deleteProgram(Program $program)
     {
         $program->delete();

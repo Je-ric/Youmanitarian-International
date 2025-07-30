@@ -17,7 +17,7 @@ class WebsiteController extends Controller
         $featuredPost = Content::where('content_status', 'published')
             ->orderBy('created_at', 'desc')
             ->first();
-            
+
         $latestPosts = collect();
 
         if ($featuredPost) {
@@ -80,7 +80,7 @@ class WebsiteController extends Controller
 
     public function news()
     {
-        return view('website.news'); // News 
+        return view('website.news'); // News
     }
 
     public function programs()
@@ -91,17 +91,17 @@ class WebsiteController extends Controller
 
     public function sponsors()
     {
-        return view('website.sponsors'); // Sponsors & Partnership 
+        return view('website.sponsors'); // Sponsors & Partnership
     }
 
     public function about()
     {
-        return view('website.about'); // About Us 
+        return view('website.about'); // About Us
     }
 
     public function team()
     {
-        return view('website.team'); // Meet the Team 
+        return view('website.team'); // Meet the Team
     }
 
     public function forecast()

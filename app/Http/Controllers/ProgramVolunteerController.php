@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Program;
 use App\Models\Volunteer;
 use App\Models\ProgramChat;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\ProgramFeedback;
 use App\Notifications\VolunteerJoinedProgram;
@@ -14,10 +15,10 @@ use Illuminate\Support\Facades\Auth;
 class ProgramVolunteerController extends Controller
 {
 
-    // program-volunteers.blade.php (main)
-    // viewFeedback.blade.php (partial)
-    //      feedbackItem.blade.php (partial)
-    // _form.blade.php (partial)
+    // programs_volunteers/program-volunteers.blade.php (main)
+    // programs_volunteers/partials/viewFeedback.blade.php (partial)
+    // programs_volunteers/partials/feedbackItem.blade.php (partial)
+    // programs_volunteers/partials/programDetails.blade.php (partial)
     public function gotoManageVolunteers(Program $program)
     {
         $approvedVolunteers = $program->volunteers()->where('program_volunteers.status', 'approved')->get();
@@ -144,8 +145,8 @@ class ProgramVolunteerController extends Controller
     // ═══════════════════════════════════════════════════════════════════════════════
 
 
-    // index.blade.php (main)
-    // view-modal.blade.php (component)
+    // programs/index.blade.php (main)
+    // programs/modals/program-modal.blade.php (partial)
     public function joinProgram(Program $program)
     {
         $user = Auth::user();
@@ -207,10 +208,8 @@ class ProgramVolunteerController extends Controller
         ]);
     }
 
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
-    // ═══════════════════════════════════════════════════════════════════════════════
-
+    // programs/index.blade.php (main)
+    // programs/modals/program-modal.blade.php (partial)
     public function leaveProgram(Request $request, Program $program, Volunteer $volunteer)
     {
         // Makes sure the volunteer has any task assignments for this program

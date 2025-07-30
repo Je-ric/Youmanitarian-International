@@ -12,6 +12,7 @@ class ContentReviewCommentController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // content/partials/contentReviewComments.blade.php (partial)
     public function index(Request $request)
     {
         $contentId = $request->get('content_id');
@@ -36,6 +37,7 @@ class ContentReviewCommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // content/content_create.blade.php (main)
     public function store(Request $request)
     {
         if (!Auth::check()) {
@@ -80,6 +82,7 @@ class ContentReviewCommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    // content/content_create.blade.php (main)
     public function destroy($id)
     {
         $comment = ContentReviewComment::findOrFail($id);

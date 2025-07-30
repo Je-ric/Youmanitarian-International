@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class DonationController extends Controller
 {
+    // finance/donations.blade.php (main)
     public function index()
     {
         $totalConfirmedDonations = Donation::where('status', 'Confirmed')->sum('amount');
@@ -26,6 +27,7 @@ class DonationController extends Controller
         ));
     }
 
+    // finance/donations.blade.php (main)
     public function updateDonationStatus(Donation $donation)
     {
         // Still undecided kung magdadagdag pa ng status na Decline? Rejected? Cancelled?
@@ -41,6 +43,7 @@ class DonationController extends Controller
         ]);
     }
 
+    // finance/modals/addDonationModal.blade.php (partial)
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -72,10 +75,10 @@ class DonationController extends Controller
             $extension = $file->getClientOriginalExtension();
             $newFilename = "{$sanitizedName}_{$dateString}_{$timestamp}.{$extension}";
             $receiptPath = $file->storeAs('uploads/donation_proof', $newFilename, 'public');
-        } 
+        }
         // [DonorName]_[YYYYMMDD]_[timestamp].jpg
         // JericDelaCruz_20240605_1717581234.jpg
-        
+
         Donation::create([
             'donor_name' => $validated['donor_name'] ?? null,
             'donor_email' => $validated['donor_email'] ?? null,

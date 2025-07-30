@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class HeartReactController extends Controller
 {
+    // website/view-content.blade.php (main)
     public function toggleReact($contentId)
     {
         $user = Auth::user();

@@ -11,13 +11,13 @@ use App\Models\User;
 
 class AuthController extends Controller
 {
-    // Show login & register page
+    // auth/login.blade.php (main)
     public function showLogin()
     {
         return view('auth.login');
     }
 
-    // Handle manual login
+    // auth/login.blade.php (main)
     public function login(Request $request)
     {
         $request->validate([
@@ -32,7 +32,7 @@ class AuthController extends Controller
         return back()->with('error', 'Invalid credentials');
     }
 
-    // Handle manual registration
+    // auth/register.blade.php (main)
     public function register(Request $request)
     {
         $request->validate([
@@ -51,20 +51,20 @@ class AuthController extends Controller
         return redirect()->route('dashboard');
     }
 
-    // Redirect to Google
+    // auth/login.blade.php (main)
     public function redirectToGoogle()
     {
-        
+
         // dd(config('services.google')); //checker kung loaded na yung credentials
         return Socialite::driver('google')->redirect();
     }
 
 
-    // Handle Google callback
+    // auth/login.blade.php (main)
     // Pag access blocked - ibig sabihin user are requesting a new token too soon
-    // When logging out, Google invalidates the session.  
-    // If the user tries to log in again immediately, Google may block it temporarily, thinking it's spam.  
-    // Waiting a few minutes before logging in again usually fixes the issue. 
+    // When logging out, Google invalidates the session.
+    // If the user tries to log in again immediately, Google may block it temporarily, thinking it's spam.
+    // Waiting a few minutes before logging in again usually fixes the issue.
     public function handleGoogleCallback()
     {
         try {
@@ -91,10 +91,10 @@ class AuthController extends Controller
     }
 
 
-    // Logout
+    // auth/login.blade.php (main)
     public function logout()
     {
-        
+
         Session::flush();
         Auth::logout();
         return redirect()->route('login')->with('success', 'Logged out successfully.');

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ContentCommentController extends Controller {
+    // website/view-content.blade.php (main)
     public function store(Request $request, $contentId) {
         $request->validate([
             'comment' => 'required|string|max:500',
@@ -39,6 +40,7 @@ class ContentCommentController extends Controller {
     // ═══════════════════════════════════════════════════════════════════════════════
 
 
+    // website/view-content.blade.php (main)
     public function update(Request $request, $commentId) {
         $comment = ContentComment::findOrFail($commentId);
 
@@ -57,9 +59,10 @@ class ContentCommentController extends Controller {
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    
 
 
+
+    // website/view-content.blade.php (main)
     public function destroy($commentId) {
         $comment = ContentComment::findOrFail($commentId);
 
@@ -76,9 +79,10 @@ class ContentCommentController extends Controller {
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    
 
 
+
+    // website/view-content.blade.php (main)
     public function fetchComments($contentId) {
         $comments = ContentComment::where('content_id', $contentId)->with('user')->latest()->get();
         return response()->json($comments);
