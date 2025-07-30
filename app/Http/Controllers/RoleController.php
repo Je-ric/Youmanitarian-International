@@ -203,6 +203,10 @@ class RoleController extends Controller
             // if theres changes, then proceed
             if (!empty($addedRoleIds) || !empty($removedRoleIds)) {
 
+                // collect() to convert the array to a collection
+                // mapWithKeys() to map the array to a new array with the key as the role id and the value as the assigned_by and assigned_at
+                // all() to convert the collection to an array
+                // the user_role table is a pivot, so we need to get the role id, user id, and the auth id (if who assigned it)
                 $syncData = collect($selectedRoleIds)->mapWithKeys(function ($roleId) {
                     return [$roleId => [
                         'assigned_by' => Auth::id(),
@@ -210,6 +214,7 @@ class RoleController extends Controller
                     ]];
                 })->all();
 
+                // sync() to update the user's roles in the database
                 $user->roles()->sync($syncData);
 
                 // Get role names for notification
@@ -219,6 +224,7 @@ class RoleController extends Controller
                 $user->notify(new UserRolesUpdated($addedRoleNames, $removedRoleNames));
             }
 
+            // if everything is successful, commit the changes
             DB::commit();
 
             return redirect()->back()->with('toast', [
@@ -226,7 +232,7 @@ class RoleController extends Controller
                 'type' => 'success'
             ]);
         } catch (\Exception $e) {
-            DB::rollBack();
+            DB::rollBack(); // if may error, rollback or dont save the changes
             return redirect()->back()->with('toast', [
                 'message' => 'Failed to update roles. Please try again.',
                 'type' => 'error'

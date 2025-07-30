@@ -38,6 +38,8 @@ class VolunteerApplicationController extends Controller
 
         $user = Auth::user();
 
+        // by default, set the application to pending
+        // remember that when applying, nagkakaroon kaagad ng volunteer record which means id
         $volunteer = Volunteer::updateOrCreate(
             ['user_id' => $user->id],
             [
@@ -46,8 +48,8 @@ class VolunteerApplicationController extends Controller
             ]
         );
 
-        // array_merge is just a way to combine the 
-        // user’s answers and the system’s extra info 
+        // array_merge is just a way to combine the
+        // user’s answers and the system’s extra info
         // before saving them together
         $volunteer->application()->updateOrCreate(
             ['volunteer_id' => $volunteer->id],

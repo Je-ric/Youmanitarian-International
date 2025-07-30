@@ -14,12 +14,14 @@ class VolunteerApprovalController extends Controller
     // application.blade.php
     public function approve($id)
     {
-        //Retrieve the volunteer by ID or fail with a 404 error if not found
+        // get the volunteer id, since meron na nung nag-apply
+        // optional kung gagawin (transfer application status sa volunteer_application table)
         $volunteer = Volunteer::findOrFail($id);
         $user = $volunteer->user;
 
+        // get the volunteer role
         $volunteerRole = Role::where('role_name', 'Volunteer')->first();
-        
+
         if (!$volunteerRole) {
             return redirect()->back()->with('toast', [
                 'message' => 'Volunteer role not found in the system.',
@@ -28,7 +30,6 @@ class VolunteerApprovalController extends Controller
         }
 
         // ito lang yung may try-catch because it involves multiple database operations na dapat mag-succeed lahat.
-        // 
         try {
             DB::beginTransaction();
 
@@ -88,6 +89,7 @@ class VolunteerApprovalController extends Controller
     {
         $volunteer = Volunteer::findOrFail($id);
 
+        // make sure na yung status is denied bago ma-restore again to pending
         if ($volunteer->application_status !== 'denied') {
             return redirect()->back()->with('toast', [
                 'message' => 'Only denied applications can be restored.',
