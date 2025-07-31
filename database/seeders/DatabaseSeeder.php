@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             UserSeeder::class,
-            VolunteerToMemberSeeder::class
+            VolunteerToMemberSeeder::class,
+            ProgramVolunteerSeeder::class
         ]);
     }
 }
