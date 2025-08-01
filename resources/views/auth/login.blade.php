@@ -1,171 +1,215 @@
-{{-- <x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
-
-        <x-validation-errors class="mb-4" />
-
-        @session('status')
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ $value }}
-            </div>
-        @endsession
-
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
-            </div>
-
-            <div class="block mt-4">
-                <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ms-4">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout> --}}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Register</title>
+    <title>Login & Register - Youmanitarian International</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.10/dist/full.css" rel="stylesheet">
-    {{-- <script src="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/dist/boxicons.min.js"></script> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
-
+    <style>
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .form-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        .logo-container {
+            background: linear-gradient(135deg, #1a2235 0%, #2d3748 100%);
+        }
+    </style>
 </head>
-<body class="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#1a2235]/70 to-[#ffb51b]/70">
+<body class="min-h-screen bg-gray-50">
 
-    <div class="flex bg-white shadow-xl rounded-lg overflow-hidden w-full max-w-7xl">
-        <div class="hidden md:flex md:w-1/2 justify-center items-center">
-            <img src="{{ asset('assets/images/logo/YI_Logo.png') }}" alt="Login Image" class="w-90 h-90 object-contain">
+    <div class="flex min-h-screen">
+        <!-- Left Side - Logo and Branding -->
+        <div class="hidden lg:flex lg:w-1/2 logo-container items-center justify-center">
+            <div class="text-center text-white p-8">
+                <img src="{{ asset('assets/images/logo/YI_Logo.png') }}" alt="Youmanitarian International" class="w-48 h-48 mx-auto mb-8 object-contain">
+                <h1 class="text-4xl font-bold mb-4">Youmanitarian International</h1>
+                <p class="text-xl text-gray-200 mb-6">Empowering communities through humanitarian service</p>
+                <div class="space-y-2 text-gray-300">
+                    <p class="flex items-center justify-center"><i class='bx bx-heart mr-2'></i> Compassionate Service</p>
+                    <p class="flex items-center justify-center"><i class='bx bx-group mr-2'></i> Community Building</p>
+                    <p class="flex items-center justify-center"><i class='bx bx-world mr-2'></i> Global Impact</p>
+                </div>
+            </div>
         </div>
 
-        <div class="w-full md:w-1/2 p-8 flex flex-col justify-center">
-            <h2 class="text-2xl font-bold text-center text-black">YOUMANITARIAN INTERNATIONAL</h2>
-            <p class="text-center text-gray-600">Fill out the information below to continue.</p>
+        <!-- Right Side - Authentication Forms -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
+            <div class="w-full max-w-md">
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h2>
+                    <p class="text-gray-600">Sign in to your account or create a new one</p>
+                </div>
 
-            @if (session('error'))
-                <div class="mb-4 p-3 text-red-600 bg-red-200 rounded">{{ session('error') }}</div>
-            @endif
-
-            <!-- Login Form -->
-            <div id="login-form">
-                <form method="post" action="{{ route('login') }}" class="space-y-4">
-                    @csrf
-                    <div class="form-control">
-                        <label class="label">Email Address</label>
-                        <input type="email" name="email" placeholder="Enter your email" required class="input input-bordered w-full">
+                @if (session('error'))
+                    <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div class="flex items-center">
+                            <i class='bx bx-error-circle text-red-500 mr-2'></i>
+                            <span class="text-red-700">{{ session('error') }}</span>
+                        </div>
                     </div>
-                    <div class="form-control">
-                        <label class="label">Password</label>
-                        <input type="password" name="password" placeholder="Enter your password" required class="input input-bordered w-full">
-                    </div>
-                    <button type="submit" class="btn btn-neutral w-full text-white">LOGIN</button>
-                </form>
+                @endif
 
-                <p class="mt-4 text-center">Don't have an account? 
-                    <button onclick="toggleForms()" class="text-blue-500 hover:underline">Register</button>
-                </p>
-            </div>
-
-            <!-- Register Form -->
-            <div id="register-form" class="hidden">
-                <form method="post" action="{{ route('register') }}" class="space-y-3">
-                    @csrf
-                    <div class="form-control">
-                        <label class="label">Full Name</label>
-                        <input type="text" name="name" placeholder="Full Name" required class="input input-bordered w-full">
+                @if (session('success'))
+                    <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <div class="flex items-center">
+                            <i class='bx bx-check-circle text-green-500 mr-2'></i>
+                            <span class="text-green-700">{{ session('success') }}</span>
+                        </div>
                     </div>
-                    <div class="form-control">
-                        <label class="label">Email Address</label>
-                        <input type="email" name="email" placeholder="Email" required class="input input-bordered w-full">
-                    </div>
+                @endif
 
-                    <div class="flex gap-2">
-                        <div class="form-control w-1/2 relative">
-                            <label class="label">Password</label>
-                            <div class="relative">
-                                <input type="password" name="password" id="password" placeholder="Password" required class="input input-bordered w-full pr-10">
-                                <button type="button" class="absolute inset-y-0 right-3 flex items-center text-gray-500" onclick="togglePassword('password', 'eye1')">
-                                    <i class='bx bx-show text-xl' id="eye1"></i>
-                                </button>
+                <!-- Login Form -->
+                <div id="login-form" class="glass-effect rounded-2xl p-8 shadow-xl">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-6 text-center">Sign In</h3>
+
+                    <form method="post" action="{{ route('login') }}" class="space-y-6">
+                        @csrf
+
+                        <div>
+                            <x-form.input
+                                name="email"
+                                type="email"
+                                label="Email Address"
+                                placeholder="Enter your email address"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <x-form.input
+                                name="password"
+                                type="password"
+                                label="Password"
+                                placeholder="Enter your password"
+                                required
+                            />
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="remember" class="rounded border-gray-300 text-[#1a2235] focus:ring-[#ffb51b]">
+                                <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                            </label>
+                            @if (Route::has('password.request'))
+                                <a href="{{ route('password.request') }}" class="text-sm text-[#1a2235] hover:text-[#ffb51b] transition-colors">
+                                    Forgot password?
+                                </a>
+                            @endif
+                        </div>
+
+                        <button type="submit" class="w-full bg-[#1a2235] hover:bg-[#2d3748] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center">
+                            <i class='bx bx-log-in mr-2'></i>
+                            Sign In
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600">
+                            Don't have an account?
+                            <button onclick="toggleForms()" class="text-[#1a2235] hover:text-[#ffb51b] font-semibold transition-colors">
+                                Create Account
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <div id="register-form" class="glass-effect rounded-2xl p-8 shadow-xl hidden">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-6 text-center">Create Account</h3>
+
+                    <form method="post" action="{{ route('register') }}" class="space-y-6">
+                        @csrf
+
+                        <div>
+                            <x-form.input
+                                name="name"
+                                type="name"
+                                label="Full Name"
+                                placeholder="Enter your full name"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <x-form.input
+                                name="email"
+                                type="email"
+                                label="Email Address"
+                                placeholder="Enter your email address"
+                                required
+                            />
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <x-form.input
+                                    name="password"
+                                    type="password"
+                                    label="Password"
+                                    placeholder="Create password"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <x-form.input
+                                    name="password_confirmation"
+                                    type="password"
+                                    label="Confirm Password"
+                                    placeholder="Confirm password"
+                                    required
+                                />
                             </div>
                         </div>
 
-                        <div class="form-control w-1/2 relative">
-                            <label class="label">Confirm Password</label>
-                            <div class="relative">
-                                <input type="password" name="password_confirmation" id="confirm-password" placeholder="Confirm Password" required class="input input-bordered w-full pr-10">
-                                <button type="button" class="absolute inset-y-0 right-3 flex items-center text-gray-500" onclick="togglePassword('confirm-password', 'eye2')">
-                                    <i class='bx bx-show text-xl' id="eye2"></i>
-                                </button>
-                            </div>
-                        </div>
+                        <button type="submit" class="w-full bg-[#1a2235] hover:bg-[#2d3748] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center">
+                            <i class='bx bx-user-plus mr-2'></i>
+                            Create Account
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600">
+                            Already have an account?
+                            <button onclick="toggleForms()" class="text-[#1a2235] hover:text-[#ffb51b] font-semibold transition-colors">
+                                Sign In
+                            </button>
+                        </p>
                     </div>
+                </div>
 
+                <!-- Divider -->
+                <div class="my-8 flex items-center">
+                    <div class="flex-1 border-t border-gray-300"></div>
+                    <span class="px-4 text-gray-500 text-sm">OR</span>
+                    <div class="flex-1 border-t border-gray-300"></div>
+                </div>
 
-
-                    <button type="submit" class="btn btn-neutral w-full text-white">REGISTER</button>
-                </form>
-
-                <p class="mt-4 text-center">Already have an account? 
-                    <button onclick="toggleForms()" class="text-blue-500 hover:underline">Login</button>
-                </p>
+                <!-- Google OAuth -->
+                <div class="glass-effect rounded-2xl p-6 shadow-xl">
+                    <a href="{{ route('google.login') }}" class="w-full bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-4 rounded-lg border border-gray-300 transition-colors duration-200 flex items-center justify-center">
+                        <img src="{{ asset('assets/images/icons/google-100.png') }}" alt="Google" class="w-5 h-5 mr-3">
+                        Continue with Google
+                    </a>
+                </div>
             </div>
-
-
-            <div class="divider my-6">OR</div>
-
-            <a href="{{ route('google.login') }}" class="btn btn-neutral w-full">
-                <img src="{{ asset('assets/images/icons/google-100.png') }}" class="w-6 h-6"> Continue with Google
-            </a>
-
         </div>
     </div>
 
     <script>
         function toggleForms() {
-            document.getElementById("login-form").classList.toggle("hidden");
-            document.getElementById("register-form").classList.toggle("hidden");
-        }
+            const loginForm = document.getElementById("login-form");
+            const registerForm = document.getElementById("register-form");
 
-        function togglePassword(inputId, eyeId) {
-            let input = document.getElementById(inputId);
-            let eyeIcon = document.getElementById(eyeId);
-    
-            if (input.type === "password") {
-                input.type = "text";
-                eyeIcon.classList.replace("bx-show", "bx-hide");
-            } else {
-                input.type = "password";
-                eyeIcon.classList.replace("bx-hide", "bx-show");
-            }
+            loginForm.classList.toggle("hidden");
+            registerForm.classList.toggle("hidden");
         }
     </script>
 
