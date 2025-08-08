@@ -1,6 +1,8 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
+    {{-- Im thinking about kung ididisplay pa ba title,
+    since nag-add tayo ng ajax, di mababago yung title dito --}}
     <x-page-header icon="bx-calendar-event" title="{{ $program->title }}"
         desc="View and manage program details and volunteer participation.">
         {{-- <a href="{{ route('program.chats.index', $program) }}"
