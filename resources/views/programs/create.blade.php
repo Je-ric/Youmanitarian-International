@@ -99,7 +99,7 @@
                 </div>
 
                 <div class="flex items-center justify-end space-x-4 pt-6">
-                    <button type="submit" 
+                    <button type="submit"
                             class="px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black/20 transition-colors">
                         Create Program
                     </button>

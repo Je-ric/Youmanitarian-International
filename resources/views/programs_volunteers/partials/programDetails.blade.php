@@ -10,7 +10,7 @@
                     <h1 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">Program Details</h1>
                     <p class="text-gray-600">View and manage program information</p>
                 </div>
-                
+
                 <div class="flex gap-3 w-full lg:w-auto">
                     <x-button
                         variant="primary"
@@ -21,19 +21,21 @@
                     <x-button variant="discard" type="button" id="discardBtn" class="hidden">
                         <i class='bx bx-x mr-2'></i>Discard
                     </x-button>
-                    <x-button variant="save-entry" type="submit" id="saveBtn" class="hidden">
+                    <x-button variant="save-entry" type="button" id="saveBtn" class="hidden">
                         <i class='bx bx-save mr-2'></i> Save Changes
                     </x-button>
                 </div>
             </div>
         </div>
 
+
+
         <!-- Main Content Grid -->
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-            
+
             <!-- Left Column - Main Information -->
             <div class="xl:col-span-2 space-y-6">
-                
+
                 <!-- Basic Information -->
                 <x-overview.card title="Basic Information" icon="bx-info-circle" variant="midnight-header">
                     <div class="space-y-6">
@@ -82,7 +84,7 @@
 
             <!-- Right Column - Schedule & Settings -->
             <div class="xl:col-span-1 space-y-6">
-                
+
                 <!-- Schedule -->
                 <x-overview.card title="Schedule" icon="bx-calendar" variant="elevated">
                     <div class="space-y-4">
@@ -161,7 +163,7 @@
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Last Updated:</span>
-                            <span class="text-gray-900">{{ $program->updated_at->format('M d, Y') }}</span>
+                            <span class="text-gray-900" id="lastUpdated">{{ $program->updated_at->format('M d, Y') }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Volunteers:</span>
@@ -175,11 +177,11 @@
         <!-- Footer Actions -->
         <div class="mt-8 pt-6 border-t border-gray-200">
             <div class="flex flex-col sm:flex-row gap-3 justify-between">
-                <a href="{{ route('programs.index') }}" 
+                <a href="{{ route('programs.index') }}"
                    class="inline-flex items-center justify-center px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                     <i class='bx bx-arrow-back mr-2'></i> Back to Programs
                 </a>
-                
+
                 <div class="flex gap-3">
                     <x-button
                     variant="ca"
@@ -195,47 +197,102 @@
     </form>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const editBtn = document.getElementById('editBtn');
-    const saveBtn = document.getElementById('saveBtn');
-    const discardBtn = document.getElementById('discardBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const fields = document.querySelectorAll('.program-field');
-    
-    let originalValues = {};
-    
+$(document).ready(function() {
+    const editBtn = $('#editBtn');
+    const saveBtn = $('#saveBtn');
+    const discardBtn = $('#discardBtn');
+    const cancelBtn = $('#cancelBtn');
+    const fields = $('.program-field');
+        let originalValues = {};
+
     // Store original values
-    fields.forEach(field => originalValues[field.id] = field.value);
-
-    editBtn.addEventListener('click', () => {
-        fields.forEach(field => {
-            field.removeAttribute('readonly');
-            field.classList.remove('bg-gray-50');
-            field.classList.add('bg-white');
-        });
-        
-        editBtn.classList.add('hidden');
-        saveBtn.classList.remove('hidden');
-        discardBtn.classList.remove('hidden');
-        cancelBtn.classList.remove('hidden');
+    fields.each(function() {
+        originalValues[$(this).attr('id')] = $(this).val();
     });
 
-    [discardBtn, cancelBtn].forEach(btn => {
-        btn.addEventListener('click', () => {
-            fields.forEach(field => {
-                field.value = originalValues[field.id];
-                field.setAttribute('readonly', true);
-                field.classList.add('bg-gray-50');
-                field.classList.remove('bg-white');
+    editBtn.on('click', function() {
+        fields.each(function() {
+            $(this).removeAttr('readonly');
+            $(this).removeClass('bg-gray-50').addClass('bg-white');
+        });
+
+        editBtn.addClass('hidden');
+        saveBtn.removeClass('hidden');
+        discardBtn.removeClass('hidden');
+        cancelBtn.removeClass('hidden');
+    });
+
+    // AJAX form submission
+    saveBtn.on('click', function() {
+        const formData = new FormData($('#programForm')[0]);
+
+        // Show loading state
+        saveBtn.prop('disabled', true).html('<i class="bx bx-loader-alt bx-spin mr-2"></i> Saving...');
+
+        $.ajax({
+            url: $('#programForm').attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+                        success: function(response) {
+                // Update last updated timestamp
+                $('#lastUpdated').text(new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                }));
+
+                // Store new original values
+                fields.each(function() {
+                    originalValues[$(this).attr('id')] = $(this).val();
+                });
+
+                // Reset to read-only mode
+                fields.each(function() {
+                    $(this).attr('readonly', true);
+                    $(this).removeClass('bg-white').addClass('bg-gray-50');
+                });
+
+                editBtn.removeClass('hidden');
+                saveBtn.addClass('hidden');
+                discardBtn.addClass('hidden');
+                cancelBtn.addClass('hidden');
+            },
+            error: function(xhr) {
+                // Handle any errors if needed
+            },
+            complete: function() {
+                // Reset button state
+                saveBtn.prop('disabled', false).html('<i class="bx bx-save mr-2"></i> Save Changes');
+            }
+        });
+    });
+
+    // Discard changes
+    [discardBtn, cancelBtn].forEach(function(btn) {
+        btn.on('click', function() {
+            fields.each(function() {
+                const fieldId = $(this).attr('id');
+                $(this).val(originalValues[fieldId]);
+                $(this).attr('readonly', true);
+                $(this).removeClass('bg-white').addClass('bg-gray-50');
             });
-            
-            editBtn.classList.remove('hidden');
-            saveBtn.classList.add('hidden');
-            discardBtn.classList.add('hidden');
-            cancelBtn.classList.add('hidden');
+
+            editBtn.removeClass('hidden');
+            saveBtn.addClass('hidden');
+            discardBtn.addClass('hidden');
+            cancelBtn.addClass('hidden');
+
         });
     });
+
+
 });
 </script>
 
@@ -250,6 +307,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .program-field:focus {
     outline: none;
+    border-color: #ffb51b;
+    box-shadow: 0 0 0 3px rgba(255, 181, 27, 0.1);
 }
 
 /* Responsive grid adjustments */
@@ -260,5 +319,15 @@ document.addEventListener('DOMContentLoaded', function() {
     .xl\:col-span-1 {
         grid-column: span 1;
     }
+}
+
+/* Loading animation */
+.bx-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 </style>
