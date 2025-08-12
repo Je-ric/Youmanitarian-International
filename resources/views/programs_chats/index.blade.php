@@ -22,11 +22,6 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-3">
-                                <button id="refreshChat"
-                                        class="inline-flex items-center justify-center px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg transition-all duration-200 backdrop-blur-sm">
-                                    <i class='bx bx-refresh mr-2'></i>
-                                    <span class="hidden sm:inline">Refresh</span>
-                                </button>
                                 <a href="{{ route('programs.volunteers', $program) }}"
                                    class="inline-flex items-center justify-center px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg transition-all duration-200 backdrop-blur-sm">
                                     <i class='bx bx-arrow-back mr-2'></i>
@@ -194,12 +189,8 @@
 <!-- jQuery CDN -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-<!-- Laravel Echo and compiled assets -->
-@vite(['resources/js/app.js'])
-
 <script>
 $(document).ready(function() {
-    e.preventDefault();
     console.log('🚀 jQuery loaded successfully!');
 
     // Chat Manager Object
@@ -212,7 +203,7 @@ $(document).ready(function() {
                 delete: '{{ isset($program) ? route("program.chats.destroy", [$program, ":messageId"]) : "" }}'
             },
             selectors: {
-                form: 'form[action*="program.chats.store"]',
+                form: 'form[action*="program.chats.store"], form[action*="chats"], #messageForm',
                 input: 'input[name="message"]',
                 chatMessages: '#chatMessages',
                 deleteBtn: '.chat-delete-btn'
@@ -234,10 +225,27 @@ $(document).ready(function() {
             const self = this;
 
             // Form submission
-            $(this.config.selectors.form).on('submit', function(e) {
-                e.preventDefault();
-                self.sendMessage($(this));
-            });
+            console.log('🔍 Looking for form with selector:', this.config.selectors.form);
+            const form = $(this.config.selectors.form);
+            console.log('🔍 Found form:', form.length, 'forms');
+
+            if (form.length > 0) {
+                form.on('submit', function(e) {
+                    console.log('🚀 Form submit event caught!');
+                    e.preventDefault();
+                    self.sendMessage($(this));
+                });
+            } else {
+                console.log('❌ No form found with selector:', this.config.selectors.form);
+
+                // Fallback: Catch any form submission in the chat area
+                console.log('🔄 Setting up fallback form handler');
+                $('#chatMessages').closest('.flex').find('form').on('submit', function(e) {
+                    console.log('🚀 Fallback form submit caught!');
+                    e.preventDefault();
+                    self.sendMessage($(this));
+                });
+            }
 
             // Delete message
             $(document).on('click', this.config.selectors.deleteBtn, function(e) {
@@ -251,11 +259,6 @@ $(document).ready(function() {
                     e.preventDefault();
                     self.sendMessage($(self.config.selectors.form));
                 }
-            });
-
-            // Refresh chat button
-            $('#refreshChat').on('click', function() {
-                self.refreshChat();
             });
         },
 
@@ -273,7 +276,6 @@ $(document).ready(function() {
                 return;
             }
 
-            console.log('📤 Sending message:', message);
             this.state.isSubmitting = true;
             this.setSubmitButtonState(true);
 
@@ -286,23 +288,23 @@ $(document).ready(function() {
                 },
                 dataType: 'json',
                 success: (response) => {
-                    console.log('📥 Server response:', response);
                     if (response.success && response.chat) {
-                        console.log('✅ Message sent successfully, appending to DOM');
+                        // Add message to DOM immediately (like delete does)
                         this.appendMessage(response.chat);
                         input.val('');
                         this.scrollToBottom();
                         this.showToast('Message sent successfully!', 'success');
 
-                        // Simulate real-time update for other users
-                        this.simulateRealTimeUpdate(response.chat);
+                        // Optional: Broadcast to other users via real-time
+                        // (but don't rely on it for the sender's view)
+                        if (typeof window.Echo !== 'undefined') {
+                            console.log('🔔 Broadcasting message to other users');
+                        }
                     } else {
-                        console.log('❌ Server returned error:', response.error);
                         this.showToast(response.error || 'Failed to send message', 'error');
                     }
                 },
                 error: (xhr) => {
-                    console.log('❌ AJAX error:', xhr);
                     let errorMsg = 'Network error. Please try again.';
                     if (xhr.responseJSON && xhr.responseJSON.error) {
                         errorMsg = xhr.responseJSON.error;
@@ -310,7 +312,6 @@ $(document).ready(function() {
                     this.showToast(errorMsg, 'error');
                 },
                 complete: () => {
-                    console.log('🏁 AJAX request completed');
                     this.state.isSubmitting = false;
                     this.setSubmitButtonState(false);
                 }
@@ -371,6 +372,13 @@ $(document).ready(function() {
 
         appendMessage: function(chat) {
             const isOwn = chat.sender_id == this.config.userId;
+            console.log('📝 Appending message to DOM:', {
+                message: chat.message,
+                sender: chat.sender.name,
+                isOwn: isOwn,
+                messageId: chat.id
+            });
+
             const msgDiv = $(`
                 <div class="flex gap-4 mb-6 ${isOwn ? 'flex-row-reverse' : ''}" data-message-id="${chat.id}">
                     <div class="flex-shrink-0">
@@ -412,7 +420,7 @@ $(document).ready(function() {
             `);
 
             $(this.config.selectors.chatMessages).append(msgDiv);
-            console.log('📝 Message appended to DOM:', chat.message);
+            console.log('✅ Message successfully added to DOM');
         },
 
         removeMessage: function(messageId) {
@@ -445,49 +453,30 @@ $(document).ready(function() {
             }
         },
 
-                setupRealTimeConnection: function() {
+        setupRealTimeConnection: function() {
             // Check if Laravel Echo is available
             if (typeof window.Echo !== 'undefined') {
-                try {
-                    console.log('🔔 Attempting to connect to channel: program.' + this.config.programId);
-                    console.log('🔑 Echo config:', {
-                        broadcaster: window.Echo.connector.options.broadcaster,
-                        key: window.Echo.connector.options.key,
-                        cluster: window.Echo.connector.options.cluster
-                    });
-
-                    window.Echo.channel(`program.${this.config.programId}`)
-                        .listen('NewChatMessage', (event) => {
-                            console.log('🔔 Real-time message received:', event);
+                window.Echo.channel(`program.${this.config.programId}`)
+                    .listen('NewChatMessage', (event) => {
+                        // Only handle messages from OTHER users (not the sender)
+                        if (event.chat.sender_id != this.config.userId) {
                             this.handleRealTimeMessage(event.chat);
-                        })
-                        .listen('ChatMessageDeleted', (event) => {
-                            console.log('🗑️ Real-time delete received:', event);
-                            this.handleRealTimeMessageDeleted(event.messageId);
-                        });
-                    console.log('🔔 Real-time connection established for program:', this.config.programId);
-                } catch (error) {
-                    console.error('❌ Error setting up real-time connection:', error);
-                    console.log('🔄 Falling back to simulation mode');
-                    this.simulateRealTime = true;
-                }
+                        }
+                    })
+                    .listen('ChatMessageDeleted', (event) => {
+                        this.handleRealTimeMessageDeleted(event.messageId);
+                    });
+                console.log('🔔 Real-time connection established for other users');
             } else {
                 console.log('⚠️ Laravel Echo not available - real-time disabled');
-                console.log('💡 To enable real-time: Install Laravel Echo and configure broadcasting');
-
-                // Fallback: Simulate real-time for testing
-                console.log('🔄 Using fallback real-time simulation');
-                this.simulateRealTime = true;
             }
         },
 
         handleRealTimeMessage: function(chat) {
-            // Don't append if it's our own message (already handled by AJAX)
-            if (chat.sender_id != this.config.userId) {
-                this.appendMessage(chat);
-                this.scrollToBottom();
-                this.showToast(`New message from ${chat.sender.name}`, 'info');
-            }
+            // Always append real-time messages (they come from other users)
+            this.appendMessage(chat);
+            this.scrollToBottom();
+            this.showToast(`New message from ${chat.sender.name}`, 'info');
         },
 
         handleRealTimeMessageDeleted: function(messageId) {
@@ -551,25 +540,6 @@ $(document).ready(function() {
                 info: 'text-blue-500'
             };
             return colors[type] || colors.info;
-        },
-
-        // Simulate real-time updates for testing when Laravel Echo is not available
-        simulateRealTimeUpdate: function(chat) {
-            if (this.simulateRealTime) {
-                console.log('🔄 Simulating real-time update for message:', chat.message);
-                // Simulate a delay like real-time would have
-                setTimeout(() => {
-                    this.handleRealTimeMessage(chat);
-                }, 1000); // 1 second delay to simulate network latency
-            }
-        },
-
-        // Manual refresh for when real-time is not available
-        refreshChat: function() {
-            console.log('🔄 Manual refresh requested');
-            this.showToast('Refreshing chat...', 'info');
-            // Reload the page to get fresh messages
-            window.location.reload();
         }
     };
 
