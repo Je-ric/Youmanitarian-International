@@ -22,6 +22,11 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-3">
+                                <button id="refreshChat"
+                                        class="inline-flex items-center justify-center px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg transition-all duration-200 backdrop-blur-sm">
+                                    <i class='bx bx-refresh mr-2'></i>
+                                    <span class="hidden sm:inline">Refresh</span>
+                                </button>
                                 <a href="{{ route('programs.volunteers', $program) }}"
                                    class="inline-flex items-center justify-center px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg transition-all duration-200 backdrop-blur-sm">
                                     <i class='bx bx-arrow-back mr-2'></i>
@@ -186,121 +191,400 @@
 </div>
 
 @push('scripts')
+<!-- jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<!-- Laravel Echo and compiled assets -->
+@vite(['resources/js/app.js'])
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form[action*="program.chats.store"]');
-    if (form) {
-        const input = form.querySelector('input[name="message"]');
-        const chatMessages = document.getElementById('chatMessages');
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+$(document).ready(function() {
+    e.preventDefault();
+    console.log('🚀 jQuery loaded successfully!');
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const message = input.value.trim();
-            if (!message) return;
+    // Chat Manager Object
+    const ChatManager = {
+        config: {
+            programId: {{ isset($program) ? $program->id : 'null' }},
+            userId: {{ Auth::id() }},
+            routes: {
+                store: '{{ isset($program) ? route("program.chats.store", $program) : "" }}',
+                delete: '{{ isset($program) ? route("program.chats.destroy", [$program, ":messageId"]) : "" }}'
+            },
+            selectors: {
+                form: 'form[action*="program.chats.store"]',
+                input: 'input[name="message"]',
+                chatMessages: '#chatMessages',
+                deleteBtn: '.chat-delete-btn'
+            }
+        },
 
-            fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ message })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success && data.chat) {
-                    // Append the new message to the chat
-                    const chat = data.chat;
-                    const isOwn = chat.sender_id == {{ Auth::id() }};
-                    const msgDiv = document.createElement('div');
-                    msgDiv.className = 'flex gap-4 mb-6' + (isOwn ? ' flex-row-reverse' : '');
-                    msgDiv.setAttribute('data-message-id', chat.id);
-                    msgDiv.innerHTML = `
-                        <div class="flex-shrink-0">
-                            <div class="relative">
-                                <img src="${chat.sender.profile_pic ?? '/images/default-avatar.png'}"
-                                     alt="${chat.sender.name}"
-                                     class="w-12 h-12 rounded-full border-2 border-white shadow-md">
-                                <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></div>
-                            </div>
-                        </div>
-                        <div class="flex-1 max-w-md ${isOwn ? 'text-right' : ''}">
-                            <div class="flex items-center gap-2 mb-2 ${isOwn ? 'justify-end' : 'justify-start'}">
-                                <span class="font-semibold text-[#1a2235] text-sm">${chat.sender.name}</span>
-                                <span class="text-xs text-gray-500">Just now</span>
-                            </div>
-                            <div class="relative group">
-                                <div class="p-4 rounded-2xl shadow-sm ${isOwn ? 'bg-gradient-to-br from-[#ffb51b] to-[#e6a319] text-[#1a2235]' : 'bg-white text-gray-700 border border-gray-200'}">
-                                    <p class="whitespace-pre-wrap text-sm leading-relaxed">${chat.message}</p>
-                                </div>
-                                <div class="absolute top-4 ${isOwn ? '-right-2' : '-left-2'}">
-                                    <div class="w-4 h-4 transform rotate-45 ${isOwn ? 'bg-[#ffb51b]' : 'bg-white border-l border-b border-gray-200'}"></div>
-                                </div>
-                            </div>
-                            ${isOwn ? `
-                            <div class="flex items-center gap-3 mt-2 justify-end">
-                                <button
-                                    type="button"
-                                    class="inline-flex items-center px-3 py-1 text-xs text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-all chat-delete-btn"
-                                    data-message-id="${chat.id}"
-                                    data-program-id="${chat.program_id}"
-                                >
-                                    <i class="bx bx-trash mr-1"></i>
-                                    Delete
-                                </button>
-                            </div>
-                            ` : ''}
-                        </div>
-                    `;
-                    chatMessages.appendChild(msgDiv);
-                    input.value = '';
-                    chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
-                } else {
-                    alert(data.error || 'Failed to send message.');
+        state: {
+            isSubmitting: false,
+            isDeleting: false
+        },
+
+        init: function() {
+            this.bindEvents();
+            this.setupRealTimeConnection();
+            console.log('🚀 Chat Manager initialized');
+        },
+
+        bindEvents: function() {
+            const self = this;
+
+            // Form submission
+            $(this.config.selectors.form).on('submit', function(e) {
+                e.preventDefault();
+                self.sendMessage($(this));
+            });
+
+            // Delete message
+            $(document).on('click', this.config.selectors.deleteBtn, function(e) {
+                e.preventDefault();
+                self.deleteMessage($(this));
+            });
+
+            // Keyboard shortcuts
+            $(this.config.selectors.input).on('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    self.sendMessage($(self.config.selectors.form));
                 }
-            })
-            .catch(() => alert('Network error. Please try again.'));
-        });
+            });
+
+            // Refresh chat button
+            $('#refreshChat').on('click', function() {
+                self.refreshChat();
+            });
+        },
+
+        sendMessage: function(form) {
+            if (this.state.isSubmitting) {
+                this.showToast('Please wait, message is being sent...', 'warning');
+                return;
+            }
+
+            const input = $(this.config.selectors.input);
+            const message = input.val().trim();
+
+            if (!message) {
+                this.showToast('Please enter a message', 'error');
+                return;
+            }
+
+            console.log('📤 Sending message:', message);
+            this.state.isSubmitting = true;
+            this.setSubmitButtonState(true);
+
+            $.ajax({
+                url: this.config.routes.store,
+                method: 'POST',
+                data: {
+                    message: message,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: 'json',
+                success: (response) => {
+                    console.log('📥 Server response:', response);
+                    if (response.success && response.chat) {
+                        console.log('✅ Message sent successfully, appending to DOM');
+                        this.appendMessage(response.chat);
+                        input.val('');
+                        this.scrollToBottom();
+                        this.showToast('Message sent successfully!', 'success');
+
+                        // Simulate real-time update for other users
+                        this.simulateRealTimeUpdate(response.chat);
+                    } else {
+                        console.log('❌ Server returned error:', response.error);
+                        this.showToast(response.error || 'Failed to send message', 'error');
+                    }
+                },
+                error: (xhr) => {
+                    console.log('❌ AJAX error:', xhr);
+                    let errorMsg = 'Network error. Please try again.';
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        errorMsg = xhr.responseJSON.error;
+                    }
+                    this.showToast(errorMsg, 'error');
+                },
+                complete: () => {
+                    console.log('🏁 AJAX request completed');
+                    this.state.isSubmitting = false;
+                    this.setSubmitButtonState(false);
+                }
+            });
+        },
+
+        deleteMessage: function(btn) {
+            if (this.state.isDeleting) {
+                this.showToast('Please wait, deleting message...', 'warning');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to delete this message?')) {
+                return;
+            }
+
+            const messageId = btn.data('message-id');
+            const programId = btn.data('program-id');
+
+            if (!messageId || !programId) {
+                this.showToast('Missing message information', 'error');
+                return;
+            }
+
+            this.state.isDeleting = true;
+            btn.prop('disabled', true).html('<i class="bx bx-loader-alt bx-spin mr-1"></i>Deleting...');
+
+            const deleteUrl = this.config.routes.delete.replace(':messageId', messageId);
+
+            $.ajax({
+                url: deleteUrl,
+                method: 'DELETE',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                dataType: 'json',
+                success: (response) => {
+                    if (response.success) {
+                        this.removeMessage(messageId);
+                        this.showToast('Message deleted successfully!', 'success');
+                    } else {
+                        this.showToast(response.error || 'Failed to delete message', 'error');
+                    }
+                },
+                error: (xhr) => {
+                    let errorMsg = 'Network error. Please try again.';
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        errorMsg = xhr.responseJSON.error;
+                    }
+                    this.showToast(errorMsg, 'error');
+                },
+                complete: () => {
+                    this.state.isDeleting = false;
+                    btn.prop('disabled', false).html('<i class="bx bx-trash mr-1"></i>Delete');
+                }
+            });
+        },
+
+        appendMessage: function(chat) {
+            const isOwn = chat.sender_id == this.config.userId;
+            const msgDiv = $(`
+                <div class="flex gap-4 mb-6 ${isOwn ? 'flex-row-reverse' : ''}" data-message-id="${chat.id}">
+                    <div class="flex-shrink-0">
+                        <div class="relative">
+                            <img src="${chat.sender.profile_pic || '/images/default-avatar.png'}"
+                                 alt="${chat.sender.name}"
+                                 class="w-12 h-12 rounded-full border-2 border-white shadow-md">
+                            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></div>
+                        </div>
+                    </div>
+                    <div class="flex-1 max-w-md ${isOwn ? 'text-right' : ''}">
+                        <div class="flex items-center gap-2 mb-2 ${isOwn ? 'justify-end' : 'justify-start'}">
+                            <span class="font-semibold text-[#1a2235] text-sm">${chat.sender.name}</span>
+                            <span class="text-xs text-gray-500">Just now</span>
+                        </div>
+                        <div class="relative group">
+                            <div class="p-4 rounded-2xl shadow-sm ${isOwn ? 'bg-gradient-to-br from-[#ffb51b] to-[#e6a319] text-[#1a2235]' : 'bg-white text-gray-700 border border-gray-200'}">
+                                <p class="whitespace-pre-wrap text-sm leading-relaxed">${chat.message}</p>
+                            </div>
+                            <div class="absolute top-4 ${isOwn ? '-right-2' : '-left-2'}">
+                                <div class="w-4 h-4 transform rotate-45 ${isOwn ? 'bg-[#ffb51b]' : 'bg-white border-l border-b border-gray-200'}"></div>
+                            </div>
+                        </div>
+                        ${isOwn ? `
+                        <div class="flex items-center gap-3 mt-2 justify-end">
+                            <button
+                                type="button"
+                                class="inline-flex items-center px-3 py-1 text-xs text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-all chat-delete-btn"
+                                data-message-id="${chat.id}"
+                                data-program-id="${chat.program_id}"
+                            >
+                                <i class="bx bx-trash mr-1"></i>
+                                Delete
+                            </button>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `);
+
+            $(this.config.selectors.chatMessages).append(msgDiv);
+            console.log('📝 Message appended to DOM:', chat.message);
+        },
+
+        removeMessage: function(messageId) {
+            $(`[data-message-id="${messageId}"]`).fadeOut(300, function() {
+                $(this).remove();
+            });
+        },
+
+        scrollToBottom: function() {
+            const chatMessages = $(this.config.selectors.chatMessages);
+            chatMessages.animate({
+                scrollTop: chatMessages[0].scrollHeight
+            }, 500);
+        },
+
+        setSubmitButtonState: function(isLoading) {
+            const submitBtn = $(this.config.selectors.form).find('button[type="submit"]');
+            const input = $(this.config.selectors.input);
+
+            if (isLoading) {
+                submitBtn.prop('disabled', true)
+                    .html('<i class="bx bx-loader-alt bx-spin text-xl"></i>')
+                    .addClass('opacity-75');
+                input.prop('disabled', true);
+            } else {
+                submitBtn.prop('disabled', false)
+                    .html('<i class="bx bx-send text-xl"></i>')
+                    .removeClass('opacity-75');
+                input.prop('disabled', false);
+            }
+        },
+
+                setupRealTimeConnection: function() {
+            // Check if Laravel Echo is available
+            if (typeof window.Echo !== 'undefined') {
+                try {
+                    console.log('🔔 Attempting to connect to channel: program.' + this.config.programId);
+                    console.log('🔑 Echo config:', {
+                        broadcaster: window.Echo.connector.options.broadcaster,
+                        key: window.Echo.connector.options.key,
+                        cluster: window.Echo.connector.options.cluster
+                    });
+
+                    window.Echo.channel(`program.${this.config.programId}`)
+                        .listen('NewChatMessage', (event) => {
+                            console.log('🔔 Real-time message received:', event);
+                            this.handleRealTimeMessage(event.chat);
+                        })
+                        .listen('ChatMessageDeleted', (event) => {
+                            console.log('🗑️ Real-time delete received:', event);
+                            this.handleRealTimeMessageDeleted(event.messageId);
+                        });
+                    console.log('🔔 Real-time connection established for program:', this.config.programId);
+                } catch (error) {
+                    console.error('❌ Error setting up real-time connection:', error);
+                    console.log('🔄 Falling back to simulation mode');
+                    this.simulateRealTime = true;
+                }
+            } else {
+                console.log('⚠️ Laravel Echo not available - real-time disabled');
+                console.log('💡 To enable real-time: Install Laravel Echo and configure broadcasting');
+
+                // Fallback: Simulate real-time for testing
+                console.log('🔄 Using fallback real-time simulation');
+                this.simulateRealTime = true;
+            }
+        },
+
+        handleRealTimeMessage: function(chat) {
+            // Don't append if it's our own message (already handled by AJAX)
+            if (chat.sender_id != this.config.userId) {
+                this.appendMessage(chat);
+                this.scrollToBottom();
+                this.showToast(`New message from ${chat.sender.name}`, 'info');
+            }
+        },
+
+        handleRealTimeMessageDeleted: function(messageId) {
+            this.removeMessage(messageId);
+        },
+
+        showToast: function(message, type = 'info') {
+            // Create toast element
+            const toast = $(`
+                <div class="fixed top-4 right-4 z-50 max-w-sm w-full bg-white border border-gray-200 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full">
+                    <div class="flex items-center p-4">
+                        <div class="flex-shrink-0">
+                            <i class="bx ${this.getToastIcon(type)} text-xl ${this.getToastColor(type)}"></i>
+                        </div>
+                        <div class="ml-3 flex-1">
+                            <p class="text-sm font-medium text-gray-900">${message}</p>
+                        </div>
+                        <div class="ml-4 flex-shrink-0">
+                            <button type="button" class="text-gray-400 hover:text-gray-600">
+                                <i class="bx bx-x text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+            // Add to page
+            $('body').append(toast);
+
+            // Show toast
+            setTimeout(() => toast.removeClass('translate-x-full'), 100);
+
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                toast.addClass('translate-x-full');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+
+            // Close button functionality
+            toast.find('button').on('click', function() {
+                toast.addClass('translate-x-full');
+                setTimeout(() => toast.remove(), 300);
+            });
+        },
+
+        getToastIcon: function(type) {
+            const icons = {
+                success: 'bx-check-circle',
+                error: 'bx-x-circle',
+                warning: 'bx-error',
+                info: 'bx-info-circle'
+            };
+            return icons[type] || icons.info;
+        },
+
+        getToastColor: function(type) {
+            const colors = {
+                success: 'text-green-500',
+                error: 'text-red-500',
+                warning: 'text-yellow-500',
+                info: 'text-blue-500'
+            };
+            return colors[type] || colors.info;
+        },
+
+        // Simulate real-time updates for testing when Laravel Echo is not available
+        simulateRealTimeUpdate: function(chat) {
+            if (this.simulateRealTime) {
+                console.log('🔄 Simulating real-time update for message:', chat.message);
+                // Simulate a delay like real-time would have
+                setTimeout(() => {
+                    this.handleRealTimeMessage(chat);
+                }, 1000); // 1 second delay to simulate network latency
+            }
+        },
+
+        // Manual refresh for when real-time is not available
+        refreshChat: function() {
+            console.log('🔄 Manual refresh requested');
+            this.showToast('Refreshing chat...', 'info');
+            // Reload the page to get fresh messages
+            window.location.reload();
+        }
+    };
+
+    // Initialize Chat Manager
+    if (ChatManager.config.programId) {
+        ChatManager.init();
     }
 
-    document.addEventListener('click', function (e) {
-    const btn = e.target.closest('.chat-delete-btn');
-    if (!btn) return;
-
-    const messageId = btn.getAttribute('data-message-id');
-    const programId = btn.getAttribute('data-program-id');
-
-    if (!messageId || !programId) {
-        alert('Missing messageId or programId!');
-        return;
+    // Test CSRF token
+    const csrfToken = $('meta[name="csrf-token"]').attr('content');
+    if (csrfToken) {
+        console.log('✅ CSRF token found:', csrfToken.substring(0, 20) + '...');
+    } else {
+        console.log('❌ CSRF token not found!');
     }
-
-    if (!confirm('Delete this message?')) return;
-
-    const deleteUrl = `/programs/${programId}/chats/${messageId}`;
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-
-    fetch(deleteUrl, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': csrfToken,
-            'Accept': 'application/json'
-        }
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            const msgDiv = btn.closest('[data-message-id]');
-            if (msgDiv) msgDiv.remove();
-        } else {
-            alert(data.error || 'Failed to delete message.');
-        }
-    })
-    .catch(() => alert('Network error. Please try again.'));
-});
-
 });
 </script>
 @endpush

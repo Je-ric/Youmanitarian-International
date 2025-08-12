@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\ProgramChat;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,18 +10,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewChatMessage implements ShouldBroadcast
+class ChatMessageDeleted implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $chat;
+    public $messageId;
+    public $programId;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(ProgramChat $chat)
+    public function __construct($messageId, $programId)
     {
-        $this->chat = $chat;
+        $this->messageId = $messageId;
+        $this->programId = $programId;
     }
 
     /**
@@ -33,7 +34,7 @@ class NewChatMessage implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('program.' . $this->chat->program_id),
+            new Channel('program.' . $this->programId),
         ];
     }
 
@@ -43,7 +44,8 @@ class NewChatMessage implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'chat' => $this->chat->load('sender:id,name,profile_pic'),
+            'messageId' => $this->messageId,
+            'programId' => $this->programId,
         ];
     }
 }

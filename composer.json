@@ -17,7 +17,7 @@
         "laravel/socialite": "^5.18",
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "^3.0",
-        "pusher/pusher-php-server": "*",
+        "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-permission": "^6.19",
         "vlucas/phpdotenv": "*"
     },

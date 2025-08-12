@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Program;
 use App\Models\ProgramChat;
+use App\Events\NewChatMessage;
+use App\Events\ChatMessageDeleted;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -52,6 +54,9 @@ class ProgramChatController extends Controller
 
         $message->load('sender:id,name,profile_pic');
 
+        // Broadcast the new message to all users in the program
+        broadcast(new NewChatMessage($message))->toOthers();
+
         if ($request->ajax()) {
             $deleteUrl = route('program.chats.destroy', [$program, $message]);
             return response()->json(['success' => true, 'chat' => $message, 'delete_url' => $deleteUrl]);
@@ -77,10 +82,19 @@ class ProgramChatController extends Controller
         // soft delete means it can be restored
         // $chat->forceDelete(); // delete the message from the db
 
+        // Broadcast the message deletion to all users in the program
+        broadcast(new ChatMessageDeleted($chat->id, $chat->program_id))->toOthers();
+
         return response()->json(['success' => true, 'chat_id' => $chat->id]);
     }
 
 
+
+    // AJAX Test Method
+    public function testAjax()
+    {
+        return view('programs_chats.test-ajax');
+    }
 
     // --- Helper methods ---
     private function getUserPrograms()
