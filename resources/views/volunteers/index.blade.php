@@ -176,9 +176,9 @@
                                                 </x-button>
 
                                             @if($volunteer->user && $volunteer->user->member)
-                                                {{-- <x-button variant="disabled" class="tooltip" data-tip="Already a member" disabled>
+                                                <x-button variant="disabled" class="tooltip" data-tip="Already a member" disabled>
                                                     <i class='bx bx-user-check'></i>
-                                                </x-button> --}}
+                                                </x-button>
                                             @else
                                                 <x-button
                                                     variant="table-action-manage"
