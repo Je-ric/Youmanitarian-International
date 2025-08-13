@@ -1,21 +1,23 @@
 @props([
-    'tabs' => [], 
+    'tabs' => [],
     'defaultTab' => null,
     'preserveState' => true,
-    'class' => '', 
+    'class' => '',
 ])
 
 @php
     $tabIds = collect($tabs)->pluck('id')->toArray();
 @endphp
 
-<div x-data="{ 
+<div x-data="{
     activeTab: new URLSearchParams(window.location.search).get('tab') || '{{ $defaultTab }}',
     setTab(tab) {
         this.activeTab = tab;
         @if($preserveState)
             const url = new URL(window.location);
             url.searchParams.set('tab', tab);
+            // Reset pagination when switching tabs
+            url.searchParams.delete('page');
             window.history.pushState({}, '', url);
         @endif
     }
@@ -38,7 +40,7 @@
             @endforeach
         </nav>
     </div>
-    
+
     {{-- still undecided kung may bg --}}
     <div class="mx-auto bg-[#F8F8FF] px-2 sm:px-4 md:px-6 py-4 sm:py-6">
         @foreach($tabIds as $tabId)
@@ -79,4 +81,4 @@ Used in:
 - resources/views/finance/membership_payments.blade.php
 - resources/views/finance/donations.blade.php
 - resources/views/components/showcase.blade.php
---}} 
+--}}

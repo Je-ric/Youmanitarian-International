@@ -15,15 +15,21 @@ use Illuminate\Support\Facades\Auth;
 class MembershipController extends Controller
 {
     // finance/membership_payments.blade.php (main)
-    public function index()
+    public function index(Request $request)
     {
+        // Get the current tab from the request
+        $currentTab = $request->get('tab', 'overview');
+
+        // Get the page number for the current tab
+        $page = $request->get('page', 1);
+
         $fullPledgeMembers = Member::with(['user', 'payments' => function($query) {
             $query->where('payment_year', now()->year);
         }])
         ->where('membership_status', 'active')
         ->where('membership_type', 'full_pledge')
         ->orderBy('created_at', 'desc')
-        ->paginate(10, ['*'], 'full_pledge_page');
+        ->paginate(10, ['*'], 'full_pledge_page', $currentTab === 'full_pledge' ? $page : 1);
 
         $honoraryMembers = Member::with(['user', 'payments' => function($query) {
             $query->where('payment_year', now()->year);
@@ -31,7 +37,7 @@ class MembershipController extends Controller
         ->where('membership_status', 'active')
         ->where('membership_type', 'honorary')
         ->orderBy('created_at', 'desc')
-        ->paginate(10, ['*'], 'honorary_page');
+        ->paginate(10, ['*'], 'honorary_page', $currentTab === 'honorary' ? $page : 1);
 
         $totalMembers = Member::count();
         $activeMembers = Member::where('membership_status', 'active')->count();

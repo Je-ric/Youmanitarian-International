@@ -256,7 +256,7 @@ $(document).ready(function() {
             // Keyboard shortcuts
             $(this.config.selectors.input).on('keydown', function(e) {
                 if (e.ctrlKey && e.key === 'Enter') {
-                    e.preventDefault();
+            e.preventDefault();
                     self.sendMessage($(self.config.selectors.form));
                 }
             });
@@ -381,41 +381,41 @@ $(document).ready(function() {
 
             const msgDiv = $(`
                 <div class="flex gap-4 mb-6 ${isOwn ? 'flex-row-reverse' : ''}" data-message-id="${chat.id}">
-                    <div class="flex-shrink-0">
-                        <div class="relative">
+                        <div class="flex-shrink-0">
+                            <div class="relative">
                             <img src="${chat.sender.profile_pic || '/images/default-avatar.png'}"
-                                 alt="${chat.sender.name}"
-                                 class="w-12 h-12 rounded-full border-2 border-white shadow-md">
-                            <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></div>
-                        </div>
-                    </div>
-                    <div class="flex-1 max-w-md ${isOwn ? 'text-right' : ''}">
-                        <div class="flex items-center gap-2 mb-2 ${isOwn ? 'justify-end' : 'justify-start'}">
-                            <span class="font-semibold text-[#1a2235] text-sm">${chat.sender.name}</span>
-                            <span class="text-xs text-gray-500">Just now</span>
-                        </div>
-                        <div class="relative group">
-                            <div class="p-4 rounded-2xl shadow-sm ${isOwn ? 'bg-gradient-to-br from-[#ffb51b] to-[#e6a319] text-[#1a2235]' : 'bg-white text-gray-700 border border-gray-200'}">
-                                <p class="whitespace-pre-wrap text-sm leading-relaxed">${chat.message}</p>
-                            </div>
-                            <div class="absolute top-4 ${isOwn ? '-right-2' : '-left-2'}">
-                                <div class="w-4 h-4 transform rotate-45 ${isOwn ? 'bg-[#ffb51b]' : 'bg-white border-l border-b border-gray-200'}"></div>
+                                     alt="${chat.sender.name}"
+                                     class="w-12 h-12 rounded-full border-2 border-white shadow-md">
+                                <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></div>
                             </div>
                         </div>
-                        ${isOwn ? `
-                        <div class="flex items-center gap-3 mt-2 justify-end">
-                            <button
-                                type="button"
-                                class="inline-flex items-center px-3 py-1 text-xs text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-all chat-delete-btn"
-                                data-message-id="${chat.id}"
-                                data-program-id="${chat.program_id}"
-                            >
-                                <i class="bx bx-trash mr-1"></i>
-                                Delete
-                            </button>
+                        <div class="flex-1 max-w-md ${isOwn ? 'text-right' : ''}">
+                            <div class="flex items-center gap-2 mb-2 ${isOwn ? 'justify-end' : 'justify-start'}">
+                                <span class="font-semibold text-[#1a2235] text-sm">${chat.sender.name}</span>
+                                <span class="text-xs text-gray-500">Just now</span>
+                            </div>
+                            <div class="relative group">
+                                <div class="p-4 rounded-2xl shadow-sm ${isOwn ? 'bg-gradient-to-br from-[#ffb51b] to-[#e6a319] text-[#1a2235]' : 'bg-white text-gray-700 border border-gray-200'}">
+                                    <p class="whitespace-pre-wrap text-sm leading-relaxed">${chat.message}</p>
+                                </div>
+                                <div class="absolute top-4 ${isOwn ? '-right-2' : '-left-2'}">
+                                    <div class="w-4 h-4 transform rotate-45 ${isOwn ? 'bg-[#ffb51b]' : 'bg-white border-l border-b border-gray-200'}"></div>
+                                </div>
+                            </div>
+                            ${isOwn ? `
+                            <div class="flex items-center gap-3 mt-2 justify-end">
+                                <button
+                                    type="button"
+                                    class="inline-flex items-center px-3 py-1 text-xs text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-all chat-delete-btn"
+                                    data-message-id="${chat.id}"
+                                    data-program-id="${chat.program_id}"
+                                >
+                                    <i class="bx bx-trash mr-1"></i>
+                                    Delete
+                                </button>
+                            </div>
+                            ` : ''}
                         </div>
-                        ` : ''}
-                    </div>
                 </div>
             `);
 
@@ -445,7 +445,7 @@ $(document).ready(function() {
                     .html('<i class="bx bx-loader-alt bx-spin text-xl"></i>')
                     .addClass('opacity-75');
                 input.prop('disabled', true);
-            } else {
+                } else {
                 submitBtn.prop('disabled', false)
                     .html('<i class="bx bx-send text-xl"></i>')
                     .removeClass('opacity-75');
@@ -552,9 +552,9 @@ $(document).ready(function() {
     const csrfToken = $('meta[name="csrf-token"]').attr('content');
     if (csrfToken) {
         console.log('✅ CSRF token found:', csrfToken.substring(0, 20) + '...');
-    } else {
+        } else {
         console.log('❌ CSRF token not found!');
-    }
+        }
 });
 </script>
 @endpush

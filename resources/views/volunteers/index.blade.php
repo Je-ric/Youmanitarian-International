@@ -51,7 +51,7 @@
                         <x-table.tbody>
                                 @foreach($applications as $volunteer)
                                 <x-table.tr>
-                                    <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration }}</x-table.td>
+                                    <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration + ($applications->currentPage() - 1) * $applications->perPage() }}</x-table.td>
                                     <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name }}</x-table.td>
                                     <x-table.td>{{ $volunteer->user->email }}</x-table.td>
                                     <x-table.td>
@@ -113,7 +113,7 @@
                         <x-table.tbody>
                                 @foreach($deniedApplications as $volunteer)
                                 <x-table.tr>
-                                    <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration }}</x-table.td>
+                                    <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration + ($deniedApplications->currentPage() - 1) * $deniedApplications->perPage() }}</x-table.td>
                                     <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name }}</x-table.td>
                                     <x-table.td>{{ $volunteer->user->email }}</x-table.td>
                                     <x-table.td>
@@ -165,7 +165,7 @@
                         <x-table.tbody>
                                 @foreach($approvedVolunteers as $volunteer)
                                 <x-table.tr>
-                                    <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration }}</x-table.td>
+                                    <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration + ($approvedVolunteers->currentPage() - 1) * $approvedVolunteers->perPage() }}</x-table.td>
                                     <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name ?? 'N/A' }}</x-table.td>
                                     <x-table.td>{{ $volunteer->user->email ?? 'N/A' }}</x-table.td>
                                     <x-table.td>{{ $volunteer->created_at->format('M d, Y') }}</x-table.td>

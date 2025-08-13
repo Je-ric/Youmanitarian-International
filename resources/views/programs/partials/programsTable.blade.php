@@ -84,7 +84,9 @@
         </x-table.tbody>
     </x-table.table>
 
-    <div class="mt-6">
-        {{ $programs->appends(['tab' => $tab ?? ''])->links() }}
-    </div>
+    @if($programs->hasPages())
+        <div class="mt-6">
+            {{ $programs->appends(['tab' => $tab ?? ''])->links() }}
+        </div>
+    @endif
 @endif

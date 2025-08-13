@@ -25,16 +25,19 @@ class MemberController extends Controller
     {
         $tab = $request->input('tab', 'overview');
 
+        // Get the page number for the current tab
+        $page = $request->get('page', 1);
+
         $members = Member::with(['user', 'volunteer'])
             ->where('membership_status', 'active')
             ->latest()
-            ->paginate(10, ['*'], 'overview_page');
+            ->paginate(10, ['*'], 'overview_page', $tab === 'overview' ? $page : 1);
 
         $fullPledgeMembers = Member::with(['user', 'volunteer'])
             ->where('membership_type', 'full_pledge')
             ->where('membership_status', 'active')
             ->latest()
-            ->paginate(10, ['*'], 'full_pledge_page');
+            ->paginate(10, ['*'], 'full_pledge_page', $tab === 'full_pledge' ? $page : 1);
 
         // dd($fullPledgeMembers);
         // dd($fullPledgeMembers->pluck('invitation_status'));
@@ -43,12 +46,12 @@ class MemberController extends Controller
             ->where('membership_type', 'honorary')
             ->where('membership_status', 'active')
             ->latest()
-            ->paginate(10, ['*'], 'honorary_page');
+            ->paginate(10, ['*'], 'honorary_page', $tab === 'honorary' ? $page : 1);
 
         $pendingMembers = Member::with(['user', 'volunteer'])
             ->where('invitation_status', 'pending')
             ->latest()
-            ->paginate(10, ['*'], 'pending_page');
+            ->paginate(10, ['*'], 'pending_page', $tab === 'pending' ? $page : 1);
 
         $totalMembersCount = Member::count();
         $activeMembersCount = Member::where('membership_status', 'active')->count();

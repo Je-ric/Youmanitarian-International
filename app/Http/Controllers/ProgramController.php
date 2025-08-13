@@ -30,12 +30,18 @@ class ProgramController extends Controller
             return redirect()->route('login');
         }
 
-        $allPrograms = Program::orderBy('date', 'desc')->paginate(10);
+        // Get the current tab from the request
+        $currentTab = $request->get('tab', 'all');
+
+        // Get the page number for the current tab
+        $page = $request->get('page', 1);
+
+        $allPrograms = Program::orderBy('date', 'desc')->paginate(10, ['*'], 'page', $currentTab === 'all' ? $page : 1);
 
         // create empty collections para sa joined at created programs
         // purpose nito ay ipakita ang empty state kung wala naman talagang laman
-        $joinedPrograms = Program::where('id', 0) ->paginate(10);
-        $myPrograms = Program::where('id', 0)->paginate(10);
+        $joinedPrograms = Program::where('id', 0)->paginate(10, ['*'], 'page', $currentTab === 'joined' ? $page : 1);
+        $myPrograms = Program::where('id', 0)->paginate(10, ['*'], 'page', $currentTab === 'my' ? $page : 1);
 
         // if user is a volunteer and has a volunteer record
         // get all programs na sinalihan ng volunteer
@@ -44,7 +50,7 @@ class ProgramController extends Controller
             $joinedPrograms = Program::whereHas('volunteers', function ($query) use ($user) {
                 $query->where('volunteers.id', $user->volunteer->id)  // volunteer id from the user
                     ->where('program_volunteers.status', 'approved');
-            })->orderBy('date', 'desc')->paginate(10);
+            })->orderBy('date', 'desc')->paginate(10, ['*'], 'page', $currentTab === 'joined' ? $page : 1);
         }
 
         // since coordinator and admin lang yung may access sa create program
@@ -53,7 +59,7 @@ class ProgramController extends Controller
         if ($user->hasRole('Program Coordinator') || $user->hasRole('Admin')) {
             $myPrograms = Program::where('created_by', $user->id)
                 ->orderBy('date', 'desc')
-                ->paginate(10);
+                ->paginate(10, ['*'], 'page', $currentTab === 'my' ? $page : 1);
         }
 
         return view('programs.index',
