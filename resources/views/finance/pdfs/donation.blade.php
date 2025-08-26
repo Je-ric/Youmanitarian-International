@@ -5,64 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donation Receipt - {{ $donation->donor_name ?? 'Anonymous' }}</title>
     <style>
+        /* --- PDF Page Setup --- */
+        @page {
+            size: A4 portrait; /* Paper size (A4), orientation portrait */
+            margin: 25mm;      /* Standard margins for readability */
+        }
+
         body {
             font-family: 'DejaVu Sans', Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             color: #333;
-            line-height: 1.6;
+            line-height: 1.5;
+            font-size: 12px; /* Slightly smaller for fitting long content */
         }
+
+        /* --- Header Section --- */
         .header {
             text-align: center;
             border-bottom: 2px solid #1a2235;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
         }
         .organization-name {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1a2235;
-            margin-bottom: 5px;
-        }
-        .organization-subtitle {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-        .receipt-title {
             font-size: 20px;
             font-weight: bold;
             color: #1a2235;
-            margin-bottom: 30px;
+            margin-bottom: 3px;
         }
+        .organization-subtitle {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .receipt-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a2235;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* --- Donation Details Section --- */
         .donation-details {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         .detail-row {
             display: flex;
-            margin-bottom: 15px;
+            justify-content: flex-start;
+            margin-bottom: 10px;
             border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            padding-bottom: 6px;
+            page-break-inside: avoid; /* Prevent detail row from splitting across pages */
         }
         .detail-label {
             font-weight: bold;
-            width: 150px;
+            width: 140px; /* Fixed width for labels */
             color: #1a2235;
+            font-size: 12px;
         }
         .detail-value {
             flex: 1;
             color: #333;
+            font-size: 12px;
         }
+
+        /* --- Special Styling --- */
         .amount-highlight {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: bold;
             color: #059669;
         }
         .status-badge {
             display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
             font-weight: bold;
             text-transform: uppercase;
         }
@@ -74,23 +92,40 @@
             background-color: #fef3c7;
             color: #92400e;
         }
+
+        /* --- Footer Section --- */
         .footer {
-            margin-top: 50px;
-            padding-top: 20px;
+            margin-top: 40px;
+            padding-top: 15px;
             border-top: 1px solid #eee;
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             color: #666;
         }
         .generated-info {
-            margin-top: 20px;
-            font-size: 11px;
+            margin-top: 15px;
+            font-size: 10px;
             color: #999;
             text-align: right;
+        }
+
+        /* --- Image Styling --- */
+        img.receipt-image {
+            max-width: 180px;   /* Keep image small to fit nicely */
+            max-height: 180px;
+            object-fit: contain; /* Maintain aspect ratio */
+            border: 1px solid #ccc;
+            padding: 3px;
+        }
+
+        /* --- Page Break Handling --- */
+        .page-break {
+            page-break-before: always; /* Manual page breaks if needed */
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <div class="header">
         <div class="organization-name">{{ $organization }}</div>
         <div class="organization-subtitle">Empowering Communities Through Humanitarian Aid</div>
@@ -98,6 +133,7 @@
 
     <div class="receipt-title">Donation Receipt</div>
 
+    <!-- Donation Details -->
     <div class="donation-details">
         <div class="detail-row">
             <div class="detail-label">Donor Name:</div>
@@ -171,9 +207,10 @@
                     $absolutePath = public_path('storage/' . $donation->receipt_url);
                 @endphp
                 @if(file_exists($absolutePath))
+                {{-- new --}}
                     <img src="{{ $absolutePath }}"
-                         alt="Donation Receipt"
-                         style="max-width: 200px; max-height: 200px; object-fit: contain;">
+                        alt="Donation Receipt"
+                        class="receipt-image">
                 @else
                     <span>Receipt file not found.</span>
                 @endif
@@ -182,6 +219,7 @@
         @endif
     </div>
 
+    <!-- Footer -->
     <div class="footer">
         <p>Thank you for your generous donation!</p>
         <p>Your contribution helps us continue our mission of providing humanitarian aid and support to communities in need.</p>

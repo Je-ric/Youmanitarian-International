@@ -172,7 +172,8 @@ class DonationController extends Controller
                 'Notes',
                 'Recorded By',
                 'Confirmed At',
-                'Created At'
+                'Created At',
+                'Receipt URL'
             ]);
 
             // Data
@@ -188,7 +189,8 @@ class DonationController extends Controller
                 $donation->notes ?? 'N/A',
                 $donation->recorder->name ?? 'Unknown',
                 $donation->confirmed_at ? $donation->confirmed_at->format('Y-m-d H:i:s') : 'N/A',
-                $donation->created_at->format('Y-m-d H:i:s')
+                $donation->created_at->format('Y-m-d H:i:s'),
+                $donation->receipt_url ? url(\Illuminate\Support\Facades\Storage::url($donation->receipt_url)) : 'N/A'
             ]);
 
             fclose($file);
