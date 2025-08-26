@@ -78,12 +78,11 @@
                                             PDF
                                         </a>
                                         @if($donation->status === 'Pending')
-                                            <form action="{{ route('finance.donations.status', $donation) }}" method="POST"
-                                                class="inline">
-                                                @csrf
-                                                @method('PATCH')
-                                                <x-button type="submit" variant="table-action-manage">Confirm</x-button>
-                                            </form>
+                                            <x-button
+                                                variant="table-action-manage"
+                                                onclick="document.getElementById('confirmDonationModal-{{ $donation->id }}').showModal()">
+                                                Confirm
+                                            </x-button>
                                         @endif
                                     </div>
                                 </x-table.td>
@@ -119,6 +118,11 @@
             'modalId' => 'viewDonationModal-' . $donation->id,
             'donation' => $donation
         ])
+        @if($donation->status === 'Pending')
+            @include('finance.modals.confirmDonationModal', [
+                'donation' => $donation
+            ])
+        @endif
     @endforeach
 
     {{-- Download Options Modal --}}
