@@ -179,7 +179,7 @@
                     </span>
                 </td>
                 <td>{{ $donation->is_anonymous ? 'Yes' : 'No' }}</td>
-                <td>{{ Str::limit($donation->notes ?? 'N/A', 30) }}</td>
+                <td>{{ \Illuminate\Support\Str::limit($donation->notes ?? 'N/A', 30) }}</td>
                 <td>{{ $donation->recorder->name ?? 'Unknown' }}</td>
             </tr>
             @endforeach

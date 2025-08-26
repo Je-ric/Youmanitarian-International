@@ -36,6 +36,7 @@ class DonationController extends Controller
     {
         // Still undecided kung magdadagdag pa ng status na Decline? Rejected? Cancelled?
         // Ang purpose lang naman kase pag confirm is indicator na talagang nareceived na yung donation.
+        // Kaya most probably hindi na need ng iba...
         $donation->update([
             'status' => 'Confirmed',
             'confirmed_at' => now(),
@@ -47,6 +48,9 @@ class DonationController extends Controller
         ]);
     }
 
+    // ╔═══════════════════════════════════════════════════════════════════════╗
+    //  Store Donation
+    // ╚═══════════════════════════════════════════════════════════════════════╝
     // finance/modals/addDonationModal.blade.php (partial)
     public function store(Request $request)
     {
@@ -100,7 +104,7 @@ class DonationController extends Controller
             'recorded_by' => Auth::id(), // wala munang confirmed_at (its in the updateDonationStatus)
             'is_anonymous' => $request->boolean('is_anonymous', false),
             'notes' => $validated['notes'] ?? null,
-        ]);// Pending status are donations that have been reported/entered not yet verified or received.
+        ]); // Pending status are donations that have been reported/entered not yet verified or received.
 
         return redirect()->route('finance.index')->with('toast', [
             'message' => 'Donation added successfully!',
@@ -108,55 +112,70 @@ class DonationController extends Controller
         ]);
     }
 
-    /**
-     * Download specific donation as PDF
-     */
-    public function downloadSpecificDonation(Donation $donation)
+
+    // ╔═══════════════════════════════════════════════════════════════════════╗
+    //  Download specific donation (PDF or CSV)
+    // ╚═══════════════════════════════════════════════════════════════════════╝
+
+    public function downloadSpecificDonation(Request $request, Donation $donation)
     {
-        try {
-            $data = [
-                'donation' => $donation,
-                'recorder' => $donation->recorder,
-                'organization' => 'Youmanitarian International',
-                'generated_at' => now()->format('F j, Y h:i A'),
-            ];
+        $format = $request->get('format', 'pdf'); // default PDF
 
-            $pdf = Pdf::loadView('finance.pdfs.donation', $data);
-
-            $filename = 'donation_' . ($donation->donor_name ?? 'anonymous') . '_' .
-                       $donation->donation_date->format('Y-m-d') . '.pdf';
-
-            return $pdf->download($filename);
-        } catch (\Exception $e) {
-            // Fallback to CSV if PDF generation fails
+        if ($format === 'csv') {
             return $this->downloadSpecificDonationAsCSV($donation);
         }
+        // if ($format === 'pdf'){}
+
+        return $this->downloadSpecificDonationAsPDF($donation);
     }
 
-    /**
-     * Download specific donation as CSV (fallback)
-     */
+    private function downloadSpecificDonationAsPDF(Donation $donation)
+    {
+        $data = [
+            'donation' => $donation,
+            'recorder' => $donation->recorder,
+            'organization' => 'Youmanitarian International',
+            'generated_at' => now()->format('F j, Y h:i A'),
+        ];
+
+        $pdf = Pdf::loadView('finance.pdfs.donation', $data);
+
+        $filename = 'donation_' . ($donation->donor_name ?? 'anonymous') . '_' .
+            $donation->donation_date->format('Y-m-d') . '.pdf';
+
+        return $pdf->download($filename);
+    }
+
     private function downloadSpecificDonationAsCSV(Donation $donation)
     {
         $filename = 'donation_' . ($donation->donor_name ?? 'anonymous') . '_' .
-                   $donation->donation_date->format('Y-m-d') . '.csv';
+            $donation->donation_date->format('Y-m-d') . '.csv';
 
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ];
 
-        $callback = function() use ($donation) {
+        $callback = function () use ($donation) {
             $file = fopen('php://output', 'w');
 
-            // CSV Headers
+            // Headers
             fputcsv($file, [
-                'ID', 'Donor Name', 'Donor Email', 'Amount', 'Payment Method',
-                'Donation Date', 'Status', 'Anonymous', 'Notes', 'Recorded By',
-                'Confirmed At', 'Created At'
+                'ID',
+                'Donor Name',
+                'Donor Email',
+                'Amount',
+                'Payment Method',
+                'Donation Date',
+                'Status',
+                'Anonymous',
+                'Notes',
+                'Recorded By',
+                'Confirmed At',
+                'Created At'
             ]);
 
-            // CSV Data
+            // Data
             fputcsv($file, [
                 $donation->id,
                 $donation->is_anonymous ? 'Anonymous' : ($donation->donor_name ?? 'N/A'),
@@ -178,12 +197,13 @@ class DonationController extends Controller
         return Response::stream($callback, 200, $headers);
     }
 
-    /**
-     * Download all donations as CSV
-     */
+    // ╔═══════════════════════════════════════════════════════════════════════╗
+    //  Download all donations (PDF or CSV)
+    // ╚═══════════════════════════════════════════════════════════════════════╝
+
     public function downloadAllDonations(Request $request)
     {
-        $format = $request->get('format', 'csv');
+        $format = $request->get('format', 'csv'); // default CSV
 
         if ($format === 'pdf') {
             return $this->downloadAllDonationsAsPDF();
@@ -192,9 +212,25 @@ class DonationController extends Controller
         return $this->downloadAllDonationsAsCSV();
     }
 
-    /**
-     * Download all donations as CSV
-     */
+    private function downloadAllDonationsAsPDF()
+    {
+        $donations = $this->getFilteredDonations();
+
+        $data = [
+            'donations' => $donations,
+            'organization' => 'Youmanitarian International',
+            'generated_at' => now()->format('F j, Y h:i A'),
+            'total_amount' => $donations->sum('amount'),
+            'total_count' => $donations->count(),
+        ];
+
+        $pdf = Pdf::loadView('finance.pdfs.all_donations', $data);
+
+        $filename = 'all_donations_' . now()->format('Y-m-d_H-i-s') . '.pdf';
+
+        return $pdf->download($filename);
+    }
+
     private function downloadAllDonationsAsCSV()
     {
         $donations = $this->getFilteredDonations();
@@ -206,10 +242,9 @@ class DonationController extends Controller
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ];
 
-        $callback = function() use ($donations) {
+        $callback = function () use ($donations) {
             $file = fopen('php://output', 'w');
 
-            // CSV Headers
             fputcsv($file, [
                 'ID',
                 'Donor Name',
@@ -225,7 +260,6 @@ class DonationController extends Controller
                 'Created At'
             ]);
 
-            // CSV Data
             foreach ($donations as $donation) {
                 fputcsv($file, [
                     $donation->id,
@@ -249,9 +283,10 @@ class DonationController extends Controller
         return Response::stream($callback, 200, $headers);
     }
 
-    /**
-     * Get filtered donations based on request parameters
-     */
+    // ╔═══════════════════════════════════════════════════════════════════════╗
+    //  Download all (Filtered)
+    // ╚═══════════════════════════════════════════════════════════════════════╝
+
     private function getFilteredDonations()
     {
         $query = Donation::with('recorder');
@@ -274,32 +309,5 @@ class DonationController extends Controller
         }
 
         return $query->orderBy('donation_date', 'desc')->get();
-    }
-
-    /**
-     * Download all donations as PDF
-     */
-    private function downloadAllDonationsAsPDF()
-    {
-        try {
-            $donations = $this->getFilteredDonations();
-
-            $data = [
-                'donations' => $donations,
-                'organization' => 'Youmanitarian International',
-                'generated_at' => now()->format('F j, Y h:i A'),
-                'total_amount' => $donations->sum('amount'),
-                'total_count' => $donations->count(),
-            ];
-
-            $pdf = Pdf::loadView('finance.pdfs.all_donations', $data);
-
-            $filename = 'all_donations_' . now()->format('Y-m-d_H-i-s') . '.pdf';
-
-            return $pdf->download($filename);
-        } catch (\Exception $e) {
-            // Fallback to CSV if PDF generation fails
-            return $this->downloadAllDonationsAsCSV();
-        }
     }
 }

@@ -71,12 +71,23 @@
                                             onclick="document.getElementById('viewDonationModal-{{ $donation->id }}').showModal()">
                                             <i class='bx bx-dots-horizontal-rounded'></i>
                                         </x-button>
-                                        <a href="{{ route('finance.donations.download', $donation) }}"
-                                           class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors duration-200"
-                                           title="Download Donation">
-                                            <i class='bx bx-download mr-1'></i>
-                                            PDF
-                                        </a>
+                                        <div class="flex space-x-2">
+                                            <a href="{{ route('finance.donations.download', ['donation' => $donation->id, 'format' => 'pdf']) }}"
+                                               class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors duration-200"
+                                               title="Download Donation as PDF">
+                                                <i class='bx bx-d   ownload mr-1'></i>
+                                                PDF
+                                            </a>
+
+                                            <!-- CSV Download -->
+                                            <a href="{{ route('finance.donations.download', ['donation' => $donation->id, 'format' => 'csv']) }}"
+                                               class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-600 bg-green-100 rounded-md hover:bg-green-200 transition-colors duration-200"
+                                               title="Download Donation as CSV">
+                                                <i class='bx bx-download mr-1'></i>
+                                                CSV
+                                            </a>
+                                        </div>
+
                                         @if($donation->status === 'Pending')
                                             <x-button
                                                 variant="table-action-manage"

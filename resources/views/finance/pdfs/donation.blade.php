@@ -167,9 +167,16 @@
         <div class="detail-row">
             <div class="detail-label">Receipt:</div>
             <div class="detail-value">
-                <img src="{{ storage_path('app/public/' . $donation->receipt_url) }}"
-                     alt="Donation Receipt"
-                     style="max-width: 200px; max-height: 200px; object-fit: contain;">
+                @php
+                    $absolutePath = public_path('storage/' . $donation->receipt_url);
+                @endphp
+                @if(file_exists($absolutePath))
+                    <img src="{{ $absolutePath }}"
+                         alt="Donation Receipt"
+                         style="max-width: 200px; max-height: 200px; object-fit: contain;">
+                @else
+                    <span>Receipt file not found.</span>
+                @endif
             </div>
         </div>
         @endif
