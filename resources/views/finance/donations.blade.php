@@ -5,10 +5,16 @@
                     title="Donations Management"
                     desc="View and manage donations, track financial statistics, and monitor payment activities.">
 
-        <x-button variant="primary" onclick="document.getElementById('addDonationModal').showModal()">
-            <i class='bx bx-plus mr-1'></i>
-            Add Donation
-        </x-button>
+        <div class="flex items-center gap-2">
+            <x-button variant="secondary" onclick="document.getElementById('downloadOptionsModal').showModal()">
+                <i class='bx bx-download mr-1'></i>
+                Download All
+            </x-button>
+            <x-button variant="primary" onclick="document.getElementById('addDonationModal').showModal()">
+                <i class='bx bx-plus mr-1'></i>
+                Add Donation
+            </x-button>
+        </div>
     </x-page-header>
 
     @php
@@ -60,18 +66,26 @@
                                     </span>
                                 </x-table.td>
                                 <x-table.td>
-                                    <x-button variant="table-action-view"
-                                        onclick="document.getElementById('viewDonationModal-{{ $donation->id }}').showModal()">
-                                        <i class='bx bx-dots-horizontal-rounded'></i>
-                                    </x-button>
-                                    @if($donation->status === 'Pending')
-                                        <form action="{{ route('finance.donations.status', $donation) }}" method="POST"
-                                            class="inline">
-                                            @csrf
-                                            @method('PATCH')
-                                            <x-button type="submit" variant="table-action-manage">Confirm</x-button>
-                                        </form>
-                                    @endif
+                                    <div class="flex items-center gap-2">
+                                        <x-button variant="table-action-view"
+                                            onclick="document.getElementById('viewDonationModal-{{ $donation->id }}').showModal()">
+                                            <i class='bx bx-dots-horizontal-rounded'></i>
+                                        </x-button>
+                                        <a href="{{ route('finance.donations.download', $donation) }}"
+                                           class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors duration-200"
+                                           title="Download Donation">
+                                            <i class='bx bx-download mr-1'></i>
+                                            PDF
+                                        </a>
+                                        @if($donation->status === 'Pending')
+                                            <form action="{{ route('finance.donations.status', $donation) }}" method="POST"
+                                                class="inline">
+                                                @csrf
+                                                @method('PATCH')
+                                                <x-button type="submit" variant="table-action-manage">Confirm</x-button>
+                                            </form>
+                                        @endif
+                                    </div>
                                 </x-table.td>
                             </x-table.tr>
                         @empty
@@ -106,4 +120,50 @@
             'donation' => $donation
         ])
     @endforeach
+
+    {{-- Download Options Modal --}}
+    <x-modal.dialog id="downloadOptionsModal" maxWidth="max-w-md" width="w-11/12">
+        <x-modal.header>
+            <div>
+                <h3 class="text-xl font-bold text-[#1a2235]">
+                    Download All Donations
+                </h3>
+                <p class="text-gray-500 text-sm mt-1">
+                    Choose your preferred format for downloading all donation records.
+                </p>
+            </div>
+        </x-modal.header>
+
+        <x-modal.body>
+            <div class="space-y-4">
+                <div class="text-center">
+                    <p class="text-gray-600 mb-4">Select the format you'd like to download:</p>
+                </div>
+
+                <div class="grid grid-cols-1 gap-3">
+                    <a href="{{ route('finance.donations.download.all', ['format' => 'csv']) }}"
+                       class="flex items-center justify-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                        <i class='bx bx-table text-2xl text-green-600'></i>
+                        <div class="text-left">
+                            <div class="font-semibold text-gray-900">CSV Format</div>
+                            <div class="text-sm text-gray-500">Spreadsheet format for data analysis</div>
+                        </div>
+                    </a>
+
+                    <a href="{{ route('finance.donations.download.all', ['format' => 'pdf']) }}"
+                       class="flex items-center justify-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                        <i class='bx bx-file-pdf text-2xl text-red-600'></i>
+                        <div class="text-left">
+                            <div class="font-semibold text-gray-900">PDF Format</div>
+                            <div class="text-sm text-gray-500">Professional report format for printing</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </x-modal.body>
+
+        <x-modal.footer>
+            <x-modal.close-button modalId="downloadOptionsModal" text="Cancel" variant="cancel" />
+        </x-modal.footer>
+    </x-modal.dialog>
 @endsection

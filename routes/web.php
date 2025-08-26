@@ -200,6 +200,8 @@ Route::middleware(['auth', 'role:Financial Coordinator'])->group(function () {
     Route::get('/finance/donations', [DonationController::class, 'index'])->name('finance.index');
     Route::post('/finance/donations', [DonationController::class, 'store'])->name('finance.donations.store');
     Route::patch('/finance/donations/{donation}/status', [DonationController::class, 'updateDonationStatus'])->name('finance.donations.status');
+    Route::get('/finance/donations/{donation}/download', [DonationController::class, 'downloadSpecificDonation'])->name('finance.donations.download');
+    Route::get('/finance/donations/download/all', [DonationController::class, 'downloadAllDonations'])->name('finance.donations.download.all');
 
     // Membership payments
     Route::get('/finance/membership/payments', [MembershipController::class, 'index'])->name('finance.membership.payments');

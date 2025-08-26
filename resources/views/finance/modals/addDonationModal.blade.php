@@ -20,12 +20,14 @@
             </p>
         </div>
     </x-modal.header>
+
     <form
         @if(!$isView)
             action="{{ route('finance.donations.store') }}" method="POST"
         @endif
         enctype="multipart/form-data" class="flex flex-col flex-1 min-h-0">
         @csrf
+
         <x-modal.body>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-4">
@@ -80,7 +82,7 @@
                                     id="quick_na_email"
                                     name="quick_na_email"
                                     value="N/A"
-                                    onchange="document.getElementById('donor_email').value = this.checked ? this.value : ''"
+                                    onchange="if(this.checked) { document.getElementById('donor_email').value = 'N/A'; document.getElementById('donor_email').disabled = true; } else { document.getElementById('donor_email').value = ''; document.getElementById('donor_email').disabled = false; }"
                                 />
                                 <label for="quick_na_email" class="text-xs text-gray-500 font-normal cursor-pointer">
                                     N/A
@@ -91,7 +93,14 @@
                     @if($isView)
                         <x-form.readonly>{{ $donation->donor_email ?? 'Not provided' }}</x-form.readonly>
                     @else
-                        <x-form.input name="donor_email" type="text" label="" placeholder="Donor Email (optional)" value="{{ old('donor_email') }}" />
+                        <x-form.input
+                            name="donor_email"
+                            type="text"
+                            label=""
+                            placeholder="Donor Email (optional)"
+                            value="{{ old('donor_email') }}"
+                            id="donor_email"
+                        />
                     @endif
 
                     {{-- Amount --}}
@@ -201,8 +210,8 @@
                         size="small"
                     />
                 @else
-                    <x-form.input-upload name="receipt" id="receipt" accept="image/jpeg,image/png,application/pdf">
-                        Supported formats: JPEG, PNG, PDF
+                    <x-form.input-upload name="receipt" id="receipt" accept="image/*,application/pdf">
+                        Supported formats: JPEG, JPG, PNG, GIF, PDF (up to 10MB)
                     </x-form.input-upload>
                 @endif
             </div>

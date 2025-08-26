@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Donation;
 use App\Models\MembershipPayment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Response;
 
 class DonationController extends Controller
 {
@@ -48,23 +52,29 @@ class DonationController extends Controller
     {
         $validated = $request->validate([
             'donor_name' => 'nullable|string|max:255',
-            'donor_email' => [
-                'nullable',
-                'string',
-                'max:255',
-                function ($attribute, $value, $fail) {
-                    if ($value && $value !== 'N/A' && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                        $fail('The email must be either "N/A" or a valid email address.');
-                    } // dapat real-time (sana malaman - frontend side)
-                },
-            ],
+            'donor_email' => 'nullable|string|max:255',
+            // [
+            //     'nullable',
+            //     'string',
+            //     'max:255',
+            //     function ($attribute, $value, $fail) {
+            //         if ($value && $value !== 'N/A' && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
+            //             $fail('The email must be either "N/A" or a valid email address.');
+            //         } // dapat real-time (sana malaman - frontend side)
+            //     },
+            // ],
             'amount' => 'required|numeric|min:1',
             'payment_method' => 'required|string|max:100',
             'donation_date' => 'required|date',
-            'receipt' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:10240',
+            'receipt' => 'nullable|file|mimes:jpeg,jpg,png,gif,pdf|max:10240',
             'is_anonymous' => 'nullable|boolean',
             'notes' => 'nullable|string|max:1000',
         ]);
+
+        // Clean up email value - if it's "N/A", set it to null
+        if (isset($validated['donor_email']) && $validated['donor_email'] === 'N/A') {
+            $validated['donor_email'] = null;
+        }
 
         $receiptPath = null;
         if ($request->hasFile('receipt')) {
@@ -96,5 +106,200 @@ class DonationController extends Controller
             'message' => 'Donation added successfully!',
             'type' => 'success',
         ]);
+    }
+
+    /**
+     * Download specific donation as PDF
+     */
+    public function downloadSpecificDonation(Donation $donation)
+    {
+        try {
+            $data = [
+                'donation' => $donation,
+                'recorder' => $donation->recorder,
+                'organization' => 'Youmanitarian International',
+                'generated_at' => now()->format('F j, Y h:i A'),
+            ];
+
+            $pdf = Pdf::loadView('finance.pdfs.donation', $data);
+
+            $filename = 'donation_' . ($donation->donor_name ?? 'anonymous') . '_' .
+                       $donation->donation_date->format('Y-m-d') . '.pdf';
+
+            return $pdf->download($filename);
+        } catch (\Exception $e) {
+            // Fallback to CSV if PDF generation fails
+            return $this->downloadSpecificDonationAsCSV($donation);
+        }
+    }
+
+    /**
+     * Download specific donation as CSV (fallback)
+     */
+    private function downloadSpecificDonationAsCSV(Donation $donation)
+    {
+        $filename = 'donation_' . ($donation->donor_name ?? 'anonymous') . '_' .
+                   $donation->donation_date->format('Y-m-d') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function() use ($donation) {
+            $file = fopen('php://output', 'w');
+
+            // CSV Headers
+            fputcsv($file, [
+                'ID', 'Donor Name', 'Donor Email', 'Amount', 'Payment Method',
+                'Donation Date', 'Status', 'Anonymous', 'Notes', 'Recorded By',
+                'Confirmed At', 'Created At'
+            ]);
+
+            // CSV Data
+            fputcsv($file, [
+                $donation->id,
+                $donation->is_anonymous ? 'Anonymous' : ($donation->donor_name ?? 'N/A'),
+                $donation->donor_email ?? 'N/A',
+                number_format((float)($donation->amount ?? 0), 2),
+                $donation->payment_method,
+                $donation->donation_date->format('Y-m-d'),
+                $donation->status,
+                $donation->is_anonymous ? 'Yes' : 'No',
+                $donation->notes ?? 'N/A',
+                $donation->recorder->name ?? 'Unknown',
+                $donation->confirmed_at ? $donation->confirmed_at->format('Y-m-d H:i:s') : 'N/A',
+                $donation->created_at->format('Y-m-d H:i:s')
+            ]);
+
+            fclose($file);
+        };
+
+        return Response::stream($callback, 200, $headers);
+    }
+
+    /**
+     * Download all donations as CSV
+     */
+    public function downloadAllDonations(Request $request)
+    {
+        $format = $request->get('format', 'csv');
+
+        if ($format === 'pdf') {
+            return $this->downloadAllDonationsAsPDF();
+        }
+
+        return $this->downloadAllDonationsAsCSV();
+    }
+
+    /**
+     * Download all donations as CSV
+     */
+    private function downloadAllDonationsAsCSV()
+    {
+        $donations = $this->getFilteredDonations();
+
+        $filename = 'all_donations_' . now()->format('Y-m-d_H-i-s') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function() use ($donations) {
+            $file = fopen('php://output', 'w');
+
+            // CSV Headers
+            fputcsv($file, [
+                'ID',
+                'Donor Name',
+                'Donor Email',
+                'Amount',
+                'Payment Method',
+                'Donation Date',
+                'Status',
+                'Anonymous',
+                'Notes',
+                'Recorded By',
+                'Confirmed At',
+                'Created At'
+            ]);
+
+            // CSV Data
+            foreach ($donations as $donation) {
+                fputcsv($file, [
+                    $donation->id,
+                    $donation->is_anonymous ? 'Anonymous' : ($donation->donor_name ?? 'N/A'),
+                    $donation->donor_email ?? 'N/A',
+                    number_format((float)($donation->amount ?? 0), 2),
+                    $donation->payment_method,
+                    $donation->donation_date->format('Y-m-d'),
+                    $donation->status,
+                    $donation->is_anonymous ? 'Yes' : 'No',
+                    $donation->notes ?? 'N/A',
+                    $donation->recorder->name ?? 'Unknown',
+                    $donation->confirmed_at ? $donation->confirmed_at->format('Y-m-d H:i:s') : 'N/A',
+                    $donation->created_at->format('Y-m-d H:i:s')
+                ]);
+            }
+
+            fclose($file);
+        };
+
+        return Response::stream($callback, 200, $headers);
+    }
+
+    /**
+     * Get filtered donations based on request parameters
+     */
+    private function getFilteredDonations()
+    {
+        $query = Donation::with('recorder');
+
+        // Add filters if provided
+        if (request()->has('status') && request('status') !== '') {
+            $query->where('status', request('status'));
+        }
+
+        if (request()->has('payment_method') && request('payment_method') !== '') {
+            $query->where('payment_method', request('payment_method'));
+        }
+
+        if (request()->has('date_from') && request('date_from') !== '') {
+            $query->where('donation_date', '>=', request('date_from'));
+        }
+
+        if (request()->has('date_to') && request('date_to') !== '') {
+            $query->where('donation_date', '<=', request('date_to'));
+        }
+
+        return $query->orderBy('donation_date', 'desc')->get();
+    }
+
+    /**
+     * Download all donations as PDF
+     */
+    private function downloadAllDonationsAsPDF()
+    {
+        try {
+            $donations = $this->getFilteredDonations();
+
+            $data = [
+                'donations' => $donations,
+                'organization' => 'Youmanitarian International',
+                'generated_at' => now()->format('F j, Y h:i A'),
+                'total_amount' => $donations->sum('amount'),
+                'total_count' => $donations->count(),
+            ];
+
+            $pdf = Pdf::loadView('finance.pdfs.all_donations', $data);
+
+            $filename = 'all_donations_' . now()->format('Y-m-d_H-i-s') . '.pdf';
+
+            return $pdf->download($filename);
+        } catch (\Exception $e) {
+            // Fallback to CSV if PDF generation fails
+            return $this->downloadAllDonationsAsCSV();
+        }
     }
 }
