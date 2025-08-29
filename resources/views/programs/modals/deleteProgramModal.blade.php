@@ -22,7 +22,8 @@
             <form action="{{ route('programs.destroy', $program) }}" 
                     method="POST"
                     class="delete-program-form" 
-                    data-modal-id="{{ $modalId }}">
+                    data-modal-id="{{ $modalId }}"
+                    data-program-id="{{ $program->id }}">
                 @csrf
                 @method('DELETE')
                 <x-button type="submit" variant="danger" class="w-full sm:w-auto">

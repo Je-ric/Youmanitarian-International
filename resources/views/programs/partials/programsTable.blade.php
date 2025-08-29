@@ -30,7 +30,7 @@
         </x-table.thead>
         <x-table.tbody class="bg-white">
             @foreach($programs as $program)
-                <x-table.tr>
+                <x-table.tr  id="program-row-{{ $program->id }}"> {{-- sa index script --}}
                     <x-table.td class="w-10 text-center text-gray-500">
                         {{ $loop->iteration + ($programs->currentPage() - 1) * $programs->perPage() }}
                     </x-table.td>

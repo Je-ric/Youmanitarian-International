@@ -82,28 +82,35 @@
 
 @push('scripts')
 <script>
-    $(document).on('submit', '.delete-program-form', function(e) {
-        e.preventDefault();
-        let form = $(this);
-    
-        $.ajax({
-            url: form.attr('action'),
-            type: 'POST',
-            data: form.serialize(),
-            success: function() {
-                // Remove row from table
-                form.closest('tr').fadeOut();
-    
+$(document).on('submit', '.delete-program-form', function(e) {
+    e.preventDefault();
+    let form = $(this);
+
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        data: form.serialize(),
+        success: function(response) {
+            if (response.success) {
+                // Remove row from table by ID
+                $("#program-row-" + form.data('program-id')).fadeOut();
+
                 // Close modal
                 const modalId = form.data('modal-id');
                 if (modalId) {
                     document.getElementById(modalId).close();
                 }
-            },
-            error: function(xhr) {
-                alert('Failed to delete program. Please try again.');
+
+                // Optional feedback
+                alert(response.message);
             }
-        });
+        },
+
+        error: function(xhr) {
+            alert('Failed to delete program. Please try again.');
+        }
     });
+});
+
 </script>
 @endpush
