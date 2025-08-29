@@ -1,5 +1,5 @@
 <div class="w-full bg-white border border-indigo-100 rounded-xl p-6 mb-6  transition-all duration-200 shadow-lg hover:shadow-sm backdrop-blur-sm">
-    <form action="{{ route('programs.tasks.store', $program) }}" method="POST" x-data="{ expanded: false }">
+    <form action="{{ route('programs.tasks.store', $program) }}" method="POST" x-data="{ expanded: false }" data-ajax="store-task">
         @csrf
         <div class="flex items-center justify-between">
             <h3 class="text-base font-semibold text-slate-800 flex items-center tracking-tight">
@@ -48,19 +48,23 @@
                             <x-feedback-status.status-indicator :status="$task->status" />
     
                             <div class="flex items-center gap-1">
-                                <form action="{{ route('programs.tasks.update', [$program, $task]) }}" method="POST" class="inline-flex">
+                                <form action="{{ route('programs.tasks.update', [$program, $task]) }}" method="POST" class="inline-flex" data-ajax="update-task">
                                     @csrf
                                     @method('PUT')
                                     <x-form.select-option name="status"
-                                        class="text-xs border border-slate-600 rounded px-2 py-1 bg-slate-800 text-slate-100 focus:ring-1 focus:ring-indigo-400 focus:border-indigo-400"
-                                        onchange="this.form.submit()" :options="[
+        class="text-xs border border-slate-600 rounded px-2 py-1 bg-slate-800 text-slate-100 focus:ring-1 focus:ring-indigo-400 focus:border-indigo-400"
+        onchange="$(this.form).trigger('submit')" :options="[
+
                                             ['value' => 'pending', 'label' => 'Pending', 'selected' => $task->status === 'pending'],
+
                                             ['value' => 'in_progress', 'label' => 'In Progress', 'selected' => $task->status === 'in_progress'],
+
                                             ['value' => 'completed', 'label' => 'Completed', 'selected' => $task->status === 'completed'],
+
                                         ]" />
                                 </form>
     
-                                <form action="{{ route('programs.tasks.destroy', [$program, $task]) }}" method="POST" onsubmit="return confirm('Delete this task?')" class="inline-flex">
+                                <form action="{{ route('programs.tasks.destroy', [$program, $task]) }}" method="POST" onsubmit="return confirm('Delete this task?')" class="inline-flex" data-ajax="delete-task">
                                     @csrf
                                     @method('DELETE')
                                     <button class="text-slate-400 hover:text-red-400 p-1 hover:bg-red-900/20 rounded transition-colors">
@@ -71,7 +75,7 @@
                         </div>
     
                         <div x-data="{ editing: false }">
-                            <form action="{{ route('programs.tasks.update', [$program, $task]) }}" method="POST">
+                            <form action="{{ route('programs.tasks.update', [$program, $task]) }}" method="POST" data-ajax="update-task">
                                 @csrf
                                 @method('PUT')
                                 <div x-show="!editing" class="cursor-pointer group" @click="editing = true">
@@ -124,18 +128,22 @@
                                                 </span>
                                             </div>
                                             <div class="flex items-center gap-2">
-                                                <form action="{{ route('programs.tasks.assignments.update-status', [$program, $task, $assignment]) }}" method="POST" class="inline-flex">
+                                                <form action="{{ route('programs.tasks.assignments.update-status', [$program, $task, $assignment]) }}" method="POST" class="inline-flex" data-ajax="update-assignment">
                                                     @csrf
                                                     @method('PUT')
                                                     <x-form.select-option name="status"
-                                                        class="text-xs border border-indigo-200 rounded px-2 py-1 bg-white focus:ring-1"
-                                                        onchange="this.form.submit()" :options="[
+        class="text-xs border border-indigo-200 rounded px-2 py-1 bg-white focus:ring-1"
+        onchange="$(this.form).trigger('submit')" :options="[
+
                                                             ['value' => 'pending', 'label' => 'Pending', 'selected' => $assignment->status === 'pending'],
+
                                                             ['value' => 'in_progress', 'label' => 'In Progress', 'selected' => $assignment->status === 'in_progress'],
+
                                                             ['value' => 'completed', 'label' => 'Completed', 'selected' => $assignment->status === 'completed'],
+
                                                         ]" />
                                                 </form>
-                                                <form action="{{ route('programs.tasks.assignments.destroy', [$program, $task, $assignment]) }}" method="POST" onsubmit="return confirm('Remove this volunteer from the task?')" class="inline-flex">
+                                                <form action="{{ route('programs.tasks.assignments.destroy', [$program, $task, $assignment]) }}" method="POST" onsubmit="return confirm('Remove this volunteer from the task?')" class="inline-flex" data-ajax="delete-assignment">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="text-indigo-300 hover:text-red-600 hover:bg-red-50 rounded transition-colors">
@@ -162,7 +170,7 @@
                                     x-transition:enter-start="opacity-0 -translate-y-2"
                                     x-transition:enter-end="opacity-100 translate-y-0"
                                     class="mt-2">
-                                <form action="{{ route('programs.tasks.assign', [$program, $task]) }}" method="POST" class="space-y-2">
+                                <form action="{{ route('programs.tasks.assign', [$program, $task]) }}" method="POST" class="space-y-2" data-ajax="assign-volunteer">
                                     @csrf
                                     <select name="volunteer_id" required
                                             class="w-full border border-indigo-200 rounded px-3 py-2 text-xs bg-white">
@@ -231,35 +239,37 @@
 <script>
 $(document).ready(function(){
 
-    // ========== Add New Task ==========
-    $(document).on('submit', 'form[action*="tasks.store"]', function(e){
+    function reloadTasks() {
+        $('#tasks-section').load(location.href + ' #tasks-section > *');
+    }
+
+    // Add New Task
+    $(document).on('submit', 'form[data-ajax="store-task"]', function(e){
         e.preventDefault();
-        let form = $(this);
+        const form = $(this);
         $.ajax({
             url: form.attr('action'),
             method: form.attr('method'),
             data: form.serialize(),
-            success: function(response){
-                $('#tasks-section').load(location.href + ' #tasks-section > *');
+            success: function(res){
+                reloadTasks();
                 form[0].reset();
-                console.log(response.message);
+                console.log(res?.message || 'Task added');
             },
-            error: function(xhr){
-                console.error(xhr.responseText);
-            }
+            error: function(xhr){ console.error(xhr.responseText); }
         });
     });
 
-    // ========== Update Task (description or status) ==========
-    $(document).on('submit', 'form[action*="tasks.update"]', function(e){
+    // Update Task (status or description)
+    $(document).on('submit', 'form[data-ajax="update-task"]', function(e){
         e.preventDefault();
-        let form = $(this);
+        const form = $(this);
         $.ajax({
             url: form.attr('action'),
             method: "POST", // PUT uses method spoofing
             data: form.serialize(),
             success: function(response){
-                $('#tasks-section').load(location.href + ' #tasks-section > *');
+                reloadTasks();
             },
             error: function(xhr){
                 console.error(xhr.responseText);
@@ -267,8 +277,8 @@ $(document).ready(function(){
         });
     });
 
-    // ========== Delete Task ==========
-    $(document).on('submit', 'form[action*="tasks.destroy"]', function(e){
+    // Delete Task
+    $(document).on('submit', 'form[data-ajax="delete-task"]', function(e){
         e.preventDefault();
         if(!confirm("Delete this task?")) return;
         let form = $(this);
@@ -277,7 +287,7 @@ $(document).ready(function(){
             method: "POST", // DELETE uses method spoofing
             data: form.serialize(),
             success: function(response){
-                $('#tasks-section').load(location.href + ' #tasks-section > *');
+                reloadTasks();
             },
             error: function(xhr){
                 console.error(xhr.responseText);
@@ -285,8 +295,8 @@ $(document).ready(function(){
         });
     });
 
-    // ========== Assign Volunteer ==========
-    $(document).on('submit', 'form[action*="tasks.assign"]', function(e){
+    // Assign Volunteer
+    $(document).on('submit', 'form[data-ajax="assign-volunteer"]', function(e){
         e.preventDefault();
         let form = $(this);
         $.ajax({
@@ -294,7 +304,7 @@ $(document).ready(function(){
             method: form.attr('method'),
             data: form.serialize(),
             success: function(response){
-                $('#tasks-section').load(location.href + ' #tasks-section > *');
+                reloadTasks();
             },
             error: function(xhr){
                 console.error(xhr.responseText);
@@ -302,8 +312,8 @@ $(document).ready(function(){
         });
     });
 
-    // ========== Update Assignment Status ==========
-    $(document).on('submit', 'form[action*="assignments.update-status"]', function(e){
+    // Update Assignment Status
+    $(document).on('submit', 'form[data-ajax="update-assignment"]', function(e){
         e.preventDefault();
         let form = $(this);
         $.ajax({
@@ -311,7 +321,7 @@ $(document).ready(function(){
             method: "POST",
             data: form.serialize(),
             success: function(response){
-                $('#tasks-section').load(location.href + ' #tasks-section > *');
+                reloadTasks();
             },
             error: function(xhr){
                 console.error(xhr.responseText);
@@ -319,8 +329,8 @@ $(document).ready(function(){
         });
     });
 
-    // ========== Remove Volunteer from Task ==========
-    $(document).on('submit', 'form[action*="assignments.destroy"]', function(e){
+    // Remove Volunteer from Task
+    $(document).on('submit', 'form[data-ajax="delete-assignment"]', function(e){
         e.preventDefault();
         if(!confirm("Remove this volunteer from the task?")) return;
         let form = $(this);
@@ -329,7 +339,7 @@ $(document).ready(function(){
             method: "POST",
             data: form.serialize(),
             success: function(response){
-                $('#tasks-section').load(location.href + ' #tasks-section > *');
+                reloadTasks();
             },
             error: function(xhr){
                 console.error(xhr.responseText);
