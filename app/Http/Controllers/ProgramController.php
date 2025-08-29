@@ -163,13 +163,6 @@ class ProgramController extends Controller
             'end_time' => $request->end_time,
             'location' => $request->location,
             'volunteer_count' => $request->volunteer_count ?? 0,
-            // 'title' => $request->input('title'),
-            // 'description' => $request->input('description'),
-            // 'date' => $request->input('date'),
-            // 'start_time' => $request->input('start_time'),
-            // 'end_time' => $request->input('end_time'),
-            // 'location' => $request->input('location'),
-            // 'volunteer_count' => $request->input('volunteer_count', 0),
         ]);
 
         // Notify all volunteers in this program about the update
@@ -194,6 +187,14 @@ class ProgramController extends Controller
         if ($volunteers->isNotEmpty()) {
             Notification::send($volunteers, ProgramUpdate::updatedProgram($program));
         }
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'program_id' => $program->id
+            ]);
+        }
+        
 
         return redirect()
             ->route('programs.manage_volunteers', $program->id)

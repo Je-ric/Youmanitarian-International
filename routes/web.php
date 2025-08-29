@@ -130,6 +130,12 @@ Route::middleware(['auth', 'role:Program Coordinator'])->group(function () {
     Route::put('/programs/{program}', [ProgramController::class, 'updateProgram'])->name('programs.update');
     Route::delete('/programs/{program}', [ProgramController::class, 'deleteProgram'])->name('programs.destroy');
 
+    // for component title sa program update
+    Route::get('/programs/{program}/component', function (\App\Models\Program $program) {
+        return view('programs_volunteers.partials.programDetails', compact('program'))->render();
+    })->name('programs.component');
+
+
     // Program volunteer management
     Route::get('/programs/{program}/volunteers/manage', [ProgramVolunteerController::class, 'gotoManageVolunteers'])->name('programs.manage_volunteers');
     Route::get('/programs/{program}/volunteers/{volunteer}/logs', [ProgramVolunteerController::class, 'getVolunteerLogs'])->name('programs.volunteer_logs');

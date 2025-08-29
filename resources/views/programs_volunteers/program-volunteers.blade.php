@@ -42,11 +42,13 @@
         </x-slot>
 
         <x-slot:slot_program>
-            @include('programs_volunteers.partials.programDetails', [
-                'route' => route('programs.update', $program),
-                'method' => 'PUT',
-                'program' => $program
-            ])
+            <div id="programDetailsSection">
+                @include('programs_volunteers.partials.programDetails', [
+                    'route' => route('programs.update', $program),
+                    'method' => 'PUT',
+                    'program' => $program
+                ])
+            </div>
         </x-slot>
 
         <x-slot:slot_feedbacks>

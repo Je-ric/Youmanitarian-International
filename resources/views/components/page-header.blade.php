@@ -14,7 +14,7 @@
             </span>
         @endif
         <div>
-            <h1 class="text-lg sm:text-xl font-bold text-[#1a2235]">{{ $title }}</h1>
+            <h1 class="text-lg sm:text-xl font-bold text-[#1a2235]" id="programTitle">{{ $title }}</h1>
             @if($desc)
                 <p class="text-sm text-gray-500 mt-1">{{ $desc }}</p>
             @endif

@@ -29,17 +29,13 @@
         </div>
 
 
-
         <!-- Main Content Grid -->
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
 
-            <!-- Left Column - Main Information -->
+            <!-- Left Column - -->
             <div class="xl:col-span-2 space-y-6">
-
-                <!-- Basic Information -->
                 <x-overview.card title="Basic Information" icon="bx-info-circle" variant="midnight-header">
                     <div class="space-y-6">
-                        <!-- Program Title -->
                         <div>
                             <x-form.label for="title" variant="title">Program Title</x-form.label>
                             <x-form.input
@@ -52,7 +48,6 @@
                             />
                         </div>
 
-                        <!-- Description -->
                         <div>
                             <x-form.label for="description" variant="description">Description</x-form.label>
                             <x-form.textarea
@@ -66,7 +61,6 @@
                             />
                         </div>
 
-                        <!-- Location -->
                         <div>
                             <x-form.label for="location" variant="location">Location <span class='text-gray-400 text-xs'>(Optional)</span></x-form.label>
                             <x-form.input
@@ -82,13 +76,11 @@
                 </x-overview.card>
             </div>
 
-            <!-- Right Column - Schedule & Settings -->
+            <!-- Right Column -->
             <div class="xl:col-span-1 space-y-6">
 
-                <!-- Schedule -->
                 <x-overview.card title="Schedule" icon="bx-calendar" variant="elevated">
                     <div class="space-y-4">
-                        <!-- Date -->
                         <div>
                             <x-form.label for="date" variant="date">Date</x-form.label>
                             <x-form.date-picker
@@ -101,7 +93,6 @@
                             />
                         </div>
 
-                        <!-- Time Range -->
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <x-form.label for="start_time" variant="start-time">Start</x-form.label>
@@ -133,7 +124,6 @@
                 <!-- Program Settings -->
                 <x-overview.card title="Settings" icon="bx-cog" variant="elevated">
                     <div>
-                        <!-- Volunteers Needed -->
                         <div>
                             <x-form.label for="volunteer_count" variant="volunteer-count">Volunteers Needed</x-form.label>
                             <x-form.input
@@ -150,7 +140,6 @@
                     </div>
                 </x-overview.card>
 
-                <!-- Program Status (Read-only info) -->
                 <x-overview.card title="Program Status" icon="bx-bar-chart" variant="minimal">
                     <div class="space-y-3 text-sm">
                         <div class="flex items-center justify-between">
@@ -174,11 +163,10 @@
             </div>
         </div>
 
-        <!-- Footer Actions -->
         <div class="mt-8 pt-6 border-t border-gray-200">
             <div class="flex flex-col sm:flex-row gap-3 justify-between">
                 <a href="{{ route('programs.index') }}"
-                   class="inline-flex items-center justify-center px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                    class="inline-flex items-center justify-center px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                     <i class='bx bx-arrow-back mr-2'></i> Back to Programs
                 </a>
 
@@ -199,6 +187,7 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
+// cons: may component to display title, pag-inupdate hindi
 $(document).ready(function() {
     const editBtn = $('#editBtn');
     const saveBtn = $('#saveBtn');
@@ -207,7 +196,6 @@ $(document).ready(function() {
     const fields = $('.program-field');
         let originalValues = {};
 
-    // Store original values
     fields.each(function() {
         originalValues[$(this).attr('id')] = $(this).val();
     });
@@ -240,32 +228,42 @@ $(document).ready(function() {
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-                        success: function(response) {
-                // Update last updated timestamp
-                $('#lastUpdated').text(new Date().toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                }));
+                    success: function(response) {
+                    // Update last updated timestamp
+                    $('#lastUpdated').text(new Date().toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    }));
 
-                // Store new original values
-                fields.each(function() {
-                    originalValues[$(this).attr('id')] = $(this).val();
-                });
+                    // Refresh the program details partial
+                    $.ajax({
+                        url: `/programs/${response.program_id}/component`, // assuming response has program_id
+                        type: 'GET',
+                        success: function(html) {
+                            $('#programDetailsSection').html(html); // to reload whole form partial
+                            $('#programTitle').text($('#title').val()); // nasa component yung id
+                        }
+                    });
 
-                // Reset to read-only mode
-                fields.each(function() {
-                    $(this).attr('readonly', true);
-                    $(this).removeClass('bg-white').addClass('bg-gray-50');
-                });
+                    // Store new original values
+                    fields.each(function() {
+                        originalValues[$(this).attr('id')] = $(this).val();
+                    });
 
-                editBtn.removeClass('hidden');
-                saveBtn.addClass('hidden');
-                discardBtn.addClass('hidden');
-                cancelBtn.addClass('hidden');
+                    // Reset to read-only mode
+                    fields.each(function() {
+                        $(this).attr('readonly', true);
+                        $(this).removeClass('bg-white').addClass('bg-gray-50');
+                    });
+
+                    editBtn.removeClass('hidden');
+                    saveBtn.addClass('hidden');
+                    discardBtn.addClass('hidden');
+                    cancelBtn.addClass('hidden');
             },
+
             error: function(xhr) {
-                // Handle any errors if needed
             },
             complete: function() {
                 // Reset button state
