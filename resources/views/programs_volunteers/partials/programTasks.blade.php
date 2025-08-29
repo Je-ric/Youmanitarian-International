@@ -41,7 +41,9 @@
     @else
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             @foreach($tasks as $task)
-                <div class="bg-white/80 border border-indigo-100 rounded-xl hover:border-indigo-200 transition-all duration-200 shadow-lg hover:shadow-sm overflow-hidden backdrop-blur-sm" data-animate>
+                <div class="bg-white/80 border border-indigo-100 rounded-xl hover:border-indigo-200 transition-all duration-200 shadow-lg hover:shadow-sm overflow-hidden backdrop-blur-sm"
+                     data-animate
+                     data-task-id="{{ $task->id }}">
     
                     <div class="p-5 border-b border-slate-600 bg-gradient-to-br from-gray-900 via-slate-800 to-indigo-900">
                         <div class="flex items-center justify-between mb-3">
@@ -239,8 +241,30 @@
 <script>
 $(document).ready(function(){
 
-    function reloadTasks() {
-        $('#tasks-section').load(location.href + ' #tasks-section > *');
+    function replaceCard(html, id){
+        const sel = `[data-task-id="${id}"]`;
+        const $card = $(sel);
+        if ($card.length) {
+            $card.replaceWith(html);
+        } else {
+            // new task, prepend to grid
+            $('#tasks-section .grid').prepend(html);
+            // remove empty state if present
+            $('#tasks-section x-empty-state').closest('#tasks-section').children().first().remove();
+        }
+    }
+
+    function removeCard(id){
+        const sel = `[data-task-id="${id}"]`;
+        $(sel).remove();
+        if ($('#tasks-section [data-task-id]').length === 0) {
+            $('#tasks-section').html(`
+                <x-empty-state 
+                    icon="bx bx-task"
+                    title="No Tasks Yet"
+                    description="Create your first task to get started." />
+            `);
+        }
     }
 
     // Add New Task
@@ -252,9 +276,13 @@ $(document).ready(function(){
             method: form.attr('method'),
             data: form.serialize(),
             success: function(res){
-                reloadTasks();
+                if (res?.html && res?.task_id) {
+                    replaceCard(res.html, res.task_id);
+                } else {
+                    // fallback
+                    $('#tasks-section').load(location.href + ' #tasks-section > *');
+                }
                 form[0].reset();
-                console.log(res?.message || 'Task added');
             },
             error: function(xhr){ console.error(xhr.responseText); }
         });
@@ -266,14 +294,16 @@ $(document).ready(function(){
         const form = $(this);
         $.ajax({
             url: form.attr('action'),
-            method: "POST", // PUT uses method spoofing
+            method: "POST",
             data: form.serialize(),
-            success: function(response){
-                reloadTasks();
+            success: function(res){
+                if (res?.html && res?.task_id) {
+                    replaceCard(res.html, res.task_id);
+                } else {
+                    $('#tasks-section').load(location.href + ' #tasks-section > *');
+                }
             },
-            error: function(xhr){
-                console.error(xhr.responseText);
-            }
+            error: function(xhr){ console.error(xhr.responseText); }
         });
     });
 
@@ -281,51 +311,57 @@ $(document).ready(function(){
     $(document).on('submit', 'form[data-ajax="delete-task"]', function(e){
         e.preventDefault();
         if(!confirm("Delete this task?")) return;
-        let form = $(this);
+        const form = $(this);
         $.ajax({
             url: form.attr('action'),
-            method: "POST", // DELETE uses method spoofing
+            method: "POST",
             data: form.serialize(),
-            success: function(response){
-                reloadTasks();
+            success: function(res){
+                if (res?.task_id) {
+                    removeCard(res.task_id);
+                } else {
+                    $('#tasks-section').load(location.href + ' #tasks-section > *');
+                }
             },
-            error: function(xhr){
-                console.error(xhr.responseText);
-            }
+            error: function(xhr){ console.error(xhr.responseText); }
         });
     });
 
     // Assign Volunteer
     $(document).on('submit', 'form[data-ajax="assign-volunteer"]', function(e){
         e.preventDefault();
-        let form = $(this);
+        const form = $(this);
         $.ajax({
             url: form.attr('action'),
             method: form.attr('method'),
             data: form.serialize(),
-            success: function(response){
-                reloadTasks();
+            success: function(res){
+                if (res?.html && res?.task_id) {
+                    replaceCard(res.html, res.task_id);
+                } else {
+                    $('#tasks-section').load(location.href + ' #tasks-section > *');
+                }
             },
-            error: function(xhr){
-                console.error(xhr.responseText);
-            }
+            error: function(xhr){ console.error(xhr.responseText); }
         });
     });
 
     // Update Assignment Status
     $(document).on('submit', 'form[data-ajax="update-assignment"]', function(e){
         e.preventDefault();
-        let form = $(this);
+        const form = $(this);
         $.ajax({
             url: form.attr('action'),
             method: "POST",
             data: form.serialize(),
-            success: function(response){
-                reloadTasks();
+            success: function(res){
+                if (res?.html && res?.task_id) {
+                    replaceCard(res.html, res.task_id);
+                } else {
+                    $('#tasks-section').load(location.href + ' #tasks-section > *');
+                }
             },
-            error: function(xhr){
-                console.error(xhr.responseText);
-            }
+            error: function(xhr){ console.error(xhr.responseText); }
         });
     });
 
@@ -333,17 +369,19 @@ $(document).ready(function(){
     $(document).on('submit', 'form[data-ajax="delete-assignment"]', function(e){
         e.preventDefault();
         if(!confirm("Remove this volunteer from the task?")) return;
-        let form = $(this);
+        const form = $(this);
         $.ajax({
             url: form.attr('action'),
             method: "POST",
             data: form.serialize(),
-            success: function(response){
-                reloadTasks();
+            success: function(res){
+                if (res?.html && res?.task_id) {
+                    replaceCard(res.html, res.task_id);
+                } else {
+                    $('#tasks-section').load(location.href + ' #tasks-section > *');
+                }
             },
-            error: function(xhr){
-                console.error(xhr.responseText);
-            }
+            error: function(xhr){ console.error(xhr.responseText); }
         });
     });
 
