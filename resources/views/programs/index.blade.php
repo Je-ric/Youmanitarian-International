@@ -55,6 +55,16 @@
         @endphp
 
         {{-- Modals Container --}}
+        {{-- If this, viewModal isnt opening --}}
+        {{-- @foreach($uniquePrograms as $program)
+            @if(Auth::id() === $program->created_by)
+                @include('programs.modals.deleteProgramModal', [
+                    'program' => $program,
+                    'modalId' => 'delete-program-modal-' . $program->id
+                ])
+            @endif
+        @endforeach --}}
+
         <div>
             @foreach($allPrograms as $program)
                 @include('programs.modals.program-modal', 
@@ -92,8 +102,10 @@ $(document).on('submit', '.delete-program-form', function(e) {
         data: form.serialize(),
         success: function(response) {
             if (response.success) {
-                // Remove row from table by ID
-                $("#program-row-" + form.data('program-id')).fadeOut();
+                const programId = form.data('program-id');
+
+                // Remove ALL rows across tabs
+                $(`.program-row[data-program-id="${programId}"]`).fadeOut();
 
                 // Close modal
                 const modalId = form.data('modal-id');
@@ -101,11 +113,9 @@ $(document).on('submit', '.delete-program-form', function(e) {
                     document.getElementById(modalId).close();
                 }
 
-                // Optional feedback
                 alert(response.message);
             }
         },
-
         error: function(xhr) {
             alert('Failed to delete program. Please try again.');
         }

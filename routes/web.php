@@ -128,8 +128,9 @@ Route::middleware(['auth', 'role:Program Coordinator'])->group(function () {
     Route::get('/programs/create', [ProgramController::class, 'gotoCreateProgram'])->name('programs.create');
     Route::post('/programs/create', [ProgramController::class, 'storeProgram'])->name('programs.store');
     Route::put('/programs/{program}', [ProgramController::class, 'updateProgram'])->name('programs.update');
-    Route::delete('/programs/{program}', [ProgramController::class, 'deleteProgram'])->name('programs.destroy');
+    // Route::delete('/programs/{program}', [ProgramController::class, 'deleteProgram'])->name('programs.destroy');
 
+    Route::delete('/programs/{program}', [ProgramController::class, 'destroy'])->name('programs.destroy');
     // for component title sa program update
     Route::get('/programs/{program}/component', function (\App\Models\Program $program) {
         return view('programs_volunteers.partials.programDetails', compact('program'))->render();

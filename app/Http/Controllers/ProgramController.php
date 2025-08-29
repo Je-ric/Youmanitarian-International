@@ -15,7 +15,7 @@ class ProgramController extends Controller
 {
     use AuthorizesRequests;
 
-        /**
+    /**
      * Display the programs list page with different views based on user role
      *
      * @param Request $request
@@ -62,11 +62,14 @@ class ProgramController extends Controller
                 ->paginate(10, ['*'], 'page', $currentTab === 'my' ? $page : 1);
         }
 
-        return view('programs.index',
-            compact('allPrograms',
-            'joinedPrograms',
-                        'myPrograms')
-                    );
+        return view(
+            'programs.index',
+            compact(
+                'allPrograms',
+                'joinedPrograms',
+                'myPrograms'
+            )
+        );
 
         // compact() takes variable names as strings
 
@@ -174,15 +177,15 @@ class ProgramController extends Controller
         // pluck('user') ine-extract yung user data instead volunteer data, example user1 -> volunteer1
         // kase again, wala naman sa volunteer data yung personal info like name, email and etc.
         // filter() is to remove null user values from the collection, useful for notification sending
-            // causes ng null values:
-            // - may volunteer record pero walang user record (pwedeng dahil sa soft or hard user record delete)
-            // example: volunteer1(user1) -> volunteer2(user2) -> volunteer3(null) -> volunteer4(user4)
-            // output: user1, user2, user4
+        // causes ng null values:
+        // - may volunteer record pero walang user record (pwedeng dahil sa soft or hard user record delete)
+        // example: volunteer1(user1) -> volunteer2(user2) -> volunteer3(null) -> volunteer4(user4)
+        // output: user1, user2, user4
         $volunteers = $program->volunteers()
-                    ->with('user')
-                    ->get()
-                    ->pluck('user')
-                    ->filter();
+            ->with('user')
+            ->get()
+            ->pluck('user')
+            ->filter();
 
         if ($volunteers->isNotEmpty()) {
             Notification::send($volunteers, ProgramUpdate::updatedProgram($program));
@@ -194,7 +197,7 @@ class ProgramController extends Controller
                 'program_id' => $program->id
             ]);
         }
-        
+
         return redirect()
             ->route('programs.manage_volunteers', $program->id)
             ->with('toast', [
@@ -204,11 +207,11 @@ class ProgramController extends Controller
     }
 
     // programs/index.blade.php (main)
-    public function deleteProgram(Request $request, Program $program)
+    public function destroy(Request $request, Program $program)
     {
         $program->delete();
 
-        if ($request->ajax()) {
+        if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Program deleted successfully.'
@@ -220,5 +223,4 @@ class ProgramController extends Controller
             'type' => 'success'
         ]);
     }
-
 }
