@@ -19,10 +19,19 @@ class ProgramTasksController extends Controller
             'task_description' => 'required|string|max:1000',
         ]);
 
-        $program->tasks()->create([
+        // $program->tasks()->create([
+        $task = $program->tasks()->create([
             'task_description' => $request->task_description,
             'status' => 'pending', // default status
         ]);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'message' => 'Task added successfully.',
+                'type' => 'success',
+                'task' => $task
+            ]);
+        }
 
         return redirect()->back()->with('toast', [
             'message' => 'Task added successfully.',
@@ -39,6 +48,13 @@ class ProgramTasksController extends Controller
         }
 
         $task->delete();
+
+        if (request()->ajax()) {
+            return response()->json([
+                'message' => 'Task deleted successfully.',
+                'type' => 'success',
+            ]);
+        }
 
         return redirect()->back()->with('toast', [
             'message' => 'Task deleted successfully.',
@@ -73,6 +89,14 @@ class ProgramTasksController extends Controller
             // if not, update only the task description
             $task->update($request->only('task_description'));
         }
+
+        if ($request->ajax()) {
+        return response()->json([
+            'message' => 'Task updated successfully.',
+            'type' => 'success',
+            'task' => $task
+        ]);
+    }
 
         // Example: task1 = jeric (pending), jozen (in_progress), melgie (pending)
         // if task1 ay tapos na, kapag pinalitan yung program tasks (tasks1) status to completed,
@@ -110,6 +134,13 @@ class ProgramTasksController extends Controller
         // sa function ko nalang i-explain, basta checker
         $this->updateMainTaskStatus($task);
 
+        if ($request->ajax()) {
+            return response()->json([
+                'message' => 'Assignment status updated successfully.',
+                'type' => 'success',
+                'task' => $task
+            ]);
+        }
         // Example: task1 = jeric (pending), jozen (in_progress), melgie (in_progress)
         // if si melgie ay tapos na, at pinalitan yung status to completed, siya lang mababago ang status, hindi yung iba
         // Output: tasks1 = jeric (pending), jozen (in_progress), melgie (completed)
@@ -141,6 +172,12 @@ class ProgramTasksController extends Controller
         // first(): SELECT * FROM task_assignments WHERE... LIMIT 1 and returns only ONE record
 
         if ($existing) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'message' => 'Volunteer already assigned to this task.',
+                    'type' => 'info',
+                ]);
+            }
             return redirect()->back()->with('toast', [
                 'message' => 'Volunteer already assigned to this task.',
                 'type' => 'info'
@@ -164,6 +201,14 @@ class ProgramTasksController extends Controller
             $volunteer->user->notify(new TaskAssigned($task, $program));
         }
 
+        if ($request->ajax()) {
+            return response()->json([
+                'message' => 'Volunteer assigned to task.',
+                'type' => 'success',
+                'task' => $task
+            ]);
+        }
+
         return redirect()->back()->with('toast', [
             'message' => 'Volunteer assigned to task.',
             'type' => 'success'
@@ -184,6 +229,13 @@ class ProgramTasksController extends Controller
         // update main task status after removing assignment
         $this->updateMainTaskStatus($task);
 
+        if (request()->ajax()) {
+            return response()->json([
+                'message' => 'Volunteer removed from task successfully.',
+                'type' => 'success',
+            ]);
+        }
+
         return redirect()->back()->with('toast', [
             'message' => 'Volunteer removed from task successfully.',
             'type' => 'success'
@@ -197,8 +249,9 @@ class ProgramTasksController extends Controller
         // fn($assignment) is a callback function that will be called for each assignment
         $assignments = $task->assignments;
 
-        // if no assignments, return
+        // If no assignments, set to pending
         if ($assignments->isEmpty()) {
+            $task->update(['status' => 'pending']);
             return;
         }
 
