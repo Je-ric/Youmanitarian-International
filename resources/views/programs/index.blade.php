@@ -57,20 +57,53 @@
         {{-- Modals Container --}}
         <div>
             @foreach($allPrograms as $program)
-                @include('programs.modals.program-modal', ['program' => $program])
+                @include('programs.modals.program-modal', 
+                            ['program' => $program])
             @endforeach
             @if(Auth::user()->hasRole('Volunteer'))
                 @foreach($joinedPrograms as $program)
-                    @include('programs.modals.program-modal', ['program' => $program])
+                    @include('programs.modals.program-modal', 
+                            ['program' => $program])
                 @endforeach
             @endif
             @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
                 @foreach($myPrograms as $program)
                     @if(Auth::id() === $program->created_by)
-                        @include('programs.modals.deleteProgramModal', ['program' => $program, 'modalId' => 'delete-program-modal-' . $program->id])
+                        @include('programs.modals.deleteProgramModal', 
+                            ['program' => $program, 
+                            'modalId' => 'delete-program-modal-' . $program->id])
                     @endif
                 @endforeach
             @endif
         </div>
     </div>
 @endsection
+
+
+@push('scripts')
+<script>
+    $(document).on('submit', '.delete-program-form', function(e) {
+        e.preventDefault();
+        let form = $(this);
+    
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function() {
+                // Remove row from table
+                form.closest('tr').fadeOut();
+    
+                // Close modal
+                const modalId = form.data('modal-id');
+                if (modalId) {
+                    document.getElementById(modalId).close();
+                }
+            },
+            error: function(xhr) {
+                alert('Failed to delete program. Please try again.');
+            }
+        });
+    });
+</script>
+@endpush

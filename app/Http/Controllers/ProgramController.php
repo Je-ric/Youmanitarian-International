@@ -195,7 +195,6 @@ class ProgramController extends Controller
             ]);
         }
         
-
         return redirect()
             ->route('programs.manage_volunteers', $program->id)
             ->with('toast', [
@@ -205,9 +204,16 @@ class ProgramController extends Controller
     }
 
     // programs/index.blade.php (main)
-    public function deleteProgram(Program $program)
+    public function deleteProgram(Request $request, Program $program)
     {
         $program->delete();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Program deleted successfully.'
+            ]);
+        }
 
         return redirect()->route('programs.index')->with('toast', [
             'message' => 'Program deleted successfully.',
