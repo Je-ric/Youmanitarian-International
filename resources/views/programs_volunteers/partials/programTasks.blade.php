@@ -34,7 +34,7 @@
 </div>
 <div id="tasks-section" class="mt-6">
     @if($tasks->isEmpty())
-        <x-empty-state 
+        <x-empty-state
             icon="bx bx-task"
             title="No Tasks Yet"
             description="Create your first task to get started." />
@@ -44,11 +44,11 @@
                 <div class="bg-white/80 border border-indigo-100 rounded-xl hover:border-indigo-200 transition-all duration-200 shadow-lg hover:shadow-sm overflow-hidden backdrop-blur-sm"
                      data-animate
                      data-task-id="{{ $task->id }}">
-    
+
                     <div class="p-5 border-b border-slate-600 bg-gradient-to-br from-gray-900 via-slate-800 to-indigo-900">
                         <div class="flex items-center justify-between mb-3">
                             <x-feedback-status.status-indicator :status="$task->status" />
-    
+
                             <div class="flex items-center gap-1">
                                 <form action="{{ route('programs.tasks.update', [$program, $task]) }}" method="POST" class="inline-flex" data-ajax="update-task">
                                     @csrf
@@ -65,8 +65,8 @@
 
                                         ]" />
                                 </form>
-    
-                                <form action="{{ route('programs.tasks.destroy', [$program, $task]) }}" method="POST" onsubmit="return confirm('Delete this task?')" class="inline-flex" data-ajax="delete-task">
+
+                                <form action="{{ route('programs.tasks.destroy', [$program, $task]) }}" method="POST" class="inline-flex" data-ajax="delete-task">
                                     @csrf
                                     @method('DELETE')
                                     <button class="text-slate-400 hover:text-red-400 p-1 hover:bg-red-900/20 rounded transition-colors">
@@ -75,7 +75,7 @@
                                 </form>
                             </div>
                         </div>
-    
+
                         <div x-data="{ editing: false }">
                             <form action="{{ route('programs.tasks.update', [$program, $task]) }}" method="POST" data-ajax="update-task">
                                 @csrf
@@ -104,14 +104,14 @@
                             </form>
                         </div>
                     </div>
-    
+
                     <div class="p-4">
                         <div class="mb-4">
                             <h4 class="text-xs font-medium text-slate-600 mb-2 flex items-center">
                                 <i class='bx bx-group w-3 h-3 mr-1'></i>
                                 Assigned Volunteers
                             </h4>
-    
+
                             @if($task->assignments->isNotEmpty())
                                 <div class="space-y-2">
                                     @foreach($task->assignments as $assignment)
@@ -145,7 +145,7 @@
 
                                                         ]" />
                                                 </form>
-                                                <form action="{{ route('programs.tasks.assignments.destroy', [$program, $task, $assignment]) }}" method="POST" onsubmit="return confirm('Remove this volunteer from the task?')" class="inline-flex" data-ajax="delete-assignment">
+                                                <form action="{{ route('programs.tasks.assignments.destroy', [$program, $task, $assignment]) }}" method="POST" class="inline-flex" data-ajax="delete-assignment">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="text-indigo-300 hover:text-red-600 hover:bg-red-50 rounded transition-colors">
@@ -160,13 +160,13 @@
                                 <p class="text-slate-400 text-xs italic">No volunteers assigned</p>
                             @endif
                         </div>
-    
+
                         <div x-data="{ showAssign: false }">
                             <x-button @click="showAssign = !showAssign" variant="assign">
                                 <i class='bx bx-user-plus w-4 h-4'></i>
                                 <span x-text="showAssign ? 'Cancel' : 'Assign Volunteer'"></span>
                             </x-button>
-    
+
                             <div x-show="showAssign"
                                     x-transition:enter="transition ease-out duration-200"
                                     x-transition:enter-start="opacity-0 -translate-y-2"
@@ -259,7 +259,7 @@ $(document).ready(function(){
         $(sel).remove();
         if ($('#tasks-section [data-task-id]').length === 0) {
             $('#tasks-section').html(`
-                <x-empty-state 
+                <x-empty-state
                     icon="bx bx-task"
                     title="No Tasks Yet"
                     description="Create your first task to get started." />
