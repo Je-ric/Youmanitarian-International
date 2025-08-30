@@ -40,6 +40,7 @@
                     $clockOut = $attendance?->clock_out ? \Carbon\Carbon::parse($attendance->clock_out) : null;
                 @endphp
 
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="space-y-1.5">
                         <x-form.label for="clock_in" variant="time-in">Time In</x-form.label>
@@ -50,11 +51,11 @@
                                     value="{{ $clockIn->format('h:i a') }}">
                                 <input type="hidden" name="clock_in" value="{{ $clockIn->format('H:i') }}">
                             @else
-                                <x-form.time-picker id="clock_in" name="clock_in" :value="old('clock_in')"
-                                    :min="$programStart"
-                                    :max="$programEnd"
-                                    {{-- nakaka-asar(dapat valid lang sa time-in is yung sa program start-time) --}}
-                                    required="true" />
+                                <x-form.time-picker id="clock_in" name="clock_in"
+                                                    :value="old('clock_in')"
+                                                    :min="$programStart"
+                                                    :max="$programEnd"
+                                                    required="true" />
                             @endif
                         </div>
                     </div>
@@ -64,20 +65,22 @@
                             @if($clockOut)
                                 <input type="text" readonly
                                     class="w-full pl-10 pr-3 py-2 rounded-md border border-gray-200 bg-gray-100 text-gray-700 focus:outline-none"
-                                    value="{{ $clockOut->format('H:i') }}">
+                                    value="{{ $clockOut->format('h:i a') }}">
                             @else
-                                <x-form.time-picker id="clock_out" name="clock_out" :value="old('clock_out')"
-                                    {{-- :min="$programStart"
-                                    :max="$programEnd" --}}
-                                    required="true" />
+                                <x-form.time-picker id="clock_out" name="clock_out"
+                                                    :value="old('clock_out')"
+                                                    :min="$programStart"
+                                                    :max="$programEnd"
+                                                    required="true" />
                             @endif
                         </div>
                     </div>
                 </div>
 
+
                 <div class="space-y-1.5">
                     <x-form.textarea name="notes" :value="$attendance?->notes"
-                        label="Reason for Manual Entry (optional):" 
+                        label="Reason for Manual Entry (optional):"
                         placeholder="Explain why manual entry is needed..."
                         rows="3" />
                 </div>

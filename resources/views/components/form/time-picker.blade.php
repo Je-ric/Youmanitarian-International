@@ -6,6 +6,8 @@
     'readonly' => false,
     'class' => '',
     'placeholder' => '',
+    'min' => null,
+    'max' => null,
 ])
 
 {{--
@@ -27,6 +29,8 @@ Used in:
             value="{{ old($name, $value) }}"
             @if($required) required @endif
             @if($readonly) readonly @endif
+            @if($min) min="{{ $min }}" @endif
+            @if($max) max="{{ $max }}" @endif
             placeholder="{{ $placeholder }}"
             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ffb51b] focus:border-[#ffb51b] transition-colors {{ $class }}"
         />
@@ -34,4 +38,4 @@ Used in:
             <i class="bx bx-chevron-down text-xl text-gray-300"></i>
         </span>
     </div>
-</div> 
+</div>

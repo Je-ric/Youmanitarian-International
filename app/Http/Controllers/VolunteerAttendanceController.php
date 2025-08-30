@@ -39,9 +39,9 @@ class VolunteerAttendanceController extends Controller
             ->first();
 
         // If the attendance record exists and has a clock-in/clock-out time, convert it to a Carbon date in Manila timezone
-        $clockInTime = $latestAttendance?->clock_in ? 
+        $clockInTime = $latestAttendance?->clock_in ?
             Carbon::parse($latestAttendance->clock_in)->setTimezone('Asia/Manila') : null;
-        $clockOutTime = $latestAttendance?->clock_out ? 
+        $clockOutTime = $latestAttendance?->clock_out ?
             Carbon::parse($latestAttendance->clock_out)->setTimezone('Asia/Manila') : null;
 
         $formattedWorkedTime = null;
@@ -232,9 +232,13 @@ class VolunteerAttendanceController extends Controller
             ];
         }
 
-        return view('volunteers.program-volunteers', 
-        compact('program', 
-        'logs'));
+        return view(
+            'volunteers.program-volunteers',
+            compact(
+                'program',
+                'logs'
+            )
+        );
     }
 
     // volunteers/program-volunteers.blade.php
@@ -279,10 +283,14 @@ class VolunteerAttendanceController extends Controller
         $volunteers = $program->volunteers()->with('user')->get();
         $selectedVolunteerId = $request->query('volunteer_id');
 
-        return view('programs-volunteers.modals.manualAttendanceModal', 
-        compact('program', 
-        'volunteers', 
-        'selectedVolunteerId'));
+        return view(
+            'programs-volunteers.modals.manualAttendanceModal',
+            compact(
+                'program',
+                'volunteers',
+                'selectedVolunteerId'
+            )
+        );
     }
 
     // programs-volunteers/modals/manualAttendanceModal.blade.php
@@ -290,7 +298,7 @@ class VolunteerAttendanceController extends Controller
     {
         // find an existing attendance record or create a new one
         $attendance = VolunteerAttendance::firstOrNew([
-            'program_id' => $program->id,
+            'program_id'   => $program->id,
             'volunteer_id' => $request->volunteer_id,
         ]);
 
@@ -298,61 +306,81 @@ class VolunteerAttendanceController extends Controller
         // but i plan to set a default notes for manual entry and approving attendance
         $rules = [
             'volunteer_id' => 'required|exists:volunteers,id',
-            'date' => 'required|date',
-            'notes' => 'required|string|max:1000',
+            'date'         => 'required|date',
+            'notes'        => 'nullable|string|max:1000',
         ];
 
         // Make clock_in required only for new attendance records.
         // kung meron na clock in, then no need to validate clock in
         if (!$attendance->clock_in) {
-            $rules['clock_in'] = 'required';
+            $rules['clock_in'] = 'required|date_format:H:i';
+        } else {
+            $rules['clock_in'] = 'nullable|date_format:H:i';
         }
-        $rules['clock_out'] = 'nullable'; // Clock_out is always optional.
-        $request->validate($rules);
 
+        // Clock_out is always optional, but if provided, it must match format
+        $rules['clock_out'] = 'nullable|date_format:H:i';
+
+        $validated = $request->validate($rules);
 
         // ---------------------------------------------------------------
         // sa enclosed code na toh, plan ko na within the start-end time lang yung pwedeng maselect
-        // for now, di ko pa nagagawa
         // get program start and end times
-        $date = Carbon::parse($program->date)->format('Y-m-d');
+        $date         = Carbon::parse($program->date)->format('Y-m-d');
         $programStart = Carbon::parse($date . ' ' . $program->start_time);
-        $programEnd = Carbon::parse($date . ' ' . $program->end_time);
-        // Parse
-        $clockIn = $request->clock_in ? Carbon::parse($request->date . ' ' . $request->clock_in) : null;
-        $clockOut = $request->clock_out ? Carbon::parse($request->date . ' ' . $request->clock_out) : null;
+        $programEnd   = Carbon::parse($date . ' ' . $program->end_time);
 
-        // Validate clock_in is not before program start
-        if ($clockIn && $clockIn->lt($programStart)) {
+        // Parse clock_in and clock_out
+        $clockIn  = $validated['clock_in']
+            ? Carbon::parse($validated['date'] . ' ' . $validated['clock_in'])
+            : ($attendance->clock_in ? Carbon::parse($attendance->clock_in) : null);
+
+        $clockOut = $validated['clock_out']
+            ? Carbon::parse($validated['date'] . ' ' . $validated['clock_out'])
+            : null;
+
+        // Validate clock_in is within program timeframe
+        if ($clockIn && ($clockIn->lt($programStart) || $clockIn->gt($programEnd))) {
             throw ValidationException::withMessages([
-                'clock_in' => 'Time in cannot be before the program start time (' . $programStart->format('H:i') . ').'
+                'clock_in' => 'Time in must be within the program schedule (' .
+                    $programStart->format('H:i') . ' - ' . $programEnd->format('H:i') . ').'
+            ]);
+        }
+
+        // Validate clock_out is within program timeframe
+        if ($clockOut && ($clockOut->lt($programStart) || $clockOut->gt($programEnd))) {
+            throw ValidationException::withMessages([
+                'clock_out' => 'Time out must be within the program schedule (' .
+                    $programStart->format('H:i') . ' - ' . $programEnd->format('H:i') . ').'
             ]);
         }
 
         // Validate clock_out is not before clock_in
-        if ($clockIn && $clockOut && $clockOut->lt($clockIn)) {
+        if ($clockIn && $clockOut && $clockOut->lte($clockIn)) {
             throw ValidationException::withMessages([
-                'clock_out' => 'Time out cannot be before time in.'
+                'clock_out' => 'Time out must be after time in.'
             ]);
         }
         // ---------------------------------------------------------------
 
         // Update clock_in only if meron na, to avoid overwriting existing data.
-        if ($request->has('clock_in')) {
-            $attendance->clock_in = $request->date . ' ' . $request->clock_in;
-        }
-        // Update clock_out only if a clock_out was provided.
-        if ($request->filled('clock_out')) {
-            $attendance->clock_out = $request->date . ' ' . $request->clock_out;
+        if (!$attendance->clock_in && $clockIn) {
+            $attendance->clock_in = $clockIn;
         }
 
-        $attendance->notes = $request->notes;
+        // Update clock_out only if a clock_out was provided.
+        if ($clockOut) {
+            $attendance->clock_out = $clockOut;
+        }
+
+        $attendance->notes = $validated['notes'] ?? $attendance->notes;
 
         // Calculate total hours worked if both clock_in and clock_out are set.
         if ($attendance->clock_in && $attendance->clock_out) {
-            $in = Carbon::parse($attendance->clock_in);
-            $out = Carbon::parse($attendance->clock_out);
-            $attendance->hours_logged = round($in->floatDiffInHours($out), 2);
+            $attendance->hours_logged = round(
+                Carbon::parse($attendance->clock_in)->floatDiffInHours($attendance->clock_out),
+                2
+            );
         } else {
             $attendance->hours_logged = 0;
         }
@@ -360,12 +388,12 @@ class VolunteerAttendanceController extends Controller
         $attendance->save();
 
         // update volunteer's total hours
-        $volunteer = $attendance->volunteer;
-        $volunteer->updateTotalHours();
+        $attendance->volunteer->updateTotalHours();
 
         return redirect()->back()->with('toast', [
             'message' => 'Attendance record updated successfully!',
-            'type' => 'success',
+            'type'    => 'success',
         ]);
     }
+
 }
