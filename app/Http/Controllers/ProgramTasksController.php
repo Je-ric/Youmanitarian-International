@@ -188,7 +188,8 @@ class ProgramTasksController extends Controller
             'task_id' => $task->id,
             'volunteer_id' => $request->volunteer_id,
             'assigned_by' => optional(Auth::user())->id,
-            'status' => 'pending',
+            'status'       => $task->status, // para mag-adjust yung volunteer status sa tasks 
+            // 'status' => 'pending',
         ]);
 
         // find() returns a single Volunteer model or null if not found

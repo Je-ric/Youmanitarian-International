@@ -1,5 +1,8 @@
 <div class="w-full bg-white border border-indigo-100 rounded-xl p-6 mb-6  transition-all duration-200 shadow-lg hover:shadow-sm backdrop-blur-sm">
-    <form action="{{ route('programs.tasks.store', $program) }}" method="POST" x-data="{ expanded: false }" data-ajax="store-task">
+    <form action="{{ route('programs.tasks.store', $program) }}"
+            method="POST"
+            x-data="{ expanded: false }"
+            data-ajax="store-task">
         @csrf
         <div class="flex items-center justify-between">
             <h3 class="text-base font-semibold text-slate-800 flex items-center tracking-tight">
@@ -66,13 +69,12 @@
                                         ]" />
                                 </form>
 
-                                <form action="{{ route('programs.tasks.destroy', [$program, $task]) }}" method="POST" class="inline-flex" data-ajax="delete-task">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="text-slate-400 hover:text-red-400 p-1 hover:bg-red-900/20 rounded transition-colors">
-                                        <i class='bx bx-trash w-4 h-4'></i>
-                                    </button>
-                                </form>
+                                <!-- Open Delete Task Modal -->
+                                <button type="button"
+                                        class="text-slate-400 hover:text-red-400 p-1 hover:bg-red-900/20 rounded transition-colors"
+                                        onclick="document.getElementById('deleteTaskModal-{{ $task->id }}').showModal()">
+                                    <i class='bx bx-trash w-4 h-4'></i>
+                                </button>
                             </div>
                         </div>
 
@@ -145,13 +147,25 @@
 
                                                         ]" />
                                                 </form>
-                                                <form action="{{ route('programs.tasks.assignments.destroy', [$program, $task, $assignment]) }}" method="POST" class="inline-flex" data-ajax="delete-assignment">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="text-indigo-300 hover:text-red-600 hover:bg-red-50 rounded transition-colors">
+
+                                                <!-- Open Remove Volunteer Modal -->
+                                                {{-- <x-button type="button"
+                                                          data-tip="Remove from Task"
+                                                          onclick="document.getElementById('removeVolunteerModal-{{ $task->id }}-{{ $assignment->id }}').showModal()">
+                                                    <i class='bx bx-x'></i>
+                                                </x-button> --}}
+                                                <button type="button" class="text-indigo-300 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                                                   onclick="document.getElementById('removeVolunteerModal-{{ $task->id }}-{{ $assignment->id }}').showModal()">
                                                         <i class='bx bx-x w-4 h-4'></i>
                                                     </button>
-                                                </form>
+
+                                                <!-- Remove Volunteer Modal -->
+                                                @include('programs_volunteers.modals.removeVolunteerModal', [
+                                                    'program'    => $program,
+                                                    'task'       => $task,
+                                                    'assignment' => $assignment,
+                                                    'modalId'    => 'removeVolunteerModal-' . $task->id . '-' . $assignment->id,
+                                                ])
                                             </div>
                                         </div>
                                     @endforeach
@@ -192,6 +206,13 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Delete Task Modal instance -->
+                @include('programs_volunteers.modals.deleteTasksModal', [
+                    'program' => $program,
+                    'task'    => $task,
+                    'modalId' => 'deleteTaskModal-' . $task->id,
+                ])
             @endforeach
         </div>
     @endif
@@ -307,16 +328,20 @@ $(document).ready(function(){
         });
     });
 
-    // Delete Task
+    // Delete Task (via modal, no confirm prompt)
     $(document).on('submit', 'form[data-ajax="delete-task"]', function(e){
         e.preventDefault();
-        if(!confirm("Delete this task?")) return;
         const form = $(this);
         $.ajax({
             url: form.attr('action'),
             method: "POST",
             data: form.serialize(),
             success: function(res){
+                const modalId = form.data('modal-id');
+                if (modalId) {
+                    const dlg = document.getElementById(modalId);
+                    if (dlg && typeof dlg.close === 'function') dlg.close();
+                }
                 if (res?.task_id) {
                     removeCard(res.task_id);
                 } else {
@@ -365,16 +390,20 @@ $(document).ready(function(){
         });
     });
 
-    // Remove Volunteer from Task
+    // Remove Volunteer from Task (via modal, no confirm prompt)
     $(document).on('submit', 'form[data-ajax="delete-assignment"]', function(e){
         e.preventDefault();
-        if(!confirm("Remove this volunteer from the task?")) return;
         const form = $(this);
         $.ajax({
             url: form.attr('action'),
             method: "POST",
             data: form.serialize(),
             success: function(res){
+                const modalId = form.data('modal-id');
+                if (modalId) {
+                    const dlg = document.getElementById(modalId);
+                    if (dlg && typeof dlg.close === 'function') dlg.close();
+                }
                 if (res?.html && res?.task_id) {
                     replaceCard(res.html, res.task_id);
                 } else {
