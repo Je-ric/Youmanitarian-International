@@ -40,6 +40,7 @@ Route::get('/programs', [WebsiteController::class, 'programs'])->name('website.p
 Route::get('/sponsors', [WebsiteController::class, 'sponsors'])->name('website.sponsors');
 Route::get('/about', [WebsiteController::class, 'about'])->name('website.about');
 Route::get('/team', [WebsiteController::class, 'team'])->name('website.team');
+Route::get('/donate', [WebsiteController::class, 'donate'])->name('website.donate');
 Route::get('/weather-forecast', [WebsiteController::class, 'forecast'])->name('weather-forecast.index');
 Route::get('/chatbot', [WebsiteController::class, 'chatbot'])->name('chatbot.index');
 

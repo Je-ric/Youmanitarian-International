@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Youmanitarian International</title>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js']) 
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
@@ -30,9 +30,11 @@
             <a href="{{ route('website.about') }}" class="text-gray-600 hover:text-blue-600">About Us</a>
             <a href="{{ route('website.team') }}" class="text-gray-600 hover:text-blue-600">Meet the Team</a>
 
+            <a href="{{ route('website.donate') }}" class="text-gray-600 hover:text-blue-600">Donate Today</a>
+            
             @if(Auth::check())
                 <a href="{{ url('/dashboard') }}" class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Dashboard</a>
-                {{-- <a href="{{ route('logout') }}" class="btn btn-outline border-[#101529] text-[#101529] hover:bg-[#101529] hover:text-white" 
+                {{-- <a href="{{ route('logout') }}" class="btn btn-outline border-[#101529] text-[#101529] hover:bg-[#101529] hover:text-white"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     Logout
                 </a>--}}

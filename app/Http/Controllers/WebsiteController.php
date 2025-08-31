@@ -104,6 +104,11 @@ class WebsiteController extends Controller
         return view('website.team'); // Meet the Team
     }
 
+     public function donate()
+    {
+        return view('website.donate'); // Donate
+    }
+
     public function forecast()
     {
         $OPEN_WEATHERMAP_KEY1 = env('OPEN_WEATHERMAP_KEY1');
