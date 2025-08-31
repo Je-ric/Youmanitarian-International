@@ -84,7 +84,10 @@
                     default => 'page',
                 };
             @endphp
-            {{ $users->appends(array_merge(request()->except($pageName), ['tab' => request()->query('tab', $roleType), $pageName => $users->currentPage()]))->links() }}
+            {{ $users->appends([
+                'tab' => request()->query('tab', $roleType),
+            ])->links() }}
+            {{-- {{ $users->appends(array_merge(request()->except($pageName), ['tab' => request()->query('tab', $roleType), $pageName => $users->currentPage()]))->links() }} --}}
         </div>
     @else
         <x-empty-state

@@ -18,11 +18,13 @@
                 // ['id' => 'member', 'label' => 'Members (' . $memberUsers->count() . ')', 'icon' => 'bx-group'],
                 ['id' => 'no_roles', 'label' => 'No Roles (' . $usersWithoutRoles->count() . ')', 'icon' => 'bx-user-x'],
             ];
+
+            $currentTab = request()->query('tab', 'overview'); // fallback to overview
         @endphp
 
         <x-navigation-layout.tabs-modern
             :tabs="$tabs"
-            default-tab="overview"
+            default-tab="{{ $currentTab }}"
         >
             <x-slot:slot_overview>
                 @include('roles.partials.rolesOverview')
