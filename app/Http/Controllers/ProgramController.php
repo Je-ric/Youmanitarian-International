@@ -209,12 +209,14 @@ class ProgramController extends Controller
     // programs/index.blade.php (main)
     public function destroy(Request $request, Program $program)
     {
+        // $id = $program->id;
         $program->delete();
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Program deleted successfully.'
+                'message' => 'Program deleted successfully.',
+                'program_id' => $program->id,
             ]);
         }
 

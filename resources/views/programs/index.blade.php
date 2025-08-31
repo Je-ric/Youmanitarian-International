@@ -31,20 +31,26 @@
 
         <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="all">
             <x-slot:slot_all>
-                @include('programs.partials.programsTable', ['programs' => $allPrograms, 'tab' => 'all'])
-                </x-slot>
+                <div id="slot_all">
+                    @include('programs.partials.programsTable', ['programs' => $allPrograms, 'tab' => 'all'])
+                </div>
+            </x-slot>
 
-                @if(Auth::user()->hasRole('Volunteer'))
-                    <x-slot:slot_joined>
+            @if(Auth::user()->hasRole('Volunteer'))
+                <x-slot:slot_joined>
+                    <div id="slot_joined">
                         @include('programs.partials.programsTable', ['programs' => $joinedPrograms, 'tab' => 'joined'])
-                        </x-slot>
-                @endif
+                    </div>
+                </x-slot>
+            @endif
 
-                    @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
-                        <x-slot:slot_my>
-                            @include('programs.partials.programsTable', ['programs' => $myPrograms, 'tab' => 'my'])
-                            </x-slot>
-                    @endif
+            @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
+                <x-slot:slot_my>
+                    <div id="slot_my">
+                        @include('programs.partials.programsTable', ['programs' => $myPrograms, 'tab' => 'my'])
+                    </div>
+                </x-slot>
+            @endif
         </x-navigation-layout.tabs-modern>
 
         @php
@@ -89,38 +95,56 @@
     </div>
 @endsection
 
-
 @push('scripts')
 <script>
 $(document).on('submit', '.delete-program-form', function(e) {
     e.preventDefault();
-    let form = $(this);
+
+    const form = $(this);
+    const modalId = form.data('modal-id');
 
     $.ajax({
         url: form.attr('action'),
         type: 'POST',
-        data: form.serialize(),
+        data: form.serialize() + '&_method=DELETE',
         success: function(response) {
-            if (response.success) {
-                const programId = form.data('program-id');
+            if (!response.success) return;
 
-                // Remove ALL rows across tabs
-                $(`.program-row[data-program-id="${programId}"]`).fadeOut();
+            const programId = response.program_id ?? form.data('program-id');
 
-                // Close modal
-                const modalId = form.data('modal-id');
-                if (modalId) {
-                    document.getElementById(modalId).close();
-                }
-
-                alert(response.message);
+            // 1) Remove any row with this program id across all tabs
+            const $rows = $(`.program-row[data-program-id="${programId}"]`);
+            if ($rows.length) {
+                $rows.fadeOut(200, function() { $(this).remove(); });
             }
+
+            // 2) Optionally refresh only the active tab’s content (to update pagination/count)
+            // const activeTabEl = document.querySelector('[role="tab"][aria-selected="true"]');
+            // const tabId = activeTabEl?.dataset?.tab || 'all';
+            // const slotId = `#slot_${tabId}`;
+            // if (document.querySelector(slotId)) {
+            //     $(slotId).load(location.href + ` ${slotId} > *`);
+            // }
+            ['all','joined','my'].forEach(tabId => {
+                const slotId = `#slot_${tabId}`;
+                if (document.querySelector(slotId)) {
+                    $(slotId).load(location.href + ` ${slotId} > *`);
+                }
+            });
+            
+            // 3) Close modal
+            if (modalId) {
+                const dlg = document.getElementById(modalId);
+                if (dlg?.close) dlg.close();
+            }
+
+            console.log('Program deleted successfully.');
         },
-        error: function(xhr) {
-            alert('Failed to delete program. Please try again.');
+        error: function() {
+            console.error('Failed to delete program. Please try again.');
         }
     });
 });
-
 </script>
 @endpush
+

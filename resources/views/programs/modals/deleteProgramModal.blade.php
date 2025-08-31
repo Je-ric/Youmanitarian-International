@@ -19,18 +19,18 @@
     <x-modal.footer>
         <div class="flex gap-2 w-full justify-end flex-col sm:flex-row">
             <x-modal.close-button :modalId="$modalId" text="Cancel" />
-            <form action="{{ route('programs.destroy', $program) }}" 
-                    method="POST"
-                    class="delete-program-form" 
-                    data-modal-id="{{ $modalId }}"
-                    data-program-id="{{ $program->id }}">
+            <form action="{{ route('programs.destroy', $program) }}"
+                  method="POST"
+                  class="inline-flex delete-program-form"
+                  data-modal-id="{{ $modalId }}"
+                  data-program-id="{{ $program->id }}">
                 @csrf
                 @method('DELETE')
-                <x-button type="submit" variant="danger" class="w-full sm:w-auto">
+                <x-button type="submit" variant="danger">
                     <i class='bx bx-trash'></i> Delete
                 </x-button>
             </form>
         </div>
     </x-modal.footer>
-</x-modal.dialog> 
+</x-modal.dialog>
 

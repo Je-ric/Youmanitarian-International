@@ -28,11 +28,14 @@
                 <x-table.th>Actions</x-table.th>
             </x-table.tr>
         </x-table.thead>
+
         <x-table.tbody class="bg-white">
             @foreach($programs as $program)
-                <x-table.tr   class="program-row" 
-                            data-program-id="{{ $program->id }}"
-                            id="program-row-{{ $tab ?? 'all' }}-{{ $program->id }}"> {{-- sa index script --}}
+                <x-table.tr
+                    id="program-row-{{ $tab ?? 'all' }}-{{ $program->id }}"
+                    class="program-row"
+                    data-program-id="{{ $program->id }}"
+                >
                     <x-table.td class="w-10 text-center text-gray-500">
                         {{ $loop->iteration + ($programs->currentPage() - 1) * $programs->perPage() }}
                     </x-table.td>
