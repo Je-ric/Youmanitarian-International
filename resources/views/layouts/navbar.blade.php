@@ -15,7 +15,12 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
-<header class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+    @if (session('toast'))
+        <x-feedback-status.toast 
+                :message="session('toast')['message']" 
+                :type="session('toast')['type']" />
+    @endif
+<header class="bg-white shadow-md fixed top-0 left-0 w-full z-10">
     <div class="container mx-auto px-6 py-4 flex items-center justify-between">
         <div class="flex items-center space-x-4">
             <img src="{{ asset('assets/images/logo/YI_Logo.png') }}" alt="Logo" class="h-14 sm:h-16 w-auto">

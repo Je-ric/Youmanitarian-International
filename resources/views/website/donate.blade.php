@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 gap-6 px-4">
+
     <h1 class="text-5xl font-extrabold text-gray-800">Donate</h1>
     <p class="text-gray-600 text-center max-w-2xl">
         Your support helps us continue our programs. Make a secure donation below.
@@ -15,6 +16,6 @@
 
 @include('finance.modals.addDonationModal', [
     'modalId' => 'addDonationModal-website',
+    'action'  => route('website.donations.store'),
 ])
-
 @endsection

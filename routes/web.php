@@ -48,6 +48,11 @@ Route::get('/chatbot', [WebsiteController::class, 'chatbot'])->name('chatbot.ind
 Route::post('/programs/{program}/feedback/guest', [ProgramFeedbackController::class, 'submitGuestFeedback'])
     ->name('programs.feedback.guest.submit');
 
+// Public donation store (no auth)
+Route::post('/donations', [DonationController::class, 'store'])
+    ->name('website.donations.store')
+    ->withoutMiddleware(['auth', 'verified']);
+
 // =================================================================
 // AUTHENTICATION ROUTES
 // =================================================================

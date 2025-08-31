@@ -21,10 +21,10 @@
         </div>
     </x-modal.header>
 
-    <form
-        @if(!$isView)
-            action="{{ route('finance.donations.store') }}" method="POST"
-        @endif
+    <form action="{{ ($action ?? null) ? $action : route('finance.donations.store') }}"
+    {{-- we are using this in two pages website (public) and system (fc) --}}
+    {{-- If the request is coming from the website, use the website route --}}
+        method="POST"
         enctype="multipart/form-data" class="flex flex-col flex-1 min-h-0">
         @csrf
 

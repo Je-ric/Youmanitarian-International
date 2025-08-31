@@ -75,10 +75,19 @@ class DonationController extends Controller
             'notes' => 'nullable|string|max:1000',
         ]);
 
-        // Clean up email value - if it's "N/A", set it to null
-        if (isset($validated['donor_email']) && $validated['donor_email'] === 'N/A') {
-            $validated['donor_email'] = null;
-        }
+            // Clean up email value - if it's "N/A", set it to null
+            if (isset($validated['donor_email']) && $validated['donor_email'] === 'N/A') {
+                $validated['donor_email'] = null;
+            }
+
+            if (($validated['donor_email'] ?? null) === 'N/A') {
+                $validated['donor_email'] = null;
+            }
+
+            // Default donor_name to current user if logged in, not anonymous, and name not provided
+            if (empty($validated['donor_name']) && Auth::check() && !$request->boolean('is_anonymous', false)) {
+                $validated['donor_name'] = Auth::user()->name;
+            }
 
         $receiptPath = null;
         if ($request->hasFile('receipt')) {
@@ -106,10 +115,28 @@ class DonationController extends Controller
             'notes' => $validated['notes'] ?? null,
         ]); // Pending status are donations that have been reported/entered not yet verified or received.
 
-        return redirect()->route('finance.index')->with('toast', [
-            'message' => 'Donation added successfully!',
-            'type' => 'success',
-        ]);
+        // Redirect based on source route (website vs. dashboard)
+        if ($request->routeIs('website.donations.store')) {
+            // Optional: return JSON if the website form uses AJAX
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Thank you for your donation.'], 201);
+            }
+
+            return redirect()
+                ->route('website.donate')
+                ->with('toast', [
+                    'message' => 'Thank you for your donation! We have received your submission.',
+                    'type' => 'success'
+                ]);
+        }
+
+        // Default: back to finance area (protected)
+        return redirect()
+            ->route('finance.index')
+            ->with('toast', [
+                'message' => 'Donation recorded successfully.',
+                'type' => 'success'
+            ]);
     }
 
 
