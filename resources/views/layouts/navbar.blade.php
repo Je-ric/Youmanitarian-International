@@ -54,11 +54,11 @@
     </div>
 </header>
 
-
-
 </html>
-@yield('content')
-
-
+<body>
+    <main>
+        @yield('content')
+    </main>
+</body>
 
 
