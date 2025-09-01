@@ -7,58 +7,12 @@
                 Manage <span class="text-primary-custom">Team Members</span>
             </h2>
 
-            <!-- Add Member Form -->
-            <div class="bg-white p-8 rounded-2xl shadow-lg mb-12 border border-gray-100">
-                <h3 class="text-2xl font-semibold mb-6 text-gray-800">➕ Add New Team Member</h3>
-                <form method="POST" action="{{ route('content.teamMembers.store') }}" enctype="multipart/form-data"
-                    class="space-y-6">
-                    @csrf
-                    <div class="grid gap-6 sm:grid-cols-2">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Name</label>
-                            <input type="text" name="name"
-                                class="w-full border-gray-300 rounded-xl shadow-sm focus:ring-primary-custom focus:border-primary-custom p-3"
-                                required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Position</label>
-                            <input type="text" name="position" required
-                                class="w-full border-gray-300 rounded-xl shadow-sm focus:ring-primary-custom focus:border-primary-custom p-3">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Photo</label>
-                            <input type="file" name="photo" required
-                                class="w-full border-gray-300 rounded-xl shadow-sm focus:ring-primary-custom focus:border-primary-custom p-3">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Facebook</label>
-                            <input type="url" name="facebook_url"
-                                class="w-full border-gray-300 rounded-xl shadow-sm focus:ring-primary-custom focus:border-primary-custom p-3">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">LinkedIn</label>
-                            <input type="url" name="linkedin_url"
-                                class="w-full border-gray-300 rounded-xl shadow-sm focus:ring-primary-custom focus:border-primary-custom p-3">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Twitter</label>
-                            <input type="url" name="twitter_url"
-                                class="w-full border-gray-300 rounded-xl shadow-sm focus:ring-primary-custom focus:border-primary-custom p-3">
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700">Bio</label>
-                            <textarea name="bio" rows="3"
-                                class="w-full border-gray-300 rounded-xl shadow-sm focus:ring-primary-custom focus:border-primary-custom p-3"></textarea>
-                        </div>
-                    </div>
-                    <div class="pt-4">
-                        <button type="submit"
-                            class="px-6 py-3 rounded-xl bg-primary-custom text-white font-medium shadow hover:bg-primary-dark transition">
-                            Save Member
-                        </button>
-                    </div>
-                </form>
-            </div>
+            <x-button variant="add-create" class="mb-6"
+                    onclick="document.getElementById('addTeamMemberModal').showModal(); return false;">
+                <i class='bx bx-plus-circle mr-2'></i> Add Team Member
+            </x-button>
+
+            @include('content.dynamic.addTeamMemberModal')
 
             <!-- Team Members Grid -->
             <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -154,11 +108,29 @@
                             <input type="url" name="twitter_url" value="{{ $member->twitter_url }}"
                                 class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm">
                             <textarea name="bio" rows="2" class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm">{{ $member->bio }}</textarea>
+
+
                             <button type="submit"
                                 class="w-full px-4 py-2 bg-yellow-500 text-white rounded-xl text-sm font-medium shadow hover:bg-yellow-600 transition">
                                 Update
                             </button>
                         </form>
+
+                        <form method="POST" action="{{ route('content.teamMembers.update', $member->id) }}">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="name" value="{{ $member->name }}">
+                            <input type="hidden" name="position" value="{{ $member->position }}">
+                            <input type="hidden" name="bio" value="{{ $member->bio }}">
+                            <input type="hidden" name="facebook_url" value="{{ $member->facebook_url }}">
+                            <input type="hidden" name="linkedin_url" value="{{ $member->linkedin_url }}">
+                            <input type="hidden" name="twitter_url" value="{{ $member->twitter_url }}">
+                            <input type="hidden" name="photo" value="{{ $member->photo_url }}">
+
+                            <x-form.toggle name="is_active" :checked="$member->is_active" label="Active"
+                                onchange="this.form.submit()" />
+                        </form>
+
 
                     </div>
                 @endforeach

@@ -33,7 +33,7 @@ class TeamMemberController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'position' => 'required|string|max:255',
-            'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'photo' => 'required|image|mimes:jpg,jpeg,png|max:10240',
             'bio' => 'nullable|string|max:255',
             'facebook_url' => 'nullable|url',
             'linkedin_url' => 'nullable|url',
@@ -66,7 +66,7 @@ class TeamMemberController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'position' => 'required|string|max:255',
-            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
             'bio' => 'nullable|string|max:255',
             'facebook_url' => 'nullable|url',
             'linkedin_url' => 'nullable|url',
