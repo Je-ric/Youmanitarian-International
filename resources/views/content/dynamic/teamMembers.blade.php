@@ -22,12 +22,12 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Position</label>
-                            <input type="text" name="position"
+                            <input type="text" name="position" required
                                 class="w-full border-gray-300 rounded-xl shadow-sm focus:ring-primary-custom focus:border-primary-custom p-3">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Photo</label>
-                            <input type="file" name="photo"
+                            <input type="file" name="photo" required
                                 class="w-full border-gray-300 rounded-xl shadow-sm focus:ring-primary-custom focus:border-primary-custom p-3">
                         </div>
                         <div>
@@ -75,12 +75,18 @@
                                 class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition rounded-full">
                                 @csrf
                                 @method('PUT')
+
+                                <!-- Include required fields as hidden -->
+                                <input type="hidden" name="name" value="{{ $member->name }}">
+                                <input type="hidden" name="position" value="{{ $member->position }}">
+
                                 <label
                                     class="cursor-pointer text-white text-sm px-3 py-1 bg-primary-custom rounded-full hover:bg-primary-dark">
                                     Change
                                     <input type="file" name="photo" class="hidden" onchange="this.form.submit()">
                                 </label>
                             </form>
+
                         </div>
 
                         <!-- Info -->
@@ -114,7 +120,7 @@
 
                         <!-- Action Buttons -->
                         <div class="flex justify-center space-x-3 mt-4">
-                            <!-- Update Bio & Position -->
+                            <!-- Update Bio, Position & Links -->
                             <button type="button"
                                 onclick="document.getElementById('updateForm-{{ $member->id }}').classList.toggle('hidden')"
                                 class="text-yellow-500 hover:text-yellow-600 text-lg">
@@ -138,8 +144,14 @@
                             @csrf
                             @method('PUT')
                             <input type="text" name="name" value="{{ $member->name }}"
-                                class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm">
+                                class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm" required>
                             <input type="text" name="position" value="{{ $member->position }}"
+                                class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm" required>
+                            <input type="url" name="facebook_url" value="{{ $member->facebook_url }}"
+                                class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm">
+                            <input type="url" name="linkedin_url" value="{{ $member->linkedin_url }}"
+                                class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm">
+                            <input type="url" name="twitter_url" value="{{ $member->twitter_url }}"
                                 class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm">
                             <textarea name="bio" rows="2" class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm">{{ $member->bio }}</textarea>
                             <button type="submit"

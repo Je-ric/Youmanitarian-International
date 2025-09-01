@@ -32,8 +32,8 @@ class TeamMemberController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'position' => 'nullable|string|max:255',
-            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'position' => 'required|string|max:255',
+            'photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'bio' => 'nullable|string|max:255',
             'facebook_url' => 'nullable|url',
             'linkedin_url' => 'nullable|url',
@@ -55,15 +55,17 @@ class TeamMemberController extends Controller
 
         TeamMember::create($data);
 
-        return redirect()->route('content.teamMembers.index')
-            ->with('success', 'Team member created successfully!');
+        return redirect()->route('content.teamMembers.index')->with('toast', [
+                'message' => 'Team member created successfully!',
+                'type' => 'success'
+        ]);
     }
 
     public function update(Request $request, TeamMember $teamMember)
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'position' => 'nullable|string|max:255',
+            'position' => 'required|string|max:255',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'bio' => 'nullable|string|max:255',
             'facebook_url' => 'nullable|url',
@@ -86,14 +88,18 @@ class TeamMemberController extends Controller
 
         $teamMember->update($data);
 
-        return redirect()->route('content.teamMembers.index')
-            ->with('success', 'Team member updated successfully!');
+            return redirect()->route('content.teamMembers.index')->with('toast', [
+                'message' => 'Team member updated successfully!',
+                'type' => 'success'
+        ]);
     }
 
     public function destroy(TeamMember $teamMember)
     {
         $teamMember->delete();
-        return redirect()->route('content.teamMembers.index')
-            ->with('success', 'Team member deleted successfully!');
+        return redirect()->route('content.teamMembers.index')->with('toast', [
+                'message' => 'Team member deleted successfully!',
+                'type' => 'success'
+        ]);
     }
 }
