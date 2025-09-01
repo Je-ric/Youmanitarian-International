@@ -43,15 +43,7 @@ class TeamMemberController extends Controller
         ]);
 
         // Handle photo upload
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $sanitizedName = preg_replace('/[^A-Za-z0-9]/', '', $data['name']);
-            $sanitizedPosition = preg_replace('/[^A-Za-z0-9]/', '', $data['position'] ?? 'Member');
-            $timestamp = time();
-            $extension = $file->getClientOriginalExtension();
-            $newFilename = "{$sanitizedName}_{$sanitizedPosition}_{$timestamp}.{$extension}";
-            $data['photo_url'] = $file->storeAs('uploads/team_members', $newFilename, 'public');
-        }
+        $this->handlePhotoUpload($request, $data);
 
         TeamMember::create($data);
 
@@ -76,15 +68,7 @@ class TeamMemberController extends Controller
         ]);
 
         // Handle photo upload
-        if ($request->hasFile('photo')) {
-            $file = $request->file('photo');
-            $sanitizedName = preg_replace('/[^A-Za-z0-9]/', '', $data['name']);
-            $sanitizedPosition = preg_replace('/[^A-Za-z0-9]/', '', $data['position'] ?? 'Member');
-            $timestamp = time();
-            $extension = $file->getClientOriginalExtension();
-            $newFilename = "{$sanitizedName}_{$sanitizedPosition}_{$timestamp}.{$extension}";
-            $data['photo_url'] = $file->storeAs('uploads/team_members', $newFilename, 'public');
-        }
+        $this->handlePhotoUpload($request, $data);
 
         $teamMember->update($data);
 
@@ -101,5 +85,16 @@ class TeamMemberController extends Controller
                 'message' => 'Team member deleted successfully!',
                 'type' => 'success'
         ]);
+    }
+    private function handlePhotoUpload($request, &$data) {
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $sanitizedName = preg_replace('/[^A-Za-z0-9]/', '', $data['name']);
+            $sanitizedPosition = preg_replace('/[^A-Za-z0-9]/', '', $data['position'] ?? 'Member');
+            $timestamp = time();
+            $extension = $file->getClientOriginalExtension();
+            $newFilename = "{$sanitizedName}_{$sanitizedPosition}_{$timestamp}.{$extension}";
+            $data['photo_url'] = $file->storeAs('uploads/team_members', $newFilename, 'public');
+        }
     }
 }
