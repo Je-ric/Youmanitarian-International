@@ -29,6 +29,7 @@ use App\Http\Controllers\MembershipReminderController;
 use App\Models\MembershipPayment;
 use Illuminate\Notifications\DatabaseNotification;
 use App\Http\Controllers\ContentReviewCommentController;
+use App\Http\Controllers\TeamMemberController;
 
 // =================================================================
 // WEBSITE ROUTES (Public - No Authentication Required)
@@ -52,6 +53,23 @@ Route::post('/programs/{program}/feedback/guest', [ProgramFeedbackController::cl
 Route::post('/donations', [DonationController::class, 'store'])
     ->name('website.donations.store')
     ->withoutMiddleware(['auth', 'verified']);
+
+
+    // Public routes
+Route::get('team-members', [TeamMemberController::class, 'index'])->name('content.teamMembers.index');
+Route::get('team-members/{team_member}', [TeamMemberController::class, 'show'])->name('content.teamMembers.show');
+
+// Back-compat alias: old name -> redirect to index
+Route::get('content/team-members', fn () => redirect()->route('content.teamMembers.index'))->name('content.team-members');
+
+// Admin-only routes
+Route::middleware(['auth', 'role:Admin'])->group(function () {
+    Route::get('team-members/create', [TeamMemberController::class, 'create'])->name('content.teamMembers.create');
+    Route::post('team-members', [TeamMemberController::class, 'store'])->name('content.teamMembers.store');
+    Route::get('team-members/{team_member}/edit', [TeamMemberController::class, 'edit'])->name('content.teamMembers.edit');
+    Route::put('team-members/{team_member}', [TeamMemberController::class, 'update'])->name('content.teamMembers.update');
+    Route::delete('team-members/{team_member}', [TeamMemberController::class, 'destroy'])->name('content.teamMembers.destroy');
+});
 
 // =================================================================
 // AUTHENTICATION ROUTES

@@ -87,6 +87,14 @@
                                 <span class="ml-3 sidebar-content text-sm">Contents</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('content.teamMembers.index') }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('content.teamMembers.*') ? 'active' : '' }}"
+                                data-tooltip="Team Members">
+                                <i class="bx bx-user-pin w-5 text-center flex-shrink-0 text-primary"></i>
+                                <span class="ml-3 sidebar-content text-sm">Team Members</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 @endif
