@@ -15,16 +15,26 @@
             @include('content.dynamic.addTeamMemberModal')
 
             <!-- Team Members Grid -->
-            <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div id="teamGrid" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 @foreach ($teamMembers as $member)
                     <div
-                        class="bg-white rounded-2xl shadow-md p-6 text-center border border-gray-100 hover:shadow-lg transition relative group">
+                        class="bg-white rounded-2xl shadow-md p-6 text-center border border-gray-100 hover:shadow-lg transition relative group"
+                        draggable="true"
+                        data-id="{{ $member->id }}"
 
+                    >
                         <!-- Active/Inactive badge -->
                         <div class="absolute top-3 right-3">
                             <x-feedback-status.status-indicator
                                 :status="$member->is_active ? 'success' : 'danger'"
                                 :label="$member->is_active ? 'Displayed' : 'Not Displayed'" />
+                        </div>
+
+                        <!-- Order badge + drag hint -->
+                        <div class="absolute top-3 left-3 select-none cursor-move" title="Drag to reorder">
+                            <span class="inline-flex items-center px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-700">
+                                #{{ $member->order }} • ⋮⋮
+                            </span>
                         </div>
 
                         <!-- Photo with Hover Change Button -->
@@ -36,13 +46,9 @@
                                 class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition rounded-full">
                                 @csrf
                                 @method('PUT')
-
-                                <!-- Include required fields as hidden -->
                                 <input type="hidden" name="name" value="{{ $member->name }}">
                                 <input type="hidden" name="position" value="{{ $member->position }}">
-
-                                <label
-                                    class="cursor-pointer text-white text-sm px-3 py-1 bg-primary-custom rounded-full hover:bg-primary-dark">
+                                <label class="cursor-pointer text-white text-sm px-3 py-1 bg-primary-custom rounded-full hover:bg-primary-dark">
                                     Change
                                     <input type="file" name="photo" class="hidden" onchange="this.form.submit()">
                                 </label>
@@ -100,14 +106,12 @@
 
                             <x-form.input name="name" label="Name" value="{{ $member->name }}" required class="text-sm" />
                             <x-form.input name="position" label="Position" value="{{ $member->position }}" required class="text-sm" />
-
                             <x-form.input name="facebook_url" type="url" label="Facebook URL" value="{{ $member->facebook_url }}" class="text-sm" />
                             <x-form.input name="linkedin_url" type="url" label="LinkedIn URL" value="{{ $member->linkedin_url }}" class="text-sm" />
                             <x-form.input name="twitter_url" type="url" label="Twitter URL" value="{{ $member->twitter_url }}" class="text-sm" />
-
                             <x-form.textarea name="bio" label="Bio" rows="2" value="{{ $member->bio }}" class="text-sm" />
+                            <x-form.input name="order" type="number" label="Display Order" value="{{ $member->order }}" min="0" class="text-sm" />
 
-                            <!-- Active toggle (inside the update form) -->
                             <input type="hidden" name="is_active" value="0">
                             <x-form.toggle
                                 name="is_active"
@@ -125,6 +129,89 @@
                     </div>
                 @endforeach
             </div>
+
+            <!-- Small status bubble -->
+            <div id="orderStatus" class="fixed bottom-6 right-6 hidden">
+                <x-feedback-status.status-indicator status="info" label="Saving order..." />
+            </div>
+
+            @push('scripts')
+            <script>
+                (function () {
+                    const grid = document.getElementById('teamGrid');
+                    if (!grid) return;
+
+                    let draggingEl = null;
+
+                    grid.addEventListener('dragstart', (e) => {
+                        const card = e.target.closest('[data-id]');
+                        if (!card) return;
+                        draggingEl = card;
+                        card.classList.add('ring-2', 'ring-[#ffb51b]');
+                        e.dataTransfer.effectAllowed = 'move';
+                    });
+
+                    grid.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        const overCard = e.target.closest('[data-id]');
+                        if (!overCard || overCard === draggingEl) return;
+
+                        const rect = overCard.getBoundingClientRect();
+                        const before = (e.clientY - rect.top) < rect.height / 2;
+                        grid.insertBefore(draggingEl, before ? overCard : overCard.nextElementSibling);
+                    });
+
+                    grid.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        if (draggingEl) draggingEl.classList.remove('ring-2', 'ring-[#ffb51b]');
+                        draggingEl = null;
+                        saveOrder();
+                    });
+
+                    grid.addEventListener('dragend', () => {
+                        if (draggingEl) draggingEl.classList.remove('ring-2', 'ring-[#ffb51b]');
+                        draggingEl = null;
+                    });
+
+                    function saveOrder() {
+                        const ids = Array.from(grid.querySelectorAll('[data-id]')).map(el => el.dataset.id);
+                        const status = document.getElementById('orderStatus');
+                        if (status) {
+                            status.classList.remove('hidden');
+                            status.querySelector('span').textContent = 'Saving order...';
+                        }
+
+                        fetch('{{ route('content.teamMembers.reorder') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                'Accept': 'application/json',
+                            },
+                            body: JSON.stringify({ order: ids }),
+                        })
+                        .then(r => r.json())
+                        .then(() => {
+                            if (status) {
+                                status.innerHTML = `{!! str_replace("\n", '', view('components.feedback-status.status-indicator', ['status' => 'success', 'label' => 'Order saved'])->render()) !!}`;
+                                setTimeout(() => status.classList.add('hidden'), 1200);
+                            }
+                            // Optionally refresh order badges without full reload
+                            grid.querySelectorAll('[data-id]').forEach((el, i) => {
+                                const badge = el.querySelector('.absolute.top-3.left-3 span');
+                                if (badge) badge.textContent = '#' + i + ' • ⋮⋮';
+                            });
+                        })
+                        .catch(() => {
+                            if (status) {
+                                status.innerHTML = `{!! str_replace("\n", '', view('components.feedback-status.status-indicator', ['status' => 'danger', 'label' => 'Save failed'])->render()) !!}`;
+                                setTimeout(() => status.classList.add('hidden'), 2000);
+                            }
+                        });
+                    }
+                })();
+            </script>
+            @endpush
         </div>
     </section>
 @endsection

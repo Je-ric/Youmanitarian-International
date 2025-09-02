@@ -22,11 +22,11 @@ class WebsiteController extends Controller
         $latestPosts = collect();
 
         if ($featuredPost) {
-        $latestPosts = Content::where('content_status', 'published')
-            ->where('id', '!=', $featuredPost->id)
-            ->orderBy('created_at', 'desc')
-            ->limit(6)
-            ->get();
+            $latestPosts = Content::where('content_status', 'published')
+                ->where('id', '!=', $featuredPost->id)
+                ->orderBy('created_at', 'desc')
+                ->limit(6)
+                ->get();
         }
 
         return view('website.index', compact('featuredPost', 'latestPosts'));
@@ -104,12 +104,13 @@ class WebsiteController extends Controller
     {
         $teamMembers = TeamMember::where('is_active', true)
             ->orderBy('order')
+            ->orderBy('name')
             ->get();
 
-        return view('website.team', compact('teamMembers')); // Meet the Team
+        return view('website.team', compact('teamMembers')); // Meet the team
     }
 
-     public function donate()
+    public function donate()
     {
         return view('website.donate'); // Donate
     }

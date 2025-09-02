@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TeamMember;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TeamMemberController extends Controller
 {
@@ -38,7 +39,7 @@ class TeamMemberController extends Controller
             'facebook_url' => 'nullable|url',
             'linkedin_url' => 'nullable|url',
             'twitter_url' => 'nullable|url',
-            'order' => 'nullable|integer',
+            'order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
 
@@ -65,7 +66,7 @@ class TeamMemberController extends Controller
             'facebook_url' => 'nullable|url',
             'linkedin_url' => 'nullable|url',
             'twitter_url' => 'nullable|url',
-            'order' => 'nullable|integer',
+            'order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
 
@@ -105,4 +106,21 @@ class TeamMemberController extends Controller
             $data['photo_url'] = $file->storeAs('uploads/team_members', $newFilename, 'public');
         }
     }
+
+    public function reorder(Request $request)
+    {
+        $data = $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'integer|exists:team_members,id',
+        ]);
+
+        DB::transaction(function () use ($data) {
+            foreach ($data['order'] as $position => $id) {
+                TeamMember::where('id', $id)->update(['order' => $position]);
+            }
+        });
+
+        return response()->json(['message' => 'Order updated']);
+    }
+
 }
