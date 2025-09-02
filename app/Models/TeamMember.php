@@ -20,6 +20,11 @@ class TeamMember extends Model
         'is_active',
     ];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+        'order' => 'integer',
+    ];
+
     public function member()
     {
         return $this->belongsTo(Member::class);

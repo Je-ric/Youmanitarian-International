@@ -9,6 +9,7 @@ use App\Models\ContentImage;
 use Illuminate\Http\Request;
 use App\Models\ContentComment;
 use Illuminate\Support\Facades\Auth;
+use App\Models\TeamMember; // add this
 
 class WebsiteController extends Controller
 {
@@ -101,7 +102,11 @@ class WebsiteController extends Controller
 
     public function team()
     {
-        return view('website.team'); // Meet the Team
+        $teamMembers = TeamMember::where('is_active', true)
+            ->orderBy('order')
+            ->get();
+
+        return view('website.team', compact('teamMembers')); // Meet the Team
     }
 
      public function donate()

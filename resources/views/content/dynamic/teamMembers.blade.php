@@ -20,6 +20,13 @@
                     <div
                         class="bg-white rounded-2xl shadow-md p-6 text-center border border-gray-100 hover:shadow-lg transition relative group">
 
+                        <!-- Active/Inactive badge -->
+                        <div class="absolute top-3 right-3">
+                            <x-feedback-status.status-indicator
+                                :status="$member->is_active ? 'success' : 'danger'"
+                                :label="$member->is_active ? 'Displayed' : 'Not Displayed'" />
+                        </div>
+
                         <!-- Photo with Hover Change Button -->
                         <div class="w-32 h-32 mx-auto mb-4 relative">
                             <img src="{{ asset('storage/' . $member->photo_url) }}" alt="{{ $member->name }}"
@@ -40,7 +47,6 @@
                                     <input type="file" name="photo" class="hidden" onchange="this.form.submit()">
                                 </label>
                             </form>
-
                         </div>
 
                         <!-- Info -->
@@ -53,40 +59,34 @@
                         <!-- Social Links -->
                         <div class="flex justify-center space-x-4 mt-3">
                             @if ($member->facebook_url)
-                                <a href="{{ $member->facebook_url }}" target="_blank"
-                                    class="text-blue-600 hover:text-blue-800 transition">
-                                    <i class="bx bxl-facebook text-2xl"></i>
+                                <a href="{{ $member->facebook_url }}" target="_blank" rel="noopener" aria-label="Facebook" class="text-blue-600 hover:text-blue-700">
+                                    <i class="bx bxl-facebook"></i>
                                 </a>
                             @endif
                             @if ($member->linkedin_url)
-                                <a href="{{ $member->linkedin_url }}" target="_blank"
-                                    class="text-blue-700 hover:text-blue-900 transition">
-                                    <i class="bx bxl-linkedin text-2xl"></i>
+                                <a href="{{ $member->linkedin_url }}" target="_blank" rel="noopener" aria-label="LinkedIn" class="text-blue-700 hover:text-blue-800">
+                                    <i class="bx bxl-linkedin"></i>
                                 </a>
                             @endif
                             @if ($member->twitter_url)
-                                <a href="{{ $member->twitter_url }}" target="_blank"
-                                    class="text-sky-500 hover:text-sky-700 transition">
-                                    <i class="bx bxl-twitter text-2xl"></i>
+                                <a href="{{ $member->twitter_url }}" target="_blank" rel="noopener" aria-label="Twitter" class="text-sky-500 hover:text-sky-600">
+                                    <i class="bx bxl-twitter"></i>
                                 </a>
                             @endif
                         </div>
 
                         <!-- Action Buttons -->
                         <div class="flex justify-center space-x-3 mt-4">
-                            <!-- Update Bio, Position & Links -->
                             <button type="button"
                                 onclick="document.getElementById('updateForm-{{ $member->id }}').classList.toggle('hidden')"
                                 class="text-yellow-500 hover:text-yellow-600 text-lg">
                                 <i class="bx bx-edit"></i>
                             </button>
 
-                            <!-- Delete -->
                             <form method="POST" action="{{ route('content.teamMembers.destroy', $member->id) }}">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-700 text-lg"
-                                    onclick="return confirm('Are you sure you want to delete this member?')">
+                                <button type="submit" class="text-red-600 hover:text-red-700 text-lg">
                                     <i class="bx bx-trash"></i>
                                 </button>
                             </form>
@@ -94,43 +94,33 @@
 
                         <!-- Hidden Update Form -->
                         <form method="POST" action="{{ route('content.teamMembers.update', $member->id) }}"
-                            class="mt-3 space-y-2 hidden" id="updateForm-{{ $member->id }}">
+                            class="mt-3 space-y-2 hidden text-left" id="updateForm-{{ $member->id }}">
                             @csrf
                             @method('PUT')
-                            <input type="text" name="name" value="{{ $member->name }}"
-                                class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm" required>
-                            <input type="text" name="position" value="{{ $member->position }}"
-                                class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm" required>
-                            <input type="url" name="facebook_url" value="{{ $member->facebook_url }}"
-                                class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm">
-                            <input type="url" name="linkedin_url" value="{{ $member->linkedin_url }}"
-                                class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm">
-                            <input type="url" name="twitter_url" value="{{ $member->twitter_url }}"
-                                class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm">
-                            <textarea name="bio" rows="2" class="w-full border-gray-300 rounded-xl shadow-sm p-2 text-sm">{{ $member->bio }}</textarea>
 
+                            <x-form.input name="name" label="Name" value="{{ $member->name }}" required class="text-sm" />
+                            <x-form.input name="position" label="Position" value="{{ $member->position }}" required class="text-sm" />
+
+                            <x-form.input name="facebook_url" type="url" label="Facebook URL" value="{{ $member->facebook_url }}" class="text-sm" />
+                            <x-form.input name="linkedin_url" type="url" label="LinkedIn URL" value="{{ $member->linkedin_url }}" class="text-sm" />
+                            <x-form.input name="twitter_url" type="url" label="Twitter URL" value="{{ $member->twitter_url }}" class="text-sm" />
+
+                            <x-form.textarea name="bio" label="Bio" rows="2" value="{{ $member->bio }}" class="text-sm" />
+
+                            <!-- Active toggle (inside the update form) -->
+                            <input type="hidden" name="is_active" value="0">
+                            <x-form.toggle
+                                name="is_active"
+                                value="1"
+                                :checked="$member->is_active"
+                                label="Active"
+                                onchange="this.form.submit()" />
 
                             <button type="submit"
                                 class="w-full px-4 py-2 bg-yellow-500 text-white rounded-xl text-sm font-medium shadow hover:bg-yellow-600 transition">
                                 Update
                             </button>
                         </form>
-
-                        <form method="POST" action="{{ route('content.teamMembers.update', $member->id) }}">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" name="name" value="{{ $member->name }}">
-                            <input type="hidden" name="position" value="{{ $member->position }}">
-                            <input type="hidden" name="bio" value="{{ $member->bio }}">
-                            <input type="hidden" name="facebook_url" value="{{ $member->facebook_url }}">
-                            <input type="hidden" name="linkedin_url" value="{{ $member->linkedin_url }}">
-                            <input type="hidden" name="twitter_url" value="{{ $member->twitter_url }}">
-                            <input type="hidden" name="photo" value="{{ $member->photo_url }}">
-
-                            <x-form.toggle name="is_active" :checked="$member->is_active" label="Active"
-                                onchange="this.form.submit()" />
-                        </form>
-
 
                     </div>
                 @endforeach

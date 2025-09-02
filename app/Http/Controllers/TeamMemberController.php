@@ -42,7 +42,9 @@ class TeamMemberController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        // Handle photo upload
+        // Ensure boolean cast with default false
+        $data['is_active'] = $request->boolean('is_active');
+
         $this->handlePhotoUpload($request, $data);
 
         TeamMember::create($data);
@@ -67,7 +69,9 @@ class TeamMemberController extends Controller
             'is_active' => 'boolean',
         ]);
 
-        // Handle photo upload
+        // Ensure boolean cast with default false
+        $data['is_active'] = $request->boolean('is_active');
+
         $this->handlePhotoUpload($request, $data);
 
         $teamMember->update($data);
@@ -86,6 +90,10 @@ class TeamMemberController extends Controller
                 'type' => 'success'
         ]);
     }
+
+    // ----------------------------
+    //  Helper Methods
+    // ----------------------------
     private function handlePhotoUpload($request, &$data) {
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
