@@ -30,58 +30,66 @@ class TeamMemberController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'position' => 'required|string|max:255',
-            'photo' => 'required|image|mimes:jpg,jpeg,png|max:10240',
-            'bio' => 'nullable|string|max:255',
-            'facebook_url' => 'nullable|url',
-            'linkedin_url' => 'nullable|url',
-            'twitter_url' => 'nullable|url',
-            'order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
-        ]);
+{
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'position' => 'required|string|max:255',
+        'photo' => 'required|image|mimes:jpg,jpeg,png|max:10240',
+        'bio' => 'nullable|string|max:255',
+        'facebook_url' => 'nullable|url',
+        'linkedin_url' => 'nullable|url',
+        'twitter_url' => 'nullable|url',
+        'order' => 'nullable|integer|min:0',
+        'is_active' => 'boolean',
+    ]);
 
-        // Ensure boolean cast with default false
-        $data['is_active'] = $request->boolean('is_active');
-
-        $this->handlePhotoUpload($request, $data);
-
-        TeamMember::create($data);
-
-        return redirect()->route('content.teamMembers.index')->with('toast', [
-                'message' => 'Team member created successfully!',
-                'type' => 'success'
-        ]);
+    // Set default order if not provided
+    if (!isset($data['order'])) {
+        $data['order'] = TeamMember::max('order') + 1;
     }
 
-    public function update(Request $request, TeamMember $teamMember)
-    {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'position' => 'required|string|max:255',
-            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
-            'bio' => 'nullable|string|max:255',
-            'facebook_url' => 'nullable|url',
-            'linkedin_url' => 'nullable|url',
-            'twitter_url' => 'nullable|url',
-            'order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
-        ]);
+    // Ensure boolean cast with default true for new members
+    $data['is_active'] = $request->boolean('is_active', true);
 
-        // Ensure boolean cast with default false
-        $data['is_active'] = $request->boolean('is_active');
+    $this->handlePhotoUpload($request, $data);
 
+    TeamMember::create($data);
+
+    return redirect()->route('content.teamMembers.index')->with('toast', [
+        'message' => 'Team member created successfully!',
+        'type' => 'success'
+    ]);
+}
+
+public function update(Request $request, TeamMember $teamMember)
+{
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'position' => 'required|string|max:255',
+        'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:10240', // nullable for updates
+        'bio' => 'nullable|string|max:255',
+        'facebook_url' => 'nullable|url',
+        'linkedin_url' => 'nullable|url',
+        'twitter_url' => 'nullable|url',
+        'order' => 'nullable|integer|min:0',
+        'is_active' => 'boolean',
+    ]);
+
+    // Ensure boolean cast
+    $data['is_active'] = $request->boolean('is_active');
+
+    // Only handle photo upload if a new photo is provided
+    if ($request->hasFile('photo')) {
         $this->handlePhotoUpload($request, $data);
-
-        $teamMember->update($data);
-
-            return redirect()->route('content.teamMembers.index')->with('toast', [
-                'message' => 'Team member updated successfully!',
-                'type' => 'success'
-        ]);
     }
+
+    $teamMember->update($data);
+
+    return redirect()->route('content.teamMembers.index')->with('toast', [
+        'message' => 'Team member updated successfully!',
+        'type' => 'success'
+    ]);
+}
 
     public function destroy(TeamMember $teamMember)
     {

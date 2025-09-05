@@ -89,6 +89,45 @@
 
                         <!-- Action Buttons -->
                         <div class="flex justify-center space-x-3 mt-4">
+    <button type="button"
+        onclick="
+            // Set modal for update mode
+            document.getElementById('modalTitle').textContent = 'Update Team Member';
+            document.getElementById('modalSubtitle').textContent = 'Edit the details below to update the team member.';
+            document.getElementById('addMemberForm').action = '{{ route('content.teamMembers.update', $member->id) }}';
+            document.getElementById('methodField').value = 'PUT';
+            document.getElementById('memberId').value = '{{ $member->id }}';
+            document.getElementById('submitButton').textContent = 'Update';
+            document.getElementById('updateOnlyFields').style.display = 'block';
+            document.getElementById('photoHelperText').textContent = 'JPG, PNG up to 5MB (leave empty to keep current photo)';
+            document.getElementById('photo').removeAttribute('required');
+
+            // Populate form fields
+            document.getElementById('name').value = '{{ $member->name }}';
+            document.getElementById('position').value = '{{ $member->position }}';
+            document.getElementById('facebook_url').value = '{{ $member->facebook_url ?? '' }}';
+            document.getElementById('linkedin_url').value = '{{ $member->linkedin_url ?? '' }}';
+            document.getElementById('twitter_url').value = '{{ $member->twitter_url ?? '' }}';
+            document.getElementById('bio').value = '{{ $member->bio ?? '' }}';
+            document.getElementById('order').value = '{{ $member->order }}';
+            document.getElementById('is_active').checked = {{ $member->is_active ? 'true' : 'false' }};
+
+            // Show modal
+            document.getElementById('addTeamMemberModal').showModal();
+        "
+        class="text-yellow-500 hover:text-yellow-600 text-lg">
+        <i class="bx bx-edit"></i>
+    </button>
+
+    <form method="POST" action="{{ route('content.teamMembers.destroy', $member->id) }}">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="text-red-600 hover:text-red-700 text-lg">
+            <i class="bx bx-trash"></i>
+        </button>
+    </form>
+</div>
+                        {{-- <div class="flex justify-center space-x-3 mt-4">
                             <button type="button"
                                 onclick="document.getElementById('updateForm-{{ $member->id }}').classList.toggle('hidden')"
                                 class="text-yellow-500 hover:text-yellow-600 text-lg">
@@ -130,7 +169,7 @@
                                 class="w-full px-4 py-2 bg-yellow-500 text-white rounded-xl text-sm font-medium shadow hover:bg-yellow-600 transition">
                                 Update
                             </button>
-                        </form>
+                        </form> --}}
 
                     </div>
                 @endforeach
