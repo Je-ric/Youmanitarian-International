@@ -12,7 +12,7 @@
                 <i class='bx bx-plus-circle mr-2'></i> Add Team Member
             </x-button>
 
-            @include('content.dynamic.addTeamMemberModal')
+            @include('content.dynamic.manageTeamMemberModal')
 
             <div id="teamGrid" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 @foreach ($teamMembers as $member)
@@ -74,7 +74,7 @@
                         </div>
                     </div>
 
-                    @include('content.dynamic.addTeamMemberModal',
+                    @include('content.dynamic.manageTeamMemberModal',
                     [
                         'isUpdate' => true,
                         'member' => $member,
