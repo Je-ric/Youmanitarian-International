@@ -1,42 +1,6 @@
 @extends('layouts.navbar')
 
 @section('content')
-    <style>
-        :root {
-            --primary-color: #1A2235;
-            --primary-tint-1: #313849;
-            --primary-tint-2: #484E5D;
-            --primary-tint-3: #5F6472;
-            --primary-tint-4: #767A86;
-            --primary-tint-5: #8D919A;
-            --primary-tint-6: #A3A7AE;
-            --accent-color: #FFB51B;
-        }
-
-        .text-primary-custom {
-            color: var(--primary-color);
-        }
-
-        .text-accent-custom {
-            color: var(--accent-color);
-        }
-
-        .bg-primary-custom {
-            background-color: var(--primary-color);
-        }
-
-        .bg-accent-custom {
-            background-color: var(--accent-color);
-        }
-
-        .border-accent-custom {
-            border-color: var(--accent-color);
-        }
-
-        .ring-accent-custom {
-            --tw-ring-color: var(--accent-color);
-        }
-    </style>
     <!-- HERO -->
     <header class="relative isolate h-[90vh] flex items-center">
         <img src="https://images.unsplash.com/photo-1506765515384-028b60a970df?auto=format&fit=crop&w=1400&q=80"

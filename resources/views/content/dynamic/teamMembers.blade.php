@@ -48,6 +48,12 @@
                                 @method('PUT')
                                 <input type="hidden" name="name" value="{{ $member->name }}">
                                 <input type="hidden" name="position" value="{{ $member->position }}">
+                                <input type="hidden" name="bio" value="{{ $member->bio }}">
+                                <input type="hidden" name="facebook_url" value="{{ $member->facebook_url }}">
+                                <input type="hidden" name="linkedin_url" value="{{ $member->linkedin_url }}">
+                                <input type="hidden" name="twitter_url" value="{{ $member->twitter_url }}">
+                                <input type="hidden" name="order" value="{{ $member->order }}">
+                                <input type="hidden" name="is_active" value="{{ $member->is_active }}">
                                 <label class="cursor-pointer text-white text-sm px-3 py-1 bg-primary-custom rounded-full hover:bg-primary-dark">
                                     Change
                                     <input type="file" name="photo" class="hidden" onchange="this.form.submit()">
@@ -112,7 +118,7 @@
                             <x-form.textarea name="bio" label="Bio" rows="2" value="{{ $member->bio }}" class="text-sm" />
                             <x-form.input name="order" type="number" label="Display Order" value="{{ $member->order }}" min="0" class="text-sm" />
 
-                            <input type="hidden" name="is_active" value="0">
+                            <input type="hidden" name="is_active" value="1">
                             <x-form.toggle
                                 name="is_active"
                                 value="1"

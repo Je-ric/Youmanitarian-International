@@ -103,11 +103,17 @@ class WebsiteController extends Controller
     public function team()
     {
         $teamMembers = TeamMember::where('is_active', true)
+            ->where('order', '>', 0) // exclude founder
             ->orderBy('order')
             ->orderBy('name')
             ->get();
 
-        return view('website.team', compact('teamMembers')); // Meet the team
+        $founder = TeamMember::where('order', 0)->first();
+
+        return view('website.team',
+        compact(
+            'teamMembers',
+            'founder')); // Meet the team
     }
 
     public function donate()
