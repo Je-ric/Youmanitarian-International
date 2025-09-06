@@ -4,10 +4,7 @@
     <div class="min-h-full bg-gray-50 py-5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10">
-                <h2 class="text-4xl lg:text-5xl font-bold text-center text-balance mb-16">
-                    <span class="text-primary-custom">Meet the</span>
-                    <span class="text-accent-custom">Team</span>
-                </h2>
+               <x-section-title first="Meet the" second="Team" />
                 <p class="mt-2 text-gray-600">The people behind our mission</p>
             </div>
 
@@ -60,10 +57,7 @@
             </section>
 
 
-            <h2 class="text-4xl lg:text-5xl font-bold text-center text-balance mb-16">
-                <span class="text-primary-custom">The</span>
-                <span class="text-accent-custom">Executives</span>
-            </h2>
+            <x-section-title first="The" second="Executives" />
             @if ($executives->isEmpty())
                 <p class="text-center text-gray-500">No team members to display.</p>
             @else
@@ -121,10 +115,7 @@
 
             {{-- Members Section --}}
             @if ($members->isNotEmpty())
-                <h2 class="text-4xl lg:text-5xl font-bold text-center text-balance mt-20 mb-16">
-                    <span class="text-primary-custom">Our</span>
-                    <span class="text-accent-custom">Members</span>
-                </h2>
+                <x-section-title first="Our" second="Members" />x-
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
                     @foreach ($members as $member)
                         <div
@@ -175,10 +166,7 @@
 
             {{-- Developers Section --}}
             @if ($developers->isNotEmpty())
-                <h2 class="text-4xl lg:text-5xl font-bold text-center text-balance mt-20 mb-16">
-                    <span class="text-primary-custom">Our</span>
-                    <span class="text-accent-custom">Developers</span>
-                </h2>
+                <x-section-title first="Our" second="Developers" />x-
                 <div class="space-y-8">
                     @foreach ($developers as $dev)
                         <div class="bg-white rounded-xl shadow p-6 flex items-center space-x-6 hover:shadow-lg transition">
