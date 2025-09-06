@@ -36,6 +36,24 @@
                         <x-form.input id="position" name="position" type="text" :value="$isUpdate ? $member->position : old('position')" required
                             class="w-full" />
                     </div>
+
+                    @php
+                        $selectedCategory = old('category', $isUpdate ? ($member->category ?? 'member') : 'member');
+                        $categoryOptions = [
+                            ['value' => 'founder',   'label' => 'Founder',   'selected' => $selectedCategory === 'founder'],
+                            ['value' => 'executive', 'label' => 'Executive', 'selected' => $selectedCategory === 'executive'],
+                            ['value' => 'member',    'label' => 'Member',    'selected' => $selectedCategory === 'member'],
+                            ['value' => 'developer', 'label' => 'Developer', 'selected' => $selectedCategory === 'developer'],
+                        ];
+                    @endphp
+                    <x-form.select-option
+                        name="category"
+                        label="Category"
+                        :options="$categoryOptions"
+                        class="focus:ring-primary-custom focus:border-primary-custom"
+                        required
+                    />
+
                     <div class="sm:col-span-2 flex items-center gap-6">
                         <div class="flex-1">
                             <x-form.label for="photo" variant="image">Photo</x-form.label>
@@ -48,7 +66,7 @@
                         @if ($isUpdate && $member->photo_url)
                             <div class="flex-shrink-0">
                                 <img src="{{ asset('storage/' . $member->photo_url) }}" alt="{{ $member->name }}"
-                                    class="w-24 h-24 object-cover rounded-full border-4 border-primary-custom shadow">
+                                    class="w-24 h-24 object-cover border-4 border-primary-custom shadow">
                             </div>
                         @endif
                     </div>

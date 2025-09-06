@@ -18,6 +18,7 @@ class TeamMember extends Model
         'twitter_url',
         'order',
         'is_active',
+        'category',
     ];
 
     protected $casts = [

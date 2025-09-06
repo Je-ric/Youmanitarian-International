@@ -36,6 +36,13 @@
 
                         <h3 class="text-xl font-bold text-gray-800">{{ $member->name }}</h3>
                         <p class="text-gray-500 text-sm mb-2">{{ $member->position }}</p>
+
+                        @if ($member->category)
+                            <span class="inline-flex items-center px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-700 capitalize">
+                                {{ $member->category }}
+                            </span>
+                        @endif
+
                         @if ($member->bio)
                             <p class="mt-2 text-gray-600 text-sm">{{ $member->bio }}</p>
                         @endif
