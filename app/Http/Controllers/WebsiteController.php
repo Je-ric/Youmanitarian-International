@@ -86,7 +86,15 @@ class WebsiteController extends Controller
 
     public function programs()
     {
-        $programs = Program::orderBy('date', 'desc')->get();
+        $now = now();
+        $cutoff = now()->subDays(7);
+
+        // Only programs that already ended, and ended within the last 7 days
+        $programs = Program::whereRaw("TIMESTAMP(`date`, `end_time`) <= ?", [$now])
+            ->whereRaw("TIMESTAMP(`date`, `end_time`) >= ?", [$cutoff])
+            ->orderBy('date', 'desc')
+            ->get();
+
         return view('website.programs', compact('programs'));
     }
 

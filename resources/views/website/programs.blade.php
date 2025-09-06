@@ -4,32 +4,109 @@
 
 @section('content')
     <section class="relative w-full min-h-screen bg-gray-200 flex flex-col lg:flex-row">
-        <!-- Left side content -->
+
         <div class="relative z-10 flex flex-col justify-center gap-6 px-6 md:px-12 lg:px-24 py-16 lg:py-20 lg:w-1/2">
-            <p class="text-base md:text-lg lg:text-xl font-normal text-black tracking-wide uppercase">
+            <p class="text-base md:text-lg lg:text-xl font-normal text-[#1A2235] tracking-wide uppercase">
                 Grow Without Limits
             </p>
-            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-black leading-tight">
-                Join Youmanitarian International and be one of us!
+            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-[#1A2235] leading-snug">
+                Join <span class="text-[#FFB51B]">Youmanitarian International</span> and be one of us!
             </h2>
 
-            <p class="text-base md:text-lg lg:text-xl font-medium text-black">
+            <p class="text-base md:text-lg lg:text-xl font-medium text-[#1A2235]">
                 Make connections, take action and move forward with a community
                 built on dedication and mutual growth.
             </p>
 
             <button
-                class="px-6 md:px-8 py-3 md:py-4 bg-slate-900 rounded-full shadow-lg text-white text-base md:text-lg lg:text-xl font-bold hover:bg-slate-800 transition">
+                class="inline-flex items-center justify-center gap-2 px-5 py-2 bg-[#1A2235] rounded-full shadow-md text-white text-sm md:text-base font-semibold hover:bg-slate-800 transition w-auto self-start">
                 JOIN NOW!
+                <i class="bx bx-right-arrow-alt text-lg"></i>
             </button>
         </div>
 
-        <!-- Right side image -->
         <div class="lg:w-1/2 h-64 md:h-96 lg:h-auto">
             <img src="https://placehold.co/1176x921" alt="Join Youmanitarian International"
                 class="w-full h-full object-cover rounded-tl-2xl lg:rounded-tl-none lg:rounded-bl-2xl" />
         </div>
     </section>
+
+
+    <section class="w-auto bg-slate-900 rounded-3xl py-10 px-6">
+        <div class="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+
+            <div>
+                <div class="text-4xl md:text-5xl font-bold text-white">100</div>
+                <div class="text-lg md:text-2xl font-medium text-white">Mentors</div>
+            </div>
+
+            <div>
+                <div class="text-4xl md:text-5xl font-bold text-white">2347</div>
+                <div class="text-lg md:text-2xl font-medium text-white">Members</div>
+            </div>
+
+            <div>
+                <div class="text-4xl md:text-5xl font-bold text-white">234</div>
+                <div class="text-lg md:text-2xl font-medium text-white">Programs</div>
+            </div>
+
+            <div>
+                <div class="text-4xl md:text-5xl font-bold text-white">431</div>
+                <div class="text-lg md:text-2xl font-medium text-white">Activities</div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <section class="relative w-full bg-white py-20">
+        <div class="container mx-auto px-6 lg:px-12">
+            <h2 class="text-center text-4xl md:text-6xl font-bold text-black mb-16">
+                PROGRAM HIGHLIGHTS
+            </h2>
+
+            <div class="space-y-12">
+                <!-- Highlight Card -->
+                <div class="flex flex-col lg:flex-row items-start gap-10 p-10 rounded-3xl border border-slate-900">
+                    <div class="flex-1 text-2xl md:text-3xl font-bold text-black">
+                        Clutch the Future
+                    </div>
+                    <div class="flex-1 text-lg md:text-2xl font-medium text-black">
+                        Clutch the Future is our organization’s signature event solely aimed to grow
+                        and sustain a mentoring culture in Frederick County. Named Best Charitable Event
+                        in Frederick, this event brings together 400+ women who lift each other up.
+                    </div>
+                    <div class="flex-shrink-0 w-14 h-14 bg-slate-900 rounded-full"></div>
+                </div>
+
+                <!-- Another Card -->
+                <div class="flex flex-col lg:flex-row items-start gap-10 p-10 rounded-3xl border border-slate-900">
+                    <div class="flex-1 text-2xl md:text-3xl font-bold text-black">
+                        The W2WM Pop-Up Shop
+                    </div>
+                    <div class="flex-1 text-lg md:text-2xl font-medium text-black">
+                        The destination for savvy fashionistas to find stylish clothing and accessories
+                        at amazing prices. Every purchase of our beautiful new and very gently-worn items
+                        directly supports our free programs.
+                    </div>
+                    <div class="flex-shrink-0 w-14 h-14 bg-slate-900 rounded-full"></div>
+                </div>
+
+                <!-- Another Card -->
+                <div class="flex flex-col lg:flex-row items-start gap-10 p-10 rounded-3xl border border-slate-900">
+                    <div class="flex-1 text-2xl md:text-3xl font-bold text-black">
+                        Girls Nite Out
+                    </div>
+                    <div class="flex-1 text-lg md:text-2xl font-medium text-black">
+                        A fun night of socializing, dancing, and shopping with friends! This annual event
+                        includes pop-up shops from local vendors, music and dancing, door prizes and more.
+                    </div>
+                    <div class="flex-shrink-0 w-14 h-14 bg-slate-900 rounded-full"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
 
     <div class="min-h-screen bg-gray-100 py-12 px-4">

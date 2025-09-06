@@ -34,7 +34,7 @@ class Program extends Model
     protected $casts = [
         'date' => 'datetime'
     ];
-    
+
     /**
      * Get the program's progress status based on current time.
      * This is a dynamic calculation that doesn't rely on the database value.
@@ -57,6 +57,15 @@ class Program extends Model
         }
     }
 
+    public function canAcceptFeedback(): bool
+    {
+        $programDate = $this->date->format('Y-m-d');
+        $end = Carbon::parse("{$programDate} {$this->end_time}");
+
+        // Only after it ended, and for 7 days after
+        return now()->gte($end) && now()->lte($end->copy()->addDays(7));
+    }
+
     /**
      * Get the program's progress status with styling classes.
      *
@@ -65,7 +74,7 @@ class Program extends Model
     public function getProgressStatusWithStyleAttribute()
     {
         $status = $this->progress_status;
-        
+
         $statusMap = [
             'incoming' => ['label' => 'Incoming'],
             'ongoing' => ['label' => 'Ongoing'],
@@ -86,16 +95,16 @@ class Program extends Model
 
         // return $this->belongsToMany(Volunteer::class, 'program_volunteers')
         //     ->withPivot('status', 'created_at', 'updated_at');
-        
+
         return $this->belongsToMany(Volunteer::class, 'program_volunteers', 'program_id', 'volunteer_id')
-        ->withPivot('status', 'created_at', 'updated_at');
+            ->withPivot('status', 'created_at', 'updated_at');
     }
 
     public function tasks()
     {
         return $this->hasMany(ProgramTask::class);
     }
-    
+
     public function volunteerAttendances()
     {
         return $this->hasMany(VolunteerAttendance::class);
