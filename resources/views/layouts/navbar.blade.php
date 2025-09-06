@@ -56,7 +56,7 @@
     @endif
 
     {{-- Header / Navbar --}}
-    <header class="bg-white shadow-md fixed top-0 left-0 w-full z-10">
+    <header class="bg-white shadow-md fixed top-0 left-0 w-full z-50 h-20">
         <div class="container mx-auto px-6 py-4 flex items-center justify-between">
             {{-- Logo --}}
             <div class="flex items-center space-x-3">
@@ -116,7 +116,7 @@
     </header>
 
     {{-- Main Content --}}
-    <main class="pt-24"> {{-- add padding-top so content isn’t hidden behind fixed header --}}
+    <main class="pt-20"> {{-- add padding-top so content isn’t hidden behind fixed header --}}
         @yield('content')
     </main>
 </body>
