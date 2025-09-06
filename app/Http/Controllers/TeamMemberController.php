@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\TeamMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TeamMemberController extends Controller
 {
     public function index()
     {
-        $teamMembers = TeamMember::orderBy('order')->get();
+        $teamMembers = TeamMember::orderBy('name', 'asc')
+                        ->get()
+                        ->groupBy('category');
         return view('content.dynamic.teamMembers', compact('teamMembers'));
     }
 
@@ -39,15 +42,9 @@ class TeamMemberController extends Controller
             'facebook_url' => 'nullable|url',
             'linkedin_url' => 'nullable|url',
             'twitter_url' => 'nullable|url',
-            'order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
             'category' => 'required|in:founder,executive,member,developer',
         ]);
-
-        // Set default order if not provided
-        if (!isset($data['order'])) {
-            $data['order'] = TeamMember::max('order') + 1;
-        }
 
         // Ensure boolean cast with default true for new members
         $data['is_active'] = $request->boolean('is_active', true);
@@ -72,7 +69,6 @@ class TeamMemberController extends Controller
             'facebook_url' => 'nullable|url',
             'linkedin_url' => 'nullable|url',
             'twitter_url' => 'nullable|url',
-            'order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
             'category' => 'required|in:founder,executive,member,developer',
         ]);
@@ -82,7 +78,7 @@ class TeamMemberController extends Controller
 
         // Only handle photo upload if a new photo is provided
         if ($request->hasFile('photo')) {
-            $this->handlePhotoUpload($request, $data);
+            $this->handlePhotoUpload($request, $data, $teamMember);
         }
 
         $teamMember->update($data);
@@ -95,7 +91,12 @@ class TeamMemberController extends Controller
 
     public function destroy(TeamMember $teamMember)
     {
+        if ($teamMember->photo_url && Storage::disk('public')->exists($teamMember->photo_url)) {
+            Storage::disk('public')->delete($teamMember->photo_url);
+        }
+
         $teamMember->delete();
+
         return redirect()->route('content.teamMembers.index')->with('toast', [
             'message' => 'Team member deleted successfully!',
             'type' => 'success'
@@ -105,9 +106,13 @@ class TeamMemberController extends Controller
     // ----------------------------
     //  Helper Methods
     // ----------------------------
-    private function handlePhotoUpload($request, &$data)
+    private function handlePhotoUpload($request, &$data,  $teamMember = null)
     {
         if ($request->hasFile('photo')) {
+            if ($teamMember && $teamMember->photo_url && Storage::disk('public')->exists($teamMember->photo_url)) {
+                Storage::disk('public')->delete($teamMember->photo_url);
+            }
+
             $file = $request->file('photo');
             $sanitizedName = preg_replace('/[^A-Za-z0-9]/', '', $data['name']);
             $sanitizedPosition = preg_replace('/[^A-Za-z0-9]/', '', $data['position'] ?? 'Member');
@@ -116,21 +121,5 @@ class TeamMemberController extends Controller
             $newFilename = "{$sanitizedName}_{$sanitizedPosition}_{$timestamp}.{$extension}";
             $data['photo_url'] = $file->storeAs('uploads/team_members', $newFilename, 'public');
         }
-    }
-
-    public function reorder(Request $request)
-    {
-        $data = $request->validate([
-            'order' => 'required|array',
-            'order.*' => 'integer|exists:team_members,id',
-        ]);
-
-        DB::transaction(function () use ($data) {
-            foreach ($data['order'] as $position => $id) {
-                TeamMember::where('id', $id)->update(['order' => $position]);
-            }
-        });
-
-        return response()->json(['message' => 'Order updated']);
     }
 }

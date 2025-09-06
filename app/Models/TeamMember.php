@@ -16,14 +16,12 @@ class TeamMember extends Model
         'instagram_url',
         'linkedin_url',
         'twitter_url',
-        'order',
         'is_active',
         'category',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
-        'order' => 'integer',
     ];
 
     public function member()

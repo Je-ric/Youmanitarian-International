@@ -58,7 +58,6 @@ Route::post('/donations', [DonationController::class, 'store'])
     // Public routes
 Route::get('team-members', [TeamMemberController::class, 'index'])->name('content.teamMembers.index');
 Route::get('team-members/{team_member}', [TeamMemberController::class, 'show'])->name('content.teamMembers.show');
-Route::post('/team-members/reorder', [TeamMemberController::class, 'reorder'])->name('content.teamMembers.reorder');
 
 // Back-compat alias: old name -> redirect to index
 Route::get('content/team-members', fn () => redirect()->route('content.teamMembers.index'))->name('content.team-members');

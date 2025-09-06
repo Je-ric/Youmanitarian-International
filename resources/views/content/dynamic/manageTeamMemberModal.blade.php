@@ -13,6 +13,9 @@
         </div>
     </x-modal.header>
     <x-modal.body>
+        @php
+            $photoInputId = 'photo_' . ($modalId ?? 'addTeamMemberModal');
+        @endphp
         <form id="form_{{ $modalId ?? 'addMemberForm' }}" method="POST"
             action="{{ $isUpdate ? route('content.teamMembers.update', $member->id) : route('content.teamMembers.store') }}"
             enctype="multipart/form-data" class="space-y-6">
@@ -56,8 +59,8 @@
 
                     <div class="sm:col-span-2 flex items-center gap-6">
                         <div class="flex-1">
-                            <x-form.label for="photo" variant="image">Photo</x-form.label>
-                            <x-form.input-upload name="photo" id="photo" accept="image/*" class="w-full">
+                            <x-form.label for="{{ $photoInputId }}" variant="image">Photo</x-form.label>
+                            <x-form.input-upload name="photo" id="{{ $photoInputId }}" accept="image/*" class="w-full">
                                 <span id="photoHelperText">
                                     {{ $isUpdate ? 'JPG, PNG up to 5MB (leave empty to keep current photo)' : 'JPG, PNG up to 5MB' }}
                                 </span>
@@ -104,13 +107,6 @@
                 </div>
                 @if ($isUpdate)
                     <div class="grid gap-6 sm:grid-cols-2" id="updateOnlyFields">
-                        <div>
-                            <x-form.label for="order">Display Order</x-form.label>
-                            <x-form.readonly id="order" name="order" type="number" min="0" class="w-full"
-                                :value="$member->order">
-                                {{ $isUpdate ? $member->order ?? '' : 'Auto (set by drag & drop)' }}
-                            </x-form.readonly>
-                        </div>
                         <div class="flex items-center">
                             <x-form.toggle name="is_active" id="is_active" value="1"
                                 label="Active (Display on website)" :checked="$member->is_active" />

@@ -103,30 +103,29 @@ class WebsiteController extends Controller
     public function team()
     {
 
-        $founder = TeamMember::where('order', 0)->first();
+        $founder = TeamMember::where('category', 'founder')->first();
 
         $executives = TeamMember::where('is_active', true)
             ->where('category', 'executive')
-            ->orderBy('order')
+            ->orderBy('name', 'asc')
             ->get();
 
         $members = TeamMember::where('is_active', true)
             ->where('category', 'member')
-            ->orderBy('order')
+            ->orderBy('name', 'asc')
             ->get();
 
         $developers = TeamMember::where('is_active', true)
             ->where('category', 'developer')
-            ->orderBy('order')
+            ->orderBy('name', 'asc')
             ->get();
 
 
         return view('website.team',
-        compact(
+        compact('founder',
             'executives',
-            'founder',
-            'members',
-            'developers'
+                        'members',
+                        'developers'
             )); // Meet the team
     }
 

@@ -30,7 +30,9 @@ return new class extends Migration
 
             // Display control
             // undecided sa order, magiging drag and drop yung dating
-            $table->unsignedInteger('order')->default(0);
+            // $table->unsignedInteger('order')->default(0);
+            $table->enum('category', ['founder', 'executive', 'member', 'developer'])
+                    ->default('member');
             $table->boolean('is_active')->default(true);
 
             $table->timestamps();
