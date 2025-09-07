@@ -9,27 +9,34 @@ use App\Models\ContentImage;
 use Illuminate\Http\Request;
 use App\Models\ContentComment;
 use Illuminate\Support\Facades\Auth;
-use App\Models\TeamMember; 
+use App\Models\TeamMember;
+
 class WebsiteController extends Controller
 {
     public function index()
     {
-        $featuredPost = Content::where('content_status', 'published')
-            ->orderBy('created_at', 'desc')
+        $featuredPost = Content::query()
+            ->where('content_status', 'published')
+            ->latest('created_at')
             ->first();
 
         $latestPosts = collect();
 
-        if ($featuredPost) {
-            $latestPosts = Content::where('content_status', 'published')
+        if ($featuredPost instanceof Content) {
+            $latestPosts = Content::query()
+                ->where('content_status', 'published')
                 ->where('id', '!=', $featuredPost->id)
-                ->orderBy('created_at', 'desc')
-                ->limit(6)
+                ->latest('created_at')
+                ->take(5)
                 ->get();
         }
 
-        return view('website.index', compact('featuredPost', 'latestPosts'));
+        return view('website.index', [
+            'featuredPost' => $featuredPost,
+            'latestPosts'  => $latestPosts,
+        ]);
     }
+
 
     public function viewContent($slug)
     {
@@ -128,12 +135,15 @@ class WebsiteController extends Controller
             ->get();
 
 
-        return view('website.team',
-        compact('founder',
-            'executives',
-                        'members',
-                        'developers'
-            )); // Meet the team
+        return view(
+            'website.team',
+            compact(
+                'founder',
+                'executives',
+                'members',
+                'developers'
+            )
+        ); // Meet the team
     }
 
     public function donate()

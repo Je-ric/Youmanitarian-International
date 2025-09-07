@@ -11,8 +11,14 @@
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@200..700&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
 
     <style>
+        *{
+            font-family: "Source Sans 3", sans-serif;
+        }
         :root {
             --primary-color: #1A2235;
             --primary-tint-1: #313849;
@@ -47,6 +53,7 @@
         .ring-accent-custom {
             --tw-ring-color: var(--accent-color);
         }
+
     </style>
 </head>
 
