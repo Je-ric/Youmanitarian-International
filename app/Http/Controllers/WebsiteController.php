@@ -98,14 +98,15 @@ class WebsiteController extends Controller
         $cutoff = now()->subDays(7);
 
         // Only programs that already ended, and ended within the last 7 days
-        $programs = Program::whereRaw("TIMESTAMP(`date`, `end_time`) <= ?", [$now])
-            ->whereRaw("TIMESTAMP(`date`, `end_time`) >= ?", [$cutoff])
+        $programs = Program::with(['creator', 'volunteers'])
+            ->whereRaw("TIMESTAMP(`date`, `end_time`) <= ?", [now()])
+            ->whereRaw("TIMESTAMP(`date`, `end_time`) >= ?", [now()->subDays(7)])
             ->orderBy('date', 'desc')
             ->get();
 
         $membersCount = Member::count();
         $programsCount = Program::count();
-        $volunteersCount = Volunteer::where('application_status', 'approved')->count(); 
+        $volunteersCount = Volunteer::where('application_status', 'approved')->count();
 
         return view('website.programs',
         compact('programs',

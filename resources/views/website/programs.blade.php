@@ -294,4 +294,23 @@
             @endforelse
         </div>
     </div>
+
+    {{-- In your website programs view --}}
+    @foreach ($programs as $program)
+        <div class="p-4 bg-white rounded-lg shadow mb-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="font-semibold">{{ $program->title }}</div>
+                    <div class="text-sm text-slate-600">{{ \Carbon\Carbon::parse($program->date)->format('M d, Y') }}</div>
+                </div>
+                <button type="button"
+                        class="px-3 py-2 rounded-lg bg-primary-custom text-white flex items-center gap-2"
+                        onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
+                    <i class='bx bx-show'></i> View
+                </button>
+            </div>
+        </div>
+
+        @include('programs.modals.program-modal', ['program' => $program])
+    @endforeach
 @endsection

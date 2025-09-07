@@ -51,20 +51,23 @@
 
                     {{-- Join Button --}}
                     @php
-                        $volunteer = Auth::user()->volunteer ?? null;
+                        $user = Auth::user();
+                        $volunteer = $user?->volunteer;
                         $alreadyJoined = false;
-                        if(Auth::user()->hasRole('Volunteer') && $volunteer) {
+
+                        if ($user && $user->hasRole('Volunteer') && $volunteer) {
                             $alreadyJoined = $program->volunteers->contains($volunteer->id);
                         }
+
                         $isCoordinator = Auth::id() === $program->created_by;
                     @endphp
 
-                    @if(Auth::user()->hasRole('Volunteer') && !$isCoordinator)
+                    @if(Auth::check() && Auth::user()->hasRole('Volunteer') && !$isCoordinator)
                         @php
                             $currentVolunteers = $program->volunteers->count();
                             $volunteer = Auth::user()->volunteer;
                             $alreadyJoined = $program->volunteers->contains($volunteer?->id ?? 0);
-                            
+
                             // Check if the volunteer has any task assignments for this program
                             $hasTasks = $volunteer ? $volunteer->taskAssignments()
                                 ->whereHas('task', function ($query) use ($program) {
@@ -80,7 +83,7 @@
                             @elseif($alreadyJoined)
                                 <div class="space-y-4">
                                     <x-feedback-status.alert type="success" icon="bx bx-check-circle" message="You are already joined in this program." />
-                                    
+
                                     @if($program->progress_status === 'incoming' && !$hasTasks)
                                         <form action="{{ route('programs.leave', [$program->id, $volunteer->id]) }}" method="POST"
                                             onsubmit="return confirm('Are you sure you want to leave this program?');">
@@ -110,6 +113,16 @@
                                     </button>
                                 </form>
                             @endif
+                        </div>
+                    @elseif(!Auth::check())
+                        <div class="border-t border-slate-200 pt-6">
+                            <x-feedback-status.alert type="info" icon="bx bx-info-circle"
+                                message="Sign in to join or interact with this program." />
+                            <a href="{{ route('login') }}"
+                               class="mt-3 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg">
+                                <i class='bx bx-log-in'></i>
+                                Sign in
+                            </a>
                         </div>
                     @endif
 
@@ -167,7 +180,7 @@
                         </div>
                     @endforeach
 
-            
+
                 </aside>
             </div>
         </x-modal.body>
