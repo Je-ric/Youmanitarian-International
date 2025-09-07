@@ -270,53 +270,8 @@
                             class="inline-block px-5 py-2 rounded-lg bg-[#1a2235] text-white font-semibold shadow hover:bg-[#232b47] transition">View
                             & Submit Feedback</a>
                     </div>
-                    <div class="flex-shrink-0">
-                        <img src="{{ $program->image_url ?? 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' }}"
-                            alt="Program" class="rounded-xl w-48 h-32 object-cover shadow">
-                    </div>
                 </div>
 
-                {{-- Feedback Form --}}
-                <div id="feedback-form-{{ $program->id }}"
-                    class="bg-white rounded-2xl shadow-lg p-8 max-w-2xl mx-auto mb-12">
-                    <h3 class="text-xl font-bold text-[#1a2235] mb-4">Submit Your Feedback for "{{ $program->title }}"
-                    </h3>
-                    <form method="POST" action="{{ route('programs.feedback.guest.submit', $program->id) }}">
-                        @csrf
-                        <div class="mb-4">
-                            <label class="block text-gray-700 font-medium mb-1">Name</label>
-                            <input type="text" name="guest_name" required
-                                class="input input-bordered w-full rounded-lg px-4 py-2 border border-gray-200 focus:border-[#1a2235] focus:ring-2 focus:ring-[#1a2235] transition"
-                                placeholder="Your name">
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 font-medium mb-1">Email <span
-                                    class="text-gray-400 text-xs">(optional)</span></label>
-                            <input type="email" name="guest_email"
-                                class="input input-bordered w-full rounded-lg px-4 py-2 border border-gray-200 focus:border-[#1a2235] focus:ring-2 focus:ring-[#1a2235] transition"
-                                placeholder="you@email.com">
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 font-medium mb-1">Rating</label>
-                            <select name="rating" required
-                                class="select select-bordered w-full rounded-lg px-4 py-2 border border-gray-200 focus:border-[#1a2235] focus:ring-2 focus:ring-[#1a2235] transition">
-                                <option value="5">5 - Excellent</option>
-                                <option value="4">4 - Good</option>
-                                <option value="3">3 - Fair</option>
-                                <option value="2">2 - Poor</option>
-                                <option value="1">1 - Terrible</option>
-                            </select>
-                        </div>
-                        <div class="mb-6">
-                            <label class="block text-gray-700 font-medium mb-1">Feedback</label>
-                            <textarea name="feedback"
-                                class="textarea textarea-bordered w-full rounded-lg px-4 py-2 border border-gray-200 focus:border-[#1a2235] focus:ring-2 focus:ring-[#1a2235] transition"
-                                rows="4" placeholder="Share your experience..."></textarea>
-                        </div>
-                        <button type="submit"
-                            class="w-full py-2 px-4 rounded-lg bg-[#1a2235] text-white font-semibold shadow hover:bg-[#232b47] transition">Submit
-                            Feedback</button>
-                    </form>
                 </div>
             @empty
                 <div class="text-center text-gray-500">No programs available at the moment.</div>
@@ -325,7 +280,6 @@
     </div>
 
 
-    {{-- In your website programs view --}}
     @foreach ($programs as $program)
         <div class="p-4 bg-white rounded-lg shadow mb-4">
             <div class="flex items-center justify-between">
@@ -334,13 +288,18 @@
                     <div class="text-sm text-slate-600">{{ \Carbon\Carbon::parse($program->date)->format('M d, Y') }}
                     </div>
                 </div>
-                <button type="button" class="px-3 py-2 rounded-lg bg-primary-custom text-white flex items-center gap-2"
+                 <button type="button" class="px-3 py-2 rounded-lg bg-primary-custom text-white flex items-center gap-2"
                     onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
                     <i class='bx bx-show'></i> View
                 </button>
+                @include('programs.modals.program-modal', ['program' => $program])
+
+                <button type="button" class="px-3 py-2 rounded-lg bg-primary-custom text-white flex items-center gap-2"
+                    onclick="document.getElementById('guestFeedbackModal_{{ $program->id }}').showModal()">
+                    <i class='bx bx-message-dots'></i> Give Feedback
+                </button>
+                @include('website.modals.guestFeedbackModal', ['program' => $program])
             </div>
         </div>
-
-        @include('programs.modals.program-modal', ['program' => $program])
     @endforeach
 @endsection
