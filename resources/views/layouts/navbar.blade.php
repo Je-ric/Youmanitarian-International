@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -9,6 +10,7 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
         :root {
@@ -50,9 +52,7 @@
 
 <body class="bg-gray-50">
     @if (session('toast'))
-        <x-feedback-status.toast
-            :message="session('toast')['message']"
-            :type="session('toast')['type']" />
+        <x-feedback-status.toast :message="session('toast')['message']" :type="session('toast')['type']" />
     @endif
 
     {{-- Header / Navbar --}}
@@ -68,21 +68,55 @@
 
             {{-- Desktop Nav --}}
             <nav class="hidden lg:flex items-center space-x-6 text-base">
-                <a href="{{ route('website.index') }}" class="text-gray-600 hover:text-blue-600">Home</a>
-                <a href="{{ route('website.news') }}" class="text-gray-600 hover:text-blue-600">News</a>
-                <a href="{{ route('website.programs') }}" class="text-gray-600 hover:text-blue-600">Program</a>
-                <a href="{{ route('website.sponsors') }}" class="text-gray-600 hover:text-blue-600">Sponsor & Partnership</a>
-                <a href="{{ route('website.about') }}" class="text-gray-600 hover:text-blue-600">About Us</a>
-                <a href="{{ route('website.team') }}" class="text-gray-600 hover:text-blue-600">Meet the Team</a>
-                <a href="{{ route('website.donate') }}" class="text-gray-600 hover:text-blue-600">Donate Today</a>
+                <a href="{{ route('website.index') }}"
+                    class="text-primary-custom hover:text-accent-custom transition-colors duration-300
+   {{ request()->routeIs('website.index') ? 'text-accent-custom font-bold' : '' }}">
+                    Home
+                </a>
 
-                @if(Auth::check())
-                    <a href="{{ url('/dashboard') }}" class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Dashboard</a>
+                <a href="{{ route('website.news') }}"
+                    class="text-primary-custom hover:text-accent-custom transition-colors duration-300
+   {{ request()->routeIs('website.news') ? 'text-accent-custom font-bold' : '' }}">
+                    News
+                </a>
+
+                <a href="{{ route('website.programs') }}"
+                    class="text-primary-custom hover:text-accent-custom transition-colors duration-300
+   {{ request()->routeIs('website.programs') ? 'text-accent-custom font-bold' : '' }}">
+                    Program
+                </a>
+
+                <a href="{{ route('website.sponsors') }}"
+                    class="text-primary-custom hover:text-accent-custom active:text-accent-custom transition-colors duration-300">
+                    Sponsor & Partnership
+                </a>
+                <a href="{{ route('website.about') }}"
+                    class="text-primary-custom hover:text-accent-custom active:text-accent-custom transition-colors duration-300">
+                    About Us
+                </a>
+                <a href="{{ route('website.team') }}"
+                    class="text-primary-custom hover:text-accent-custom active:text-accent-custom transition-colors duration-300">
+                    Meet the Team
+                </a>
+                <a href="{{ route('website.donate') }}"
+                    class="text-primary-custom hover:text-accent-custom active:text-accent-custom transition-colors duration-300">
+                    Donate Today
+                </a>
+
+                @if (Auth::check())
+                    <a href="{{ url('/dashboard') }}"
+                        class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">
+                        Dashboard
+                    </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">@csrf</form>
                 @else
-                    <a href="{{ url('/login') }}" class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Login</a>
+                    <a href="{{ url('/login') }}"
+                        class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">
+                        Login
+                    </a>
                 @endif
             </nav>
+
 
             {{-- Mobile Hamburger --}}
             <div class="lg:hidden" x-data="{ open: false }">
@@ -91,23 +125,27 @@
                 </button>
 
                 {{-- Mobile Menu --}}
-                <div x-show="open"
-                     x-transition
-                     class="absolute top-16 left-0 w-full bg-white shadow-lg border-t z-20">
+                <div x-show="open" x-transition class="absolute top-16 left-0 w-full bg-white shadow-lg border-t z-20">
                     <nav class="flex flex-col p-4 space-y-3 text-base">
                         <a href="{{ route('website.index') }}" class="text-gray-600 hover:text-blue-600">Home</a>
                         <a href="{{ route('website.news') }}" class="text-gray-600 hover:text-blue-600">News</a>
                         <a href="{{ route('website.programs') }}" class="text-gray-600 hover:text-blue-600">Program</a>
-                        <a href="{{ route('website.sponsors') }}" class="text-gray-600 hover:text-blue-600">Sponsor & Partnership</a>
+                        <a href="{{ route('website.sponsors') }}" class="text-gray-600 hover:text-blue-600">Sponsor &
+                            Partnership</a>
                         <a href="{{ route('website.about') }}" class="text-gray-600 hover:text-blue-600">About Us</a>
-                        <a href="{{ route('website.team') }}" class="text-gray-600 hover:text-blue-600">Meet the Team</a>
-                        <a href="{{ route('website.donate') }}" class="text-gray-600 hover:text-blue-600">Donate Today</a>
+                        <a href="{{ route('website.team') }}" class="text-gray-600 hover:text-blue-600">Meet the
+                            Team</a>
+                        <a href="{{ route('website.donate') }}" class="text-gray-600 hover:text-blue-600">Donate
+                            Today</a>
 
-                        @if(Auth::check())
-                            <a href="{{ url('/dashboard') }}" class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Dashboard</a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">@csrf</form>
+                        @if (Auth::check())
+                            <a href="{{ url('/dashboard') }}"
+                                class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Dashboard</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">@csrf
+                            </form>
                         @else
-                            <a href="{{ url('/login') }}" class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Login</a>
+                            <a href="{{ url('/login') }}"
+                                class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Login</a>
                         @endif
                     </nav>
                 </div>
@@ -120,4 +158,5 @@
         @yield('content')
     </main>
 </body>
+
 </html>

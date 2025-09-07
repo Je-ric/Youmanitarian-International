@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Content extends Model
 {
@@ -31,6 +32,13 @@ class Content extends Model
         'meta_title',
         'meta_description',
     ];
+
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image_content ? Storage::url($this->image_content) : null;
+    }
 
     public function contentRequest()
     {

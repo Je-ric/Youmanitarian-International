@@ -1,215 +1,227 @@
 @extends('layouts.navbar')
 
 @section('content')
-    <div class="flex flex-col sm:py-10 lg:py-12">
 
-        <!-- Top section: gray background -->
-        <div class="bg-gray-100 px-20 py-6">
-            <div class="pt-16 px-4 sm:px-7">
-                <div class="flex flex-col gap-4">
-                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1a2235] leading-tight">
-                        {{ $content->title }}
-                    </h1>
-                    <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
-                        <div class="flex items-center gap-2">
-                            <i class='bx bx-calendar text-[#ffb51b]'></i>
-                            <span>{{ $content->created_at->format('F j, Y') }}</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <i class='bx bx-show text-[#ffb51b]'></i>
-                            <span>{{ number_format($content->views) }} views</span>
-                        </div>
+    @if ($content->image_content)
+        <div class="relative w-full h-[80vh] sm:h-[90vh] lg:h-[100vh] flex items-center justify-center overflow-hidden">
+            <!-- Background image with blur -->
+            <div class="absolute inset-0 w-full h-full overflow-hidden">
+                <img src="{{ Storage::url($content->image_content) }}"
+                    alt="Content Image" class="w-full h-full object-cover filter blur-sm">
+            </div>
+
+            <!-- Semi-transparent overlay -->
+            <div class="absolute inset-0 bg-[#1a2235] bg-opacity-80 backdrop-blur-sm"></div>
+
+            <!-- Centered text -->
+            <div class="relative z-10 text-center px-6 sm:px-12">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#ffb51b] leading-tight">
+                    {{ $content->title }}
+                </h1>
+
+                <div
+                    class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-4 text-sm sm:text-base text-white">
+                    <div class="flex items-center gap-2">
+                        <i class='bx bx-calendar'></i>
+                        <span>{{ $content->created_at->format('F j, Y') }}</span>
                     </div>
-                    <div class="flex flex-wrap items-center gap-3">
-                        <span class="inline-flex items-center px-3 py-1 bg-[#ffb51b] text-white text-sm font-semibold">
-                            {{ ucfirst($content->content_type) }}
+                    <div class="flex items-center gap-2">
+                        <i class='bx bx-show'></i>
+                        <span>{{ number_format($content->views) }} views</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap justify-center items-center gap-3 mt-4">
+                    <span class="inline-flex items-center px-3 py-1 bg-[#ffb51b] text-[#1a2235] text-sm font-semibold">
+                        {{ ucfirst($content->content_type) }}
+                    </span>
+                    @if ($content->is_featured)
+                        <span
+                            class="inline-flex items-center px-3 py-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold">
+                            <i class='bx bx-star mr-1'></i> Featured
                         </span>
-                        @if($content->is_featured)
-                            <span
-                                class="inline-flex items-center px-3 py-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold">
-                                <i class='bx bx-star mr-1'></i> Featured
-                            </span>
-                        @endif
-                    </div>
-                    @if ($content->image_content)
-                        <div class="relative">
-                            <img src="{{ \App\Http\Controllers\WebsiteController::getImageUrl($content->image_content) }}"
-                                alt="Content Image" class="w-full h-48 sm:h-64 lg:h-80 xl:h-96 object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                        </div>
                     @endif
                 </div>
             </div>
         </div>
+    @endif
 
-        <!-- Main content: white background -->
-        <div class="flex flex-col xl:flex-row gap-6 lg:gap-8 bg-white px-10">
 
-            <article class="xl:w-2/3">
-                <div class="overflow-hidden">
-                    <!-- Article Content -->
-                    <div class="sm:px-8 lg:px-16 pt-10 pb-6 sm:pb-8">
-                        <div class="prose prose-lg max-w-none text-gray-800 leading-relaxed">
-                            {!! $content->body !!}
-                        </div>
+    <!-- Main content: white background -->
+    <div class="flex flex-col xl:flex-row gap-6 lg:gap-8 bg-white px-10 py-4">
+
+        <article class="xl:w-2/3">
+            <div class="overflow-hidden">
+                <!-- Article Content -->
+                <div class="sm:px-8 lg:px-16 pt-10 pb-6 sm:pb-8">
+                    <div class="prose prose-lg max-w-none text-gray-800 leading-relaxed">
+                        {!! $content->body !!}
                     </div>
+                </div>
 
-                    <!-- Gallery Section -->
-                    @if ($galleryImages->isNotEmpty())
-                        <div class="px-6 sm:px-8 lg:px-10 pb-6 sm:pb-8">
-                            <div class="border-t border-gray-200 pt-6 sm:pt-8">
-                                <h3 class="text-xl sm:text-2xl font-semibold text-[#1a2235] mb-6 flex items-center gap-2">
-                                    <i class='bx bx-image text-[#ffb51b]'></i>
-                                    Gallery
-                                </h3>
-                                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                                    @foreach ($galleryImages as $image)
-                                        <div class="group relative overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300"
-                                            onclick="openImageModal({{ $loop->index }})">
-                                            <img src="{{ \App\Http\Controllers\WebsiteController::getImageUrl($image->image_path) }}"
-                                                class="w-full h-24 sm:h-32 lg:h-40 object-cover"
-                                                alt="Gallery Image {{ $loop->iteration }}">
-                                            <div
-                                                class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                                                <i
-                                                    class='bx bx-expand text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300'></i>
-                                            </div>
+                <!-- Gallery Section -->
+                @if ($content->image_content)
+                    <!-- Featured Poster Image -->
+                    <div class="px-6 sm:px-8 lg:px-10 pb-6 sm:pb-8">
+                        <img src="{{ Storage::url($content->image_content) }}"
+                            alt="Featured Image" class="w-full h-auto max-h-[80vh] object-contain rounded-md shadow-lg">
+                    </div>
+                @endif
+                @if ($galleryImages->isNotEmpty())
+                    <div class="px-6 sm:px-8 lg:px-10 pb-6 sm:pb-8">
+                        <div class="border-t border-gray-200 pt-6 sm:pt-8">
+                            <h3 class="text-xl sm:text-2xl font-semibold text-[#1a2235] mb-6 flex items-center gap-2">
+                                <i class='bx bx-image text-[#ffb51b]'></i>
+                                Gallery
+                            </h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+                                @foreach ($galleryImages as $image)
+                                    <div class="group relative overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300"
+                                        onclick="openImageModal({{ $loop->index }})">
+                                        <img src="{{ Storage::url($image->image_path) }}"
+                                            class="w-full h-24 sm:h-32 lg:h-40 object-cover"
+                                            alt="Gallery Image {{ $loop->iteration }}">
+                                        <div
+                                            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                                            <i
+                                                class='bx bx-expand text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300'></i>
                                         </div>
-                                    @endforeach
-                                </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
-                    @endif
+                    </div>
+                @endif
 
-                    <!-- Engagement Section -->
-                    @if($content->enable_likes || $content->enable_comments || $content->enable_bookmark)
-                        <div class="px-6 sm:px-8 lg:px-10 py-6 border-t border-gray-200 bg-gray-50">
-                            <div class="flex flex-wrap items-center justify-between gap-4">
-                                <div class="flex items-center gap-6">
-                                    @if($content->enable_likes)
-                                        <button id="heartButton-{{ $content->id }}"
-                                            class="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors duration-200 group"
-                                            onclick="toggleReact({{ $content->id }}, '{{ csrf_token() }}')"
-                                            data-reacted="{{ auth()->user() && $content->heartReacts->contains('user_id', auth()->id()) ? 'true' : 'false' }}">
-                                            <i id="heartIcon-{{ $content->id }}"
-                                                class="bx text-xl {{ auth()->user() && $content->heartReacts->contains('user_id', auth()->id()) ? 'bxs-heart text-red-500' : 'bx-heart group-hover:text-red-500' }}"></i>
-                                            <span id="heartCount-{{ $content->id }}" class="font-medium">
-                                                {{ $content->heartReacts->count() }}
-                                            </span>
-                                        </button>
-                                    @endif
-
-                                    @if($content->enable_comments)
-                                        <div class="flex items-center gap-2 text-gray-600">
-                                            <i class='bx bx-comment text-xl'></i>
-                                            <span id="commentCount-{{ $content->id }}" class="font-medium">
-                                                {{ $content->comments->count() }}
-                                            </span>
-                                            <span class="text-sm">Comments</span>
-                                        </div>
-                                    @endif
-                                </div>
-
-                                @if($content->enable_bookmark)
-                                    <button
-                                        class="flex items-center gap-2 text-gray-600 hover:text-[#ffb51b] transition-colors duration-200">
-                                        <i class='bx bx-bookmark text-xl'></i>
-                                        <span class="font-medium text-sm">Bookmark</span>
+                <!-- Engagement Section -->
+                @if ($content->enable_likes || $content->enable_comments || $content->enable_bookmark)
+                    <div class="px-6 sm:px-8 lg:px-10 py-6 border-t border-gray-200 bg-gray-50">
+                        <div class="flex flex-wrap items-center justify-between gap-4">
+                            <div class="flex items-center gap-6">
+                                @if ($content->enable_likes)
+                                    <button id="heartButton-{{ $content->id }}"
+                                        class="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors duration-200 group"
+                                        onclick="toggleReact({{ $content->id }}, '{{ csrf_token() }}')"
+                                        data-reacted="{{ auth()->user() && $content->heartReacts->contains('user_id', auth()->id()) ? 'true' : 'false' }}">
+                                        <i id="heartIcon-{{ $content->id }}"
+                                            class="bx text-xl {{ auth()->user() && $content->heartReacts->contains('user_id', auth()->id()) ? 'bxs-heart text-red-500' : 'bx-heart group-hover:text-red-500' }}"></i>
+                                        <span id="heartCount-{{ $content->id }}" class="font-medium">
+                                            {{ $content->heartReacts->count() }}
+                                        </span>
                                     </button>
                                 @endif
+
+                                @if ($content->enable_comments)
+                                    <div class="flex items-center gap-2 text-gray-600">
+                                        <i class='bx bx-comment text-xl'></i>
+                                        <span id="commentCount-{{ $content->id }}" class="font-medium">
+                                            {{ $content->comments->count() }}
+                                        </span>
+                                        <span class="text-sm">Comments</span>
+                                    </div>
+                                @endif
                             </div>
-                        </div>
-                    @endif
 
-                    <!-- Comments Section -->
-                    @if($content->enable_comments)
-                        @include('website.partials.comment', ['content' => $content])
-                    @endif
-
-                    <!-- Navigation -->
-                    <div class="px-6 sm:px-8 lg:px-10 py-6 border-t border-gray-200 bg-gray-50">
-                        <div class="flex flex-col sm:flex-row justify-between gap-4">
-                            @if ($prevContent)
-                                <a href="{{ route('website.view-content', $prevContent->slug) }}"
-                                    class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 text-sm font-medium">
-                                    <i class='bx bx-chevron-left'></i>
-                                    <span class="truncate max-w-32 sm:max-w-48">{{ $prevContent->title }}</span>
-                                </a>
-                            @endif
-
-                            @if ($nextContent)
-                                <a href="{{ route('website.view-content', $nextContent->slug) }}"
-                                    class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 text-sm font-medium sm:ml-auto">
-                                    <span class="truncate max-w-32 sm:max-w-48">{{ $nextContent->title }}</span>
-                                    <i class='bx bx-chevron-right'></i>
-                                </a>
+                            @if ($content->enable_bookmark)
+                                <button
+                                    class="flex items-center gap-2 text-gray-600 hover:text-[#ffb51b] transition-colors duration-200">
+                                    <i class='bx bx-bookmark text-xl'></i>
+                                    <span class="font-medium text-sm">Bookmark</span>
+                                </button>
                             @endif
                         </div>
+                    </div>
+                @endif
+
+                <!-- Comments Section -->
+                @if ($content->enable_comments)
+                    @include('website.partials.comment', ['content' => $content])
+                @endif
+
+                <!-- Navigation -->
+                <div class="px-6 sm:px-8 lg:px-10 py-6 border-t border-gray-200 bg-gray-50">
+                    <div class="flex flex-col sm:flex-row justify-between gap-4">
+                        @if ($prevContent)
+                            <a href="{{ route('website.view-content', $prevContent->slug) }}"
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 text-sm font-medium">
+                                <i class='bx bx-chevron-left'></i>
+                                <span class="truncate max-w-32 sm:max-w-48">{{ $prevContent->title }}</span>
+                            </a>
+                        @endif
+
+                        @if ($nextContent)
+                            <a href="{{ route('website.view-content', $nextContent->slug) }}"
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 text-sm font-medium sm:ml-auto">
+                                <span class="truncate max-w-32 sm:max-w-48">{{ $nextContent->title }}</span>
+                                <i class='bx bx-chevron-right'></i>
+                            </a>
+                        @endif
                     </div>
                 </div>
-            </article>
+            </div>
+        </article>
 
-            <!-- Sidebar -->
-            <aside class="xl:w-1/3">
-                <div class="bg-white border border-gray-200 sticky top-6 max-h-[calc(100vh-3rem)] overflow-hidden">
-                    <div class="p-6 border-b border-gray-200">
-                        <h2 class="text-xl font-semibold text-[#1a2235] flex items-center gap-2">
-                            <i class='bx bx-collection text-[#ffb51b]'></i>
-                            Related Content
-                        </h2>
-                    </div>
+        <!-- Sidebar -->
+        <aside class="xl:w-1/3">
+            <div class="bg-white border border-gray-200 sticky top-6 max-h-[calc(100vh-3rem)] overflow-hidden">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-semibold text-[#1a2235] flex items-center gap-2">
+                        <i class='bx bx-collection text-[#ffb51b]'></i>
+                        Related Content
+                    </h2>
+                </div>
 
-                    <div class="overflow-y-auto max-h-[calc(100vh-12rem)]">
-                        <div class="p-6 space-y-4">
-                            @forelse ($otherContents as $item)
-                                <a href="{{ route('website.view-content', $item->slug) }}" class="block group">
-                                    <article
-                                        class="p-4 border border-gray-200 hover:border-[#ffb51b] hover:shadow-md transition-all duration-200">
-                                        <div class="flex gap-4">
-                                            @if ($item->image_content)
-                                                <div class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 overflow-hidden">
-                                                    <img src="{{ \App\Http\Controllers\WebsiteController::getImageUrl($item->image_content) }}"
-                                                        alt="Thumbnail"
-                                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200">
-                                                </div>
-                                            @else
-                                                <div
-                                                    class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 flex items-center justify-center">
-                                                    <i class='bx bx-image text-xl text-gray-400'></i>
-                                                </div>
-                                            @endif
-
-                                            <div class="flex-1 min-w-0">
-                                                <h3
-                                                    class="font-semibold text-[#1a2235] text-sm sm:text-base line-clamp-2 group-hover:text-[#ffb51b] transition-colors duration-200">
-                                                    {{ $item->title }}
-                                                </h3>
-                                                <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
-                                                    <i class='bx bx-calendar'></i>
-                                                    <span>{{ $item->created_at->format('M j, Y') }}</span>
-                                                </div>
-                                                @if($item->is_featured)
-                                                    <span
-                                                        class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 text-xs mt-2">
-                                                        <i class='bx bx-star mr-1'></i> Featured
-                                                    </span>
-                                                @endif
+                <div class="overflow-y-auto max-h-[calc(100vh-12rem)]">
+                    <div class="p-6 space-y-4">
+                        @forelse ($otherContents as $item)
+                            <a href="{{ route('website.view-content', $item->slug) }}" class="block group">
+                                <article
+                                    class="p-4 border border-gray-200 hover:border-[#ffb51b] hover:shadow-md transition-all duration-200">
+                                    <div class="flex gap-4">
+                                        @if ($item->image_content)
+                                            <div class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 overflow-hidden">
+                                                <img src="{{ Storage::url($item->image_content) }}"
+                                                    alt="Thumbnail"
+                                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200">
                                             </div>
+                                        @else
+                                            <div
+                                                class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 flex items-center justify-center">
+                                                <i class='bx bx-image text-xl text-gray-400'></i>
+                                            </div>
+                                        @endif
+
+                                        <div class="flex-1 min-w-0">
+                                            <h3
+                                                class="font-semibold text-[#1a2235] text-sm sm:text-base line-clamp-2 group-hover:text-[#ffb51b] transition-colors duration-200">
+                                                {{ $item->title }}
+                                            </h3>
+                                            <div class="flex items-center gap-2 mt-2 text-xs text-gray-500">
+                                                <i class='bx bx-calendar'></i>
+                                                <span>{{ $item->created_at->format('M j, Y') }}</span>
+                                            </div>
+                                            @if ($item->is_featured)
+                                                <span
+                                                    class="inline-flex items-center px-2 py-1 bg-red-100 text-red-700 text-xs mt-2">
+                                                    <i class='bx bx-star mr-1'></i> Featured
+                                                </span>
+                                            @endif
                                         </div>
-                                    </article>
-                                </a>
-                            @empty
-                                <div class="text-center py-8 text-gray-500">
-                                    <i class='bx bx-collection text-3xl mb-2'></i>
-                                    <p class="text-sm">No related content available</p>
-                                </div>
-                            @endforelse
-                        </div>
+                                    </div>
+                                </article>
+                            </a>
+                        @empty
+                            <div class="text-center py-8 text-gray-500">
+                                <i class='bx bx-collection text-3xl mb-2'></i>
+                                <p class="text-sm">No related content available</p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
-            </aside>
-        </div>
+            </div>
+        </aside>
     </div>
+    {{-- </div> --}}
 
     <!-- Image Preview Modal -->
     <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-90 items-center justify-center hidden z-50 p-4">
@@ -234,7 +246,7 @@
     <script>
         let galleryImages = [
             @foreach ($galleryImages as $image)
-                "{{ \App\Http\Controllers\WebsiteController::getImageUrl($image->image_path) }}",
+                "{{ Storage::url($image->image_path) }}",
             @endforeach
         ];
         let currentIndex = 0;
@@ -261,7 +273,7 @@
             document.getElementById('modalImage').src = galleryImages[currentIndex];
         }
 
-        document.addEventListener('keydown', function (e) {
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeImageModal();
             }
@@ -280,14 +292,16 @@
             submitBtn.disabled = true;
 
             fetch(`/content/${contentId}/comments`, {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify({ comment: comment })
-            })
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        comment: comment
+                    })
+                })
                 .then(res => res.json())
                 .then(data => {
                     if (data.error) {
@@ -353,13 +367,17 @@
             saveButton.classList.add("px-4", "py-2", "bg-[#ffb51b]", "text-white",
                 "hover:bg-[#e6a017]", "transition-colors", "font-medium", "text-sm");
             saveButton.innerText = "Save";
-            saveButton.onclick = function () { updateComment(commentId, inputField.value); };
+            saveButton.onclick = function() {
+                updateComment(commentId, inputField.value);
+            };
 
             let cancelButton = document.createElement("button");
             cancelButton.classList.add("px-4", "py-2", "bg-gray-200", "text-gray-700",
                 "hover:bg-gray-300", "transition-colors", "font-medium", "text-sm");
             cancelButton.innerText = "Cancel";
-            cancelButton.onclick = function () { commentText.innerHTML = currentText; };
+            cancelButton.onclick = function() {
+                commentText.innerHTML = currentText;
+            };
 
             buttonContainer.appendChild(saveButton);
             buttonContainer.appendChild(cancelButton);
@@ -374,13 +392,15 @@
 
         function updateComment(commentId, newText) {
             fetch(`/content/comments/${commentId}`, {
-                method: "PUT",
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ comment: newText })
-            })
+                    method: "PUT",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        comment: newText
+                    })
+                })
                 .then(res => res.json())
                 .then(data => {
                     if (data.error) {
@@ -402,11 +422,11 @@
             }
 
             fetch(`/content/comments/${commentId}`, {
-                method: "DELETE",
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                }
-            })
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    }
+                })
                 .then(res => res.json())
                 .then(data => {
                     if (data.error) {
@@ -452,7 +472,8 @@
         document.addEventListener('click', (event) => {
             const emojiPicker = document.getElementById('emoji-picker');
             const emojiButton = document.querySelector('button[onclick="toggleEmojiPicker()"]');
-            if (emojiPicker && emojiButton && !emojiPicker.contains(event.target) && !emojiButton.contains(event.target)) {
+            if (emojiPicker && emojiButton && !emojiPicker.contains(event.target) && !emojiButton.contains(event
+                    .target)) {
                 emojiPicker.classList.add('hidden');
             }
         });
@@ -460,8 +481,6 @@
 @endsection
 
 <script src="{{ asset('js/toggleReact.js') }}"></script>
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
     .line-clamp-2 {

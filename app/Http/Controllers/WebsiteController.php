@@ -9,8 +9,7 @@ use App\Models\ContentImage;
 use Illuminate\Http\Request;
 use App\Models\ContentComment;
 use Illuminate\Support\Facades\Auth;
-use App\Models\TeamMember; // add this
-
+use App\Models\TeamMember; 
 class WebsiteController extends Controller
 {
     public function index()
