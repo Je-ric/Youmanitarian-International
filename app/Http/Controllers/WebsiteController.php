@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use App\Models\Content;
 use App\Models\Program;
+use App\Models\TeamMember;
 use Illuminate\Support\Str;
 use App\Models\ContentImage;
 use Illuminate\Http\Request;
 use App\Models\ContentComment;
 use Illuminate\Support\Facades\Auth;
-use App\Models\TeamMember;
+use App\Models\Volunteer;
 
 class WebsiteController extends Controller
 {
@@ -101,7 +103,15 @@ class WebsiteController extends Controller
             ->orderBy('date', 'desc')
             ->get();
 
-        return view('website.programs', compact('programs'));
+        $membersCount = Member::count();
+        $programsCount = Program::count();
+        $volunteersCount = Volunteer::where('application_status', 'approved')->count(); 
+
+        return view('website.programs',
+        compact('programs',
+            'membersCount',
+            'programsCount',
+            'volunteersCount'));
     }
 
     public function sponsors()

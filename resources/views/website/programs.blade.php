@@ -36,22 +36,22 @@
         <div class="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
 
             <div>
-                <div class="text-4xl md:text-5xl font-bold text-white">100</div>
-                <div class="text-lg md:text-2xl font-medium text-white">Mentors</div>
+                <div class="text-4xl md:text-5xl font-bold text-white">{{ $volunteersCount }}</div>
+                <div class="text-lg md:text-2xl font-medium text-white">Volunteers</div>
             </div>
 
             <div>
-                <div class="text-4xl md:text-5xl font-bold text-white">2347</div>
+                <div class="text-4xl md:text-5xl font-bold text-white">{{ $membersCount }}</div>
                 <div class="text-lg md:text-2xl font-medium text-white">Members</div>
             </div>
 
             <div>
-                <div class="text-4xl md:text-5xl font-bold text-white">234</div>
+                <div class="text-4xl md:text-5xl font-bold text-white">{{ $programsCount }}</div>
                 <div class="text-lg md:text-2xl font-medium text-white">Programs</div>
             </div>
 
             <div>
-                <div class="text-4xl md:text-5xl font-bold text-white">431</div>
+                <div class="text-4xl md:text-5xl font-bold text-white"></div>
                 <div class="text-lg md:text-2xl font-medium text-white">Activities</div>
             </div>
         </div>
@@ -108,6 +108,112 @@
     </section>
 
 
+    <!-- FAQ Section -->
+    <section class="py-16 bg-white">
+        <div class="mx-auto max-w-4xl px-6 lg:px-8">
+            <h2 class="text-4xl lg:text-5xl font-bold text-center text-balance mb-12">
+                <span class="text-primary-custom">Frequently</span>
+                <span class="text-accent-custom">Asked Questions</span>
+            </h2>
+
+            <div class="space-y-4">
+                <!-- FAQ 1 -->
+                <div tabindex="0" class="collapse collapse-plus border border-base-300 bg-base-100 rounded-box">
+                    <div class="collapse-title text-lg font-semibold">
+                        How can I join a program?
+                    </div>
+                    <div class="collapse-content text-gray-700 leading-relaxed">
+                        <p>
+                            You can join by registering through our website’s program page. Each program has a “Register” or
+                            “Sign Up” button.
+                            Simply fill out the form and wait for confirmation from our team.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div tabindex="0" class="collapse collapse-plus border border-base-300 bg-base-100 rounded-box">
+                    <div class="collapse-title text-lg font-semibold">
+                        Are the programs free?
+                    </div>
+                    <div class="collapse-content text-gray-700 leading-relaxed">
+                        <p>
+                            Yes, most of our programs are free of charge. However, some may require minimal contributions or
+                            materials depending
+                            on the nature of the activity. All details are listed in each program description.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div tabindex="0" class="collapse collapse-plus border border-base-300 bg-base-100 rounded-box">
+                    <div class="collapse-title text-lg font-semibold">
+                        Who can participate?
+                    </div>
+                    <div class="collapse-content text-gray-700 leading-relaxed">
+                        <p>
+                            Anyone with the passion to serve is welcome to participate! Whether you’re a student,
+                            professional, or community member,
+                            our programs are open to volunteers, partners, and beneficiaries alike.
+                        </p>
+                    </div>
+                </div>
+                <h1>We need to ask Maam Makee kung ano pa mga FAQs</h1>
+            </div>
+        </div>
+    </section>
+
+    <!-- Program Feedback Carousel -->
+    <section class="py-16 bg-gray-50">
+        <div class="mx-auto max-w-5xl px-6 lg:px-8 text-center">
+            <h2 class="text-4xl lg:text-5xl font-bold text-balance mb-12">
+                <span class="text-primary-custom">Program</span>
+                <span class="text-accent-custom">Feedback</span>
+            </h2>
+
+            <div class="carousel w-full rounded-2xl shadow-lg">
+                <!-- Slide 1 -->
+                <div id="slide1" class="carousel-item relative w-full flex flex-col items-center p-10 bg-white">
+                    <p class="text-lg md:text-xl text-gray-700 leading-relaxed max-w-3xl italic">
+                        “This program gave me the confidence to step out of my comfort zone and make a real impact in my
+                        community.”
+                    </p>
+                    <h3 class="mt-6 text-lg font-semibold text-gray-900">— Maria Santos, Volunteer</h3>
+                    <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                        <a href="#slide3" class="btn btn-circle">❮</a>
+                        <a href="#slide2" class="btn btn-circle">❯</a>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div id="slide2" class="carousel-item relative w-full flex flex-col items-center p-10 bg-white">
+                    <p class="text-lg md:text-xl text-gray-700 leading-relaxed max-w-3xl italic">
+                        “The workshops were practical and inspiring. I learned skills that I now use every day at work and
+                        in life.”
+                    </p>
+                    <h3 class="mt-6 text-lg font-semibold text-gray-900">— John Dela Cruz, Participant</h3>
+                    <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                        <a href="#slide1" class="btn btn-circle">❮</a>
+                        <a href="#slide3" class="btn btn-circle">❯</a>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div id="slide3" class="carousel-item relative w-full flex flex-col items-center p-10 bg-white">
+                    <p class="text-lg md:text-xl text-gray-700 leading-relaxed max-w-3xl italic">
+                        “Joining this program helped me connect with like-minded people who share the same passion for
+                        community service.”
+                    </p>
+                    <h3 class="mt-6 text-lg font-semibold text-gray-900">— Angela Reyes, Youth Leader</h3>
+                    <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+                        <a href="#slide2" class="btn btn-circle">❮</a>
+                        <a href="#slide1" class="btn btn-circle">❯</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
     <div class="min-h-screen bg-gray-100 py-12 px-4">
         <div class="max-w-4xl mx-auto">
@@ -144,7 +250,8 @@
                 {{-- Feedback Form --}}
                 <div id="feedback-form-{{ $program->id }}"
                     class="bg-white rounded-2xl shadow-lg p-8 max-w-2xl mx-auto mb-12">
-                    <h3 class="text-xl font-bold text-[#1a2235] mb-4">Submit Your Feedback for "{{ $program->title }}"</h3>
+                    <h3 class="text-xl font-bold text-[#1a2235] mb-4">Submit Your Feedback for "{{ $program->title }}"
+                    </h3>
                     <form method="POST" action="{{ route('programs.feedback.guest.submit', $program->id) }}">
                         @csrf
                         <div class="mb-4">

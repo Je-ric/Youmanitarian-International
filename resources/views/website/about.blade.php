@@ -147,9 +147,82 @@
         </div>
     </section>
 
+<section class="py-20 bg-[#1a2235]">
+    <div class="mx-auto max-w-6xl px-6 lg:px-10">
+        <div class="grid lg:grid-cols-2 gap-x-20 gap-y-20 items-center">
+            <!-- IMAGE -->
+            <div class="flex flex-col items-center lg:order-2 space-y-4">
+                <h2 class="text-4xl lg:text-5xl font-bold mb-8">
+                    <span class="text-white">The</span>
+                    <span class="text-accent-custom">Logo</span>
+                </h2>
+                <img src="{{ asset('assets/images/logo/YI.jpg') }}" alt="Youmanitarian Logo"
+                    class="w-80 h-80 md:w-[30rem] md:h-[30rem] rounded-full ring ring-gray-300 object-cover translate-y-6 motion-safe:animate-fadeIn motion-safe:delay-100 shadow-2xl" />
+            </div>
+
+            <!-- TEXT BLOCK -->
+            <div class="space-y-10 text-gray-100">
+                <!-- LEFT -->
+                <div class="flex flex-col justify-center space-y-6 motion-safe:animate-fadeIn motion-safe:delay-200">
+                    <div class="flex items-start gap-4">
+                        <i class="bx bx-star text-3xl text-[var(--accent-color)]"></i>
+                        <p class="leading-relaxed">
+                            <span class="font-semibold text-white">3 Stars</span><br>
+                            Symbolize the three main islands of the country.
+                        </p>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <i class="bx bx-font text-3xl text-[var(--accent-color)]"></i>
+                        <p class="leading-relaxed">
+                            <span class="font-semibold text-white">Letter Y</span><br>
+                            the initial of <span class="font-semibold text-[var(--accent-color)]">Youmanitarian</span>.
+                        </p>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <i class="bx bx-leaf text-3xl text-[var(--accent-color)]"></i>
+                        <p class="leading-relaxed">
+                            <span class="font-semibold text-white">Laurel</span><br>
+                            Symbolizes <em>nobility</em> and <em>victory</em>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="w-full h-px bg-gray-600"></div>
+
+                <!-- RIGHT  -->
+                <div class="space-y-6 translate-x-4 motion-safe:animate-fadeIn motion-safe:delay-[300ms]">
+                    <div class="flex items-start gap-4">
+                        <i class="bx bx-infinite text-3xl text-[var(--accent-color)]"></i>
+                        <p class="leading-relaxed">
+                            <span class="font-semibold text-white">8 Rings in Lotus Form</span>
+                            – Youmanitarian International is just like Lotus flower that grows from the mud (humble
+                            beginning) and blooming towards the sky (aiming high).
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="mb-3 font-semibold text-white">
+                            The 8 rings symbolize the <span class="text-[var(--accent-color)]">8 Noble Fold Path</span>:
+                        </p>
+                        <ul class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-2 text-sm pl-6 list-disc marker:text-[var(--accent-color)]">
+                            <li>Right View</li>
+                            <li>Right Intention</li>
+                            <li>Right Speech</li>
+                            <li>Right Action</li>
+                            <li>Right Livelihood</li>
+                            <li>Right Effort</li>
+                            <li>Right Mindfulness</li>
+                            <li>Right Concentration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 
-    <section class="py-20 bg-gray-50">
+    {{-- <section class="py-20 bg-gray-50">
         <div class="mx-auto max-w-6xl px-6 lg:px-10">
             <div class="grid lg:grid-cols-2 gap-x-20 gap-y-20 items-center">
                 <!-- IMAGE -->
@@ -225,7 +298,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <section class="py-20 bg-white">
         <div class="mx-auto max-w-6xl px-6 lg:px-8">
