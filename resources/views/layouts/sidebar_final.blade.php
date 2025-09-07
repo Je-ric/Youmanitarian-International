@@ -379,6 +379,7 @@
             ['label' => 'Content Management', 'url' => route('content.index')],
             ...(request()->routeIs('content.create') ? [['label' => 'Create Content']] : []),
             ...(request()->routeIs('content.edit') ? [['label' => 'Edit Content']] : []),
+            ...(request()->routeIs('content.team-members') ? [['label' => 'Team Members']] : []),
         ] : []),
         ...(request()->routeIs('programs.*') ? [
             ['label' => 'Programs', 'url' => route('programs.index')],

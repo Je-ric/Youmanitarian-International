@@ -41,26 +41,39 @@
                     </div>
 
                     @php
-                        $selectedCategory = old('category', $isUpdate ? ($member->category ?? 'member') : 'member');
+                        $selectedCategory = old('category', $isUpdate ? $member->category ?? 'member' : 'member');
                         $categoryOptions = [
-                            ['value' => 'founder',   'label' => 'Founder',   'selected' => $selectedCategory === 'founder'],
-                            ['value' => 'executive', 'label' => 'Executive', 'selected' => $selectedCategory === 'executive'],
-                            ['value' => 'member',    'label' => 'Member',    'selected' => $selectedCategory === 'member'],
-                            ['value' => 'developer', 'label' => 'Developer', 'selected' => $selectedCategory === 'developer'],
+                            ['value' => 'founder', 'label' => 'Founder', 'selected' => $selectedCategory === 'founder'],
+                            [
+                                'value' => 'executive',
+                                'label' => 'Executive',
+                                'selected' => $selectedCategory === 'executive',
+                            ],
+                            ['value' => 'member', 'label' => 'Member', 'selected' => $selectedCategory === 'member'],
+                            [
+                                'value' => 'developer',
+                                'label' => 'Developer',
+                                'selected' => $selectedCategory === 'developer',
+                            ],
                         ];
                     @endphp
-                    <x-form.select-option
-                        name="category"
-                        label="Category"
-                        :options="$categoryOptions"
-                        class="focus:ring-primary-custom focus:border-primary-custom"
-                        required
-                    />
+                    <x-form.select-option name="category" label="Category" :options="$categoryOptions"
+                        class="focus:ring-primary-custom focus:border-primary-custom" required />
+
+                    @if ($isUpdate)
+                        <div class="grid gap-6 sm:grid-cols-2" id="updateOnlyFields">
+                            <div class="flex items-center">
+                                <x-form.toggle name="is_active" id="is_active" value="1"
+                                    label="Active (Display on website)" :checked="$member->is_active" />
+                            </div>
+                        </div>
+                    @endif
 
                     <div class="sm:col-span-2 flex items-center gap-6">
                         <div class="flex-1">
                             <x-form.label for="{{ $photoInputId }}" variant="image">Photo</x-form.label>
-                            <x-form.input-upload name="photo" id="{{ $photoInputId }}" accept="image/*" class="w-full">
+                            <x-form.input-upload name="photo" id="{{ $photoInputId }}" accept="image/*"
+                                class="w-full">
                                 <span id="photoHelperText">
                                     {{ $isUpdate ? 'JPG, PNG up to 5MB (leave empty to keep current photo)' : 'JPG, PNG up to 5MB' }}
                                 </span>
@@ -105,14 +118,6 @@
                         {{ old('bio', $isUpdate ? $member->bio ?? '' : '') }}
                     </x-form.textarea>
                 </div>
-                @if ($isUpdate)
-                    <div class="grid gap-6 sm:grid-cols-2" id="updateOnlyFields">
-                        <div class="flex items-center">
-                            <x-form.toggle name="is_active" id="is_active" value="1"
-                                label="Active (Display on website)" :checked="$member->is_active" />
-                        </div>
-                    </div>
-                @endif
             </div>
         </form>
     </x-modal.body>
