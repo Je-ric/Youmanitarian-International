@@ -219,8 +219,37 @@
         <div class="max-w-4xl mx-auto">
             <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-8 text-center">Programs</h1>
 
-            @forelse($programs as $program)
-                {{-- Program Card --}}
+            {{-- Incoming Programs --}}
+            <h2 class="text-2xl font-bold text-[#1a2235] mb-6">Upcoming Programs</h2>
+            @forelse($incomingPrograms as $program)
+                <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 flex flex-col sm:flex-row items-center gap-8">
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold text-[#1a2235] mb-2">{{ $program->title }}</h2>
+                        <div class="text-gray-500 mb-2">
+                            {{ \Carbon\Carbon::parse($program->date)->format('F d, Y') }}
+                            &middot;
+                            {{ \Carbon\Carbon::parse($program->start_time)->format('g:i A') }}
+                            @if ($program->end_time)
+                                - {{ \Carbon\Carbon::parse($program->end_time)->format('g:i A') }}
+                            @endif
+                        </div>
+                        <div class="text-gray-700 mb-4">{{ $program->description }}</div>
+                        <div class="flex items-center gap-2 text-sm text-gray-400">
+                            <i class='bx bx-map'></i>
+                            <span>{{ $program->location }}</span>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <img src="{{ $program->image_url ?? 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' }}"
+                            alt="Program" class="rounded-xl w-48 h-32 object-cover shadow">
+                    </div>
+                </div>
+            @empty
+                <div class="text-center text-gray-500 mb-12">No upcoming programs.</div>
+            @endforelse
+            {{-- Done Programs --}}
+            <h2 class="text-2xl font-bold text-[#1a2235] mb-6 mt-12">Recently Ended Programs</h2>
+            @forelse($donePrograms as $program)
                 <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 flex flex-col sm:flex-row items-center gap-8">
                     <div class="flex-1">
                         <h2 class="text-2xl font-bold text-[#1a2235] mb-2">{{ $program->title }}</h2>
@@ -295,17 +324,18 @@
         </div>
     </div>
 
+
     {{-- In your website programs view --}}
     @foreach ($programs as $program)
         <div class="p-4 bg-white rounded-lg shadow mb-4">
             <div class="flex items-center justify-between">
                 <div>
                     <div class="font-semibold">{{ $program->title }}</div>
-                    <div class="text-sm text-slate-600">{{ \Carbon\Carbon::parse($program->date)->format('M d, Y') }}</div>
+                    <div class="text-sm text-slate-600">{{ \Carbon\Carbon::parse($program->date)->format('M d, Y') }}
+                    </div>
                 </div>
-                <button type="button"
-                        class="px-3 py-2 rounded-lg bg-primary-custom text-white flex items-center gap-2"
-                        onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
+                <button type="button" class="px-3 py-2 rounded-lg bg-primary-custom text-white flex items-center gap-2"
+                    onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
                     <i class='bx bx-show'></i> View
                 </button>
             </div>
