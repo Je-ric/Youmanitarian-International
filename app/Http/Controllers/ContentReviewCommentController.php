@@ -43,8 +43,11 @@ class ContentReviewCommentController extends Controller
         if (!Auth::check()) {
             return redirect()->back()->with('error', 'You must be logged in to comment');
         }
+
+
         $data = $request->only(['content_id', 'comment']);
         $data['user_id'] = Auth::id();
+
         $validator = Validator::make($data, [
             'content_id' => 'required|integer|exists:contents,id',
             'comment' => 'required|string',
@@ -52,6 +55,11 @@ class ContentReviewCommentController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
+        if($request->ajax()){
+
+        }
+
         ContentReviewComment::create($data);
         return redirect()->back()->with('success', 'Comment added!');
     }

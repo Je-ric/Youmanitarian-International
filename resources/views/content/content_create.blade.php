@@ -23,7 +23,12 @@
                 Back to Content
             </x-button>
 
-            <button type="button"
+            {{-- Only opening kapag asa edit tab --}}
+            <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example">
+                Review
+            </button>
+
+            {{-- <button type="button"
                     data-drawer-target="drawer-right-example"
                     data-drawer-show="drawer-right-example"
                     data-drawer-placement="right"
@@ -31,7 +36,7 @@
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                 <i class='bx bx-cog mr-2'></i>
                 Settings Panel
-            </button>
+            </button> --}}
 
             <x-button variant="add-create" type="submit" form="contentForm">
                 <i class='bx {{ isset($content) ? 'bx-edit' : 'bx-save' }} mr-2'></i>
@@ -376,7 +381,7 @@
                         </div>
                     </form>
 
-                    @include('content.partials.contentReviewComments')
+                    {{-- @include('content.partials.contentReviewComments') --}}
                 </div>
             @endif
         </x-slot>
@@ -394,13 +399,17 @@
                 'gallery_images' => isset($content) && $content->images ? $content->images->pluck('image_path')->toArray() : []
             ])
 
-            @include('content.partials.contentReviewComments')
+            {{-- @include('content.partials.contentReviewComments') --}}
         </x-slot>
     </x-navigation-layout.tabs-modern>
+
+    <!-- Add ONE global instance after the tabs so it’s always in the DOM -->
+    @include('content.partials.contentReviewComments')
 
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 
     <script>
         $(document).ready(function () {

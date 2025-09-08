@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <!-- Quick Stats -->
+        {{-- <!-- Quick Stats -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
                 <i class='bx bx-briefcase-alt-2 text-3xl text-indigo-500 mb-2'></i>
@@ -43,7 +43,7 @@
                 <div class="text-2xl font-bold">--</div>
                 <div class="text-gray-500">Upcoming Events</div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Get Involved Section -->
         <div class="bg-gradient-to-r from-green-400 to-blue-500 rounded-2xl shadow-lg p-8 flex flex-col items-center text-white mb-10">
@@ -57,12 +57,12 @@
         </div>
 
         <!-- Recent Activity Placeholder -->
-        <div class="bg-white rounded-2xl shadow p-8 mb-10">
+        {{-- <div class="bg-white rounded-2xl shadow p-8 mb-10">
             <h3 class="text-lg font-semibold mb-4 flex items-center"><i class='bx bx-bell mr-2 text-yellow-500'></i>Recent Activity</h3>
             <ul class="text-gray-600 space-y-2">
                 <li class="flex items-center"><i class='bx bx-chevron-right mr-2'></i>Activity feed coming soon...</li>
             </ul>
-        </div>
+        </div> --}}
 
         <!-- Logout Button -->
         <form action="{{ route('logout') }}" method="POST" class="mt-6 max-w-md mx-auto">

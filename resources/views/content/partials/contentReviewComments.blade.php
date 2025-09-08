@@ -59,3 +59,18 @@
         </form>
     </div>
 </div>
+
+
+<script>
+    // Initialize Flowbite drawer
+    const drawerElement = document.getElementById('drawer-right-example');
+    if (drawerElement) {
+        const drawer = new Drawer(drawerElement, {
+            placement: 'right',
+            backdrop: true,
+            keyboard: true,
+        });
+    }
+
+
+</script>

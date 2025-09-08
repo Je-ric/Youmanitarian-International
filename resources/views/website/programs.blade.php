@@ -31,27 +31,27 @@
     </section>
 
 
-    <section class="w-auto bg-slate-900 rounded-3xl py-10 px-6">
+    <section class="w-auto mx-4 bg-[#1A2235] rounded-full py-5 px-6">
         <div class="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
 
             <div>
-                <div class="text-4xl md:text-5xl font-bold text-white">{{ $volunteersCount }}</div>
-                <div class="text-lg md:text-2xl font-medium text-white">Volunteers</div>
+                <div class="text-3xl md:text-4xl font-bold text-white">{{ $volunteersCount }}</div>
+                <div class="text-md md:text-l font-medium text-white">Volunteers</div>
             </div>
 
             <div>
-                <div class="text-4xl md:text-5xl font-bold text-white">{{ $membersCount }}</div>
-                <div class="text-lg md:text-2xl font-medium text-white">Members</div>
+                <div class="text-3xl md:text-4xl font-bold text-white">{{ $membersCount }}</div>
+                <div class="text-md md:text-l font-medium text-white">Members</div>
             </div>
 
             <div>
-                <div class="text-4xl md:text-5xl font-bold text-white">{{ $programsCount }}</div>
-                <div class="text-lg md:text-2xl font-medium text-white">Programs</div>
+                <div class="text-3xl md:text-4xl font-bold text-white">{{ $programsCount }}</div>
+                <div class="text-md md:text-l font-medium text-white">Programs</div>
             </div>
 
             <div>
-                <div class="text-4xl md:text-5xl font-bold text-white"></div>
-                <div class="text-lg md:text-2xl font-medium text-white">Activities</div>
+                <div class="text-3xl md:text-4xl font-bold text-white"></div>
+                <div class="text-md md:text-l font-medium text-white">Activities</div>
             </div>
         </div>
     </section>
@@ -67,7 +67,7 @@
             <div class="space-y-12">
                 <!-- Highlight Card -->
                 <div class="flex flex-col lg:flex-row items-start gap-10 p-10 rounded-3xl border border-slate-900">
-                    <div class="flex-1 text-2xl md:text-3xl font-bold text-black">
+                    <div class="flex-1 text-3xl md:text-4xl font-bold text-black">
                         Clutch the Future
                     </div>
                     <div class="flex-1 text-lg md:text-2xl font-medium text-black">
@@ -80,7 +80,7 @@
 
                 <!-- Another Card -->
                 <div class="flex flex-col lg:flex-row items-start gap-10 p-10 rounded-3xl border border-slate-900">
-                    <div class="flex-1 text-2xl md:text-3xl font-bold text-black">
+                    <div class="flex-1 text-3xl md:text-4xl font-bold text-black">
                         The W2WM Pop-Up Shop
                     </div>
                     <div class="flex-1 text-lg md:text-2xl font-medium text-black">
@@ -93,7 +93,7 @@
 
                 <!-- Another Card -->
                 <div class="flex flex-col lg:flex-row items-start gap-10 p-10 rounded-3xl border border-slate-900">
-                    <div class="flex-1 text-2xl md:text-3xl font-bold text-black">
+                    <div class="flex-1 text-3xl md:text-4xl font-bold text-black">
                         Girls Nite Out
                     </div>
                     <div class="flex-1 text-lg md:text-2xl font-medium text-black">
@@ -218,14 +218,14 @@
         <div class="max-w-7xl mx-auto">
             <!-- Enhanced header with better typography and spacing -->
             <div class="text-center mb-12">
-                <h1 class="text-4xl md:text-5xl font-bold text-[#1a2235] mb-4">Our Programs</h1>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Discover our upcoming events and share your feedback on
+                <h1 class="text-3xl md:text-4xl font-bold text-[#1a2235] mb-4">Our Programs</h1>
+                <p class="text-lmdtext-gray00 max-w-2xl mx-auto">Discover our upcoming events and share your feedback on
                     completed programs</p>
             </div>
 
 
             <div class="flex items-center justify-between mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-[#1a2235] flex items-center gap-3">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#1a2235] flex items-center gap-3">
                     <i class='bx bx-calendar text-[#FFB51B]'></i>
                     Ongoing Programs
                 </h2>
@@ -247,7 +247,7 @@
             <!-- Calendar-like grid layout for upcoming programs -->
             <div class="mb-16">
                 <div class="flex items-center justify-between mb-8">
-                    <h2 class="text-2xl md:text-3xl font-bold text-[#1a2235] flex items-center gap-3">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#1a2235] flex items-center gap-3">
                         <i class='bx bx-calendar text-[#FFB51B]'></i>
                         Upcoming Programs
                     </h2>
@@ -322,7 +322,7 @@
             <!-- Enhanced completed programs section -->
             <div class="mb-16">
                 <div class="flex items-center justify-between mb-8">
-                    <h2 class="text-2xl md:text-3xl font-bold text-[#1a2235] flex items-center gap-3">
+                    <h2 class="text-3xl md:text-4xl font-bold text-[#1a2235] flex items-center gap-3">
                         <i class='bx bx-check-circle text-[#FFB51B]'></i>
                         Recently Completed Programs
                     </h2>
@@ -386,51 +386,6 @@
                     @endforelse
                 </div>
             </div>
-
-            @if (isset($programs) && count($programs) > 0)
-                {{-- <div>
-            <div class="flex items-center justify-between mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-[#1a2235] flex items-center gap-3">
-                    <i class='bx bx-list-ul text-[#FFB51B]'></i>
-                    All Programs
-                </h2>
-            </div>
-
-            <!-- Improved grid layout for all programs -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                @foreach ($programs as $program)
-                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-5 group">
-                        <div class="flex items-start justify-between mb-3">
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-[#1a2235] mb-1 line-clamp-2 group-hover:text-[#FFB51B] transition-colors">
-                                    {{ $program->title }}
-                                </h4>
-                                <div class="text-sm text-gray-500 flex items-center gap-1">
-                                    <i class='bx bx-calendar-alt text-xs'></i>
-                                    {{ \Carbon\Carbon::parse($program->date)->format('M d, Y') }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <button type="button"
-                                class="flex-1 px-3 py-2 bg-[#1a2235] text-white rounded-lg hover:bg-[#232b47] transition-colors duration-200 flex items-center justify-center gap-1 text-xs font-medium"
-                                onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
-                                <i class='bx bx-show text-sm'></i> View
-                            </button>
-                            <button type="button"
-                                class="flex-1 px-3 py-2 bg-[#FFB51B] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors duration-200 flex items-center justify-center gap-1 text-xs font-medium"
-                                onclick="document.getElementById('guestFeedbackModal_{{ $program->id }}').showModal()">
-                                <i class='bx bx-message-dots text-sm'></i> Feedback
-                            </button>
-                        </div>
-                    </div>
-                    @include('programs.modals.program-modal', ['program' => $program])
-                    @include('website.modals.guestFeedbackModal', ['program' => $program])
-                @endforeach
-            </div>
-        </div> --}}
-            @endif
         </div>
     </div>
 @endsection
