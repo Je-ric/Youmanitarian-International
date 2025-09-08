@@ -117,4 +117,26 @@ class User extends Authenticatable
     {
         return $this->member && $this->member->membership_status === 'active';
     }
+
+    // -------------------------------------------------------------------------
+
+    public function consultationHours()
+    {
+        return $this->hasMany(ConsultationHour::class, 'user_id');
+    }
+
+    public function consultationThreadsAsVolunteer()
+    {
+        return $this->hasMany(ConsultationThread::class, 'volunteer_id');
+    }
+
+    public function consultationThreadsAsProfessional()
+    {
+        return $this->hasMany(ConsultationThread::class, 'professional_id');
+    }
+
+    public function consultationChats()
+    {
+        return $this->hasMany(ConsultationChat::class, 'sender_id');
+    }
 }
