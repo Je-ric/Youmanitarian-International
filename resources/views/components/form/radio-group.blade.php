@@ -3,15 +3,22 @@
     'label' => '',
     'options' => [],
     'selected' => null,
+    'inline' => false,
 ])
 
 {{--
-Usage: <x-form.radio-group name="gender" label="Gender" 
-           :options="['male' => 'Male', 'female' => 'Female']" 
+Usage: <x-form.radio-group name="gender" label="Gender"
+           :options="['male' => 'Male', 'female' => 'Female']"
            :selected="old('gender')" />
-       <x-form.radio-group name="status" 
+       <x-form.radio-group name="status"
            :options="['active' => 'Active', 'inactive' => 'Inactive']" />
 
+        <x-form.radio-group
+                name="status"
+                :options="['active' => 'Active', 'inactive' => 'Inactive']"
+                :selected="old('status', 'active')"
+                inline="true"
+            />
 Used in:
 - resources/views/volunteers/form.blade.php
 - resources/views/programs_volunteers/modals/attendanceApproval.blade.php
@@ -21,7 +28,7 @@ Used in:
     @if($label)
         <label class="block text-sm font-medium text-gray-700 mb-2">{{ $label }}</label>
     @endif
-    <div class="flex flex-col gap-2">
+    <div class="flex {{ $inline ? 'flex-row gap-4' : 'flex-col gap-2' }}">
         @foreach($options as $value => $optionLabel)
             @php
                 $id = $name . '_' . \Illuminate\Support\Str::slug($value, '_');
@@ -39,4 +46,4 @@ Used in:
             </div>
         @endforeach
     </div>
-</div> 
+</div>

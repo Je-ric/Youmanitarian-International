@@ -30,6 +30,7 @@ use App\Models\MembershipPayment;
 use Illuminate\Notifications\DatabaseNotification;
 use App\Http\Controllers\ContentReviewCommentController;
 use App\Http\Controllers\TeamMemberController;
+use App\Http\Controllers\ConsultationHourController;
 
 // =================================================================
 // WEBSITE ROUTES (Public - No Authentication Required)
@@ -218,8 +219,11 @@ Route::middleware(['auth', 'role:Volunteer'])->group(function () {
     ->name('member.invitation.decline')
     ->middleware('signed');
 
-});
+    Route::resource('consultation-hours', ConsultationHourController::class)->only([
+            'index','store','update','destroy','edit'
+        ]);
 
+});
 
 // =================================================================
 // FINANCIAL COORDINATOR (Done - Working Role-Based)
@@ -270,7 +274,6 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
 
 });
 
-
 // =================================================================
 // CONTENT MANAGER ROUTES
 // =================================================================
@@ -298,3 +301,4 @@ Route::post('content-review-comments', [ContentReviewCommentController::class, '
 Route::delete('content-review-comments/{id}', [ContentReviewCommentController::class, 'destroy'])->name('content-review-comments.destroy');
 
 Route::get('/content/{slug}', [WebsiteController::class, 'viewContent'])->name('website.view-content');
+

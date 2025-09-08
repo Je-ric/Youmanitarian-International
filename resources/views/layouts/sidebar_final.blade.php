@@ -328,6 +328,8 @@
                                 class="hidden lg:block text-gray-600 hover:text-primary transition-all duration-200 text-sm">Website</a>
                             <a href="{{ route('weather-forecast.index') }}"
                                 class="hidden lg:block text-gray-600 hover:text-primary transition-all duration-200 text-sm">Weather</a>
+                            <a href="{{ route('consultation-hours.index') }}"
+                                class="hidden lg:block text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation</a>
                         </div>
                     </div>
                 </div>
