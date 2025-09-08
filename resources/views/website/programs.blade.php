@@ -4,7 +4,6 @@
 
 @section('content')
     <section class="relative w-full min-h-screen bg-gray-200 flex flex-col lg:flex-row">
-
         <div class="relative z-10 flex flex-col justify-center gap-6 px-6 md:px-12 lg:px-24 py-16 lg:py-20 lg:w-1/2">
             <p class="text-base md:text-lg lg:text-xl font-normal text-[#1A2235] tracking-wide uppercase">
                 Grow Without Limits
@@ -215,154 +214,181 @@
     </section>
 
 
-   <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
-    <div class="max-w-7xl mx-auto">
-        <!-- Enhanced header with better typography and spacing -->
-        <div class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold text-[#1a2235] mb-4">Our Programs</h1>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Discover our upcoming events and share your feedback on completed programs</p>
-        </div>
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- Enhanced header with better typography and spacing -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-[#1a2235] mb-4">Our Programs</h1>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Discover our upcoming events and share your feedback on
+                    completed programs</p>
+            </div>
 
-        <!-- Calendar-like grid layout for upcoming programs -->
-        <div class="mb-16">
+
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-2xl md:text-3xl font-bold text-[#1a2235] flex items-center gap-3">
                     <i class='bx bx-calendar text-[#FFB51B]'></i>
-                    Upcoming Programs
+                    Ongoing Programs
                 </h2>
                 <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
-                    {{ count($incomingPrograms) }} Events Scheduled
+                    {{ count($ongoingPrograms) }} Events Scheduled
                 </div>
             </div>
 
-            <!-- Responsive grid layout that looks more calendar-like -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @forelse($incomingPrograms as $program)
-                    <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                        <!-- Image with hover effect -->
-                        <div class="relative overflow-hidden h-48">
-                            <img src="{{ $program->image_url ?? 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' }}"
-                                alt="{{ $program->title }}"
-                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                            <div class="absolute top-4 right-4 bg-[#FFB51B] text-[#1a2235] px-3 py-1 rounded-full text-sm font-semibold">
-                                {{ \Carbon\Carbon::parse($program->date)->format('M d') }}
-                            </div>
-                        </div>
-
-                        <!-- Better organized content with consistent spacing -->
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-[#1a2235] mb-3 line-clamp-2">{{ $program->title }}</h3>
-
-                            <!-- Time and location info with icons -->
-                            <div class="space-y-2 mb-4">
-                                <div class="flex items-center gap-2 text-gray-600 text-sm">
-                                    <i class='bx bx-time text-[#FFB51B]'></i>
-                                    <span>{{ \Carbon\Carbon::parse($program->start_time)->format('g:i A') }}
-                                    @if ($program->end_time)
-                                        - {{ \Carbon\Carbon::parse($program->end_time)->format('g:i A') }}
-                                    @endif</span>
-                                </div>
-                                <div class="flex items-center gap-2 text-gray-600 text-sm">
-                                    <i class='bx bx-map text-[#FFB51B]'></i>
-                                    <span>{{ $program->location }}</span>
-                                </div>
-                            </div>
-
-                            <p class="text-gray-700 text-sm mb-6 line-clamp-3">{{ $program->description }}</p>
-
-                            <!-- Action buttons for upcoming programs -->
-                            <div class="flex gap-3">
-                                <button type="button"
-                                    class="flex-1 px-4 py-2 bg-[#1a2235] text-white rounded-lg hover:bg-[#232b47] transition-colors duration-200 flex items-center justify-center gap-2 text-sm font-medium"
-                                    onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
-                                    <i class='bx bx-show'></i> View Details
-                                </button>
-                                <button class="px-4 py-2 border-2 border-[#FFB51B] text-[#FFB51B] rounded-lg hover:bg-[#FFB51B] hover:text-[#1a2235] transition-colors duration-200 flex items-center gap-2 text-sm font-medium">
-                                    <i class='bx bx-bookmark'></i> Save
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    @include('programs.modals.program-modal', ['program' => $program])
-                @empty
-                    <div class="col-span-full text-center py-16">
-                        <i class='bx bx-calendar-x text-6xl text-gray-300 mb-4'></i>
-                        <p class="text-xl text-gray-500">No upcoming programs scheduled</p>
-                        <p class="text-gray-400 mt-2">Check back soon for new events!</p>
-                    </div>
-                @endforelse
-            </div>
-        </div>
-
-        <!-- Enhanced completed programs section -->
-        <div class="mb-16">
-            <div class="flex items-center justify-between mb-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-[#1a2235] flex items-center gap-3">
-                    <i class='bx bx-check-circle text-[#FFB51B]'></i>
-                    Recently Completed Programs
-                </h2>
-                <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
-                    {{ count($donePrograms) }} Programs Completed
+            @forelse ($ongoingPrograms as $program)
+                <h3 class="text-xl font-bold text-[#1a2235] mb-3 line-clamp-2">{{ $program->title }}</h3>
+            @empty
+                <div class="col-span-full text-center py-16">
+                    <i class='bx bx-calendar-x text-6xl text-gray-300 mb-4'></i>
+                    <p class="text-xl text-gray-500">No upcoming programs scheduled</p>
+                    <p class="text-gray-400 mt-2">Check back soon for new events!</p>
                 </div>
-            </div>
+            @endforelse
 
-            <!-- Grid layout for completed programs with feedback focus -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                @forelse($donePrograms as $program)
-                    <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                        <div class="flex flex-col sm:flex-row">
-                            <!-- Image section with completed badge -->
-                            <div class="relative sm:w-1/3 h-48 sm:h-auto overflow-hidden">
+            <!-- Calendar-like grid layout for upcoming programs -->
+            <div class="mb-16">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold text-[#1a2235] flex items-center gap-3">
+                        <i class='bx bx-calendar text-[#FFB51B]'></i>
+                        Upcoming Programs
+                    </h2>
+                    <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
+                        {{ count($incomingPrograms) }} Events Scheduled
+                    </div>
+                </div>
+
+                <!-- Responsive grid layout that looks more calendar-like -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @forelse($incomingPrograms as $program)
+                        <div
+                            class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                            <!-- Image with hover effect -->
+                            <div class="relative overflow-hidden h-48">
                                 <img src="{{ $program->image_url ?? 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' }}"
                                     alt="{{ $program->title }}"
                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                <div class="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                                    Completed
+                                <div
+                                    class="absolute top-4 right-4 bg-[#FFB51B] text-[#1a2235] px-3 py-1 rounded-full text-sm font-semibold">
+                                    {{ \Carbon\Carbon::parse($program->date)->format('M d') }}
                                 </div>
                             </div>
 
-                            <!-- Content section with feedback emphasis -->
-                            <div class="flex-1 p-6">
-                                <h3 class="text-lg font-bold text-[#1a2235] mb-2">{{ $program->title }}</h3>
+                            <!-- Better organized content with consistent spacing -->
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-[#1a2235] mb-3 line-clamp-2">{{ $program->title }}</h3>
 
-                                <div class="flex items-center gap-2 text-gray-500 text-sm mb-3">
-                                    <i class='bx bx-calendar'></i>
-                                    <span>{{ \Carbon\Carbon::parse($program->date)->format('F d, Y') }}</span>
+                                <!-- Time and location info with icons -->
+                                <div class="space-y-2 mb-4">
+                                    <div class="flex items-center gap-2 text-gray-600 text-sm">
+                                        <i class='bx bx-time text-[#FFB51B]'></i>
+                                        <span>{{ \Carbon\Carbon::parse($program->start_time)->format('g:i A') }}
+                                            @if ($program->end_time)
+                                                - {{ \Carbon\Carbon::parse($program->end_time)->format('g:i A') }}
+                                            @endif
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-gray-600 text-sm">
+                                        <i class='bx bx-map text-[#FFB51B]'></i>
+                                        <span>{{ $program->location }}</span>
+                                    </div>
                                 </div>
 
-                                <p class="text-gray-700 text-sm mb-4 line-clamp-2">{{ $program->description }}</p>
+                                <p class="text-gray-700 text-sm mb-6 line-clamp-3">{{ $program->description }}</p>
 
-                                <!-- Feedback-focused action buttons -->
-                                <div class="space-y-3">
+                                <!-- Action buttons for upcoming programs -->
+                                <div class="flex gap-3">
                                     <button type="button"
-                                        class="w-full px-4 py-3 bg-[#FFB51B] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors duration-200 flex items-center justify-center gap-2 font-semibold"
-                                        onclick="document.getElementById('guestFeedbackModal_{{ $program->id }}').showModal()">
-                                        <i class='bx bx-message-dots'></i> Share Your Feedback
-                                    </button>
-                                    <button type="button"
-                                        class="w-full px-4 py-2 border border-[#1a2235] text-[#1a2235] rounded-lg hover:bg-[#1a2235] hover:text-white transition-colors duration-200 flex items-center justify-center gap-2 text-sm"
+                                        class="flex-1 px-4 py-2 bg-[#1a2235] text-white rounded-lg hover:bg-[#232b47] transition-colors duration-200 flex items-center justify-center gap-2 text-sm font-medium"
                                         onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
-                                        <i class='bx bx-show'></i> View Program Details
+                                        <i class='bx bx-show'></i> View Details
+                                    </button>
+                                    <button
+                                        class="px-4 py-2 border-2 border-[#FFB51B] text-[#FFB51B] rounded-lg hover:bg-[#FFB51B] hover:text-[#1a2235] transition-colors duration-200 flex items-center gap-2 text-sm font-medium">
+                                        <i class='bx bx-bookmark'></i> Save
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    @include('programs.modals.program-modal', ['program' => $program])
-                    @include('website.modals.guestFeedbackModal', ['program' => $program])
-                @empty
-                    <div class="col-span-full text-center py-16">
-                        <i class='bx bx-history text-6xl text-gray-300 mb-4'></i>
-                        <p class="text-xl text-gray-500">No completed programs yet</p>
-                        <p class="text-gray-400 mt-2">Completed programs will appear here</p>
-                    </div>
-                @endforelse
+                        @include('programs.modals.program-modal', ['program' => $program])
+                    @empty
+                        <div class="col-span-full text-center py-16">
+                            <i class='bx bx-calendar-x text-6xl text-gray-300 mb-4'></i>
+                            <p class="text-xl text-gray-500">No upcoming programs scheduled</p>
+                            <p class="text-gray-400 mt-2">Check back soon for new events!</p>
+                        </div>
+                    @endforelse
+                </div>
             </div>
-        </div>
 
-        <!-- All Programs section with enhanced layout -->
-        @if(isset($programs) && count($programs) > 0)
-        <div>
+            <!-- Enhanced completed programs section -->
+            <div class="mb-16">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold text-[#1a2235] flex items-center gap-3">
+                        <i class='bx bx-check-circle text-[#FFB51B]'></i>
+                        Recently Completed Programs
+                    </h2>
+                    <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
+                        {{ count($donePrograms) }} Programs Completed
+                    </div>
+                </div>
+
+                <!-- Grid layout for completed programs with feedback focus -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    @forelse($donePrograms as $program)
+                        <div
+                            class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                            <div class="flex flex-col sm:flex-row">
+                                <!-- Image section with completed badge -->
+                                <div class="relative sm:w-1/3 h-48 sm:h-auto overflow-hidden">
+                                    <img src="{{ $program->image_url ?? 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' }}"
+                                        alt="{{ $program->title }}"
+                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                    <div
+                                        class="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                                        Completed
+                                    </div>
+                                </div>
+
+                                <!-- Content section with feedback emphasis -->
+                                <div class="flex-1 p-6">
+                                    <h3 class="text-lg font-bold text-[#1a2235] mb-2">{{ $program->title }}</h3>
+
+                                    <div class="flex items-center gap-2 text-gray-500 text-sm mb-3">
+                                        <i class='bx bx-calendar'></i>
+                                        <span>{{ \Carbon\Carbon::parse($program->date)->format('F d, Y') }}</span>
+                                    </div>
+
+                                    <p class="text-gray-700 text-sm mb-4 line-clamp-2">{{ $program->description }}</p>
+
+                                    <!-- Feedback-focused action buttons -->
+                                    <div class="space-y-3">
+                                        <button type="button"
+                                            class="w-full px-4 py-3 bg-[#FFB51B] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors duration-200 flex items-center justify-center gap-2 font-semibold"
+                                            onclick="document.getElementById('guestFeedbackModal_{{ $program->id }}').showModal()">
+                                            <i class='bx bx-message-dots'></i> Share Your Feedback
+                                        </button>
+                                        <button type="button"
+                                            class="w-full px-4 py-2 border border-[#1a2235] text-[#1a2235] rounded-lg hover:bg-[#1a2235] hover:text-white transition-colors duration-200 flex items-center justify-center gap-2 text-sm"
+                                            onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
+                                            <i class='bx bx-show'></i> View Program Details
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @include('programs.modals.program-modal', ['program' => $program])
+                        @include('website.modals.guestFeedbackModal', ['program' => $program])
+                    @empty
+                        <div class="col-span-full text-center py-16">
+                            <i class='bx bx-history text-6xl text-gray-300 mb-4'></i>
+                            <p class="text-xl text-gray-500">No completed programs yet</p>
+                            <p class="text-gray-400 mt-2">Completed programs will appear here</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            @if (isset($programs) && count($programs) > 0)
+                {{-- <div>
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-2xl md:text-3xl font-bold text-[#1a2235] flex items-center gap-3">
                     <i class='bx bx-list-ul text-[#FFB51B]'></i>
@@ -403,10 +429,8 @@
                     @include('website.modals.guestFeedbackModal', ['program' => $program])
                 @endforeach
             </div>
+        </div> --}}
+            @endif
         </div>
-        @endif
     </div>
-</div>
-
-
 @endsection

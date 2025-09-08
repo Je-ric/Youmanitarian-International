@@ -81,11 +81,11 @@
                     Home
                 </a>
 
-                <a href="{{ route('website.news') }}"
+                {{-- <a href="{{ route('website.news') }}"
                     class="text-primary-custom hover:text-accent-custom transition-colors duration-300
    {{ request()->routeIs('website.news') ? 'text-accent-custom font-bold' : '' }}">
                     News
-                </a>
+                </a> --}}
 
                 <a href="{{ route('website.programs') }}"
                     class="text-primary-custom hover:text-accent-custom transition-colors duration-300
@@ -135,7 +135,7 @@
                 <div x-show="open" x-transition class="absolute top-16 left-0 w-full bg-white shadow-lg border-t z-20">
                     <nav class="flex flex-col p-4 space-y-3 text-base">
                         <a href="{{ route('website.index') }}" class="text-gray-600 hover:text-blue-600">Home</a>
-                        <a href="{{ route('website.news') }}" class="text-gray-600 hover:text-blue-600">News</a>
+                        {{-- <a href="{{ route('website.news') }}" class="text-gray-600 hover:text-blue-600">News</a> --}}
                         <a href="{{ route('website.programs') }}" class="text-gray-600 hover:text-blue-600">Program</a>
                         <a href="{{ route('website.sponsors') }}" class="text-gray-600 hover:text-blue-600">Sponsor &
                             Partnership</a>

@@ -36,7 +36,7 @@ use App\Http\Controllers\TeamMemberController;
 // =================================================================
 
 Route::get('/', [WebsiteController::class, 'index'])->name('website.index');
-Route::get('/news', [WebsiteController::class, 'news'])->name('website.news');
+// Route::get('/news', [WebsiteController::class, 'news'])->name('website.news');
 Route::get('/programs', [WebsiteController::class, 'programs'])->name('website.programs');
 Route::get('/sponsors', [WebsiteController::class, 'sponsors'])->name('website.sponsors');
 Route::get('/about', [WebsiteController::class, 'about'])->name('website.about');

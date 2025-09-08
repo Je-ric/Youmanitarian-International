@@ -87,16 +87,24 @@ class WebsiteController extends Controller
 
 
 
-    public function news()
-    {
-        return view('website.news'); // News
-    }
+    // public function news()
+    // {
+    //     return view('website.news'); // News
+    // }
 
     public function programs()
     {
         $now = now();
         $cutoff = now()->subDays(7);
 
+        // in between
+        $ongoingPrograms = Program::with(['creator', 'volunteers'])
+            ->whereRaw("TIMESTAMP(`date`, `start_time`) <= ?", [now()])
+            ->whereRaw("TIMESTAMP(`date`, `end_time`) >= ?", [now()])
+            ->orderBy('date', 'asc')
+            ->get();
+
+        // greater than now
         $incomingPrograms = Program::with(['creator', 'volunteers'])
             ->whereRaw("TIMESTAMP(`date`, `end_time`) > ?", [now()])
             ->orderBy('date', 'asc')
@@ -118,6 +126,7 @@ class WebsiteController extends Controller
         return view('website.programs',
         compact('incomingPrograms',
             'donePrograms',
+            'ongoingPrograms',
             'programs',
             'membersCount',
             'programsCount',
