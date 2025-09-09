@@ -286,7 +286,7 @@ Route::middleware(['auth', 'role:Content Manager'])->group(function () {
     Route::get('/content/{content}/review', [ContentController::class, 'review'])->name('content.review');
 });
 
-Route::middleware(['auth', 'role:Program Coordinator,Content Manager'])->group(function () {
+Route::middleware(['auth', 'role:Program Coordinator|Content Manager'])->group(function () {
     Route::get('/content/list', [ContentController::class, 'index'])->name('content.index');
     Route::get('/content/create', [ContentController::class, 'create'])->name('content.create');
     Route::post('/content/store', [ContentController::class, 'store'])->name('content.store');
