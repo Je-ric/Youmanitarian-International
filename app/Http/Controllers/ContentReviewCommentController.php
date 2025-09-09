@@ -94,7 +94,20 @@ class ContentReviewCommentController extends Controller
     public function destroy($id)
     {
         $comment = ContentReviewComment::findOrFail($id);
+
+        if (!Auth::check() || Auth::id() !== (int)$comment->user_id) {
+            if (request()->ajax()) {
+                return response()->json(['success' => false, 'error' => 'Forbidden'], 403);
+            }
+            return redirect()->back()->with('error', 'You can only delete your own comment.');
+        }
+
         $comment->delete();
+
+        if (request()->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
         return redirect()->back()->with('success', 'Comment deleted!');
     }
 }
