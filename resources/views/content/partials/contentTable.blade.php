@@ -71,7 +71,7 @@
 
                         @if($tab === 'needs_approval' && Auth::user()->hasRole('Content Manager'))
                             <a href="{{ route('content.review', $content->id) }}"
-                               class="inline-block">
+                                class="inline-block">
                                 <x-button variant="table-action-view" size="sm" class="tooltip" data-tip="Review">
                                     <i class='bx bx-search'></i>
                                 </x-button>

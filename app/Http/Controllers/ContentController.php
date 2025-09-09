@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon; // add
 
 class ContentController extends Controller
 {
@@ -132,7 +133,7 @@ class ContentController extends Controller
             'enable_likes' => 'nullable|boolean',
             'enable_comments' => 'nullable|boolean',
             'enable_bookmark' => 'nullable|boolean',
-            'published_at' => 'nullable|date',
+            // removed: 'published_at' => 'nullable|date',
             'is_featured' => 'nullable|boolean',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:255',
@@ -175,12 +176,18 @@ class ContentController extends Controller
 
         $statusArr = $this->setContentApprovalStatus($request, $user);
 
+        // Default published_at -> now() when publishing directly or auto-approved
+        $publishedAt = null;
+        if (($statusArr['content_status'] ?? null) === 'published' || ($statusArr['approval_status'] ?? null) === 'approved') {
+            $publishedAt = now();
+        }
+
         $content = Content::create([
             'title' => $validated['title'],
             'slug' => $validated['slug'],
             'content_type' => $validated['content_type'],
             'body' => $validated['body'],
-            'created_by' => $user_id,
+            'created_by' => $user->id,
             'content_status' => $statusArr['content_status'],
             'image_content' => $image_path,
             'approval_status' => $statusArr['approval_status'],
@@ -190,7 +197,7 @@ class ContentController extends Controller
             'enable_likes' => $enable_likes,
             'enable_comments' => $enable_comments,
             'enable_bookmark' => $enable_bookmark,
-            'published_at' => $validated['published_at'] ?? null,
+            'published_at' => $publishedAt, // set automatically
             'is_featured' => $is_featured,
             'meta_title' => $validated['meta_title'] ?? null,
             'meta_description' => $validated['meta_description'] ?? null,
@@ -226,7 +233,7 @@ class ContentController extends Controller
             'enable_likes' => 'nullable|boolean',
             'enable_comments' => 'nullable|boolean',
             'enable_bookmark' => 'nullable|boolean',
-            'published_at' => 'nullable|date',
+            // removed: 'published_at' => 'nullable|date',
             'is_featured' => 'nullable|boolean',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:255',
@@ -261,12 +268,15 @@ class ContentController extends Controller
 
         $statusArr = $this->setContentApprovalStatus($request, $user);
 
-        // If content is being approved, set content_status to published
         $newApprovalStatus = $statusArr['approval_status'];
         $newContentStatus = $statusArr['content_status'];
-        if ($newApprovalStatus === 'approved') {
-            $newContentStatus = 'published';
+
+        // Preserve existing published_at, set now() if publishing/approving and not set yet
+        $publishedAt = $content->published_at;
+        if ($newContentStatus === 'published' || $newApprovalStatus === 'approved') {
+            $publishedAt = $publishedAt ?: now();
         }
+
         $content->update([
             'title' => $validated['title'],
             'slug' => $validated['slug'],
@@ -280,7 +290,7 @@ class ContentController extends Controller
             'enable_likes' => $enable_likes,
             'enable_comments' => $enable_comments,
             'enable_bookmark' => $enable_bookmark,
-            'published_at' => $validated['published_at'] ?? null,
+            'published_at' => $publishedAt, // auto-managed
             'is_featured' => $is_featured,
             'meta_title' => $validated['meta_title'] ?? null,
             'meta_description' => $validated['meta_description'] ?? null,
@@ -387,6 +397,7 @@ class ContentController extends Controller
             'approved_by' => $user->id,
             'approved_at' => now(),
             'content_status' => 'published',
+            'published_at' => $content->published_at ?: now(), // keep if already set, else now
         ]);
 
         return redirect()->route('content.index')->with('toast', [

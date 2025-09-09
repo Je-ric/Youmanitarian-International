@@ -56,8 +56,8 @@
                 ['id' => 'edit', 'label' => 'Edit', 'icon' => 'bx-edit'],
                 ['id' => 'preview', 'label' => 'Preview', 'icon' => 'bx-show']
             ]"
-        defaultTab="preview"
-        :preserveState="false"
+        default-tab="{{ $reviewMode ? 'preview' : 'edit' }}"
+        :preserve-state="true"
         class="mb-6">
 
         <x-slot name="slot_edit">
@@ -327,15 +327,16 @@
                                     </div>
 
                                     <div class="space-y-4">
-                                        <div>
-                                            <x-form.label for="published_at" class="text-sm">Publish Date</x-form.label>
-                                            <x-form.input
-                                                type="date"
-                                                name="published_at"
-                                                id="published_at"
-                                                class="w-full"
-                                                value="{{ old('published_at', isset($content->published_at) ? \Illuminate\Support\Carbon::parse($content->published_at)->format('Y-m-d') : '') }}" />
-                                        </div>
+                                        <x-feedback-status.alert
+                                            variant="flexible"
+                                            type="info"
+                                            message="Publish date is set automatically when content is published directly or approved."
+                                            bgColor="bg-blue-50"
+                                            textColor="text-blue-700"
+                                            borderColor="border-blue-200"
+                                            icon="bx bx-time-five"
+                                        />
+
 
                                         <div>
                                             <x-form.label for="meta_title" class="text-sm">Meta Title</x-form.label>
