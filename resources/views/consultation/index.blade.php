@@ -8,13 +8,14 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             {{-- left --}}
-            <div class="bg-white shadow rounded-xl p-6">
-                <h2 class="text-xl font-semibold text-gray-800 mb-1">Your Consultation Hours</h2>
+            <x-overview.card
+                title="Your Consultation Hours"
+                icon="bx-time-five"
+                variant="midnight-header">
                 <p class="text-sm text-gray-500 mb-4">
                     These are the times when you're available for consultations with other volunteers.
                 </p>
 
-                <!-- Responsive wrapper -->
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm text-gray-700 border rounded-lg">
                         <thead class="text-xs font-semibold text-gray-500 border-b bg-gray-50">
@@ -74,16 +75,16 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </x-overview.card>
 
 
 
             {{-- right --}}
-            <div class="bg-white shadow rounded-xl p-6">
-                <h2 id="form-title" class="text-2xl font-semibold text-gray-800 mb-1">
-                    Add Consultation Hours
-                    {{-- Edit Consultation Hours --}}
-                </h2>
+            <x-overview.card
+                title="Add Consultation Hours"
+                id="form-title"
+                icon="bx-plus-circle"
+                variant="midnight-header">
                 <p class="text-sm text-gray-500 mb-6">
                     Set times when you're available to provide consultations.
                 </p>
@@ -153,7 +154,7 @@
                     </div>
 
                 </form>
-            </div>
+            </x-overview.card>
         </div>
     </div>
 @endsection

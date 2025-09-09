@@ -7,6 +7,7 @@
     'borderColor' => null,
     'headerClass' => '',
     'bodyClass' => '',
+    'id' => null,
 ])
 
 @php
@@ -72,7 +73,7 @@
 <div class="w-full {{ $containerClass }} {{ $shadowClass }} rounded-xl overflow-hidden transition-all duration-300 group">
     @if($title || $icon)
         <div class="flex items-center gap-3 px-6 py-4 {{ $headerClass }} {{ $headerClass }} relative">
-            
+
             @if($variant === 'elevated')
                 <div class="absolute inset-0 opacity-10">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full -translate-y-16 translate-x-16"></div>
@@ -85,9 +86,10 @@
                     <i class="bx {{ $icon }} text-lg {{ $config['iconColor'] }}"></i>
                 </span>
             @endif
-            
+
             @if($title)
-                <h3 class="relative text-lg font-semibold tracking-tight flex-1">
+                <h3 @if($id) id="{{ $id }}" @endif 
+                    class="relative text-lg font-semibold tracking-tight flex-1">
                     {{ $title }}
                 </h3>
             @endif
@@ -98,7 +100,7 @@
             @endif
         </div>
     @endif
-    
+
     <div class="p-6 {{ $bodyClass }} {{ $bodyClass }} relative">
         {{ $slot }}
     </div>
@@ -133,9 +135,9 @@ Usage Examples:
 </x-overview.card>
 
 <!-- Custom Colors -->
-<x-overview.card 
-    title="Custom Card" 
-    icon="bx-star" 
+<x-overview.card
+    title="Custom Card"
+    icon="bx-star"
     variant="default"
     headerColor="bg-gradient-to-r from-emerald-600 to-teal-600 text-white"
     bodyColor="bg-emerald-50"
@@ -147,4 +149,4 @@ Used in:
 - resources/views/member/partials/membersOverview.blade.php
 - resources/views/programs_volunteers/partials/programOverview.blade.php
 - resources/views/components/showcase.blade.php
---}} 
+--}}
