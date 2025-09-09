@@ -5,10 +5,9 @@
     since nag-add tayo ng ajax, di mababago yung title dito --}}
     <x-page-header icon="bx-calendar-event" title="{{ $program->title }}"
         desc="View and manage program details and volunteer participation.">
-        {{-- <a href="{{ route('program.chats.index', $program) }}"
-            class="flex-1 lg:flex-none inline-flex items-center justify-center px-4 py-2 bg-[#ffb51b] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors font-medium">
-            <i class='bx bx-message-square-dots mr-2'></i> Group Chat
-        </a> --}}
+        <x-button variant="primary" href="{{ route('program.chats.index', $program) }}">
+             <i class='bx bx-message-square-dots mr-2'></i> Group Chat
+        </x-button>
     </x-page-header>
 
     @php
