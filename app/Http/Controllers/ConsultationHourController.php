@@ -17,14 +17,15 @@ class ConsultationHourController extends Controller
             $editingHour = ConsultationHour::findOrFail($request->input('edit'));
         }
 
-        return view('consultation.index', compact('consultationHours', 'editingHour'));
+        return view('consultation.index', compact('consultationHours',
+        'editingHour'));
     }
 
     public function store(Request $request)
     {
         $data = $this->validateData($request);
 
-        // Always assign the auth user
+        // always assign the auth user
         $data['user_id'] = Auth::id() ?? $request->input('user_id');
 
         ConsultationHour::create($data);
@@ -36,7 +37,6 @@ class ConsultationHourController extends Controller
 
     public function update(Request $request, ConsultationHour $consultationHour)
     {
-        // Ownership check
         if ($request->user() && $consultationHour->user_id !== $request->user()->id) {
             abort(403);
         }
@@ -66,9 +66,6 @@ class ConsultationHourController extends Controller
             ->with('success', 'Consultation hour deleted.');
     }
 
-    /**
-     * Centralized validation for both store and update.
-     */
     private function validateData(Request $request, bool $updating = false): array
     {
         $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];

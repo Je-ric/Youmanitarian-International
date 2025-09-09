@@ -1,58 +1,72 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
+    <x-page-header icon="bx-time" title="Consultation Hours" desc="Manage and set your available consultation times.">
+    </x-page-header>
+
     <div class="py-10 px-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             {{-- left --}}
             <div class="bg-white shadow rounded-xl p-6">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-1">Your Consultation Hours</h2>
-                <p class="text-sm text-gray-500 mb-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-1">Your Consultation Hours</h2>
+                <p class="text-sm text-gray-500 mb-4">
                     These are the times when you're available for consultations with other volunteers.
                 </p>
 
+                <!-- Responsive wrapper -->
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm text-gray-700">
-                        <thead class="text-xs font-semibold text-gray-500 border-b">
+                    <table class="min-w-full text-sm text-gray-700 border rounded-lg">
+                        <thead class="text-xs font-semibold text-gray-500 border-b bg-gray-50">
                             <tr>
-                                <th class="py-3">Specialization</th>
-                                <th class="py-3">Day</th>
-                                <th class="py-3">Time</th>
-                                <th class="py-3 text-right">Actions</th>
+                                <th scope="col" class="py-2 px-3 text-left">Specialization</th>
+                                <th scope="col" class="py-2 px-3 text-left">Day</th>
+                                <th scope="col" class="py-2 px-3 text-left">Time</th>
+                                <th scope="col" class="py-2 px-3 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($consultationHours as $hour)
-                                <tr class="border-b last:border-0">
-                                    <td class="py-3 font-medium">{{ $hour->specialization }}</td>
-                                    <td class="py-3">{{ $hour->day }}</td>
-                                    <td class="py-3">{{ $hour->start_time }} – {{ $hour->end_time }}</td>
-                                    <td class="py-3 flex justify-end gap-2">
-                                        {{-- <button type="button" class="p-2 text-gray-600 hover:text-blue-600 edit-btn"
-                                            data-id="{{ $hour->id }}" aria-label="Edit">
-                                            <i class="bx bx-edit text-xl"></i>
-                                        </button> --}}
-                                        <button type="button" class="p-2 text-gray-600 hover:text-blue-600 edit-btn"
+                                <tr class="border-b last:border-0 hover:bg-gray-50">
+                                    <td class="py-2 px-3 font-medium whitespace-nowrap">
+                                        {{ $hour->specialization }}
+                                    </td>
+                                    <td class="py-2 px-3 whitespace-nowrap">
+                                        {{ $hour->day }}
+                                    </td>
+                                    <td class="py-2 px-3">
+                                        {{ \Carbon\Carbon::parse($hour->start_time)->format('g:i A') }}
+                                        –
+                                        {{ \Carbon\Carbon::parse($hour->end_time)->format('g:i A') }}
+                                    </td>
+
+                                    <td class="py-2 px-3 flex justify-end items-center gap-1">
+
+                                        <button type="button"
+                                            class="p-1.5 text-gray-600 hover:text-blue-600 rounded-md transition edit-btn"
                                             data-id="{{ $hour->id }}" data-specialization="{{ $hour->specialization }}"
                                             data-day="{{ $hour->day }}" data-start="{{ $hour->start_time }}"
                                             data-end="{{ $hour->end_time }}" data-status="{{ $hour->status }}"
                                             aria-label="Edit">
-                                            <i class="bx bx-edit text-xl"></i>
+                                            <i class="bx bx-edit text-base"></i>
                                         </button>
+
                                         <form action="{{ route('consultation-hours.destroy', $hour->id) }}" method="POST"
+                                            class="inline-block"
                                             onsubmit="return confirm('Are you sure you want to delete this consultation hour?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="p-2 text-gray-600 hover:text-red-600"
+                                            <button type="submit"
+                                                class="p-1.5 text-gray-600 hover:text-red-600 rounded-md transition"
                                                 aria-label="Delete">
-                                                <i class="bx bx-trash text-xl"></i>
+                                                <i class="bx bx-trash text-base"></i>
                                             </button>
                                         </form>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="py-4 text-center text-gray-500">
+                                    <td colspan="4" class="py-3 text-center text-gray-500 text-sm">
                                         No consultation hours available.
                                     </td>
                                 </tr>
@@ -62,10 +76,13 @@
                 </div>
             </div>
 
+
+
             {{-- right --}}
             <div class="bg-white shadow rounded-xl p-6">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-1">
-                    {{ isset($editingHour) ? 'Update Consultation Hours' : 'Add Consultation Hours' }}
+                <h2 id="form-title" class="text-2xl font-semibold text-gray-800 mb-1">
+                    Add Consultation Hours
+                    {{-- Edit Consultation Hours --}}
                 </h2>
                 <p class="text-sm text-gray-500 mb-6">
                     Set times when you're available to provide consultations.
@@ -86,7 +103,6 @@
                         id="form-method">
                     <input type="hidden" name="id" id="consultation_id">
 
-                    {{-- Specialization --}}
                     <div>
                         <x-form.label for="specialization" variant="task">Specialization</x-form.label>
                         <x-form.input name="specialization" id="specialization" placeholder="e.g., Mental Health Support"
@@ -149,16 +165,16 @@
         const methodInput = document.getElementById("form-method");
         const consultationId = document.getElementById("consultation_id");
         const cancelBtn = document.getElementById("cancel-btn");
+        const formTitle = document.getElementById("form-title");
 
         document.querySelectorAll(".edit-btn").forEach(btn => {
             btn.addEventListener("click", () => {
-                // Fill form fields
+
                 document.getElementById("specialization").value = btn.dataset.specialization;
                 document.getElementById("day").value = btn.dataset.day;
                 document.getElementById("start_time").value = btn.dataset.start;
                 document.getElementById("end_time").value = btn.dataset.end;
 
-                // Radios
                 document.querySelectorAll("input[name='status']").forEach(radio => {
                     radio.checked = (radio.value === btn.dataset.status);
                 });
@@ -168,21 +184,20 @@
                 methodInput.value = "PUT";
                 consultationId.value = btn.dataset.id;
 
-                // Show cancel button
+                formTitle.textContent = "Update Consultation Hours";
                 cancelBtn?.classList.remove("hidden");
             });
         });
 
-        // Reset form to Add mode
+        // reset for add
         form.addEventListener("reset", () => {
             form.action = "/consultation-hours"; // store route
             methodInput.value = "POST";
             consultationId.value = "";
 
-            // Optional: reset radios to default 'active'
-            const activeRadio = document.querySelector("input[name='status'][value='active']");
-            if (activeRadio) activeRadio.checked = true;
+            form.reset();
 
+            formTitle.textContent = "Add Consultation Hours";
             cancelBtn?.classList.add("hidden");
         });
     });

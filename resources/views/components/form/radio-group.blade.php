@@ -8,10 +8,10 @@
 
 {{--
 Usage: <x-form.radio-group name="gender" label="Gender"
-           :options="['male' => 'Male', 'female' => 'Female']"
-           :selected="old('gender')" />
-       <x-form.radio-group name="status"
-           :options="['active' => 'Active', 'inactive' => 'Inactive']" />
+            :options="['male' => 'Male', 'female' => 'Female']"
+            :selected="old('gender')" />
+        <x-form.radio-group name="status"
+            :options="['active' => 'Active', 'inactive' => 'Inactive']" />
 
         <x-form.radio-group
                 name="status"
