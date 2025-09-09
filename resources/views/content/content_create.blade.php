@@ -16,7 +16,6 @@
         title="{{ isset($content) ? 'Edit Content' : 'Create New Content' }}"
         desc="Fill out the form to create or edit content.">
 
-        <!-- Header Actions -->
         <div class="flex flex-col sm:flex-row gap-3">
             <x-button href="{{ route('content.index') }}" variant="cancel">
                 <i class='bx bx-arrow-back mr-2'></i>
@@ -24,29 +23,24 @@
             </x-button>
 
             {{-- Only opening kapag asa edit tab --}}
+
             <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example">
                 Review
             </button>
 
-            {{-- <button type="button"
-                    data-drawer-target="drawer-right-example"
-                    data-drawer-show="drawer-right-example"
-                    data-drawer-placement="right"
-                    aria-controls="drawer-right-example"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                <i class='bx bx-cog mr-2'></i>
-                Settings Panel
-            </button> --}}
-
+            {{-- Show kapag add-create/edit --}}
+            @unless($reviewMode ?? false)
             <x-button variant="add-create" type="submit" form="contentForm">
                 <i class='bx {{ isset($content) ? 'bx-edit' : 'bx-save' }} mr-2'></i>
                 {{ isset($content) ? 'Update Content' : 'Save Content' }}
             </x-button>
+            @endunless
         </div>
     </x-page-header>
 
     @php
-        $reviewMode = $reviewMode ?? false;
+        // Preview-only if not owner/auth
+        $reviewMode = $reviewMode ?? (isset($content) && Auth::id() !== $content->created_by);
     @endphp
 
     <x-navigation-layout.tabs-modern

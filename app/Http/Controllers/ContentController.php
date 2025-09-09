@@ -68,7 +68,11 @@ class ContentController extends Controller
     // content/content_create.blade.php (main)
     public function edit(Content $content)
     {
-        return view('content.content_create', compact('content'));
+        $user = Auth::user();
+        $reviewMode = $user->id !== $content->created_by; // preview-only if not owner/auth
+        return view('content.content_create',
+            compact('content',
+                        'reviewMode'));
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
