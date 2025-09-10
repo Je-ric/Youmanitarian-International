@@ -22,8 +22,10 @@ class ContentReviewCommentController extends Controller
             ->get();
 
         // return response()->json($comments);
-        return view('content.partials.contentReviewComments',
-        compact('comments'));
+        return view(
+            'content.partials.contentReviewComments',
+            compact('comments')
+        );
     }
 
     /**
@@ -41,9 +43,8 @@ class ContentReviewCommentController extends Controller
     public function store(Request $request)
     {
         if (!Auth::check()) {
-            return redirect()->back()->with('error', 'You must be logged in to comment');
+            return response()->json(['success' => false, 'error' => 'You must be logged in.'], 401);
         }
-
 
         $data = $request->only(['content_id', 'comment']);
         $data['user_id'] = Auth::id();
@@ -52,17 +53,20 @@ class ContentReviewCommentController extends Controller
             'content_id' => 'required|integer|exists:contents,id',
             'comment' => 'required|string',
         ]);
+
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
         }
 
-        if($request->ajax()){
+        $comment = ContentReviewComment::create($data);
 
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'comment' => $comment]);
         }
 
-        ContentReviewComment::create($data);
         return redirect()->back()->with('success', 'Comment added!');
     }
+
 
     /**
      * Display the specified resource.
@@ -83,9 +87,7 @@ class ContentReviewCommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-    {
-    }
+    public function update(Request $request, $id) {}
 
     /**
      * Remove the specified resource from storage.
