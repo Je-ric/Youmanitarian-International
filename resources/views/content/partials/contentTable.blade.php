@@ -67,6 +67,8 @@
                                 onclick="document.getElementById('archive-modal-{{ $content->id }}').showModal(); return false;">
                                 <i class='bx bx-archive'></i>
                             </x-button>
+
+                            @include('content.modals.archiveContentModal', ['content' => $content])
                         @endif
 
                         @if($tab === 'needs_approval' && Auth::user()->hasRole('Content Manager'))
@@ -112,9 +114,9 @@
     </x-table.tbody>
 </x-table.table>
 
-@foreach($contents as $content)
+{{-- @foreach($contents as $content)
     @include('content.modals.archiveContentModal', ['content' => $content])
-@endforeach
+@endforeach--}}
 
 @if(method_exists($contents, 'links'))
     <div class="mt-6">

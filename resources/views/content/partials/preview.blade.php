@@ -39,13 +39,13 @@
                         </x-button>
                     </form>
 
-                    <form action="{{ route('content.reject', $content->id) }}" method="POST"
+                    {{-- <form action="{{ route('content.reject', $content->id) }}" method="POST"
                           onsubmit="return confirm('Reject this content?')">
                         @csrf
                         <x-button type="submit" variant="danger">
                             <i class="bx bx-x-circle text-lg"></i> Reject
                         </x-button>
-                    </form>
+                    </form> --}}
                 @elseif($approval === 'needs_revision')
                     <form action="{{ route('content.approve', $content->id) }}" method="POST"
                           onsubmit="return confirm('Approve now and publish?')">
