@@ -40,34 +40,10 @@
                     @include('content.modals.needsRevisionModal', ['content' => $content])
                     @include('content.modals.archiveContentModal', ['content' => $content])
 
-
-                    {{-- <form action="{{ route('content.reject', $content->id) }}" method="POST"
-                          onsubmit="return confirm('Reject this content?')">
-                        @csrf
-                        <x-button type="submit" variant="danger">
-                            <i class="bx bx-x-circle text-lg"></i> Reject
-                        </x-button>
-                    </form> --}}
-
-                {{-- @elseif($approval === 'needs_revision')
-                    <form action="{{ route('content.approve', $content->id) }}" method="POST"
-                          onsubmit="return confirm('Approve now and publish?')">
-                        @csrf
-                        <x-button type="submit" variant="approve">
-                            <i class="bx bx-check-circle text-lg"></i> Approve
-                        </x-button>
-                    </form>
-                    <form action="{{ route('content.reject', $content->id) }}" method="POST"
-                          onsubmit="return confirm('Reject this content?')">
-                        @csrf
-                        <x-button type="submit" variant="danger">
-                            <i class="bx bx-block text-lg"></i> Reject
-                        </x-button>
-                    </form> --}}
                 {{-- if published and approved na --}}
                 @elseif($cStatus === 'published' && $approval === 'approved')
                     <form action="{{ route('content.archive', $content->id) }}" method="POST"
-                          onsubmit="return confirm('Archive this published content?')">
+                            onsubmit="return confirm('Archive this published content?')">
                         @csrf
                         <x-button type="submit" variant="table-action-archive">
                             <i class="bx bx-archive text-lg"></i> Archive
