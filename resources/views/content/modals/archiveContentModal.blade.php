@@ -10,8 +10,19 @@
                 <i class='bx bx-archive text-2xl sm:text-3xl text-blue-500'></i>
             </div>
             <h3 class="text-base sm:text-lg font-semibold text-blue-700">Are you sure you want to archive this content?</h3>
-            <p class="text-gray-600 text-xs sm:text-sm">This action cannot be undone.</p>
-            <div class="bg-gray-50 rounded p-2 w-full mt-2">
+
+            <x-feedback-status.alert 
+                variant="flexible"
+                icon="bx bx-info-circle text-xl"
+                message="Archiving will remove this content from public view. <br>
+                    <span class='font-semibold'>This action cannot be undone.</span>"
+                bgColor="bg-blue-50"
+                textColor="text-blue-700"
+                borderColor="border-blue-200"
+                iconColor="text-blue-500"
+            />
+
+            <div class="w-full bg-gray-50 border border-gray-200 rounded p-3 text-center">
                 <span class="font-semibold text-gray-800 text-xs sm:text-base">{{ $content->title }}</span>
             </div>
         </div>

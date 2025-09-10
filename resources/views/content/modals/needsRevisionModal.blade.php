@@ -16,14 +16,19 @@
                     <i class='bx bx-edit text-2xl text-amber-600'></i>
                 </div>
 
-                 <div class="flex items-center gap-3 p-3 bg-amber-50 border border-amber-200 rounded">
-                    <i class="bx bx-info-circle text-amber-500 text-xl"></i>
-                    <p class="text-sm text-amber-700">
-                        This will return the content to the author with a status of
-                        <span class="font-semibold">Needs Revision</span>.
-                        It will not be published until resubmitted and approved.
-                    </p>
-                </div>
+                <h3 class="text-base sm:text-lg font-semibold text-amber-700">Are you sure you want to mark this content as needing revision?</h3>
+
+                <x-feedback-status.alert 
+                    variant="flexible"
+                    icon="bx bx-info-circle text-xl"
+                    message="This will return the content to the author with a status of 
+                        <span class='font-semibold'>Needs Revision</span>. 
+                        It will not be published until resubmitted and approved."
+                    bgColor="bg-amber-50"
+                    textColor="text-amber-700"
+                    borderColor="border-amber-200"
+                    iconColor="text-amber-500"
+                />
 
                 <div class="w-full bg-gray-50 border border-gray-200 rounded p-3 text-center">
                     <p class="text-sm font-semibold text-gray-800 line-clamp-2">
@@ -60,7 +65,7 @@
                 <x-button
                     type="submit"
                     form="needsRevisionForm-{{ $content->id }}"
-                    variant="warning"
+                    variant="table-action-edit"
                     class="w-full sm:w-auto">
                     <i class="bx bx-send"></i> Send Back
                 </x-button>

@@ -13,24 +13,28 @@
     @if($showActionBar)
         <div class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-gray-200 px-6 sm:px-8 py-4 mb-4 flex flex-wrap items-center gap-3">
             <div class="flex items-center gap-2 text-sm">
-                <span class="px-2 py-1 rounded bg-gray-100 text-gray-700 font-medium">
-                    Status: {{ ucfirst($cStatus) }}
-                </span>
-                <span class="px-2 py-1 rounded bg-gray-100 text-gray-700 font-medium">
-                    Approval: {{ str_replace('_',' ', ucfirst($approval)) }}
-                </span>
+                @if($cStatus)
+                    <x-feedback-status.status-indicator
+                        status="{{ $cStatus }}"
+                        label="Status: {{ ucfirst(str_replace('_',' ', $cStatus)) }}" />
+                @endif
+                @if($approval)
+                    <x-feedback-status.status-indicator
+                        status="{{ $approval }}"
+                        label="Approval: {{ ucfirst(str_replace('_',' ', $approval)) }}" />
+                @endif
             </div>
 
             <div class="flex items-center gap-2 ml-auto flex-wrap">
                 @if(in_array($approval, ['pending','submitted']))
 
-                    <x-button variant="table-action-view" size="sm"
+                    <x-button variant="success" size="sm"
                                 class="tooltip" data-tip="Approve & Publish"
                                 onclick="document.getElementById('approve-modal-{{ $content->id }}').showModal(); return false;">
                                 <i class='bx bx-check-circle'></i>Approve & Publish
                     </x-button>
 
-                    <x-button variant="table-action-view" size="sm"
+                    <x-button variant="warning" size="sm"
                                 class="tooltip" data-tip="Needs Revision"
                                 onclick="document.getElementById('needs-revision-modal-{{ $content->id }}').showModal(); return false;">
                                 <i class='bx bx-check-circle'></i>Needs Revision
