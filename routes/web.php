@@ -138,6 +138,9 @@ Route::middleware(['auth'])->group(function () {
 
      //  Route::delete('/programs/{program}/chats/{message}', [ProgramChatController::class, 'destroy'])->name('program.chats.destroy');
 
+    // My Profile (reuse volunteer details view)
+    Route::get('/profile/me', [VolunteerController::class, 'myProfile'])->name('profile.me');
+    Route::post('/profile/me/photo', [VolunteerController::class, 'updateProfilePhoto'])->name('profile.photo.update');
 });
 
 

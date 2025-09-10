@@ -352,8 +352,9 @@
                     </a>
 
                     <div class="relative">
-                        <button
-                            class="flex items-center space-x-2 p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
+                        <a href="{{ route('profile.me') }}"
+                            class="flex items-center space-x-2 p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200"
+                            title="My Profile">
                             @if(Auth::user()->profile_pic)
                                 <img src="{{ Auth::user()->profile_pic }}" alt="Profile"
                                     class="h-8 w-8 rounded-full object-cover">
@@ -363,10 +364,10 @@
                                     {{ substr(Auth::user()->name, 0, 1) }}
                                 </div>
                             @endif
-                            <span
-                                class="hidden lg:block text-sm font-medium max-w-24 truncate text-gray-700">{{ Auth::user()->name }}</span>
-                            <i class="fas fa-chevron-down text-xs hidden lg:block"></i>
-                        </button>
+                            <span class="hidden lg:block text-sm font-medium max-w-24 truncate text-gray-700">
+                                {{ Auth::user()->name }}
+                            </span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -400,6 +401,9 @@
             ['label' => 'Finance', 'url' => route('finance.index')],
             ...(request()->routeIs('finance.membership.payments') ? [['label' => 'Membership Payments']] : []),
             ...(request()->routeIs('members.index*') ? [['label' => 'Members']] : []),
+        ] : []),
+        ...(request()->routeIs('profile.me') ? [
+            ['label' => 'My Profile']
         ] : []),
     ]" />
         </div>

@@ -10,21 +10,44 @@
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
                     
                     <div class="relative">
-                        @if($volunteer->user->profile_photo_path)
-                            
-                            <img src="{{ asset('storage/' . $volunteer->user->profile_photo_path) }}"
+                        @php
+                            $userModel = $volunteer->user;
+                            $profilePic = $userModel->profile_pic; // stored as 'storage/uploads/profile_photo/...' or external URL
+                            $legacyPic = $userModel->profile_photo_path; // jetstream style (optional)
+                        @endphp
+
+                        @if($profilePic)
+                            <img src="{{ asset($profilePic) }}"
                                  alt="Profile Photo"
                                  class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-4 border-white shadow-lg">
-                        @elseif($volunteer->user->profile_pic)
-                            
-                            <img src="{{ $volunteer->user->profile_pic }}"
+                        @elseif($legacyPic)
+                            <img src="{{ asset('storage/' . $legacyPic) }}"
                                  alt="Profile Photo"
                                  class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-4 border-white shadow-lg">
                         @else
-                            
                             <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-[#ffb51b] to-[#e6a017] flex items-center justify-center border-4 border-white shadow-lg">
                                 <i class='bx bx-user text-white text-3xl sm:text-4xl'></i>
                             </div>
+                        @endif
+
+                        @if(Auth::id() === $userModel->id)
+                            <form action="{{ route('profile.photo.update') }}" method="POST" enctype="multipart/form-data"
+                                  class="absolute -bottom-2 -right-2">
+                                @csrf
+                                <input
+                                    id="profilePicInput-{{ $volunteer->id }}"
+                                    type="file"
+                                    name="profile_pic"
+                                    accept="image/*"
+                                    class="hidden"
+                                    onchange="this.form.submit();">
+                                <button type="button"
+                                        onclick="document.getElementById('profilePicInput-{{ $volunteer->id }}').click();"
+                                        class="w-9 h-9 rounded-xl bg-white border border-gray-200 shadow flex items-center justify-center text-gray-600 hover:text-[#1a2235] hover:border-[#1a2235] transition"
+                                        title="Change Photo">
+                                    <i class='bx bx-camera text-lg'></i>
+                                </button>
+                            </form>
                         @endif
                     </div>
                     
@@ -48,6 +71,7 @@
                             <div class="text-lg sm:text-xl font-bold text-[#1a2235]">{{ $volunteer->calculated_total_hours }}</div>
                             <div class="text-xs text-gray-500">Hours</div>
                         </div>
+                        
                         <div class="text-center">
                             <div class="text-lg sm:text-xl font-bold text-[#1a2235]">{{ $volunteer->attendanceLogs->count() }}</div>
                             <div class="text-xs text-gray-500">Programs</div>
@@ -294,4 +318,4 @@
             </div>
         </x-overview.card>
     @endif
-</div> 
+</div>

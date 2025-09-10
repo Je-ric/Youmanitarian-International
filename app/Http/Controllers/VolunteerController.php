@@ -1,12 +1,14 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\Volunteer;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class VolunteerController extends Controller
 {
@@ -38,14 +40,16 @@ class VolunteerController extends Controller
             ->sortByDesc('updated_at')
             ->take(5);
 
-        return view('volunteers.index',
-        compact(
-            'applications',
-            'deniedApplications',
-            'approvedVolunteers',
-            'approvalRate',
-            'recentActivities'
-        ));
+        return view(
+            'volunteers.index',
+            compact(
+                'applications',
+                'deniedApplications',
+                'approvedVolunteers',
+                'approvalRate',
+                'recentActivities'
+            )
+        );
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -64,4 +68,67 @@ class VolunteerController extends Controller
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨
     // ═══════════════════════════════════════════════════════════════════════════════
+
+    public function myProfile()
+    {
+        $user = Auth::user();
+
+        $volunteer = Volunteer::with([
+            'user.roles',
+            'programs',
+            'attendanceLogs.program',
+            'application',
+            'member.payments'
+        ])->where('user_id', $user->id)->first();
+
+        if (!$volunteer) {
+            return redirect()
+                ->route('volunteers.form')
+                ->with('toast', [
+                    'message' => 'You have not created a volunteer profile yet. Please apply first.',
+                    'type' => 'info'
+                ]);
+        }
+
+        return view('volunteers.volunteer-details', compact('volunteer'));
+    }
+    public function updateProfilePhoto(Request $request)
+    {
+        $request->validate([
+            'profile_pic' => ['required', 'image', 'mimes:jpg,jpeg,png,webp,gif', 'max:2048'],
+        ]);
+
+        $user = Auth::user();
+
+        // Delete old stored file if it lives in our managed folder
+        if ($user->profile_pic && str_starts_with($user->profile_pic, 'storage/uploads/profile_photo/')) {
+            $oldPath = str_replace('storage/', '', $user->profile_pic); // convert to disk-relative
+            Storage::disk('public')->delete($oldPath);
+        }
+
+        $file = $request->file('profile_pic');
+
+        // Sanitize name (letters & numbers only). Fallback 'User' if becomes empty.
+        $sanitizedName = preg_replace('/[^A-Za-z0-9]/', '', $user->name);
+        if ($sanitizedName === '') {
+            $sanitizedName = 'User';
+        }
+
+        $dateString = now()->format('Ymd');
+        $timestamp  = time();
+        $extension  = $file->getClientOriginalExtension();
+        $newFilename = "{$sanitizedName}_{$dateString}_{$timestamp}.{$extension}";
+
+        // Store as: storage/uploads/profile_photo/[SanitizedName]_[YYYYMMDD]_[timestamp].ext
+        $storedRelativePath = $file->storeAs('uploads/profile_photo', $newFilename, 'public');
+
+        $user->update([
+            'profile_pic' => 'storage/' . $storedRelativePath,
+        ]);
+
+        return back()->with('toast', [
+            'message' => 'Profile photo updated.',
+            'type' => 'success'
+        ]);
+    }
 }
