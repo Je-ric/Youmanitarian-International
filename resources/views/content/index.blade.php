@@ -11,44 +11,85 @@
 
     @php
         $user = Auth::user();
-        $tabs = [
+        $isCoordinator = $user->hasRole('Program Coordinator');
+        $isManager = $user->hasRole('Content Manager');
+        $isAdmin = $user->hasRole('Admin');
+
+        $tabs = [ //all
             ['id' => 'my', 'label' => 'My Content', 'icon' => 'bx-user'],
             ['id' => 'published', 'label' => 'Published', 'icon' => 'bx-globe'],
-            ['id' => 'archived', 'label' => 'Archived', 'icon' => 'bx-archive'],
         ];
-        if ($user->hasRole('Program Coordinator')) {
+
+        // arcchive para lang kay $isCoordinator || $isAdm
+        if ($isManager || $isAdmin) {
+            $tabs[] = ['id' => 'archived', 'label' => 'Archived', 'icon' => 'bx-archive'];
+        }
+
+        // kay program coordinator lang, since siya lang need ng approval when creating content.
+        if ($isCoordinator && !$isAdmin && !$isManager) {
             $tabs[] = ['id' => 'submitted', 'label' => 'Submitted', 'icon' => 'bx-upload'];
             $tabs[] = ['id' => 'needs_revision', 'label' => 'Needs Revision', 'icon' => 'bx-refresh'];
         }
-        if ($user->hasRole('Content Manager')) {
+
+        // then dito opposite ng nasa taas, since sila yung privileged to approve content.
+        if ($isManager || $isAdmin) {
             $tabs[] = ['id' => 'needs_approval', 'label' => 'Needs Approval', 'icon' => 'bx-check-circle'];
         }
     @endphp
 
     <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="my">
         <x-slot:slot_my>
+            <x-feedback-status.alert
+                type="info"
+                message="This tab lists only the content you created. Drafts are editable; published items are read-only unless updated."
+            />
             @include('content.partials.contentTable', ['contents' => $myContent, 'tab' => 'my'])
         </x-slot>
+
         <x-slot:slot_published>
+            <x-feedback-status.alert
+                type="neutral"
+                message="All published content visible to users. Editing creates an updated version if workflow requires review."
+            />
             @include('content.partials.contentTable', ['contents' => $publishedContent, 'tab' => 'published'])
         </x-slot>
-        <x-slot:slot_archived>
-            @include('content.partials.contentTable', ['contents' => $archived, 'tab' => 'archived'])
-        </x-slot>
-        @if($user->hasRole('Program Coordinator'))
-            <x-slot:slot_needs_revision>
-                @include('content.partials.contentTable', ['contents' => $needsRevision, 'tab' => 'needs_revision'])
-            </x-slot>
-            <x-slot:slot_submitted>
-                @include('content.partials.contentTable', ['contents' => $submitted, 'tab' => 'submitted'])
+
+        @if($isManager || $isAdmin)
+            <x-slot:slot_archived>
+                <x-feedback-status.alert
+                    type="warning"
+                    message="Archived content is hidden from public views. You can restore it by editing and republishing."
+                />
+                @include('content.partials.contentTable', ['contents' => $archived, 'tab' => 'archived'])
             </x-slot>
         @endif
-        @if($user->hasRole('Content Manager'))
+
+        @if($isCoordinator && !$isAdmin && !$isManager)
+            <x-slot:slot_submitted>
+                <x-feedback-status.alert
+                    type="info"
+                    message="Submitted items are waiting for a Content Manager to review. You can still edit before approval."
+                />
+                @include('content.partials.contentTable', ['contents' => $submitted, 'tab' => 'submitted'])
+            </x-slot>
+
+            <x-slot:slot_needs_revision>
+                <x-feedback-status.alert
+                    type="warning"
+                    message="These items were sent back for revision. Update them and resubmit for approval."
+                />
+                @include('content.partials.contentTable', ['contents' => $needsRevision, 'tab' => 'needs_revision'])
+            </x-slot>
+        @endif
+
+        @if($isManager || $isAdmin)
             <x-slot:slot_needs_approval>
+                <x-feedback-status.alert
+                    type="info"
+                    message="Queue of content awaiting your approval. Approve, request revision, or reject."
+                />
                 @include('content.partials.contentTable', ['contents' => $needsApproval, 'tab' => 'needs_approval'])
             </x-slot>
         @endif
     </x-navigation-layout.tabs-modern>
-
-
 @endsection

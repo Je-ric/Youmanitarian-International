@@ -1,8 +1,8 @@
 @php
     $user = Auth::user();
     $isAdmin = $user->hasRole('Admin');
-    $isProgramCoordinator = $user->hasRole('Program Coordinator');
-    $isContentManager = $user->hasRole('Content Manager');
+    $isCoordinator = $user->hasRole('Program Coordinator');
+    $isManager = $user->hasRole('Content Manager');
 @endphp
 <x-table.table>
     <x-table.thead>
@@ -18,7 +18,7 @@
     <x-table.tbody>
         @forelse($contents as $content)
             <x-table.tr>
-                <x-table.td>{{ $content->title }}</x-table.td>
+                <x-table.td>{{ \Illuminate\Support\Str::limit($content->title, 30) }}</x-table.td>
                 <x-table.td>
                     <x-feedback-status.status-indicator status="{{ $content->content_type }}" />
                 </x-table.td>
@@ -78,7 +78,7 @@
                             @endif
                         @endauth
 
-                        @if($tab === 'published')
+                        @if($tab === 'published' && ($isManager || $isAdmin))
                             <x-button variant="table-action-view" size="sm"
                                       class="tooltip" data-tip="Archive"
                                       onclick="document.getElementById('archive-modal-{{ $content->id }}').showModal(); return false;">
@@ -87,7 +87,7 @@
                             @include('content.modals.archiveContentModal', ['content' => $content])
                         @endif
 
-                        @if($tab === 'needs_approval' && ($isContentManager || $isAdmin))
+                        @if($tab === 'needs_approval' && ($isManager || $isAdmin))
                             {{-- Content Manager/Admin: can review/approve --}}
                             <a href="{{ route('content.review', $content->id) }}" class="inline-block">
                                 <x-button variant="table-action-view" size="sm" class="tooltip" data-tip="Review">
