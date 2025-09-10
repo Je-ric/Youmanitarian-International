@@ -1,5 +1,8 @@
 @php
     $user = Auth::user();
+    $isAdmin = $user->hasRole('Admin');
+    $isProgramCoordinator = $user->hasRole('Program Coordinator');
+    $isContentManager = $user->hasRole('Content Manager');
 @endphp
 <x-table.table>
     <x-table.thead>
@@ -53,27 +56,40 @@
                 <x-table.td>{{ $content->updated_at->setTimezone('Asia/Manila')->format('M d, Y h:i A') }}</x-table.td>
                 <x-table.td>
                     <div class="flex items-center space-x-2">
-                        @if(auth()->user())
-                        <x-button href="{{ route('content.edit', $content->id) }}"
-                            variant="table-action-edit" size="sm"
-                            class="tooltip" data-tip="Edit">
-                            <i class='bx bx-edit'></i>
-                        </x-button>
-                        @endif
+                        @auth
+                            @php
+                                $isOwner = Auth::id() === $content->created_by;
+                            @endphp
+
+                            @if($isOwner)
+                                {{-- Owner: can edit --}}
+                                <x-button href="{{ route('content.edit', $content->id) }}"
+                                          variant="table-action-edit" size="sm"
+                                          class="tooltip" data-tip="Edit">
+                                    <i class='bx bx-edit'></i>
+                                </x-button>
+                            @else
+                                {{-- Not owner: view-only (replace route name if different) --}}
+                                <x-button href="{{ route('content.edit', $content->id) }}"
+                                          variant="table-action-view" size="sm"
+                                          class="tooltip" data-tip="View">
+                                    <i class='bx bx-show'></i>
+                                </x-button>
+                            @endif
+                        @endauth
 
                         @if($tab === 'published')
                             <x-button variant="table-action-view" size="sm"
-                                class="tooltip" data-tip="Archive"
-                                onclick="document.getElementById('archive-modal-{{ $content->id }}').showModal(); return false;">
+                                      class="tooltip" data-tip="Archive"
+                                      onclick="document.getElementById('archive-modal-{{ $content->id }}').showModal(); return false;">
                                 <i class='bx bx-archive'></i>
                             </x-button>
-
                             @include('content.modals.archiveContentModal', ['content' => $content])
                         @endif
 
-                        @if($tab === 'needs_approval' && Auth::user()->hasRole('Content Manager'))
-                            <a href="{{ route('content.review', $content->id) }}"
-                                class="inline-block">
+                        @if($tab === 'needs_approval' && ($isContentManager || $isAdmin))
+                            {{-- Content Manager/Admin: can review/approve --}}
+                            <a href="{{ route('content.review', $content->id) }}" class="inline-block">
                                 <x-button variant="table-action-view" size="sm" class="tooltip" data-tip="Review">
                                     <i class='bx bx-search'></i>
                                 </x-button>

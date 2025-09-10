@@ -19,8 +19,7 @@
                 and visible wherever published items appear.
             </p>
 
-            <div class="w-full bg-gray-50 border border-gray-200 rounded p-3 text-left">
-                <p class="text-xs uppercase tracking-wide text-gray-500 mb-1">Title</p>
+            <div class="w-full bg-gray-50 border border-gray-200 rounded p-3 text-center">
                 <p class="text-sm font-semibold text-gray-800 line-clamp-2">
                     {{ $content->title }}
                 </p>

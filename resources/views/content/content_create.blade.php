@@ -9,7 +9,7 @@
     .note-editable ol { margin-left: 2em; }
     .note-editable li { list-style-type: inherit; }
     .note-editable img { max-width: 100%; height: auto; cursor: move; }
-    </style>
+</style>
 
     <x-page-header
         icon="bx-file"
@@ -23,7 +23,6 @@
             </x-button>
 
             {{-- Only opening kapag asa edit tab --}}
-
             <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example" data-drawer-placement="right" aria-controls="drawer-right-example">
                 Review
             </button>
@@ -41,6 +40,11 @@
     @php
         // Preview-only if not owner/auth
         $reviewMode = $reviewMode ?? (isset($content) && Auth::id() !== $content->created_by);
+
+        $user = Auth::user();
+        $isAdmin = $user->hasRole('Admin');
+        $isProgramCoordinator = $user->hasRole('Program Coordinator');
+        $isContentManager = $user->hasRole('Content Manager');
     @endphp
 
     <x-navigation-layout.tabs-modern
@@ -239,13 +243,6 @@
                                         <h3 class="font-semibold text-[#1a2235]">Publishing</h3>
                                     </div>
 
-                                    @php
-                                        $user = Auth::user();
-                                        $isProgramCoordinator = $user->hasRole('Program Coordinator');
-                                        $isContentManager = $user->hasRole('Content Manager');
-                                        $hasBothRoles = $isProgramCoordinator && $isContentManager;
-                                    @endphp
-
                                     <div class="space-y-3">
                                         <label class="flex items-center">
                                             <input type="radio" name="publishing_action" value="draft"
@@ -254,7 +251,7 @@
                                             <span class="ml-2 text-sm">Save as Draft</span>
                                         </label>
 
-                                        @if($isProgramCoordinator || $hasBothRoles)
+                                        @if($isProgramCoordinator && !$isAdmin && !$isContentManager)
                                         <label class="flex items-center">
                                             <input type="radio" name="publishing_action" value="submitted"
                                                 {{ old('publishing_action') == 'submitted' ? 'checked' : '' }}
@@ -263,7 +260,7 @@
                                         </label>
                                         @endif
 
-                                        @if($isContentManager || $hasBothRoles)
+                                        @if($isContentManager || $isAdmin) {{-- Ask nalang kung pati program manager --}}
                                         <label class="flex items-center">
                                             <input type="radio" name="publishing_action" value="published"
                                                 {{ old('publishing_action') == 'published' ? 'checked' : '' }}

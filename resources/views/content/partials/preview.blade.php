@@ -4,7 +4,7 @@
         use Illuminate\Support\Facades\Auth;
         $viewer = Auth::user();
         $isManager = $viewer && $viewer->hasRole('Content Manager');
-        $isOwner = isset($content) && $viewer && $viewer->id === $content->created_by; 
+        $isOwner = isset($content) && $viewer && $viewer->id === $content->created_by;
         $showActionBar = isset($reviewMode, $content) && $reviewMode && $isManager && !$isOwner; // show if review mode and is manager and not owner
         $approval = $content->approval_status ?? null;
         $cStatus = $content->content_status ?? null;
@@ -38,6 +38,7 @@
 
                     @include('content.modals.approveContentModal', ['content' => $content])
                     @include('content.modals.needsRevisionModal', ['content' => $content])
+                    @include('content.modals.archiveContentModal', ['content' => $content])
 
 
                     {{-- <form action="{{ route('content.reject', $content->id) }}" method="POST"
@@ -47,7 +48,8 @@
                             <i class="bx bx-x-circle text-lg"></i> Reject
                         </x-button>
                     </form> --}}
-                @elseif($approval === 'needs_revision')
+
+                {{-- @elseif($approval === 'needs_revision')
                     <form action="{{ route('content.approve', $content->id) }}" method="POST"
                           onsubmit="return confirm('Approve now and publish?')">
                         @csrf
@@ -61,7 +63,8 @@
                         <x-button type="submit" variant="danger">
                             <i class="bx bx-block text-lg"></i> Reject
                         </x-button>
-                    </form>
+                    </form> --}}
+                {{-- if published and approved na --}}
                 @elseif($cStatus === 'published' && $approval === 'approved')
                     <form action="{{ route('content.archive', $content->id) }}" method="POST"
                           onsubmit="return confirm('Archive this published content?')">
@@ -76,6 +79,11 @@
             </div>
         </div>
     @endif
+
+
+
+
+
 
     {{-- px-20 == 80px and since may tabs-modern (24px) - 80-24 = 56 --}}
     {{-- Kinomment ko lang, kase nakakaproud HAHAHAHAHA --}}
