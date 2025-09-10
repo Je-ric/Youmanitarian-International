@@ -391,7 +391,9 @@
                 'enable_likes' => old('enable_likes', $content->enable_likes ?? true),
                 'enable_comments' => old('enable_comments', $content->enable_comments ?? true),
                 'enable_bookmark' => old('enable_bookmark', $content->enable_bookmark ?? true),
-                'gallery_images' => isset($content) && $content->images ? $content->images->pluck('image_path')->toArray() : []
+                'gallery_images' => isset($content) && $content->images ? $content->images->pluck('image_path')->toArray() : [],
+                'content' => $content ?? null,
+                'reviewMode' => $reviewMode,
             ])
 
             {{-- @include('content.partials.contentReviewComments') --}}

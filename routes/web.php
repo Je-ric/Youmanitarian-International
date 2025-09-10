@@ -282,7 +282,7 @@ Route::middleware(['auth', 'role:Content Manager'])->group(function () {
     Route::post('/content/{content}/approve', [ContentController::class, 'approveContent'])->name('content.approve');
     Route::post('/content/{content}/needs-revision', [ContentController::class, 'needsRevisionContent'])->name('content.needs_revision');
     Route::post('/content/{content}/reject', [ContentController::class, 'rejectContent'])->name('content.reject');
-    Route::get('/content/{content}/archive', [ContentController::class, 'archiveContent'])->name('content.archive');
+    Route::post('/content/{content}/archive', [ContentController::class, 'archiveContent'])->name('content.archive');
     Route::get('/content/{content}/review', [ContentController::class, 'review'])->name('content.review');
 });
 

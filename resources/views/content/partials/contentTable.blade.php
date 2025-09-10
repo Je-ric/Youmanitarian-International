@@ -76,7 +76,7 @@
                                     <i class='bx bx-search'></i>
                                 </x-button>
                             </a>
-                            <form action="{{ route('content.approve', $content->id) }}" method="POST" class="inline">
+                            {{-- <form action="{{ route('content.approve', $content->id) }}" method="POST" class="inline">
                                 @csrf
                                 <x-button type="submit" variant="table-action-manage" size="sm" class="tooltip" data-tip="Approve">
                                     <i class='bx bx-check'></i>
@@ -93,7 +93,7 @@
                                 <x-button type="submit" variant="danger" size="sm" class="tooltip" data-tip="Reject">
                                     <i class='bx bx-x'></i>
                                 </x-button>
-                            </form>
+                            </form> --}}
                         @endif
                     </div>
                 </x-table.td>

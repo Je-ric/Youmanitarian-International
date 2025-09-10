@@ -1,5 +1,81 @@
 <div class="flex flex-col">
 
+    @php
+        use Illuminate\Support\Facades\Auth;
+        $viewer = Auth::user();
+        $isManager = $viewer && $viewer->hasRole('Content Manager');
+        $isOwner = isset($content) && $viewer && $viewer->id === $content->created_by;
+        $showActionBar = isset($reviewMode, $content) && $reviewMode && $isManager && !$isOwner;
+        $approval = $content->approval_status ?? null;
+        $cStatus = $content->content_status ?? null;
+    @endphp
+
+    @if($showActionBar)
+        <div class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-gray-200 px-6 sm:px-8 py-4 mb-4 flex flex-wrap items-center gap-3">
+            <div class="flex items-center gap-2 text-sm">
+                <span class="px-2 py-1 rounded bg-gray-100 text-gray-700 font-medium">
+                    Status: {{ ucfirst($cStatus) }}
+                </span>
+                <span class="px-2 py-1 rounded bg-gray-100 text-gray-700 font-medium">
+                    Approval: {{ str_replace('_',' ', ucfirst($approval)) }}
+                </span>
+            </div>
+
+            <div class="flex items-center gap-2 ml-auto flex-wrap">
+                @if(in_array($approval, ['pending','submitted']))
+                    <form action="{{ route('content.approve', $content->id) }}" method="POST"
+                          onsubmit="return confirm('Approve and publish this content?')">
+                        @csrf
+                        <x-button type="submit" variant="approve">
+                            <i class="bx bx-check-circle text-lg"></i> Approve
+                        </x-button>
+                    </form>
+
+                    <form action="{{ route('content.needs_revision', $content->id) }}" method="POST"
+                          onsubmit="return confirm('Mark as needs revision?')">
+                        @csrf
+                        <x-button type="submit" variant="warning">
+                            <i class="bx bx-edit text-lg"></i> Needs Revision
+                        </x-button>
+                    </form>
+
+                    <form action="{{ route('content.reject', $content->id) }}" method="POST"
+                          onsubmit="return confirm('Reject this content?')">
+                        @csrf
+                        <x-button type="submit" variant="danger">
+                            <i class="bx bx-x-circle text-lg"></i> Reject
+                        </x-button>
+                    </form>
+                @elseif($approval === 'needs_revision')
+                    <form action="{{ route('content.approve', $content->id) }}" method="POST"
+                          onsubmit="return confirm('Approve now and publish?')">
+                        @csrf
+                        <x-button type="submit" variant="approve">
+                            <i class="bx bx-check-circle text-lg"></i> Approve
+                        </x-button>
+                    </form>
+                    <form action="{{ route('content.reject', $content->id) }}" method="POST"
+                          onsubmit="return confirm('Reject this content?')">
+                        @csrf
+                        <x-button type="submit" variant="danger">
+                            <i class="bx bx-block text-lg"></i> Reject
+                        </x-button>
+                    </form>
+                @elseif($cStatus === 'published' && $approval === 'approved')
+                    <form action="{{ route('content.archive', $content->id) }}" method="POST"
+                          onsubmit="return confirm('Archive this published content?')">
+                        @csrf
+                        <x-button type="submit" variant="table-action-archive">
+                            <i class="bx bx-archive text-lg"></i> Archive
+                        </x-button>
+                    </form>
+                @elseif($cStatus === 'archived')
+                    <span class="text-sm text-gray-500 italic">Archived (no actions)</span>
+                @endif
+            </div>
+        </div>
+    @endif
+
     {{-- px-20 == 80px and since may tabs-modern (24px) - 80-24 = 56 --}}
     {{-- Kinomment ko lang, kase nakakaproud HAHAHAHAHA --}}
     <div class="px-[56px] py-2">
