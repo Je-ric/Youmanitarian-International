@@ -439,6 +439,7 @@ class ContentController extends Controller
         ]);
     }
 
+    // unused (kinomment muna sa preview)
     // content/index.blade.php (main)
     public function rejectContent($id)
     {

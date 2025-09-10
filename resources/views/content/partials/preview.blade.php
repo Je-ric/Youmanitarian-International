@@ -4,8 +4,8 @@
         use Illuminate\Support\Facades\Auth;
         $viewer = Auth::user();
         $isManager = $viewer && $viewer->hasRole('Content Manager');
-        $isOwner = isset($content) && $viewer && $viewer->id === $content->created_by;
-        $showActionBar = isset($reviewMode, $content) && $reviewMode && $isManager && !$isOwner;
+        $isOwner = isset($content) && $viewer && $viewer->id === $content->created_by; 
+        $showActionBar = isset($reviewMode, $content) && $reviewMode && $isManager && !$isOwner; // show if review mode and is manager and not owner
         $approval = $content->approval_status ?? null;
         $cStatus = $content->content_status ?? null;
     @endphp
@@ -23,21 +23,22 @@
 
             <div class="flex items-center gap-2 ml-auto flex-wrap">
                 @if(in_array($approval, ['pending','submitted']))
-                    <form action="{{ route('content.approve', $content->id) }}" method="POST"
-                          onsubmit="return confirm('Approve and publish this content?')">
-                        @csrf
-                        <x-button type="submit" variant="approve">
-                            <i class="bx bx-check-circle text-lg"></i> Approve
-                        </x-button>
-                    </form>
 
-                    <form action="{{ route('content.needs_revision', $content->id) }}" method="POST"
-                          onsubmit="return confirm('Mark as needs revision?')">
-                        @csrf
-                        <x-button type="submit" variant="warning">
-                            <i class="bx bx-edit text-lg"></i> Needs Revision
-                        </x-button>
-                    </form>
+                    <x-button variant="table-action-view" size="sm"
+                                class="tooltip" data-tip="Approve & Publish"
+                                onclick="document.getElementById('approve-modal-{{ $content->id }}').showModal(); return false;">
+                                <i class='bx bx-check-circle'></i>Approve & Publish
+                    </x-button>
+
+                    <x-button variant="table-action-view" size="sm"
+                                class="tooltip" data-tip="Needs Revision"
+                                onclick="document.getElementById('needs-revision-modal-{{ $content->id }}').showModal(); return false;">
+                                <i class='bx bx-check-circle'></i>Needs Revision
+                    </x-button>
+
+                    @include('content.modals.approveContentModal', ['content' => $content])
+                    @include('content.modals.needsRevisionModal', ['content' => $content])
+
 
                     {{-- <form action="{{ route('content.reject', $content->id) }}" method="POST"
                           onsubmit="return confirm('Reject this content?')">
