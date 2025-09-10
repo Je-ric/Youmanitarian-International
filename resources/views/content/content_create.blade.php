@@ -373,7 +373,6 @@
                         </div>
                     </form>
 
-                    {{-- @include('content.partials.contentReviewComments') --}}
                 </div>
             @endif
         </x-slot>

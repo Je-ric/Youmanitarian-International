@@ -185,46 +185,73 @@ $('#editor').on('summernote.change summernote.init', function () {
 // ---------------------------------------------
 // Extra
 // ---------------------------------------------
+function enforceMinHeight() {
+    const $editable = $('.note-editable');
+    const scrollHeight = $editable[0].scrollHeight;
+    const minHeight = 200;
 
+    // Enforce height based on content or default min
+    const requiredHeight = Math.max(scrollHeight, minHeight);
+    $editable.css('min-height', requiredHeight + 'px');
+}
+
+// Run every time content changes
+$('#editor').on('summernote.change summernote.init', function () {
+    enforceMinHeight();
+});
+
+// Also run after typing
+$(document).on('keyup paste input', '.note-editable', function () {
+    enforceMinHeight();
+});
+
+// Tab indent using spaces
 $(document).on('keydown', '.note-editable', function(e) {
     if (e.key === 'Tab') {
         e.preventDefault();
         document.execCommand('insertText', false, '    '); // 4 spaces
     }
 });
-
+// Pairing
 $(document).on('keydown', '.note-editable', function(e) {
-    const pairs = {
-        '(': ')',
-        '{': '}',
-        '[': ']',
-        '"': '"',
-        "'": "'",
-        '`': '`'
+    // TAB → insert spaces
+    if (e.key === 'Tab') {
+        e.preventDefault();
+        insertTextAtCaret('    '); // replace execCommand
+        return;
+    }
+
+    // Auto-pairing
+    const pairs = { 
+        '(': ')', 
+        '{': '}', 
+        '[': ']', 
+        '"': '"', 
+        "'": "'", 
+        '`': '`' 
     };
 
-    // Auto-pair
     if (pairs[e.key]) {
         e.preventDefault();
-
         const openChar = e.key;
         const closeChar = pairs[e.key];
+        insertTextAtCaret(openChar + closeChar);
 
-        // Insert both chars
-        document.execCommand('insertText', false, openChar + closeChar);
-
-        // Move caret back one step (inside the pair)
+        // Move caret inside
         const sel = window.getSelection();
         if (sel.rangeCount > 0) {
             const range = sel.getRangeAt(0);
-            range.setStart(range.startContainer, range.startOffset - 1);
-            range.collapse(true);
-            sel.removeAllRanges();
-            sel.addRange(range);
+            if (range.startOffset > 0) {
+                range.setStart(range.startContainer, range.startOffset - 1);
+                range.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
         }
+        return;
     }
 
-    // Smart closing: skip over if next char matches
+    // Smart closing: skip over existing
     if (Object.values(pairs).includes(e.key)) {
         const sel = window.getSelection();
         if (sel.rangeCount > 0) {
@@ -232,10 +259,8 @@ $(document).on('keydown', '.note-editable', function(e) {
             const container = range.startContainer;
             const text = container.textContent || '';
             const pos = range.startOffset;
-
             if (text[pos] === e.key) {
                 e.preventDefault();
-                // Move caret forward
                 range.setStart(container, pos + 1);
                 range.collapse(true);
                 sel.removeAllRanges();
@@ -244,3 +269,13 @@ $(document).on('keydown', '.note-editable', function(e) {
         }
     }
 });
+
+// Helper
+function insertTextAtCaret(text) {
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(document.createTextNode(text));
+    range.collapse(false);
+}
