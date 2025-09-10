@@ -56,17 +56,33 @@
                     <x-table.td>
                         <div class="flex items-center space-x-2">
                             @auth
-                                @php $isOwner = Auth::id() === $content->created_by; @endphp
+                                @php
+                                    $isOwner = Auth::id() === $content->created_by;
+                                    $lockedPublished = $isOwner
+                                        && $content->content_status === 'published'
+                                        && $isCoordinator
+                                        && !$isManager
+                                        && !$isAdmin;
+                                @endphp
 
                                 @if($isOwner)
-                                {{-- Owner: can edit --}}
-                                    <x-button href="{{ route('content.edit', $content->id) }}"
-                                                variant="table-action-edit" size="sm"
-                                                class="tooltip" data-tip="Edit">
-                                        <i class='bx bx-edit'></i>
-                                    </x-button>
+                                    @if($lockedPublished)
+                                        {{-- Owner but locked (published by Program Coordinator) -> View only --}}
+                                        <x-button href="{{ route('content.edit', $content->id) }}"
+                                                    variant="table-action-view" size="sm"
+                                                    class="tooltip" data-tip="View">
+                                            <i class='bx bx-show'></i>
+                                        </x-button>
+                                    @else
+                                        {{-- Editable --}}
+                                        <x-button href="{{ route('content.edit', $content->id) }}"
+                                                    variant="table-action-edit" size="sm"
+                                                    class="tooltip" data-tip="Edit">
+                                            <i class='bx bx-edit'></i>
+                                        </x-button>
+                                    @endif
                                 @else
-                                {{-- Not owner: view-only (replace route name if different) --}}
+                                    {{-- Not owner: View --}}
                                     <x-button href="{{ route('content.edit', $content->id) }}"
                                                 variant="table-action-view" size="sm"
                                                 class="tooltip" data-tip="View">

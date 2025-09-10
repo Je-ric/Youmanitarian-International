@@ -69,10 +69,22 @@ class ContentController extends Controller
     public function edit(Content $content)
     {
         $user = Auth::user();
-        $reviewMode = $user->id !== $content->created_by; // preview-only if not owner/auth
-        return view('content.content_create',
-            compact('content',
-                        'reviewMode'));
+
+        // Base rule: review mode if not the owner
+        $reviewMode = $user->id !== $content->created_by;
+
+        // lock Program Coordinator's own published content (no direct editing)
+        if (
+            $user->id === $content->created_by &&
+            $content->content_status === 'published' &&
+            $user->hasRole('Program Coordinator') &&
+            !$user->hasRole('Content Manager') &&
+            !$user->hasRole('Admin')
+        ) {
+            $reviewMode = true;
+        }
+
+        return view('content.content_create', compact('content', 'reviewMode'));
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -441,33 +453,33 @@ class ContentController extends Controller
 
     // unused (kinomment muna sa preview)
     // content/index.blade.php (main)
-    public function rejectContent($id)
-    {
-        $content = Content::findOrFail($id);
-        $user = Auth::user();
+    // public function rejectContent($id)
+    // {
+    //     $content = Content::findOrFail($id);
+    //     $user = Auth::user();
 
-        if (!$user->hasRole('Content Manager')) {
-            abort(403, 'You are not authorized to reject this content.');
-        }
+    //     if (!$user->hasRole('Content Manager')) {
+    //         abort(403, 'You are not authorized to reject this content.');
+    //     }
 
-        //  if submitted or pending
-        if (!in_array($content->approval_status, ['submitted', 'pending'])) {
-            return redirect()->route('content.index')->with('toast', [
-                'message' => 'Content is not awaiting review.',
-                'type' => 'info'
-            ]);
-        }
+    //     //  if submitted or pending
+    //     if (!in_array($content->approval_status, ['submitted', 'pending'])) {
+    //         return redirect()->route('content.index')->with('toast', [
+    //             'message' => 'Content is not awaiting review.',
+    //             'type' => 'info'
+    //         ]);
+    //     }
 
-        $content->update([
-            'approval_status' => 'rejected',
-            'content_status' => 'draft',
-        ]);
+    //     $content->update([
+    //         'approval_status' => 'rejected',
+    //         'content_status' => 'draft',
+    //     ]);
 
-        return redirect()->route('content.index')->with('toast', [
-            'message' => 'Content rejected.',
-            'type' => 'error'
-        ]);
-    }
+    //     return redirect()->route('content.index')->with('toast', [
+    //         'message' => 'Content rejected.',
+    //         'type' => 'error'
+    //     ]);
+    // }
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // 🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨🌟✨

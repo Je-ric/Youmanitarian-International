@@ -38,8 +38,22 @@
     </x-page-header>
 
     @php
-        // Preview-only if not owner/auth
-        $reviewMode = $reviewMode ?? (isset($content) && Auth::id() !== $content->created_by);
+        $reviewMode = $reviewMode ?? false;
+
+        if (isset($content)) {
+            $authUser = Auth::user();
+            $owner = $authUser->id === $content->created_by;
+            $lockedPublished = $owner
+                && $content->content_status === 'published'
+                && $authUser->hasRole('Program Coordinator')
+                && !$authUser->hasRole('Content Manager')
+                && !$authUser->hasRole('Admin');
+
+            // force review mode (preview-only)
+            if (!$owner || $lockedPublished) {
+                $reviewMode = true;
+            }
+        }
 
         $user = Auth::user();
         $isAdmin = $user->hasRole('Admin');
