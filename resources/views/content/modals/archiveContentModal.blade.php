@@ -32,7 +32,7 @@
             <x-modal.close-button :modalId="'archive-modal-' . $content->id" text="Cancel" />
             <form action="{{ route('content.archive', $content->id) }}" method="POST" class="w-full sm:w-auto">
                 @csrf
-                <x-button type="submit" variant="table-action-danger" class="w-full sm:w-auto">
+                <x-button type="submit" variant="table-action-view" class="w-full sm:w-auto">
                     <i class='bx bx-archive'></i> Archive
                 </x-button>
             </form>

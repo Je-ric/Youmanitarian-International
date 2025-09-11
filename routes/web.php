@@ -287,6 +287,7 @@ Route::middleware(['auth', 'role:Content Manager'])->group(function () {
     Route::post('/content/{content}/reject', [ContentController::class, 'rejectContent'])->name('content.reject');
     Route::post('/content/{content}/archive', [ContentController::class, 'archiveContent'])->name('content.archive');
     Route::get('/content/{content}/review', [ContentController::class, 'review'])->name('content.review');
+    Route::post('/content/{content}/unarchive', [ContentController::class, 'unarchive'])->name('content.unarchive');
 });
 
 Route::middleware(['auth', 'role:Program Coordinator|Content Manager'])->group(function () {

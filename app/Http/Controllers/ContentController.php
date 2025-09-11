@@ -58,7 +58,11 @@ class ContentController extends Controller
     // content/content_create.blade.php (main)
     public function create()
     {
-        return view('content.content_create');
+        $reviewMode = false;
+        $defaultPublishingAction = 'draft';
+        $isArchived = false;
+
+        return view('content.content_create', compact('reviewMode', 'defaultPublishingAction', 'isArchived'));
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -69,22 +73,30 @@ class ContentController extends Controller
     public function edit(Content $content)
     {
         $user = Auth::user();
+        $request = request();
 
-        // Base rule: review mode if not the owner
-        $reviewMode = $user->id !== $content->created_by;
+        $owner = $user->id === $content->created_by;
+        $lockedPublished = $owner
+            && $content->content_status === 'published'
+            && $user->hasRole('Program Coordinator')
+            && !$user->hasRole('Content Manager')
+            && !$user->hasRole('Admin');
 
-        // lock Program Coordinator's own published content (no direct editing)
-        if (
-            $user->id === $content->created_by &&
-            $content->content_status === 'published' &&
-            $user->hasRole('Program Coordinator') &&
-            !$user->hasRole('Content Manager') &&
-            !$user->hasRole('Admin')
-        ) {
+        $reviewMode = !$owner || $lockedPublished;
+
+        $mode = $request->query('mode');
+        if ($mode === 'preview') {
             $reviewMode = true;
+        } elseif ($mode === 'edit') {
+            if ($owner && !$lockedPublished) {
+                $reviewMode = false;
+            }
         }
 
-        return view('content.content_create', compact('content', 'reviewMode'));
+        $defaultPublishingAction = $this->computeDefaultPublishingAction($content);
+        $isArchived = $content->content_status === 'archived';
+
+        return view('content.content_create', compact('content', 'reviewMode', 'defaultPublishingAction', 'isArchived'));
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -102,35 +114,35 @@ class ContentController extends Controller
     // When approved:
     //   content_status = published
     //   approval_status = approved (if content manager)
-    private function setContentApprovalStatus($request, $user)
-    {
-        $publishing_action = $request->input('publishing_action', 'draft');
-        // If resubmitting from needs_revision, allow transition to submitted/pending
-        if ($publishing_action === 'published') {
-            return [
-                'content_status' => 'published',
-                'approval_status' => 'approved',
-                'approved_by' => $user->id,
-                'approved_at' => now(),
-            ];
-        } elseif ($publishing_action === 'submitted') {
-            // If Content Manager, set to pending; else, set to submitted
-            $isContentManager = $user->hasRole('Content Manager');
-            return [
-                'content_status' => 'draft',
-                'approval_status' => $isContentManager ? 'pending' : 'submitted',
-                'approved_by' => null,
-                'approved_at' => null,
-            ];
-        } else {
-            return [
-                'content_status' => 'draft',
-                'approval_status' => 'draft',
-                'approved_by' => null,
-                'approved_at' => null,
-            ];
-        }
-    }
+    // private function setContentApprovalStatus($request, $user)
+    // {
+    //     $publishing_action = $request->input('publishing_action', 'draft');
+    //     // If resubmitting from needs_revision, allow transition to submitted/pending
+    //     if ($publishing_action === 'published') {
+    //         return [
+    //             'content_status' => 'published',
+    //             'approval_status' => 'approved',
+    //             'approved_by' => $user->id,
+    //             'approved_at' => now(),
+    //         ];
+    //     } elseif ($publishing_action === 'submitted') {
+    //         // If Content Manager, set to pending; else, set to submitted
+    //         $isContentManager = $user->hasRole('Content Manager');
+    //         return [
+    //             'content_status' => 'draft',
+    //             'approval_status' => $isContentManager ? 'pending' : 'submitted',
+    //             'approved_by' => null,
+    //             'approved_at' => null,
+    //         ];
+    //     } else {
+    //         return [
+    //             'content_status' => 'draft',
+    //             'approval_status' => 'draft',
+    //             'approved_by' => null,
+    //             'approved_at' => null,
+    //         ];
+    //     }
+    // }
 
     // content/content_create.blade.php (main)
     public function store(Request $request)
@@ -184,15 +196,13 @@ class ContentController extends Controller
             $validated['image_content'] = $image_path;
         }
 
-        // Prepare boolean fields - handle unchecked checkboxes properly
-        $enable_likes = $request->has('enable_likes') ? true : false;
-        $enable_comments = $request->has('enable_comments') ? true : false;
-        $enable_bookmark = $request->has('enable_bookmark') ? true : false;
-        $is_featured = $request->has('is_featured') ? true : false;
+        $enable_likes = $request->has('enable_likes');
+        $enable_comments = $request->has('enable_comments');
+        $enable_bookmark = $request->has('enable_bookmark');
+        $is_featured = $request->has('is_featured');
 
-        $statusArr = $this->setContentApprovalStatus($request, $user);
+        $statusArr = $this->determineStatusTransition($request, $user, null);
 
-        // Default published_at -> now() when publishing directly or auto-approved
         $publishedAt = null;
         if (($statusArr['content_status'] ?? null) === 'published' || ($statusArr['approval_status'] ?? null) === 'approved') {
             $publishedAt = now();
@@ -204,16 +214,16 @@ class ContentController extends Controller
             'content_type' => $validated['content_type'],
             'body' => $validated['body'],
             'created_by' => $user->id,
-            'content_status' => $statusArr['content_status'],
+            'content_status'   => $statusArr['content_status'],
             'image_content' => $image_path,
-            'approval_status' => $statusArr['approval_status'],
-            'approved_by' => $statusArr['approved_by'],
-            'approved_at' => $statusArr['approved_at'],
+            'approval_status'  => $statusArr['approval_status'],
+            'approved_by'      => $statusArr['approved_by'] ?? null,
+            'approved_at'      => $statusArr['approved_at'] ?? null,
             'views' => 0,
             'enable_likes' => $enable_likes,
             'enable_comments' => $enable_comments,
             'enable_bookmark' => $enable_bookmark,
-            'published_at' => $publishedAt, // set automatically
+            'published_at'     => $publishedAt,
             'is_featured' => $is_featured,
             'meta_title' => $validated['meta_title'] ?? null,
             'meta_description' => $validated['meta_description'] ?? null,
@@ -277,20 +287,21 @@ class ContentController extends Controller
         }
 
         // prepare
-        $enable_likes = $request->has('enable_likes') ? true : false;
-        $enable_comments = $request->has('enable_comments') ? true : false;
-        $enable_bookmark = $request->has('enable_bookmark') ? true : false;
-        $is_featured = $request->has('is_featured') ? true : false;
+        $enable_likes = $request->has('enable_likes');
+        $enable_comments = $request->has('enable_comments');
+        $enable_bookmark = $request->has('enable_bookmark');
+        $is_featured = $request->has('is_featured');
 
-        $statusArr = $this->setContentApprovalStatus($request, $user);
+        $statusArr = $this->determineStatusTransition($request, $user, $content);
 
         $newApprovalStatus = $statusArr['approval_status'];
         $newContentStatus = $statusArr['content_status'];
 
-        // Preserve existing published_at, set now() if publishing/approving and not set yet
         $publishedAt = $content->published_at;
-        if ($newContentStatus === 'published' || $newApprovalStatus === 'approved') {
-            $publishedAt = $publishedAt ?: now();
+        if (($statusArr['no_change'] ?? false) !== true) {
+            if ($newContentStatus === 'published' || $newApprovalStatus === 'approved') {
+                $publishedAt = $publishedAt ?: now();
+            }
         }
 
         $content->update([
@@ -298,15 +309,15 @@ class ContentController extends Controller
             'slug' => $validated['slug'],
             'content_type' => $validated['content_type'],
             'body' => $validated['body'],
-            'content_status' => $newContentStatus,
+            'content_status'  => $newContentStatus,
             'approval_status' => $newApprovalStatus,
-            'approved_by' => $statusArr['approved_by'] ?? $content->approved_by,
-            'approved_at' => $statusArr['approved_at'] ?? $content->approved_at,
+            'approved_by'     => $statusArr['approved_by'] ?? $content->approved_by,
+            'approved_at'     => $statusArr['approved_at'] ?? $content->approved_at,
             'image_content' => $validated['image_content'],
             'enable_likes' => $enable_likes,
             'enable_comments' => $enable_comments,
             'enable_bookmark' => $enable_bookmark,
-            'published_at' => $publishedAt, // auto-managed
+            'published_at'    => $publishedAt,
             'is_featured' => $is_featured,
             'meta_title' => $validated['meta_title'] ?? null,
             'meta_description' => $validated['meta_description'] ?? null,
@@ -516,5 +527,133 @@ class ContentController extends Controller
         }
         $reviewMode = true;
         return view('content.content_create', compact('content', 'reviewMode'));
+    }
+
+    // DRY: centralize status transitions
+    private function determineStatusTransition(Request $request, $user, ?Content $current = null): array
+    {
+        $actionProvided = $request->has('publishing_action');
+        $action = $request->input('publishing_action'); // null if not present
+
+        // If current is archived and no explicit action is provided, keep statuses
+        if ($current && $current->content_status === 'archived' && !$actionProvided) {
+            return [
+                'content_status' => $current->content_status,
+                'approval_status' => $current->approval_status,
+                'approved_by'    => $current->approved_by,
+                'approved_at'    => $current->approved_at,
+                'no_change'      => true,
+            ];
+        }
+
+        // Default when creating (no current) and no action posted
+        if (!$current && !$actionProvided) {
+            $action = 'draft';
+        }
+
+        switch ($action) {
+            case 'published':
+                return [
+                    'content_status' => 'published',
+                    'approval_status' => 'approved',
+                    'approved_by' => $user->id,
+                    'approved_at' => now(),
+                ];
+            case 'submitted':
+                $isContentManager = $user->hasRole('Content Manager');
+                return [
+                    'content_status' => 'draft',
+                    'approval_status' => $isContentManager ? 'pending' : 'submitted',
+                    'approved_by' => null,
+                    'approved_at' => null,
+                ];
+            case 'draft':
+            default:
+                // If updating and no action provided, keep current
+                if ($current && !$actionProvided) {
+                    return [
+                        'content_status' => $current->content_status,
+                        'approval_status' => $current->approval_status,
+                        'approved_by'    => $current->approved_by,
+                        'approved_at'    => $current->approved_at,
+                        'no_change'      => true,
+                    ];
+                }
+                return [
+                    'content_status' => 'draft',
+                    'approval_status' => 'draft',
+                    'approved_by' => null,
+                    'approved_at' => null,
+                ];
+        }
+    }
+
+    // DRY: compute default (for UI) based on existing content
+    private function computeDefaultPublishingAction(?Content $content): ?string
+    {
+        if (!$content) return 'draft';
+        if ($content->content_status === 'archived') return null;
+        if ($content->content_status === 'published' || $content->approval_status === 'approved') return 'published';
+        if (in_array($content->approval_status, ['submitted','pending'])) return 'submitted';
+        return 'draft';
+    }
+
+    // content/index.blade.php (main)
+    public function unarchive(Request $request, Content $content)
+    {
+        $user = Auth::user();
+
+        if ($content->content_status !== 'archived') {
+            return redirect()->route('content.index')->with('toast', [
+                'message' => 'Content is not archived.',
+                'type' => 'info',
+            ]);
+        }
+
+        $action = $request->input('action', 'draft'); // 'draft' | 'publish'
+
+        // Permissions:
+        $isAdmin = $user->hasRole('Admin');
+        $isManager = $user->hasRole('Content Manager');
+        $isOwner = $user->id === $content->created_by;
+
+        if ($action === 'publish') {
+            // Only Content Manager/Admin can unarchive and publish
+            if (!($isManager || $isAdmin)) {
+                abort(403, 'Not authorized to publish.');
+            }
+
+            $content->update([
+                'content_status'  => 'published',
+                'approval_status' => 'approved',
+                'approved_by'     => $user->id,
+                'approved_at'     => now(),
+                'published_at'    => $content->published_at ?: now(),
+            ]);
+
+            return redirect()->route('content.index')->with('toast', [
+                'message' => 'Content unarchived and published.',
+                'type' => 'success',
+            ]);
+        }
+
+        // Default: unarchive to draft (owner, manager, or admin)
+        if (!($isOwner || $isManager || $isAdmin)) {
+            abort(403, 'Not authorized to unarchive.');
+        }
+
+        $content->update([
+            'content_status'  => 'draft',
+            'approval_status' => 'draft',
+            'approved_by'     => null,
+            'approved_at'     => null,
+            // Keep published_at as-is or null it; usually null for draft:
+            'published_at'    => null,
+        ]);
+
+        return redirect()->route('content.index')->with('toast', [
+            'message' => 'Content unarchived to Draft.',
+            'type' => 'success',
+        ]);
     }
 }

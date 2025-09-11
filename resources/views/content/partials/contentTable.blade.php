@@ -58,23 +58,15 @@
                                 @endphp
 
                                 @if ($isOwner)
-                                    @if ($lockedPublished)
-                                        {{-- can see by the owner, pero nakalock when approved and published na --}}
-                                        <x-button href="{{ route('content.edit', $content->id) }}"
-                                            variant="table-action-view" size="sm" class="tooltip" data-tip="View">
-                                            <i class='bx bx-show'></i>
-                                        </x-button>
-                                    @else
-                                        {{-- Editable since hindi pa approved and published at owner siya --}}
-                                        <x-button href="{{ route('content.edit', $content->id) }}"
-                                            variant="table-action-edit" size="sm" class="tooltip" data-tip="Edit">
-                                            <i class='bx bx-edit'></i>
-                                        </x-button>
-                                    @endif
+                                    {{-- Always open in preview first; switch to edit inside --}}
+                                    <x-button href="{{ route('content.edit', $content->id) }}?mode=preview"
+                                        variant="table-action-view" size="sm" class="tooltip" data-tip="View">
+                                        <i class='bx bx-show'></i>
+                                    </x-button>
                                 @else
-                                    {{-- Not owner: view only --}}
+                                    {{-- Not owner: view only (hide when in needs_approval list) --}}
                                     @if ($tab !== 'needs_approval')
-                                        <x-button href="{{ route('content.edit', $content->id) }}" variant="table-action-view"
+                                        <x-button href="{{ route('content.edit', $content->id) }}?mode=preview" variant="table-action-view"
                                             size="sm" class="tooltip" data-tip="View">
                                             <i class='bx bx-show'></i>
                                         </x-button>
@@ -86,6 +78,13 @@
                                 <x-button variant="table-action-view" size="sm" class="tooltip" data-tip="Archive"
                                     onclick="document.getElementById('archive-modal-{{ $content->id }}').showModal(); return false;">
                                     <i class='bx bx-archive'></i>
+                                </x-button>
+                            @endif
+
+                            @if ($tab === 'archived' && ($isManager || $isAdmin))
+                                <x-button variant="table-action-view" size="sm" class="tooltip" data-tip="Unarchive"
+                                    onclick="document.getElementById('unarchive-modal-{{ $content->id }}').showModal(); return false;">
+                                    <i class='bx bx-archive-out'></i>
                                 </x-button>
                             @endif
 
@@ -105,6 +104,9 @@
     @foreach ($contents as $content)
         @if ($tab === 'published' && ($isManager || $isAdmin))
             @include('content.modals.archiveContentModal', ['content' => $content])
+        @endif
+        @if ($tab === 'archived' && ($isManager || $isAdmin))
+            @include('content.modals.unarchiveContentModal', ['content' => $content])
         @endif
     @endforeach
 
