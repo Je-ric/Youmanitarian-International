@@ -81,7 +81,7 @@
                     <ul class="space-y-1">
                         <li>
                             <a href="{{ route('content.index') }}"
-                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('content.*') ? 'active' : '' }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('content.index') ? 'active' : '' }}"
                                 data-tooltip="Contents">
                                 <i class="bx bxs-file-doc w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Contents</span>
@@ -488,28 +488,40 @@
         }
 
         .sidebar-link:hover {
-            background-color: #ffda8d;
-            color: #313849;
+            background: linear-gradient(
+                90deg,
+                rgba(26, 34, 53, 0.85) 0%,
+                rgba(26, 34, 53, 0.65) 100%
+            );
+            color: var(--accent-color);
+            border-left: 3px solid var(--accent-color);
+            border-radius: 0.5rem;
             transform: translateX(2px);
+            transition: all 0.2s ease-in-out;
         }
 
         .sidebar-link:hover .sidebar-icon,
         .sidebar-link:hover i {
-            color: #313849 !important;
+            color: var(--accent-color) !important;
         }
 
+
         .sidebar-link.active {
-            background-color: var(--sidebar-active-bg);
-            color: var(--sidebar-active-text);
+            background: linear-gradient(90deg, var(--primary-color) 0%, rgba(26,34,53,0.85) 100%);
+            color: #fff;
             font-weight: 600;
-            border-left: 3px solid var(--sidebar-border-active);
-            box-shadow: var(--sidebar-shadow-active);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 10px rgba(26, 34, 53, 0.25);
+            transform: translateX(2px);
+            transition: all 0.2s ease-in-out;
         }
 
         .sidebar-link.active .sidebar-icon,
         .sidebar-link.active i {
             color: var(--accent-color) !important;
         }
+
 
         .sidebar-link.logout-link:hover {
             background-color: var(--logout-bg-hover);
@@ -540,19 +552,6 @@
 
         .main-content {
             transition: margin-left 0.3s ease-in-out;
-        }
-
-        .sidebar-link.active {
-            background-color: var(--primary-color);
-            color: var(--accent-color);
-            font-weight: 600;
-            border: 2px solid var(--accent-color);
-            box-shadow: 0 2px 8px 0 rgba(26, 34, 53, 0.3);
-        }
-
-        .sidebar-link.active .sidebar-icon,
-        .sidebar-link.active i {
-            color: var(--accent-color) !important;
         }
     </style>
 
