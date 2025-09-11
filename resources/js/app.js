@@ -3,8 +3,11 @@ import 'alpinejs';
 import 'flowbite';
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
-import { createApp } from 'vue' 
-import ContentEditor from './components/ContentEditor.vue' 
+// import { createApp } from 'vue'
+// import ContentEditor from './components/ContentEditor.vue'
+
+import './sidebar';
+
 
 window.flatpickr = flatpickr;
 
