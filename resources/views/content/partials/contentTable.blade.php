@@ -73,10 +73,12 @@
                                     @endif
                                 @else
                                     {{-- Not owner: view only --}}
-                                    <x-button href="{{ route('content.edit', $content->id) }}" variant="table-action-view"
-                                        size="sm" class="tooltip" data-tip="View">
-                                        <i class='bx bx-show'></i>
-                                    </x-button>
+                                    @if ($tab !== 'needs_approval')
+                                        <x-button href="{{ route('content.edit', $content->id) }}" variant="table-action-view"
+                                            size="sm" class="tooltip" data-tip="View">
+                                            <i class='bx bx-show'></i>
+                                        </x-button>
+                                    @endif
                                 @endif
                             @endauth
 
@@ -107,8 +109,8 @@
     @endforeach
 
         {{-- kaya pala separate, para hindi magtumpukan ang modals
-            nagfrefreeze yung browser 
-            Kapag magkasama sila sa <tr> o <tbody>, nagiging invalid yung HTML structure.  
+            nagfrefreeze yung browser
+            Kapag magkasama sila sa <tr> o <tbody>, nagiging invalid yung HTML structure.
             hirap ang browser mag-render  --}}
         {{-- Kapag hiwalay, malinaw ang table markup at mas madaling i-render ang bawat modal. --}}
 

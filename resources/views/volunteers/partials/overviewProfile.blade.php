@@ -71,7 +71,8 @@
                             <div class="text-lg sm:text-xl font-bold text-[#1a2235]">{{ $volunteer->calculated_total_hours }}</div>
                             <div class="text-xs text-gray-500">Hours</div>
                         </div>
-                        
+                        {{-- what if pc? 
+                            --}}
                         <div class="text-center">
                             <div class="text-lg sm:text-xl font-bold text-[#1a2235]">{{ $volunteer->attendanceLogs->count() }}</div>
                             <div class="text-xs text-gray-500">Programs</div>

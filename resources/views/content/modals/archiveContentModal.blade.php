@@ -11,7 +11,7 @@
             </div>
             <h3 class="text-base sm:text-lg font-semibold text-blue-700">Are you sure you want to archive this content?</h3>
 
-            <x-feedback-status.alert 
+            <x-feedback-status.alert
                 variant="flexible"
                 icon="bx bx-info-circle text-xl"
                 message="Archiving will remove this content from public view. <br>
@@ -30,8 +30,9 @@
     <x-modal.footer>
         <div class="flex gap-2 w-full justify-end flex-col sm:flex-row">
             <x-modal.close-button :modalId="'archive-modal-' . $content->id" text="Cancel" />
-            <form action="{{ route('content.archive', $content->id) }}" method="GET">
-                <x-button type="submit" variant="info" class="w-full sm:w-auto">
+            <form action="{{ route('content.archive', $content->id) }}" method="POST" class="w-full sm:w-auto">
+                @csrf
+                <x-button type="submit" variant="table-action-danger" class="w-full sm:w-auto">
                     <i class='bx bx-archive'></i> Archive
                 </x-button>
             </form>
