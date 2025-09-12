@@ -138,40 +138,34 @@ class ProgramChatController extends Controller
                     ->exists();
     }
 
-    private function formatParticipants($participants, Program $program)
-    {
-        return collect($participants)->map(function ($p) use ($program) {
-            $u = $p->user ?? null;
+private function formatParticipants($participants, Program $program)
+{
+    return collect($participants)->map(function ($p) use ($program) {
+        $u = $p->user ?? null;
 
-            // Always a collection (empty if none)
-            $hours = $u && $u->consultationHours
-                ? $u->consultationHours
-                : collect();
+        $participantData = [
+            'id' => 'participant-' . ($u ? $u->id : 'unknown'),
+            'user' => $u,
+            'is_coordinator' => $u && $u->id === $program->created_by,
+            'status' => strtolower($p->status ?? ''),
+            'hours' => $u && $u->consultationHours instanceof \Illuminate\Support\Collection
+                        ? $u->consultationHours
+                        : collect(),
+        ];
+        
+        return [
+            'id' => $participantData['id'],
+            'title' => view('programs_chats.partials.participant', [ // avatar + name + badges
+                'participant' => $participantData, ])->render(),
+            'content' => view('programs_chats.partials.participantHours', [ // only hours list
+                'hours' => $participantData['hours'],])->render(),
+            'open' => false,
+        ];  
+    })->toArray();
+}
 
-            $avatar = $u ? view('components.user-avatar', [
-                'user' => $u,
-                'size' => '8',
-                'showName' => false,
-            ])->render() : '';
 
-            // Badges
-            $badge = ($u && $u->id === $program->created_by)
-                ? "<span class='ml-2 px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-[10px] font-semibold'>Coordinator</span>"
-                : '';
 
-            $statusTag = "<span class='ml-1 px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 text-[10px] font-medium'>"
-                . ($p->status ? e(ucfirst($p->status)) : '') . "</span>";
-
-            $content = view('programs_chats.partials.consultationHours', ['hours' => $hours,])->render();
-
-            return [
-                'id'      => 'participant-' . ($u ? $u->id : 'unknown'),
-                'title'   => $avatar . '<span>' . ($u ? e($u->name) : 'Unknown') . '</span>' . $badge . $statusTag,
-                'content' => $content,
-                'open'    => false,
-            ];
-        })->toArray();
-    }
 
 
 }
