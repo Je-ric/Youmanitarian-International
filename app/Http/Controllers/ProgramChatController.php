@@ -37,14 +37,14 @@ class ProgramChatController extends Controller
 
         // ProgramChat::withTrashed()->get();
         // ProgramChat::onlyTrashed()->get();
-        $participantList = $this->formatParticipants($participants, $program);
+        $participantLists = $this->formatParticipants($participants, $program);
 
         return view('programs_chats.index',
         compact('programs',
                     'program',
                             'messages',
                             'participants',
-                            'participantList'));
+                            'participantLists'));
     }
 
     // programs_chats/index.blade.php (main)
@@ -102,13 +102,6 @@ class ProgramChatController extends Controller
     }
 
 
-
-    // AJAX Test Method
-    public function testAjax()
-    {
-        return view('programs_chats.test-ajax');
-    }
-
     // --- Helper methods ---
     private function getUserPrograms()
     {
@@ -139,50 +132,46 @@ class ProgramChatController extends Controller
     private function canAccessProgram(Program $program)
     {
         return $program->created_by === Auth::id() ||
-               $program->volunteers()
-                   ->where('volunteers.user_id', Auth::id())
-                   ->where('program_volunteers.status', 'approved')
-                   ->exists();
+                $program->volunteers()
+                    ->where('volunteers.user_id', Auth::id())
+                    ->where('program_volunteers.status', 'approved')
+                    ->exists();
     }
 
-private function formatParticipants($participants, Program $program)
-{
-    return collect($participants)->map(function ($p) use ($program) {
-        $u = $p->user ?? null;
+    private function formatParticipants($participants, Program $program)
+    {
+        return collect($participants)->map(function ($p) use ($program) {
+            $u = $p->user ?? null;
 
-        // Always a collection (empty if none)
-        $hours = $u && $u->consultationHours
-            ? $u->consultationHours
-            : collect();
+            // Always a collection (empty if none)
+            $hours = $u && $u->consultationHours
+                ? $u->consultationHours
+                : collect();
 
-        // Avatar rendered once via component
-        $avatar = $u ? view('components.user-avatar', [
-            'user' => $u,
-            'size' => '8',
-            'showName' => false,
-        ])->render() : '';
+            $avatar = $u ? view('components.user-avatar', [
+                'user' => $u,
+                'size' => '8',
+                'showName' => false,
+            ])->render() : '';
 
-        // Badges
-        $badge = ($u && $u->id === $program->created_by)
-            ? "<span class='ml-2 px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-[10px] font-semibold'>Coordinator</span>"
-            : '';
+            // Badges
+            $badge = ($u && $u->id === $program->created_by)
+                ? "<span class='ml-2 px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-[10px] font-semibold'>Coordinator</span>"
+                : '';
 
-        $statusTag = "<span class='ml-1 px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 text-[10px] font-medium'>"
-            . ($p->status ? e(ucfirst($p->status)) : '') . "</span>";
+            $statusTag = "<span class='ml-1 px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 text-[10px] font-medium'>"
+                . ($p->status ? e(ucfirst($p->status)) : '') . "</span>";
 
-        // Render hours partial (pass $hours cleanly)
-        $content = view('programs_chats.partials.consultationHours', [
-            'hours' => $hours,
-        ])->render();
+            $content = view('programs_chats.partials.consultationHours', ['hours' => $hours,])->render();
 
-        return [
-            'id'      => 'participant-' . ($u ? $u->id : 'unknown'),
-            'title'   => $avatar . '<span>' . ($u ? e($u->name) : 'Unknown') . '</span>' . $badge . $statusTag,
-            'content' => $content,
-            'open'    => false,
-        ];
-    })->toArray();
-}
+            return [
+                'id'      => 'participant-' . ($u ? $u->id : 'unknown'),
+                'title'   => $avatar . '<span>' . ($u ? e($u->name) : 'Unknown') . '</span>' . $badge . $statusTag,
+                'content' => $content,
+                'open'    => false,
+            ];
+        })->toArray();
+    }
 
 
 }

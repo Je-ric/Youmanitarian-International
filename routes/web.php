@@ -133,9 +133,6 @@ Route::middleware(['auth'])->group(function () {
      Route::put('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'update'])->name('program.chats.update');
      Route::delete('/programs/{program}/chats/{chat}', [ProgramChatController::class, 'destroy'])->name('program.chats.destroy');
 
-     // AJAX Test Route
-     Route::get('/programs/chats/test-ajax', [ProgramChatController::class, 'testAjax'])->name('program.chats.test-ajax');
-
      //  Route::delete('/programs/{program}/chats/{message}', [ProgramChatController::class, 'destroy'])->name('program.chats.destroy');
 
     // My Profile (reuse volunteer details view)
