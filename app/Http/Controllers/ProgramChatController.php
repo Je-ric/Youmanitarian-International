@@ -58,6 +58,7 @@ class ProgramChatController extends Controller
             'message' => 'required|string|max:1000',
         ]);
 
+
         $message = $program->chats()->create([
             'sender_id' => Auth::id(),
             'message' => $request->message,
@@ -116,17 +117,39 @@ class ProgramChatController extends Controller
 
     private function getProgramParticipants(Program $program)
     {
-        return $program->volunteers()
+        // Get volunteers
+        $volunteers = $program->volunteers()
             ->where('program_volunteers.status', 'approved')
             ->with([
                 'user:id,name,profile_pic',
                 'user.consultationHours' => function ($query) {
-                                                    $query->where('status', 'active')
-                                                            ->orderBy('day')
-                                                            ->orderBy('start_time');
-                                                    }
-                ])
+                    $query->where('status', 'active')
+                          ->orderBy('day')
+                          ->orderBy('start_time');
+                }
+            ])
             ->get();
+
+        // Get coordinator (created_by)
+        $coordinator = \App\Models\User::with(['consultationHours' => function ($query) {
+            $query->where('status', 'active')
+                  ->orderBy('day')
+                  ->orderBy('start_time');
+        }])->find($program->created_by);
+
+        // Create a pseudo volunteer object for coordinator if not in volunteers
+        $isCoordinatorInVolunteers = $volunteers->contains(function ($v) use ($coordinator) {
+            return $v->user && $coordinator && $v->user->id === $coordinator->id;
+        });
+
+        if (!$isCoordinatorInVolunteers && $coordinator) {
+            $coordinatorVolunteer = new \stdClass();
+            $coordinatorVolunteer->user = $coordinator;
+            $coordinatorVolunteer->status = 'coordinator';
+            $volunteers->prepend($coordinatorVolunteer);
+        }
+
+        return $volunteers;
     }
 
     private function canAccessProgram(Program $program)
@@ -140,31 +163,51 @@ class ProgramChatController extends Controller
 
     private function formatParticipants($participants, Program $program)
     {
-        return collect($participants)->map(function ($p) use ($program) {
+        // Coordinator first, then alphabetical
+        $participants = collect($participants)
+            ->sort(function ($a, $b) use ($program) {
+                $aUser = $a->user;
+                $bUser = $b->user;
+
+                $aCoord = $aUser && $aUser->id === $program->created_by ? 1 : 0;
+                $bCoord = $bUser && $bUser->id === $program->created_by ? 1 : 0;
+
+                if ($aCoord !== $bCoord) {
+                    return $bCoord <=> $aCoord; // coordinator first
+                }
+                return strcasecmp($aUser->name ?? '', $bUser->name ?? '');
+            })
+            ->values();
+
+        $total = $participants->count();
+
+        return $participants->map(function ($p, $idx) use ($program, $total) {
             $u = $p->user ?? null;
 
-            $hours = $u && $u->consultationHours instanceof \Illuminate\Support\Collection
+            $hours = ($u && $u->consultationHours instanceof \Illuminate\Support\Collection)
                 ? $u->consultationHours
                 : collect();
 
             $participantData = [
-                'id' => 'participant-' . ($u ? $u->id : 'unknown'),
-                'user' => $u,
+                'id'             => 'participant-' . ($u ? $u->id : 'unknown'),
+                'user'           => $u,
                 'is_coordinator' => $u && $u->id === $program->created_by,
-                'status' => strtolower($p->status ?? ''),
-                'hours' => $hours,
-                'hours_count' => $hours->count(),
+                'status'         => strtolower($p->status ?? ''),
+                'hours'          => $hours,
+                'hours_count'    => $hours->count(),
+                'index'          => $idx + 1,
+                'total'          => $total,
             ];
 
             return [
-                'id' => $participantData['id'],
-                'title' => view('programs_chats.partials.participant', [
-                    'participant' => $participantData,
-                ])->render(),
+                'id'      => $participantData['id'],
+                'title'   => view('programs_chats.partials.participant', [
+                                'participant' => $participantData,
+                            ])->render(),
                 'content' => view('programs_chats.partials.consultationHours', [
-                    'hours' => $participantData['hours'],
-                ])->render(),
-                'open' => false,
+                                'hours' => $participantData['hours'],
+                            ])->render(),
+                'open'    => $participantData['is_coordinator'], // auto-open coordinator accordion
             ];
         })->toArray();
     }
