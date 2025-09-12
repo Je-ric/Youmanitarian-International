@@ -5,10 +5,16 @@
     </span>
 
     @if ($participant['is_coordinator'])
-        <x-feedback-status.status-indicator status="program-coordinator" label="Coordinator" />
+        <x-feedback-status.status-indicator status="program-coordinator" label="Program Coordinator" />
     @endif
 
     @if ($participant['status'])
         <x-feedback-status.status-indicator :status="$participant['status']" />
+    @endif
+
+    @if ($participant['hours_count'] > 0)
+        <span class="text-xs text-gray-500 ml-2">
+            ({{ $participant['hours_count'] }})
+        </span>
     @endif
 </div>

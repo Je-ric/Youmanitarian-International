@@ -143,26 +143,32 @@ class ProgramChatController extends Controller
         return collect($participants)->map(function ($p) use ($program) {
             $u = $p->user ?? null;
 
+            $hours = $u && $u->consultationHours instanceof \Illuminate\Support\Collection
+                ? $u->consultationHours
+                : collect();
+
             $participantData = [
                 'id' => 'participant-' . ($u ? $u->id : 'unknown'),
                 'user' => $u,
                 'is_coordinator' => $u && $u->id === $program->created_by,
                 'status' => strtolower($p->status ?? ''),
-                'hours' => $u && $u->consultationHours instanceof \Illuminate\Support\Collection
-                            ? $u->consultationHours
-                            : collect(),
+                'hours' => $hours,
+                'hours_count' => $hours->count(),
             ];
-            
+
             return [
                 'id' => $participantData['id'],
-                'title' => view('programs_chats.partials.participant', [ // avatar + name + badges
-                    'participant' => $participantData, ])->render(),
-                'content' => view('programs_chats.partials.participantHours', [ // only hours list
-                    'hours' => $participantData['hours'],])->render(),
+                'title' => view('programs_chats.partials.participant', [
+                    'participant' => $participantData,
+                ])->render(),
+                'content' => view('programs_chats.partials.consultationHours', [
+                    'hours' => $participantData['hours'],
+                ])->render(),
                 'open' => false,
-            ];  
+            ];
         })->toArray();
     }
+
 
 
 }

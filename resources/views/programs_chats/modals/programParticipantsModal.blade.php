@@ -4,7 +4,8 @@
 
     <x-modal.header>
         <h2 class="text-lg sm:text-xl font-bold text-[#1a2235] flex items-center gap-2">
-            <i class='bx bx-group text-[#ffb51b]'></i> Program Participants
+            <i class='bx bx-group text-[#ffb51b]'></i> Program Participants 
+            <span class="text-sm font-medium text-gray-500">({{ $participants->count() }})</span>
         </h2>
     </x-modal.header>
 
