@@ -186,19 +186,16 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-2 flex-shrink-0">
-
                                 <!-- Mobile Sidebar Toggle -->
                                 <x-button id="mobileSidebarToggle" variant="mobile-toggle">
                                     <i class='bx bx-menu text-lg'></i>
                                 </x-button>
 
-                                <!-- Back Button -->
                                 <x-button href="{{ route('programs.index', $program) }}" variant="glass-button">
                                     <i class='bx bx-arrow-back mr-1 text-sm'></i>
                                     <span class="hidden sm:inline text-sm"></span>
                                 </x-button>
 
-                                <!-- Participants Button -->
                                 <x-button variant="glass-button"
                                     onclick="document.getElementById('programParticipants-modal-{{ $program->id }}').showModal(); return false;">
                                     <i class='bx bx-group'></i> Participants
@@ -207,6 +204,7 @@
                                 @include('programs_chats.modals.programParticipantsModal', [
                                     'program' => $program,
                                 ])
+
                             </div>
                         </div>
                     </div>

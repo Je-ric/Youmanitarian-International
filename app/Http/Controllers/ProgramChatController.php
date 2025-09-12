@@ -37,12 +37,14 @@ class ProgramChatController extends Controller
 
         // ProgramChat::withTrashed()->get();
         // ProgramChat::onlyTrashed()->get();
+        $participantList = $this->formatParticipants($participants, $program);
 
         return view('programs_chats.index',
         compact('programs',
                     'program',
                             'messages',
-                            'participants'));
+                            'participants',
+                            'participantList'));
     }
 
     // programs_chats/index.blade.php (main)
@@ -112,20 +114,26 @@ class ProgramChatController extends Controller
     {
         return Program::where(function($query) {
             $query->where('created_by', Auth::id())
-                  ->orWhereHas('volunteers', function($q) {
-                      $q->where('volunteers.user_id', Auth::id())
+                    ->orWhereHas('volunteers', function($q) {
+                        $q->where('volunteers.user_id', Auth::id())
                         ->where('program_volunteers.status', 'approved');
-                  });
+                    });
         })->with(['volunteers', 'chats'])->get();
     }
 
     private function getProgramParticipants(Program $program)
     {
         return $program->volunteers()
-                        ->where('program_volunteers.status', 'approved')
-                        ->with('user:id,name,profile_pic')
-                        ->get();
-
+            ->where('program_volunteers.status', 'approved')
+            ->with([
+                'user:id,name,profile_pic',
+                'user.consultationHours' => function ($query) {
+                                                    $query->where('status', 'active')
+                                                            ->orderBy('day')
+                                                            ->orderBy('start_time');
+                                                    }
+                ])
+            ->get();
     }
 
     private function canAccessProgram(Program $program)
@@ -136,4 +144,48 @@ class ProgramChatController extends Controller
                    ->where('program_volunteers.status', 'approved')
                    ->exists();
     }
+
+private function formatParticipants($participants, Program $program)
+{
+    return collect($participants)->map(function ($p) use ($program) {
+        $u = $p->user ?? null;
+
+        // Always a collection (empty if none)
+        $hours = $u && $u->consultationHours
+            ? $u->consultationHours
+            : collect();
+
+        // Avatar rendered once via component
+        $avatar = $u ? view('components.user-avatar', [
+            'user' => $u,
+            'size' => '8',
+            'showName' => false,
+        ])->render() : '';
+
+        // Badges
+        $badge = ($u && $u->id === $program->created_by)
+            ? "<span class='ml-2 px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-[10px] font-semibold'>Coordinator</span>"
+            : '';
+
+        $statusTag = "<span class='ml-1 px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 text-[10px] font-medium'>"
+            . ($p->status ? e(ucfirst($p->status)) : '') . "</span>";
+
+        // Render hours partial (pass $hours cleanly)
+        $content = view('programs_chats.partials.consultationHours', [
+            'hours' => $hours,
+        ])->render();
+
+        return [
+            'id'      => 'participant-' . ($u ? $u->id : 'unknown'),
+            'title'   => $avatar . '<span>' . ($u ? e($u->name) : 'Unknown') . '</span>' . $badge . $statusTag,
+            'content' => $content,
+            'open'    => false,
+        ];
+    })->toArray();
 }
+
+
+}
+
+
+

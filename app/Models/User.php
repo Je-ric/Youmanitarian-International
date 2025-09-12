@@ -122,9 +122,9 @@ class User extends Authenticatable
 
     public function consultationHours()
     {
-        return $this->hasMany(ConsultationHour::class, 'user_id');
+        // return $this->hasMany(ConsultationHour::class, 'user_id');
+        return $this->hasMany(ConsultationHour::class);
     }
-
     public function consultationThreadsAsVolunteer()
     {
         return $this->hasMany(ConsultationThread::class, 'volunteer_id');
@@ -139,4 +139,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(ConsultationChat::class, 'sender_id');
     }
+
+
 }
