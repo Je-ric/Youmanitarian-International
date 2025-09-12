@@ -1,5 +1,5 @@
 @extends('layouts.sidebar_final')
-
+{{-- modal (participants lists) - dropdown "accordion" (consultation hours) --}}
 @section('content')
     <style>
         /* Global Layout */
@@ -186,41 +186,47 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-2 flex-shrink-0">
+
                                 <!-- Mobile Sidebar Toggle -->
-                                <button
-                                    class="md:hidden inline-flex items-center justify-center w-8 h-8 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg transition-all duration-200"
-                                    id="mobileSidebarToggle">
+                                <x-button id="mobileSidebarToggle" variant="mobile-toggle">
                                     <i class='bx bx-menu text-lg'></i>
-                                </button>
+                                </x-button>
+
                                 <!-- Back Button -->
-                                <a href="{{ route('programs.volunteers', $program) }}"
-                                    class="inline-flex items-center justify-center px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg transition-all duration-200 backdrop-blur-sm">
+                                <x-button href="{{ route('programs.index', $program) }}" variant="glass-button">
                                     <i class='bx bx-arrow-back mr-1 text-sm'></i>
-                                    <span class="hidden sm:inline text-sm">Back</span>
-                                </a>
+                                    <span class="hidden sm:inline text-sm"></span>
+                                </x-button>
+
+                                <!-- Participants Button -->
+                                <x-button variant="glass-button"
+                                    onclick="document.getElementById('programParticipants-modal-{{ $program->id }}').showModal(); return false;">
+                                    <i class='bx bx-group'></i> Participants
+                                </x-button>
+
+                                @include('programs_chats.modals.programParticipantsModal', [
+                                    'program' => $program,
+                                ])
                             </div>
                         </div>
                     </div>
+
 
                     <!-- Messages Area (Scrollable) -->
                     <div id="chatMessages" class="flex-1 px-4 py-2 bg-gray-50">
                         @forelse($messages as $message)
                             <div class="chat {{ $message->sender_id === Auth::id() ? 'chat-end' : 'chat-start' }}"
-
                                 data-message-id="{{ $message->id }}">
                                 <div class="chat-image avatar">
                                     <div class="w-10 rounded-full">
                                         <img src="{{ $message->sender->profile_pic ?? asset('images/default-avatar.png') }}"
-
                                             alt="{{ $message->sender->name }}">
                                     </div>
                                 </div>
                                 <div class="chat-header">
                                     {{ $message->sender->name }}
-                                    <time
-                                        class="chat-time text-xs opacity-50 ml-2"
+                                    <time class="chat-time text-xs opacity-50 ml-2"
                                         datetime="{{ $message->created_at->toIso8601String() }}"
-
                                         data-time="{{ $message->created_at->toIso8601String() }}">
                                         {{ $message->created_at->diffForHumans() }}
                                     </time>
@@ -235,14 +241,10 @@
 
                                 @if ($message->sender_id === Auth::id())
                                     <div class="chat-footer opacity-70">
-                                        <button
-                                            type="button"
-                                            class="chat-delete-btn btn btn-xs btn-ghost text-red-500"
+                                        <button type="button" class="chat-delete-btn btn btn-xs btn-ghost text-red-500"
                                             data-message-id="{{ $message->id }}"
-
                                             data-program-id="{{ $message->program_id }}"
                                             data-delete-url="{{ route('program.chats.destroy', [$program, $message->id]) }}"
-
                                             title="Delete message">
                                             <i class="bx bx-trash text-sm"></i>
                                             <span class="sr-only">Delete</span>
@@ -567,36 +569,40 @@
                             this.config.routes.deleteTemplate.replace('CHAT_ID', messageId);
 
                         $.ajax({
-                            url: deleteUrl,
-                            method: 'DELETE',
-                            data: { _token: $('meta[name="csrf-token"]').attr('content') }
-                        })
-                        .done((response, textStatus, xhr) => {
-                            // JSON or empty 204 both count as success
-                            if (!response || response.success !== false) {
-                                this.removeMessage(messageId);
-                            } else {
-                                btn.prop('disabled', false).html('<i class="bx bx-trash text-xs"></i>');
-                            }
-                        })
-                        .fail((xhr) => {
-                            // If server sent 200/204 without JSON, still remove
-                            if (xhr.status === 200 || xhr.status === 204) {
-                                this.removeMessage(messageId);
-                            } else {
-                                btn.prop('disabled', false).html('<i class="bx bx-trash text-xs"></i>');
-                            }
-                        })
-                        .always(() => {
-                            this.state.isDeleting = false;
-                        });
+                                url: deleteUrl,
+                                method: 'DELETE',
+                                data: {
+                                    _token: $('meta[name="csrf-token"]').attr('content')
+                                }
+                            })
+                            .done((response, textStatus, xhr) => {
+                                // JSON or empty 204 both count as success
+                                if (!response || response.success !== false) {
+                                    this.removeMessage(messageId);
+                                } else {
+                                    btn.prop('disabled', false).html('<i class="bx bx-trash text-xs"></i>');
+                                }
+                            })
+                            .fail((xhr) => {
+                                // If server sent 200/204 without JSON, still remove
+                                if (xhr.status === 200 || xhr.status === 204) {
+                                    this.removeMessage(messageId);
+                                } else {
+                                    btn.prop('disabled', false).html('<i class="bx bx-trash text-xs"></i>');
+                                }
+                            })
+                            .always(() => {
+                                this.state.isDeleting = false;
+                            });
                     },
 
                     // Keep a single removeMessage definition
                     removeMessage: function(messageId) {
                         const $el = $(`[data-message-id="${messageId}"]`);
                         if ($el.length) {
-                            $el.fadeOut(200, function() { $(this).remove(); });
+                            $el.fadeOut(200, function() {
+                                $(this).remove();
+                            });
                         }
                     },
 
@@ -621,25 +627,28 @@
                                     ${safeMsg}
                                 </div>
                                 ${isOwn ? `
-                                    <div class="chat-footer opacity-70">
-                                        <button
-                                            type="button"
-                                            class="chat-delete-btn btn btn-xs btn-ghost text-red-500"
-                                            data-message-id="${chat.id}"
-                                            data-program-id="${chat.program_id}"
-                                            data-delete-url="${deleteUrl}"
-                                            title="Delete message">
-                                            <i class="bx bx-trash text-sm"></i>
-                                            <span class="sr-only">Delete</span>
-                                        </button>
-                                    </div>
-                                ` : ''}
+                                            <div class="chat-footer opacity-70">
+                                                <button
+                                                    type="button"
+                                                    class="chat-delete-btn btn btn-xs btn-ghost text-red-500"
+                                                    data-message-id="${chat.id}"
+                                                    data-program-id="${chat.program_id}"
+                                                    data-delete-url="${deleteUrl}"
+                                                    title="Delete message">
+                                                    <i class="bx bx-trash text-sm"></i>
+                                                    <span class="sr-only">Delete</span>
+                                                </button>
+                                            </div>
+                                        ` : ''}
                             </div>
                         `);
 
                         $(this.config.selectors.chatMessages).append(msgDiv);
                         const el = document.getElementById('chatMessages');
-                        el?.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+                        el?.scrollTo({
+                            top: el.scrollHeight,
+                            behavior: 'smooth'
+                        });
                     },
 
                     scrollToBottom: function() {

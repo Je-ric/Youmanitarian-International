@@ -15,7 +15,9 @@ class ProgramChatController extends Controller
     public function index()
     {
         $programs = $this->getUserPrograms();
-        return view('programs_chats.index', compact('programs'));
+
+        return view('programs_chats.index',
+        compact('programs'));
     }
 
     // programs_chats/index.blade.php (main)
@@ -26,12 +28,21 @@ class ProgramChatController extends Controller
         }
 
         $programs = $this->getUserPrograms();
-        $messages = $program->chats()->with(['sender:id,name,profile_pic'])->orderBy('created_at', 'asc')->paginate(20);
+        $messages = $program->chats()
+                    ->with(['sender:id,name,profile_pic'])
+                    ->orderBy('created_at', 'asc')
+                    ->paginate(20);
+
+        $participants = $this->getProgramParticipants($program);
 
         // ProgramChat::withTrashed()->get();
         // ProgramChat::onlyTrashed()->get();
 
-        return view('programs_chats.index', compact('programs', 'program', 'messages'));
+        return view('programs_chats.index',
+        compact('programs',
+                    'program',
+                            'messages',
+                            'participants'));
     }
 
     // programs_chats/index.blade.php (main)
@@ -106,6 +117,15 @@ class ProgramChatController extends Controller
                         ->where('program_volunteers.status', 'approved');
                   });
         })->with(['volunteers', 'chats'])->get();
+    }
+
+    private function getProgramParticipants(Program $program)
+    {
+        return $program->volunteers()
+                        ->where('program_volunteers.status', 'approved')
+                        ->with('user:id,name,profile_pic')
+                        ->get();
+
     }
 
     private function canAccessProgram(Program $program)

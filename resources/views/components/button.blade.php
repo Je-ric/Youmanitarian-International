@@ -64,6 +64,15 @@
         'attendance-dark' => 'btn px-4 py-2 rounded-md text-[#ffb51b] text-sm md:text-sm font-semibold
                 shadow-[0px_5.28px_13.2px_rgba(30,41,59,0.5)] active:scale-95 transition-transform duration-200
                 bg-slate-800 hover:bg-slate-700 border border-[#ffb51b] outline-none focus:outline-none focus:ring-2 focus:ring-yellow-400/70',
+
+        'mobile-toggle' => 'md:hidden inline-flex items-center justify-center w-8 h-8
+                            bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-lg
+                            transition-all duration-200',
+
+        'glass-button' => 'inline-flex items-center justify-center px-3 py-1.5
+                            bg-white/10 hover:bg-white/20 border border-white/20 text-white
+                            rounded-lg transition-all duration-200 backdrop-blur-sm',
+
     ];
 
     $class = "inline-flex items-center justify-center gap-1 px-4 py-2 rounded-md font-semibold transition duration-200 " . ($styles[$variant] ?? $styles['primary']);
