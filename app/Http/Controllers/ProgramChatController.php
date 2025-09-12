@@ -138,34 +138,31 @@ class ProgramChatController extends Controller
                     ->exists();
     }
 
-private function formatParticipants($participants, Program $program)
-{
-    return collect($participants)->map(function ($p) use ($program) {
-        $u = $p->user ?? null;
+    private function formatParticipants($participants, Program $program)
+    {
+        return collect($participants)->map(function ($p) use ($program) {
+            $u = $p->user ?? null;
 
-        $participantData = [
-            'id' => 'participant-' . ($u ? $u->id : 'unknown'),
-            'user' => $u,
-            'is_coordinator' => $u && $u->id === $program->created_by,
-            'status' => strtolower($p->status ?? ''),
-            'hours' => $u && $u->consultationHours instanceof \Illuminate\Support\Collection
-                        ? $u->consultationHours
-                        : collect(),
-        ];
-        
-        return [
-            'id' => $participantData['id'],
-            'title' => view('programs_chats.partials.participant', [ // avatar + name + badges
-                'participant' => $participantData, ])->render(),
-            'content' => view('programs_chats.partials.participantHours', [ // only hours list
-                'hours' => $participantData['hours'],])->render(),
-            'open' => false,
-        ];  
-    })->toArray();
-}
-
-
-
+            $participantData = [
+                'id' => 'participant-' . ($u ? $u->id : 'unknown'),
+                'user' => $u,
+                'is_coordinator' => $u && $u->id === $program->created_by,
+                'status' => strtolower($p->status ?? ''),
+                'hours' => $u && $u->consultationHours instanceof \Illuminate\Support\Collection
+                            ? $u->consultationHours
+                            : collect(),
+            ];
+            
+            return [
+                'id' => $participantData['id'],
+                'title' => view('programs_chats.partials.participant', [ // avatar + name + badges
+                    'participant' => $participantData, ])->render(),
+                'content' => view('programs_chats.partials.participantHours', [ // only hours list
+                    'hours' => $participantData['hours'],])->render(),
+                'open' => false,
+            ];  
+        })->toArray();
+    }
 
 
 }

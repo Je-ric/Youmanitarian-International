@@ -9,41 +9,27 @@ use Illuminate\Support\Facades\Auth;
 
 class ContentReviewCommentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    // Show comments (used in partials)
     // content/partials/contentReviewComments.blade.php (partial)
     public function index(Request $request)
     {
         $contentId = $request->get('content_id');
+
         $comments = ContentReviewComment::with('user')
             ->where('content_id', $contentId)
             ->orderBy('created_at', 'asc')
             ->get();
 
-        // return response()->json($comments);
-        return view(
-            'content.partials.contentReviewComments',
-            compact('comments')
-        );
+        return view('content.partials.contentReviewComments', compact('comments'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     // content/content_create.blade.php (main)
     public function store(Request $request)
     {
         if (!Auth::check()) {
-            return response()->json(['success' => false, 'error' => 'You must be logged in.'], 401);
+            return $this->errorResponse('You must be logged in.', 401, $request);
         }
 
         $data = $request->only(['content_id', 'comment']);
@@ -55,61 +41,55 @@ class ContentReviewCommentController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+            return $this->errorResponse($validator->errors(), 422, $request);
         }
 
         $comment = ContentReviewComment::create($data);
 
-        if ($request->ajax()) {
-            return response()->json(['success' => true, 'comment' => $comment]);
-        }
-
-        return redirect()->back()->with('success', 'Comment added!');
+        return $this->successResponse([
+            'comment' => $comment,
+            'message' => 'Comment added!'
+        ], $request);
     }
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
-
-    /**
-     * Remove the specified resource from storage.
-     */
+    
     // content/content_create.blade.php (main)
     public function destroy($id)
     {
         $comment = ContentReviewComment::findOrFail($id);
 
-        if (!Auth::check() || Auth::id() !== (int)$comment->user_id) {
-            if (request()->ajax()) {
-                return response()->json(['success' => false, 'error' => 'Forbidden'], 403);
-            }
-            return redirect()->back()->with('error', 'You can only delete your own comment.');
+        if (!Auth::check() || Auth::id() !== (int) $comment->user_id) {
+            return $this->errorResponse('You can only delete your own comment.', 403, request());
         }
 
         $comment->delete();
 
-        if (request()->ajax()) {
-            return response()->json(['success' => true]);
+        return $this->successResponse([
+            'message' => 'Comment deleted!'
+        ], request());
+    }
+
+    /**
+     * Handle success response for both AJAX and normal requests
+     */
+    private function successResponse(array $data, Request $request)
+    {
+        if ($request->ajax()) {
+            return response()->json(['success' => true] + $data);
         }
 
-        return redirect()->back()->with('success', 'Comment deleted!');
+        return redirect()->back()->with('success', $data['message'] ?? 'Success');
+    }
+
+    /**
+     * Handle error response for both AJAX and normal requests
+     */
+    private function errorResponse($error, int $status, Request $request)
+    {
+        if ($request->ajax()) {
+            return response()->json(['success' => false, 'error' => $error], $status);
+        }
+
+        return redirect()->back()->with('error', is_string($error) ? $error : 'Something went wrong');
     }
 }
