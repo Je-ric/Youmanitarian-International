@@ -425,34 +425,147 @@
     </div>
 
     <?php $__env->startPush('scripts'); ?>
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <script>
-            $(function () {
-                const mobileSidebar = $('#mobileSidebar');
-                const mobileOverlay = $('#mobileOverlay');
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+    (function(){
+        var threadId = <?php echo e(isset($thread) ? $thread->id : 'null'); ?>;
+        var userId = <?php echo e(Auth::id()); ?>;
+        var storeUrl = threadId ? "<?php echo e(isset($thread) ? route('consultation-chats.thread.message.store', $thread) : ''); ?>" : null;
+        var csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-                function showMobileSidebar() {
-                    mobileSidebar.addClass('show');
-                    mobileOverlay.addClass('show');
-                    $('body').addClass('overflow-hidden');
+        function log(msg){ console.log(msg); }
+
+        function initMobileSidebar(){
+            var mobileSidebar = $('#mobileSidebar');
+            var mobileOverlay = $('#mobileOverlay');
+
+            function show(){ mobileSidebar.addClass('show'); mobileOverlay.addClass('show'); $('body').addClass('overflow-hidden'); }
+            function hide(){ mobileSidebar.removeClass('show'); mobileOverlay.removeClass('show'); $('body').removeClass('overflow-hidden'); }
+
+            $('#mobileSidebarToggle, #mobileSidebarToggleEmpty').on('click', show);
+            $('#closeMobileSidebar, #mobileOverlay').on('click', hide);
+        }
+
+        function scrollMessagesBottom(){
+            var wrap = document.getElementById('consultationMessages');
+            if(!wrap) return;
+            wrap.scrollTo({ top: wrap.scrollHeight });
+        }
+
+        function buildMessageHtml(chat, isOwn){
+            var timeText = 'Just now';
+            var bubbleClass = isOwn ? 'chat-end' : 'chat-start';
+            return '' +
+            '<div class="chat ' + bubbleClass + '" data-message-id="'+ chat.id +'">' +
+                '<div class="chat-header">' +
+                    escapeHtml(chat.sender.name) +
+                    '<time class="chat-time"> ' + timeText + '</time>' +
+                '</div>' +
+                '<div class="chat-bubble">' + formatMessage(chat.message) + '</div>' +
+            '</div>';
+        }
+
+        function escapeHtml(str){
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        function formatMessage(str){
+            return escapeHtml(str).replace(/\n/g,'<br>');
+        }
+
+        function appendMessage(chat){
+            var isOwn = chat.sender_id == userId;
+            var html = buildMessageHtml(chat, isOwn);
+            $('#consultationMessages').append(html);
+            scrollMessagesBottom();
+        }
+
+        function sendMessageAjax(form){
+            if(!storeUrl) { log('No storeUrl'); return; }
+            var input = form.find('input[name="message"]');
+            var message = input.val().trim();
+            if(!message){ return; }
+
+            setSendingState(form, true);
+
+            $.ajax({
+                url: storeUrl,
+                method: 'POST',
+                data: { message: message, _token: csrfToken },
+                dataType: 'json'
+            }).done(function(resp){
+                if(resp && resp.success && resp.chat){
+                    appendMessage(resp.chat);
+                    input.val('');
+                } else {
+                    log('Send failed response structure');
                 }
-                function hideMobileSidebar() {
-                    mobileSidebar.removeClass('show');
-                    mobileOverlay.removeClass('show');
-                    $('body').removeClass('overflow-hidden');
-                }
+            }).fail(function(xhr){
+                log('Send failed status ' + xhr.status);
+            }).always(function(){
+                setSendingState(form, false);
+            });
+        }
 
-                $('#mobileSidebarToggle, #mobileSidebarToggleEmpty').on('click', showMobileSidebar);
-                $('#closeMobileSidebar, #mobileOverlay').on('click', hideMobileSidebar);
+        function setSendingState(form, isSending){
+            var btn = form.find('button[type="submit"]');
+            var input = form.find('input[name="message"]');
+            if(isSending){
+                btn.prop('disabled', true).html('<span>...</span>');
+                input.prop('disabled', true);
+            } else {
+                btn.prop('disabled', false).html('<i class="bx bx-send text-lg"></i>');
+                input.prop('disabled', false);
+            }
+        }
 
-                // Scroll to bottom on load if thread open
-                const msgWrap = document.getElementById('consultationMessages');
-                if (msgWrap) {
-                    msgWrap.scrollTo({ top: msgWrap.scrollHeight });
+        function bindForm(){
+            var form = $('form[action*="consultation-chats/threads"]');
+            if(!form.length){ return; }
+            form.on('submit', function(e){
+                e.preventDefault();
+                sendMessageAjax(form);
+            });
+            form.find('input[name="message"]').on('keydown', function(e){
+                if(e.key === 'Enter' && !e.shiftKey){
+                    e.preventDefault();
+                    sendMessageAjax(form);
                 }
             });
-        </script>
+        }
+
+        function initEcho(){
+            if(typeof window.Echo === 'undefined'){
+                log('Echo not available');
+                return;
+            }
+            if(!threadId){
+                log('No thread selected. Echo not initialized');
+                return;
+            }
+            log('Subscribing to channel consultation.thread.' + threadId);
+            window.Echo.channel('consultation.thread.' + threadId)
+                .listen('ConsultationNewMessage', function(event){
+                    if(!event.chat){ return; }
+                    if(event.chat.sender_id == userId){ return; }
+                    appendMessage(event.chat);
+                });
+        }
+
+        function init(){
+            initMobileSidebar();
+            bindForm();
+            initEcho();
+            scrollMessagesBottom();
+            log('Consultation chat ready');
+        }
+
+        $(init);
+    })();
+    </script>
     <?php $__env->stopPush(); ?>
 <?php $__env->stopSection(); ?>
 

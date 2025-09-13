@@ -2,8 +2,8 @@
     <ul class="space-y-2">
         <?php $__currentLoopData = $hours; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $h): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <li>
-                <a href="<?php echo e(route('consultation-chats.start', $h->professional->id)); ?>"
-                    class="group p-2 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-between hover:bg-white hover:shadow-sm transition">
+                <a href="<?php echo e(route('consultation-chats.thread.show', $h)); ?>"
+                   class="group p-2 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-between hover:bg-white hover:shadow-sm transition">
                     <div>
                         <p class="font-medium text-gray-800 text-xs group-hover:text-[#1a2235]">
                             <?php echo e($h->specialization ?? ''); ?>
@@ -14,10 +14,9 @@
 
                         </p>
                     </div>
-                    <span
-                        class="text-[11px] font-medium text-[#1a2235] bg-white px-2 py-0.5 rounded border border-gray-200">
-                        <?php echo e(\Carbon\Carbon::parse($h->start_time)->format('g:i A')); ?> –
-                        <?php echo e(\Carbon\Carbon::parse($h->end_time)->format('g:i A')); ?>
+                    <span class="text-[11px] font-medium text-[#1a2235] bg-white px-2 py-0.5 rounded border border-gray-200">
+                        <?php echo e($h->start_time ? \Carbon\Carbon::parse($h->start_time)->format('g:i A') : '—'); ?> –
+                        <?php echo e($h->end_time ? \Carbon\Carbon::parse($h->end_time)->format('g:i A') : '—'); ?>
 
                     </span>
                 </a>

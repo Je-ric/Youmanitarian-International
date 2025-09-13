@@ -43,12 +43,22 @@ class ConsultationChatsController extends Controller
             'message' => 'required|string|max:2000',
         ]);
 
-        ConsultationChat::create([
+        $chat = ConsultationChat::create([
             'thread_id' => $thread->id,
             'sender_id' => Auth::id(),
             'message'   => $data['message'],
             'sent_at'   => now(),
-        ]);
+        ])->load('sender:id,name,profile_pic');
+
+        // broadcast (exclude current sender on client via check)
+        broadcast(new \App\Events\ConsultationNewMessage($chat))->toOthers();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'chat' => $chat,
+            ]);
+        }
 
         return redirect()->route('consultation-chats.thread.show', $thread);
     }

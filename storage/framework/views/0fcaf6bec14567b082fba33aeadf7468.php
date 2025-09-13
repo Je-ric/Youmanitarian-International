@@ -19,7 +19,7 @@
             overflow-y: auto;
             overflow-x: hidden;
             scroll-behavior: smooth;
-            padding-bottom: 20px;
+            padding-bottom: 120px;
         }
 
         /* Custom Scrollbar */
@@ -61,42 +61,36 @@
             border-radius: 4px;
         }
 
-        /* Updated chat bubble styles for Messenger look */
-        .chat-bubble {
+        /* Compact Message Design */
+        .message-bubble {
             max-width: 70%;
             word-wrap: break-word;
-            border-radius: 18px;
-            padding: 8px 12px;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+
+        .message-content {
             font-size: 14px;
             line-height: 1.4;
+            padding: 8px 12px;
         }
 
-        .chat-end .chat-bubble {
-            background-color: #1a2235;
-            color: white;
-        }
-
-        .chat-start .chat-bubble {
-            background-color: #f1f3f4;
-            color: #1a2235;
-        }
-
-        .chat-image .avatar .w-8 {
-            width: 28px;
-            height: 28px;
-        }
-
-        .chat-header {
+        .message-time {
             font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 2px;
-            opacity: 0.8;
+            opacity: 0.7;
         }
 
-        .chat-time {
-            font-size: 10px;
-            opacity: 0.6;
-            margin-left: 4px;
+        .delete-btn {
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+
+        .message-wrapper:hover .delete-btn {
+            opacity: 1;
         }
 
         /* Fixed Input Bar */
@@ -146,17 +140,15 @@
                 visibility: visible;
             }
 
-            .chat-bubble {
+            .message-bubble {
                 max-width: 85%;
             }
         }
 
-        /* Updated sidebar items to look like Messenger chat list */
+        /* Compact Sidebar Items */
         .program-item {
             padding: 12px 16px;
             transition: all 0.2s ease;
-            border-radius: 8px;
-            margin: 4px 8px;
         }
 
         .program-item:hover {
@@ -165,26 +157,7 @@
 
         .program-item.active {
             background-color: rgba(255, 181, 27, 0.15);
-            border-left: 3px solid #ffb51b;
-        }
-
-        .program-item .program-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .program-item .program-time {
-            font-size: 11px;
-            color: #65676b;
-            white-space: nowrap;
+            border-right: 3px solid #ffb51b;
         }
     </style>
 
@@ -287,14 +260,14 @@
                         </div>
                     </div>
 
-                    <!-- Updated messages area with proper DaisyUI chat bubbles and human-readable timestamps -->
+
                     <!-- Messages Area (Scrollable) -->
-                    <div id="chatMessages" class="flex-1 px-4 py-4 bg-gray-50">
+                    <div id="chatMessages" class="flex-1 px-4 py-2 bg-gray-50">
                         <?php $__empty_1 = true; $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $message): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <div class="chat <?php echo e($message->sender_id === Auth::id() ? 'chat-end' : 'chat-start'); ?>"
                                 data-message-id="<?php echo e($message->id); ?>">
                                 <div class="chat-image avatar">
-                                    <div class="w-8 rounded-full">
+                                    <div class="w-10 rounded-full">
                                         <img src="<?php echo e($message->sender->profile_pic ?? asset('images/default-avatar.png')); ?>"
                                             alt="<?php echo e($message->sender->name); ?>">
                                     </div>
@@ -302,24 +275,15 @@
                                 <div class="chat-header">
                                     <?php echo e($message->sender->name); ?>
 
-                                    <time class="chat-time text-xs text-gray-400"
+                                    <time class="chat-time text-xs opacity-50 ml-2"
                                         datetime="<?php echo e($message->created_at->toIso8601String()); ?>"
                                         data-time="<?php echo e($message->created_at->toIso8601String()); ?>">
-                                        <?php
-                                            $now = now();
-                                            $messageTime = $message->created_at;
+                                        <?php echo e($message->created_at->diffForHumans()); ?>
 
-                                            if ($messageTime->isToday()) {
-                                                echo $messageTime->format('g:i A');
-                                            } elseif ($messageTime->isYesterday()) {
-                                                echo 'Yesterday ' . $messageTime->format('g:i A');
-                                            } else {
-                                                echo $messageTime->format('M j, Y g:i A');
-                                            }
-                                        ?>
                                     </time>
                                 </div>
-                                <div class="chat-bubble">
+                                <div
+                                    class="chat-bubble <?php echo e($message->sender_id === Auth::id() ? 'chat-bubble-warning text-[#1a2235]' : ''); ?>">
                                     <?php echo nl2br(e($message->message)); ?>
 
                                     <?php if($message->is_edited): ?>
@@ -355,7 +319,6 @@
                         <?php endif; ?>
                     </div>
 
-                    <!-- Updated input area with rounded input and send button -->
                     <!-- Fixed Input Bar -->
                     <div class="chat-input-fixed p-4 bg-white">
                         <form action="<?php echo e(route('program.chats.store', $program)); ?>" method="POST"
@@ -364,12 +327,12 @@
                             <div class="flex-1">
                                 <div class="relative">
                                     <input type="text" id="messageInput" name="message"
-                                        class="input input-bordered w-full rounded-full bg-gray-100 border-0 text-gray-800 placeholder-gray-500 focus:bg-white focus:ring-2 focus:ring-[#ffb51b] focus:outline-none"
+                                        class="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-full text-gray-800 placeholder-gray-500 transition-all duration-200 focus:bg-white focus:ring-2 focus:ring-[#ffb51b] focus:outline-none resize-none"
                                         placeholder="Type a message..." required autocomplete="off">
                                 </div>
                             </div>
                             <button type="submit"
-                                class="btn btn-primary rounded-full w-10 h-10 min-h-10 p-0 bg-[#ffb51b] border-[#ffb51b] hover:bg-[#e6a319] hover:border-[#e6a319] text-[#1a2235]">
+                                class="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-[#ffb51b] to-[#e6a319] text-[#1a2235] rounded-full hover:from-[#e6a319] hover:to-[#cc9116] transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#ffb51b]/50 flex-shrink-0">
                                 <i class='bx bx-send text-lg'></i>
                             </button>
                         </form>
@@ -392,7 +355,6 @@
                 <?php endif; ?>
             </div>
 
-            <!-- Updated sidebar to look like Messenger chat list with avatars and timestamps -->
             <!-- Sidebar -->
             <div class="hidden md:block w-80 flex-shrink-0 bg-white border-l border-gray-200">
                 <div class="flex flex-col h-full">
@@ -409,43 +371,28 @@
                         <?php if($programs->isNotEmpty()): ?>
                             <?php $__currentLoopData = $programs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <a href="<?php echo e(route('program.chats.show', $p)); ?>"
-                                    class="program-item flex items-center gap-3 <?php echo e(isset($program) && $program->id === $p->id ? 'active' : ''); ?>">
-                                    <div class="program-avatar flex-shrink-0">
-                                        <?php echo e(strtoupper(substr($p->title, 0, 1))); ?>
-
+                                    class="program-item flex items-center gap-3 border-b border-gray-50 <?php echo e(isset($program) && $program->id === $p->id ? 'active' : ''); ?>">
+                                    <div
+                                        class="flex items-center justify-center w-10 h-10 bg-blue-50 rounded-lg flex-shrink-0">
+                                        <i class='bx bx-message-square-dots text-blue-600'></i>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <div class="flex items-center justify-between">
-                                            <h3 class="text-sm font-semibold text-[#1a2235] truncate"><?php echo e($p->title); ?></h3>
-                                            <span class="program-time">
-                                                <?php if($p->chats->isNotEmpty()): ?>
-                                                    <?php
-                                                        $lastChat = $p->chats->sortByDesc('created_at')->first();
-                                                        $lastTime = $lastChat->created_at;
+                                        <h3 class="text-sm font-semibold text-[#1a2235] truncate"><?php echo e($p->title); ?></h3>
+                                        <div class="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+                                            <span><?php echo e($p->volunteers->count()); ?>
 
-                                                        if ($lastTime->isToday()) {
-                                                            echo $lastTime->format('g:i A');
-                                                        } elseif ($lastTime->isYesterday()) {
-                                                            echo 'Yesterday';
-                                                        } else {
-                                                            echo $lastTime->format('M j');
-                                                        }
-                                                    ?>
-                                                <?php endif; ?>
-                                            </span>
-                                        </div>
-                                        <div class="text-xs text-gray-500 mt-0.5 truncate">
-                                            <?php if($p->chats->isNotEmpty()): ?>
-                                                <?php
-                                                    $lastMessage = $p->chats->sortByDesc('created_at')->first()->message;
-                                                    echo Str::limit($lastMessage, 40);
-                                                ?>
-                                            <?php else: ?>
-                                                <?php echo e($p->volunteers->count()); ?> <?php echo e($p->volunteers->count() === 1 ? 'participant' : 'participants'); ?>
+                                                <?php echo e($p->volunteers->count() === 1 ? 'volunteer' : 'volunteers'); ?></span>
+                                            <span>•</span>
+                                            <span><?php echo e($p->chats->count()); ?>
 
-                                            <?php endif; ?>
+                                                <?php echo e($p->chats->count() === 1 ? 'message' : 'messages'); ?></span>
                                         </div>
                                     </div>
+                                    <span
+                                        class="px-2 py-1 text-xs font-medium rounded-full whitespace-nowrap flex-shrink-0 <?php echo e($p->created_by === Auth::id() ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'); ?>">
+                                        <?php echo e($p->created_by === Auth::id() ? 'Host' : 'Member'); ?>
+
+                                    </span>
                                 </a>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         <?php else: ?>
@@ -483,43 +430,28 @@
                         <?php if($programs->isNotEmpty()): ?>
                             <?php $__currentLoopData = $programs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <a href="<?php echo e(route('program.chats.show', $p)); ?>"
-                                    class="program-item flex items-center gap-3 <?php echo e(isset($program) && $program->id === $p->id ? 'active' : ''); ?>">
-                                    <div class="program-avatar flex-shrink-0">
-                                        <?php echo e(strtoupper(substr($p->title, 0, 1))); ?>
-
+                                    class="program-item flex items-center gap-3 border-b border-gray-50 <?php echo e(isset($program) && $program->id === $p->id ? 'active' : ''); ?>">
+                                    <div
+                                        class="flex items-center justify-center w-10 h-10 bg-blue-50 rounded-lg flex-shrink-0">
+                                        <i class='bx bx-message-square-dots text-blue-600'></i>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <div class="flex items-center justify-between">
-                                            <h3 class="text-sm font-semibold text-[#1a2235] truncate"><?php echo e($p->title); ?></h3>
-                                            <span class="program-time">
-                                                <?php if($p->chats->isNotEmpty()): ?>
-                                                    <?php
-                                                        $lastChat = $p->chats->sortByDesc('created_at')->first();
-                                                        $lastTime = $lastChat->created_at;
+                                        <h3 class="text-sm font-semibold text-[#1a2235] truncate"><?php echo e($p->title); ?></h3>
+                                        <div class="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
+                                            <span><?php echo e($p->volunteers->count()); ?>
 
-                                                        if ($lastTime->isToday()) {
-                                                            echo $lastTime->format('g:i A');
-                                                        } elseif ($lastTime->isYesterday()) {
-                                                            echo 'Yesterday';
-                                                        } else {
-                                                            echo $lastTime->format('M j');
-                                                        }
-                                                    ?>
-                                                <?php endif; ?>
-                                            </span>
-                                        </div>
-                                        <div class="text-xs text-gray-500 mt-0.5 truncate">
-                                            <?php if($p->chats->isNotEmpty()): ?>
-                                                <?php
-                                                    $lastMessage = $p->chats->sortByDesc('created_at')->first()->message;
-                                                    echo Str::limit($lastMessage, 40);
-                                                ?>
-                                            <?php else: ?>
-                                                <?php echo e($p->volunteers->count()); ?> <?php echo e($p->volunteers->count() === 1 ? 'participant' : 'participants'); ?>
+                                                <?php echo e($p->volunteers->count() === 1 ? 'volunteer' : 'volunteers'); ?></span>
+                                            <span>•</span>
+                                            <span><?php echo e($p->chats->count()); ?>
 
-                                            <?php endif; ?>
+                                                <?php echo e($p->chats->count() === 1 ? 'message' : 'messages'); ?></span>
                                         </div>
                                     </div>
+                                    <span
+                                        class="px-2 py-1 text-xs font-medium rounded-full whitespace-nowrap flex-shrink-0 <?php echo e($p->created_by === Auth::id() ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'); ?>">
+                                        <?php echo e($p->created_by === Auth::id() ? 'Host' : 'Member'); ?>
+
+                                    </span>
                                 </a>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         <?php else: ?>
@@ -732,22 +664,24 @@
                         }
                     },
 
+
                     appendMessage: function(chat) {
                         const isOwn = chat.sender_id == this.config.userId;
                         const safeMsg = $('<div>').text(chat.message).html().replace(/\n/g, '<br>');
                         const deleteUrl = this.config.routes.deleteTemplate.replace('CHAT_ID', chat.id);
                         const msgDiv = $(`
+
                             <div class="chat ${isOwn ? 'chat-end' : 'chat-start'}" data-message-id="${chat.id}">
                                 <div class="chat-image avatar">
-                                    <div class="w-8 rounded-full">
+                                    <div class="w-10 rounded-full">
                                         <img src="${chat.sender.profile_pic || '/images/default-avatar.png'}" alt="${chat.sender.name}">
                                     </div>
                                 </div>
                                 <div class="chat-header">
                                     ${chat.sender.name}
-                                    <time class="chat-time text-xs text-gray-400">Just now</time>
+                                    <time class="text-xs opacity-50 ml-2">Just now</time>
                                 </div>
-                                <div class="chat-bubble">
+                                <div class="chat-bubble ${isOwn ? 'chat-bubble-warning text-[#1a2235]' : ''}">
                                     ${safeMsg}
                                 </div>
                                 ${isOwn ? `
