@@ -117,6 +117,42 @@ class ConsultationChatsController extends Controller
             ]);
     }
 
+    // Delete message
+    public function destroyMessage(Request $request, ConsultationThread $thread, ConsultationChat $chat)
+    {
+        $this->authorizeThread($thread);
+
+        if ($chat->thread_id !== $thread->id) {
+            return response()->json([
+                'success' => false,
+                'error'   => 'Message not in this thread.'
+            ], 404);
+        }
+
+        if ($chat->sender_id !== Auth::id()) {
+            return response()->json([
+                'success' => false,
+                'error'   => 'You can only delete your own messages.'
+            ], 403);
+        }
+
+        $chat->delete(); // soft or hard depending on model
+
+        broadcast(new \App\Events\ConsultationChatMessageDeleted($chat->id, $thread->id))->toOthers();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'chat_id' => $chat->id
+            ]);
+        }
+
+        return back()->with('toast', [
+            'message' => 'Message deleted.',
+            'type'    => 'success'
+        ]);
+    }
+
     // Helper
 
     private function loadUserThreads(int $userId)

@@ -143,7 +143,7 @@
                 max-width: 85%;
             }
 
-            /* #consultationMessages { padding-bottom: 120px; }  */
+            #consultationMessages { padding-bottom: 120px; } 
             /*  para hindi puma-ilalim yung chats sa input */
         }
 
@@ -216,29 +216,28 @@
                         @forelse($messages as $m)
                             @php $mine = $m->sender_id === Auth::id(); @endphp
                             <div class="chat {{ $mine ? 'chat-end' : 'chat-start' }}" data-message-id="{{ $m->id }}">
-                                <div class="flex items-start gap-2 mb-2 {{ $mine ? 'justify-end' : '' }}">
-
-                                    <div class="flex flex-col {{ $mine ? 'items-end text-right' : '' }}">
-                                        <div class="chat-header flex items-center gap-1 {{ $mine ? 'justify-end' : '' }}">
-                                            {{ $m->sender->name }}
-                                            <time class="chat-time" datetime="{{ $m->sent_at?->toIso8601String() }}">
-                                                @php
-                                                    $mt = \Carbon\Carbon::parse($m->sent_at);
-                                                    if ($mt->isToday()) {
-                                                        echo $mt->format('g:i A');
-                                                    } elseif ($mt->isYesterday()) {
-                                                        echo 'Yesterday ' . $mt->format('g:i A');
-                                                    } else {
-                                                        echo $mt->format('M j, Y g:i A');
-                                                    }
-                                                @endphp
-                                            </time>
-                                        </div>
-                                        <div class="chat-bubble">
-                                            {!! nl2br(e($m->message)) !!}
-                                        </div>
+                                <div class="flex flex-col {{ $mine ? 'items-end text-right' : '' }} mb-2">
+                                    <div class="chat-header flex items-center gap-1 {{ $mine ? 'justify-end' : '' }}">
+                                        {{ $m->sender->name }}
+                                        <time class="chat-time" datetime="{{ $m->sent_at?->toIso8601String() }}">
+                                            @php
+                                                $mt = \Carbon\Carbon::parse($m->sent_at);
+                                                if ($mt->isToday()) echo $mt->format('g:i A');
+                                                elseif ($mt->isYesterday()) echo 'Yesterday ' . $mt->format('g:i A');
+                                                else echo $mt->format('M j, Y g:i A');
+                                            @endphp
+                                        </time>
+                                        @if($mine)
+                                            <button
+                                                class="ml-1 text-red-400 hover:text-red-600 transition chat-delete-btn"
+                                                data-delete-url="{{ route('consultation-chats.thread.message.destroy', [$thread, $m]) }}"
+                                                data-message-id="{{ $m->id }}"
+                                                title="Delete message">
+                                                <i class="bx bx-trash text-xs"></i>
+                                            </button>
+                                        @endif
                                     </div>
-
+                                    <div class="chat-bubble">{!! nl2br(e($m->message)) !!}</div>
                                 </div>
                             </div>
 
@@ -428,8 +427,12 @@
             (function() {
                 var threadId = {{ isset($thread) ? $thread->id : 'null' }};
                 var userId = {{ Auth::id() }};
-                var storeUrl = threadId ?
-                    "{{ isset($thread) ? route('consultation-chats.thread.message.store', $thread) : '' }}" : null;
+                var storeUrl = threadId
+                    ? "{{ isset($thread) ? route('consultation-chats.thread.message.store', $thread) : '' }}"
+                    : null;
+                var deleteRouteTemplate = threadId
+                    ? "{{ route('consultation-chats.thread.message.destroy', [$thread, '__ID__']) }}"
+                    : null;
                 var csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
                 function log(msg) {
@@ -473,17 +476,31 @@
                         });
                     }
                 }
-                
-                function buildMessageHtml(chat, isOwn) {
-                    var timeText = 'Just now';
+
+                function buildMessageHtml(chat, isOwn){
                     var bubbleClass = isOwn ? 'chat-end' : 'chat-start';
+                    var name = escapeHtml(chat.sender?.name || 'You');
+                    var timeText = 'Just now';
+                    var deleteBtn = '';
+
+                    if(isOwn && deleteRouteTemplate){
+                        var deleteUrl = deleteRouteTemplate.replace('__ID__', chat.id);
+                        deleteBtn =
+                            '<button class="ml-1 text-red-400 hover:text-red-600 transition chat-delete-btn" ' +
+                            'data-delete-url="'+deleteUrl+'" data-message-id="'+chat.id+'" title="Delete message">' +
+                            '<i class="bx bx-trash text-xs"></i></button>';
+                    }
+
                     return '' +
                         '<div class="chat ' + bubbleClass + '" data-message-id="' + chat.id + '">' +
-                        '<div class="chat-header">' +
-                        escapeHtml(chat.sender.name) +
-                        '<time class="chat-time"> ' + timeText + '</time>' +
-                        '</div>' +
-                        '<div class="chat-bubble">' + formatMessage(chat.message) + '</div>' +
+                            '<div class="flex flex-col ' + (isOwn ? 'items-end text-right':'') + ' mb-2">' +
+                            '<div class="chat-header flex items-center gap-1 ' + (isOwn ? 'justify-end':'') + '">' +
+                                name +
+                                '<time class="chat-time"> ' + timeText + '</time>' +
+                                deleteBtn +
+                            '</div>' +
+                            '<div class="chat-bubble">' + formatMessage(chat.message || '') + '</div>' +
+                            '</div>' +
                         '</div>';
                 }
 
@@ -569,6 +586,39 @@
                     });
                 }
 
+                function bindDelete() {
+                    $(document).on('click', '.chat-delete-btn', function(e){
+                        e.preventDefault();
+                        var btn = $(this);
+                        var msgId = btn.data('message-id');
+                        var url = btn.data('delete-url');
+                        if(!url || !msgId) return;
+                        if(!confirm('Delete this message?')) return;
+                        btn.prop('disabled', true).html('<i class="bx bx-loader-alt bx-spin text-xs"></i>');
+                        $.ajax({
+                            url: url,
+                            method: 'POST',
+                            data: { _method: 'DELETE', _token: csrfToken },
+                            dataType: 'json'
+                        }).done(function(resp){
+                            if(resp && resp.success){
+                                removeMessage(msgId);
+                            } else {
+                                btn.prop('disabled', false).html('<i class="bx bx-trash text-xs"></i>');
+                            }
+                        }).fail(function(){
+                            btn.prop('disabled', false).html('<i class="bx bx-trash text-xs"></i>');
+                        });
+                    });
+                }
+
+                function removeMessage(id){
+                    var el = $('[data-message-id="'+id+'"]');
+                    if(el.length){
+                        el.fadeOut(150, function(){ $(this).remove(); });
+                    }
+                }
+
                 function initEcho() {
                     if (typeof window.Echo === 'undefined') {
                         log('Echo not available');
@@ -580,14 +630,15 @@
                     }
                     log('Subscribing to channel consultation.thread.' + threadId);
                     window.Echo.channel('consultation.thread.' + threadId)
-                        .listen('ConsultationNewMessage', function(event) {
-                            if (!event.chat) {
-                                return;
+                        .listen('ConsultationNewMessage', function(event){
+                            if(event.chat && event.chat.sender_id != userId){
+                                appendMessage(event.chat);
                             }
-                            if (event.chat.sender_id == userId) {
-                                return;
+                        })
+                        .listen('ConsultationChatMessageDeleted', function(event){
+                            if(event.messageId){
+                                removeMessage(event.messageId);
                             }
-                            appendMessage(event.chat);
                         });
                 }
 
@@ -606,6 +657,7 @@
                     adjustChatSpacer();
                     initMobileSidebar();
                     bindForm();
+                    bindDelete();
                     initEcho();
                     scrollMessagesBottom();
                     log('Consultation chat ready');
