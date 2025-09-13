@@ -13,6 +13,10 @@ class ConsultationChat extends Model
         'sent_at',
     ];
 
+    protected $casts = [
+        'sent_at' => 'datetime',
+    ];
+
     public function thread()
     {
         return $this->belongsTo(ConsultationThread::class, 'thread_id');

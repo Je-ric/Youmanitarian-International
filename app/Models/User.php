@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,50 +9,20 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
-/** @mixin \Illuminate\Notifications\Notifiable */
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable, HasFactory, HasProfilePhoto, TwoFactorAuthenticatable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'google_id',
-        'profile_pic'
+        'name','email','password','google_id','profile_pic'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
-        'password',
-        'remember_token',
-        'two_factor_recovery_codes',
-        'two_factor_secret',
+        'password','remember_token','two_factor_recovery_codes','two_factor_secret',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
-    protected $appends = [
-        'profile_photo_url',
-    ];
+    protected $appends = ['profile_photo_url'];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -62,9 +31,7 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Get the roles that belong to the user.
-     */
+    // Roles / Permissions
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
@@ -75,6 +42,7 @@ class User extends Authenticatable
         return $this->hasMany(UserRole::class, 'assigned_by');
     }
 
+    // Domain relations
     public function content()
     {
         return $this->hasMany(Content::class, 'created_by');
@@ -90,9 +58,6 @@ class User extends Authenticatable
         return $this->hasMany(ContentRequest::class, 'requested_by');
     }
 
-    /**
-     * Check if the user has a specific role.
-     */
     public function hasRole($roleName)
     {
         return $this->roles()->where('role_name', $roleName)->exists();
@@ -118,34 +83,18 @@ class User extends Authenticatable
         return $this->member && $this->member->membership_status === 'active';
     }
 
-    // -------------------------------------------------------------------------
-
+    // Consultation (current schema)
     public function consultationHours()
     {
-        return $this->hasMany(\App\Models\ConsultationHour::class, 'user_id');
+        return $this->hasMany(ConsultationHour::class, 'user_id');
     }
 
-    public function consultationThreadsAsVolunteer()
+    // Unified user-to-user threads (query builder shortcut)
+    public function consultationThreads()
     {
-        return $this->hasMany(\App\Models\ConsultationThread::class, 'volunteer_id');
+        return ConsultationThread::where(function ($q) {
+            $q->where('user_one_id', $this->id)
+                ->orWhere('user_two_id', $this->id);
+        });
     }
-
-    public function consultationThreadsAsProfessional()
-    {
-        return $this->hasMany(\App\Models\ConsultationThread::class, 'professional_id');
-    }
-
-    public function consultationChats()
-    {
-        return $this->hasManyThrough(
-            \App\Models\ConsultationChat::class,
-            \App\Models\ConsultationThread::class,
-            'volunteer_id',   // FK on threads table for first key
-            'thread_id',      // FK on chats table
-            'id',             // Local user id
-            'id'              // Thread id
-        );
-    }
-
-
 }
