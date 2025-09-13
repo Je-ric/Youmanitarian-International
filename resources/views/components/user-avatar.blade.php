@@ -2,6 +2,7 @@
     'user' => null,
     'size' => '8',
     'showName' => false,
+    'bare' => false, // When true, render only the circle (for compact/chat use)
 ])
 
 @php
@@ -12,23 +13,19 @@
 
     if ($raw) {
         if (Str::startsWith($raw, 'https://lh3.googleusercontent.com')) {
-            // Google photo (highest priority)
+            // Google photo
             $profilePic = $raw;
         } elseif (Str::startsWith($raw, ['http://', 'https://'])) {
             // Any other absolute URL
             $profilePic = $raw;
         } elseif (Str::startsWith($raw, 'storage/')) {
-            // Already public path (e.g. storage/uploads/profile_photo/...)
             $profilePic = asset($raw);
         } elseif (Str::startsWith($raw, 'uploads/')) {
-            // Stored without leading storage/
             $profilePic = asset('storage/' . $raw);
         } elseif (Str::contains($raw, 'public/')) {
-            //  public/storage/uploads/...
             $relative = Str::after($raw, 'public/');
             $profilePic = asset($relative);
         } else {
-            // treat as relative inside storage
             $profilePic = asset('storage/' . ltrim($raw, '/'));
         }
     }
@@ -36,7 +33,7 @@
     $initial = $user?->name ? strtoupper(mb_substr($user->name, 0, 1)) : '?';
 
     $sizeMap = [
-        '6' => 'h-6 w-6 text-xs',
+        '6' => 'h-6 w-6 text-[10px]',
         '8' => 'h-8 w-8 text-sm',
         '10' => 'h-10 w-10 text-base',
         '12' => 'h-12 w-12 text-lg',
@@ -44,19 +41,30 @@
     $sizeClass = $sizeMap[$size] ?? $sizeMap['8'];
 @endphp
 
-<div class="flex items-center gap-2">
+@if($bare)
     @if ($profilePic)
-        <img src="{{ $profilePic }}" alt="{{ $user?->name ?? 'User' }}"
+        <img src="{{ $profilePic }}" alt="{{ $user?->name ?? $initial }}"
              class="{{ $sizeClass }} rounded-full object-cover">
     @else
         <div class="{{ $sizeClass }} bg-primary rounded-full flex items-center justify-center text-white">
             {{ $initial }}
         </div>
     @endif
+@else
+    <div class="flex items-center gap-2">
+        @if ($profilePic)
+            <img src="{{ $profilePic }}" alt="{{ $user?->name ?? $initial }}"
+                 class="{{ $sizeClass }} rounded-full object-cover">
+        @else
+            <div class="{{ $sizeClass }} bg-primary rounded-full flex items-center justify-center text-white">
+                {{ $initial }}
+            </div>
+        @endif
 
-    @if ($showName && $user?->name)
-        <span class="hidden lg:block text-sm font-medium max-w-24 truncate text-gray-700">
-            {{ $user->name }}
-        </span>
-    @endif
-</div>
+        @if ($showName && $user?->name)
+            <span class="hidden lg:block text-sm font-medium max-w-24 truncate text-gray-700">
+                {{ $user->name }}
+            </span>
+        @endif
+    </div>
+@endif

@@ -18,22 +18,22 @@ class ConsultationHourController extends Controller
         }
 
         return view('consultation.consultationHours',
-        compact('consultationHours',
-        'editingHour'));
+            compact('consultationHours', 'editingHour'));
     }
 
     public function store(Request $request)
     {
         $data = $this->validateData($request);
-
-        // always assign the auth user
         $data['user_id'] = Auth::id() ?? $request->input('user_id');
 
         ConsultationHour::create($data);
 
         return redirect()
             ->route('consultation-hours.index')
-            ->with('success', 'Consultation hour created.');
+            ->with('toast', [
+                'message' => 'Consultation hour created.',
+                'type' => 'success'
+            ]);
     }
 
     public function update(Request $request, ConsultationHour $consultationHour)
@@ -43,15 +43,16 @@ class ConsultationHourController extends Controller
         }
 
         $data = $this->validateData($request, updating: true);
-
-        // dont change id
         unset($data['user_id']);
 
         $consultationHour->update($data);
 
         return redirect()
             ->route('consultation-hours.index')
-            ->with('success', 'Consultation hour updated.');
+            ->with('toast', [
+                'message' => 'Consultation hour updated.',
+                'type' => 'success'
+            ]);
     }
 
     public function destroy(Request $request, ConsultationHour $consultationHour)
@@ -64,13 +65,15 @@ class ConsultationHourController extends Controller
 
         return redirect()
             ->route('consultation-hours.index')
-            ->with('success', 'Consultation hour deleted.');
+            ->with('toast', [
+                'message' => 'Consultation hour deleted.',
+                'type' => 'success'
+            ]);
     }
 
     private function validateData(Request $request, bool $updating = false): array
     {
         $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-        $statuses = ['active', 'inactive'];
 
         return $request->validate([
             'specialization' => ['required', 'string', 'max:255'],
