@@ -178,11 +178,6 @@
             <!-- Main Conversation Area -->
             <div class="flex-1 flex flex-col min-w-0">
                 @if (isset($thread))
-                    @php
-                        $me = Auth::id();
-                        $other = $thread->user_one_id === $me ? $thread->userTwo : $thread->userOne;
-                    @endphp
-
                     <!-- Header -->
                     <div class="px-4 py-3 bg-gradient-to-r from-[#1a2235] to-[#2a3447] text-white flex-shrink-0">
                         <div class="flex items-center justify-between">
@@ -209,41 +204,32 @@
 
                     <!-- Messages -->
                     <div id="consultationMessages" class="flex-1 px-4 py-4 bg-gray-50">
-                        @forelse($messages as $m)
-                            @php $mine = $m->sender_id === Auth::id(); @endphp
-                            <div class="chat {{ $mine ? 'chat-end' : 'chat-start' }}" data-message-id="{{ $m->id }}">
-                                <div class="flex flex-col {{ $mine ? 'items-end text-right' : '' }} mb-2">
-                                    <div class="chat-header flex items-center gap-1 {{ $mine ? 'justify-end' : '' }}">
-                                        {{ $m->sender->name }}
-                                        <time class="chat-time" datetime="{{ $m->sent_at?->toIso8601String() }}">
-                                            @php
-                                                $mt = \Carbon\Carbon::parse($m->sent_at);
-                                                if ($mt->isToday()) echo $mt->format('g:i A');
-                                                elseif ($mt->isYesterday()) echo 'Yesterday ' . $mt->format('g:i A');
-                                                else echo $mt->format('M j, Y g:i A');
-                                            @endphp
-                                        </time>
-                                        @if($mine)
+                        @forelse($messages as $msg)
+                            <div class="chat {{ $msg['is_mine'] ? 'chat-end' : 'chat-start' }}" data-message-id="{{ $msg['id'] }}">
+                                <div class="flex flex-col {{ $msg['is_mine'] ? 'items-end text-right' : '' }} mb-2">
+                                    <div class="chat-header flex items-center gap-1 {{ $msg['is_mine'] ? 'justify-end' : '' }}">
+                                        {{ $msg['sender_name'] }}
+                                        <time class="chat-time" datetime="{{ $msg['sent_iso'] }}">{{ $msg['time_label'] }}</time>
+                                        @if($msg['is_mine'])
                                             <button
                                                 class="ml-1 text-red-400 hover:text-red-600 transition chat-delete-btn"
-                                                data-delete-url="{{ route('consultation-chats.thread.message.destroy', [$thread, $m]) }}"
-                                                data-message-id="{{ $m->id }}"
+                                                data-delete-url="{{ $msg['delete_url'] }}"
+                                                data-message-id="{{ $msg['id'] }}"
                                                 title="Delete message">
                                                 <i class="bx bx-trash text-xs"></i>
                                             </button>
                                         @endif
                                     </div>
-                                    <div class="chat-bubble">{!! nl2br(e($m->message)) !!}</div>
+                                    <div class="chat-bubble">{!! nl2br(e($msg['message'])) !!}</div>
                                 </div>
                             </div>
 
                         @empty
-                            <div class="flex flex-col items-center justify-center h-full text-center py-12">
-                                <div class="w-16 h-16 bg-[#ffb51b]/10 rounded-full flex items-center justify-center mb-4">
-                                    <i class='bx bx-message-detail text-[#ffb51b] text-2xl'></i>
-                                </div>
-                                <h3 class="text-lg font-semibold text-gray-700 mb-2">No messages yet</h3>
-                                <p class="text-gray-500 mb-4">Start the conversation.</p>
+                            <div id="chatEmptyState">
+                                <x-empty-state
+                                    icon="bx bx-message-detail"
+                                    title="No messages yet"
+                                    description="Start the conversation." />
                             </div>
                         @endforelse
                         <div id="chatBottomSpacer"></div>
@@ -297,39 +283,20 @@
                     <div class="sidebar-scrollable">
                         @if ($threads->isNotEmpty())
                             @foreach ($threads as $t)
-                                @php
-                                    $me = Auth::id();
-                                    $other = $t->user_one_id === $me ? $t->userTwo : $t->userOne;
-                                    $last = $t->latestChat;
-                                    $lastTime = $last ? \Carbon\Carbon::parse($last->sent_at) : null;
-                                    $preview = $last?->message
-                                        ? \Illuminate\Support\Str::limit($last->message, 40)
-                                        : 'No messages yet.';
-                                    $timeLabel = '';
-                                    if ($lastTime) {
-                                        if ($lastTime->isToday()) {
-                                            $timeLabel = $lastTime->format('g:i A');
-                                        } elseif ($lastTime->isYesterday()) {
-                                            $timeLabel = 'Yesterday';
-                                        } else {
-                                            $timeLabel = $lastTime->format('M j');
-                                        }
-                                    }
-                                @endphp
-                                <a href="{{ route('consultation-chats.thread.show', $t) }}"
-                                    class="thread-item flex items-center gap-3 {{ isset($thread) && $thread->id === $t->id ? 'active' : '' }}">
+                                <a href="{{ route('consultation-chats.thread.show', $t['id']) }}"
+                                   class="thread-item flex items-center gap-3 {{ $t['is_active'] ? 'active' : '' }}">
                                     <div class="flex-shrink-0">
-                                        <x-user-avatar :user="$other" size="10" />
+                                        <x-user-avatar :user="$t['other']" size="10" />
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center justify-between">
                                             <h3 class="text-sm font-semibold text-[#1a2235] truncate">
-                                                {{ $other->name }}
+                                                {{ $t['other']->name }}
                                             </h3>
-                                            <span class="thread-time">{{ $timeLabel }}</span>
+                                            <span class="thread-time">{{ $t['time_label'] }}</span>
                                         </div>
                                         <div class="text-xs text-gray-500 mt-0.5 truncate">
-                                            {{ $preview }}
+                                            {{ $t['preview'] }}
                                         </div>
                                     </div>
                                 </a>
@@ -363,39 +330,20 @@
                     <div class="flex-1 overflow-y-auto">
                         @if ($threads->isNotEmpty())
                             @foreach ($threads as $t)
-                                @php
-                                    $me = Auth::id();
-                                    $other = $t->user_one_id === $me ? $t->userTwo : $t->userOne;
-                                    $last = $t->latestChat;
-                                    $lastTime = $last ? \Carbon\Carbon::parse($last->sent_at) : null;
-                                    $timeLabel = '';
-                                    if ($lastTime) {
-                                        if ($lastTime->isToday()) {
-                                            $timeLabel = $lastTime->format('g:i A');
-                                        } elseif ($lastTime->isYesterday()) {
-                                            $timeLabel = 'Yesterday';
-                                        } else {
-                                            $timeLabel = $lastTime->format('M j');
-                                        }
-                                    }
-                                    $preview = $last?->message
-                                        ? \Illuminate\Support\Str::limit($last->message, 40)
-                                        : 'No messages yet.';
-                                @endphp
-                                <a href="{{ route('consultation-chats.thread.show', $t) }}"
-                                    class="thread-item flex items-center gap-3 {{ isset($thread) && $thread->id === $t->id ? 'active' : '' }}">
+                                <a href="{{ route('consultation-chats.thread.show', $t['id']) }}"
+                                    class="thread-item flex items-center gap-3 {{ $t['is_active'] ? 'active' : '' }}">
                                     <div class="flex-shrink-0">
-                                        <x-user-avatar :user="$other" size="10" />
+                                        <x-user-avatar :user="$t['other']" size="10" />
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center justify-between">
                                             <h3 class="text-sm font-semibold text-[#1a2235] truncate">
-                                                {{ $other->name }}
+                                                {{ $t['other']->name }}
                                             </h3>
-                                            <span class="thread-time">{{ $timeLabel }}</span>
+                                            <span class="thread-time">{{ $t['time_label'] }}</span>
                                         </div>
                                         <div class="text-xs text-gray-500 mt-0.5 truncate">
-                                            {{ $preview }}
+                                            {{ $t['preview'] }}
                                         </div>
                                     </div>
                                 </a>
@@ -512,7 +460,12 @@
                     return escapeHtml(str).replace(/\n/g, '<br>');
                 }
 
+                function hideEmptyState(){
+                    $('#chatEmptyState').remove();
+                }
+
                 function appendMessage(chat) {
+                    hideEmptyState();
                     var isOwn = chat.sender_id == userId;
                     var html = buildMessageHtml(chat, isOwn);
                     $('#consultationMessages').append(html);
@@ -630,6 +583,7 @@
                     window.Echo.channel('consultation.thread.' + threadId)
                         .listen('ConsultationNewMessage', function(event){
                             if(event.chat && event.chat.sender_id != userId){
+                                hideEmptyState();
                                 appendMessage(event.chat);
                             }
                         })

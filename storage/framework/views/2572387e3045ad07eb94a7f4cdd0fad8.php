@@ -176,11 +176,6 @@
             <!-- Main Conversation Area -->
             <div class="flex-1 flex flex-col min-w-0">
                 <?php if(isset($thread)): ?>
-                    <?php
-                        $me = Auth::id();
-                        $other = $thread->user_one_id === $me ? $thread->userTwo : $thread->userOne;
-                    ?>
-
                     <!-- Header -->
                     <div class="px-4 py-3 bg-gradient-to-r from-[#1a2235] to-[#2a3447] text-white flex-shrink-0">
                         <div class="flex items-center justify-between">
@@ -246,42 +241,49 @@
 
                     <!-- Messages -->
                     <div id="consultationMessages" class="flex-1 px-4 py-4 bg-gray-50">
-                        <?php $__empty_1 = true; $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                            <?php $mine = $m->sender_id === Auth::id(); ?>
-                            <div class="chat <?php echo e($mine ? 'chat-end' : 'chat-start'); ?>" data-message-id="<?php echo e($m->id); ?>">
-                                <div class="flex flex-col <?php echo e($mine ? 'items-end text-right' : ''); ?> mb-2">
-                                    <div class="chat-header flex items-center gap-1 <?php echo e($mine ? 'justify-end' : ''); ?>">
-                                        <?php echo e($m->sender->name); ?>
+                        <?php $__empty_1 = true; $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $msg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                            <div class="chat <?php echo e($msg['is_mine'] ? 'chat-end' : 'chat-start'); ?>" data-message-id="<?php echo e($msg['id']); ?>">
+                                <div class="flex flex-col <?php echo e($msg['is_mine'] ? 'items-end text-right' : ''); ?> mb-2">
+                                    <div class="chat-header flex items-center gap-1 <?php echo e($msg['is_mine'] ? 'justify-end' : ''); ?>">
+                                        <?php echo e($msg['sender_name']); ?>
 
-                                        <time class="chat-time" datetime="<?php echo e($m->sent_at?->toIso8601String()); ?>">
-                                            <?php
-                                                $mt = \Carbon\Carbon::parse($m->sent_at);
-                                                if ($mt->isToday()) echo $mt->format('g:i A');
-                                                elseif ($mt->isYesterday()) echo 'Yesterday ' . $mt->format('g:i A');
-                                                else echo $mt->format('M j, Y g:i A');
-                                            ?>
-                                        </time>
-                                        <?php if($mine): ?>
+                                        <time class="chat-time" datetime="<?php echo e($msg['sent_iso']); ?>"><?php echo e($msg['time_label']); ?></time>
+                                        <?php if($msg['is_mine']): ?>
                                             <button
                                                 class="ml-1 text-red-400 hover:text-red-600 transition chat-delete-btn"
-                                                data-delete-url="<?php echo e(route('consultation-chats.thread.message.destroy', [$thread, $m])); ?>"
-                                                data-message-id="<?php echo e($m->id); ?>"
+                                                data-delete-url="<?php echo e($msg['delete_url']); ?>"
+                                                data-message-id="<?php echo e($msg['id']); ?>"
                                                 title="Delete message">
                                                 <i class="bx bx-trash text-xs"></i>
                                             </button>
                                         <?php endif; ?>
                                     </div>
-                                    <div class="chat-bubble"><?php echo nl2br(e($m->message)); ?></div>
+                                    <div class="chat-bubble"><?php echo nl2br(e($msg['message'])); ?></div>
                                 </div>
                             </div>
 
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                            <div class="flex flex-col items-center justify-center h-full text-center py-12">
-                                <div class="w-16 h-16 bg-[#ffb51b]/10 rounded-full flex items-center justify-center mb-4">
-                                    <i class='bx bx-message-detail text-[#ffb51b] text-2xl'></i>
-                                </div>
-                                <h3 class="text-lg font-semibold text-gray-700 mb-2">No messages yet</h3>
-                                <p class="text-gray-500 mb-4">Start the conversation.</p>
+                            <div id="chatEmptyState">
+                                <?php if (isset($component)) { $__componentOriginal074a021b9d42f490272b5eefda63257c = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal074a021b9d42f490272b5eefda63257c = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.empty-state','data' => ['icon' => 'bx bx-message-detail','title' => 'No messages yet','description' => 'Start the conversation.']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('empty-state'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'bx bx-message-detail','title' => 'No messages yet','description' => 'Start the conversation.']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal074a021b9d42f490272b5eefda63257c)): ?>
+<?php $attributes = $__attributesOriginal074a021b9d42f490272b5eefda63257c; ?>
+<?php unset($__attributesOriginal074a021b9d42f490272b5eefda63257c); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal074a021b9d42f490272b5eefda63257c)): ?>
+<?php $component = $__componentOriginal074a021b9d42f490272b5eefda63257c; ?>
+<?php unset($__componentOriginal074a021b9d42f490272b5eefda63257c); ?>
+<?php endif; ?>
                             </div>
                         <?php endif; ?>
                         <div id="chatBottomSpacer"></div>
@@ -335,38 +337,19 @@
                     <div class="sidebar-scrollable">
                         <?php if($threads->isNotEmpty()): ?>
                             <?php $__currentLoopData = $threads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php
-                                    $me = Auth::id();
-                                    $other = $t->user_one_id === $me ? $t->userTwo : $t->userOne;
-                                    $last = $t->latestChat;
-                                    $lastTime = $last ? \Carbon\Carbon::parse($last->sent_at) : null;
-                                    $preview = $last?->message
-                                        ? \Illuminate\Support\Str::limit($last->message, 40)
-                                        : 'No messages yet.';
-                                    $timeLabel = '';
-                                    if ($lastTime) {
-                                        if ($lastTime->isToday()) {
-                                            $timeLabel = $lastTime->format('g:i A');
-                                        } elseif ($lastTime->isYesterday()) {
-                                            $timeLabel = 'Yesterday';
-                                        } else {
-                                            $timeLabel = $lastTime->format('M j');
-                                        }
-                                    }
-                                ?>
-                                <a href="<?php echo e(route('consultation-chats.thread.show', $t)); ?>"
-                                    class="thread-item flex items-center gap-3 <?php echo e(isset($thread) && $thread->id === $t->id ? 'active' : ''); ?>">
+                                <a href="<?php echo e(route('consultation-chats.thread.show', $t['id'])); ?>"
+                                   class="thread-item flex items-center gap-3 <?php echo e($t['is_active'] ? 'active' : ''); ?>">
                                     <div class="flex-shrink-0">
                                         <?php if (isset($component)) { $__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.user-avatar','data' => ['user' => $other,'size' => '10']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.user-avatar','data' => ['user' => $t['other'],'size' => '10']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('user-avatar'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['user' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($other),'size' => '10']); ?>
+<?php $component->withAttributes(['user' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($t['other']),'size' => '10']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e)): ?>
@@ -381,13 +364,13 @@
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center justify-between">
                                             <h3 class="text-sm font-semibold text-[#1a2235] truncate">
-                                                <?php echo e($other->name); ?>
+                                                <?php echo e($t['other']->name); ?>
 
                                             </h3>
-                                            <span class="thread-time"><?php echo e($timeLabel); ?></span>
+                                            <span class="thread-time"><?php echo e($t['time_label']); ?></span>
                                         </div>
                                         <div class="text-xs text-gray-500 mt-0.5 truncate">
-                                            <?php echo e($preview); ?>
+                                            <?php echo e($t['preview']); ?>
 
                                         </div>
                                     </div>
@@ -422,38 +405,19 @@
                     <div class="flex-1 overflow-y-auto">
                         <?php if($threads->isNotEmpty()): ?>
                             <?php $__currentLoopData = $threads; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $t): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php
-                                    $me = Auth::id();
-                                    $other = $t->user_one_id === $me ? $t->userTwo : $t->userOne;
-                                    $last = $t->latestChat;
-                                    $lastTime = $last ? \Carbon\Carbon::parse($last->sent_at) : null;
-                                    $timeLabel = '';
-                                    if ($lastTime) {
-                                        if ($lastTime->isToday()) {
-                                            $timeLabel = $lastTime->format('g:i A');
-                                        } elseif ($lastTime->isYesterday()) {
-                                            $timeLabel = 'Yesterday';
-                                        } else {
-                                            $timeLabel = $lastTime->format('M j');
-                                        }
-                                    }
-                                    $preview = $last?->message
-                                        ? \Illuminate\Support\Str::limit($last->message, 40)
-                                        : 'No messages yet.';
-                                ?>
-                                <a href="<?php echo e(route('consultation-chats.thread.show', $t)); ?>"
-                                    class="thread-item flex items-center gap-3 <?php echo e(isset($thread) && $thread->id === $t->id ? 'active' : ''); ?>">
+                                <a href="<?php echo e(route('consultation-chats.thread.show', $t['id'])); ?>"
+                                    class="thread-item flex items-center gap-3 <?php echo e($t['is_active'] ? 'active' : ''); ?>">
                                     <div class="flex-shrink-0">
                                         <?php if (isset($component)) { $__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.user-avatar','data' => ['user' => $other,'size' => '10']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.user-avatar','data' => ['user' => $t['other'],'size' => '10']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('user-avatar'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['user' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($other),'size' => '10']); ?>
+<?php $component->withAttributes(['user' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($t['other']),'size' => '10']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e)): ?>
@@ -468,13 +432,13 @@
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center justify-between">
                                             <h3 class="text-sm font-semibold text-[#1a2235] truncate">
-                                                <?php echo e($other->name); ?>
+                                                <?php echo e($t['other']->name); ?>
 
                                             </h3>
-                                            <span class="thread-time"><?php echo e($timeLabel); ?></span>
+                                            <span class="thread-time"><?php echo e($t['time_label']); ?></span>
                                         </div>
                                         <div class="text-xs text-gray-500 mt-0.5 truncate">
-                                            <?php echo e($preview); ?>
+                                            <?php echo e($t['preview']); ?>
 
                                         </div>
                                     </div>
@@ -592,7 +556,12 @@
                     return escapeHtml(str).replace(/\n/g, '<br>');
                 }
 
+                function hideEmptyState(){
+                    $('#chatEmptyState').remove();
+                }
+
                 function appendMessage(chat) {
+                    hideEmptyState();
                     var isOwn = chat.sender_id == userId;
                     var html = buildMessageHtml(chat, isOwn);
                     $('#consultationMessages').append(html);
@@ -710,6 +679,7 @@
                     window.Echo.channel('consultation.thread.' + threadId)
                         .listen('ConsultationNewMessage', function(event){
                             if(event.chat && event.chat.sender_id != userId){
+                                hideEmptyState();
                                 appendMessage(event.chat);
                             }
                         })

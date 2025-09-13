@@ -7,31 +7,51 @@ use App\Models\ConsultationChat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class ConsultationChatsController extends Controller
 {
-    // List only (no active thread)
     public function index()
     {
-        $threads = $this->loadUserThreads(Auth::id());
-        $thread = null;
+        $userId   = Auth::id();
+        $threads  = $this->prepareThreads($userId);
+        $thread   = null;
         $messages = collect();
+        $other    = null;
 
-        return view('consultation.consultationChats', compact('threads', 'thread', 'messages'));
+        return view('consultation.consultationChats', compact('threads','thread','messages','other'));
     }
 
-    // Show a specific thread (sidebar + selected conversation)
     public function show(ConsultationThread $thread)
     {
         $this->authorizeThread($thread);
 
-        $threads  = $this->loadUserThreads(Auth::id());
-        $messages = $thread->chats()
+        $userId  = Auth::id();
+        $threads = $this->prepareThreads($userId, $thread->id);
+        $other   = $thread->user_one_id === $userId ? $thread->userTwo : $thread->userOne;
+
+        $rawMessages = $thread->chats()
             ->with('sender:id,name,profile_pic')
             ->orderBy('sent_at')
             ->get();
 
-        return view('consultation.consultationChats', compact('threads', 'thread', 'messages'));
+        $messages = $rawMessages->map(function($m) use ($userId, $thread) {
+            $sentAt = Carbon::parse($m->sent_at);
+            return [
+                'id'          => $m->id,
+                'thread_id'   => $thread->id,
+                'sender_id'   => $m->sender_id,
+                'sender_name' => $m->sender->name,
+                'message'     => $m->message,
+                'is_mine'     => $m->sender_id === $userId,
+                'time_label'  => $this->formatMessageTime($sentAt),
+                'sent_iso'    => $sentAt->toIso8601String(),
+                'delete_url'  => route('consultation-chats.thread.message.destroy', [$thread, $m]),
+            ];
+        });
+
+        return view('consultation.consultationChats', compact('threads','thread','messages','other'));
     }
 
     // Start (or reuse) a thread between two users (role‑agnostic now)
@@ -139,14 +159,10 @@ class ConsultationChatsController extends Controller
 
     // Helper
 
-    private function loadUserThreads(int $userId)
+    private function prepareThreads(int $userId, ?int $activeId = null)
     {
         return ConsultationThread::forUser($userId)
-            ->with([
-                'userOne:id,name,profile_pic',
-                'userTwo:id,name,profile_pic',
-                'latestChat.sender:id,name',
-            ])
+            ->with(['userOne:id,name,profile_pic','userTwo:id,name,profile_pic','latestChat.sender:id,name'])
             ->withCount('chats')
             ->orderByDesc(
                 ConsultationChat::select('sent_at')
@@ -154,7 +170,35 @@ class ConsultationChatsController extends Controller
                     ->latest()
                     ->limit(1)
             )
-            ->get();
+            ->get()
+            ->map(function($t) use ($userId, $activeId) {
+                $other    = $t->user_one_id === $userId ? $t->userTwo : $t->userOne;
+                $last     = $t->latestChat;
+                $lastTime = $last ? Carbon::parse($last->sent_at) : null;
+                $timeLabel = '';
+                if ($lastTime) {
+                    if ($lastTime->isToday())       $timeLabel = $lastTime->format('g:i A');
+                    elseif ($lastTime->isYesterday()) $timeLabel = 'Yesterday';
+                    else                               $timeLabel = $lastTime->format('M j');
+                }
+                $preview = $last?->message
+                    ? Str::limit($last->message, 40)
+                    : 'No messages yet.';
+                return [
+                    'id'         => $t->id,
+                    'other'      => $other,
+                    'preview'    => $preview,
+                    'time_label' => $timeLabel,
+                    'is_active'  => $activeId === $t->id,
+                ];
+            });
+    }
+
+    private function formatMessageTime(Carbon $dt): string
+    {
+        if ($dt->isToday()) return $dt->format('g:i A');
+        if ($dt->isYesterday()) return 'Yesterday '.$dt->format('g:i A');
+        return $dt->format('M j, Y g:i A');
     }
 
     private function authorizeThread(ConsultationThread $thread): void
