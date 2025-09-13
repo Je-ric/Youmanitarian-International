@@ -122,22 +122,29 @@ class User extends Authenticatable
 
     public function consultationHours()
     {
-        // return $this->hasMany(ConsultationHour::class, 'user_id');
-        return $this->hasMany(ConsultationHour::class);
+        return $this->hasMany(\App\Models\ConsultationHour::class, 'user_id');
     }
+
     public function consultationThreadsAsVolunteer()
     {
-        return $this->hasMany(ConsultationThread::class, 'volunteer_id');
+        return $this->hasMany(\App\Models\ConsultationThread::class, 'volunteer_id');
     }
 
     public function consultationThreadsAsProfessional()
     {
-        return $this->hasMany(ConsultationThread::class, 'professional_id');
+        return $this->hasMany(\App\Models\ConsultationThread::class, 'professional_id');
     }
 
     public function consultationChats()
     {
-        return $this->hasMany(ConsultationChat::class, 'sender_id');
+        return $this->hasManyThrough(
+            \App\Models\ConsultationChat::class,
+            \App\Models\ConsultationThread::class,
+            'volunteer_id',   // FK on threads table for first key
+            'thread_id',      // FK on chats table
+            'id',             // Local user id
+            'id'              // Thread id
+        );
     }
 
 

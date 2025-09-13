@@ -31,6 +31,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use App\Http\Controllers\ContentReviewCommentController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ConsultationHourController;
+use App\Http\Controllers\ConsultationChatsController;
 
 // =================================================================
 // WEBSITE ROUTES (Public - No Authentication Required)
@@ -224,6 +225,23 @@ Route::middleware(['auth', 'role:Volunteer'])->group(function () {
         ]);
 
 });
+
+// --- Consultation 1-on-1 Chat Routes (CLEANED) ---
+Route::middleware('auth')->group(function () {
+    Route::get('/consultation-chats', [ConsultationChatsController::class, 'index'])
+        ->name('consultation-chats.index');
+
+    Route::get('/consultation-chats/threads/{thread}', [ConsultationChatsController::class, 'index'])
+        ->name('consultation-chats.thread.show');
+
+    Route::post('/consultation-chats/threads/{thread}/messages', [ConsultationChatsController::class, 'storeMessage'])
+        ->name('consultation-chats.thread.message.store');
+
+    // Optional: start new thread with a user
+    Route::get('/consultation-chats/start/{user}', [ConsultationChatsController::class, 'startWithUser'])
+        ->name('consultation-chats.start');
+});
+
 
 // =================================================================
 // FINANCIAL COORDINATOR (Done - Working Role-Based)

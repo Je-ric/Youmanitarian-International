@@ -17,7 +17,8 @@ class ConsultationHourController extends Controller
             $editingHour = ConsultationHour::findOrFail($request->input('edit'));
         }
 
-        return view('consultation.index', compact('consultationHours',
+        return view('consultation.consultationHours',
+        compact('consultationHours',
         'editingHour'));
     }
 
