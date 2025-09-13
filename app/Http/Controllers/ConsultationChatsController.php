@@ -38,45 +38,29 @@ class ConsultationChatsController extends Controller
     public function startWithUser(User $user)
     {
         $currentId = Auth::id();
-
         if ($currentId === $user->id) {
             return redirect()
                 ->route('consultation-chats.index')
-                ->with('toast', [
-                    'message' => 'Cannot start a chat with yourself.',
-                    'type' => 'info'
-                ]);
+                ->with('toast', ['message' => 'Cannot chat with yourself.', 'type' => 'info']);
         }
 
-        [$one, $two] = $currentId < $user->id
-            ? [$currentId, $user->id]
-            : [$user->id, $currentId];
+        $thread = ConsultationThread::betweenUsers($currentId, $user->id)->first();
 
-        // Extra guard lang, baka mabutasan
-        if ($one === $two) {
-            return redirect()
-                ->route('consultation-chats.index')
-                ->with('toast', [
-                    'message' => 'Invalid thread participants.',
-                    'type' => 'error'
-                ]);
+        if (!$thread) {
+            [$one,$two] = $currentId < $user->id ? [$currentId,$user->id] : [$user->id,$currentId];
+            $thread = ConsultationThread::create([
+                'user_one_id' => $one,
+                'user_two_id' => $two,
+                'status'      => 'active'
+            ]);
+            $toast = ['message' => 'Conversation started.', 'type' => 'success'];
+        } else {
+            $toast = ['message' => 'Conversation opened.', 'type' => 'success'];
         }
-
-        $thread = ConsultationThread::firstOrCreate(
-            ['user_one_id' => $one, 'user_two_id' => $two],
-            ['status' => 'active']
-        );
-
-        $msg = $thread->wasRecentlyCreated
-            ? 'New conversation started.'
-            : 'Conversation loaded.';
 
         return redirect()
             ->route('consultation-chats.thread.show', $thread)
-            ->with('toast', [
-                'message' => $msg,
-                'type' => 'success'
-            ]);
+            ->with('toast', $toast);
     }
 
     // Send message

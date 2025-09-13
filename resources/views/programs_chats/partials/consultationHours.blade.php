@@ -1,12 +1,15 @@
 @if($hours->isNotEmpty())
     <ul class="space-y-2">
         @foreach($hours as $h)
+            @php
+                $hourUserId = $h->user_id ?? ($h->user->id ?? null);
+                $isSelf = $hourUserId === Auth::id();
+            @endphp
             <li>
-                <a href="{{ route('consultation-chats.thread.show', $h) }}"
-                   class="group p-2 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-between hover:bg-white hover:shadow-sm transition">
+                <a href="{{ !$isSelf ? route('consultation-chats.thread.start', $hourUserId) : 'javascript:void(0)' }}" class="group p-2 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-between hover:bg-white hover:shadow-sm transition {{ $isSelf ? 'opacity-60 cursor-not-allowed' : '' }}">
                     <div>
                         <p class="font-medium text-gray-800 text-xs group-hover:text-[#1a2235]">
-                            {{ $h->specialization ?? '' }}
+                            {{ $h->specialization ?? 'Consultation Hour' }}
                         </p>
                         <p class="text-[11px] text-gray-500">
                             {{ $h->day ?? '' }}

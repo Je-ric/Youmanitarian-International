@@ -12,15 +12,8 @@ class ConsultationThread extends Model
         'status',
     ];
 
-    public function userOne()
-    {
-        return $this->belongsTo(User::class, 'user_one_id');
-    }
-
-    public function userTwo()
-    {
-        return $this->belongsTo(User::class, 'user_two_id');
-    }
+    public function userOne() { return $this->belongsTo(User::class, 'user_one_id'); }
+    public function userTwo() { return $this->belongsTo(User::class, 'user_two_id'); }
 
     public function chats()
     {
@@ -32,10 +25,20 @@ class ConsultationThread extends Model
         return $this->hasOne(ConsultationChat::class, 'thread_id')->latestOfMany('sent_at');
     }
 
-    public function scopeForUser($q, $userId)
+    public function scopeBetweenUsers($q, int $a, int $b)
     {
-        $q->where('user_one_id', $userId)
-          ->orWhere('user_two_id', $userId);
+        return $q->where(function($qq) use ($a,$b){
+            $qq->where('user_one_id',$a)->where('user_two_id',$b);
+        })->orWhere(function($qq) use ($a,$b){
+            $qq->where('user_one_id',$b)->where('user_two_id',$a);
+        });
+    }
+
+    public function scopeForUser($q, int $userId)
+    {
+        return $q->where(function($qq) use ($userId){
+            $qq->where('user_one_id',$userId)->orWhere('user_two_id',$userId);
+        });
     }
 
     public static function between($a, $b)

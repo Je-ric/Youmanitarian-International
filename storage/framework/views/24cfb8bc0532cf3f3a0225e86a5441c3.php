@@ -1,12 +1,15 @@
 <?php if($hours->isNotEmpty()): ?>
     <ul class="space-y-2">
         <?php $__currentLoopData = $hours; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $h): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php
+                $hourUserId = $h->user_id ?? ($h->user->id ?? null);
+                $isSelf = $hourUserId === Auth::id();
+            ?>
             <li>
-                <a href="<?php echo e(route('consultation-chats.thread.show', $h)); ?>"
-                   class="group p-2 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-between hover:bg-white hover:shadow-sm transition">
+                <a href="<?php echo e(!$isSelf ? route('consultation-chats.thread.start', $hourUserId) : 'javascript:void(0)'); ?>" class="group p-2 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-between hover:bg-white hover:shadow-sm transition <?php echo e($isSelf ? 'opacity-60 cursor-not-allowed' : ''); ?>">
                     <div>
                         <p class="font-medium text-gray-800 text-xs group-hover:text-[#1a2235]">
-                            <?php echo e($h->specialization ?? ''); ?>
+                            <?php echo e($h->specialization ?? 'Consultation Hour'); ?>
 
                         </p>
                         <p class="text-[11px] text-gray-500">

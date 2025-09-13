@@ -242,8 +242,9 @@ Route::middleware('auth')->group(function () {
         [ConsultationChatsController::class, 'destroyMessage']
     )->name('consultation-chats.thread.message.destroy');
 
-    Route::get('/consultation-chats/start/{user}', [ConsultationChatsController::class, 'startWithUser'])
-        ->name('consultation-chats.start');              // ad‑hoc start (fallback)
+    Route::get('/consultation-chats/start/{user}',
+        [ConsultationChatsController::class, 'startWithUser']
+    )->name('consultation-chats.thread.start');              // ad‑hoc start (fallback)
 });
 
 
