@@ -141,7 +141,7 @@
                 max-width: 85%;
             }
 
-            #consultationMessages { padding-bottom: 120px; } 
+            #consultationMessages { padding-bottom: 120px; }
             /*  para hindi puma-ilalim yung chats sa input */
         }
 
@@ -240,28 +240,6 @@
 <?php $component = $__componentOriginale67687e3e4e61f963b25a6bcf3983629; ?>
 <?php unset($__componentOriginale67687e3e4e61f963b25a6bcf3983629); ?>
 <?php endif; ?>
-                                <?php if (isset($component)) { $__componentOriginale67687e3e4e61f963b25a6bcf3983629 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginale67687e3e4e61f963b25a6bcf3983629 = $attributes; } ?>
-<?php $component = App\View\Components\Button::resolve(['variant' => 'glass-button'] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('button'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\App\View\Components\Button::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => ''.e(route('consultation-chats.index')).'']); ?>
-                                    <i class='bx bx-list-ul mr-1 text-sm'></i>
-                                    <span class="hidden sm:inline text-sm">Threads</span>
-                                 <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginale67687e3e4e61f963b25a6bcf3983629)): ?>
-<?php $attributes = $__attributesOriginale67687e3e4e61f963b25a6bcf3983629; ?>
-<?php unset($__attributesOriginale67687e3e4e61f963b25a6bcf3983629); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginale67687e3e4e61f963b25a6bcf3983629)): ?>
-<?php $component = $__componentOriginale67687e3e4e61f963b25a6bcf3983629; ?>
-<?php unset($__componentOriginale67687e3e4e61f963b25a6bcf3983629); ?>
-<?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -306,7 +284,7 @@
                                 <p class="text-gray-500 mb-4">Start the conversation.</p>
                             </div>
                         <?php endif; ?>
-                        
+                        <div id="chatBottomSpacer"></div>
                     </div>
 
 
@@ -528,9 +506,11 @@
                 var storeUrl = threadId
                     ? "<?php echo e(isset($thread) ? route('consultation-chats.thread.message.store', $thread) : ''); ?>"
                     : null;
-                var deleteRouteTemplate = threadId
-                    ? "<?php echo e(route('consultation-chats.thread.message.destroy', [$thread, '__ID__'])); ?>"
-                    : null;
+                var deleteRouteTemplate = null;
+                <?php if(isset($thread)): ?>
+                        // Template with placeholder to replace in JS
+                        deleteRouteTemplate = "<?php echo e(url('consultation-chats/threads/'.$thread->id.'/messages/__CHAT_ID__')); ?>";
+                <?php endif; ?>
                 var csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
                 function log(msg) {
@@ -582,7 +562,7 @@
                     var deleteBtn = '';
 
                     if(isOwn && deleteRouteTemplate){
-                        var deleteUrl = deleteRouteTemplate.replace('__ID__', chat.id);
+                        var deleteUrl = deleteRouteTemplate.replace('__CHAT_ID__', chat.id);
                         deleteBtn =
                             '<button class="ml-1 text-red-400 hover:text-red-600 transition chat-delete-btn" ' +
                             'data-delete-url="'+deleteUrl+'" data-message-id="'+chat.id+'" title="Delete message">' +
