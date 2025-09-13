@@ -6,7 +6,6 @@ $__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames(([
     'defaultTab' => null,
     'preserveState' => true,
     'class' => '',
-    'mxAuto' => true,
 ]));
 
 foreach ($attributes->all() as $__key => $__value) {
@@ -27,7 +26,6 @@ foreach (array_filter(([
     'defaultTab' => null,
     'preserveState' => true,
     'class' => '',
-    'mxAuto' => true,
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 }
@@ -56,7 +54,7 @@ unset($__defined_vars); ?>
             window.history.pushState({}, '', url);
         <?php endif; ?>
     }
-}" class="<?php echo e($class); ?> <?php echo e($mxAuto ? 'mx-auto' : ''); ?>">
+}" class="<?php echo e($class); ?>">
 
     <div class="border-b border-gray-200">
         <nav class="flex flex-wrap px-2 sm:px-4 gap-x-2 md:gap-x-4" aria-label="Tabs">

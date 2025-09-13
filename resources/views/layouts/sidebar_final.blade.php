@@ -355,18 +355,7 @@
                         <a href="{{ route('profile.me') }}"
                             class="flex items-center space-x-2 p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200"
                             title="My Profile">
-                            @if(Auth::user()->profile_pic)
-                                <img src="{{ Auth::user()->profile_pic }}" alt="Profile"
-                                    class="h-8 w-8 rounded-full object-cover">
-                            @else
-                                <div
-                                    class="h-8 w-8 bg-primary rounded-full flex items-center justify-center text-white text-sm">
-                                    {{ substr(Auth::user()->name, 0, 1) }}
-                                </div>
-                            @endif
-                            <span class="hidden lg:block text-sm font-medium max-w-24 truncate text-gray-700">
-                                {{ Auth::user()->name }}
-                            </span>
+                            <x-user-avatar :user="Auth::user()" size="8" :showName="true" />
                         </a>
                     </div>
                 </div>

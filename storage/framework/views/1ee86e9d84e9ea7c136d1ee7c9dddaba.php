@@ -368,20 +368,26 @@
                         <a href="<?php echo e(route('profile.me')); ?>"
                             class="flex items-center space-x-2 p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200"
                             title="My Profile">
-                            <?php if(Auth::user()->profile_pic): ?>
-                                <img src="<?php echo e(Auth::user()->profile_pic); ?>" alt="Profile"
-                                    class="h-8 w-8 rounded-full object-cover">
-                            <?php else: ?>
-                                <div
-                                    class="h-8 w-8 bg-primary rounded-full flex items-center justify-center text-white text-sm">
-                                    <?php echo e(substr(Auth::user()->name, 0, 1)); ?>
-
-                                </div>
-                            <?php endif; ?>
-                            <span class="hidden lg:block text-sm font-medium max-w-24 truncate text-gray-700">
-                                <?php echo e(Auth::user()->name); ?>
-
-                            </span>
+                            <?php if (isset($component)) { $__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.user-avatar','data' => ['user' => Auth::user(),'size' => '8','showName' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('user-avatar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['user' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(Auth::user()),'size' => '8','showName' => true]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e)): ?>
+<?php $attributes = $__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e; ?>
+<?php unset($__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e)): ?>
+<?php $component = $__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e; ?>
+<?php unset($__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e); ?>
+<?php endif; ?>
                         </a>
                     </div>
                 </div>
