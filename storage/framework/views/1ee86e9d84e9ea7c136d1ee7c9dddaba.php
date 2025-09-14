@@ -52,10 +52,17 @@
 <?php unset($__componentOriginalba514aae05f9b3538fc06d4d11058e0d); ?>
 <?php endif; ?>
 
+    <!-- Left Sidebar Overlay -->
     <div id="sidebarOverlay"
-        class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden transition-opacity duration-300"
-        aria-hidden="true"></div>
+         class="fixed inset-0 top-16 bg-black bg-opacity-50 z-40 lg:hidden hidden transition-opacity duration-300"
+         aria-hidden="true"></div>
 
+    <!-- Right Sidebar Overlay for mobile navbar content -->
+    <div id="rightSidebarOverlay"
+         class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden transition-opacity duration-300"
+         aria-hidden="true"></div>
+
+    <!-- Left Sidebar -->
     <aside id="sidebar"
         class="fixed top-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out transform -translate-x-full lg:translate-x-0 bg-sidebar-bg border-r border-gray-200 shadow-lg sidebar-expanded"
         aria-label="Sidebar">
@@ -143,9 +150,6 @@
                     </ul>
                 </div>
                 <?php endif; ?>
-
-                
-                
 
                 
                 <div class="mb-4">
@@ -289,8 +293,97 @@
         </div>
     </aside>
 
+    <!-- Right Sidebar for mobile navbar content -->
+    <aside id="rightSidebar"
+        class="fixed top-0 right-0 z-50 h-screen w-80 transition-all duration-300 ease-in-out transform translate-x-full lg:hidden bg-white border-l border-gray-200 shadow-lg"
+        aria-label="Right Sidebar">
+        <div class="h-full overflow-y-auto">
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900">Menu</h2>
+                    <button id="rightSidebarClose"
+                        class="p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-4 space-y-4">
+                <!-- User Profile Section -->
+                <div class="pb-4 border-b border-gray-200">
+                    <a href="<?php echo e(route('profile.me')); ?>"
+                        class="flex items-center space-x-3 p-3 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
+                        <?php if (isset($component)) { $__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.user-avatar','data' => ['user' => Auth::user(),'size' => '10']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('user-avatar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['user' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(Auth::user()),'size' => '10']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e)): ?>
+<?php $attributes = $__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e; ?>
+<?php unset($__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e)): ?>
+<?php $component = $__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e; ?>
+<?php unset($__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e); ?>
+<?php endif; ?>
+                        <div>
+                            <div class="font-medium text-gray-900"><?php echo e(Auth::user()->name); ?></div>
+                            <div class="text-sm text-gray-500">View Profile</div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="space-y-2">
+                    <a href="<?php echo e(route('website.index')); ?>"
+                        class="flex items-center space-x-3 p-3 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
+                        <i class="fas fa-globe w-5 text-center"></i>
+                        <span>Website</span>
+                    </a>
+
+                    <a href="<?php echo e(route('consultation-chats.index')); ?>"
+                        class="flex items-center space-x-3 p-3 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
+                        <i class="fas fa-comments w-5 text-center"></i>
+                        <span>Consultation Chats</span>
+                    </a>
+
+                    <a href="<?php echo e(route('consultation-hours.index')); ?>"
+                        class="flex items-center space-x-3 p-3 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
+                        <i class="fas fa-clock w-5 text-center"></i>
+                        <span>Consultation Hours</span>
+                    </a>
+                </div>
+
+                <!-- Notifications -->
+                <div class="pt-4 border-t border-gray-200">
+                    <a href="<?php echo e(route('notifications.index')); ?>"
+                        class="flex items-center justify-between p-3 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-bell w-5 text-center"></i>
+                            <span>Notifications</span>
+                        </div>
+                        <?php if(Auth::check() && Auth::user()->unreadNotifications->count() > 0): ?>
+                            <span class="h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                                <?php echo e(Auth::user()->unreadNotifications->count()); ?>
+
+                            </span>
+                        <?php endif; ?>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Top Navbar -->
     <nav id="navbar"
-        class="bg-white border-b border-gray-200 fixed top-0 right-0 z-40 transition-all duration-300 ease-in-out overflow-x-hidden">
+         class="bg-white border-b border-gray-200 fixed top-0 left-0 w-full z-60 transition-all duration-300 ease-in-out overflow-x-hidden">
         <div class="navbar-container w-full mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out">
             <div class="flex justify-between items-center h-16 w-full">
                 <div class="flex items-center space-x-4">
@@ -310,8 +403,9 @@
                             </svg>
                         </button>
 
-                        <div class="flex items-center space-x-4">
-                            <div class="hidden lg:block relative">
+                        <!-- Desktop-only search and navigation -->
+                        <div class="hidden lg:flex items-center space-x-4">
+                            <div class="relative">
                                 <?php if (isset($component)) { $__componentOriginal894294112bf23c4166443c90d4833959 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal894294112bf23c4166443c90d4833959 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.form.search-input','data' => ['name' => 'search','placeholder' => 'Search...','class' => 'w-64']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -335,40 +429,38 @@
                             </div>
 
                             <a href="<?php echo e(route('website.index')); ?>"
-                                class="hidden lg:block text-gray-600 hover:text-primary transition-all duration-200 text-sm">Website</a>
+                                class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Website</a>
                             <a href="<?php echo e(route('weather-forecast.index')); ?>"
-                                class="hidden lg:block text-gray-600 hover:text-primary transition-all duration-200 text-sm">Weather</a>
+                                class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Weather</a>
                             <a href="<?php echo e(route('consultation-hours.index')); ?>"
-                                class="hidden lg:block text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation Hours</a>
+                                class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation Hours</a>
                             <a href="<?php echo e(route('consultation-chats.index')); ?>"
-                                class="hidden lg:block text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation Chats</a>
+                                class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation Chats</a>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-3 flex-wrap max-w-full">
-                    <button
-                        class="sm:hidden p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
-                        <i class="fas fa-search text-lg"></i>
-                    </button>
+                <!-- Desktop navbar items and mobile menu button -->
+                <div class="flex items-center space-x-3">
+                    <!-- Desktop items -->
+                    <div class="hidden lg:flex items-center space-x-3">
+                        <a href="<?php echo e(route('notifications.index')); ?>"
+                            class="p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200 relative">
+                            <i class="fas fa-bell text-lg"></i>
+                            <?php if(Auth::check() && Auth::user()->unreadNotifications->count() > 0): ?>
+                                <span
+                                    class="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                                    <?php echo e(Auth::user()->unreadNotifications->count()); ?>
 
-                    <a href="<?php echo e(route('notifications.index')); ?>"
-                        class="p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200 relative">
-                        <i class="fas fa-bell text-lg"></i>
-                        <?php if(Auth::check() && Auth::user()->unreadNotifications->count() > 0): ?>
-                            <span
-                                class="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                                <?php echo e(Auth::user()->unreadNotifications->count()); ?>
+                                </span>
+                            <?php endif; ?>
+                        </a>
 
-                            </span>
-                        <?php endif; ?>
-                    </a>
-
-                    <div class="relative">
-                        <a href="<?php echo e(route('profile.me')); ?>"
-                            class="flex items-center space-x-2 p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200"
-                            title="My Profile">
-                            <?php if (isset($component)) { $__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e = $component; } ?>
+                        <div class="relative">
+                            <a href="<?php echo e(route('profile.me')); ?>"
+                                class="flex items-center space-x-2 p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200"
+                                title="My Profile">
+                                <?php if (isset($component)) { $__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.user-avatar','data' => ['user' => Auth::user(),'size' => '8','showName' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('user-avatar'); ?>
@@ -388,8 +480,16 @@
 <?php $component = $__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e; ?>
 <?php unset($__componentOriginalaa6ddd3b8ee0acee5a2d1d7ac5c7e40e); ?>
 <?php endif; ?>
-                        </a>
+                            </a>
+                        </div>
                     </div>
+
+                    <!-- Mobile menu button -->
+                    <button id="rightSidebarToggle"
+                        class="lg:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-primary hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary transition-all duration-200"
+                        aria-label="Toggle menu">
+                        <i class="fas fa-bars text-lg"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -397,7 +497,6 @@
 
     <div id="mainContent" class="main-content pt-16">
         <?php echo $__env->make('layouts.partials.breadcrumb', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-        
 
         <?php if(session('toast')): ?>
             <?php if (isset($component)) { $__componentOriginal4369abbb857f0aa87adb9fbdd60d2750 = $component; } ?>
@@ -431,6 +530,267 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-...sha..." crossorigin="anonymous"></script>
     <?php echo $__env->yieldPushContent('scripts'); ?>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.getElementById('sidebar');
+            const rightSidebar = document.getElementById('rightSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const rightOverlay = document.getElementById('rightSidebarOverlay');
+            const toggleBtn = document.getElementById('sidebarToggle');
+            const rightToggleBtn = document.getElementById('rightSidebarToggle');
+            const rightCloseBtn = document.getElementById('rightSidebarClose');
+            const hamburger = document.getElementById('hamburgerIcon');
+            const closeIcon = document.getElementById('closeIcon');
+
+            function openSidebar(){
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                requestAnimationFrame(()=>overlay.classList.remove('opacity-0'));
+                hamburger.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            }
+            function closeSidebar(){
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(()=>overlay.classList.add('hidden'),150);
+                closeIcon.classList.add('hidden');
+                hamburger.classList.remove('hidden');
+            }
+
+            function openRightSidebar(){
+                rightSidebar.classList.remove('translate-x-full');
+                rightOverlay.classList.remove('hidden');
+                requestAnimationFrame(()=>rightOverlay.classList.remove('opacity-0'));
+                document.body.style.overflow = 'hidden';
+            }
+            function closeRightSidebar(){
+                rightSidebar.classList.add('translate-x-full');
+                rightOverlay.classList.add('opacity-0');
+                setTimeout(()=>rightOverlay.classList.add('hidden'),150);
+                document.body.style.overflow = '';
+            }
+
+            if(toggleBtn){
+                toggleBtn.addEventListener('click', ()=>{
+                    if(sidebar.classList.contains('-translate-x-full')) openSidebar();
+                    else closeSidebar();
+                });
+            }
+            if(rightToggleBtn){
+                rightToggleBtn.addEventListener('click', openRightSidebar);
+            }
+            if(rightCloseBtn){
+                rightCloseBtn.addEventListener('click', closeRightSidebar);
+            }
+            if(overlay){
+                overlay.addEventListener('click', closeSidebar);
+            }
+            if(rightOverlay){
+                rightOverlay.addEventListener('click', closeRightSidebar);
+            }
+
+            // Close right sidebar on escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !rightSidebar.classList.contains('translate-x-full')) {
+                    closeRightSidebar();
+                }
+            });
+
+            // Ensure navbar always visible height space for main content
+            const main = document.getElementById('mainContent');
+            if(main && !main.dataset.navAdjusted){
+                main.style.paddingTop = '4rem';
+                main.dataset.navAdjusted = '1';
+            }
+        });
+
+        class SidebarManager {
+            constructor() {
+                this.sidebar = document.getElementById('sidebar');
+                this.rightSidebar = document.getElementById('rightSidebar');
+                this.navbar = document.getElementById('navbar');
+                this.mainContent = document.getElementById('mainContent');
+                this.overlay = document.getElementById('sidebarOverlay');
+                this.rightOverlay = document.getElementById('rightSidebarOverlay');
+                this.sidebarToggle = document.getElementById('sidebarToggle');
+                this.rightSidebarToggle = document.getElementById('rightSidebarToggle');
+                this.rightSidebarClose = document.getElementById('rightSidebarClose');
+                this.hamburgerIcon = document.getElementById('hamburgerIcon');
+                this.closeIcon = document.getElementById('closeIcon');
+                this.tooltip = document.getElementById('tooltip');
+
+                this.isOpen = false;
+                this.isRightOpen = false;
+                this.isCollapsed = false;
+                this.isDesktop = window.innerWidth >= 1024;
+
+                this.handleResize();
+                this.updateLayout();
+                this.init();
+            }
+
+            init() {
+                this.sidebarToggle.addEventListener('click', () => this.handleToggle());
+                if(this.rightSidebarToggle) {
+                    this.rightSidebarToggle.addEventListener('click', () => this.openRightMobile());
+                }
+                if(this.rightSidebarClose) {
+                    this.rightSidebarClose.addEventListener('click', () => this.closeRightMobile());
+                }
+                this.overlay.addEventListener('click', () => this.closeMobile());
+                if(this.rightOverlay) {
+                    this.rightOverlay.addEventListener('click', () => this.closeRightMobile());
+                }
+                window.addEventListener('resize', () => this.handleResize());
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        if (this.isOpen && !this.isDesktop) {
+                            this.closeMobile();
+                        }
+                        if (this.isRightOpen && !this.isDesktop) {
+                            this.closeRightMobile();
+                        }
+                    }
+                });
+
+                this.initTooltips();
+            }
+
+            handleToggle() {
+                if (this.isDesktop) {
+                    this.isCollapsed = !this.isCollapsed;
+                    this.updateSidebarState();
+                    this.updateLayout();
+                } else {
+                    this.toggleMobile();
+                }
+            }
+
+            updateSidebarState() {
+                if (this.isCollapsed) {
+                    this.sidebar.classList.remove('sidebar-expanded');
+                    this.sidebar.classList.add('sidebar-collapsed');
+                } else {
+                    this.sidebar.classList.remove('sidebar-collapsed');
+                    this.sidebar.classList.add('sidebar-expanded');
+                }
+            }
+
+            updateLayout() {
+                if (!this.isDesktop) return;
+
+                if (this.isCollapsed) {
+                    this.navbar.classList.add('navbar-collapsed');
+                    this.mainContent.classList.add('content-collapsed');
+                } else {
+                    this.navbar.classList.remove('navbar-collapsed');
+                    this.mainContent.classList.remove('content-collapsed');
+                }
+            }
+
+            handleResize() {
+                const wasDesktop = this.isDesktop;
+                this.isDesktop = window.innerWidth >= 1024;
+
+                if (this.isDesktop && !wasDesktop) {
+                    this.closeMobile();
+                    this.closeRightMobile();
+                    this.sidebar.classList.remove('-translate-x-full');
+                    this.sidebar.classList.add('translate-x-0');
+                    this.isOpen = true;
+                    this.updateLayout();
+                } else if (!this.isDesktop && wasDesktop) {
+                    this.sidebar.classList.add('-translate-x-full');
+                    this.sidebar.classList.remove('translate-x-0');
+                    this.isOpen = false;
+                    this.isCollapsed = false;
+                    this.updateSidebarState();
+                    this.navbar.classList.remove('navbar-expanded', 'navbar-collapsed');
+                    this.mainContent.classList.remove('content-expanded', 'content-collapsed');
+                }
+            }
+
+            toggleMobile() {
+                if (this.isOpen) {
+                    this.closeMobile();
+                } else {
+                    this.openMobile();
+                }
+            }
+
+            openMobile() {
+                this.isOpen = true;
+                this.sidebar.classList.remove('-translate-x-full');
+                this.sidebar.classList.add('translate-x-0');
+                this.overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                this.hamburgerIcon.classList.add('hidden');
+                this.closeIcon.classList.remove('hidden');
+                this.sidebarToggle.setAttribute('aria-expanded', 'true');
+            }
+
+            closeMobile() {
+                this.isOpen = false;
+                this.sidebar.classList.add('-translate-x-full');
+                this.sidebar.classList.remove('translate-x-0');
+                this.overlay.classList.add('hidden');
+                this.hamburgerIcon.classList.remove('hidden');
+                this.closeIcon.classList.add('hidden');
+                this.sidebarToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+
+            openRightMobile() {
+                this.isRightOpen = true;
+                this.rightSidebar.classList.remove('translate-x-full');
+                this.rightOverlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            closeRightMobile() {
+                this.isRightOpen = false;
+                this.rightSidebar.classList.add('translate-x-full');
+                this.rightOverlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+
+            initTooltips() {
+                const sidebarItems = document.querySelectorAll('.sidebar-item[data-tooltip]');
+
+                sidebarItems.forEach(item => {
+                    item.addEventListener('mouseenter', (e) => {
+                        if (this.isCollapsed && this.isDesktop) {
+                            this.showTooltip(e.target.closest('.sidebar-item'), e.target.closest('.sidebar-item').getAttribute('data-tooltip'));
+                        }
+                    });
+
+                    item.addEventListener('mouseleave', () => {
+                        this.hideTooltip();
+                    });
+                });
+            }
+
+            showTooltip(element, text) {
+                const rect = element.getBoundingClientRect();
+                this.tooltip.textContent = text;
+                this.tooltip.style.left = rect.right + 10 + 'px';
+                this.tooltip.style.top = rect.top + (rect.height / 2) - (this.tooltip.offsetHeight / 2) + 'px';
+                this.tooltip.classList.remove('opacity-0');
+                this.tooltip.classList.add('opacity-100');
+            }
+
+            hideTooltip() {
+                this.tooltip.classList.remove('opacity-100');
+                this.tooltip.classList.add('opacity-0');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new SidebarManager();
+        });
+    </script>
 </body>
 
 </html>
