@@ -112,7 +112,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications/list', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
-    Route::get('/notifications/{notification}/payment-reminder', [NotificationController::class, 'showPaymentReminder'])->name('notifications.show_payment_reminder');
+    Route::get('/notifications/{notification}/payment-reminder', [NotificationController::class, 'showPaymentReminder'])
+        ->name('notifications.show_payment_reminder');
+
+    // ADD THIS (invitation show route)
+    Route::get('/notifications/invitation/{notification}', [NotificationController::class, 'showInvitation'])
+        ->name('notifications.invitation.show');
 
     // Content reactions
     Route::post('/content/{contentId}/react', [HeartReactController::class, 'toggleReact']);

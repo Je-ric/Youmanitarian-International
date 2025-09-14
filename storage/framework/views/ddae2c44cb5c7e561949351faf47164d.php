@@ -1,6 +1,4 @@
-@extends('layouts.sidebar_final')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
     <!-- Header Section -->
@@ -14,70 +12,74 @@
                     <h1 class="text-2xl font-bold text-[#1a2235] tracking-tight">Notifications</h1>
                     <p class="text-gray-600 mt-1 flex items-center gap-2">
                         <span>Stay updated with your latest activities</span>
-                        @if(Auth::user()->unreadNotifications->count() > 0)
+                        <?php if(Auth::user()->unreadNotifications->count() > 0): ?>
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#ffb51b] text-[#1a2235]">
-                                {{ Auth::user()->unreadNotifications->count() }} new
+                                <?php echo e(Auth::user()->unreadNotifications->count()); ?> new
                             </span>
-                        @endif
+                        <?php endif; ?>
                     </p>
                 </div>
             </div>
 
             <div class="flex items-center gap-3">
-                @if(Auth::user()->unreadNotifications->isNotEmpty())
-                    <form action="{{ route('notifications.readAll') }}" method="POST">
-                        @csrf
+                <?php if(Auth::user()->unreadNotifications->isNotEmpty()): ?>
+                    <form action="<?php echo e(route('notifications.readAll')); ?>" method="POST">
+                        <?php echo csrf_field(); ?>
                         <button type="submit" class="inline-flex items-center px-4 py-2 border border-[#1a2235] text-[#1a2235] bg-white rounded-lg hover:bg-[#1a2235] hover:text-white transition-all duration-200 text-sm font-medium">
                             <i class='bx bx-check-double mr-2'></i>
                             Mark all as read
                         </button>
                     </form>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
     </header>
 
     <!-- Pinned Invitations Section -->
-    @if(isset($invitationNotifications) && $invitationNotifications->isNotEmpty())
+    <?php if(isset($invitationNotifications) && $invitationNotifications->isNotEmpty()): ?>
         <div class="mb-8 bg-white rounded-xl border border-amber-300 shadow-sm overflow-hidden">
             <div class="px-6 py-4 flex items-center justify-between bg-gradient-to-r from-amber-50 to-white border-b border-amber-200">
                 <h2 class="text-sm font-semibold text-amber-800 flex items-center gap-2">
                     <i class='bx bx-pin text-amber-600'></i>
                     Pinned Invitations
                     <span class="px-2 py-0.5 text-xs rounded-full bg-amber-100 text-amber-700">
-                        {{ $invitationNotifications->count() }}
+                        <?php echo e($invitationNotifications->count()); ?>
+
                     </span>
                 </h2>
             </div>
-            @foreach($invitationNotifications as $notification)
-                @php
+            <?php $__currentLoopData = $invitationNotifications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $notification): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php
                     $isUnread = is_null($notification->read_at);
                     $iconConfig = ['bx-mail-send','bg-cyan-100','text-cyan-700'];
                     $actionUrl = route('notifications.invitation.show', $notification->id);
-                @endphp
-                <a href="{{ $actionUrl }}"
-                   class="relative block border-b border-amber-100 last:border-b-0 hover:bg-amber-50/40 transition-all {{ $isUnread ? 'bg-gradient-to-r from-amber-100/30 to-transparent' : '' }}">
-                    @if($isUnread)
+                ?>
+                <a href="<?php echo e($actionUrl); ?>"
+                   class="relative block border-b border-amber-100 last:border-b-0 hover:bg-amber-50/40 transition-all <?php echo e($isUnread ? 'bg-gradient-to-r from-amber-100/30 to-transparent' : ''); ?>">
+                    <?php if($isUnread): ?>
                         <div class="absolute left-0 top-0 bottom-0 w-1 bg-amber-400"></div>
-                    @endif
+                    <?php endif; ?>
                     <div class="p-5 flex items-start gap-4">
-                        <div class="flex-shrink-0 w-12 h-12 {{ $iconConfig[1] }} rounded-xl flex items-center justify-center">
-                            <i class='bx {{ $iconConfig[0] }} {{ $iconConfig[2] }} text-xl'></i>
+                        <div class="flex-shrink-0 w-12 h-12 <?php echo e($iconConfig[1]); ?> rounded-xl flex items-center justify-center">
+                            <i class='bx <?php echo e($iconConfig[0]); ?> <?php echo e($iconConfig[2]); ?> text-xl'></i>
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-start justify-between gap-4">
                                 <h3 class="font-semibold text-gray-900 text-sm leading-tight">
-                                    {{ $notification->data['title'] ?? 'Member Invitation' }}
-                                    @if($isUnread)
+                                    <?php echo e($notification->data['title'] ?? 'Member Invitation'); ?>
+
+                                    <?php if($isUnread): ?>
                                         <span class="inline-block w-2 h-2 bg-amber-500 rounded-full ml-2"></span>
-                                    @endif
+                                    <?php endif; ?>
                                 </h3>
                                 <div class="text-xs text-gray-500 font-medium">
-                                    {{ $notification->created_at->diffForHumans() }}
+                                    <?php echo e($notification->created_at->diffForHumans()); ?>
+
                                 </div>
                             </div>
                             <div class="text-gray-600 text-sm mt-1">
-                                {!! $notification->data['message'] ?? 'You have a pending membership invitation.' !!}
+                                <?php echo $notification->data['message'] ?? 'You have a pending membership invitation.'; ?>
+
                             </div>
                             <div class="mt-3 flex items-center justify-between">
                                 <span class="inline-flex items-center text-amber-700 text-xs font-medium group-hover:text-amber-800 transition">
@@ -91,14 +93,14 @@
                         </div>
                     </div>
                 </a>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Notifications Container -->
     <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        @forelse ($notifications as $notification)
-            @php
+        <?php $__empty_1 = true; $__currentLoopData = $notifications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $notification): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <?php
                 $isUnread = is_null($notification->read_at);
                 $notificationType = $notification->data['type'] ?? 'general';
                 $iconConfig = match($notificationType) {
@@ -134,35 +136,38 @@
                 } elseif (!empty($notification->data['action_url'])) {
                     $actionUrl = $notification->data['action_url'];
                 }
-            @endphp
-            <div class="relative border-b border-gray-100 last:border-b-0 transition-all duration-200 hover:bg-gray-50 {{ $isUnread ? 'bg-gradient-to-r from-[#ffb51b]/5 to-transparent' : '' }}">
-                @if($isUnread)
+            ?>
+            <div class="relative border-b border-gray-100 last:border-b-0 transition-all duration-200 hover:bg-gray-50 <?php echo e($isUnread ? 'bg-gradient-to-r from-[#ffb51b]/5 to-transparent' : ''); ?>">
+                <?php if($isUnread): ?>
                     <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#ffb51b] to-[#ff9500]"></div>
-                @endif
-                <form action="{{ route('notifications.read', $notification->id) }}" method="POST" class="w-full">
-                    @csrf
+                <?php endif; ?>
+                <form action="<?php echo e(route('notifications.read', $notification->id)); ?>" method="POST" class="w-full">
+                    <?php echo csrf_field(); ?>
                     <button type="submit" class="w-full text-left p-0 group focus:outline-none focus:bg-gray-50">
-                        <a href="{{ $actionUrl }}" class="block p-6 w-full h-full no-underline text-inherit">
+                        <a href="<?php echo e($actionUrl); ?>" class="block p-6 w-full h-full no-underline text-inherit">
                             <div class="flex items-start gap-4">
-                                <div class="flex-shrink-0 w-12 h-12 {{ $iconConfig[1] }} rounded-xl flex items-center justify-center">
-                                    <i class='bx {{ $iconConfig[0] }} {{ $iconConfig[2] }} text-xl'></i>
+                                <div class="flex-shrink-0 w-12 h-12 <?php echo e($iconConfig[1]); ?> rounded-xl flex items-center justify-center">
+                                    <i class='bx <?php echo e($iconConfig[0]); ?> <?php echo e($iconConfig[2]); ?> text-xl'></i>
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-start justify-between gap-4">
-                                        <h3 class="font-semibold text-gray-900 text-base leading-tight {{ $isUnread ? 'text-[#1a2235]' : '' }}">
-                                            {{ $notification->data['title'] ?? 'Notification' }}
-                                            @if($isUnread)
+                                        <h3 class="font-semibold text-gray-900 text-base leading-tight <?php echo e($isUnread ? 'text-[#1a2235]' : ''); ?>">
+                                            <?php echo e($notification->data['title'] ?? 'Notification'); ?>
+
+                                            <?php if($isUnread): ?>
                                                 <span class="inline-block w-2 h-2 bg-[#ffb51b] rounded-full ml-2"></span>
-                                            @endif
+                                            <?php endif; ?>
                                         </h3>
                                         <div class="flex-shrink-0 text-right">
                                             <div class="text-xs text-gray-500 font-medium">
-                                                {{ $notification->created_at->diffForHumans() }}
+                                                <?php echo e($notification->created_at->diffForHumans()); ?>
+
                                             </div>
                                         </div>
                                     </div>
                                     <div class="text-gray-600 text-sm mt-2 leading-relaxed">
-                                        {!! $notification->data['message'] ?? 'You have a new notification.' !!}
+                                        <?php echo $notification->data['message'] ?? 'You have a new notification.'; ?>
+
                                     </div>
                                     <div class="mt-4 flex items-center justify-between">
                                         <div class="flex items-center gap-4">
@@ -170,25 +175,25 @@
                                                 View details
                                                 <i class='bx bx-right-arrow-alt ml-1'></i>
                                             </span>
-                                            @if(isset($notification->data['priority']) && $notification->data['priority'] === 'high')
+                                            <?php if(isset($notification->data['priority']) && $notification->data['priority'] === 'high'): ?>
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                                                     <i class='bx bx-error-circle mr-1'></i>
                                                     High Priority
                                                 </span>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                         <div>
-                                            @if($isUnread)
+                                            <?php if($isUnread): ?>
                                                 <div class="flex items-center text-xs text-blue-600 font-medium">
                                                     <i class='bx bx-mouse mr-1'></i>
                                                     Click to mark as read
                                                 </div>
-                                            @else
+                                            <?php else: ?>
                                                 <div class="flex items-center text-xs text-gray-400">
                                                     <i class='bx bx-check mr-1'></i>
                                                     Read
                                                 </div>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -197,7 +202,7 @@
                     </button>
                 </form>
             </div>
-        @empty
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <!-- Empty State -->
             <div class="p-16 text-center">
                 <div class="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
@@ -208,22 +213,23 @@
                     You don't have any notifications right now. We'll let you know when something important happens.
                 </p>
             </div>
-        @endforelse
+        <?php endif; ?>
     </div>
 
     <!-- Pagination -->
-    @if($notifications->hasPages())
+    <?php if($notifications->hasPages()): ?>
         <div class="mt-8 bg-white rounded-lg border border-gray-200 p-4">
             <div class="flex items-center justify-between">
                 <div class="text-sm text-gray-600">
-                    Showing {{ $notifications->firstItem() }} to {{ $notifications->lastItem() }} of {{ $notifications->total() }} notifications
+                    Showing <?php echo e($notifications->firstItem()); ?> to <?php echo e($notifications->lastItem()); ?> of <?php echo e($notifications->total()); ?> notifications
                 </div>
                 <div class="flex items-center gap-2">
-                    {{ $notifications->links('pagination::tailwind') }}
+                    <?php echo e($notifications->links('pagination::tailwind')); ?>
+
                 </div>
             </div>
         </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Quick Stats -->
     <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -233,7 +239,7 @@
                     <i class='bx bx-bell text-[#ffb51b] text-lg'></i>
                 </div>
                 <div>
-                    <div class="text-2xl font-bold text-[#1a2235]">{{ Auth::user()->unreadNotifications->count() }}</div>
+                    <div class="text-2xl font-bold text-[#1a2235]"><?php echo e(Auth::user()->unreadNotifications->count()); ?></div>
                     <div class="text-sm text-gray-600">Unread</div>
                 </div>
             </div>
@@ -245,7 +251,7 @@
                     <i class='bx bx-check text-green-600 text-lg'></i>
                 </div>
                 <div>
-                    <div class="text-2xl font-bold text-[#1a2235]">{{ Auth::user()->readNotifications->count() }}</div>
+                    <div class="text-2xl font-bold text-[#1a2235]"><?php echo e(Auth::user()->readNotifications->count()); ?></div>
                     <div class="text-sm text-gray-600">Read</div>
                 </div>
             </div>
@@ -257,7 +263,7 @@
                     <i class='bx bx-time text-blue-600 text-lg'></i>
                 </div>
                 <div>
-                    <div class="text-2xl font-bold text-[#1a2235]">{{ Auth::user()->notifications->where('created_at', '>=', now()->subDay())->count() }}</div>
+                    <div class="text-2xl font-bold text-[#1a2235]"><?php echo e(Auth::user()->notifications->where('created_at', '>=', now()->subDay())->count()); ?></div>
                     <div class="text-sm text-gray-600">Today</div>
                 </div>
             </div>
@@ -265,4 +271,6 @@
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.sidebar_final', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Janice\youmanitarian-international\resources\views/notifications/index.blade.php ENDPATH**/ ?>
