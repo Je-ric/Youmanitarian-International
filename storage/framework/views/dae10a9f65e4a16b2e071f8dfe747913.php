@@ -1,8 +1,4 @@
-{{-- filepath: resources/views/website/programs.blade.php --}}
-
-@extends('layouts.navbar')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <section class="relative w-full min-h-screen bg-gray-200 flex flex-col lg:flex-row">
         <div class="relative z-10 flex flex-col justify-center gap-6 px-6 md:px-12 lg:px-24 py-16 lg:py-20 lg:w-1/2">
             <p class="text-base md:text-lg lg:text-xl font-normal text-[#1A2235] tracking-wide uppercase">
@@ -35,17 +31,17 @@
         <div class="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
 
             <div>
-                <div class="text-3xl md:text-4xl font-bold text-white">{{ $volunteersCount }}</div>
+                <div class="text-3xl md:text-4xl font-bold text-white"><?php echo e($volunteersCount); ?></div>
                 <div class="text-md md:text-l font-medium text-white">Volunteers</div>
             </div>
 
             <div>
-                <div class="text-3xl md:text-4xl font-bold text-white">{{ $membersCount }}</div>
+                <div class="text-3xl md:text-4xl font-bold text-white"><?php echo e($membersCount); ?></div>
                 <div class="text-md md:text-l font-medium text-white">Members</div>
             </div>
 
             <div>
-                <div class="text-3xl md:text-4xl font-bold text-white">{{ $programsCount }}</div>
+                <div class="text-3xl md:text-4xl font-bold text-white"><?php echo e($programsCount); ?></div>
                 <div class="text-md md:text-l font-medium text-white">Programs</div>
             </div>
 
@@ -230,19 +226,19 @@
                     Ongoing Programs
                 </h2>
                 <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
-                    {{ count($ongoingPrograms) }} Events Scheduled
+                    <?php echo e(count($ongoingPrograms)); ?> Events Scheduled
                 </div>
             </div>
 
-            @forelse ($ongoingPrograms as $program)
-                <h3 class="text-xl font-bold text-[#1a2235] mb-3 line-clamp-2">{{ $program->title }}</h3>
-            @empty
+            <?php $__empty_1 = true; $__currentLoopData = $ongoingPrograms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $program): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <h3 class="text-xl font-bold text-[#1a2235] mb-3 line-clamp-2"><?php echo e($program->title); ?></h3>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <div class="col-span-full text-center py-16">
                     <i class='bx bx-calendar-x text-6xl text-gray-300 mb-4'></i>
                     <p class="text-xl text-gray-500">No upcoming programs scheduled</p>
                     <p class="text-gray-400 mt-2">Check back soon for new events!</p>
                 </div>
-            @endforelse
+            <?php endif; ?>
 
             <!-- Calendar-like grid layout for upcoming programs -->
             <div class="mb-16">
@@ -252,53 +248,56 @@
                         Upcoming Programs
                     </h2>
                     <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
-                        {{ count($incomingPrograms) }} Events Scheduled
+                        <?php echo e(count($incomingPrograms)); ?> Events Scheduled
                     </div>
                 </div>
 
                 <!-- Responsive grid layout that looks more calendar-like -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @forelse($incomingPrograms as $program)
+                    <?php $__empty_1 = true; $__currentLoopData = $incomingPrograms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $program): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <div
                             class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                             <!-- Image with hover effect -->
                             <div class="relative overflow-hidden h-48">
-                                <img src="{{ $program->image_url ?? 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' }}"
-                                    alt="{{ $program->title }}"
+                                <img src="<?php echo e($program->image_url ?? 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'); ?>"
+                                    alt="<?php echo e($program->title); ?>"
                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <div
                                     class="absolute top-4 right-4 bg-[#FFB51B] text-[#1a2235] px-3 py-1 rounded-full text-sm font-semibold">
-                                    {{ \Carbon\Carbon::parse($program->date)->format('M d') }}
+                                    <?php echo e(\Carbon\Carbon::parse($program->date)->format('M d')); ?>
+
                                 </div>
                             </div>
 
                             <!-- Better organized content with consistent spacing -->
                             <div class="p-6">
-                                <h3 class="text-xl font-bold text-[#1a2235] mb-3 line-clamp-2">{{ $program->title }}</h3>
+                                <h3 class="text-xl font-bold text-[#1a2235] mb-3 line-clamp-2"><?php echo e($program->title); ?></h3>
 
                                 <!-- Time and location info with icons -->
                                 <div class="space-y-2 mb-4">
                                     <div class="flex items-center gap-2 text-gray-600 text-sm">
                                         <i class='bx bx-time text-[#FFB51B]'></i>
-                                        <span>{{ \Carbon\Carbon::parse($program->start_time)->format('g:i A') }}
-                                            @if ($program->end_time)
-                                                - {{ \Carbon\Carbon::parse($program->end_time)->format('g:i A') }}
-                                            @endif
+                                        <span><?php echo e(\Carbon\Carbon::parse($program->start_time)->format('g:i A')); ?>
+
+                                            <?php if($program->end_time): ?>
+                                                - <?php echo e(\Carbon\Carbon::parse($program->end_time)->format('g:i A')); ?>
+
+                                            <?php endif; ?>
                                         </span>
                                     </div>
                                     <div class="flex items-center gap-2 text-gray-600 text-sm">
                                         <i class='bx bx-map text-[#FFB51B]'></i>
-                                        <span>{{ $program->location }}</span>
+                                        <span><?php echo e($program->location); ?></span>
                                     </div>
                                 </div>
 
-                                <p class="text-gray-700 text-sm mb-6 line-clamp-3">{{ $program->description }}</p>
+                                <p class="text-gray-700 text-sm mb-6 line-clamp-3"><?php echo e($program->description); ?></p>
 
                                 <!-- Action buttons for upcoming programs -->
                                 <div class="flex gap-3">
                                     <button type="button"
                                         class="flex-1 px-4 py-2 bg-[#1a2235] text-white rounded-lg hover:bg-[#232b47] transition-colors duration-200 flex items-center justify-center gap-2 text-sm font-medium"
-                                        onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
+                                        onclick="document.getElementById('modal_<?php echo e($program->id); ?>').showModal()">
                                         <i class='bx bx-show'></i> View Details
                                     </button>
                                     <button
@@ -308,14 +307,14 @@
                                 </div>
                             </div>
                         </div>
-                        @include('programs.modals.program-modal', ['program' => $program])
-                    @empty
+                        <?php echo $__env->make('programs.modals.program-modal', ['program' => $program], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <div class="col-span-full text-center py-16">
                             <i class='bx bx-calendar-x text-6xl text-gray-300 mb-4'></i>
                             <p class="text-xl text-gray-500">No upcoming programs scheduled</p>
                             <p class="text-gray-400 mt-2">Check back soon for new events!</p>
                         </div>
-                    @endforelse
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -327,20 +326,20 @@
                         Recently Completed Programs
                     </h2>
                     <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
-                        {{ count($donePrograms) }} Programs Completed
+                        <?php echo e(count($donePrograms)); ?> Programs Completed
                     </div>
                 </div>
 
                 <!-- Grid layout for completed programs with feedback focus -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    @forelse($donePrograms as $program)
+                    <?php $__empty_1 = true; $__currentLoopData = $donePrograms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $program): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <div
                             class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                             <div class="flex flex-col sm:flex-row">
                                 <!-- Image section with completed badge -->
                                 <div class="relative sm:w-1/3 h-48 sm:h-auto overflow-hidden">
-                                    <img src="{{ $program->image_url ?? 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' }}"
-                                        alt="{{ $program->title }}"
+                                    <img src="<?php echo e($program->image_url ?? 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'); ?>"
+                                        alt="<?php echo e($program->title); ?>"
                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                     <div
                                         class="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
@@ -350,48 +349,48 @@
 
                                 <!-- Content section with feedback emphasis -->
                                 <div class="flex-1 p-6">
-                                    <h3 class="text-lg font-bold text-[#1a2235] mb-2">{{ $program->title }}</h3>
+                                    <h3 class="text-lg font-bold text-[#1a2235] mb-2"><?php echo e($program->title); ?></h3>
 
                                     <div class="flex items-center gap-2 text-gray-500 text-sm mb-3">
                                         <i class='bx bx-calendar'></i>
-                                        <span>{{ \Carbon\Carbon::parse($program->date)->format('F d, Y') }}</span>
+                                        <span><?php echo e(\Carbon\Carbon::parse($program->date)->format('F d, Y')); ?></span>
                                     </div>
 
-                                    <p class="text-gray-700 text-sm mb-4 line-clamp-2">{{ $program->description }}</p>
+                                    <p class="text-gray-700 text-sm mb-4 line-clamp-2"><?php echo e($program->description); ?></p>
 
                                     <!-- Feedback-focused action buttons -->
                                     <div class="space-y-3">
                                         <button type="button"
                                             class="w-full px-4 py-3 bg-[#FFB51B] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors duration-200 flex items-center justify-center gap-2 font-semibold"
-                                            onclick="document.getElementById('guestFeedbackModal_{{ $program->id }}').showModal()">
+                                            onclick="document.getElementById('guestFeedbackModal_<?php echo e($program->id); ?>').showModal()">
                                             <i class='bx bx-message-dots'></i> Share Your Feedback
                                         </button>
                                         <button type="button"
                                             class="w-full px-4 py-2 border border-[#1a2235] text-[#1a2235] rounded-lg hover:bg-[#1a2235] hover:text-white transition-colors duration-200 flex items-center justify-center gap-2 text-sm"
-                                            onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
+                                            onclick="document.getElementById('modal_<?php echo e($program->id); ?>').showModal()">
                                             <i class='bx bx-show'></i> View Program Details
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @include('programs.modals.program-modal', ['program' => $program])
-                        @include('website.modals.guestFeedbackModal', ['program' => $program])
-                    @empty
+                        <?php echo $__env->make('programs.modals.program-modal', ['program' => $program], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                        <?php echo $__env->make('website.modals.guestFeedbackModal', ['program' => $program], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <div class="col-span-full text-center py-16">
                             <i class='bx bx-history text-6xl text-gray-300 mb-4'></i>
                             <p class="text-xl text-gray-500">No completed programs yet</p>
                             <p class="text-gray-400 mt-2">Completed programs will appear here</p>
                         </div>
-                    @endforelse
+                    <?php endif; ?>
                 </div>
             </div>
 
             <div class="container">
     <h1 class="mb-4">Submit Program Request</h1>
 
-    <form action="{{ route('program_requests.store') }}" method="POST">
-        @csrf
+    <form action="<?php echo e(route('program_requests.store')); ?>" method="POST">
+        <?php echo csrf_field(); ?>
         <div class="mb-3">
             <label>Name</label>
             <input type="text" name="name" class="form-control" required>
@@ -428,4 +427,6 @@
 
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Janice\youmanitarian-international\resources\views/website/programs.blade.php ENDPATH**/ ?>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\MembershipPayment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -13,25 +14,25 @@ use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\HeartReactController;
-use App\Http\Controllers\MembershipController;
 // use App\Http\Controllers\ContentViewController;
+use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ProgramChatController;
+// use App\Http\Controllers\ContentRequestController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProgramTasksController;
 use App\Http\Controllers\ContentCommentController;
-// use App\Http\Controllers\ContentRequestController;
-use App\Http\Controllers\ProgramFeedbackController;
-use App\Http\Controllers\ProgramVolunteerController;
-use App\Http\Controllers\VolunteerApprovalController;
-use App\Http\Controllers\VolunteerAttendanceController;
-use App\Http\Controllers\VolunteerApplicationController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\MembershipReminderController;
-use App\Models\MembershipPayment;
 use Illuminate\Notifications\DatabaseNotification;
-use App\Http\Controllers\ContentReviewCommentController;
-use App\Http\Controllers\TeamMemberController;
+use App\Http\Controllers\ProgramFeedbackController;
+use App\Http\Controllers\ProgramRequestsController;
 use App\Http\Controllers\ConsultationHourController;
+use App\Http\Controllers\ProgramVolunteerController;
 use App\Http\Controllers\ConsultationChatsController;
+use App\Http\Controllers\VolunteerApprovalController;
+use App\Http\Controllers\MembershipReminderController;
+use App\Http\Controllers\VolunteerAttendanceController;
+use App\Http\Controllers\ContentReviewCommentController;
+use App\Http\Controllers\VolunteerApplicationController;
 
 // =================================================================
 // WEBSITE ROUTES (Public - No Authentication Required)
@@ -56,6 +57,16 @@ Route::post('/donations', [DonationController::class, 'store'])
     ->name('website.donations.store')
     ->withoutMiddleware(['auth', 'verified']);
 
+    
+Route::post('/programs', [ProgramRequestsController::class, 'store'])
+    ->name('program_requests.store');
+    
+Route::get('/program_requests', [ProgramRequestsController::class, 'index'])
+    ->name('program_requests.index');
+Route::delete('program_requests/{programRequest}', [ProgramRequestsController::class, 'destroy'])
+    ->name('program_requests.destroy');
+Route::get('program_requests', [ProgramRequestsController::class, 'index'])
+    ->name('program_requests.index');
 
     // Public routes
 Route::get('team-members', [TeamMemberController::class, 'index'])->name('content.teamMembers.index');

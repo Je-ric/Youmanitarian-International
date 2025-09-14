@@ -147,6 +147,14 @@
                                 <span class="ml-3 sidebar-content text-sm">Program Chats</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="<?php echo e(route('program_requests.index')); ?>"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item <?php echo e(request()->routeIs('program_requests.*') ? 'active' : ''); ?>"
+                                data-tooltip="Program Requests">
+                                <i class="bx bx-bulb w-5 text-center flex-shrink-0 text-primary"></i>
+                                <span class="ml-3 sidebar-content text-sm">Program Requests</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
                 <?php endif; ?>
@@ -223,34 +231,6 @@
                     </ul>
                 </div>
                 <?php endif; ?>
-
-                <div class="mb-4">
-                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
-                        <span class="sidebar-content">Tools</span>
-                        <span
-                            class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
-                    </h3>
-                    <ul class="space-y-1">
-                        <li>
-                            <a href="<?php echo e(route('weather-forecast.index')); ?>"
-                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item <?php echo e(request()->routeIs('weather-forecast.index') ? 'active' : ''); ?>"
-                                data-tooltip="Weather Forecasts">
-                                <i class="bx bx-cloud w-5 text-center flex-shrink-0 text-primary"></i>
-                                <span class="ml-3 sidebar-content text-sm">Weather Forecasts</span>
-                            </a>
-                        </li>
-                        <?php if(Auth::user()->hasRole('Admin') || config('app.env') == 'local'): ?>
-                            <li>
-                                <a href="<?php echo e(route('components.showcase')); ?>"
-                                    class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item <?php echo e(request()->routeIs('components.showcase') ? 'active' : ''); ?>"
-                                    data-tooltip="Component Showcase">
-                                    <i class='bx bx-category w-5 text-center flex-shrink-0 text-primary'></i>
-                                    <span class="ml-3 sidebar-content text-sm">Component Showcase</span>
-                                </a>
-                            </li>
-                        <?php endif; ?>
-                    </ul>
-                </div>
 
                 <div class="mb-4">
                     <h3 class="flex items-center text-sm font-medium text-primary mb-2">
@@ -358,6 +338,12 @@
                         class="flex items-center space-x-3 p-3 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
                         <i class="fas fa-clock w-5 text-center"></i>
                         <span>Consultation Hours</span>
+                    </a>
+
+                    <a href="<?php echo e(route('program_requests.index')); ?>"
+                        class="flex items-center space-x-3 p-3 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
+                        <i class='bx bx-bulb w-5 text-center'></i>
+                        <span>Program Requests</span>
                     </a>
                 </div>
 
