@@ -29,13 +29,13 @@ class MemberController extends Controller
         $page = $request->get('page', 1);
 
         $members = Member::with(['user', 'volunteer'])
-            ->where('membership_status', 'active')
             ->latest()
             ->paginate(10, ['*'], 'overview_page', $tab === 'overview' ? $page : 1);
 
         $fullPledgeMembers = Member::with(['user', 'volunteer'])
             ->where('membership_type', 'full_pledge')
-            ->where('membership_status', 'active')
+            // ->where('membership_status', 'active')
+            ->whereIn('membership_status', ['active', 'inactive'])
             ->latest()
             ->paginate(10, ['*'], 'full_pledge_page', $tab === 'full_pledge' ? $page : 1);
 
@@ -44,7 +44,8 @@ class MemberController extends Controller
 
         $honoraryMembers = Member::with(['user', 'volunteer'])
             ->where('membership_type', 'honorary')
-            ->where('membership_status', 'active')
+            // ->where('membership_status', 'active')
+            ->whereIn('membership_status', ['active', 'inactive'])
             ->latest()
             ->paginate(10, ['*'], 'honorary_page', $tab === 'honorary' ? $page : 1);
 
@@ -269,13 +270,15 @@ class MemberController extends Controller
     // notifications/show-invitation.blade.php (main)
     public function declineInvitation(Member $member)
     {
+        // Keep invitation as pending so user can accept in the future
+        // Don't update invitation_status to 'declined' - keep it as 'pending'
         $member->update([
             'membership_status' => 'inactive',
-            'invitation_status' => 'declined'
+            // 'invitation_status' => 'declined' // commented out to keep as pending
         ]);
 
         return redirect()->route('dashboard')
-            ->with('toast', ['type' => 'info', 'message' => 'You have declined the membership invitation.']);
+            ->with('toast', ['type' => 'info', 'message' => 'You have declined the membership invitation. You can still accept it in the future.']);
     }
 
     // member/index.blade.php (main)
@@ -317,22 +320,20 @@ class MemberController extends Controller
     }
 
     // notifications/show-invitation.blade.php (main)
-    public function showInvitation(Member $member)
-    {
-        // if ($member->status !== 'invited') {
-        //     abort(404, 'Invitation not found or has already been responded to.');
-        // }
+    // public function showInvitation(Member $member)
+    // {
+    //     if ($member->status !== 'invited') {
+    //         abort(404, 'Invitation not found or has already been responded to.');
+    //     }
 
-        // Generate signed URLs
-        $acceptUrl = URL::temporarySignedRoute(
-            'member.invitation.accept', now()->addDays(7), ['member' => $member->id]
-        );
-        $declineUrl = URL::temporarySignedRoute(
-            'member.invitation.decline', now()->addDays(7), ['member' => $member->id]
-        );
+    //     Generate signed URLs
+    //     $acceptUrl = acceptInvitation($member);
+    //     $declineUrl = URL::temporarySignedRoute(
+    //         'member.invitation.decline', now()->addDays(7), ['member' => $member->id]
+    //     );
 
-        $invitationMessage = "You have been invited to join as a member.";
+    //     $invitationMessage = "You have been invited to join as a member.";
 
-        return view('notifications.show-invitation', compact('member', 'acceptUrl', 'declineUrl', 'invitationMessage'));
-    }
+    //     return view('notifications.show-invitation', compact('member', 'acceptUrl', 'declineUrl', 'invitationMessage'));
+    // }
 }

@@ -57,10 +57,10 @@ Route::post('/donations', [DonationController::class, 'store'])
     ->name('website.donations.store')
     ->withoutMiddleware(['auth', 'verified']);
 
-    
+
 Route::post('/programs', [ProgramRequestsController::class, 'store'])
     ->name('program_requests.store');
-    
+
 Route::get('/program_requests', [ProgramRequestsController::class, 'index'])
     ->name('program_requests.index');
 Route::delete('program_requests/{programRequest}', [ProgramRequestsController::class, 'destroy'])
@@ -229,12 +229,21 @@ Route::middleware(['auth', 'role:Volunteer'])->group(function () {
     // VOLUNTEER FEEDBACK
     Route::post('/programs/{program}/feedback/volunteer', [ProgramFeedbackController::class, 'submitVolunteerFeedback'])->name('programs.feedback.submit');
 
-    Route::get('/members/invitation/{member}/accept', [MemberController::class, 'acceptInvitation'])
-    ->name('member.invitation.accept')
-    ->middleware('signed');
-    Route::get('/members/invitation/{member}/decline', [MemberController::class, 'declineInvitation'])
-    ->name('member.invitation.decline')
-    ->middleware('signed');
+    // Route::get('/members/invitation/{member}/accept', [MemberController::class, 'acceptInvitation'])
+    // ->name('member.invitation.accept')
+    // ->middleware('signed');
+    // Route::get('/members/invitation/{member}/decline', [MemberController::class, 'declineInvitation'])
+    // ->name('member.invitation.decline')
+    // ->middleware('signed');
+
+    Route::get('/members/invitation/{member}', [MemberController::class,'showInvitation'])
+        ->name('member.invitation.show');
+
+    Route::post('/members/invitation/{member}/accept', [MemberController::class,'acceptInvitation'])
+        ->name('member.invitation.accept');
+
+    Route::post('/members/invitation/{member}/decline', [MemberController::class,'declineInvitation'])
+        ->name('member.invitation.decline');
 
     Route::resource('consultation-hours', ConsultationHourController::class)->only([
             'index','store','update','destroy','edit'

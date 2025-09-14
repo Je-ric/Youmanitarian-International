@@ -21,7 +21,7 @@ class MemberFactory extends Factory
             $startDate = $this->faker->dateTimeThisYear();
             $invitationStatus = 'accepted';
         } else { // inactive
-            $invitationStatus = $this->faker->randomElement(['pending', 'declined']);
+            $invitationStatus = $this->faker->randomElement(['pending', 'accepted']);
         }
 
         return [
