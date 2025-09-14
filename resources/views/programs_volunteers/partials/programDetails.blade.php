@@ -151,6 +151,12 @@
                             <span class="text-gray-900">{{ $program->created_at->format('M d, Y') }}</span>
                         </div>
                         <div class="flex justify-between">
+                            <span class="text-gray-600">Coordinator:</span>
+                            <span class="text-gray-900 text-right truncate">
+                                {{ $program->creator->name }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between">
                             <span class="text-gray-600">Last Updated:</span>
                             <span class="text-gray-900" id="lastUpdated">{{ $program->updated_at->format('M d, Y') }}</span>
                         </div>
