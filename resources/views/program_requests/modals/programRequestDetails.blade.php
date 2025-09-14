@@ -1,55 +1,74 @@
-<x-modal.dialog :id="'programRequest-' . $req->id" maxWidth="lg:max-w-2xl w-full">
+@php
+    $modalId = 'programRequest-' . $req->id;
+@endphp
+
+<x-modal.dialog
+    :id="$modalId"
+    maxWidth="2xl:max-w-4xl xl:max-w-3xl lg:max-w-2xl md:max-w-xl sm:max-w-lg max-w-md"
+    width="w-full"
+    maxHeight="max-h-[90vh]">
+
     <x-modal.header>
-        <div class="flex items-start gap-3">
-            <div class="shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-[#ffb51b]/10">
-                <i class='bx bx-bulb text-[#ffb51b] text-2xl'></i>
-            </div>
-            <div>
-                <h2 class="text-lg font-semibold text-[#1a2235] leading-tight">
-                    {{ $req->title }}
-                </h2>
-                <p class="text-xs text-gray-500">
-                    Submitted {{ $req->created_at->diffForHumans() }}
-                </p>
-            </div>
-        </div>
+        <h2 class="text-lg sm:text-xl font-bold text-[#1a2235] flex items-center gap-2">
+            <i class='bx bx-bulb text-[#ffb51b] text-2xl'></i>
+            <span class="leading-tight">{{ $req->title }}</span>
+        </h2>
     </x-modal.header>
 
     <x-modal.body>
-        <div class="space-y-6 text-sm">
+        <div class="space-y-6">
 
-            <!-- Info Grid -->
-            <div class="grid sm:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <p class="text-[11px] uppercase text-gray-500 tracking-wide">Submitted By</p>
-                    <p class="mt-1 font-medium text-[#1a2235]">{{ $req->name }}</p>
+                    <x-form.label variant="user" class="text-[11px] tracking-wide">Submitted By</x-form.label>
+                    <x-form.readonly class="text-sm font-semibold text-[#1a2235] bg-gray-100">
+                        {{ $req->name }}
+                    </x-form.readonly>
                 </div>
+
                 <div>
-                    <p class="text-[11px] uppercase text-gray-500 tracking-wide">Target Audience</p>
-                    <p class="mt-1 text-gray-700">{{ $req->target_audience ?: '—' }}</p>
+                    <x-form.label variant="date" class="text-[11px] tracking-wide">Submitted</x-form.label>
+                    <x-form.readonly class="text-sm font-medium text-[#1a2235] bg-gray-100">
+                        {{ $req->created_at->diffForHumans() }}
+                    </x-form.readonly>
                 </div>
+
                 <div>
-                    <p class="text-[11px] uppercase text-gray-500 tracking-wide">Location</p>
-                    <p class="mt-1 text-gray-700">{{ $req->location ?: '—' }}</p>
+                    <x-form.label variant="user" class="text-[11px] tracking-wide">Target Audience</x-form.label>
+                    <x-form.readonly class="text-sm text-[#1a2235] bg-gray-100">
+                        {{ $req->target_audience ?: 'Not specified' }}
+                    </x-form.readonly>
                 </div>
+
                 <div>
-                    <p class="text-[11px] uppercase text-gray-500 tracking-wide">Proposed Date</p>
-                    <p class="mt-1">
-                        <span class="inline-flex px-2 py-0.5 rounded bg-[#1a2235]/10 text-[#1a2235] font-medium">
-                            {{ $req->proposed_date ? \Carbon\Carbon::parse($req->proposed_date)->format('M j, Y') : 'TBD' }}
-                        </span>
-                    </p>
+                    <x-form.label variant="location" class="text-[11px] tracking-wide">Proposed Location</x-form.label>
+                    <x-form.readonly class="text-sm text-[#1a2235] bg-gray-100">
+                        {{ $req->location ?: 'Not specified' }}
+                    </x-form.readonly>
                 </div>
             </div>
 
-            <!-- Divider -->
             <div class="border-t border-gray-200"></div>
 
-            <!-- Description -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <x-form.label variant="date" class="text-[11px] tracking-wide">Proposed Date</x-form.label>
+                    <x-form.readonly class="text-sm font-medium text-[#1a2235] bg-gray-100">
+                        {{ $req->proposed_date ? \Carbon\Carbon::parse($req->proposed_date)->format('M j, Y') : 'To Be Determined' }}
+                    </x-form.readonly>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200"></div>
+
             <div>
-                <p class="text-[11px] uppercase text-gray-500 tracking-wide mb-2">Description</p>
-                <div class="text-gray-700 leading-relaxed whitespace-pre-line text-sm">
-                    {!! nl2br(e($req->description)) !!}
+                <x-form.label variant="description" class="text-[11px] tracking-wide mb-1">
+                    Description
+                </x-form.label>
+                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                    <div class="text-sm leading-relaxed text-gray-700 whitespace-pre-line">
+                        {!! nl2br(e($req->description)) !!}
+                    </div>
                 </div>
             </div>
 
@@ -57,17 +76,16 @@
     </x-modal.body>
 
     <x-modal.footer>
-        <div class="flex flex-col sm:flex-row justify-end gap-2 w-full">
-            <x-modal.close-button :modalId="'programRequest-' . $req->id" text="Close" />
-            <form action="{{ route('program_requests.destroy', $req) }}" method="POST"
-                  onsubmit="return confirm('Delete this request?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit"
-                        class="inline-flex items-center gap-1 px-3 py-2 rounded-lg bg-red-50 text-red-600 text-xs font-medium hover:bg-red-100 transition">
-                    <i class='bx bx-trash text-sm'></i> Delete
-                </button>
-            </form>
+        <div class="flex flex-col sm:flex-row justify-end items-center gap-4 w-full">
+            <x-modal.close-button :modalId="'programRequest-' . $req->id" text="Cancel" />
+                <form action="{{ route('program_requests.destroy', $req) }}" method="POST"
+                        onsubmit="return confirm('Are you sure you want to delete this request? This action cannot be undone.');">
+                    @csrf
+                    @method('DELETE')
+                    <x-button type="submit" variant="delete">
+                        <i class='bx bx-trash'></i> Delete Request
+                    </x-button>
+                </form>
         </div>
     </x-modal.footer>
 </x-modal.dialog>
