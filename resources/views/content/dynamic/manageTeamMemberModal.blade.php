@@ -44,17 +44,13 @@
                         $selectedCategory = old('category', $isUpdate ? $member->category ?? 'member' : 'member');
                         $categoryOptions = [
                             ['value' => 'founder', 'label' => 'Founder', 'selected' => $selectedCategory === 'founder'],
-                            [
-                                'value' => 'executive',
-                                'label' => 'Executive',
-                                'selected' => $selectedCategory === 'executive',
-                            ],
+                            ['value' => 'executive','label' => 'Executive','selected' => $selectedCategory === 'executive'],
                             ['value' => 'member', 'label' => 'Member', 'selected' => $selectedCategory === 'member'],
-                            [
-                                'value' => 'developer',
-                                'label' => 'Developer',
-                                'selected' => $selectedCategory === 'developer',
-                            ],
+                            // [
+                            //     'value' => 'developer',
+                            //     'label' => 'Developer',
+                            //     'selected' => $selectedCategory === 'developer',
+                            // ],
                         ];
                     @endphp
                     <x-form.select-option name="category" label="Category" :options="$categoryOptions"
