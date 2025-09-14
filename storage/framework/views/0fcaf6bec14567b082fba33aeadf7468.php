@@ -159,6 +159,54 @@
             background-color: rgba(255, 181, 27, 0.15);
             border-right: 3px solid #ffb51b;
         }
+
+        /* Replace old .message-bubble/.chat-bubble styles with unified consultation style */
+        .chat-bubble {
+            max-width: 70%;
+            word-wrap: break-word;
+            border-radius: 18px;
+            padding: 8px 12px;
+            font-size: 14px;
+            line-height: 1.4;
+            margin: 0 4px;
+        }
+
+        .chat-start .chat-bubble {
+            background-color: #b37f13;
+            color: #fff;
+        }
+
+        .chat-end .chat-bubble {
+            background-color: #1a2235;
+            color: #fff;
+        }
+
+        .chat-header {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            opacity: .8;
+        }
+
+        .chat-time {
+            font-size: 10px;
+            opacity: .6;
+            margin-left: 4px;
+        }
+
+        /* Footer (delete area) */
+        .chat-footer-actions {
+            font-size: 10px;
+            opacity: .65;
+        }
+
+        @media (max-width: 768px) {
+            .chat-bubble {
+                max-width: 85%;
+            }
+        }
+
+        /* Remove unused old classes (optional, or leave if referenced elsewhere) */
     </style>
 
     <div class="chat-container">
@@ -264,57 +312,59 @@
                     <!-- Messages Area (Scrollable) -->
                     <div id="chatMessages" class="flex-1 px-4 py-2 bg-gray-50">
                         <?php $__empty_1 = true; $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $message): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                            <div class="chat <?php echo e($message->sender_id === Auth::id() ? 'chat-end' : 'chat-start'); ?>"
-                                data-message-id="<?php echo e($message->id); ?>">
-                                <div class="chat-image avatar">
-                                    <div class="w-10 rounded-full">
-                                        <img src="<?php echo e($message->sender->profile_pic ?? asset('images/default-avatar.png')); ?>"
-                                            alt="<?php echo e($message->sender->name); ?>">
+                            <?php $mine = $message->sender_id === Auth::id(); ?>
+                            <div class="chat <?php echo e($mine ? 'chat-end' : 'chat-start'); ?>" data-message-id="<?php echo e($message->id); ?>">
+                                <div class="flex flex-col <?php echo e($mine ? 'items-end text-right' : ''); ?> mb-2">
+                                    <div class="chat-header flex items-center gap-1 <?php echo e($mine ? 'justify-end' : ''); ?>">
+                                        <?php echo e($message->sender->name); ?>
+
+                                        <time class="chat-time"
+                                              datetime="<?php echo e($message->created_at->toIso8601String()); ?>"
+                                              data-time="<?php echo e($message->created_at->toIso8601String()); ?>">
+                                            <?php echo e($message->created_at->diffForHumans()); ?>
+
+                                        </time>
+                                        <?php if($message->is_edited): ?>
+                                            <span class="italic opacity-60">(edited)</span>
+                                        <?php endif; ?>
                                     </div>
-                                </div>
-                                <div class="chat-header">
-                                    <?php echo e($message->sender->name); ?>
-
-                                    <time class="chat-time text-xs opacity-50 ml-2"
-                                        datetime="<?php echo e($message->created_at->toIso8601String()); ?>"
-                                        data-time="<?php echo e($message->created_at->toIso8601String()); ?>">
-                                        <?php echo e($message->created_at->diffForHumans()); ?>
-
-                                    </time>
-                                </div>
-                                <div
-                                    class="chat-bubble <?php echo e($message->sender_id === Auth::id() ? 'chat-bubble-warning text-[#1a2235]' : ''); ?>">
-                                    <?php echo nl2br(e($message->message)); ?>
-
-                                    <?php if($message->is_edited): ?>
-                                        <span class="ml-2 text-xs opacity-70 italic">(edited)</span>
+                                    <div class="chat-bubble"><?php echo nl2br(e($message->message)); ?></div>
+                                    <?php if($mine): ?>
+                                        <div class="chat-footer-actions mt-1 flex items-center gap-2">
+                                            <button type="button"
+                                                    class="chat-delete-btn text-red-500 hover:text-red-600 transition"
+                                                    data-message-id="<?php echo e($message->id); ?>"
+                                                    data-program-id="<?php echo e($message->program_id); ?>"
+                                                    data-delete-url="<?php echo e(route('program.chats.destroy', [$program, $message->id])); ?>"
+                                                    title="Delete message">
+                                                <i class="bx bx-trash text-sm"></i>
+                                            </button>
+                                        </div>
                                     <?php endif; ?>
                                 </div>
-
-                                <?php if($message->sender_id === Auth::id()): ?>
-                                    <div class="chat-footer opacity-70">
-                                        <button type="button" class="chat-delete-btn btn btn-xs btn-ghost text-red-500"
-                                            data-message-id="<?php echo e($message->id); ?>"
-                                            data-program-id="<?php echo e($message->program_id); ?>"
-                                            data-delete-url="<?php echo e(route('program.chats.destroy', [$program, $message->id])); ?>"
-                                            title="Delete message">
-                                            <i class="bx bx-trash text-sm"></i>
-                                            <span class="sr-only">Delete</span>
-                                        </button>
-                                    </div>
-                                <?php endif; ?>
                             </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                            <div class="flex flex-col items-center justify-center h-full text-center py-12">
-                                <div class="w-16 h-16 bg-[#ffb51b]/10 rounded-full flex items-center justify-center mb-4">
-                                    <i class='bx bx-message-square-dots text-[#ffb51b] text-2xl'></i>
-                                </div>
-                                <h3 class="text-lg font-semibold text-gray-700 mb-2">No messages yet</h3>
-                                <p class="text-gray-500 mb-4">Be the first to start the conversation!</p>
-                                <div class="flex items-center text-sm text-gray-400">
-                                    <i class='bx bx-info-circle mr-2'></i>
-                                    <span>Messages will appear here once someone sends one</span>
-                                </div>
+                            <div id="programChatEmptyState">
+                                <?php if (isset($component)) { $__componentOriginal074a021b9d42f490272b5eefda63257c = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal074a021b9d42f490272b5eefda63257c = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.empty-state','data' => ['icon' => 'bx bx-message-square-dots','title' => 'No messages yet','description' => 'Start the conversation.']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('empty-state'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'bx bx-message-square-dots','title' => 'No messages yet','description' => 'Start the conversation.']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal074a021b9d42f490272b5eefda63257c)): ?>
+<?php $attributes = $__attributesOriginal074a021b9d42f490272b5eefda63257c; ?>
+<?php unset($__attributesOriginal074a021b9d42f490272b5eefda63257c); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal074a021b9d42f490272b5eefda63257c)): ?>
+<?php $component = $__componentOriginal074a021b9d42f490272b5eefda63257c; ?>
+<?php unset($__componentOriginal074a021b9d42f490272b5eefda63257c); ?>
+<?php endif; ?>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -340,13 +390,30 @@
                 <?php else: ?>
                     <!-- No Program Selected -->
                     <div class="flex flex-col items-center justify-center h-full text-center py-24">
-                        <div class="w-20 h-20 bg-[#ffb51b]/10 rounded-full flex items-center justify-center mb-6">
-                            <i class='bx bx-message-square-dots text-[#ffb51b] text-3xl'></i>
+                        <div id="programChatEmptyState">
+                            <?php if (isset($component)) { $__componentOriginal074a021b9d42f490272b5eefda63257c = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal074a021b9d42f490272b5eefda63257c = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.empty-state','data' => ['icon' => 'bx bx-message-square-dots','title' => 'Select a program chat','description' => 'Choose a program from the sidebar to start chatting.']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('empty-state'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'bx bx-message-square-dots','title' => 'Select a program chat','description' => 'Choose a program from the sidebar to start chatting.']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal074a021b9d42f490272b5eefda63257c)): ?>
+<?php $attributes = $__attributesOriginal074a021b9d42f490272b5eefda63257c; ?>
+<?php unset($__attributesOriginal074a021b9d42f490272b5eefda63257c); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal074a021b9d42f490272b5eefda63257c)): ?>
+<?php $component = $__componentOriginal074a021b9d42f490272b5eefda63257c; ?>
+<?php unset($__componentOriginal074a021b9d42f490272b5eefda63257c); ?>
+<?php endif; ?>
                         </div>
-                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Select a program chat</h3>
-                        <p class="text-gray-500 mb-6">Choose a program from the sidebar to start chatting.</p>
                         <button
-                            class="md:hidden inline-flex items-center px-4 py-2 bg-[#ffb51b] text-[#1a2235] rounded-lg font-medium hover:bg-[#e6a319] transition-colors"
+                            class="md:hidden inline-flex items-center px-4 py-2 bg-[#ffb51b] text-[#1a2235] rounded-lg font-medium hover:bg-[#e6a319] transition-colors mt-4"
                             id="mobileSidebarToggleEmpty">
                             <i class='bx bx-list-ul mr-2'></i>
                             Show Programs
@@ -665,48 +732,45 @@
                     },
 
 
-                    appendMessage: function(chat) {
-                        const isOwn = chat.sender_id == this.config.userId;
-                        const safeMsg = $('<div>').text(chat.message).html().replace(/\n/g, '<br>');
-                        const deleteUrl = this.config.routes.deleteTemplate.replace('CHAT_ID', chat.id);
-                        const msgDiv = $(`
+                    hideEmptyState: function(){
+                        $('#programChatEmptyState').remove();
+                    },
 
-                            <div class="chat ${isOwn ? 'chat-end' : 'chat-start'}" data-message-id="${chat.id}">
-                                <div class="chat-image avatar">
-                                    <div class="w-10 rounded-full">
-                                        <img src="${chat.sender.profile_pic || '/images/default-avatar.png'}" alt="${chat.sender.name}">
+                    appendMessage: function(chat) {
+                        this.hideEmptyState();
+                        const isOwn = chat.sender_id == this.config.userId;
+                        const safeMsg = $('<div>').text(chat.message || '').html().replace(/\n/g, '<br>');
+                        const deleteUrl = this.config.routes.deleteTemplate
+                            ? this.config.routes.deleteTemplate.replace('CHAT_ID', chat.id)
+                            : '';
+
+                        const nameEsc = $('<div>').text(chat.sender.name || 'User').html();
+                        const createdIso = chat.created_at || new Date().toISOString();
+
+                        const html = `
+                            <div class="chat ${isOwn ? 'chat-end':'chat-start'}" data-message-id="${chat.id}">
+                                <div class="flex flex-col ${isOwn ? 'items-end text-right':''} mb-2">
+                                    <div class="chat-header flex items-center gap-1 ${isOwn ? 'justify-end':''}">
+                                        ${nameEsc}
+                                        <time class="chat-time" datetime="${createdIso}">Just now</time>
                                     </div>
-                                </div>
-                                <div class="chat-header">
-                                    ${chat.sender.name}
-                                    <time class="text-xs opacity-50 ml-2">Just now</time>
-                                </div>
-                                <div class="chat-bubble ${isOwn ? 'chat-bubble-warning text-[#1a2235]' : ''}">
-                                    ${safeMsg}
-                                </div>
-                                ${isOwn ? `
-                                            <div class="chat-footer opacity-70">
-                                                <button
-                                                    type="button"
-                                                    class="chat-delete-btn btn btn-xs btn-ghost text-red-500"
+                                    <div class="chat-bubble">${safeMsg}</div>
+                                    ${isOwn ? `
+                                        <div class="chat-footer-actions mt-1 flex items-center gap-2">
+                                            <button type="button"
+                                                    class="chat-delete-btn text-red-500 hover:text-red-600 transition"
                                                     data-message-id="${chat.id}"
                                                     data-program-id="${chat.program_id}"
                                                     data-delete-url="${deleteUrl}"
                                                     title="Delete message">
-                                                    <i class="bx bx-trash text-sm"></i>
-                                                    <span class="sr-only">Delete</span>
-                                                </button>
-                                            </div>
-                                        ` : ''}
+                                                <i class="bx bx-trash text-sm"></i>
+                                            </button>
+                                        </div>` : ''}
+                                </div>
                             </div>
-                        `);
-
-                        $(this.config.selectors.chatMessages).append(msgDiv);
-                        const el = document.getElementById('chatMessages');
-                        el?.scrollTo({
-                            top: el.scrollHeight,
-                            behavior: 'smooth'
-                        });
+                        `;
+                        $(this.config.selectors.chatMessages).append(html);
+                        this.scrollToBottom();
                     },
 
                     scrollToBottom: function() {
@@ -760,7 +824,7 @@
 
                     handleRealTimeMessage: function(chat) {
                         // Always append real-time messages (they come from other users)
-                        this.appendMessage(chat);
+                        this.appendMessage(chat); // appendMessage already hides empty state
                         this.scrollToBottom();
                     },
 

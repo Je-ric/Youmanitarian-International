@@ -100,6 +100,8 @@
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         }
 
+        .chat-footer-actions { font-size:10px; opacity:.65; }
+
         @media (max-width: 768px) {
             .chat-container {
                 height: 100vh;
@@ -241,6 +243,7 @@
 
                     <!-- Messages -->
                     <div id="consultationMessages" class="flex-1 px-4 py-4 bg-gray-50">
+                        
                         <?php $__empty_1 = true; $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $msg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <div class="chat <?php echo e($msg['is_mine'] ? 'chat-end' : 'chat-start'); ?>" data-message-id="<?php echo e($msg['id']); ?>">
                                 <div class="flex flex-col <?php echo e($msg['is_mine'] ? 'items-end text-right' : ''); ?> mb-2">
@@ -248,17 +251,19 @@
                                         <?php echo e($msg['sender_name']); ?>
 
                                         <time class="chat-time" datetime="<?php echo e($msg['sent_iso']); ?>"><?php echo e($msg['time_label']); ?></time>
-                                        <?php if($msg['is_mine']): ?>
+                                    </div>
+                                    <div class="chat-bubble"><?php echo nl2br(e($msg['message'])); ?></div>
+                                    <?php if($msg['is_mine']): ?>
+                                        <div class="chat-footer-actions mt-1 flex items-center gap-2">
                                             <button
-                                                class="ml-1 text-red-400 hover:text-red-600 transition chat-delete-btn"
+                                                class="chat-delete-btn text-red-500 hover:text-red-600 transition"
                                                 data-delete-url="<?php echo e($msg['delete_url']); ?>"
                                                 data-message-id="<?php echo e($msg['id']); ?>"
                                                 title="Delete message">
-                                                <i class="bx bx-trash text-xs"></i>
+                                                <i class="bx bx-trash text-sm"></i>
                                             </button>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="chat-bubble"><?php echo nl2br(e($msg['message'])); ?></div>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
 
@@ -523,27 +528,27 @@
                     var bubbleClass = isOwn ? 'chat-end' : 'chat-start';
                     var name = escapeHtml(chat.sender?.name || 'You');
                     var timeText = 'Just now';
-                    var deleteBtn = '';
-
+                    var deleteBlock = '';
                     if(isOwn && deleteRouteTemplate){
                         var deleteUrl = deleteRouteTemplate.replace('__CHAT_ID__', chat.id);
-                        deleteBtn =
-                            '<button class="ml-1 text-red-400 hover:text-red-600 transition chat-delete-btn" ' +
-                            'data-delete-url="'+deleteUrl+'" data-message-id="'+chat.id+'" title="Delete message">' +
-                            '<i class="bx bx-trash text-xs"></i></button>';
+                        deleteBlock =
+                            '<div class="chat-footer-actions mt-1 flex items-center gap-2">' +
+                                '<button class="chat-delete-btn text-red-500 hover:text-red-600 transition" ' +
+                                'data-delete-url="'+deleteUrl+'" data-message-id="'+chat.id+'" title="Delete message">' +
+                                '<i class="bx bx-trash text-sm"></i></button>' +
+                            '</div>';
                     }
-
                     return '' +
-                        '<div class="chat ' + bubbleClass + '" data-message-id="' + chat.id + '">' +
-                            '<div class="flex flex-col ' + (isOwn ? 'items-end text-right':'') + ' mb-2">' +
-                            '<div class="chat-header flex items-center gap-1 ' + (isOwn ? 'justify-end':'') + '">' +
-                                name +
-                                '<time class="chat-time"> ' + timeText + '</time>' +
-                                deleteBtn +
-                            '</div>' +
-                            '<div class="chat-bubble">' + formatMessage(chat.message || '') + '</div>' +
-                            '</div>' +
-                        '</div>';
+      '<div class="chat ' + bubbleClass + '" data-message-id="' + chat.id + '">' +
+        '<div class="flex flex-col ' + (isOwn ? 'items-end text-right':'') + ' mb-2">' +
+          '<div class="chat-header flex items-center gap-1 ' + (isOwn ? 'justify-end':'') + '">' +
+             name +
+             '<time class="chat-time"> ' + timeText + '</time>' +
+          '</div>' +
+          '<div class="chat-bubble">' + formatMessage(chat.message || '') + '</div>' +
+          deleteBlock +
+        '</div>' +
+      '</div>';
                 }
 
                 function escapeHtml(str) {
