@@ -3,7 +3,7 @@
 @section('content')
 <div class="min-h-screen bg-gray-50 py-12 px-6">
     <div class="max-w-5xl mx-auto flex flex-col gap-16">
-        
+
         <!-- Page Header -->
         <div class="text-center">
             <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Donate</h1>
@@ -14,9 +14,9 @@
             <!-- Disclaimer Note -->
             <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 p-4 rounded-lg text-sm max-w-2xl mx-auto">
                 <p>
-                    <strong>Note:</strong> This website does not process donations directly. 
-                    Please use the details provided below to send your donation. 
-                    After donating, you may fill out our donation form. 
+                    <strong>Note:</strong> This website does not process donations directly.
+                    Please use the details provided below to send your donation.
+                    After donating, you may fill out our donation form.
                     A treasurer or authorized staff will then confirm your donation as received.
                 </p>
             </div>
@@ -26,7 +26,7 @@
         <div class="text-center">
             <h2 class="text-3xl font-bold text-gray-800 mb-4">Why Donate?</h2>
             <p class="text-gray-600 max-w-3xl mx-auto">
-                Every contribution you make allows us to sustain our programs and reach more communities in need. 
+                Every contribution you make allows us to sustain our programs and reach more communities in need.
                 Whether it’s supporting children’s education, providing relief during disasters, or empowering local volunteers—your help makes it possible.
             </p>
         </div>
@@ -38,7 +38,7 @@
                 We are committed to using your donations responsibly. 100% of your support goes directly to our programs and beneficiaries.
             </p>
             <p class="text-gray-600">
-                Administrative costs are covered separately, ensuring your contribution creates the maximum impact. 
+                Administrative costs are covered separately, ensuring your contribution creates the maximum impact.
                 <a href="#" class="text-indigo-600 hover:underline">View our financial reports</a> (if available).
             </p>
         </div>
@@ -97,24 +97,32 @@
             <p class="text-gray-600"><strong>Contact Person:</strong> Juan Dela Cruz – 0917 123 4567</p>
         </div>
 
-        <!-- 4. FAQ -->
-        <div class="bg-white rounded-2xl border border-gray-200 p-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Frequently Asked Questions</h2>
-            <div class="space-y-4">
-                <div>
-                    <h3 class="font-semibold text-gray-700">Will I get a receipt for my donation?</h3>
-                    <p class="text-gray-600 text-sm">Yes, receipts can be provided upon request. Please contact our treasurer for details.</p>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gray-700">Can I donate in-kind (clothes, food, supplies)?</h3>
-                    <p class="text-gray-600 text-sm">Yes, we welcome in-kind donations. Please coordinate with our contact person for drop-off arrangements.</p>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gray-700">Do you accept international donations?</h3>
-                    <p class="text-gray-600 text-sm">Yes, international donations are possible through bank transfer and certain e-wallets. Please reach out to confirm details.</p>
-                </div>
-            </div>
-        </div>
+     <!-- 4. FAQ -->
+<div class="bg-white rounded-2xl border border-gray-200 p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Frequently Asked Questions</h2>
+
+    <div class="space-y-4">
+        <x-accordion-daisy title="Will I get a receipt for my donation?">
+            <p class="text-gray-600 text-sm">
+                Yes, receipts can be provided upon request. Please contact our treasurer for details.
+            </p>
+        </x-accordion-daisy>
+
+        <x-accordion-daisy title="Can I donate in-kind (clothes, food, supplies)?">
+            <p class="text-gray-600 text-sm">
+                Yes, we welcome in-kind donations. Please coordinate with our contact person for drop-off arrangements.
+            </p>
+        </x-accordion-daisy>
+
+        <x-accordion-daisy title="Do you accept international donations?">
+            <p class="text-gray-600 text-sm">
+                Yes, international donations are possible through bank transfer and certain e-wallets.
+                Please reach out to confirm details.
+            </p>
+        </x-accordion-daisy>
+    </div>
+</div>
+
 
     </div>
 

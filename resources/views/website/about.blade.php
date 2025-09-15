@@ -222,143 +222,85 @@
 </section>
 
 
-    {{-- <section class="py-20 bg-gray-50">
-        <div class="mx-auto max-w-6xl px-6 lg:px-10">
-            <div class="grid lg:grid-cols-2 gap-x-20 gap-y-20 items-center">
-                <!-- IMAGE -->
+  <section class="py-20 bg-white">
+  <div class="mx-auto max-w-6xl px-6 lg:px-8">
+    <!-- Section Header -->
+    <h2 class="text-4xl lg:text-5xl font-bold text-center mb-16">
+      <span class="text-primary-custom">Our</span>
+      <span class="text-accent-custom">Services</span>
+    </h2>
 
-                <div class="flex flex-col items-center lg:order-2 space-y-4">
-                    <h2 class="text-4xl lg:text-5xl font-bold mb-8">
-                        <span class="text-primary-custom">The</span>
-                        <span class="text-accent-custom">Logo</span>
-                    </h2>
-                    <img src="{{ asset('assets/images/logo/YI.jpg') }}" alt="Youmanitarian Logo"
-                        class="w-80 h-80 md:w-[30rem] md:h-[30rem] rounded-full ring ring-gray-200 object-cover translate-y-6 motion-safe:animate-fadeIn motion-safe:delay-100" />
-                </div>
+    <!-- Services Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
 
+      <!-- Service Card -->
+      <div
+        class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
+        <i class='bx bx-news text-5xl text-[var(--primary-color)] mb-4'></i>
+        <h3 class="text-xl font-semibold mb-2">Content Management</h3>
+        <p class="text-gray-600 text-sm">
+          Easily create, update, and publish news, blogs, and impact stories with a structured CMS
+          that ensures collaboration and accurate content delivery.
+        </p>
+      </div>
 
-                <!-- TEXT BLOCK -->
-                <div class="space-y-10 text-gray-800">
+      <!-- Service Card -->
+      <div
+        class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
+        <i class='bx bx-group text-5xl text-[var(--primary-color)] mb-4'></i>
+        <h3 class="text-xl font-semibold mb-2">Volunteer Management</h3>
+        <p class="text-gray-600 text-sm">
+          Streamline volunteer registration, task assignments, and attendance logs with personal dashboards
+          for tracking contributions and activities.
+        </p>
+      </div>
 
-                    <!-- LEFT -->
-                    <div class="flex flex-col justify-center space-y-6 motion-safe:animate-fadeIn motion-safe:delay-200">
-                        <div class="flex items-start gap-4">
-                            <i class="bx bx-star text-3xl text-[var(--primary-color)]"></i>
-                            <p class="leading-relaxed">
-                                <span class="font-semibold text-[var(--primary-color)]">3 Stars</span><br>
-                                Symbolize the three main islands of the country.
-                            </p>
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <i class="bx bx-font text-3xl text-[var(--primary-color)]"></i>
-                            <p class="leading-relaxed">
-                                <span class="font-semibold text-[var(--primary-color)]">Letter Y</span><br>
-                                the initial of <span class="font-semibold text-[var(--accent-color)]">Youmanitarian</span>.
-                            </p>
-                        </div>
-                        <div class="flex items-start gap-4">
-                            <i class="bx bx-leaf text-3xl text-[var(--primary-color)]"></i>
-                            <p class="leading-relaxed">
-                                <span class="font-semibold text-[var(--primary-color)]">Laurel</span><br>
-                                Symbolizes <em>nobility</em> and <em>victory</em>.
-                            </p>
-                        </div>
-                    </div>
+      <!-- Service Card -->
+      <div
+        class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
+        <i class='bx bx-credit-card text-5xl text-[var(--primary-color)] mb-4'></i>
+        <h3 class="text-xl font-semibold mb-2">Membership & Payments</h3>
+        <p class="text-gray-600 text-sm">
+          Securely track membership fees and donations with QR-based payment displays and automated
+          email confirmations for transparency and accountability.
+        </p>
+      </div>
 
+      <!-- Service Card -->
+      <div
+        class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
+        <i class='bx bx-bell text-5xl text-[var(--primary-color)] mb-4'></i>
+        <h3 class="text-xl font-semibold mb-2">User Notifications</h3>
+        <p class="text-gray-600 text-sm">
+          Keep users updated with real-time dashboard alerts and email notifications for approvals,
+          payments, new events, and organizational announcements.
+        </p>
+      </div>
 
-                    <div class="w-full h-px bg-gray-200"></div>
+      <!-- Service Card -->
+      <div
+        class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
+        <i class='bx bx-shield text-5xl text-[var(--primary-color)] mb-4'></i>
+        <h3 class="text-xl font-semibold mb-2">Role-Based Access</h3>
+        <p class="text-gray-600 text-sm">
+          Ensure security and efficiency with role-specific access for administrators, coordinators,
+          content managers, members, and volunteers.
+        </p>
+      </div>
 
-                    <!-- RIGHT  -->
-                    <div class="space-y-6 translate-x-4 motion-safe:animate-fadeIn motion-safe:delay-[300ms]">
-                        <div class="flex items-start gap-4">
-                            <i class="bx bx-infinite text-3xl text-[var(--primary-color)]"></i>
-                            <p class="leading-relaxed">
-                                <span class="font-semibold text-[var(--primary-color)]">8 Rings in Lotus Form</span>
-                                – Youmanitarian International is just like Lotus flower that grows from the mud (humble
-                                beginning) and blooming towards the sky (aiming high).
-                            </p>
-                        </div>
+      <!-- Service Card -->
+      <div
+        class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
+        <i class='bx bx-analyse text-5xl text-[var(--primary-color)] mb-4'></i>
+        <h3 class="text-xl font-semibold mb-2">Analytics & Reports</h3>
+        <p class="text-gray-600 text-sm">
+          Generate real-time reports on content, volunteer engagement, and financial records to
+          measure social impact and improve decision-making.
+        </p>
+      </div>
 
-                        <div>
-                            <p class="mb-3 font-semibold text-[var(--primary-color)]">The 8 rings symbolizes the
-                                <span class="text-[var(--accent-color)]">8 Noble Fold Path</span>:
-                            </p>
-                            <ul class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-2 text-sm pl-6 list-disc">
-                                <li>Right View</li>
-                                <li>Right Intention</li>
-                                <li>Right Speech</li>
-                                <li>Right Action</li>
-                                <li>Right Livelihood</li>
-                                <li>Right Effort</li>
-                                <li>Right Mindfulness</li>
-                                <li>Right Concentration</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
+    </div>
+  </div>
+</section>
 
-    <section class="py-20 bg-white">
-        <div class="mx-auto max-w-6xl px-6 lg:px-8">
-            <!-- Section Header -->
-            <h2 class="text-4xl lg:text-5xl font-bold text-center mb-16">
-                <span class="text-primary-custom">Our</span>
-                <span class="text-accent-custom">Services</span>
-            </h2>
-
-            <!-- Services Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-                <!-- Service Card -->
-                <div
-                    class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
-                    <i class='bx bx-cog text-5xl text-[var(--primary-color)] mb-4'></i>
-                    <h3 class="text-xl font-semibold mb-2">Service Title 1</h3>
-                    <p class="text-gray-600 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-                        tempor.</p>
-                </div>
-
-                <div
-                    class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
-                    <i class='bx bx-layer text-5xl text-[var(--primary-color)] mb-4'></i>
-                    <h3 class="text-xl font-semibold mb-2">Service Title 2</h3>
-                    <p class="text-gray-600 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-                        tempor.</p>
-                </div>
-
-                <div
-                    class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
-                    <i class='bx bx-rocket text-5xl text-[var(--primary-color)] mb-4'></i>
-                    <h3 class="text-xl font-semibold mb-2">Service Title 3</h3>
-                    <p class="text-gray-600 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-                        tempor.</p>
-                </div>
-
-                <div
-                    class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
-                    <i class='bx bx-world text-5xl text-[var(--primary-color)] mb-4'></i>
-                    <h3 class="text-xl font-semibold mb-2">Service Title 4</h3>
-                    <p class="text-gray-600 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                        eiusmod tempor.</p>
-                </div>
-
-                <div
-                    class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
-                    <i class='bx bx-briefcase text-5xl text-[var(--primary-color)] mb-4'></i>
-                    <h3 class="text-xl font-semibold mb-2">Service Title 5</h3>
-                    <p class="text-gray-600 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                        eiusmod tempor.</p>
-                </div>
-
-                <div
-                    class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
-                    <i class='bx bx-help-circle text-5xl text-[var(--primary-color)] mb-4'></i>
-                    <h3 class="text-xl font-semibold mb-2">Service Title 6</h3>
-                    <p class="text-gray-600 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                        eiusmod tempor.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 @endsection

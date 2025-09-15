@@ -31,144 +31,105 @@
     </section>
 
 
-    <section class="w-auto mx-4 bg-[#1A2235] rounded-full py-5 px-6">
-        <div class="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-
+    <!-- Stats Section -->
+    <section class="w-auto mx-4 bg-[#1A2235] rounded-2xl py-4 px-6">
+        <div class="container mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             <div>
-                <div class="text-3xl md:text-4xl font-bold text-white">{{ $volunteersCount }}</div>
-                <div class="text-md md:text-l font-medium text-white">Volunteers</div>
+                <div class="text-2xl sm:text-3xl font-bold text-white">{{ $volunteersCount }}</div>
+                <div class="text-sm sm:text-base text-white">Volunteers</div>
             </div>
-
             <div>
-                <div class="text-3xl md:text-4xl font-bold text-white">{{ $membersCount }}</div>
-                <div class="text-md md:text-l font-medium text-white">Members</div>
+                <div class="text-2xl sm:text-3xl font-bold text-white">{{ $membersCount }}</div>
+                <div class="text-sm sm:text-base text-white">Members</div>
             </div>
-
             <div>
-                <div class="text-3xl md:text-4xl font-bold text-white">{{ $programsCount }}</div>
-                <div class="text-md md:text-l font-medium text-white">Programs</div>
+                <div class="text-2xl sm:text-3xl font-bold text-white">{{ $programsCount }}</div>
+                <div class="text-sm sm:text-base text-white">Programs</div>
             </div>
-
             <div>
-                <div class="text-3xl md:text-4xl font-bold text-white"></div>
-                <div class="text-md md:text-l font-medium text-white">Activities</div>
+                <div class="text-2xl sm:text-3xl font-bold text-white">--</div>
+                <div class="text-sm sm:text-base text-white">Activities</div>
             </div>
         </div>
     </section>
 
 
+    <!-- Program Highlights -->
+    <section class="relative max-w-5xl mx-auto bg-white py-8 sm:py-10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
-    <section class="relative w-full bg-white py-20">
-        <div class="container mx-auto px-6 lg:px-12">
-            <h2 class="text-center text-4xl md:text-6xl font-bold text-black mb-16">
-                PROGRAM HIGHLIGHTS
-            </h2>
+            <!-- Title -->
+            <x-section-title first="Program" second="Highlights" />
 
-            <div class="space-y-12">
+            <div class="space-y-5 sm:space-y-6">
                 <!-- Highlight Card -->
-                <div class="flex flex-col lg:flex-row items-start gap-10 p-10 rounded-3xl border border-slate-900">
-                    <div class="flex-1 text-3xl md:text-4xl font-bold text-black">
-                        Clutch the Future
+                <div
+                    class="flex flex-col md:flex-row items-start md:items-center gap-3 sm:gap-5 p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex-1 text-lg sm:text-xl font-semibold text-black">
+                        Community Empowerment
                     </div>
-                    <div class="flex-1 text-lg md:text-2xl font-medium text-black">
-                        Clutch the Future is our organization’s signature event solely aimed to grow
-                        and sustain a mentoring culture in Frederick County. Named Best Charitable Event
-                        in Frederick, this event brings together 400+ women who lift each other up.
+                    <div class="flex-1 text-sm sm:text-base text-gray-700 leading-relaxed">
+                        Our programs strengthen rural communities by supporting farmers, women, and youth.
+                        Through workshops, capacity building, and partnerships, we ensure that beneficiaries
+                        gain long-term skills and opportunities for sustainable livelihoods.
                     </div>
-                    <div class="flex-shrink-0 w-14 h-14 bg-slate-900 rounded-full"></div>
+                    <!-- Icon -->
+                    <div
+                        class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-primary-custom text-white rounded-full">
+                        <i class='bx bx-group text-xl'></i>
+                    </div>
                 </div>
 
                 <!-- Another Card -->
-                <div class="flex flex-col lg:flex-row items-start gap-10 p-10 rounded-3xl border border-slate-900">
-                    <div class="flex-1 text-3xl md:text-4xl font-bold text-black">
-                        The W2WM Pop-Up Shop
+                <div
+                    class="flex flex-col md:flex-row items-start md:items-center gap-3 sm:gap-5 p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex-1 text-lg sm:text-xl font-semibold text-black">
+                        Volunteer Engagement
                     </div>
-                    <div class="flex-1 text-lg md:text-2xl font-medium text-black">
-                        The destination for savvy fashionistas to find stylish clothing and accessories
-                        at amazing prices. Every purchase of our beautiful new and very gently-worn items
-                        directly supports our free programs.
+                    <div class="flex-1 text-sm sm:text-base text-gray-700 leading-relaxed">
+                        Volunteers are at the heart of our mission. We provide structured opportunities
+                        for individuals to contribute their skills, log their hours, and participate in
+                        initiatives ranging from disaster response to community outreach.
                     </div>
-                    <div class="flex-shrink-0 w-14 h-14 bg-slate-900 rounded-full"></div>
+                    <!-- Icon -->
+                    <div
+                        class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-accent-custom text-white rounded-full">
+                        <i class='bx bx-heart text-xl'></i>
+                    </div>
                 </div>
 
                 <!-- Another Card -->
-                <div class="flex flex-col lg:flex-row items-start gap-10 p-10 rounded-3xl border border-slate-900">
-                    <div class="flex-1 text-3xl md:text-4xl font-bold text-black">
-                        Girls Nite Out
+                <div
+                    class="flex flex-col md:flex-row items-start md:items-center gap-3 sm:gap-5 p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex-1 text-lg sm:text-xl font-semibold text-black">
+                        Impact Stories
                     </div>
-                    <div class="flex-1 text-lg md:text-2xl font-medium text-black">
-                        A fun night of socializing, dancing, and shopping with friends! This annual event
-                        includes pop-up shops from local vendors, music and dancing, door prizes and more.
+                    <div class="flex-1 text-sm sm:text-base text-gray-700 leading-relaxed">
+                        We believe in transparency and inspiration. Our platform showcases real stories of
+                        transformation from farmers, volunteers, and beneficiaries whose lives have been touched
+                        by our work and collective effort.
                     </div>
-                    <div class="flex-shrink-0 w-14 h-14 bg-slate-900 rounded-full"></div>
+                    <!-- Icon -->
+                    <div
+                        class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-slate-900 text-white rounded-full">
+                        <i class='bx bx-book-open text-xl'></i>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
 
-    <!-- FAQ Section -->
-    <section class="py-16 bg-white">
-        <div class="mx-auto max-w-4xl px-6 lg:px-8">
-            <h2 class="text-4xl lg:text-5xl font-bold text-center text-balance mb-12">
-                <span class="text-primary-custom">Frequently</span>
-                <span class="text-accent-custom">Asked Questions</span>
-            </h2>
 
-            <div class="space-y-4">
-                <!-- FAQ 1 -->
-                <div tabindex="0" class="collapse collapse-plus border border-base-300 bg-base-100 rounded-box">
-                    <div class="collapse-title text-lg font-semibold">
-                        How can I join a program?
-                    </div>
-                    <div class="collapse-content text-gray-700 leading-relaxed">
-                        <p>
-                            You can join by registering through our website’s program page. Each program has a “Register” or
-                            “Sign Up” button.
-                            Simply fill out the form and wait for confirmation from our team.
-                        </p>
-                    </div>
-                </div>
 
-                <!-- FAQ 2 -->
-                <div tabindex="0" class="collapse collapse-plus border border-base-300 bg-base-100 rounded-box">
-                    <div class="collapse-title text-lg font-semibold">
-                        Are the programs free?
-                    </div>
-                    <div class="collapse-content text-gray-700 leading-relaxed">
-                        <p>
-                            Yes, most of our programs are free of charge. However, some may require minimal contributions or
-                            materials depending
-                            on the nature of the activity. All details are listed in each program description.
-                        </p>
-                    </div>
-                </div>
 
-                <!-- FAQ 3 -->
-                <div tabindex="0" class="collapse collapse-plus border border-base-300 bg-base-100 rounded-box">
-                    <div class="collapse-title text-lg font-semibold">
-                        Who can participate?
-                    </div>
-                    <div class="collapse-content text-gray-700 leading-relaxed">
-                        <p>
-                            Anyone with the passion to serve is welcome to participate! Whether you’re a student,
-                            professional, or community member,
-                            our programs are open to volunteers, partners, and beneficiaries alike.
-                        </p>
-                    </div>
-                </div>
-                <h1>We need to ask Maam Makee kung ano pa mga FAQs</h1>
-            </div>
-        </div>
-    </section>
+
 
     <!-- Program Feedback Carousel -->
     <section class="py-16 bg-gray-50">
         <div class="mx-auto max-w-5xl px-6 lg:px-8 text-center">
-            <h2 class="text-4xl lg:text-5xl font-bold text-balance mb-12">
-                <span class="text-primary-custom">Program</span>
-                <span class="text-accent-custom">Feedback</span>
-            </h2>
+
+            <x-section-title first="Program" second="Feedback" />
 
             <div class="carousel w-full rounded-2xl shadow-lg">
                 <!-- Slide 1 -->
@@ -216,216 +177,238 @@
 
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
         <div class="max-w-7xl mx-auto">
-            <!-- Enhanced header with better typography and spacing -->
-            <div class="text-center mb-12">
-                <h1 class="text-3xl md:text-4xl font-bold text-[#1a2235] mb-4">Our Programs</h1>
-                <p class="text-lmdtext-gray00 max-w-2xl mx-auto">Discover our upcoming events and share your feedback on
-                    completed programs</p>
-            </div>
+                <x-section-title first="Our" second="Programs" />
 
-
+            <!-- Ongoing -->
             <div class="flex items-center justify-between mb-8">
                 <h2 class="text-3xl md:text-4xl font-bold text-[#1a2235] flex items-center gap-3">
-                    <i class='bx bx-calendar text-[#FFB51B]'></i>
-                    Ongoing Programs
+                    <i class='bx bx-play-circle text-[#FFB51B]'></i> Ongoing Programs
                 </h2>
                 <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
-                    {{ count($ongoingPrograms) }} Events Scheduled
+                    {{ count($ongoingPrograms) }} Programs Scheduled
                 </div>
             </div>
 
-            @forelse ($ongoingPrograms as $program)
-                <h3 class="text-xl font-bold text-[#1a2235] mb-3 line-clamp-2">{{ $program->title }}</h3>
-            @empty
-                <div class="col-span-full text-center py-16">
-                    <i class='bx bx-calendar-x text-6xl text-gray-300 mb-4'></i>
-                    <p class="text-xl text-gray-500">No upcoming programs scheduled</p>
-                    <p class="text-gray-400 mt-2">Check back soon for new events!</p>
-                </div>
-            @endforelse
-
-            <!-- Calendar-like grid layout for upcoming programs -->
-            <div class="mb-16">
-                <div class="flex items-center justify-between mb-8">
-                    <h2 class="text-3xl md:text-4xl font-bold text-[#1a2235] flex items-center gap-3">
-                        <i class='bx bx-calendar text-[#FFB51B]'></i>
-                        Upcoming Programs
-                    </h2>
-                    <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
-                        {{ count($incomingPrograms) }} Events Scheduled
-                    </div>
-                </div>
-
-                <!-- Responsive grid layout that looks more calendar-like -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @forelse($incomingPrograms as $program)
-                        <div
-                            class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                            <!-- Image with hover effect -->
-                            <div class="relative overflow-hidden h-48">
-                                <img src="{{ $program->image_url ?? 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' }}"
-                                    alt="{{ $program->title }}"
-                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                <div
-                                    class="absolute top-4 right-4 bg-[#FFB51B] text-[#1a2235] px-3 py-1 rounded-full text-sm font-semibold">
-                                    {{ \Carbon\Carbon::parse($program->date)->format('M d') }}
-                                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                @forelse ($ongoingPrograms as $program)
+                    <x-overview.card title="{{ $program->title }}" icon="bx-bolt" variant="minimal">
+                        <div class="flex items-center justify-between gap-4 text-sm text-gray-600 mb-3">
+                            <div class="flex items-center gap-1">
+                                <i class='bx bx-calendar text-[#FFB51B]'></i>
+                                <span>{{ \Carbon\Carbon::parse($program->date)->format('M d, Y') }}</span>
                             </div>
-
-                            <!-- Better organized content with consistent spacing -->
-                            <div class="p-6">
-                                <h3 class="text-xl font-bold text-[#1a2235] mb-3 line-clamp-2">{{ $program->title }}</h3>
-
-                                <!-- Time and location info with icons -->
-                                <div class="space-y-2 mb-4">
-                                    <div class="flex items-center gap-2 text-gray-600 text-sm">
-                                        <i class='bx bx-time text-[#FFB51B]'></i>
-                                        <span>{{ \Carbon\Carbon::parse($program->start_time)->format('g:i A') }}
-                                            @if ($program->end_time)
-                                                - {{ \Carbon\Carbon::parse($program->end_time)->format('g:i A') }}
-                                            @endif
-                                        </span>
-                                    </div>
-                                    <div class="flex items-center gap-2 text-gray-600 text-sm">
-                                        <i class='bx bx-map text-[#FFB51B]'></i>
-                                        <span>{{ $program->location }}</span>
-                                    </div>
-                                </div>
-
-                                <p class="text-gray-700 text-sm mb-6 line-clamp-3">{{ $program->description }}</p>
-
-                                <!-- Action buttons for upcoming programs -->
-                                <div class="flex gap-3">
-                                    <button type="button"
-                                        class="flex-1 px-4 py-2 bg-[#1a2235] text-white rounded-lg hover:bg-[#232b47] transition-colors duration-200 flex items-center justify-center gap-2 text-sm font-medium"
-                                        onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
-                                        <i class='bx bx-show'></i> View Details
-                                    </button>
-                                    <button
-                                        class="px-4 py-2 border-2 border-[#FFB51B] text-[#FFB51B] rounded-lg hover:bg-[#FFB51B] hover:text-[#1a2235] transition-colors duration-200 flex items-center gap-2 text-sm font-medium">
-                                        <i class='bx bx-bookmark'></i> Save
-                                    </button>
-                                </div>
+                            <div class="flex items-center gap-1">
+                                <i class='bx bx-time text-[#FFB51B]'></i>
+                                <span>
+                                    {{ \Carbon\Carbon::parse($program->start_time)->format('g:i A') }}
+                                    @if ($program->end_time)
+                                        - {{ \Carbon\Carbon::parse($program->end_time)->format('g:i A') }}
+                                    @endif
+                                </span>
                             </div>
                         </div>
-                        @include('programs.modals.program-modal', ['program' => $program])
-                    @empty
-                        <div class="col-span-full text-center py-16">
-                            <i class='bx bx-calendar-x text-6xl text-gray-300 mb-4'></i>
-                            <p class="text-xl text-gray-500">No upcoming programs scheduled</p>
-                            <p class="text-gray-400 mt-2">Check back soon for new events!</p>
+                        <div class="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                            <i class='bx bx-map text-[#FFB51B]'></i>
+                            <span>{{ $program->location }}</span>
                         </div>
-                    @endforelse
+                        <x-button type="button" variant="secondary" class="w-full text-sm gap-1"
+                            onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
+                            <i class='bx bx-show'></i>
+                            View Details
+                        </x-button>
+                    </x-overview.card>
+                    @include('programs.modals.program-modal', ['program' => $program])
+                @empty
+                    <x-empty-state icon="bx bx-history" title="No Ongoing Programs"
+                        description="Ongoing programs will appear here." size="small" />
+                @endforelse
+            </div>
+
+            <!-- Upcoming -->
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#1a2235] flex items-center gap-3">
+                    <i class='bx bx-calendar text-[#FFB51B]'></i> Upcoming Programs
+                </h2>
+                <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
+                    {{ count($incomingPrograms) }} Programs Scheduled
                 </div>
             </div>
 
-            <!-- Enhanced completed programs section -->
-            <div class="mb-16">
-                <div class="flex items-center justify-between mb-8">
-                    <h2 class="text-3xl md:text-4xl font-bold text-[#1a2235] flex items-center gap-3">
-                        <i class='bx bx-check-circle text-[#FFB51B]'></i>
-                        Recently Completed Programs
-                    </h2>
-                    <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
-                        {{ count($donePrograms) }} Programs Completed
-                    </div>
-                </div>
-
-                <!-- Grid layout for completed programs with feedback focus -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    @forelse($donePrograms as $program)
-                        <div
-                            class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                            <div class="flex flex-col sm:flex-row">
-                                <!-- Image section with completed badge -->
-                                <div class="relative sm:w-1/3 h-48 sm:h-auto overflow-hidden">
-                                    <img src="{{ $program->image_url ?? 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' }}"
-                                        alt="{{ $program->title }}"
-                                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                    <div
-                                        class="absolute top-4 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
-                                        Completed
-                                    </div>
-                                </div>
-
-                                <!-- Content section with feedback emphasis -->
-                                <div class="flex-1 p-6">
-                                    <h3 class="text-lg font-bold text-[#1a2235] mb-2">{{ $program->title }}</h3>
-
-                                    <div class="flex items-center gap-2 text-gray-500 text-sm mb-3">
-                                        <i class='bx bx-calendar'></i>
-                                        <span>{{ \Carbon\Carbon::parse($program->date)->format('F d, Y') }}</span>
-                                    </div>
-
-                                    <p class="text-gray-700 text-sm mb-4 line-clamp-2">{{ $program->description }}</p>
-
-                                    <!-- Feedback-focused action buttons -->
-                                    <div class="space-y-3">
-                                        <button type="button"
-                                            class="w-full px-4 py-3 bg-[#FFB51B] text-[#1a2235] rounded-lg hover:bg-[#e6a319] transition-colors duration-200 flex items-center justify-center gap-2 font-semibold"
-                                            onclick="document.getElementById('guestFeedbackModal_{{ $program->id }}').showModal()">
-                                            <i class='bx bx-message-dots'></i> Share Your Feedback
-                                        </button>
-                                        <button type="button"
-                                            class="w-full px-4 py-2 border border-[#1a2235] text-[#1a2235] rounded-lg hover:bg-[#1a2235] hover:text-white transition-colors duration-200 flex items-center justify-center gap-2 text-sm"
-                                            onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
-                                            <i class='bx bx-show'></i> View Program Details
-                                        </button>
-                                    </div>
-                                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                @forelse($incomingPrograms as $program)
+                    <x-overview.card title="{{ $program->title }}" icon="bx-calendar-event" variant="minimal">
+                        <div class="flex items-center justify-between gap-4 text-sm text-gray-600 mb-3">
+                            <div class="flex items-center gap-1">
+                                <i class='bx bx-calendar text-[#FFB51B]'></i>
+                                <span>{{ \Carbon\Carbon::parse($program->date)->format('M d, Y') }}</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class='bx bx-time text-[#FFB51B]'></i>
+                                <span>
+                                    {{ \Carbon\Carbon::parse($program->start_time)->format('g:i A') }}
+                                    @if ($program->end_time)
+                                        - {{ \Carbon\Carbon::parse($program->end_time)->format('g:i A') }}
+                                    @endif
+                                </span>
                             </div>
                         </div>
-                        @include('programs.modals.program-modal', ['program' => $program])
-                        @include('website.modals.guestFeedbackModal', ['program' => $program])
-                    @empty
-                        <div class="col-span-full text-center py-16">
-                            <i class='bx bx-history text-6xl text-gray-300 mb-4'></i>
-                            <p class="text-xl text-gray-500">No completed programs yet</p>
-                            <p class="text-gray-400 mt-2">Completed programs will appear here</p>
+                        <div class="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                            <i class='bx bx-map text-[#FFB51B]'></i>
+                            <span>{{ $program->location }}</span>
                         </div>
-                    @endforelse
+                        <x-button type="button" variant="secondary" class="w-full text-sm gap-1"
+                            onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
+                            <i class='bx bx-show'></i>
+                            View Details
+                        </x-button>
+                    </x-overview.card>
+                    @include('programs.modals.program-modal', ['program' => $program])
+                @empty
+                    <x-empty-state icon="bx bx-history" title="No Upcoming Programs Scheduled"
+                        description="Scheduled programs will appear here." size="small" />
+                @endforelse
+            </div>
+
+            <!-- Completed -->
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#1a2235] flex items-center gap-3">
+                    <i class='bx bx-check-circle text-[#FFB51B]'></i> Recently Completed Programs
+                </h2>
+                <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
+                    {{ count($donePrograms) }} Programs Completed
                 </div>
             </div>
 
-            <div class="container">
-    <h1 class="mb-4">Submit Program Request</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @forelse($donePrograms as $program)
+                    <x-overview.card title="{{ $program->title }}" icon="bx-check" variant="minimal">
+                        <div class="flex items-center justify-between gap-4 text-sm text-gray-600 mb-3">
+                            <div class="flex items-center gap-1">
+                                <i class='bx bx-calendar text-[#FFB51B]'></i>
+                                <span>{{ \Carbon\Carbon::parse($program->date)->format('M d, Y') }}</span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class='bx bx-time text-[#FFB51B]'></i>
+                                <span>
+                                    {{ \Carbon\Carbon::parse($program->start_time)->format('g:i A') }}
+                                    @if ($program->end_time)
+                                        - {{ \Carbon\Carbon::parse($program->end_time)->format('g:i A') }}
+                                    @endif
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                            <i class='bx bx-map text-[#FFB51B]'></i>
+                            <span>{{ $program->location }}</span>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-2 w-full">
+                            <x-button type="button" variant="primary" class="flex-1 text-sm gap-1"
+                                onclick="document.getElementById('guestFeedbackModal_{{ $program->id }}').showModal()">
+                                <i class='bx bx-message-dots'></i>
+                                Share Feedback
+                            </x-button>
 
-    <form action="{{ route('program_requests.store') }}" method="POST">
-        @csrf
-        <div class="mb-3">
-            <label>Name</label>
-            <input type="text" name="name" class="form-control" required>
+                            <x-button type="button" variant="secondary" class="flex-1 text-sm gap-1"
+                                onclick="document.getElementById('modal_{{ $program->id }}').showModal()">
+                                <i class='bx bx-show'></i>
+                                View Details
+                            </x-button>
+                        </div>
+
+                    </x-overview.card>
+                    @include('programs.modals.program-modal', ['program' => $program])
+                    @include('website.modals.guestFeedbackModal', ['program' => $program])
+                @empty
+                    <x-empty-state icon="bx bx-history" title="No Completed Programs"
+                        description="Finished programs will appear here." size="small" />
+                @endforelse
+            </div>
         </div>
+    </div>
 
-        <div class="mb-3">
-            <label>Program Title</label>
-            <input type="text" name="title" class="form-control" required>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-white">
+        <div class="mx-auto max-w-4xl px-6 lg:px-8">
+
+            <x-section-title first="Frequently" second="Asked Questions" />
+
+            <div class="space-y-4">
+                <x-accordion-daisy title="How can I join a program?">
+                    <p>
+                        You can join by registering through our website’s program page.
+                        Each program has a “Register” or “Sign Up” button.
+                        Simply fill out the form and wait for confirmation from our team.
+                    </p>
+                </x-accordion-daisy>
+
+                <x-accordion-daisy title="Are the programs free?">
+                    <p>
+                        Yes, most of our programs are free of charge.
+                        However, some may require minimal contributions or materials depending on the activity.
+                        All details are listed in each program description.
+                    </p>
+                </x-accordion-daisy>
+
+                <x-accordion-daisy title="Who can participate?">
+                    <p>
+                        Anyone with the passion to serve is welcome to participate!
+                        Whether you’re a student, professional, or community member,
+                        our programs are open to volunteers, partners, and beneficiaries alike.
+                    </p>
+                </x-accordion-daisy>
+            </div>
         </div>
+    </section>
 
-        <div class="mb-3">
-            <label>Description</label>
-            <textarea name="description" class="form-control" rows="4" required></textarea>
-        </div>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-10 py-10">
+        <x-section-title first="Submit" second="Program Request" />
 
-        <div class="mb-3">
-            <label>Target Audience</label>
-            <input type="text" name="target_audience" class="form-control" required>
-        </div>
+        <form action="{{ route('program_requests.store') }}" method="POST" class="space-y-6">
+            @csrf
 
-        <div class="mb-3">
-            <label>Location</label>
-            <input type="text" name="location" class="form-control" required>
-        </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <x-form.label for="name" variant="user">Your Name</x-form.label>
+                    <x-form.input name="name" id="name" required placeholder="e.g. Juan Dela Cruz" />
+                </div>
 
-        <div class="mb-3">
-            <label>Proposed Date</label>
-            <input type="date" name="proposed_date" class="form-control">
-        </div>
+                <div>
+                    <x-form.label for="title" variant="title">Program Title</x-form.label>
+                    <x-form.input name="title" id="title" required placeholder="e.g. Community Feeding Program" />
+                </div>
+            </div>
 
-        <button type="submit" class="btn btn-success">Submit Request</button>
-    </form>
-</div>
+            <div>
+                <x-form.textarea name="description" label="Description" required
+                    placeholder="Briefly describe the program objectives and activities..." />
+            </div>
 
-        </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <x-form.label for="target_audience">Target Audience</x-form.label>
+                    <x-form.input name="target_audience" id="target_audience" required
+                        placeholder="e.g. Farmers, Women, Youth" />
+                </div>
+
+                <div>
+                    <x-form.label for="location" variant="location">Location</x-form.label>
+                    <x-form.input name="location" id="location" required placeholder="e.g. Nueva Ecija, Philippines" />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <x-form.label for="proposed_date" variant="date">Proposed Date</x-form.label>
+                    <x-form.date-picker id="proposed_date" name="proposed_date" />
+                </div>
+            </div>
+
+            <div>
+                <x-button type="submit" variant="primary">
+                    <i class='bx bx-send mr-1'></i> Submit Request
+                </x-button>
+            </div>
+        </form>
     </div>
 @endsection
