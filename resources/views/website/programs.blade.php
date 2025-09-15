@@ -1,9 +1,7 @@
-{{-- filepath: resources/views/website/programs.blade.php --}}
-
 @extends('layouts.navbar')
 
 @section('content')
-    <section class="relative w-full min-h-screen bg-gray-200 flex flex-col lg:flex-row">
+    {{-- <section class="relative w-full min-h-screen bg-gray-200 flex flex-col lg:flex-row">
         <div class="relative z-10 flex flex-col justify-center gap-6 px-6 md:px-12 lg:px-24 py-16 lg:py-20 lg:w-1/2">
             <p class="text-base md:text-lg lg:text-xl font-normal text-[#1A2235] tracking-wide uppercase">
                 Grow Without Limits
@@ -25,10 +23,78 @@
         </div>
 
         <div class="lg:w-1/2 h-64 md:h-96 lg:h-auto">
-            <img src="https://placehold.co/1176x921" alt="Join Youmanitarian International"
-                class="w-full h-full object-cover rounded-tl-2xl lg:rounded-tl-none lg:rounded-bl-2xl" />
+            <img src="{{ asset('assets/images/bg/program-bg.jpg') }}" alt="Join Youmanitarian International"
+                class="w-full h-full object-cover" />
         </div>
     </section>
+
+    <section class="relative w-full min-h-screen flex flex-col lg:flex-row">
+    <!-- Left Image with Overlay + Text -->
+    <div class="relative lg:w-1/2 h-80 lg:h-auto bg-cover bg-center"
+         style="background-image: url('{{ asset('assets/images/bg/program-bg.jpg') }}');">
+
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-[#1a2235] bg-opacity-60 backdrop-blur-sm"></div>
+
+        <!-- Text Content -->
+        <div class="relative z-10 flex flex-col justify-center h-full px-6 md:px-12 lg:px-16 py-12 text-white">
+            <p class="text-base md:text-lg uppercase tracking-wide">Grow Without Limits</p>
+            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold leading-snug">
+                Join <span class="text-[#FFB51B]">Youmanitarian International</span> and be one of us!
+            </h2>
+            <p class="mt-4 text-base md:text-lg font-medium">
+                Make connections, take action and move forward with a community
+                built on dedication and mutual growth.
+            </p>
+
+            <button
+                class="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-[#FFB51B] text-[#1A2235] rounded-full font-semibold shadow hover:bg-[#e6a318] transition">
+                JOIN NOW!
+                <i class="bx bx-right-arrow-alt text-lg"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Right Image (No Overlay) -->
+    <div class="lg:w-1/2 h-80 lg:h-auto">
+        <img src="{{ asset('assets/images/bg/program-bg.jpg') }}"
+             alt="Join Youmanitarian International"
+             class="w-full h-full object-cover" />
+    </div>
+</section> --}}
+
+
+
+<section class="relative w-full min-h-screen flex items-center">
+    <!-- Background image -->
+    <img src="{{ asset('assets/images/bg/program1-bg.jpg') }}"
+         alt="Join Youmanitarian International"
+         class="absolute inset-0 w-full h-full object-cover">
+
+    <!-- Gradient overlay (dark left -> transparent right) -->
+    <div class="absolute inset-0 bg-gradient-to-r from-[#1a2235]/80 via-[#1a2235]/50 to-transparent"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-3xl px-6 md:px-12 lg:px-24 text-white">
+        <p class="text-base md:text-lg lg:text-xl font-normal tracking-wide uppercase">
+            Grow Without Limits
+        </p>
+        <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold leading-snug">
+            Join <span class="text-[#FFB51B]">Youmanitarian International</span> and be one of us!
+        </h2>
+        <p class="mt-4 text-base md:text-lg lg:text-xl font-medium">
+            Make connections, take action and move forward with a community
+            built on dedication and mutual growth.
+        </p>
+
+        <button
+            class="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-[#FFB51B] text-[#1A2235] rounded-full font-semibold shadow hover:bg-[#e6a318] transition">
+            JOIN NOW!
+            <i class="bx bx-right-arrow-alt text-lg"></i>
+        </button>
+    </div>
+</section>
+
 
 
     <section class="max-w-7xl w-full mx-auto bg-[#1A2235] rounded-2xl py-4 my-3 px-6">
@@ -494,15 +560,14 @@
                         <x-form.label for="proposed_date" variant="date">Proposed Date</x-form.label>
                         <x-form.date-picker id="proposed_date" name="proposed_date" />
                     </div>
+                    <div>
+                        <x-button type="submit" variant="primary">
+                            <i class='bx bx-send mr-1'></i> Submit Request
+                        </x-button>
+                    </div>
                 </div>
 
-                <div>
-                    <x-button type="submit" variant="primary">
-                        <i class='bx bx-send mr-1'></i> Submit Request
-                    </x-button>
-                </div>
             </form>
         </div>
-
     </div>
 @endsection

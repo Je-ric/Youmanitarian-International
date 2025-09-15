@@ -6,29 +6,14 @@
             style="background-image: url('{{ asset('assets/images/bg/team-bg.jpg') }}');">
             <div class="absolute inset-0 bg-[#1a2235] bg-opacity-60 backdrop-blur-sm"></div>
 
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <x-section-title first="Meet" second="Our Team" firstColor="#FFFFFF" />
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                    Dedicated professionals working together to make a meaningful impact in our community
-                </p>
-            </div>
-        </div>
-
-    <header class="relative isolate h-[90vh] flex items-center">
-        <img src="https://images.unsplash.com/photo-1506765515384-028b60a970df?auto=format&fit=crop&w=1400&q=80"
-            alt="Empowering community"
-            class="absolute inset-0 w-full h-full object-cover object-center opacity-70 sm:opacity-80" />
-        <div class="absolute inset-0 bg-white/40 backdrop-blur-md"></div>
-        <div class="relative z-10 mx-auto w-full max-w-6xl px-6 lg:px-8">
-            <div class="max-w-3xl">
-                <p class="text-lg font-medium uppercase tracking-wide text-gray-800/80">Who we are?</p>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight">
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
+                  <p class="text-lg font-medium uppercase tracking-wide text-white">Who we are?</p>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#FFB51B] tracking-tight">
                     Youmanitarian International
                 </h1>
-                <p class="mt-4 text-base sm:text-lg lg:text-xl">
-                    A non-stock, non-profit organization composed of passionate, goal-driven, and responsive individuals who
-                    exist
-                    to empower communities and transform the lives of marginalized people.
+                 <p class="mt-4 text-base sm:text-lg lg:text-xl text-white">
+                    A non-stock, non-profit organization composed of passionate, goal-driven, and responsive <br> individuals who
+                    exist to empower communities and transform the lives of marginalized people.
                 </p>
                 <button aria-label="Contact Us"
                     class="mt-6 inline-flex items-center gap-2 rounded-full bg-gray-900 px-7 py-3 font-medium text-white shadow
@@ -38,7 +23,10 @@
                 </button>
             </div>
         </div>
-    </header>
+
+
+
+
 
     {{-- ===================================================================================== --}}
     <!-- ABOUT US -->
