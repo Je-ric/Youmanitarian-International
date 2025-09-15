@@ -1,7 +1,19 @@
 @extends('layouts.navbar')
 
 @section('content')
-    <!-- HERO -->
+
+    <div class="relative bg-cover bg-center py-16"
+            style="background-image: url('{{ asset('assets/images/bg/team-bg.jpg') }}');">
+            <div class="absolute inset-0 bg-[#1a2235] bg-opacity-60 backdrop-blur-sm"></div>
+
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <x-section-title first="Meet" second="Our Team" firstColor="#FFFFFF" />
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Dedicated professionals working together to make a meaningful impact in our community
+                </p>
+            </div>
+        </div>
+
     <header class="relative isolate h-[90vh] flex items-center">
         <img src="https://images.unsplash.com/photo-1506765515384-028b60a970df?auto=format&fit=crop&w=1400&q=80"
             alt="Empowering community"
