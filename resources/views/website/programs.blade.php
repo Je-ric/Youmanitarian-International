@@ -32,158 +32,211 @@
 
 
     <!-- Stats Section -->
-    <section class="w-auto mx-4 bg-[#1A2235] rounded-2xl py-4 px-6">
+    <section class="max-w-7xl w-full mx-auto bg-[#1A2235] rounded-2xl py-4 my-3 px-6">
         <div class="container mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             <div>
                 <div class="text-2xl sm:text-3xl font-bold text-white">{{ $volunteersCount }}</div>
-                <div class="text-sm sm:text-base text-white">Volunteers</div>
+                <div class="text-sm sm:text-base font-bold text-[#FFB51B]">Volunteers</div>
             </div>
             <div>
                 <div class="text-2xl sm:text-3xl font-bold text-white">{{ $membersCount }}</div>
-                <div class="text-sm sm:text-base text-white">Members</div>
+                <div class="text-sm sm:text-base font-bold text-[#FFB51B]">Members</div>
             </div>
             <div>
                 <div class="text-2xl sm:text-3xl font-bold text-white">{{ $programsCount }}</div>
-                <div class="text-sm sm:text-base text-white">Programs</div>
+                <div class="text-sm sm:text-base font-bold text-[#FFB51B]">Programs</div>
             </div>
             <div>
                 <div class="text-2xl sm:text-3xl font-bold text-white">--</div>
-                <div class="text-sm sm:text-base text-white">Activities</div>
+                <div class="text-sm sm:text-base font-bold text-[#FFB51B]">Activities</div>
             </div>
         </div>
     </section>
+
 
 
     <!-- Program Highlights -->
-    <section class="relative max-w-5xl mx-auto bg-white py-8 sm:py-10">
+    <section class="relative max-w-5xl mx-auto py-8 sm:py-10">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
-            <!-- Title -->
+            <!-- Section Title -->
             <x-section-title first="Program" second="Highlights" />
 
-            <div class="space-y-5 sm:space-y-6">
+            <div class="space-y-6">
                 <!-- Highlight Card -->
-                <div
-                    class="flex flex-col md:flex-row items-start md:items-center gap-3 sm:gap-5 p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="flex-1 text-lg sm:text-xl font-semibold text-black">
-                        Community Empowerment
+                <article class="p-5 sm:p-6 rounded-xl border border-slate-200 shadow-sm bg-white">
+                    <!-- Title + Icon -->
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg sm:text-xl font-semibold text-black">
+                            Community Empowerment
+                        </h3>
+                        <span
+                            class="w-10 h-10 flex items-center justify-center bg-primary-custom text-white rounded-full shadow-md">
+                            <i class='bx bx-group text-xl'></i>
+                        </span>
                     </div>
-                    <div class="flex-1 text-sm sm:text-base text-gray-700 leading-relaxed">
+
+                    <!-- w-1/2 -->
+                    <p class="text-sm sm:text-base text-gray-700 leading-relaxed w-[70%] text-justify">
                         Our programs strengthen rural communities by supporting farmers, women, and youth.
-                        Through workshops, capacity building, and partnerships, we ensure that beneficiaries
-                        gain long-term skills and opportunities for sustainable livelihoods.
-                    </div>
-                    <!-- Icon -->
-                    <div
-                        class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-primary-custom text-white rounded-full">
-                        <i class='bx bx-group text-xl'></i>
-                    </div>
-                </div>
+                        Through hands-on workshops, skills training, and strategic partnerships, beneficiaries
+                        gain long-term knowledge and sustainable opportunities. By empowering local leaders and
+                        providing access to resources, we help communities thrive socially and economically.
+                    </p>
+                </article>
 
                 <!-- Another Card -->
-                <div
-                    class="flex flex-col md:flex-row items-start md:items-center gap-3 sm:gap-5 p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="flex-1 text-lg sm:text-xl font-semibold text-black">
-                        Volunteer Engagement
+                <article class="p-5 sm:p-6 rounded-xl border border-slate-200 shadow-sm bg-white">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg sm:text-xl font-semibold text-black">
+                            Volunteer Engagement
+                        </h3>
+                        <span
+                            class="w-10 h-10 flex items-center justify-center bg-accent-custom text-white rounded-full shadow-md">
+                            <i class='bx bx-heart text-xl'></i>
+                        </span>
                     </div>
-                    <div class="flex-1 text-sm sm:text-base text-gray-700 leading-relaxed">
-                        Volunteers are at the heart of our mission. We provide structured opportunities
-                        for individuals to contribute their skills, log their hours, and participate in
-                        initiatives ranging from disaster response to community outreach.
-                    </div>
-                    <!-- Icon -->
-                    <div
-                        class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-accent-custom text-white rounded-full">
-                        <i class='bx bx-heart text-xl'></i>
-                    </div>
-                </div>
+                    <p class="text-sm sm:text-base text-gray-700 leading-relaxed w-[70%] text-justify">
+                        Volunteers are at the heart of our mission. We provide structured opportunities for
+                        individuals to contribute their expertise, track their volunteer hours, and participate
+                        in initiatives ranging from disaster relief to educational outreach. By fostering
+                        engagement, we build a community of active citizens who drive meaningful change.
+                    </p>
+                </article>
 
                 <!-- Another Card -->
-                <div
-                    class="flex flex-col md:flex-row items-start md:items-center gap-3 sm:gap-5 p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm">
-                    <div class="flex-1 text-lg sm:text-xl font-semibold text-black">
-                        Impact Stories
+                <article class="p-5 sm:p-6 rounded-xl border border-slate-200 shadow-sm bg-white">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg sm:text-xl font-semibold text-black">
+                            Impact Stories
+                        </h3>
+                        <span
+                            class="w-10 h-10 flex items-center justify-center bg-slate-900 text-white rounded-full shadow-md">
+                            <i class='bx bx-book-open text-xl'></i>
+                        </span>
                     </div>
-                    <div class="flex-1 text-sm sm:text-base text-gray-700 leading-relaxed">
-                        We believe in transparency and inspiration. Our platform showcases real stories of
-                        transformation from farmers, volunteers, and beneficiaries whose lives have been touched
-                        by our work and collective effort.
-                    </div>
-                    <!-- Icon -->
-                    <div
-                        class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-slate-900 text-white rounded-full">
-                        <i class='bx bx-book-open text-xl'></i>
-                    </div>
-                </div>
+                    <p class="text-sm sm:text-base text-gray-700 leading-relaxed w-[70%] text-justify">
+                        We believe in transparency and inspiration. Our platform highlights real-life stories
+                        of transformation, showing how farmers, volunteers, and community members have
+                        benefited from our programs. These narratives showcase success, resilience, and the
+                        positive ripple effects of collective effort on society.
+                    </p>
+                </article>
             </div>
         </div>
     </section>
 
 
 
-
-
-
-
-    <!-- Program Feedback Carousel -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-16 bg-[#1A2235]">
         <div class="mx-auto max-w-5xl px-6 lg:px-8 text-center">
 
-            <x-section-title first="Program" second="Feedback" />
+            <x-section-title first="Program" second="Feedback" firstColor="#FFFFFF" mb="false" />
+            <p class="text-white mb-10">
+                Here’s the peoples feedback about our programs and events and how they transformed their lives
+            </p>
 
-            <div class="carousel w-full rounded-2xl shadow-lg">
-                <!-- Slide 1 -->
-                <div id="slide1" class="carousel-item relative w-full flex flex-col items-center p-10 bg-white">
-                    <p class="text-lg md:text-xl text-gray-700 leading-relaxed max-w-3xl italic">
-                        “This program gave me the confidence to step out of my comfort zone and make a real impact in my
-                        community.”
-                    </p>
-                    <h3 class="mt-6 text-lg font-semibold text-gray-900">— Maria Santos, Volunteer</h3>
-                    <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-                        <a href="#slide3" class="btn btn-circle">❮</a>
-                        <a href="#slide2" class="btn btn-circle">❯</a>
+            <div class="relative w-full overflow-hidden rounded-2xl shadow-lg bg-white">
+
+                <div id="feedbackSlides"
+                    class="flex w-full transition-transform duration-500 ease-in-out overflow-x-auto scroll-smooth scrollbar-hide max-h-[400px]">
+
+                    <div class="slide flex-shrink-0 w-full p-10 text-center overflow-y-auto">
+                        <p class="text-lg md:text-xl text-gray-700 italic max-w-3xl mx-auto">
+                            “This program completely changed how I view volunteering. I gained practical skills that I now
+                            apply daily. The instructors were very supportive and encouraging. I feel more confident
+                            stepping into leadership roles in my community.”
+                        </p>
+                        <h3 class="mt-6 text-lg font-semibold text-gray-900">— Juan Dela Cruz, Volunteer</h3>
                     </div>
+
+                    <div class="slide flex-shrink-0 w-full p-10 text-center overflow-y-auto">
+                        <p class="text-lg md:text-xl text-gray-700 italic max-w-3xl mx-auto">
+                            “The workshops were practical and inspiring. I learned skills that I now use every day at work
+                            and in life. Highly recommended!”
+                        </p>
+                        <h3 class="mt-6 text-lg font-semibold text-gray-900">— Jose Dimagiba, Participant</h3>
+                    </div>
+
+                    <div class="slide flex-shrink-0 w-full p-10 text-center overflow-y-auto">
+                        <p class="text-lg md:text-xl text-gray-700 italic max-w-3xl mx-auto">
+                            “Joining this program allowed me to meet amazing people who share my passion. We collaborated on
+                            meaningful projects. I left with both new skills and lasting friendships.”
+                        </p>
+                        <h3 class="mt-6 text-lg font-semibold text-gray-900">— Malupiton, Youth Leader</h3>
+                    </div>
+
+                    <div class="slide flex-shrink-0 w-full p-10 text-center overflow-y-auto">
+                        <p class="text-lg md:text-xl text-gray-700 italic max-w-3xl mx-auto">
+                            “I never expected a program like this to be so enriching. Every session was interactive and
+                            insightful. The activities taught me problem-solving and teamwork. I’m looking forward to
+                            participating in future programs.”
+                        </p>
+                        <h3 class="mt-6 text-lg font-semibold text-gray-900">— Hiro Hamada, Volunteer</h3>
+                    </div>
+
                 </div>
 
-                <!-- Slide 2 -->
-                <div id="slide2" class="carousel-item relative w-full flex flex-col items-center p-10 bg-white">
-                    <p class="text-lg md:text-xl text-gray-700 leading-relaxed max-w-3xl italic">
-                        “The workshops were practical and inspiring. I learned skills that I now use every day at work and
-                        in life.”
-                    </p>
-                    <h3 class="mt-6 text-lg font-semibold text-gray-900">— John Dela Cruz, Participant</h3>
-                    <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-                        <a href="#slide1" class="btn btn-circle">❮</a>
-                        <a href="#slide3" class="btn btn-circle">❯</a>
-                    </div>
-                </div>
+                <button id="prevSlideBtn"
+                    class="btn btn-circle absolute left-3 top-1/2 -translate-y-1/2 bg-[#FFB51B] hover:bg-[#e6a319] text-white shadow-lg">
+                    ❮
+                </button>
+                <button id="nextSlideBtn"
+                    class="btn btn-circle absolute right-3 top-1/2 -translate-y-1/2 bg-[#FFB51B] hover:bg-[#e6a319] text-white shadow-lg">
+                    ❯
+                </button>
 
-                <!-- Slide 3 -->
-                <div id="slide3" class="carousel-item relative w-full flex flex-col items-center p-10 bg-white">
-                    <p class="text-lg md:text-xl text-gray-700 leading-relaxed max-w-3xl italic">
-                        “Joining this program helped me connect with like-minded people who share the same passion for
-                        community service.”
-                    </p>
-                    <h3 class="mt-6 text-lg font-semibold text-gray-900">— Angela Reyes, Youth Leader</h3>
-                    <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-                        <a href="#slide2" class="btn btn-circle">❮</a>
-                        <a href="#slide1" class="btn btn-circle">❯</a>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
+
+    <script>
+        const slidesContainer = document.getElementById('feedbackSlides');
+        const slides = slidesContainer.querySelectorAll('.slide');
+        let activeSlideIndex = 0;
+
+        function goToSlide(index) {
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+            activeSlideIndex = index;
+
+            slidesContainer.scrollTo({
+                left: slides[index].offsetLeft,
+                behavior: 'smooth'
+            });
+        }
+
+        document.getElementById('prevSlideBtn').addEventListener('click', () => goToSlide(activeSlideIndex - 1));
+        document.getElementById('nextSlideBtn').addEventListener('click', () => goToSlide(activeSlideIndex + 1));
+    </script>
+
+    <style>
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+
+
+
+
+
+
 
 
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
         <div class="max-w-7xl mx-auto">
-                <x-section-title first="Our" second="Programs" />
+            <x-section-title first="Our" second="Programs" />
 
             <!-- Ongoing -->
             <div class="flex items-center justify-between mb-8">
-                <h2 class="text-3xl md:text-4xl font-bold text-[#1a2235] flex items-center gap-3">
+                <h3 class="text-3xl md:text-4xl font-bold text-[#1a2235] flex items-center gap-3">
                     <i class='bx bx-play-circle text-[#FFB51B]'></i> Ongoing Programs
-                </h2>
+                </h3>
                 <div class="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm">
                     {{ count($ongoingPrograms) }} Programs Scheduled
                 </div>
@@ -191,7 +244,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
                 @forelse ($ongoingPrograms as $program)
-                    <x-overview.card title="{{ $program->title }}" icon="bx-bolt" variant="minimal">
+                    <x-overview.card title="{{ $program->title }}" icon="bx-play-circle" variant="minimal">
                         <div class="flex items-center justify-between gap-4 text-sm text-gray-600 mb-3">
                             <div class="flex items-center gap-1">
                                 <i class='bx bx-calendar text-[#FFB51B]'></i>
@@ -327,14 +380,14 @@
     </div>
 
 
-    <!-- FAQ Section -->
-    <section class="py-16 bg-white">
+    <section class="py-16 bg-[#1A2235]">
         <div class="mx-auto max-w-4xl px-6 lg:px-8">
 
-            <x-section-title first="Frequently" second="Asked Questions" />
+            <x-section-title first="Frequently" second="Asked Questions" mb="false" firstColor="#FFFFFF" />
+            <p class="text-center text-gray-400 mb-10">Find answers to the most common questions about our programs.</p>
 
             <div class="space-y-4">
-                <x-accordion-daisy title="How can I join a program?">
+                <x-accordion-daisy title="How can I join a program?" variant="dark">
                     <p>
                         You can join by registering through our website’s program page.
                         Each program has a “Register” or “Sign Up” button.
@@ -342,7 +395,7 @@
                     </p>
                 </x-accordion-daisy>
 
-                <x-accordion-daisy title="Are the programs free?">
+                <x-accordion-daisy title="Are the programs free?" variant="dark">
                     <p>
                         Yes, most of our programs are free of charge.
                         However, some may require minimal contributions or materials depending on the activity.
@@ -350,16 +403,50 @@
                     </p>
                 </x-accordion-daisy>
 
-                <x-accordion-daisy title="Who can participate?">
+                <x-accordion-daisy title="Who can participate?" variant="dark">
                     <p>
                         Anyone with the passion to serve is welcome to participate!
                         Whether you’re a student, professional, or community member,
                         our programs are open to volunteers, partners, and beneficiaries alike.
                     </p>
                 </x-accordion-daisy>
+
+                <x-accordion-daisy title="How are volunteer applications processed?" variant="dark">
+                    <p>
+                        All volunteer applications are reviewed by Admins or Program Coordinators.
+                        They can approve, deny, or restore applications. Once approved, volunteers
+                        can join programs and may be invited to become official members.
+                    </p>
+                </x-accordion-daisy>
+
+                <x-accordion-daisy title="Who can manage programs and volunteers?" variant="dark">
+                    <p>
+                        Admins and Program Coordinators can create and manage programs.
+                        Coordinators can manage volunteers within their programs, assign tasks,
+                        approve attendance, and view feedback. Volunteers can only join or leave programs based on rules.
+                    </p>
+                </x-accordion-daisy>
+
+                <x-accordion-daisy title="How is program feedback collected?" variant="dark">
+                    <p>
+                        Feedback is collected from volunteers and guests only after a program ends.
+                        Coordinators and Admins can view all submitted feedback, which helps improve
+                        future programs and ensure better participant experiences.
+                    </p>
+                </x-accordion-daisy>
+
+                <x-accordion-daisy title="Can volunteers leave a program after joining?" variant="dark">
+                    <p>
+                        Volunteers can leave a program only if it hasn’t started yet (status: incoming) and
+                        they have no assigned tasks. Once a program has started or tasks are assigned, leaving
+                        is not allowed to ensure smooth program operations.
+                    </p>
+                </x-accordion-daisy>
+
             </div>
         </div>
     </section>
+
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-10 py-10">
         <x-section-title first="Submit" second="Program Request" />
