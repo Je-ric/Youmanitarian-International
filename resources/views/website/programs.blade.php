@@ -31,7 +31,6 @@
     </section>
 
 
-    <!-- Stats Section -->
     <section class="max-w-7xl w-full mx-auto bg-[#1A2235] rounded-2xl py-4 my-3 px-6">
         <div class="container mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             <div>
@@ -55,17 +54,14 @@
 
 
 
-    <!-- Program Highlights -->
     <section class="relative max-w-5xl mx-auto py-8 sm:py-10">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
-            <!-- Section Title -->
             <x-section-title first="Program" second="Highlights" />
 
             <div class="space-y-6">
-                <!-- Highlight Card -->
                 <article class="p-5 sm:p-6 rounded-xl border border-slate-200 shadow-sm bg-white">
-                    <!-- Title + Icon -->
+
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="text-lg sm:text-xl font-semibold text-black">
                             Community Empowerment
@@ -85,7 +81,6 @@
                     </p>
                 </article>
 
-                <!-- Another Card -->
                 <article class="p-5 sm:p-6 rounded-xl border border-slate-200 shadow-sm bg-white">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="text-lg sm:text-xl font-semibold text-black">
@@ -104,7 +99,6 @@
                     </p>
                 </article>
 
-                <!-- Another Card -->
                 <article class="p-5 sm:p-6 rounded-xl border border-slate-200 shadow-sm bg-white">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="text-lg sm:text-xl font-semibold text-black">
@@ -129,7 +123,7 @@
 
 
     <section class="py-16 bg-[#1A2235]">
-        <div class="mx-auto max-w-5xl px-6 lg:px-8 text-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
             <x-section-title first="Program" second="Feedback" firstColor="#FFFFFF" mb="false" />
             <p class="text-white mb-10">
@@ -228,8 +222,8 @@
 
 
 
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
-        <div class="max-w-7xl mx-auto">
+    <div class="bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
+        <div class="max-w-7xl mx-auto px-0 sm:px-0 lg:px-0">
             <x-section-title first="Our" second="Programs" />
 
             <!-- Ongoing -->
@@ -381,7 +375,7 @@
 
 
     <section class="py-16 bg-[#1A2235]">
-        <div class="mx-auto max-w-4xl px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <x-section-title first="Frequently" second="Asked Questions" mb="false" firstColor="#FFFFFF" />
             <p class="text-center text-gray-400 mb-10">Find answers to the most common questions about our programs.</p>
@@ -447,55 +441,68 @@
         </div>
     </section>
 
+    <div class="py-10">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <x-section-title first="Submit" second="Program Request" mb="false" />
+            <div class="text-center max-w-5xl mx-auto my-4">
+                <x-feedback-status.alert type="info" icon="bx bx-info-circle"
+                    message="Have an idea for a program? Submit your request,
+                    and our team will carefully review it.
+                    If it meets our criteria and aligns with our mission,
+                    we’ll proceed with planning and bring it
+                    to life for the community." />
+            </div>
 
-    <div class="container mx-auto px-4 sm:px-6 lg:px-10 py-10">
-        <x-section-title first="Submit" second="Program Request" />
 
-        <form action="{{ route('program_requests.store') }}" method="POST" class="space-y-6">
-            @csrf
+            <form action="{{ route('program_requests.store') }}" method="POST" class="space-y-6">
+                @csrf
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                    <x-form.label for="name" variant="user">Your Name</x-form.label>
-                    <x-form.input name="name" id="name" required placeholder="e.g. Juan Dela Cruz" />
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <x-form.label for="name" variant="user">Your Name</x-form.label>
+                        <x-form.input name="name" id="name" required placeholder="e.g. Juan Dela Cruz" />
+                    </div>
+
+                    <div>
+                        <x-form.label for="title" variant="title">Program Title</x-form.label>
+                        <x-form.input name="title" id="title" required
+                            placeholder="e.g. Community Feeding Program" />
+                    </div>
                 </div>
 
                 <div>
-                    <x-form.label for="title" variant="title">Program Title</x-form.label>
-                    <x-form.input name="title" id="title" required placeholder="e.g. Community Feeding Program" />
+                    <x-form.textarea name="description" label="Description" required
+                        placeholder="Briefly describe the program objectives and activities..." />
                 </div>
-            </div>
 
-            <div>
-                <x-form.textarea name="description" label="Description" required
-                    placeholder="Briefly describe the program objectives and activities..." />
-            </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <x-form.label for="target_audience">Target Audience</x-form.label>
+                        <x-form.input name="target_audience" id="target_audience" required
+                            placeholder="e.g. Farmers, Women, Youth" />
+                    </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <x-form.label for="location" variant="location">Location</x-form.label>
+                        <x-form.input name="location" id="location" required
+                            placeholder="e.g. Nueva Ecija, Philippines" />
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <x-form.label for="proposed_date" variant="date">Proposed Date</x-form.label>
+                        <x-form.date-picker id="proposed_date" name="proposed_date" />
+                    </div>
+                </div>
+
                 <div>
-                    <x-form.label for="target_audience">Target Audience</x-form.label>
-                    <x-form.input name="target_audience" id="target_audience" required
-                        placeholder="e.g. Farmers, Women, Youth" />
+                    <x-button type="submit" variant="primary">
+                        <i class='bx bx-send mr-1'></i> Submit Request
+                    </x-button>
                 </div>
+            </form>
+        </div>
 
-                <div>
-                    <x-form.label for="location" variant="location">Location</x-form.label>
-                    <x-form.input name="location" id="location" required placeholder="e.g. Nueva Ecija, Philippines" />
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                    <x-form.label for="proposed_date" variant="date">Proposed Date</x-form.label>
-                    <x-form.date-picker id="proposed_date" name="proposed_date" />
-                </div>
-            </div>
-
-            <div>
-                <x-button type="submit" variant="primary">
-                    <i class='bx bx-send mr-1'></i> Submit Request
-                </x-button>
-            </div>
-        </form>
     </div>
 @endsection
