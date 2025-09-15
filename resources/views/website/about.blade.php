@@ -72,6 +72,9 @@
     <!-- Vision and Mission -->
     <section class="py-16 bg-gray-50">
         <div class="mx-auto max-w-6xl px-6 lg:px-8">
+
+            <x-section-title first="Our Mission" second="and Vision" />
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <!-- Vision -->
                 <div class="flex flex-col space-y-4 p-6 md:p-10 bg-[var(--primary-color)] text-white rounded-lg">
@@ -103,13 +106,49 @@
         </div>
     </section>
 
+    <section class="py-16 bg-gray-50">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8">
+
+        <x-section-title first="Our Mission" second="and Vision" />
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <!-- Vision -->
+            <div class="relative flex flex-col space-y-4 p-6 md:p-10 bg-[var(--primary-color)] text-white rounded-tl-[3rem] rounded-br-[3rem]">
+                <!-- Icon Circle (top-left corner) -->
+                <div class="absolute -top-6 -left-6 w-14 h-14 bg-white text-[var(--primary-color)] rounded-full flex items-center justify-center shadow-lg">
+                    <i class='bx bx-show text-2xl text-[var(--accent-color)]'></i>
+                </div>
+
+                <h3 class="text-2xl font-semibold mt-4">Our&nbsp;Vision</h3>
+                <p>
+                    Youmanitarian International as one of the progressive organizations working through harmony
+                    with other stakeholders in creating more sustainable communities by tapping the resources within.
+                </p>
+            </div>
+
+            <!-- Mission -->
+            <div class="relative flex flex-col space-y-4 p-6 md:p-10 bg-[var(--primary-color)] text-white rounded-tr-[3rem] rounded-bl-[3rem]">
+                <!-- Icon Circle (top-right corner) -->
+                <div class="absolute -top-6 -right-6 w-14 h-14 bg-white text-[var(--primary-color)] rounded-full flex items-center justify-center shadow-lg">
+                    <i class='bx bx-target-lock text-2xl text-[var(--accent-color)]'></i>
+                </div>
+
+                <h3 class="text-2xl font-semibold mt-4">Our&nbsp;Mission</h3>
+                <p>
+                    Transform the lives of marginalized and underprivileged people, and youth sector through education,
+                    inclusive development and exchange, civic and social endeavours in the spirit of volunteerism and goodwill,
+                    encourage peace and promote understanding to make a substantial change through sustainable development programs.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
     <section class="py-16 bg-white">
         <div class="mx-auto max-w-6xl px-6 lg:px-8">
-            <h2 class="text-4xl lg:text-5xl font-bold text-center text-balance mb-16">
-                <span class="text-primary-custom">Our</span>
-                <span class="text-accent-custom">Purpose</span>
-            </h2>
 
+            <x-section-title first="Our" second="Purpose" />
             <!-- General Purpose -->
             <div class="mt-8 flex items-start gap-4">
                 <i class='bx bx-info-circle text-3xl text-[var(--accent-color)] mt-1'></i>
@@ -224,10 +263,7 @@
     <section class="py-20 bg-white">
         <div class="mx-auto max-w-6xl px-6 lg:px-8">
             <!-- Section Header -->
-            <h2 class="text-4xl lg:text-5xl font-bold text-center mb-16">
-                <span class="text-primary-custom">Our</span>
-                <span class="text-accent-custom">Services</span>
-            </h2>
+            <x-section-title first="Our" second="Services" />
 
             <!-- Services Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">

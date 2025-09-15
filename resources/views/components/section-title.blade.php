@@ -15,7 +15,7 @@
     };
 @endphp
 
-<h2 class="text-3xl lg:text-4xl font-bold {{ $textAlignClass }} {{ $mbClass }}">
+<h2 class="text-3xl lg:text-4xl font-bold mt-6 {{ $textAlignClass }} {{ $mbClass }}">
     <span class="text-[{{ $firstColor }}]">{{ $first }}</span>
     <span class="text-[#FFB51B]">{{ $second }}</span>
 </h2>
