@@ -4,7 +4,7 @@
 
 <section class="relative w-full min-h-screen flex items-center">
     <!-- Background image -->
-    <img src="{{ asset('assets/images/bg/program1-bg.jpg') }}"
+    <img src="{{ asset('assets/images/bg/program-bg.jpg') }}"
          alt="Join Youmanitarian International"
          class="absolute inset-0 w-full h-full object-cover">
 

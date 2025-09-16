@@ -4,10 +4,7 @@
 
     <div class="relative bg-cover bg-center py-16"
         style="background-image: url('{{ asset('assets/images/bg/team-bg.jpg') }}');">
-        <!-- Overlay for better text readability -->
         <div class="absolute inset-0 bg-[#1a2235] bg-opacity-60 backdrop-blur-sm"></div>
-
-        <!-- Content -->
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <x-section-title first="Meet" second="Our Team" firstColor="#FFFFFF" />
             <p class="text-xl text-gray-300 max-w-3xl mx-auto">
