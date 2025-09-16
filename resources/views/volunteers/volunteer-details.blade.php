@@ -1,7 +1,7 @@
 @extends('layouts.sidebar_final')
 
 @section('content')
-    <x-page-header 
+    <x-page-header
         icon="bx-user"
         title="Volunteer Details"
         desc="Complete information about {{ $volunteer->user->name }}">
@@ -13,12 +13,13 @@
         }
     }">
 
-    <x-navigation-layout.tabs-modern 
+    <x-navigation-layout.tabs-modern
         :tabs="[
             ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-user-circle'],
             ['id' => 'application', 'label' => 'Application Details', 'icon' => 'bx-file-text'],
-            ['id' => 'programs', 'label' => 'Programs & Attendance', 'icon' => 'bx-calendar']
-        ]" 
+            ['id' => 'programs', 'label' => 'Programs & Attendance', 'icon' => 'bx-calendar'],
+            ['id' => 'consultation_hours', 'label' => 'Consultation Hours', 'icon' => 'bx-time-five']
+        ]"
         defaultTab="overview"
         :preserveState="false"
         class="mb-6">
@@ -33,6 +34,10 @@
 
         <x-slot name="slot_programs">
             @include('volunteers.partials.programsProfile', ['volunteer' => $volunteer])
+        </x-slot>
+
+        <x-slot name="slot_consultation_hours">
+            @include('volunteers.partials.consultationHoursProfile', ['volunteer' => $volunteer])
         </x-slot>
     </x-navigation-layout.tabs-modern>
 

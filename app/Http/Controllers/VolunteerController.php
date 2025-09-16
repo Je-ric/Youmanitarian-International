@@ -59,8 +59,8 @@ class VolunteerController extends Controller
     // volunteers/volunteer-details.blade.php (main)
     public function gotoVolunteerDetails($id)
     {
-        //  volunteer with associated programs
-        $volunteer = Volunteer::with('programs')->findOrFail($id);
+        //  volunteer with associated programs and consultation hours (through user)
+        $volunteer = Volunteer::with(['programs', 'user.consultationHours'])->findOrFail($id);
 
         return view('volunteers.volunteer-details', compact('volunteer'));
     }
