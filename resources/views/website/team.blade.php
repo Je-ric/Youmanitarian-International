@@ -70,8 +70,7 @@
             </div>
     </section>
 
-    <hr class="bg-[#1a2235] h-8 w-full my-8">
-    </hr>
+    <hr class="bg-[#1a2235] h-8 w-full my-8"></hr>
 
     <blockquote
         class="relative border-l-4 border-[#FFB51B] pl-6 sm:pl-8 md:pl-10 italic text-md sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-gray-700 leading-relaxed max-w-5xl mx-auto">

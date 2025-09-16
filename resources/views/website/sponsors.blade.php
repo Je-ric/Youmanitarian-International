@@ -30,49 +30,49 @@
 
 
 
-<section class="w-full bg-white px-6 md:px-16 lg:px-32 py-16">
+<section class="w-full bg-white px-6 md:px-16 lg:px-32 py-20">
     <div class="max-w-[1920px] mx-auto flex flex-col lg:flex-row gap-16">
 
         <!-- Left Text Column -->
         <div class="flex flex-col gap-4 lg:w-1/3">
             <span class="inline-block px-4 py-1.5 bg-sky-950 rounded-full text-white font-semibold text-lg tracking-wide">
-                Beneficial
+                Why Partner With Us
             </span>
             <h2 class="text-4xl md:text-5xl font-bold leading-tight text-zinc-900">
-                Beneficial Elements
+                Benefits for <span class="text-[#FFB51B]">Our Partners</span>
             </h2>
             <p class="text-lg md:text-xl text-zinc-900 leading-relaxed">
-                Powerful tools for your business to increase revenue and productivity.
+                Join a network of like-minded organizations and individuals. Collaborate with us to make a meaningful impact, grow your brand visibility, and contribute to lasting change in the community.
             </p>
         </div>
 
         <!-- Right Cards Column -->
-        <div class="flex flex-1 flex-col md:flex-row gap-4 md:gap-6">
+        <div class="flex flex-1 flex-col md:flex-row gap-6">
 
             <!-- Card 1 -->
-            <div class="flex-1 bg-gray-100 rounded-3xl p-6 md:p-8 flex flex-col gap-4">
-                <i class='bx bxs-smile text-5xl text-amber-400'></i>
-                <h3 class="text-xl md:text-2xl font-bold text-zinc-900">Happy Customers</h3>
-                <p class="text-base md:text-lg text-neutral-700 leading-relaxed">
-                    Productive agents are happy agents. Provide all the tools and info they need to best serve your customers.
+            <div class="flex-1 bg-gradient-to-br from-amber-100 to-amber-300 rounded-3xl p-8 flex flex-col gap-4 shadow-lg hover:scale-105 transition-transform duration-300">
+                <i class='bx bx-donate-heart text-5xl text-amber-700'></i>
+                <h3 class="text-xl md:text-2xl font-bold text-zinc-900">Amplify Your Impact</h3>
+                <p class="text-base md:text-lg text-zinc-800 leading-relaxed">
+                    Partnering with us allows your organization to reach communities in need and make a real difference.
                 </p>
             </div>
 
             <!-- Card 2 -->
-            <div class="flex-1 bg-gray-100 rounded-3xl p-6 md:p-8 flex flex-col gap-4">
-                <i class='bx bxs-cog text-5xl text-amber-400'></i>
-                <h3 class="text-xl md:text-2xl font-bold text-zinc-900">Best Integrations</h3>
-                <p class="text-base md:text-lg text-neutral-700 leading-relaxed">
-                    Our software handles complex businesses, yet scales effortlessly as you grow.
+            <div class="flex-1 bg-gradient-to-br from-sky-100 to-sky-300 rounded-3xl p-8 flex flex-col gap-4 shadow-lg hover:scale-105 transition-transform duration-300">
+                <i class='bx bxs-network-chart text-5xl text-sky-700'></i>
+                <h3 class="text-xl md:text-2xl font-bold text-zinc-900">Grow Your Network</h3>
+                <p class="text-base md:text-lg text-zinc-800 leading-relaxed">
+                    Connect with other organizations, thought leaders, and community members who share your vision for positive change.
                 </p>
             </div>
 
             <!-- Card 3 -->
-            <div class="flex-1 bg-gray-100 rounded-3xl p-6 md:p-8 flex flex-col gap-4">
-                <i class='bx bx-trending-up text-5xl text-amber-400'></i>
-                <h3 class="text-xl md:text-2xl font-bold text-zinc-900">Grow Without Problems</h3>
-                <p class="text-base md:text-lg text-neutral-700 leading-relaxed">
-                    By analyzing diverse datasets and adopting fast technology, we bridge companies with their customers seamlessly.
+            <div class="flex-1 bg-gradient-to-br from-emerald-100 to-emerald-300 rounded-3xl p-8 flex flex-col gap-4 shadow-lg hover:scale-105 transition-transform duration-300">
+                <i class='bx bx-trending-up text-5xl text-emerald-700'></i>
+                <h3 class="text-xl md:text-2xl font-bold text-zinc-900">Brand Visibility</h3>
+                <p class="text-base md:text-lg text-zinc-800 leading-relaxed">
+                    Gain recognition and highlight your support across our events, campaigns, and online platforms.
                 </p>
             </div>
 
@@ -81,64 +81,7 @@
 </section>
 
 
-
-  <div class="w-full max-w-[1920px] h-auto md:max-h-[700px] px-6 md:px-12 bg-white flex flex-col lg:flex-row justify-start items-center gap-8 md:gap-16 overflow-hidden">
-
-    <!-- Left Image Section -->
-    <div class="w-full md:w-[700px] relative flex-shrink-0">
-        <img class="w-full h-auto md:h-[700px] object-cover rounded-tr-3xl rounded-br-3xl"
-            src="https://placehold.co/839x933" alt="Bridge Illustration" />
-
-        <!-- Overlay Circle Card -->
-        <div class="absolute md:left-[500px] md:top-[450px] px-8 py-6 bg-sky-950 rounded-full shadow-lg outline outline-4 outline-white flex flex-col items-center gap-4">
-
-            <!-- Top Icon/Graphic -->
-            <div class="p-2 bg-gray-100/20 rounded-full flex justify-center items-center">
-                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-                    <!-- Replace with actual icon or SVG -->
-                </div>
-            </div>
-
-            <!-- Text Content -->
-            <div class="text-center">
-                <div class="text-white text-4xl md:text-5xl font-bold leading-tight">YOU</div>
-                <div class="text-white text-base md:text-lg font-bold leading-loose">Lorem Ipsum</div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Right Text Section -->
-    <div class="flex-1 flex flex-col justify-center items-start gap-4 md:gap-6">
-
-        <!-- Heading -->
-        <h2 class="text-zinc-900 text-3xl md:text-5xl font-bold leading-snug">
-            Building bridges between <span class="text-slate-400">organization and stakeholders</span>
-        </h2>
-
-        <!-- Description -->
-        <p class="text-zinc-900 text-base md:text-lg font-normal leading-relaxed md:leading-8">
-            By evaluating diverse datasets and adopting technology quickly, we bridge the gap between companies and their stakeholders efficiently.
-        </p>
-
-        <!-- Call-to-Action Card -->
-        <div class="flex items-center gap-4 md:gap-6 px-4 md:px-6 py-2 md:py-3 bg-sky-950 rounded-[60px]">
-
-            <!-- Text inside CTA -->
-            <div class="text-white text-base md:text-lg font-bold leading-7">Lorem Ipsum</div>
-
-            <!-- Icon or small graphic -->
-            <div class="p-1.5 bg-gray-100/20 rounded-full flex items-center justify-center">
-                <div class="w-5 h-5 bg-white rounded-full"></div>
-            </div>
-
-        </div>
-
-    </div>
-</div>
-
-
-
+    <hr class="bg-[#1a2235] h-8 w-full my-8"></hr>
 
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 space-y-16">
@@ -146,7 +89,7 @@
             <!-- Our Farm Members -->
             <div class="space-y-8">
 
-                <x-section-title first="Our" second="Farm Members" />
+                <x-section-title first="Our" second="Farm Members" mb="false"/>
                 <p class="text-center text-base md:text-lg text-zinc-600 max-w-4xl mx-auto">
                     Meet our dedicated farm members who help make our agricultural programs a success.
                 </p>
@@ -194,7 +137,7 @@
 
             <!-- Our Partners -->
             <div class="space-y-8">
-                <x-section-title first="Our" second="Partners" />
+                <x-section-title first="Our" second="Partners" mb="false" />
                 <p class="text-center text-base md:text-lg text-zinc-600 max-w-4xl mx-auto">
                     We collaborate with organizations who share our vision and support our mission.
                 </p>
@@ -239,4 +182,5 @@
 
         </div>
     </section>
+
 @endsection

@@ -85,6 +85,18 @@
                             transition-all duration-200
                             focus:outline-none focus:ring-2 focus:ring-yellow-400/70
                         ',
+        'secondary-outline' => 'inline-flex items-center justify-center
+                            px-10 py-3
+                            rounded-full
+                            text-[#ffb51b] font-bold text-sm md:text-base
+                            border-2 border-white
+                            bg-transparent
+                            hover:bg-[#ffb51b]/10
+                            active:scale-95
+                            transition-all duration-200
+                            focus:outline-none focus:ring-2 focus:ring-yellow-400/70
+                    ',
+
         ];
 
     $class = "inline-flex items-center justify-center gap-1 px-4 py-2 rounded-md font-semibold transition duration-200 " . ($styles[$variant] ?? $styles['primary']);

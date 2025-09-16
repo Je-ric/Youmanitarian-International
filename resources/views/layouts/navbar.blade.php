@@ -11,50 +11,6 @@
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@200..700&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-
-    <style>
-        *{
-            font-family: "Source Sans 3", sans-serif;
-        }
-        :root {
-            --primary-color: #1A2235;
-            --primary-tint-1: #313849;
-            --primary-tint-2: #484E5D;
-            --primary-tint-3: #5F6472;
-            --primary-tint-4: #767A86;
-            --primary-tint-5: #8D919A;
-            --primary-tint-6: #A3A7AE;
-            --accent-color: #FFB51B;
-        }
-
-        .text-primary-custom {
-            color: var(--primary-color);
-        }
-
-        .text-accent-custom {
-            color: var(--accent-color);
-        }
-
-        .bg-primary-custom {
-            background-color: var(--primary-color);
-        }
-
-        .bg-accent-custom {
-            background-color: var(--accent-color);
-        }
-
-        .border-accent-custom {
-            border-color: var(--accent-color);
-        }
-
-        .ring-accent-custom {
-            --tw-ring-color: var(--accent-color);
-        }
-
-    </style>
 </head>
 
 <body class="bg-gray-50">
@@ -77,53 +33,43 @@
             <nav class="hidden lg:flex items-center space-x-6 text-base">
                 <a href="{{ route('website.index') }}"
                     class="text-primary-custom hover:text-accent-custom transition-colors duration-300
-   {{ request()->routeIs('website.index') ? 'text-accent-custom font-bold' : '' }}">
+                    {{ request()->routeIs('website.index') ? 'text-accent-custom font-bold' : '' }}">
                     Home
                 </a>
-
-                {{-- <a href="{{ route('website.news') }}"
-                    class="text-primary-custom hover:text-accent-custom transition-colors duration-300
-   {{ request()->routeIs('website.news') ? 'text-accent-custom font-bold' : '' }}">
-                    News
-                </a> --}}
-
                 <a href="{{ route('website.programs') }}"
                     class="text-primary-custom hover:text-accent-custom transition-colors duration-300
-   {{ request()->routeIs('website.programs') ? 'text-accent-custom font-bold' : '' }}">
-                    Program
+                    {{ request()->routeIs('website.programs') ? 'text-accent-custom font-bold' : '' }}">
+                    Programs
                 </a>
-
                 <a href="{{ route('website.sponsors') }}"
-                    class="text-primary-custom hover:text-accent-custom active:text-accent-custom transition-colors duration-300">
+                    class="text-primary-custom hover:text-accent-custom transition-colors duration-300
+                    {{ request()->routeIs('website.sponsors') ? 'text-accent-custom font-bold' : '' }}">
                     Sponsor & Partnership
                 </a>
                 <a href="{{ route('website.about') }}"
-                    class="text-primary-custom hover:text-accent-custom active:text-accent-custom transition-colors duration-300">
+                    class="text-primary-custom hover:text-accent-custom transition-colors duration-300
+                    {{ request()->routeIs('website.about') ? 'text-accent-custom font-bold' : '' }}">
                     About Us
                 </a>
                 <a href="{{ route('website.team') }}"
-                    class="text-primary-custom hover:text-accent-custom active:text-accent-custom transition-colors duration-300">
+                    class="text-primary-custom hover:text-accent-custom transition-colors duration-300
+                    {{ request()->routeIs('website.team') ? 'text-accent-custom font-bold' : '' }}">
                     Meet the Team
                 </a>
                 <a href="{{ route('website.donate') }}"
-                    class="text-primary-custom hover:text-accent-custom active:text-accent-custom transition-colors duration-300">
+                    class="text-primary-custom hover:text-accent-custom transition-colors duration-300
+                    {{ request()->routeIs('website.donate') ? 'text-accent-custom font-bold' : '' }}">
                     Donate Today
                 </a>
 
                 @if (Auth::check())
                     <a href="{{ url('/dashboard') }}"
-                        class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">
-                        Dashboard
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">@csrf</form>
+                        class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Dashboard</a>
                 @else
                     <a href="{{ url('/login') }}"
-                        class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">
-                        Login
-                    </a>
+                        class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Login</a>
                 @endif
             </nav>
-
 
             {{-- Mobile Hamburger --}}
             <div class="lg:hidden" x-data="{ open: false }">
@@ -131,28 +77,19 @@
                     <i class="bx bx-menu"></i>
                 </button>
 
-                {{-- Mobile Menu --}}
                 <div x-show="open" x-transition class="absolute top-16 left-0 w-full bg-white shadow-lg border-t z-20">
                     <nav class="flex flex-col p-4 space-y-3 text-base">
                         <a href="{{ route('website.index') }}" class="text-gray-600 hover:text-blue-600">Home</a>
-                        {{-- <a href="{{ route('website.news') }}" class="text-gray-600 hover:text-blue-600">News</a> --}}
-                        <a href="{{ route('website.programs') }}" class="text-gray-600 hover:text-blue-600">Program</a>
-                        <a href="{{ route('website.sponsors') }}" class="text-gray-600 hover:text-blue-600">Sponsor &
-                            Partnership</a>
+                        <a href="{{ route('website.programs') }}" class="text-gray-600 hover:text-blue-600">Programs</a>
+                        <a href="{{ route('website.sponsors') }}" class="text-gray-600 hover:text-blue-600">Sponsor & Partnership</a>
                         <a href="{{ route('website.about') }}" class="text-gray-600 hover:text-blue-600">About Us</a>
-                        <a href="{{ route('website.team') }}" class="text-gray-600 hover:text-blue-600">Meet the
-                            Team</a>
-                        <a href="{{ route('website.donate') }}" class="text-gray-600 hover:text-blue-600">Donate
-                            Today</a>
+                        <a href="{{ route('website.team') }}" class="text-gray-600 hover:text-blue-600">Meet the Team</a>
+                        <a href="{{ route('website.donate') }}" class="text-gray-600 hover:text-blue-600">Donate Today</a>
 
                         @if (Auth::check())
-                            <a href="{{ url('/dashboard') }}"
-                                class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Dashboard</a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">@csrf
-                            </form>
+                            <a href="{{ url('/dashboard') }}" class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Dashboard</a>
                         @else
-                            <a href="{{ url('/login') }}"
-                                class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Login</a>
+                            <a href="{{ url('/login') }}" class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Login</a>
                         @endif
                     </nav>
                 </div>
@@ -161,9 +98,12 @@
     </header>
 
     {{-- Main Content --}}
-    <main class="pt-20"> {{-- add padding-top so content isn’t hidden behind fixed header --}}
+    <main class="pt-20">
         @yield('content')
     </main>
+
+
+    @include('website.partials.footer')
 </body>
 
 </html>
