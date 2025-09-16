@@ -65,74 +65,61 @@
     </div>
 
 
+    {{-- Main Preview (mirrors website.view-content structure) --}}
+    @php
+        $hasImage = isset($image_content) && $image_content;
+        $displayTitle = isset($title) && $title ? $title : null;
+        $displayDate = now()->format('F j, Y');
+        $authorName = optional($viewer)->name ?? 'Preview User';
+        $isFeatured = isset($is_featured) && $is_featured;
+        $contentType = isset($content_type) ? $content_type : null;
+    @endphp
+
 
     {{-- px-20 == 80px and since may tabs-modern (24px) - 80-24 = 56 --}}
     {{-- Kinomment ko lang, kase nakakaproud HAHAHAHAHA --}}
-    <div class="px-[56px] py-2">
-        <div class="pt-16 px-4 sm:px-7">
-            <div class="flex flex-col gap-4">
+    @if ($hasImage)
+        <div class="relative w-full h-[80vh] sm:h-[90vh] lg:h-[100vh] flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 w-full h-full overflow-hidden">
+                <img src="{{ asset('storage/' . $image_content) }}" alt="Content Image" class="w-full h-full object-cover filter blur-sm">
+            </div>
 
-                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1a2235] leading-tight">
-                    @if (isset($title) && $title)
-                        {{ $title }}
-                    @else
-                        <div class="h-8 bg-gray-200 rounded animate-pulse"></div>
-                    @endif
+            <div class="absolute inset-0 bg-[#1a2235] bg-opacity-80 backdrop-blur-sm"></div>
+
+            <div class="relative z-10 text-center px-6 sm:px-12">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#ffb51b] leading-tight">
+                    {{ $displayTitle ?? 'Untitled Content' }}
                 </h1>
-
-                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
-                    <div class="flex items-center gap-2">
-                        <i class='bx bx-calendar text-[#ffb51b]'></i>
-                        <span>{{ now()->format('F j, Y') }}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <i class='bx bx-show text-[#ffb51b]'></i>
-                        <span>0 views</span>
-                    </div>
+                <div class="mt-2 text-white text-sm sm:text-base">
+                    <i class='bx bx-calendar mr-1'></i> {{ $displayDate }}
                 </div>
+            </div>
 
-                <div class="flex flex-wrap items-center gap-3">
-                    @if (isset($content_type) && $content_type)
-                        <span class="inline-flex items-center px-3 py-1 bg-[#ffb51b] text-white text-sm font-semibold">
-                            {{ ucfirst($content_type) }}
-                        </span>
-                    @else
-                        <div class="h-6 w-16 bg-gray-200 rounded animate-pulse"></div>
-                    @endif
-
-                    @if (isset($is_featured) && $is_featured)
-                        <span
-                            class="inline-flex items-center px-3 py-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold">
-                            <i class='bx bx-star mr-1'></i> Featured
-                        </span>
-                    @endif
+            <div class="absolute bottom-6 left-6 flex flex-col gap-2 text-white text-sm sm:text-base">
+                <div class="flex items-center gap-2">
+                    <i class='bx bx-user'></i>
+                    <span>By {{ $authorName }}</span>
                 </div>
+                <div class="flex items-center gap-2">
+                    <i class='bx bx-show'></i>
+                    <span>0 views</span>
+                </div>
+            </div>
 
-                @if (isset($image_content) && $image_content)
-                    <div class="relative">
-                        <img src="{{ asset('storage/' . $image_content) }}" alt="Content Image"
-                            class="w-full h-48 sm:h-64 lg:h-80 xl:h-96 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                    </div>
-                @else
-                    <div
-                        class="relative w-full h-48 sm:h-64 lg:h-80 xl:h-96 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                        <div class="text-center z-10">
-                            <i class='bx bx-image text-6xl text-gray-400 mb-2'></i>
-                            <p class="text-gray-500 text-sm font-medium">No featured image selected</p>
-                            <p class="text-gray-400 text-xs">Upload an image in the Edit tab</p>
-                        </div>
-                    </div>
+            <div class="absolute bottom-6 right-6 flex flex-wrap justify-end items-center gap-3">
+                @if ($contentType)
+                    <x-feedback-status.status-indicator :status="$contentType" :label="ucfirst($contentType)" />
+                @endif
+                @if ($isFeatured)
+                    <x-feedback-status.status-indicator status="info" icon="bx bx-star" label="Featured" />
                 @endif
             </div>
         </div>
-    </div>
+    @endif
 
-    <div class="flex flex-col xl:flex-row gap-6 lg:gap-8 bg-white px-10">
+    <div class="flex flex-col xl:flex-row gap-6 lg:gap-8 bg-white px-10 py-4">
         <article class="xl:w-2/3">
             <div class="overflow-hidden">
-                <!-- Article Content -->
                 <div class="sm:px-8 lg:px-16 pt-10 pb-6 sm:pb-8">
                     <div class="prose prose-lg max-w-none text-gray-800 leading-relaxed">
                         @if (isset($body) && $body)
@@ -149,6 +136,12 @@
                     </div>
                 </div>
 
+                @if ($hasImage)
+                    <div class="px-6 sm:px-8 lg:px-10 pb-6 sm:pb-8">
+                        <img src="{{ asset('storage/' . $image_content) }}" alt="Featured Image" class="w-full h-auto max-h-[80vh] object-contain rounded-md shadow-lg">
+                    </div>
+                @endif
+
                 <div class="px-6 sm:px-8 lg:px-10 pb-6 sm:pb-8">
                     <div class="border-t border-gray-200 pt-6 sm:pt-8">
                         <h3 class="text-xl sm:text-2xl font-semibold text-[#1a2235] mb-6 flex items-center gap-2">
@@ -158,15 +151,10 @@
                         @if (isset($gallery_images) && count($gallery_images) > 0)
                             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                                 @foreach ($gallery_images as $image)
-                                    <div
-                                        class="group relative overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300">
-                                        <img src="{{ asset('storage/' . $image) }}"
-                                            class="w-full h-24 sm:h-32 lg:h-40 object-cover"
-                                            alt="Gallery Image {{ $loop->iteration }}">
-                                        <div
-                                            class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                                            <i
-                                                class='bx bx-expand text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300'></i>
+                                    <div class="group relative overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300" onclick="openImageModal({{ $loop->index }})">
+                                        <img src="{{ asset('storage/' . $image) }}" class="w-full h-24 sm:h-32 lg:h-40 object-cover" alt="Gallery Image {{ $loop->iteration }}">
+                                        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                                            <i class='bx bx-expand text-white text-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300'></i>
                                         </div>
                                     </div>
                                 @endforeach
@@ -174,8 +162,7 @@
                         @else
                             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                                 @for ($i = 0; $i < 4; $i++)
-                                    <div
-                                        class="w-full h-24 sm:h-32 lg:h-40 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center border-2 border-dashed border-gray-300">
+                                    <div class="w-full h-24 sm:h-32 lg:h-40 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center border-2 border-dashed border-gray-300">
                                         <div class="text-center">
                                             <i class='bx bx-image text-2xl text-gray-400 mb-1'></i>
                                             <p class="text-gray-400 text-xs">Gallery Image</p>
@@ -187,21 +174,16 @@
                     </div>
                 </div>
 
-                @if (
-                    (isset($enable_likes) && $enable_likes) ||
-                        (isset($enable_comments) && $enable_comments) ||
-                        (isset($enable_bookmark) && $enable_bookmark))
+                @if ((isset($enable_likes) && $enable_likes) || (isset($enable_comments) && $enable_comments) || (isset($enable_bookmark) && $enable_bookmark))
                     <div class="px-6 sm:px-8 lg:px-10 py-6 border-t border-gray-200 bg-gray-50">
                         <div class="flex flex-wrap items-center justify-between gap-4">
                             <div class="flex items-center gap-6">
                                 @if (isset($enable_likes) && $enable_likes)
-                                    <button
-                                        class="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors duration-200 group">
+                                    <button class="flex items-center gap-2 text-gray-600 hover:text-red-500 transition-colors duration-200 group">
                                         <i class='bx bx-heart text-xl group-hover:text-red-500'></i>
                                         <span class="font-medium">0</span>
                                     </button>
                                 @endif
-
                                 @if (isset($enable_comments) && $enable_comments)
                                     <div class="flex items-center gap-2 text-gray-600">
                                         <i class='bx bx-comment text-xl'></i>
@@ -210,10 +192,8 @@
                                     </div>
                                 @endif
                             </div>
-
                             @if (isset($enable_bookmark) && $enable_bookmark)
-                                <button
-                                    class="flex items-center gap-2 text-gray-600 hover:text-[#ffb51b] transition-colors duration-200">
+                                <button class="flex items-center gap-2 text-gray-600 hover:text-[#ffb51b] transition-colors duration-200">
                                     <i class='bx bx-bookmark text-xl'></i>
                                     <span class="font-medium text-sm">Bookmark</span>
                                 </button>
@@ -232,15 +212,12 @@
                         Related Content
                     </h2>
                 </div>
-
                 <div class="overflow-y-auto max-h-[calc(100vh-12rem)]">
                     <div class="p-6 space-y-4">
-
                         @for ($i = 0; $i < 3; $i++)
                             <div class="p-4 border border-gray-200">
                                 <div class="flex gap-4">
-                                    <div
-                                        class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 flex items-center justify-center">
+                                    <div class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 flex items-center justify-center">
                                         <i class='bx bx-image text-xl text-gray-400'></i>
                                     </div>
                                     <div class="flex-1 min-w-0">
@@ -255,4 +232,60 @@
             </div>
         </aside>
     </div>
+
+    <!-- Image Preview Modal -->
+    <div id="imageModal" class="fixed inset-0 items-center justify-center bg-black bg-opacity-90 hidden z-50 p-4">
+        <button onclick="closeImageModal()" class="absolute top-4 right-4 text-white text-2xl sm:text-3xl hover:text-[#ffb51b] transition-colors z-10 w-10 h-10 flex items-center justify-center bg-black bg-opacity-50">
+            <i class='bx bx-x'></i>
+        </button>
+        <button onclick="prevImage()" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white text-2xl sm:text-3xl hover:text-[#ffb51b] transition-colors z-10 w-10 h-10 flex items-center justify-center bg-black bg-opacity-50">
+            <i class='bx bx-chevron-left'></i>
+        </button>
+        <img id="modalImage" class="w-full h-full max-w-full max-h-full object-contain" src="/placeholder.svg" alt="Preview">
+        <button onclick="nextImage()" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-2xl sm:text-3xl hover:text-[#ffb51b] transition-colors z-10 w-10 h-10 flex items-center justify-center bg-black bg-opacity-50">
+            <i class='bx bx-chevron-right'></i>
+        </button>
+    </div>
+
+    <script>
+        let galleryImages = [
+            @if (isset($gallery_images) && count($gallery_images) > 0)
+                @foreach ($gallery_images as $image)
+                    "{{ asset('storage/' . $image) }}",
+                @endforeach
+            @endif
+        ];
+        let currentIndex = 0;
+
+        function openImageModal(index) {
+            currentIndex = index;
+            const modal = document.getElementById('imageModal');
+            document.getElementById('modalImage').src = galleryImages[currentIndex] || '';
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function prevImage() {
+            if (!galleryImages.length) return;
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : galleryImages.length - 1;
+            document.getElementById('modalImage').src = galleryImages[currentIndex];
+        }
+
+        function nextImage() {
+            if (!galleryImages.length) return;
+            currentIndex = (currentIndex < galleryImages.length - 1) ? currentIndex + 1 : 0;
+            document.getElementById('modalImage').src = galleryImages[currentIndex];
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+    </script>
 </div>
