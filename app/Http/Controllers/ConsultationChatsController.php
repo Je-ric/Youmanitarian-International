@@ -51,7 +51,43 @@ class ConsultationChatsController extends Controller
             ];
         });
 
-        return view('consultation.consultationChats', compact('threads','thread','messages','other'));
+        // Availability logic (moved from blade): compute other user's active consultation hours
+        $timezone = 'Asia/Manila';
+        $now = Carbon::now($timezone);
+        $today = $now->format('Y-m-d');
+        $todayDay = $now->format('l');
+
+        // All active hours for the other user (sorted)
+        $activeHours = $other && method_exists($other, 'consultationHours')
+            ? $other->consultationHours()
+                ->where('status', 'active')
+                ->orderByRaw("FIELD(day, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday')")
+                ->orderBy('start_time')
+                ->get()
+            : collect();
+
+        // Today's active hours
+        $todaysActiveHours = $activeHours->where('day', $todayDay);
+
+        // Is available now (inclusive between start and end)
+        $isAvailableNow = $todaysActiveHours->contains(function ($h) use ($today, $now, $timezone) {
+            try {
+                $start = Carbon::parse($today . ' ' . $h->start_time, $timezone);
+                $end = Carbon::parse($today . ' ' . $h->end_time, $timezone);
+                return $now->betweenIncluded($start, $end);
+            } catch (\Throwable $e) {
+                return false;
+            }
+        });
+
+        return view('consultation.consultationChats', compact(
+            'threads',
+            'thread',
+            'messages',
+            'other',
+            'activeHours',
+            'isAvailableNow'
+        ));
     }
 
     // Start (or reuse) a thread between two users (role‑agnostic now)

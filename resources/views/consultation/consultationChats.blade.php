@@ -200,9 +200,27 @@
                                 <x-button id="mobileSidebarToggle" variant="mobile-toggle">
                                     <i class='bx bx-menu text-lg'></i>
                                 </x-button>
+
+                                {{-- View Other User Active Consultation Hours --}}
+                                <x-button variant="glass-button"
+                                    onclick="document.getElementById('user-hours-{{ $other->id }}').showModal(); return false;">
+                                    <i class='bx bx-time-five'></i>
+                                    <span class="hidden sm:inline">Consultation Hours</span>
+                                </x-button>
                             </div>
                         </div>
                     </div>
+
+                    @if(isset($isAvailableNow) && !$isAvailableNow)
+                        <div class="px-4 py-3 bg-amber-50 border-b border-amber-200 text-amber-800">
+                            <div class="flex items-start gap-2 text-sm">
+                                <i class='bx bx-time-five mt-0.5'></i>
+                                <p>
+                                    The user may not be available right now based on their consultation hours. You can still send a message; they might reply later.
+                                </p>
+                            </div>
+                        </div>
+                    @endif
 
                     <!-- Messages -->
                     <div id="consultationMessages" class="flex-1 px-4 py-4 bg-gray-50">
@@ -368,6 +386,49 @@
 
         </div>
     </div>
+
+    @if(isset($other))
+        <x-modal.dialog id="user-hours-{{ $other->id }}" maxWidth="max-w-md" width="w-11/12" maxHeight="max-h-[90vh]">
+            <x-modal.header>
+                <div class="flex items-center gap-2">
+                    <i class='bx bx-time-five text-[#ffb51b] text-xl'></i>
+                    <div>
+                        <h3 class="text-lg font-bold text-[#1a2235]">Consultation Hours</h3>
+                        <p class="text-xs text-gray-500">{{ $other->name }}</p>
+                    </div>
+                </div>
+            </x-modal.header>
+
+            <x-modal.body>
+                @if(empty($activeHours) || $activeHours->isEmpty())
+                    <x-empty-state icon="bx bx-time" title="No Active Hours"
+                        description="This user has no active consultation hours." />
+                @else
+                    <div class="space-y-3">
+                        @foreach($activeHours as $h)
+                            <div class="flex items-start justify-between p-3 border border-gray-200 rounded-lg bg-white">
+                                <div class="min-w-0">
+                                    <div class="text-sm font-semibold text-[#1a2235] truncate">
+                                        {{ $h->specialization ?? 'Consultation' }}
+                                    </div>
+                                    <div class="text-xs text-gray-600 mt-0.5">
+                                        {{ $h->day }}
+                                    </div>
+                                </div>
+                                <div class="text-xs font-medium text-[#1a2235] bg-gray-50 px-2 py-1 rounded border border-gray-200">
+                                    {{ \Carbon\Carbon::parse($h->start_time)->format('g:i A') }} – {{ \Carbon\Carbon::parse($h->end_time)->format('g:i A') }}
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </x-modal.body>
+
+            <x-modal.footer>
+                <x-modal.close-button :modalId="'user-hours-' . $other->id" text="Close" />
+            </x-modal.footer>
+        </x-modal.dialog>
+    @endif
 
     @push('scripts')
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"
