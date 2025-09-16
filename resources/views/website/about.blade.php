@@ -1,45 +1,41 @@
 @extends('layouts.navbar')
 
 @section('content')
+    <div class="relative w-full bg-cover bg-center py-16"
+        style="background-image: url('{{ asset('assets/images/bg/team-bg.jpg') }}');">
+        <div class="absolute inset-0 bg-[#1a2235] bg-opacity-60 backdrop-blur-sm"></div>
 
-    <div class="relative bg-cover bg-center py-16"
-            style="background-image: url('{{ asset('assets/images/bg/team-bg.jpg') }}');">
-            <div class="absolute inset-0 bg-[#1a2235] bg-opacity-60 backdrop-blur-sm"></div>
-
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
-                  <p class="text-lg font-medium uppercase tracking-wide text-white">Who we are?</p>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#FFB51B] tracking-tight">
-                    Youmanitarian International
-                </h1>
-                 <p class="mt-4 text-base sm:text-lg lg:text-xl text-white">
-                    A non-stock, non-profit organization composed of passionate, goal-driven, and responsive <br> individuals who
-                    exist to empower communities and transform the lives of marginalized people.
-                </p>
-                <button aria-label="Contact Us"
-                    class="mt-6 inline-flex items-center gap-2 rounded-full bg-gray-900 px-7 py-3 font-medium text-white shadow
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left">
+            <p class="text-lg font-medium uppercase tracking-wide text-white">Who we are?</p>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#FFB51B] tracking-tight">
+                Youmanitarian International
+            </h1>
+            <p class="mt-4 text-base sm:text-lg lg:text-xl text-white">
+                A non-stock, non-profit organization composed of passionate, goal-driven, and responsive <br> individuals
+                who
+                exist to empower communities and transform the lives of marginalized people.
+            </p>
+            <button aria-label="Contact Us"
+                class="mt-6 inline-flex items-center gap-2 rounded-full bg-gray-900 px-7 py-3 font-medium text-white shadow
                      hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-800">
-                    Contact&nbsp;Us
-                    <i class='bx bx-mail-send'></i>
-                </button>
-            </div>
+                Contact&nbsp;Us
+                <i class='bx bx-mail-send'></i>
+            </button>
         </div>
-
-
-
-
+    </div>
 
     {{-- ===================================================================================== --}}
     <!-- ABOUT US -->
-    <section class="py-16 md:py-20 bg-[#1a2235]">
+    <section class="py-14 md:py-20 bg-gray-50">
         <div class="mx-auto max-w-6xl px-6 lg:px-8">
             <!-- About Us Header -->
 
-            <x-section-title textAlign="left" first="About" second="Us" firstColor="#FFFFFF" />
+            <x-section-title textAlign="left" first="About" second="Us" />
 
             <!-- About Us Content -->
             <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <!-- Text -->
-                <div class="flex flex-col justify-center space-y-6 text-white leading-relaxed text-justify">
+                <div class="flex flex-col justify-center space-y-6 text-black leading-relaxed text-justify">
                     <p>
                         <strong class="text-[#FFB51B]">Youmanitarian Service Organization Internation, Inc.</strong> or
                         simply <strong class="text-[#FFB51B]">Youmanitarian International</strong>
@@ -70,79 +66,48 @@
     </section>
 
     <!-- Vision and Mission -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-16 md:py-20 bg-[#1a2235]">
         <div class="mx-auto max-w-6xl px-6 lg:px-8">
 
-            <x-section-title first="Our Mission" second="and Vision" />
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <!-- Vision -->
-                <div class="flex flex-col space-y-4 p-6 md:p-10 bg-[var(--primary-color)] text-white rounded-lg">
-                    <div class="flex items-center gap-3">
-                        <i class='bx bx-show text-3xl text-[var(--accent-color)]'></i>
-                        <h3 class="text-2xl font-semibold">Our&nbsp;Vision</h3>
-                    </div>
-                    <p>
-                        Youmanitarian International as one of the progressive organizations working through harmony
-                        with other stakeholders in creating more sustainable communities by tapping the resources within.
-                    </p>
-                </div>
-
-                <!-- Mission -->
-                <div class="flex flex-col space-y-4 p-6 md:p-10 bg-[var(--primary-color)] text-white rounded-lg">
-                    <div class="flex items-center gap-3">
-                        <i class='bx bx-target-lock text-3xl text-[var(--accent-color)]'></i>
-                        <h3 class="text-2xl font-semibold">Our&nbsp;Mission</h3>
-                    </div>
-                    <p>
-                        Transform the lives of marginalized and underprivileged people, and youth sector through education,
-                        inclusive development
-                        and exchange, civic and social endeavours in the spirit of volunteerism and goodwill encourage peace
-                        and promote understanding
-                        to make a substantial change through sustainable development programs.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 bg-gray-50">
-    <div class="mx-auto max-w-6xl px-6 lg:px-8">
-
-        <x-section-title first="Our Mission" second="and Vision" />
+        <x-section-title first="Who" second="We Are" firstColor="#FFFFFF" />
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <!-- Vision -->
-            <div class="relative flex flex-col space-y-4 p-6 md:p-10 bg-[var(--primary-color)] text-white rounded-tl-[3rem] rounded-br-[3rem]">
-                <!-- Icon Circle (top-left corner) -->
-                <div class="absolute -top-6 -left-6 w-14 h-14 bg-white text-[var(--primary-color)] rounded-full flex items-center justify-center shadow-lg">
-                    <i class='bx bx-show text-2xl text-[var(--accent-color)]'></i>
-                </div>
-
-                <h3 class="text-2xl font-semibold mt-4">Our&nbsp;Vision</h3>
-                <p>
-                    Youmanitarian International as one of the progressive organizations working through harmony
-                    with other stakeholders in creating more sustainable communities by tapping the resources within.
-                </p>
-            </div>
 
             <!-- Mission -->
-            <div class="relative flex flex-col space-y-4 p-6 md:p-10 bg-[var(--primary-color)] text-white rounded-tr-[3rem] rounded-bl-[3rem]">
-                <!-- Icon Circle (top-right corner) -->
-                <div class="absolute -top-6 -right-6 w-14 h-14 bg-white text-[var(--primary-color)] rounded-full flex items-center justify-center shadow-lg">
-                    <i class='bx bx-target-lock text-2xl text-[var(--accent-color)]'></i>
-                </div>
+            <div class="flex flex-col">
+                <img src="{{ asset('assets/images/bg/mission.jpg') }}"
+                     alt="Mission of Youmanitarian International"
+                     class="w-full max-w-160 h-72 md:h-80 lg:h-88 object-cover mb-6 rounded-lg" />
 
-                <h3 class="text-2xl font-semibold mt-4">Our&nbsp;Mission</h3>
-                <p>
+                <h2 class="flex items-center gap-2 text-2xl font-bold text-[#FFB51B] mb-4">
+                    <i class='bx bx-target-lock text-3xl'></i>
+                    Mission
+                </h2>
+                <p class="text-white leading-relaxed">
                     Transform the lives of marginalized and underprivileged people, and youth sector through education,
                     inclusive development and exchange, civic and social endeavours in the spirit of volunteerism and goodwill,
                     encourage peace and promote understanding to make a substantial change through sustainable development programs.
                 </p>
             </div>
+
+            <!-- Vision -->
+            <div class="flex flex-col">
+                <img src="{{ asset('assets/images/bg/vision.jpg') }}"
+                     alt="Vision of Youmanitarian International"
+                     class="w-full max-w-160 h-72 md:h-80 lg:h-88 object-cover mb-6 rounded-lg" />
+
+                <h2 class="flex items-center gap-2 text-2xl font-bold text-[#FFB51B] mb-4">
+                    <i class='bx bx-show text-3xl'></i>
+                    Vision
+                </h2>
+                <p class="text-white leading-relaxed">
+                    Youmanitarian International as one of the progressive organizations working through harmony
+                    with other stakeholders in creating more sustainable communities by tapping the resources within.
+                </p>
+            </div>
         </div>
     </div>
-</section>
+    </section>
 
 
     <section class="py-16 bg-white">

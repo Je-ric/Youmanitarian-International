@@ -1,69 +1,6 @@
 @extends('layouts.navbar')
 
 @section('content')
-    {{-- <section class="relative w-full min-h-screen bg-gray-200 flex flex-col lg:flex-row">
-        <div class="relative z-10 flex flex-col justify-center gap-6 px-6 md:px-12 lg:px-24 py-16 lg:py-20 lg:w-1/2">
-            <p class="text-base md:text-lg lg:text-xl font-normal text-[#1A2235] tracking-wide uppercase">
-                Grow Without Limits
-            </p>
-            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-[#1A2235] leading-snug">
-                Join <span class="text-[#FFB51B]">Youmanitarian International</span> and be one of us!
-            </h2>
-
-            <p class="text-base md:text-lg lg:text-xl font-medium text-[#1A2235]">
-                Make connections, take action and move forward with a community
-                built on dedication and mutual growth.
-            </p>
-
-            <button
-                class="inline-flex items-center justify-center gap-2 px-5 py-2 bg-[#1A2235] rounded-full shadow-md text-white text-sm md:text-base font-semibold hover:bg-slate-800 transition w-auto self-start">
-                JOIN NOW!
-                <i class="bx bx-right-arrow-alt text-lg"></i>
-            </button>
-        </div>
-
-        <div class="lg:w-1/2 h-64 md:h-96 lg:h-auto">
-            <img src="{{ asset('assets/images/bg/program-bg.jpg') }}" alt="Join Youmanitarian International"
-                class="w-full h-full object-cover" />
-        </div>
-    </section>
-
-    <section class="relative w-full min-h-screen flex flex-col lg:flex-row">
-    <!-- Left Image with Overlay + Text -->
-    <div class="relative lg:w-1/2 h-80 lg:h-auto bg-cover bg-center"
-         style="background-image: url('{{ asset('assets/images/bg/program-bg.jpg') }}');">
-
-        <!-- Overlay -->
-        <div class="absolute inset-0 bg-[#1a2235] bg-opacity-60 backdrop-blur-sm"></div>
-
-        <!-- Text Content -->
-        <div class="relative z-10 flex flex-col justify-center h-full px-6 md:px-12 lg:px-16 py-12 text-white">
-            <p class="text-base md:text-lg uppercase tracking-wide">Grow Without Limits</p>
-            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold leading-snug">
-                Join <span class="text-[#FFB51B]">Youmanitarian International</span> and be one of us!
-            </h2>
-            <p class="mt-4 text-base md:text-lg font-medium">
-                Make connections, take action and move forward with a community
-                built on dedication and mutual growth.
-            </p>
-
-            <button
-                class="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-[#FFB51B] text-[#1A2235] rounded-full font-semibold shadow hover:bg-[#e6a318] transition">
-                JOIN NOW!
-                <i class="bx bx-right-arrow-alt text-lg"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- Right Image (No Overlay) -->
-    <div class="lg:w-1/2 h-80 lg:h-auto">
-        <img src="{{ asset('assets/images/bg/program-bg.jpg') }}"
-             alt="Join Youmanitarian International"
-             class="w-full h-full object-cover" />
-    </div>
-</section> --}}
-
-
 
 <section class="relative w-full min-h-screen flex items-center">
     <!-- Background image -->
@@ -188,7 +125,7 @@
 
 
 
-    <section class="py-16 bg-[#1A2235]">
+    <section class="py-16 bg-[#1A2235] my-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
             <x-section-title first="Program" second="Feedback" firstColor="#FFFFFF" mb="false" />
@@ -280,9 +217,6 @@
             scrollbar-width: none;
         }
     </style>
-
-
-
 
 
 

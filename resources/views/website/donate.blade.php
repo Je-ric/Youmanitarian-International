@@ -1,6 +1,38 @@
 @extends('layouts.navbar')
 
 @section('content')
+<section class="relative w-full min-h-screen flex items-center">
+    <!-- Background image -->
+    <img src="{{ asset('assets/images/bg/donate-bg.jpg') }}"
+         alt="Support Youmanitarian International"
+         class="absolute inset-0 w-full h-full object-cover">
+
+    <!-- Gradient overlay (dark top -> transparent bottom) -->
+    <div class="absolute inset-0 bg-gradient-to-b from-[#1a2235]/90 via-[#1a2235]/70 to-transparent"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-3xl px-6 md:px-12 lg:px-24 text-white">
+        <p class="text-base md:text-lg lg:text-xl font-normal tracking-wide uppercase">
+            Give Hope, Change Lives
+        </p>
+        <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold leading-snug">
+            Your <span class="text-[#FFB51B]">Donation</span> Builds a Brighter Tomorrow
+        </h2>
+        <p class="mt-4 text-base md:text-lg lg:text-xl font-medium">
+            Every contribution, big or small, helps us reach more communities,
+            provide essential aid, and empower lives. Together, we can
+            transform hope into action.
+        </p>
+
+        <button
+            class="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-[#FFB51B] text-[#1A2235] rounded-full font-semibold shadow hover:bg-[#e6a318] transition">
+            DONATE NOW
+            <i class="bx bx-heart text-lg"></i>
+        </button>
+    </div>
+</section>
+
+
 <div class="min-h-screen bg-gray-50 py-12 px-6">
     <div class="max-w-5xl mx-auto flex flex-col gap-16">
 
@@ -98,6 +130,74 @@
         </div>
 
      <!-- 4. FAQ -->
+
+      <section class="py-16 bg-[#1A2235]">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <x-section-title first="Frequently" second="Asked Questions" mb="false" firstColor="#FFFFFF" />
+            <p class="text-center text-gray-400 mb-10">Find answers to the most common questions about our programs.</p>
+
+            <div class="space-y-4">
+                <x-accordion-daisy title="How can I join a program?" variant="dark">
+                    <p>
+                        You can join by registering through our website’s program page.
+                        Each program has a “Register” or “Sign Up” button.
+                        Simply fill out the form and wait for confirmation from our team.
+                    </p>
+                </x-accordion-daisy>
+
+                <x-accordion-daisy title="Are the programs free?" variant="dark">
+                    <p>
+                        Yes, most of our programs are free of charge.
+                        However, some may require minimal contributions or materials depending on the activity.
+                        All details are listed in each program description.
+                    </p>
+                </x-accordion-daisy>
+
+                <x-accordion-daisy title="Who can participate?" variant="dark">
+                    <p>
+                        Anyone with the passion to serve is welcome to participate!
+                        Whether you’re a student, professional, or community member,
+                        our programs are open to volunteers, partners, and beneficiaries alike.
+                    </p>
+                </x-accordion-daisy>
+
+                <x-accordion-daisy title="How are volunteer applications processed?" variant="dark">
+                    <p>
+                        All volunteer applications are reviewed by Admins or Program Coordinators.
+                        They can approve, deny, or restore applications. Once approved, volunteers
+                        can join programs and may be invited to become official members.
+                    </p>
+                </x-accordion-daisy>
+
+                <x-accordion-daisy title="Who can manage programs and volunteers?" variant="dark">
+                    <p>
+                        Admins and Program Coordinators can create and manage programs.
+                        Coordinators can manage volunteers within their programs, assign tasks,
+                        approve attendance, and view feedback. Volunteers can only join or leave programs based on rules.
+                    </p>
+                </x-accordion-daisy>
+
+                <x-accordion-daisy title="How is program feedback collected?" variant="dark">
+                    <p>
+                        Feedback is collected from volunteers and guests only after a program ends.
+                        Coordinators and Admins can view all submitted feedback, which helps improve
+                        future programs and ensure better participant experiences.
+                    </p>
+                </x-accordion-daisy>
+
+                <x-accordion-daisy title="Can volunteers leave a program after joining?" variant="dark">
+                    <p>
+                        Volunteers can leave a program only if it hasn’t started yet (status: incoming) and
+                        they have no assigned tasks. Once a program has started or tasks are assigned, leaving
+                        is not allowed to ensure smooth program operations.
+                    </p>
+                </x-accordion-daisy>
+
+            </div>
+        </div>
+    </section>
+    
 <div class="bg-white rounded-2xl border border-gray-200 p-6">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">Frequently Asked Questions</h2>
 

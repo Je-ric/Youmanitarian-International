@@ -16,9 +16,6 @@
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-    </div>
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto text-center">
@@ -76,7 +73,8 @@
             </div>
     </section>
 
-    <hr class="bg-[#1a2235] h-8 w-full my-8"></hr>
+    <hr class="bg-[#1a2235] h-8 w-full my-8">
+    </hr>
 
     <blockquote
         class="relative border-l-4 border-[#FFB51B] pl-6 sm:pl-8 md:pl-10 italic text-md sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-gray-700 leading-relaxed max-w-5xl mx-auto">
@@ -90,7 +88,8 @@
         </footer>
     </blockquote>
 
-    <hr class="bg-[#1a2235] h-8 w-full my-8"></hr>
+    <hr class="bg-[#1a2235] h-8 w-full my-8">
+    </hr>
 
 
     <style>
@@ -171,7 +170,8 @@
     </section>
 
 
-    <hr class="bg-[#1a2235] h-8 w-full my-8"></hr>
+    <hr class="bg-[#1a2235] h-8 w-full my-8">
+    </hr>
 
 
 
@@ -310,22 +310,24 @@
     </section>
 
 
-    <section class="py-16 bg-gradient-to-r from-[#FFB51B] to-[#e6a318] mt-14">
-        <div class="text-center">
-            <h2 class="text-3xl font-bold text-[#1a2235] mb-4">Join <span class="text-white">Our Team</span></h2>
-            <p class="text-[#1a2235] text-lg mb-8 max-w-2xl mx-auto">
+    <section class="relative bg-cover bg-center py-20 my-10"
+        style="background-image: url('{{ asset('assets/images/bg/volunteer.jpg') }}');">
+
+        <div class="absolute inset-0 bg-[#1a2235] bg-opacity-70 backdrop-blur-sm"></div>
+
+        <div class="relative z-10 text-center px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                Join <span class="text-[#FFB51B]">Our Team</span>
+            </h2>
+            <p class="text-white text-lg mb-8 max-w-2xl mx-auto">
                 Are you passionate about making a difference? We're always looking for dedicated individuals to join
                 our mission.
             </p>
-            <a href="#contact"
-                class="inline-flex items-center px-8 py-3 bg-[#1a2235] text-white font-semibold rounded-full hover:bg-[#2a3447] transition-colors duration-200">
-                Get In Touch
+            <x-button href="#" variant="primary-outline">
+                Join Us
                 <i class="bx bx-right-arrow-alt ml-2 text-xl"></i>
-            </a>
+            </x-button>
         </div>
     </section>
-
-
-
 
 @endsection
