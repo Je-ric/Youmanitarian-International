@@ -64,6 +64,7 @@ class WebsiteController extends Controller
 
         
 
+
         $comments = ContentComment::where('content_id', $content->id)->with('user')->latest()->get();
 
         return view('website.view-content', compact('content', 'galleryImages', 'prevContent', 'nextContent', 'otherContents', 'comments'));

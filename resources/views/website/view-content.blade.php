@@ -1,54 +1,50 @@
 @extends('layouts.navbar')
 
 @section('content')
-
     @if ($content->image_content)
         <div class="relative w-full h-[80vh] sm:h-[90vh] lg:h-[100vh] flex items-center justify-center overflow-hidden">
             <!-- Background image with blur -->
             <div class="absolute inset-0 w-full h-full overflow-hidden">
-                <img src="{{ Storage::url($content->image_content) }}"
-                    alt="Content Image" class="w-full h-full object-cover filter blur-sm">
+                <img src="{{ Storage::url($content->image_content) }}" alt="Content Image"
+                    class="w-full h-full object-cover filter blur-sm">
             </div>
 
             <!-- Semi-transparent overlay -->
             <div class="absolute inset-0 bg-[#1a2235] bg-opacity-80 backdrop-blur-sm"></div>
 
-            <!-- Centered text -->
+            <!-- Centered title + date -->
             <div class="relative z-10 text-center px-6 sm:px-12">
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#ffb51b] leading-tight">
                     {{ $content->title }}
                 </h1>
 
-                <div
-                    class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-4 text-sm sm:text-base text-white">
-                    <div class="flex items-center gap-2">
-                        <i class='bx bx-calendar'></i>
-                        <span>{{ $content->created_at->format('F j, Y') }}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <i class='bx bx-show'></i>
-                        <span>{{ number_format($content->views) }} views</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <i class='bx bx-user'></i>
-                        <span>By {{ optional($content->author ?? $content->user)->name ?? 'Unknown Author' }}</span>
-                    </div>
+                <!-- Date below the title -->
+                <div class="mt-2 text-white text-sm sm:text-base">
+                    <i class='bx bx-calendar mr-1'></i> {{ $content->created_at->format('F j, Y') }}
                 </div>
+            </div>
 
-                <div class="flex flex-wrap justify-center items-center gap-3 mt-4">
-                    <span class="inline-flex items-center px-3 py-1 bg-[#ffb51b] text-[#1a2235] text-sm font-semibold">
-                        {{ ucfirst($content->content_type) }}
-                    </span>
-                    @if ($content->is_featured)
-                        <span
-                            class="inline-flex items-center px-3 py-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-semibold">
-                            <i class='bx bx-star mr-1'></i> Featured
-                        </span>
-                    @endif
+            <!-- Bottom overlay: badges (right) + author & views (left) -->
+            <div class="absolute bottom-6 left-6 flex flex-col gap-2 text-white text-sm sm:text-base">
+                <div class="flex items-center gap-2">
+                    <i class='bx bx-user'></i>
+                    <span>By {{ optional($content->author ?? $content->user)->name ?? 'Unknown Author' }}</span>
                 </div>
+                <div class="flex items-center gap-2">
+                    <i class='bx bx-show'></i>
+                    <span>{{ number_format($content->views) }} views</span>
+                </div>
+            </div>
+
+            <div class="absolute bottom-6 right-6 flex flex-wrap justify-end items-center gap-3">
+                <x-feedback-status.status-indicator :status="$content->content_type" :label="ucfirst($content->content_type)" />
+                @if ($content->is_featured)
+                    <x-feedback-status.status-indicator status="info" icon="bx bx-star" label="Featured" />
+                @endif
             </div>
         </div>
     @endif
+
 
 
     <!-- Main content: white background -->
@@ -67,8 +63,8 @@
                 @if ($content->image_content)
                     <!-- Featured Poster Image -->
                     <div class="px-6 sm:px-8 lg:px-10 pb-6 sm:pb-8">
-                        <img src="{{ Storage::url($content->image_content) }}"
-                            alt="Featured Image" class="w-full h-auto max-h-[80vh] object-contain rounded-md shadow-lg">
+                        <img src="{{ Storage::url($content->image_content) }}" alt="Featured Image"
+                            class="w-full h-auto max-h-[80vh] object-contain rounded-md shadow-lg">
                     </div>
                 @endif
                 @if ($galleryImages->isNotEmpty())
@@ -184,8 +180,7 @@
                                     <div class="flex gap-4">
                                         @if ($item->image_content)
                                             <div class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 overflow-hidden">
-                                                <img src="{{ Storage::url($item->image_content) }}"
-                                                    alt="Thumbnail"
+                                                <img src="{{ Storage::url($item->image_content) }}" alt="Thumbnail"
                                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200">
                                             </div>
                                         @else
@@ -228,7 +223,7 @@
     {{-- </div> --}}
 
     <!-- Image Preview Modal -->
-    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-90 items-center justify-center hidden z-50 p-4">
+    <div id="imageModal" class="fixed inset-0 items-center justify-center bg-black bg-opacity-90 hidden z-50 p-4">
         <button onclick="closeImageModal()"
             class="absolute top-4 right-4 text-white text-2xl sm:text-3xl hover:text-[#ffb51b] transition-colors z-10 w-10 h-10 flex items-center justify-center bg-black bg-opacity-50">
             <i class='bx bx-x'></i>
@@ -239,13 +234,15 @@
             <i class='bx bx-chevron-left'></i>
         </button>
 
-        <img id="modalImage" class="max-w-full max-h-full" src="/placeholder.svg" alt="Preview">
+        <img id="modalImage" class="w-full h-full max-w-full max-h-full object-contain" src="/placeholder.svg"
+            alt="Preview">
 
         <button onclick="nextImage()"
             class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white text-2xl sm:text-3xl hover:text-[#ffb51b] transition-colors z-10 w-10 h-10 flex items-center justify-center bg-black bg-opacity-50">
             <i class='bx bx-chevron-right'></i>
         </button>
     </div>
+
 
     <script>
         let galleryImages = [
@@ -313,24 +310,28 @@
                         return;
                     }
 
+                    let userInitial = "{{ strtoupper(substr(optional(auth()->user())->name ?? 'G', 0, 1)) }}";
+
                     let commentHtml = `
                     <div class="comment-item bg-white border-b border-gray-100 p-6" data-comment-id="${data.comment.id}">
-                        <div class="flex items-start gap-4">
-                            <div class="w-10 h-10 flex-shrink-0 bg-gradient-to-br from-[#1a2235] to-[#2a3441] flex items-center justify-center">
-                                <span class="text-sm font-semibold text-white">{{ substr(optional(auth()->user())->name, 0, 1) }}</span>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <h4 class="font-semibold text-[#1a2235]">{{ optional(auth()->user())->name ?? 'Guest' }}</h4>
-                                    <span class="text-sm text-gray-500">Just now</span>
-                                </div>
-                                <p id="comment-text-${data.comment.id}" class="text-gray-800 leading-relaxed">${data.comment.comment}</p>
-                                <div class="mt-3 flex items-center gap-4">
-                                    <button onclick="editComment(${data.comment.id})" class="text-sm text-[#ffb51b] hover:text-[#e6a017] transition-colors font-medium">Edit</button>
-                                    <button onclick="deleteComment(${data.comment.id})" class="text-sm text-red-500 hover:text-red-600 transition-colors font-medium">Delete</button>
-                                </div>
-                            </div>
+                      <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                          <div class="h-10 w-10 rounded-full bg-gradient-to-br from-[#1a2235] to-[#2a3441] flex items-center justify-center">
+                            <span class="text-sm font-semibold text-white">${userInitial}</span>
+                          </div>
                         </div>
+                        <div class="flex-1 min-w-0">
+                          <div class="flex items-center gap-2 mb-2">
+                            <h4 class="font-semibold text-[#1a2235]">{{ optional(auth()->user())->name ?? 'Guest' }}</h4>
+                            <span class="text-sm text-gray-500">Just now</span>
+                          </div>
+                          <p id="comment-text-${data.comment.id}" class="text-gray-800 leading-relaxed">${data.comment.comment}</p>
+                          <div class="mt-3 flex items-center gap-4">
+                            <button onclick="editComment(${data.comment.id})" class="text-sm text-[#ffb51b] hover:text-[#e6a017] transition-colors font-medium">Edit</button>
+                            <button onclick="deleteComment(${data.comment.id})" class="text-sm text-red-500 hover:text-red-600 transition-colors font-medium">Delete</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                 `;
                     document.getElementById('comment-list').insertAdjacentHTML('afterbegin', commentHtml);

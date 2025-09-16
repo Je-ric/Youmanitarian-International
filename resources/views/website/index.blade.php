@@ -19,6 +19,11 @@
                         <h2 class="text-3xl font-bold text-[#FFB51B]">{{ $featuredPost->title }}</h2>
                         <p class="text-sm text-white mt-2">Published on:
                             {{ $featuredPost->created_at->format('F j, Y') }}</p>
+
+                        <div class="mt-4 flex flex-wrap items-center gap-2">
+                            <x-feedback-status.status-indicator :status="$featuredPost->content_type"
+                                :label="ucfirst($featuredPost->content_type)" />
+                        </div>
                     </div>
                 </div>
             </a>
@@ -40,6 +45,11 @@
                                 <h2 class="text-lg font-bold text-gray-800">{{ $post->title }}</h2>
                                 <p class="text-xs text-gray-500 mt-1">Published on:
                                     {{ $post->created_at->format('F j, Y') }}</p>
+
+                                <p class="mt-2">
+                                    <x-feedback-status.status-indicator :status="$post->content_type"
+                                        :label="ucfirst($post->content_type)" />
+                                </p>
                             </div>
                         </div>
                     </a>
