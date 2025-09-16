@@ -32,45 +32,39 @@
     </section>
 
 
+<section class="py-16 px-6 md:px-16 lg:px-32 space-y-12">
 
-    <!-- Page Header -->
-    <div class="text-center">
-        <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Donate</h1>
-        <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-            Your support helps us continue our programs. Choose a method below and make a secure donation.
-        </p>
+        <!-- Page Header -->
+        <div class="text-center">
+            <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Donate</h1>
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                Your support helps us continue our programs. Choose a method below and make a secure donation.
+            </p>
 
-        <!-- Disclaimer Note -->
-        <div
-            class="mt-6 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 p-4 rounded-lg text-sm max-w-2xl mx-auto">
-            <p>
-                <strong>Note:</strong> This website does not process donations directly.
-                Please use the details provided below to send your donation.
-                After donating, you may fill out our donation form.
-                A treasurer or authorized staff will then confirm your donation as received.
+            <!-- Disclaimer Note -->
+
+        </div>
+
+        <!-- 1. Why Donate -->
+        <div class="text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Why Donate?</h2>
+            <p class="text-gray-600 max-w-3xl mx-auto">
+                Every contribution you make allows us to sustain our programs and reach more communities in need.
+                Whether it’s supporting children’s education, providing relief during disasters, or empowering local
+                volunteers—your help makes it possible.
             </p>
         </div>
-    </div>
 
-    <!-- 1. Why Donate -->
-    <div class="text-center">
-        <h2 class="text-3xl font-bold text-gray-800 mb-4">Why Donate?</h2>
-        <p class="text-gray-600 max-w-3xl mx-auto">
-            Every contribution you make allows us to sustain our programs and reach more communities in need.
-            Whether it’s supporting children’s education, providing relief during disasters, or empowering local
-            volunteers—your help makes it possible.
-        </p>
-    </div>
-
-    <!-- 2. Transparency -->
-    <div class="bg-white rounded-2xl border border-gray-200 p-6">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Transparency & Assurance</h2>
-        <p class="text-gray-600 mb-3">
-            We are committed to using your donations responsibly. 100% of your support goes directly to our programs
-            and beneficiaries. Administrative costs are covered separately, ensuring your contribution creates the maximum
-            impact.
-        </p>
-    </div>
+        <!-- 2. Transparency -->
+        <div class="bg-white rounded-2xl border border-gray-200 p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Transparency & Assurance</h2>
+            <p class="text-gray-600 mb-3">
+                We are committed to using your donations responsibly. 100% of your support goes directly to our programs
+                and beneficiaries. Administrative costs are covered separately, ensuring your contribution creates the maximum
+                impact.
+            </p>
+        </div>
+</section class="py-16 px-6 md:px-16 lg:px-32 space-y-12">
 
 
 
@@ -89,50 +83,55 @@
 
             <x-section-title first="How Can" second="You Help?" firstColor="#FFFFFF" />
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-    <!-- Make a Donation -->
-    <div class="flex flex-col items-center justify-between h-full">
-        <div class="flex flex-col items-center">
-            <div class="w-20 h-20 rounded-full bg-[#FFB51B]/20 flex items-center justify-center mb-4">
-                <i class='bx bx-heart text-3xl text-[#FFB51B]'></i>
-            </div>
-            <h3 class="text-xl font-bold mb-2">Make A Donation</h3>
-            <p class="text-sm">
-                Support our mission by contributing to our programs and initiatives. Every donation, big or small, helps
-                provide essential resources, fund community projects, and empower individuals in need.
-            </p>
-        </div>
-    </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                <!-- Make a Donation -->
+                <div class="flex flex-col items-center justify-between h-full">
+                    <div class="flex flex-col items-center">
+                        <div class="w-20 h-20 rounded-full bg-[#FFB51B]/20 flex items-center justify-center mb-4">
+                            <i class='bx bx-heart text-3xl text-[#FFB51B]'></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Make A Donation</h3>
+                        <p class="text-sm">
+                            Support our mission by contributing to our programs and initiatives. Every donation, big or
+                            small, helps
+                            provide essential resources, fund community projects, and empower individuals in need.
+                        </p>
+                    </div>
+                </div>
 
-    <!-- Become A Volunteer -->
-    <div class="flex flex-col items-center justify-between h-full">
-        <div class="flex flex-col items-center">
-            <div class="w-20 h-20 rounded-full bg-[#FFB51B]/20 flex items-center justify-center mb-4">
-                <i class='bx bx-group text-3xl text-[#FFB51B]'></i>
-            </div>
-            <h3 class="text-xl font-bold mb-2">Become A Volunteer</h3>
-            <p class="text-sm">
-                Join our team and help us make a difference in the community. Volunteers gain meaningful experience,
-                connect with like-minded individuals, and play an active role in creating positive social impact.
-            </p>
-        </div>
-    </div>
+                <!-- Become A Volunteer -->
+                <div class="flex flex-col items-center justify-between h-full">
+                    <div class="flex flex-col items-center">
+                        <div class="w-20 h-20 rounded-full bg-[#FFB51B]/20 flex items-center justify-center mb-4">
+                            <i class='bx bx-group text-3xl text-[#FFB51B]'></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Become A Volunteer</h3>
+                        <p class="text-sm">
+                            Join our team and help us make a difference in the community. Volunteers gain meaningful
+                            experience,
+                            connect with like-minded individuals, and play an active role in creating positive social
+                            impact.
+                        </p>
+                    </div>
+                </div>
 
-    <!-- Partner With Us -->
-    <div class="flex flex-col items-center justify-between h-full">
-        <div class="flex flex-col items-center">
-            <div class="w-20 h-20 rounded-full bg-[#FFB51B]/20 flex items-center justify-center mb-4">
-                <i class='bx bx-conversation text-3xl text-[#FFB51B]'></i>
+                <!-- Partner With Us -->
+                <div class="flex flex-col items-center justify-between h-full">
+                    <div class="flex flex-col items-center">
+                        <div class="w-20 h-20 rounded-full bg-[#FFB51B]/20 flex items-center justify-center mb-4">
+                            <i class='bx bx-conversation text-3xl text-[#FFB51B]'></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Partner With Us</h3>
+                        <p class="text-sm">
+                            Collaborate with us to amplify impact and support more communities. Partnerships allow
+                            organizations
+                            and businesses to contribute resources, share expertise, and join forces to address social
+                            challenges
+                            effectively.
+                        </p>
+                    </div>
+                </div>
             </div>
-            <h3 class="text-xl font-bold mb-2">Partner With Us</h3>
-            <p class="text-sm">
-                Collaborate with us to amplify impact and support more communities. Partnerships allow organizations
-                and businesses to contribute resources, share expertise, and join forces to address social challenges
-                effectively.
-            </p>
-        </div>
-    </div>
-</div>
 
 
         </div>
@@ -142,7 +141,7 @@
 
     <!-- Donation Methods -->
     <div class="py-16 px-6 md:px-16 lg:px-32">
-        <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">Ways to Donate</h2>
+            <x-section-title first="Ways to" second="Donate" firstColor="#FFFFFF" />
 
         <!-- Banks Section -->
         <div class="mb-12">
@@ -206,24 +205,49 @@
             </div>
         </div>
 
-
-        <!-- Fill Out Donation Form Button -->
-        <p>After making your donation, please fill out the form below to help us track your contribution:</p>
-        <div class="text-center">
-            <x-button type="button" variant="primary" class="mt-6 inline-flex items-center justify-center px-8 py-3"
+        <!-- Instruction & Button -->
+        <div class="text-center space-y-4">
+            <p class="text-gray-700 text-lg">
+                After making your donation, please fill out the form below to help us track your contribution.
+                This ensures your donation is properly acknowledged and processed.
+            </p>
+            <x-button type="button" variant="primary"
+                class="mt-2 inline-flex items-center justify-center px-8 py-3 text-lg"
                 onclick="document.getElementById('addDonationModal-website').showModal()">
                 <i class='bx bx-heart mr-2'></i> Fill Out Donation Form
             </x-button>
         </div>
 
-        <!-- 3. Offline Donations -->
-        <div class="bg-white rounded-2xl border border-gray-200 p-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Offline/Onsite Donations</h2>
-            <p class="text-gray-600 mb-3">
-                You may also bring donations directly to our office or partner locations.
+        <!-- Disclaimer / Note -->
+        <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 p-6 rounded-lg text-sm shadow-sm">
+            <p class="mb-2">
+                <strong>Note:</strong> This website does not process donations directly.
+                Please use the details provided above to send your donation. After donating, kindly fill out our donation
+                form.
             </p>
-            <p class="text-gray-600"><strong>Address:</strong> 123 Main Street, City, Province</p>
-            <p class="text-gray-600"><strong>Contact Person:</strong> Juan Dela Cruz – 0917 123 4567</p>
+            <p class="mb-0">
+                A treasurer or authorized staff will confirm receipt of your donation and provide acknowledgment if needed.
+            </p>
+        </div>
+
+        <!-- Offline/Onsite Donations -->
+        <div
+            class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center gap-6">
+            <div class="flex-shrink-0">
+                <i class='bx bx-map text-4xl text-[#FFB51B]'></i>
+            </div>
+            <div class="text-gray-700 space-y-2">
+                <h2 class="text-2xl font-bold text-gray-800">Offline / Onsite Donations</h2>
+                <p>
+                    You may also bring donations directly to our office or partner locations.
+                    We welcome both monetary and in-kind contributions to support our programs.
+                </p>
+                <p><strong>Address:</strong> 123 Main Street, City, Province</p>
+                <p><strong>Contact Person:</strong> Juan Dela Cruz – 0917 123 4567</p>
+                <p class="text-sm text-gray-500">
+                    Office hours: Mon-Fri, 8:00 AM – 5:00 PM. Please call ahead to coordinate large donations.
+                </p>
+            </div>
         </div>
 
     </div>
@@ -293,15 +317,6 @@
         </div>
     </section>
 
-
-
-
-
-    <h1 class="text-xl font-bold mt-16">We need to know the different donation method na meron sila</h1>
-    <p>If may bank (for each bank), we need the account details (bank name, account name, account number, etc.).</p>
-    <p>E-wallets (GCash, PayMaya, etc.) - we need the account details (account name, account number, QR's).</p>
-    <p>Location for offline donations (if applicable) - we need the address and contact person details.</p>
-    </div>
 
     @include('finance.modals.addDonationModal', [
         'modalId' => 'addDonationModal-website',
