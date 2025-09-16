@@ -8,8 +8,8 @@
 
     <!-- CTA Buttons -->
     <div class="flex flex-wrap justify-center mb-16 gap-4">
-        <x-button href="{{ route('website.team') }}" variant="primary-outline" class="w-48">Be a Volunteer</x-button>
-        <x-button href="{{ route('website.donate') }}" variant="secondary-outline" class="w-48">Donate</x-button>
+        <x-button href="{{ route('website.programs') }}" variant="primary-outline" class="w-50">Be a Volunteer</x-button>
+        <x-button href="{{ route('website.donate') }}" variant="secondary-outline" class="w-50">Donate</x-button>
     </div>
 
     <!-- Footer Links Grid -->

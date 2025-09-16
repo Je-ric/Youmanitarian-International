@@ -1,36 +1,34 @@
 @extends('layouts.navbar')
 
 @section('content')
+    <section class="relative w-full min-h-screen flex items-center">
+        <!-- Background image -->
+        <img src="{{ asset('assets/images/bg/program-bg.jpg') }}" alt="Join Youmanitarian International"
+            class="absolute inset-0 w-full h-full object-cover">
 
-<section class="relative w-full min-h-screen flex items-center">
-    <!-- Background image -->
-    <img src="{{ asset('assets/images/bg/program-bg.jpg') }}"
-         alt="Join Youmanitarian International"
-         class="absolute inset-0 w-full h-full object-cover">
+        <!-- Gradient overlay (dark left -> transparent right) -->
+        <div class="absolute inset-0 bg-gradient-to-r from-[#1a2235]/80 via-[#1a2235]/50 to-transparent"></div>
 
-    <!-- Gradient overlay (dark left -> transparent right) -->
-    <div class="absolute inset-0 bg-gradient-to-r from-[#1a2235]/80 via-[#1a2235]/50 to-transparent"></div>
+        <!-- Content -->
+        <div class="relative z-10 max-w-3xl px-6 md:px-12 lg:px-24 text-white">
+            <p class="text-base md:text-lg lg:text-xl font-normal tracking-wide uppercase">
+                Grow Without Limits
+            </p>
+            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold leading-snug">
+                Join <span class="text-[#FFB51B]">Youmanitarian International</span> and be one of us!
+            </h2>
+            <p class="mt-4 text-base md:text-lg lg:text-xl font-medium">
+                Make connections, take action and move forward with a community
+                built on dedication and mutual growth.
+            </p>
 
-    <!-- Content -->
-    <div class="relative z-10 max-w-3xl px-6 md:px-12 lg:px-24 text-white">
-        <p class="text-base md:text-lg lg:text-xl font-normal tracking-wide uppercase">
-            Grow Without Limits
-        </p>
-        <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold leading-snug">
-            Join <span class="text-[#FFB51B]">Youmanitarian International</span> and be one of us!
-        </h2>
-        <p class="mt-4 text-base md:text-lg lg:text-xl font-medium">
-            Make connections, take action and move forward with a community
-            built on dedication and mutual growth.
-        </p>
-
-        <button
-            class="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-[#FFB51B] text-[#1A2235] rounded-full font-semibold shadow hover:bg-[#e6a318] transition">
-            JOIN NOW!
-            <i class="bx bx-right-arrow-alt text-lg"></i>
-        </button>
-    </div>
-</section>
+            <button
+                class="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-[#FFB51B] text-[#1A2235] rounded-full font-semibold shadow hover:bg-[#e6a318] transition">
+                JOIN NOW!
+                <i class="bx bx-right-arrow-alt text-lg"></i>
+            </button>
+        </div>
+    </section>
 
 
 
@@ -494,7 +492,8 @@
                         <x-form.label for="proposed_date" variant="date">Proposed Date</x-form.label>
                         <x-form.date-picker id="proposed_date" name="proposed_date" />
                     </div>
-                    <div>
+                    <div class="flex items-end">
+                        <x-form.label></x-form.label>
                         <x-button type="submit" variant="primary">
                             <i class='bx bx-send mr-1'></i> Submit Request
                         </x-button>

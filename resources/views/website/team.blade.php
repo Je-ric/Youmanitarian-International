@@ -306,7 +306,7 @@
     </section>
 
 
-    <section class="relative bg-cover bg-center py-20 my-10"
+    <section class="relative bg-cover bg-center py-20 mt-12"
         style="background-image: url('{{ asset('assets/images/bg/volunteer.jpg') }}');">
 
         <div class="absolute inset-0 bg-[#1a2235] bg-opacity-70 backdrop-blur-sm"></div>

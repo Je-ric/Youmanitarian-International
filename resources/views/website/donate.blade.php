@@ -33,19 +33,17 @@
 
 
     <section class="py-16 px-6 md:px-16 lg:px-32 space-y-12">
+        <x-section-title first="Why" second="Donate?" />
 
         <p class="text-gray-600 text-lg max-w-2xl mx-auto text-center">
             Your support helps us continue our programs. Choose a method below and make a secure donation.
         </p>
 
-        <div class="text-center">
-            <x-section-title first="Why" second="Donate?" />
-            <p class="text-gray-600 max-w-3xl mx-auto">
-                Every contribution you make allows us to sustain our programs and reach more communities in need.
-                Whether it’s supporting children’s education, providing relief during disasters, or empowering local
-                volunteers—your help makes it possible.
-            </p>
-        </div>
+        <p class="text-gray-600 max-w-3xl mx-auto text-center">
+            Every contribution you make allows us to sustain our programs and reach more communities in need.
+            Whether it’s supporting children’s education, providing relief during disasters, or empowering local
+            volunteers—your help makes it possible.
+        </p>
 
         <div class="bg-white rounded-2xl border border-gray-200 p-6">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Transparency & Assurance</h2>
@@ -213,7 +211,11 @@
 
         <!-- Disclaimer / Note -->
         <x-feedback-status.alert variant="flexible" icon="bx bx-info-circle" bgColor="bg-yellow-50"
-            borderColor="border-yellow-300" textColor="text-yellow-800" iconColor="text-yellow-600" :message="'<strong>Note:</strong> This website does not process donations directly. Please use the details provided above to send your donation. After donating, kindly fill out our donation form.<br><span class=&quot;block mt-2 text-sm text-gray-600&quot;>A treasurer or authorized staff will confirm receipt of your donation and provide acknowledgment if needed.</span>'" />
+            borderColor="border-yellow-300" textColor="text-yellow-800" iconColor="text-yellow-600"
+            :message="'<strong>Note:</strong> This website does not process donations directly.
+            Please use the details provided above to send your donation. After donating, kindly fill out our donation form.
+            <br><span class=&quot;block mt-2 text-sm text-gray-600&quot;>A treasurer or finance facilitator will confirm
+            receipt of your donation and provide acknowledgment if needed.</span>'" />
 
         <!-- Offline/Onsite Donations Card -->
         <x-overview.card title="Offline / Onsite Donations" icon="bx-map" variant="minimal" class="max-w-4xl mx-auto">

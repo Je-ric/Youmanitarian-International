@@ -33,32 +33,32 @@
             <nav class="hidden lg:flex items-center space-x-6 text-base">
                 <a href="{{ route('website.index') }}"
                     class="text-primary-custom hover:text-accent-custom transition-colors duration-300
-                    {{ request()->routeIs('website.index') ? 'text-accent-custom font-bold' : '' }}">
+                    {{ request()->routeIs('website.index') ? 'text-[#ffb51b] font-bold' : '' }}">
                     Home
                 </a>
                 <a href="{{ route('website.programs') }}"
                     class="text-primary-custom hover:text-accent-custom transition-colors duration-300
-                    {{ request()->routeIs('website.programs') ? 'text-accent-custom font-bold' : '' }}">
+                    {{ request()->routeIs('website.programs') ? 'text-[#ffb51b] font-bold' : '' }}">
                     Programs
                 </a>
                 <a href="{{ route('website.sponsors') }}"
                     class="text-primary-custom hover:text-accent-custom transition-colors duration-300
-                    {{ request()->routeIs('website.sponsors') ? 'text-accent-custom font-bold' : '' }}">
+                    {{ request()->routeIs('website.sponsors') ? 'text-[#ffb51b] font-bold' : '' }}">
                     Sponsor & Partnership
                 </a>
                 <a href="{{ route('website.about') }}"
                     class="text-primary-custom hover:text-accent-custom transition-colors duration-300
-                    {{ request()->routeIs('website.about') ? 'text-accent-custom font-bold' : '' }}">
+                    {{ request()->routeIs('website.about') ? 'text-[#ffb51b] font-bold' : '' }}">
                     About Us
                 </a>
                 <a href="{{ route('website.team') }}"
                     class="text-primary-custom hover:text-accent-custom transition-colors duration-300
-                    {{ request()->routeIs('website.team') ? 'text-accent-custom font-bold' : '' }}">
+                    {{ request()->routeIs('website.team') ? 'text-[#ffb51b] font-bold' : '' }}">
                     Meet the Team
                 </a>
                 <a href="{{ route('website.donate') }}"
                     class="text-primary-custom hover:text-accent-custom transition-colors duration-300
-                    {{ request()->routeIs('website.donate') ? 'text-accent-custom font-bold' : '' }}">
+                    {{ request()->routeIs('website.donate') ? 'text-[#ffb51b] font-bold' : '' }}">
                     Donate Today
                 </a>
 
@@ -79,12 +79,12 @@
 
                 <div x-show="open" x-transition class="absolute top-16 left-0 w-full bg-white shadow-lg border-t z-20">
                     <nav class="flex flex-col p-4 space-y-3 text-base">
-                        <a href="{{ route('website.index') }}" class="text-gray-600 hover:text-blue-600">Home</a>
-                        <a href="{{ route('website.programs') }}" class="text-gray-600 hover:text-blue-600">Programs</a>
-                        <a href="{{ route('website.sponsors') }}" class="text-gray-600 hover:text-blue-600">Sponsor & Partnership</a>
-                        <a href="{{ route('website.about') }}" class="text-gray-600 hover:text-blue-600">About Us</a>
-                        <a href="{{ route('website.team') }}" class="text-gray-600 hover:text-blue-600">Meet the Team</a>
-                        <a href="{{ route('website.donate') }}" class="text-gray-600 hover:text-blue-600">Donate Today</a>
+                        <a href="{{ route('website.index') }}" class="text-gray-600 hover:text-[#ffb51b]">Home</a>
+                        <a href="{{ route('website.programs') }}" class="text-gray-600 hover:text-[#ffb51b]">Programs</a>
+                        <a href="{{ route('website.sponsors') }}" class="text-gray-600 hover:text-[#ffb51b]">Sponsor & Partnership</a>
+                        <a href="{{ route('website.about') }}" class="text-gray-600 hover:text-[#ffb51b]">About Us</a>
+                        <a href="{{ route('website.team') }}" class="text-gray-600 hover:text-[#ffb51b]">Meet the Team</a>
+                        <a href="{{ route('website.donate') }}" class="text-gray-600 hover:text-[#ffb51b]">Donate Today</a>
 
                         @if (Auth::check())
                             <a href="{{ url('/dashboard') }}" class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Dashboard</a>
