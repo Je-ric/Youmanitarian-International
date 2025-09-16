@@ -447,7 +447,7 @@
             <div class="text-center max-w-5xl mx-auto my-4">
                 <x-feedback-status.alert type="info" icon="bx bx-info-circle"
                     message="Have an idea for a program? Submit your request,
-                    and our team will carefully review it.
+                    and our team will carefully review it. <br>
                     If it meets our criteria and aligns with our mission,
                     we’ll proceed with planning and bring it
                     to life for the community." />

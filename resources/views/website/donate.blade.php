@@ -32,22 +32,14 @@
     </section>
 
 
-<section class="py-16 px-6 md:px-16 lg:px-32 space-y-12">
+    <section class="py-16 px-6 md:px-16 lg:px-32 space-y-12">
 
-        <!-- Page Header -->
+        <p class="text-gray-600 text-lg max-w-2xl mx-auto text-center">
+            Your support helps us continue our programs. Choose a method below and make a secure donation.
+        </p>
+
         <div class="text-center">
-            <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Donate</h1>
-            <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-                Your support helps us continue our programs. Choose a method below and make a secure donation.
-            </p>
-
-            <!-- Disclaimer Note -->
-
-        </div>
-
-        <!-- 1. Why Donate -->
-        <div class="text-center">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Why Donate?</h2>
+            <x-section-title first="Why" second="Donate?" />
             <p class="text-gray-600 max-w-3xl mx-auto">
                 Every contribution you make allows us to sustain our programs and reach more communities in need.
                 Whether it’s supporting children’s education, providing relief during disasters, or empowering local
@@ -55,16 +47,18 @@
             </p>
         </div>
 
-        <!-- 2. Transparency -->
         <div class="bg-white rounded-2xl border border-gray-200 p-6">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Transparency & Assurance</h2>
             <p class="text-gray-600 mb-3">
                 We are committed to using your donations responsibly. 100% of your support goes directly to our programs
-                and beneficiaries. Administrative costs are covered separately, ensuring your contribution creates the maximum
+                and beneficiaries. Administrative costs are covered separately, ensuring your contribution creates the
+                maximum
                 impact.
             </p>
         </div>
-</section class="py-16 px-6 md:px-16 lg:px-32 space-y-12">
+
+
+    </section>
 
 
 
@@ -141,7 +135,7 @@
 
     <!-- Donation Methods -->
     <div class="py-16 px-6 md:px-16 lg:px-32">
-            <x-section-title first="Ways to" second="Donate" firstColor="#FFFFFF" />
+        <x-section-title first="Ways to" second="Donate" />
 
         <!-- Banks Section -->
         <div class="mb-12">
@@ -206,49 +200,46 @@
         </div>
 
         <!-- Instruction & Button -->
-        <div class="text-center space-y-4">
-            <p class="text-gray-700 text-lg">
+        <div class="text-center space-y-6 md:space-y-8 max-w-3xl mx-auto mb-10">
+            <p class="text-gray-700 text-lg md:text-xl leading-relaxed">
                 After making your donation, please fill out the form below to help us track your contribution.
-                This ensures your donation is properly acknowledged and processed.
+                This ensures your donation is properly acknowledged and processed efficiently.
             </p>
             <x-button type="button" variant="primary"
-                class="mt-2 inline-flex items-center justify-center px-8 py-3 text-lg"
                 onclick="document.getElementById('addDonationModal-website').showModal()">
                 <i class='bx bx-heart mr-2'></i> Fill Out Donation Form
             </x-button>
         </div>
 
         <!-- Disclaimer / Note -->
-        <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 p-6 rounded-lg text-sm shadow-sm">
-            <p class="mb-2">
-                <strong>Note:</strong> This website does not process donations directly.
-                Please use the details provided above to send your donation. After donating, kindly fill out our donation
-                form.
-            </p>
-            <p class="mb-0">
-                A treasurer or authorized staff will confirm receipt of your donation and provide acknowledgment if needed.
-            </p>
-        </div>
+        <x-feedback-status.alert variant="flexible" icon="bx bx-info-circle" bgColor="bg-yellow-50"
+            borderColor="border-yellow-300" textColor="text-yellow-800" iconColor="text-yellow-600" :message="'<strong>Note:</strong> This website does not process donations directly. Please use the details provided above to send your donation. After donating, kindly fill out our donation form.<br><span class=&quot;block mt-2 text-sm text-gray-600&quot;>A treasurer or authorized staff will confirm receipt of your donation and provide acknowledgment if needed.</span>'" />
 
-        <!-- Offline/Onsite Donations -->
-        <div
-            class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center gap-6">
-            <div class="flex-shrink-0">
-                <i class='bx bx-map text-4xl text-[#FFB51B]'></i>
+        <!-- Offline/Onsite Donations Card -->
+        <x-overview.card title="Offline / Onsite Donations" icon="bx-map" variant="minimal" class="max-w-4xl mx-auto">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+                <!-- Icon for desktop -->
+                <div
+                    class="flex-shrink-0 hidden md:flex items-center justify-center w-16 h-16 rounded-full bg-[#FFB51B]/20">
+                    <i class='bx bx-store-alt text-4xl text-[#FFB51B]'></i>
+                </div>
+
+                <!-- Donation Details -->
+                <div class="text-gray-700 space-y-3 md:space-y-2">
+                    <p class="text-base md:text-lg leading-relaxed">
+                        You may bring donations directly to our office or partner locations. We welcome both monetary and
+                        in-kind contributions to support our programs.
+                    </p>
+                    <p><strong>Address:</strong> CLIRDEC, CLSU, Science City of Munoz, Nueva Ecija, Philippines</p>
+                    <p><strong>Contact Person:</strong> Juan Dela Cruz – 0917-000-1111</p>
+                    <p class="text-sm text-gray-500">
+                        Office hours: Mon-Fri, 8:00 AM – 6:00 PM. Please call ahead to coordinate large or special
+                        donations.
+                    </p>
+                </div>
             </div>
-            <div class="text-gray-700 space-y-2">
-                <h2 class="text-2xl font-bold text-gray-800">Offline / Onsite Donations</h2>
-                <p>
-                    You may also bring donations directly to our office or partner locations.
-                    We welcome both monetary and in-kind contributions to support our programs.
-                </p>
-                <p><strong>Address:</strong> 123 Main Street, City, Province</p>
-                <p><strong>Contact Person:</strong> Juan Dela Cruz – 0917 123 4567</p>
-                <p class="text-sm text-gray-500">
-                    Office hours: Mon-Fri, 8:00 AM – 5:00 PM. Please call ahead to coordinate large donations.
-                </p>
-            </div>
-        </div>
+        </x-overview.card>
+
 
     </div>
 
