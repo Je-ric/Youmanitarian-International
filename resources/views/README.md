@@ -12,6 +12,11 @@ views/
 ├── member/                    # Member management and organization membership
 ├── roles/                     # User roles and permissions management
 └── finance/                   # Financial management (donations and membership payments)
+├── consultation/              # One‑to‑one consultation chats and hours management
+├── programs_chats/            # Program group chat UI
+├── program_requests/          # Public program requests
+├── content/                   # CMS (create/edit/preview) and dynamic content
+└── content/dynamic/           # Team members and other dynamic pages
 ```
 
 ---
@@ -64,6 +69,7 @@ This section is for Admins/Coordinators to manage the central list of all volunt
 -   **Approved Volunteers:**
     -   Once approved, a volunteer can join programs.
     -   Admins can invite approved volunteers to become official **Members** of the organization.
+    -   Volunteer profile supports profile photo upload and consolidated history.
 
 ### 4. Member Management (`/member`)
 
@@ -78,6 +84,7 @@ This section manages official organization membership and member types.
     -   Admins can invite approved volunteers to become members.
     -   Invitations are sent via email and notification to the account with membership details.
     -   Members can be categorized as Full-Pledge or Honorary based on their contribution level.
+    -   Invitation notifications are now pinned and accessible in Notifications. Accept/Decline flows update membership and roles accordingly.
 
 ### 5. Role Management (`/roles`)
 
@@ -109,6 +116,8 @@ This section manages all site content, articles, and media. Both Content Manager
     -   Archived: User's archived content.
     -   Rejected/Needs Revision: User's content that was rejected or needs revision.
     -   Needs Approval: (Visible only to Content Managers) Content from Program Coordinators pending approval.
+    -   Program Coordinators see Submitted and Needs Revision.
+    -   Managers/Admins see My Content, Published, Archived, and Needs Approval.
 -   **Role Permissions:**
     -   **Content Manager:**
         -   Can create, edit, publish, archive, and approve content.
@@ -126,6 +135,13 @@ This section manages all site content, articles, and media. Both Content Manager
     -   All users can view published content.
     -   Only the creator or a Content Manager can edit or update content.
     -   Archived and rejected content is accessible in their respective tabs for reference or revision.
+    -   Create/Edit/Preview tabs in Content default based on role/ownership and content status (review mode vs edit mode).
+    -   The Preview tab now mirrors the public content view layout (hero, gallery with modal, engagement, sidebar) for accurate review.
+    -   Create/Edit cards use professional UI components for clearer grouping (Basic Info, Editor, Media, Publishing, Features, SEO, Stats).
+    -   Website content page includes likes, comments, bookmarks (feature‑flagged), and dynamic gallery modal.
+    -   Likes, comments, and bookmark are feature‑flagged per content. Heart reacts are per‑user toggles; counts update live.
+    -   Comments support create, inline edit, and delete via AJAX with live counters.
+    -   Tabs: My Content; Published; Archived (Manager/Admin). Program Coordinators see Submitted and Needs Revision; Managers/Admins see Needs Approval.
 
 ### 7. Financial Management (`/finance`)
 
@@ -141,6 +157,10 @@ This section manages all financial operations including donations and membership
     -   Manage membership payment tracking and processing.
     -   Handle payment reminders and status updates.
     -   Track payment history and financial records.
+ -   **Public Donations (Website `Donate`):**
+    -   Guests or users can submit donations from the website.
+    -   Upload receipt proof (optional); records stored as Pending until confirmed in Finance.
+    -   When submitted from website, a thank‑you flow and toast are shown.
 
 ### 8. Participant Rules (Attendance, Tasks, and Feedback)
 
@@ -155,7 +175,14 @@ This section manages all financial operations including donations and membership
 -   **Feedback:**
     -   Volunteers and guests can only submit feedback/ratings after a program has ended.
 
-### 9. UI/UX Feedback (Toasts and Alerts)
+### 9. Notifications (`/notifications`)
+
+-   Invitation notifications are pinned to the top and also listed in the general feed.
+-   Mark‑as‑read redirects contextually (invitation page, payment reminder details, or `action_url`).
+-   Bulk “Mark all as read” supported.
+-   Payment reminder details link to the specific membership payment context.
+
+### 10. UI/UX Feedback (Toasts and Alerts)
 
 -   The system uses toasts and alerts to provide clear feedback for all major actions, such as:
     -   Creating, updating, or deleting programs and tasks.
@@ -165,3 +192,37 @@ This section manages all financial operations including donations and membership
     -   Financial transactions and payment processing.
     -   Member invitations and status updates.
     -   All successful actions and error conditions.
+
+### 11. Team Members (`/content/team-members` and dynamic team pages)
+
+-   Manage team member profiles, including name, position, bio, photo, links, category (founder, executive, member, developer), and active status. This information appears on the "Meet The Team" page of the website.
+
+### 12. Consultation Hours (`/consultation-hours`)
+
+-   Users can define consultation hours (day, time window, specialization) with active/inactive status for visibility.
+-   Hours are shown in consultation contexts (e.g., program/participants side panels) sorted by day and start time.
+-   Only owners can edit/delete their hours; validation ensures proper time ranges.
+ -   Starting a chat from hours opens a 1‑to‑1 thread with that user (self links are disabled).
+
+### 13. Consultation Chats (1‑to‑1) (`/consultation-chats`)
+
+-   Any two users can start a private consultation thread. If a thread already exists, it will be reused; otherwise, a new one will be created.
+-   Messages display sender, timestamps, and support deletion by the sender.
+-   Authorization ensures only participants can view threads/messages.
+-   Real‑time events broadcast new messages and deletions for live updates.
+
+### 14. Program Chats (Group) (`/programs/chats`)
+
+-   Each program has a persistent group chat created on program creation with a pinned welcome system message.
+-   Participants are the coordinator and approved volunteers; access is enforced per program membership.
+-   Messages stream chronologically with pagination; send/delete with real‑time broadcast updates.
+
+### 15. Program Requests (Website `Program Request`)
+
+-   Public users can submit program requests with name, title, description, audience, location, and proposed date.
+-   Requests are listed for review in the dashboard; successful submission redirects to Programs with a toast.
+
+### General
+
+-   All Photos are stored in `storage/uploads/` with safe filenames; previous photos are cleaned up on update.
+ -   Tabs across list pages (Programs, Content, Finance, Members, Volunteers) preserve the active tab across pagination via `?tab=` query params.
