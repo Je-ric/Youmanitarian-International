@@ -29,6 +29,10 @@
                         <i class='bx bx-show'></i>
                         <span>{{ number_format($content->views) }} views</span>
                     </div>
+                    <div class="flex items-center gap-2">
+                        <i class='bx bx-user'></i>
+                        <span>By {{ optional($content->author ?? $content->user)->name ?? 'Unknown Author' }}</span>
+                    </div>
                 </div>
 
                 <div class="flex flex-wrap justify-center items-center gap-3 mt-4">

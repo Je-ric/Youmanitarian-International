@@ -25,22 +25,22 @@
                         {{ substr(auth()->user()->name, 0, 1) }}
                     </span>
                 </div>
-                
+
                 <div class="flex-1 space-y-3">
                     <div class="relative">
-                        <textarea 
+                        <textarea
                             id="comment-input"
-                            name="comment" 
-                            rows="3" 
+                            name="comment"
+                            rows="3"
                             class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-[#ffb51b] focus:ring-0 focus:outline-none resize-none transition-all duration-200 text-gray-800 placeholder-gray-500"
                             placeholder="Share your thoughts on this content..."
                             oninput="autoResizeTextarea(this)"
                         ></textarea>
-                        
+
                         <!-- Emoji Picker Button -->
-                        <button 
-                            type="button" 
-                            onclick="toggleEmojiPicker()" 
+                        <button
+                            type="button"
+                            onclick="toggleEmojiPicker()"
                             class="absolute bottom-3 right-3 text-gray-400 hover:text-[#ffb51b] transition-colors duration-200 p-1 rounded-lg hover:bg-gray-100"
                             title="Add emoji"
                         >
@@ -56,9 +56,9 @@
                                     $emojis = ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🤩', '🥳', '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩', '🥺', '😢', '😭', '😤', '😠', '😡', '🤬', '🤯', '😳', '🥵', '🥶', '😱', '😨', '😰', '😥', '😓', '🤗', '🤔', '🤭', '🤫', '🤥', '😶', '😐', '😑', '😯', '😦', '😧', '😮', '😲', '🥱', '😴', '🤤', '😪', '😵', '🤐', '🥴', '🤢', '🤮', '🤧', '😷', '🤒', '🤕', '🤑', '🤠', '👍', '👎', '👏', '🙌', '👌', '✌️', '🤞', '🤟', '🤘', '🤙', '👈', '👉', '👆', '👇', '☝️', '✋', '🤚', '🖐️', '🖖', '👋', '🤏', '💪', '🦾', '🖕', '✍️', '🙏', '🦶', '🦵', '🦿', '💄', '💋', '👄', '🦷', '👅', '👂', '🦻', '👃', '👣', '👁️', '👀', '🧠', '🗣️', '👤', '👥'];
                                 @endphp
                                 @foreach($emojis as $emoji)
-                                    <button 
-                                        type="button" 
-                                        onclick="insertEmoji('{{ $emoji }}')" 
+                                    <button
+                                        type="button"
+                                        onclick="insertEmoji('{{ $emoji }}')"
                                         class="text-lg hover:bg-gray-100 rounded p-1 transition-colors duration-200"
                                         title="{{ $emoji }}"
                                     >
@@ -74,8 +74,8 @@
                             <i class='bx bx-info-circle mr-1'></i>
                             Be respectful and constructive in your comments
                         </div>
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             class="inline-flex items-center gap-2 px-6 py-2.5 bg-[#ffb51b] text-white rounded-lg hover:bg-[#e6a017] transition-all duration-200 font-medium shadow-sm hover:shadow-md"
                         >
                             <i class='bx bx-send'></i>
@@ -113,7 +113,7 @@
                             {{ substr($comment->user->name ?? 'Guest', 0, 1) }}
                         </span>
                     </div>
-                    
+
                     <!-- Comment Content -->
                     <div class="flex-1 min-w-0">
                         <!-- Comment Header -->
@@ -128,26 +128,26 @@
                                 </time>
                             </div>
                         </header>
-                        
+
                         <!-- Comment Text -->
                         <div class="mb-4">
                             <p id="comment-text-{{ $comment->id }}" class="text-gray-800 leading-relaxed text-sm sm:text-base">
                                 {{ $comment->comment }}
                             </p>
                         </div>
-                        
+
                         <!-- Comment Actions -->
                         @if(auth()->check() && (auth()->id() == $comment->user_id || auth()->user()->hasRole('admin')))
                             <footer class="flex items-center gap-4">
-                                <button 
-                                    onclick="editComment({{ $comment->id }})" 
+                                <button
+                                    onclick="editComment({{ $comment->id }})"
                                     class="inline-flex items-center gap-1 text-sm text-[#ffb51b] hover:text-[#e6a017] transition-colors duration-200 font-medium"
                                 >
                                     <i class='bx bx-edit-alt'></i>
                                     <span>Edit</span>
                                 </button>
-                                <button 
-                                    onclick="deleteComment({{ $comment->id }})" 
+                                <button
+                                    onclick="deleteComment({{ $comment->id }})"
                                     class="inline-flex items-center gap-1 text-sm text-red-500 hover:text-red-600 transition-colors duration-200 font-medium"
                                 >
                                     <i class='bx bx-trash'></i>

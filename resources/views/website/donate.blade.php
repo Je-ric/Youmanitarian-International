@@ -35,10 +35,6 @@
     <section class="py-16 px-6 md:px-16 lg:px-32 space-y-12">
         <x-section-title first="Why" second="Donate?" />
 
-        <p class="text-gray-600 text-lg max-w-2xl mx-auto text-center">
-            Your support helps us continue our programs. Choose a method below and make a secure donation.
-        </p>
-
         <p class="text-gray-600 max-w-3xl mx-auto text-center">
             Every contribution you make allows us to sustain our programs and reach more communities in need.
             Whether it’s supporting children’s education, providing relief during disasters, or empowering local
@@ -133,7 +129,11 @@
 
     <!-- Donation Methods -->
     <div class="py-16 px-6 md:px-16 lg:px-32">
-        <x-section-title first="Ways to" second="Donate" />
+        <x-section-title first="Ways to" second="Donate" mb="false" />
+
+        <p class="text-gray-600 text-lg max-w-2xl mx-auto text-center">
+            Your support helps us continue our programs. Choose a method below and make a secure donation.
+        </p>
 
         <!-- Banks Section -->
         <div class="mb-12">

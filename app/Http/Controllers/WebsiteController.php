@@ -42,7 +42,10 @@ class WebsiteController extends Controller
 
     public function viewContent($slug)
     {
-        $content = Content::where('slug', $slug)->where('content_status', 'published')->firstOrFail();
+        $content = Content::with('user') // ensure author/user is loaded
+            ->where('slug', $slug)
+            ->where('content_status', 'published')
+            ->firstOrFail();
         $content->increment('views'); //views
 
         // multiple images
@@ -53,7 +56,13 @@ class WebsiteController extends Controller
         $nextContent = Content::where('id', '>', $content->id)->where('content_status', 'published')->orderBy('id', 'asc')->first();
 
         // other contents
-        $otherContents = Content::where('id', '!=', $content->id)->where('content_status', 'published')->orderBy('created_at', 'desc')->limit(10)->get();
+        $otherContents = Content::where('id', '!=', $content->id)
+                    ->where('content_status', 'published')
+                    ->orderBy('created_at', 'desc')
+                    ->limit(5)
+                    ->get();
+
+        
 
         $comments = ContentComment::where('content_id', $content->id)->with('user')->latest()->get();
 
