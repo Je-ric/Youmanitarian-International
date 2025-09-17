@@ -33,6 +33,7 @@ use App\Http\Controllers\MembershipReminderController;
 use App\Http\Controllers\VolunteerAttendanceController;
 use App\Http\Controllers\ContentReviewCommentController;
 use App\Http\Controllers\VolunteerApplicationController;
+use App\Http\Controllers\DashboardController;
 
 // =================================================================
 // WEBSITE ROUTES (Public - No Authentication Required)
@@ -102,14 +103,11 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 // =================================================================
 
 Route::middleware(['auth'])->group(function () {
-
     // =================================================================
     // DASHBOARD & COMPONENTS
     // =================================================================
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Component Showcase Route
     Route::get('/components/showcase', function () {

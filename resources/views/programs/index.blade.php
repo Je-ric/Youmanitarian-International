@@ -73,20 +73,20 @@
 
         <div>
             @foreach($allPrograms as $program)
-                @include('programs.modals.program-modal', 
+                @include('programs.modals.program-modal',
                             ['program' => $program])
             @endforeach
             @if(Auth::user()->hasRole('Volunteer'))
                 @foreach($joinedPrograms as $program)
-                    @include('programs.modals.program-modal', 
+                    @include('programs.modals.program-modal',
                             ['program' => $program])
                 @endforeach
             @endif
             @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
                 @foreach($myPrograms as $program)
                     @if(Auth::id() === $program->created_by)
-                        @include('programs.modals.deleteProgramModal', 
-                            ['program' => $program, 
+                        @include('programs.modals.deleteProgramModal',
+                            ['program' => $program,
                             'modalId' => 'delete-program-modal-' . $program->id])
                     @endif
                 @endforeach
@@ -131,7 +131,7 @@ $(document).on('submit', '.delete-program-form', function(e) {
                     $(slotId).load(location.href + ` ${slotId} > *`);
                 }
             });
-            
+
             // 3) Close modal
             if (modalId) {
                 const dlg = document.getElementById(modalId);
