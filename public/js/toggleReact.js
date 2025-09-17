@@ -19,7 +19,7 @@ function toggleReact(contentId, csrfToken) {
         heartButton.setAttribute("data-reacted", "true");
     }
 
-    fetch(`/react/${contentId}`, {
+    fetch(`/content/${contentId}/react`, {
         method: "POST",
         headers: {
             "X-CSRF-TOKEN": csrfToken,

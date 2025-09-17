@@ -19,7 +19,7 @@ function toggleBookmark(contentId, csrfToken) {
         bookmarkButton.setAttribute("data-bookmarked", "true");
     }
 
-    fetch(`/bookmark/${contentId}`, {
+    fetch(`/content/${contentId}/toggle`, {
         method: "POST",
         headers: {
             "X-CSRF-TOKEN": csrfToken,

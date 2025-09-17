@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flowbite@1.6.5/dist/flowbite.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
 <body class="font-sans antialiased bg-gray-100">

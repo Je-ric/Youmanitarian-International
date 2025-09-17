@@ -103,7 +103,7 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 // ALL AUTHENTICATED USERS (Common routes for all logged-in users)
 // =================================================================
 
-Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth'])->group(function () {
     // =================================================================
     // DASHBOARD & COMPONENTS
     // =================================================================
@@ -131,7 +131,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Content reactions
     Route::post('/content/{contentId}/react', [HeartReactController::class, 'toggleReact']);
-    Route::post('/bookmarks/{content}/toggle', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
+    Route::post('/content/{contentId}/toggle', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
     // Content comments
     Route::post('/content/{contentId}/comments', [ContentCommentController::class, 'store']);
     Route::put('/content/comments/{commentId}', [ContentCommentController::class, 'update']);

@@ -61,7 +61,7 @@ class Content extends Model
 
     public function bookmarks()
     {
-        return $this->hasMany(HeartReact::class, 'content_id');
+        return $this->hasMany(Bookmark::class, 'content_id');
     }
 
 

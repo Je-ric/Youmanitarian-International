@@ -8,6 +8,10 @@ import "flatpickr/dist/flatpickr.min.css";
 
 import './sidebar';
 
+// import './comment';
+// import './toggleBookmark';
+// import './toggleReact';
+
 
 window.flatpickr = flatpickr;
 

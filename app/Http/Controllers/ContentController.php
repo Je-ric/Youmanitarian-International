@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Content;
+use App\Models\HeartReact;
+use Illuminate\Support\Str;
 use App\Models\ContentImage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\ContentComment;
+use App\Models\Bookmark;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon; // add
+use Illuminate\Support\Facades\Storage;
 
 class ContentController extends Controller
 {
@@ -132,36 +135,21 @@ class ContentController extends Controller
             $viewsLast7 = null;
         }
 
-        $likesTotal  = \App\Models\HeartReact::where('content_id', $content->id)->count();
-        $likesLast7  = \App\Models\HeartReact::where('content_id', $content->id)
+        $likesTotal  = HeartReact::where('content_id', $content->id)->count();
+        $likesLast7  = HeartReact::where('content_id', $content->id)
                         ->where('created_at', '>=', \Carbon\Carbon::now()->subDays(7))
                         ->count();
 
-        $commentsTotal = \App\Models\ContentComment::where('content_id', $content->id)->count();
-        $commentsLast7 = \App\Models\ContentComment::where('content_id', $content->id)
+        $commentsTotal = ContentComment::where('content_id', $content->id)->count();
+        $commentsLast7 = ContentComment::where('content_id', $content->id)
                         ->where('created_at', '>=', \Carbon\Carbon::now()->subDays(7))
                         ->count();
 
-        // $bookmarksTotal = null;
-        // $bookmarksLast7 = null;
-        // try {
-        //     if (class_exists('App\\Models\\ContentBookmark')) {
-        //         $bookmarksTotal = \App\Models\ContentBookmark::where('content_id', $content->id)->count();
-        //         $bookmarksLast7 = \App\Models\ContentBookmark::where('content_id', $content->id)
-        //             ->where('created_at', '>=', \Carbon\Carbon::now()->subDays(7))
-        //             ->count();
-        //     } elseif (\Illuminate\Support\Facades\Schema::hasTable('content_bookmarks')) {
-        //         $bookmarksTotal = \Illuminate\Support\Facades\DB::table('content_bookmarks')
-        //             ->where('content_id', $content->id)->count();
-        //         $bookmarksLast7 = \Illuminate\Support\Facades\DB::table('content_bookmarks')
-        //             ->where('content_id', $content->id)
-        //             ->where('created_at', '>=', \Carbon\Carbon::now()->subDays(7))
-        //             ->count();
-        //     }
-        // } catch (\Throwable $e) {
-        //     $bookmarksTotal = null;
-        //     $bookmarksLast7 = null;
-        // }
+        // FIX: use the Bookmark model directly (class_exists('Bookmark') was false and table name was wrong)
+        $bookmarksTotal = Bookmark::where('content_id', $content->id)->count();
+        $bookmarksLast7 = Bookmark::where('content_id', $content->id)
+            ->where('created_at', '>=', \Carbon\Carbon::now()->subDays(7))
+            ->count();
 
         $overview = [
             'totalViews'     => $totalViews,
@@ -170,8 +158,8 @@ class ContentController extends Controller
             'likesLast7'     => $likesLast7,
             'commentsTotal'  => $commentsTotal,
             'commentsLast7'  => $commentsLast7,
-            // 'bookmarksTotal' => $bookmarksTotal,
-            // 'bookmarksLast7' => $bookmarksLast7,
+            'bookmarksTotal' => $bookmarksTotal,
+            'bookmarksLast7' => $bookmarksLast7,
             'status'         => $content->content_status ?? 'draft',
             'approval'       => $content->approval_status ?? 'draft',
             'publishedAt'    => $content->published_at,
