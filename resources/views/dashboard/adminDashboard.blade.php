@@ -1,80 +1,191 @@
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <div class="p-4 bg-white rounded shadow">
-        <div class="text-gray-500">Users</div>
-        <div class="text-2xl font-semibold">{{ number_format($data['usersCount'] ?? 0) }}</div>
+<!-- Admin Dashboard -->
+<div class="bg-gray-50 min-h-screen">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        <div class="bg-white border-2 border-blue-100 rounded-xl p-6 hover:border-blue-200 transition-colors">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-gray-600 text-sm font-medium mb-1">Users</div>
+                    <div class="text-3xl font-bold text-blue-600">{{ number_format($data['usersCount'] ?? 0) }}</div>
+                </div>
+                <div class="bg-blue-50 p-3 rounded-lg">
+                    <i class='bx bx-user text-2xl text-blue-600'></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white border-2 border-green-100 rounded-xl p-6 hover:border-green-200 transition-colors">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-gray-600 text-sm font-medium mb-1">Programs</div>
+                    <div class="text-3xl font-bold text-green-600">{{ number_format($data['programsCount'] ?? 0) }}</div>
+                </div>
+                <div class="bg-green-50 p-3 rounded-lg">
+                    <i class='bx bx-calendar text-2xl text-green-600'></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white border-2 border-purple-100 rounded-xl p-6 hover:border-purple-200 transition-colors">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-gray-600 text-sm font-medium mb-1">Contents</div>
+                    <div class="text-3xl font-bold text-purple-600">{{ number_format($data['contentsCount'] ?? 0) }}</div>
+                </div>
+                <div class="bg-purple-50 p-3 rounded-lg">
+                    <i class='bx bx-file text-2xl text-purple-600'></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white border-2 border-emerald-100 rounded-xl p-6 hover:border-emerald-200 transition-colors md:col-span-2">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-gray-600 text-sm font-medium mb-1">Confirmed Donations</div>
+                    <div class="text-3xl font-bold text-emerald-600">₱ {{ number_format($data['donationsTotal'] ?? 0, 2) }}</div>
+                </div>
+                <div class="bg-emerald-50 p-3 rounded-lg">
+                    <i class='bx bx-donate-heart text-2xl text-emerald-600'></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white border-2 border-amber-100 rounded-xl p-6 hover:border-amber-200 transition-colors">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-gray-600 text-sm font-medium mb-1">Pending Donations</div>
+                    <div class="text-3xl font-bold text-amber-600">{{ number_format($data['pendingDonations'] ?? 0) }}</div>
+                </div>
+                <div class="bg-amber-50 p-3 rounded-lg">
+                    <i class='bx bx-hourglass text-2xl text-amber-600'></i>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="p-4 bg-white rounded shadow">
-        <div class="text-gray-500">Programs</div>
-        <div class="text-2xl font-semibold">{{ number_format($data['programsCount'] ?? 0) }}</div>
+
+    <!-- Content Management Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Pending Contents -->
+        <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+            <div class="flex items-center mb-6">
+                <div class="bg-amber-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-time text-xl text-amber-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Pending Contents</h3>
+                    <p class="text-gray-600 text-sm">Awaiting approval</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                @forelse(($data['pendingContents'] ?? []) as $c)
+                    <div class="flex items-center justify-between p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors">
+                        <div class="flex items-center flex-1">
+                            <i class='bx bx-file text-amber-600 mr-2'></i>
+                            <span class="text-gray-700 font-medium truncate">{{ $c->title }}</span>
+                        </div>
+                        <span class="text-amber-600 text-sm font-medium">{{ $c->approval_status }}</span>
+                    </div>
+                @empty
+                    <div class="text-center py-6 text-gray-500">
+                        <i class='bx bx-check-circle text-2xl mb-2'></i>
+                        <p class="text-sm">No pending contents.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Top Reacted Contents -->
+        <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+            <div class="flex items-center mb-6">
+                <div class="bg-pink-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-heart text-xl text-pink-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Top Reacted</h3>
+                    <p class="text-gray-600 text-sm">Most popular content</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                @forelse(($data['topReactedContents'] ?? []) as $c)
+                    <div class="flex items-center justify-between p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition-colors">
+                        <div class="flex items-center flex-1">
+                            <i class='bx bx-file text-pink-600 mr-2'></i>
+                            <span class="text-gray-700 font-medium truncate">{{ $c->title }}</span>
+                        </div>
+                        <div class="flex items-center text-pink-600 font-bold">
+                            <i class='bx bx-heart mr-1'></i>
+                            <span>{{ $c->hearts ?? 0 }}</span>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-6 text-gray-500">
+                        <i class='bx bx-heart text-2xl mb-2'></i>
+                        <p class="text-sm">No reactions yet.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Recent Donations -->
+        <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+            <div class="flex items-center mb-6">
+                <div class="bg-emerald-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-donate-heart text-xl text-emerald-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Recent Donations</h3>
+                    <p class="text-gray-600 text-sm">Latest contributions</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                @forelse(($data['recentDonations'] ?? []) as $d)
+                    <div class="flex items-center justify-between p-3 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors">
+                        <div class="flex items-center">
+                            <i class='bx bx-money text-emerald-600 mr-2'></i>
+                            <span class="text-gray-700 font-bold">₱ {{ number_format($d->amount ?? 0, 2) }}</span>
+                        </div>
+                        <span class="text-gray-500 text-sm">{{ $d->donor_name ?? 'Anonymous' }}</span>
+                    </div>
+                @empty
+                    <div class="text-center py-6 text-gray-500">
+                        <i class='bx bx-donate-heart text-2xl mb-2'></i>
+                        <p class="text-sm">No recent donations.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
     </div>
-    <div class="p-4 bg-white rounded shadow">
-        <div class="text-gray-500">Contents</div>
-        <div class="text-2xl font-semibold">{{ number_format($data['contentsCount'] ?? 0) }}</div>
-    </div>
-    <div class="p-4 bg-white rounded shadow md:col-span-2">
-        <div class="text-gray-500">Confirmed Donations</div>
-        <div class="text-2xl font-semibold">₱ {{ number_format($data['donationsTotal'] ?? 0, 2) }}</div>
-    </div>
-    <div class="p-4 bg-white rounded shadow">
-        <div class="text-gray-500">Pending Donations</div>
-        <div class="text-2xl font-semibold">{{ number_format($data['pendingDonations'] ?? 0) }}</div>
+
+    <!-- Top Donation Methods -->
+    <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+        <div class="flex items-center mb-6">
+            <div class="bg-indigo-50 p-2 rounded-lg mr-3">
+                <i class='bx bx-credit-card text-xl text-indigo-600'></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-lg text-gray-800">Top Donation Methods</h3>
+                <p class="text-gray-600 text-sm">Preferred payment methods</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @forelse(($data['topDonationMethods'] ?? []) as $m)
+                <div class="flex items-center justify-between p-4 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors">
+                    <div class="flex items-center">
+                        <i class='bx bx-credit-card text-indigo-600 mr-3'></i>
+                        <span class="text-gray-700 font-medium">{{ $m->payment_method ?? 'Unknown' }}</span>
+                    </div>
+                    <span class="text-gray-900 font-bold">₱ {{ number_format($m->total ?? 0, 2) }}</span>
+                </div>
+            @empty
+                <div class="col-span-full text-center py-8 text-gray-500">
+                    <i class='bx bx-credit-card text-3xl mb-2'></i>
+                    <p>No donation data available.</p>
+                </div>
+            @endforelse
+        </div>
     </div>
 </div>
-
-
-<div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="bg-white rounded shadow p-4">
-        <div class="font-semibold mb-2">Pending Contents</div>
-        <ul class="space-y-2">
-            @forelse(($data['pendingContents'] ?? []) as $c)
-                <li class="flex items-center justify-between">
-                    <div class="truncate">{{ $c->title }}</div>
-                    <div class="text-amber-600 text-sm">{{ $c->approval_status }}</div>
-                </li>
-            @empty
-                <li class="text-gray-500">No pending contents.</li>
-            @endforelse
-        </ul>
-    </div>
-    <div class="bg-white rounded shadow p-4">
-        <div class="font-semibold mb-2">Top Reacted Contents</div>
-        <ul class="space-y-2">
-            @forelse(($data['topReactedContents'] ?? []) as $c)
-                <li class="flex items-center justify-between">
-                    <div class="truncate">{{ $c->title }}</div>
-                    <div class="text-pink-600 text-sm font-medium">❤ {{ $c->hearts ?? 0 }}</div>
-                </li>
-            @empty
-                <li class="text-gray-500">No reacts yet.</li>
-            @endforelse
-        </ul>
-    </div>
-    <div class="bg-white rounded shadow p-4">
-        <div class="font-semibold mb-2">Recent Donations</div>
-        <ul class="space-y-2">
-            @forelse(($data['recentDonations'] ?? []) as $d)
-                <li class="flex items-center justify-between">
-                    <div class="truncate">₱ {{ number_format($d->amount ?? 0, 2) }}</div>
-                    <div class="text-gray-500 text-sm">{{ $d->donor_name ?? 'Anonymous' }}</div>
-                </li>
-            @empty
-                <li class="text-gray-500">No recent donations.</li>
-            @endforelse
-        </ul>
-    </div>
-</div>
-
-<div class="mt-6 bg-white rounded shadow p-4">
-    <div class="font-semibold mb-2">Top Donation Methods</div>
-    <ul class="space-y-2">
-        @forelse(($data['topDonationMethods'] ?? []) as $m)
-            <li class="flex items-center justify-between">
-                <div class="text-gray-700">{{ $m->payment_method ?? 'Unknown' }}</div>
-                <div class="text-gray-900 font-medium">₱ {{ number_format($m->total ?? 0, 2) }}</div>
-            </li>
-        @empty
-            <li class="text-gray-500">No data.</li>
-        @endforelse
-    </ul>
-</div>
-

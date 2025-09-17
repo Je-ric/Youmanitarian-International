@@ -1,190 +1,312 @@
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <div class="p-4 bg-white rounded shadow">
-        <div class="text-gray-500">Awaiting Review</div>
-        <div class="text-2xl font-semibold">{{ number_format($data['needsApproval'] ?? 0) }}</div>
-    </div>
-    <div class="p-4 bg-white rounded shadow">
-        <div class="text-gray-500">Published</div>
-        <div class="text-2xl font-semibold">{{ number_format($data['published'] ?? 0) }}</div>
-    </div>
-    <div class="p-4 bg-white rounded shadow">
-        <div class="text-gray-500">My Drafts</div>
-        <div class="text-2xl font-semibold">{{ number_format($data['myDrafts'] ?? 0) }}</div>
-    </div>
-</div>
-
-<div class="mt-6 bg-white rounded shadow p-4">
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-        <div>
-            <div class="font-semibold">Content Engagement</div>
-            <div class="text-gray-500 text-sm">Views and Reactions over time</div>
+<!-- Content Management Dashboard -->
+<div class="bg-gray-50 min-h-screen">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="bg-white border-2 border-amber-100 rounded-xl p-6 hover:border-amber-200 transition-colors">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-gray-600 text-sm font-medium mb-1">Awaiting Review</div>
+                    <div class="text-3xl font-bold text-amber-600">{{ number_format($data['needsApproval'] ?? 0) }}</div>
+                </div>
+                <div class="bg-amber-50 p-3 rounded-lg">
+                    <i class='bx bx-hourglass text-2xl text-amber-600'></i>
+                </div>
+            </div>
         </div>
-        <form method="GET" action="{{ url()->current() }}" class="flex items-center gap-2">
-            <input type="date" name="from" value="{{ $data['range']['from'] ?? '' }}" class="border rounded px-2 py-1 text-sm">
-            <span class="text-gray-500">to</span>
-            <input type="date" name="to" value="{{ $data['range']['to'] ?? '' }}" class="border rounded px-2 py-1 text-sm">
-            <button class="bg-blue-600 text-white text-sm px-3 py-1 rounded">Apply</button>
-            <a href="{{ url()->current() }}" class="text-sm text-gray-600 underline">Reset</a>
-        </form>
+
+        <div class="bg-white border-2 border-green-100 rounded-xl p-6 hover:border-green-200 transition-colors">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-gray-600 text-sm font-medium mb-1">Published</div>
+                    <div class="text-3xl font-bold text-green-600">{{ number_format($data['published'] ?? 0) }}</div>
+                </div>
+                <div class="bg-green-50 p-3 rounded-lg">
+                    <i class='bx bx-check-circle text-2xl text-green-600'></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white border-2 border-blue-100 rounded-xl p-6 hover:border-blue-200 transition-colors">
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="text-gray-600 text-sm font-medium mb-1">My Drafts</div>
+                    <div class="text-3xl font-bold text-blue-600">{{ number_format($data['myDrafts'] ?? 0) }}</div>
+                </div>
+                <div class="bg-blue-50 p-3 rounded-lg">
+                    <i class='bx bx-edit text-2xl text-blue-600'></i>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="mt-4">
-        <canvas id="engagementChart" height="120"></canvas>
-    </div>
+    <!-- Content Engagement Chart -->
+    <div class="bg-white border-2 border-gray-100 rounded-xl p-6 mb-8 hover:border-gray-200 transition-colors">
+        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-6">
+            <div class="flex items-center">
+                <div class="bg-indigo-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-line-chart text-xl text-indigo-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Content Engagement</h3>
+                    <p class="text-gray-600 text-sm">Views and Reactions over time</p>
+                </div>
+            </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script>
-        (function(){
-            const ctx = document.getElementById('engagementChart');
-            if (!ctx) return;
+            <form method="GET" action="{{ url()->current() }}" class="flex items-center gap-2 bg-gray-50 p-3 rounded-lg">
+                <i class='bx bx-calendar text-gray-600'></i>
+                <input type="date" name="from" value="{{ $data['range']['from'] ?? '' }}" class="border border-gray-300 rounded px-2 py-1 text-sm">
+                <span class="text-gray-500">to</span>
+                <input type="date" name="to" value="{{ $data['range']['to'] ?? '' }}" class="border border-gray-300 rounded px-2 py-1 text-sm">
+                <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition-colors">Apply</button>
+                <a href="{{ url()->current() }}" class="text-sm text-gray-600 hover:text-gray-800 underline">Reset</a>
+            </form>
+        </div>
 
-            const viewsSeries = @json(collect($data['viewsOverTime'] ?? [])->map(function($r){ return ['date' => $r->date, 'value' => ($r->views ?? $r->published_count ?? 0)]; }));
-            const reactsSeries = @json(collect($data['reactsOverTime'] ?? [])->map(function($r){ return ['date' => $r->date, 'value' => ($r->reacts ?? 0)]; }));
+        <div class="bg-gray-50 rounded-lg p-4">
+            <canvas id="engagementChart" height="120"></canvas>
+        </div>
 
-            // Merge labels from both series
-            const labelSet = new Set([...
-                viewsSeries.map(r => r.date),
-                ...reactsSeries.map(r => r.date)
-            ]);
-            const labels = Array.from(labelSet).sort();
+        <!-- ... existing chart script ... -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+        <script>
+            (function(){
+                const ctx = document.getElementById('engagementChart');
+                if (!ctx) return;
 
-            const viewsData = labels.map(d => {
-                const found = viewsSeries.find(r => r.date === d);
-                return found ? Number(found.value) : 0;
-            });
-            const reactsData = labels.map(d => {
-                const found = reactsSeries.find(r => r.date === d);
-                return found ? Number(found.value) : 0;
-            });
+                const viewsSeries = @json(collect($data['viewsOverTime'] ?? [])->map(function($r){ return ['date' => $r->date, 'value' => ($r->views ?? $r->published_count ?? 0)]; }));
+                const reactsSeries = @json(collect($data['reactsOverTime'] ?? [])->map(function($r){ return ['date' => $r->date, 'value' => ($r->reacts ?? 0)]; }));
 
-            const chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels,
-                    datasets: [
-                        {
-                            label: 'Views',
-                            data: viewsData,
-                            borderColor: 'rgba(37, 99, 235, 1)',
-                            backgroundColor: 'rgba(37, 99, 235, 0.15)',
-                            tension: 0.25,
-                            fill: true,
-                            pointRadius: 3,
-                        },
-                        {
-                            label: 'Reactions',
-                            data: reactsData,
-                            borderColor: 'rgba(236, 72, 153, 1)',
-                            backgroundColor: 'rgba(236, 72, 153, 0.15)',
-                            tension: 0.25,
-                            fill: true,
-                            pointRadius: 3,
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: { mode: 'nearest', axis: 'x', intersect: false },
-                    plugins: {
-                        tooltip: { enabled: true },
-                        legend: { position: 'top' }
+                const labelSet = new Set([...
+                    viewsSeries.map(r => r.date),
+                    ...reactsSeries.map(r => r.date)
+                ]);
+                const labels = Array.from(labelSet).sort();
+
+                const viewsData = labels.map(d => {
+                    const found = viewsSeries.find(r => r.date === d);
+                    return found ? Number(found.value) : 0;
+                });
+                const reactsData = labels.map(d => {
+                    const found = reactsSeries.find(r => r.date === d);
+                    return found ? Number(found.value) : 0;
+                });
+
+                const chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [
+                            {
+                                label: 'Views',
+                                data: viewsData,
+                                borderColor: 'rgba(37, 99, 235, 1)',
+                                backgroundColor: 'rgba(37, 99, 235, 0.15)',
+                                tension: 0.25,
+                                fill: true,
+                                pointRadius: 3,
+                            },
+                            {
+                                label: 'Reactions',
+                                data: reactsData,
+                                borderColor: 'rgba(236, 72, 153, 1)',
+                                backgroundColor: 'rgba(236, 72, 153, 0.15)',
+                                tension: 0.25,
+                                fill: true,
+                                pointRadius: 3,
+                            }
+                        ]
                     },
-                    scales: {
-                        x: {
-                            ticks: { autoSkip: true, maxTicksLimit: 10 },
-                            grid: { display: false }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'nearest', axis: 'x', intersect: false },
+                        plugins: {
+                            tooltip: { enabled: true },
+                            legend: { position: 'top' }
                         },
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        scales: {
+                            x: {
+                                ticks: { autoSkip: true, maxTicksLimit: 10 },
+                                grid: { display: false }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            }
                         }
                     }
-                }
-            });
-        })();
-    </script>
+                });
+            })();
+        </script>
+    </div>
+
+    <!-- Content Lists -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Recent Published -->
+        <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+            <div class="flex items-center mb-6">
+                <div class="bg-green-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-news text-xl text-green-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Recent Published</h3>
+                    <p class="text-gray-600 text-sm">Latest content</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                @forelse(($data['recentPublished'] ?? []) as $c)
+                    <div class="p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <div class="flex items-start">
+                            <i class='bx bx-file text-green-600 mr-2 mt-1'></i>
+                            <div class="flex-1">
+                                <div class="font-medium text-gray-800 truncate">{{ $c->title }}</div>
+                                <div class="text-gray-500 text-sm">{{ optional($c->published_at)->format('M d, Y') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-6 text-gray-500">
+                        <i class='bx bx-file-blank text-2xl mb-2'></i>
+                        <p class="text-sm">No recent publications.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Top Reacted -->
+        <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+            <div class="flex items-center mb-6">
+                <div class="bg-pink-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-heart text-xl text-pink-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Top Reacted</h3>
+                    <p class="text-gray-600 text-sm">Most loved content</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                @forelse(($data['topReacted'] ?? []) as $c)
+                    <div class="flex items-center justify-between p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition-colors">
+                        <div class="flex items-center flex-1">
+                            <i class='bx bx-file text-pink-600 mr-2'></i>
+                            <span class="text-gray-700 font-medium truncate">{{ $c->title }}</span>
+                        </div>
+                        <div class="flex items-center text-pink-600 font-bold">
+                            <i class='bx bx-heart mr-1'></i>
+                            <span>{{ $c->hearts ?? 0 }}</span>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-6 text-gray-500">
+                        <i class='bx bx-heart text-2xl mb-2'></i>
+                        <p class="text-sm">No reactions yet.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Views Over Time -->
+        <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+            <div class="flex items-center mb-6">
+                <div class="bg-blue-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-show text-xl text-blue-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Views (14 days)</h3>
+                    <p class="text-gray-600 text-sm">Daily view counts</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                @forelse(($data['viewsOverTime'] ?? []) as $row)
+                    <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                        <div class="flex items-center">
+                            <i class='bx bx-calendar text-blue-600 mr-2'></i>
+                            <span class="text-gray-700 font-medium">{{ \Illuminate\Support\Carbon::parse($row->date)->format('M d') }}</span>
+                        </div>
+                        <span class="text-gray-900 font-bold">{{ $row->views ?? $row->published_count ?? 0 }}</span>
+                    </div>
+                @empty
+                    <div class="text-center py-6 text-gray-500">
+                        <i class='bx bx-show text-2xl mb-2'></i>
+                        <p class="text-sm">No view data.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Recently Updated -->
+        <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+            <div class="flex items-center mb-6">
+                <div class="bg-indigo-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-edit-alt text-xl text-indigo-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Recently Updated</h3>
+                    <p class="text-gray-600 text-sm">Latest modifications</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                @forelse(($data['recentlyUpdated'] ?? []) as $c)
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="flex items-center flex-1">
+                            <i class='bx bx-file text-gray-600 mr-2'></i>
+                            <div class="flex-1">
+                                <div class="font-medium text-gray-800 truncate">{{ $c->title }}</div>
+                                <div class="text-gray-500 text-sm">by {{ $c->user->name ?? 'Unknown' }}</div>
+                            </div>
+                        </div>
+                        <div class="text-gray-500 text-sm">{{ optional($c->updated_at)->diffForHumans() }}</div>
+                    </div>
+                @empty
+                    <div class="text-center py-6 text-gray-500">
+                        <i class='bx bx-edit text-2xl mb-2'></i>
+                        <p class="text-sm">No recent updates.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Awaiting Approval -->
+        <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+            <div class="flex items-center mb-6">
+                <div class="bg-amber-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-time text-xl text-amber-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Awaiting Approval</h3>
+                    <p class="text-gray-600 text-sm">Pending review</p>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                @forelse(($data['awaiting'] ?? []) as $c)
+                    <div class="flex items-center justify-between p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors">
+                        <div class="flex items-center flex-1">
+                            <i class='bx bx-file text-amber-600 mr-2'></i>
+                            <div class="flex-1">
+                                <div class="font-medium text-gray-800 truncate">{{ $c->title }}</div>
+                                <div class="text-gray-500 text-sm">by {{ $c->user->name ?? 'Unknown' }}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-amber-600 font-medium">
+                            <i class='bx bx-hourglass mr-1'></i>
+                            <span class="text-sm">Pending</span>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-6 text-gray-500">
+                        <i class='bx bx-check-circle text-2xl mb-2'></i>
+                        <p class="text-sm">Nothing awaiting approval.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </div>
 </div>
-
-
-<div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="bg-white rounded shadow p-4">
-        <div class="font-semibold mb-2">Recent Content Published</div>
-        <ul class="space-y-2">
-            @forelse(($data['recentPublished'] ?? []) as $c)
-                <li class="flex items-center justify-between">
-                    <div class="truncate">
-                        <span class="text-gray-800">{{ $c->title }}</span>
-                        <span class="text-gray-500 text-sm ml-2">{{ optional($c->published_at)->format('M d, Y') }}</span>
-                    </div>
-                </li>
-            @empty
-                <li class="text-gray-500">No recent publications.</li>
-            @endforelse
-        </ul>
-    </div>
-    <div class="bg-white rounded shadow p-4">
-        <div class="font-semibold mb-2">Top 5 Most Reacted</div>
-        <ul class="space-y-2">
-            @forelse(($data['topReacted'] ?? []) as $c)
-                <li class="flex items-center justify-between">
-                    <div class="truncate">{{ $c->title }}</div>
-                    <div class="text-sm text-pink-600 font-medium">❤ {{ $c->hearts ?? 0 }}</div>
-                </li>
-            @empty
-                <li class="text-gray-500">No reacts yet.</li>
-            @endforelse
-        </ul>
-    </div>
-    <div class="bg-white rounded shadow p-4">
-        <div class="font-semibold mb-2">Views Over Time (last 14d)</div>
-        <ul class="space-y-2">
-            @forelse(($data['viewsOverTime'] ?? []) as $row)
-                <li class="flex items-center justify-between">
-                    <div class="text-gray-700">{{ \Illuminate\Support\Carbon::parse($row->date)->format('M d') }}</div>
-                    <div class="text-gray-900 font-medium">
-                        {{ $row->views ?? $row->published_count ?? 0 }}
-                    </div>
-                </li>
-            @empty
-                <li class="text-gray-500">No view data.</li>
-            @endforelse
-        </ul>
-    </div>
-</div>
-
-<div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <div class="bg-white rounded shadow p-4">
-        <div class="font-semibold mb-2">Recently Updated</div>
-        <ul class="space-y-2">
-            @forelse(($data['recentlyUpdated'] ?? []) as $c)
-                <li class="flex items-center justify-between">
-                    <div class="truncate">
-                        <span class="text-gray-800">{{ $c->title }}</span>
-                        <span class="text-gray-500 text-sm ml-2">by {{ $c->user->name ?? 'Unknown' }}</span>
-                    </div>
-                    <div class="text-gray-500 text-sm">{{ optional($c->updated_at)->diffForHumans() }}</div>
-                </li>
-            @empty
-                <li class="text-gray-500">No recent updates.</li>
-            @endforelse
-        </ul>
-    </div>
-    <div class="bg-white rounded shadow p-4">
-        <div class="font-semibold mb-2">Awaiting Approval</div>
-        <ul class="space-y-2">
-            @forelse(($data['awaiting'] ?? []) as $c)
-                <li class="flex items-center justify-between">
-                    <div class="truncate">
-                        <span class="text-gray-800">{{ $c->title }}</span>
-                        <span class="text-gray-500 text-sm ml-2">by {{ $c->user->name ?? 'Unknown' }}</span>
-                    </div>
-                    <div class="text-amber-600 text-sm font-medium">Pending</div>
-                </li>
-            @empty
-                <li class="text-gray-500">Nothing awaiting approval.</li>
-            @endforelse
-        </ul>
-    </div>
-</div>
-
