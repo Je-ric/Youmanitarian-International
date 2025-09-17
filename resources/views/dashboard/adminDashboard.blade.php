@@ -1,44 +1,16 @@
 <!-- Admin Dashboard -->
 <div class="bg-gray-50 min-h-screen">
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-        <div class="bg-white border-2 border-blue-100 rounded-xl p-6 hover:border-blue-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Users</div>
-                    <div class="text-3xl font-bold text-blue-600">{{ number_format($data['usersCount'] ?? 0) }}</div>
-                </div>
-                <div class="bg-blue-50 p-3 rounded-lg">
-                    <i class='bx bx-user text-2xl text-blue-600'></i>
-                </div>
-            </div>
-        </div>
+    <!-- Stats (counts only) -->
+    <x-overview.stat-card-group>
+        <x-overview.stat-card icon="bx-user" title="Users" :value="number_format($data['usersCount'] ?? 0)" gradientVariant="brand" />
+        <x-overview.stat-card icon="bx-calendar" title="Programs" :value="number_format($data['programsCount'] ?? 0)" gradientVariant="forest" />
+        <x-overview.stat-card icon="bx-file" title="Contents" :value="number_format($data['contentsCount'] ?? 0)" gradientVariant="blue-sky" />
+        <x-overview.stat-card icon="bx-hourglass" title="Pending Donations" :value="number_format($data['pendingDonations'] ?? 0)" gradientVariant="sunset-orange" />
+    </x-overview.stat-card-group>
 
-        <div class="bg-white border-2 border-green-100 rounded-xl p-6 hover:border-green-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Programs</div>
-                    <div class="text-3xl font-bold text-green-600">{{ number_format($data['programsCount'] ?? 0) }}</div>
-                </div>
-                <div class="bg-green-50 p-3 rounded-lg">
-                    <i class='bx bx-calendar text-2xl text-green-600'></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white border-2 border-purple-100 rounded-xl p-6 hover:border-purple-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Contents</div>
-                    <div class="text-3xl font-bold text-purple-600">{{ number_format($data['contentsCount'] ?? 0) }}</div>
-                </div>
-                <div class="bg-purple-50 p-3 rounded-lg">
-                    <i class='bx bx-file text-2xl text-purple-600'></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white border-2 border-emerald-100 rounded-xl p-6 hover:border-emerald-200 transition-colors md:col-span-2">
+    <!-- Confirmed Donations (amount, keep as card) -->
+    <div class="grid grid-cols-1 gap-4 mb-8">
+        <div class="bg-white border-2 border-emerald-100 rounded-xl p-6 hover:border-emerald-200 transition-colors">
             <div class="flex items-center justify-between">
                 <div>
                     <div class="text-gray-600 text-sm font-medium mb-1">Confirmed Donations</div>
@@ -46,18 +18,6 @@
                 </div>
                 <div class="bg-emerald-50 p-3 rounded-lg">
                     <i class='bx bx-donate-heart text-2xl text-emerald-600'></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white border-2 border-amber-100 rounded-xl p-6 hover:border-amber-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Pending Donations</div>
-                    <div class="text-3xl font-bold text-amber-600">{{ number_format($data['pendingDonations'] ?? 0) }}</div>
-                </div>
-                <div class="bg-amber-50 p-3 rounded-lg">
-                    <i class='bx bx-hourglass text-2xl text-amber-600'></i>
                 </div>
             </div>
         </div>
@@ -134,10 +94,10 @@
                 <div class="bg-emerald-50 p-2 rounded-lg mr-3">
                     <i class='bx bx-donate-heart text-xl text-emerald-600'></i>
                 </div>
-                <div>
-                    <h3 class="font-bold text-lg text-gray-800">Recent Donations</h3>
-                    <p class="text-gray-600 text-sm">Latest contributions</p>
-                </div>
+            <div>
+                <h3 class="font-bold text-lg text-gray-800">Recent Donations</h3>
+                <p class="text-gray-600 text-sm">Latest contributions</p>
+            </div>
             </div>
 
             <div class="space-y-3">

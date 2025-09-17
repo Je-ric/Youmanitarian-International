@@ -1,31 +1,10 @@
 <!-- Volunteer Dashboard -->
 <div class="bg-gray-50 min-h-screen">
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div class="bg-white border-2 border-blue-100 rounded-xl p-6 hover:border-blue-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Joined Programs</div>
-                    <div class="text-3xl font-bold text-blue-600">{{ number_format($data['joinedPrograms'] ?? 0) }}</div>
-                </div>
-                <div class="bg-blue-50 p-3 rounded-lg">
-                    <i class='bx bx-group text-2xl text-blue-600'></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white border-2 border-green-100 rounded-xl p-6 hover:border-green-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Total Hours</div>
-                    <div class="text-3xl font-bold text-green-600">{{ number_format($data['totalHours'] ?? 0, 2) }}</div>
-                </div>
-                <div class="bg-green-50 p-3 rounded-lg">
-                    <i class='bx bx-time text-2xl text-green-600'></i>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Stats (counts only) -->
+    <x-overview.stat-card-group>
+        <x-overview.stat-card icon="bx-group" title="Joined Programs" :value="number_format($data['joinedPrograms'] ?? 0)" gradientVariant="brand" />
+        <x-overview.stat-card icon="bx-time" title="Total Hours" :value="number_format($data['totalHours'] ?? 0, 2)" gradientVariant="forest" />
+    </x-overview.stat-card-group>
 
     <!-- Program Lists -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">

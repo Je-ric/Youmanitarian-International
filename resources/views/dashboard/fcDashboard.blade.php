@@ -1,8 +1,8 @@
 <!-- Financial Dashboard -->
 <div class="bg-gray-50 min-h-screen">
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div class="bg-white border-2 border-blue-100 rounded-xl p-6 hover:border-blue-200 transition-colors md:col-span-2">
+    <!-- Membership Revenue (amount, keep as card) -->
+    <div class="grid grid-cols-1 gap-4 mb-6">
+        <div class="bg-white border-2 border-blue-100 rounded-xl p-6 hover:border-blue-200 transition-colors">
             <div class="flex items-center justify-between">
                 <div>
                     <div class="text-gray-600 text-sm font-medium mb-1">Membership Revenue (Paid)</div>
@@ -13,43 +13,14 @@
                 </div>
             </div>
         </div>
-
-        <div class="bg-white border-2 border-red-100 rounded-xl p-6 hover:border-red-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Overdue Payments</div>
-                    <div class="text-3xl font-bold text-red-600">{{ number_format($data['overduePayments'] ?? 0) }}</div>
-                </div>
-                <div class="bg-red-50 p-3 rounded-lg">
-                    <i class='bx bx-time text-2xl text-red-600'></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white border-2 border-green-100 rounded-xl p-6 hover:border-green-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Donations (Confirmed)</div>
-                    <div class="text-3xl font-bold text-green-600">{{ number_format($data['donationsConfirmed'] ?? 0) }}</div>
-                </div>
-                <div class="bg-green-50 p-3 rounded-lg">
-                    <i class='bx bx-check-circle text-2xl text-green-600'></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white border-2 border-amber-100 rounded-xl p-6 hover:border-amber-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Donations (Pending)</div>
-                    <div class="text-3xl font-bold text-amber-600">{{ number_format($data['donationsPending'] ?? 0) }}</div>
-                </div>
-                <div class="bg-amber-50 p-3 rounded-lg">
-                    <i class='bx bx-hourglass text-2xl text-amber-600'></i>
-                </div>
-            </div>
-        </div>
     </div>
+
+    <!-- Stats (counts only) -->
+    <x-overview.stat-card-group>
+        <x-overview.stat-card icon="bx-time" title="Overdue Payments" :value="number_format($data['overduePayments'] ?? 0)" gradientVariant="deep-rose" />
+        <x-overview.stat-card icon="bx-check-circle" title="Donations (Confirmed)" :value="number_format($data['donationsConfirmed'] ?? 0)" gradientVariant="forest" />
+        <x-overview.stat-card icon="bx-hourglass" title="Donations (Pending)" :value="number_format($data['donationsPending'] ?? 0)" gradientVariant="sunset-orange" />
+    </x-overview.stat-card-group>
 
     <!-- Main Content Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">

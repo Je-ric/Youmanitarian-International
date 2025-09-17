@@ -1,43 +1,11 @@
 <!-- Content Management Dashboard -->
 <div class="bg-gray-50 min-h-screen">
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div class="bg-white border-2 border-amber-100 rounded-xl p-6 hover:border-amber-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Awaiting Review</div>
-                    <div class="text-3xl font-bold text-amber-600">{{ number_format($data['needsApproval'] ?? 0) }}</div>
-                </div>
-                <div class="bg-amber-50 p-3 rounded-lg">
-                    <i class='bx bx-hourglass text-2xl text-amber-600'></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white border-2 border-green-100 rounded-xl p-6 hover:border-green-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Published</div>
-                    <div class="text-3xl font-bold text-green-600">{{ number_format($data['published'] ?? 0) }}</div>
-                </div>
-                <div class="bg-green-50 p-3 rounded-lg">
-                    <i class='bx bx-check-circle text-2xl text-green-600'></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white border-2 border-blue-100 rounded-xl p-6 hover:border-blue-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">My Drafts</div>
-                    <div class="text-3xl font-bold text-blue-600">{{ number_format($data['myDrafts'] ?? 0) }}</div>
-                </div>
-                <div class="bg-blue-50 p-3 rounded-lg">
-                    <i class='bx bx-edit text-2xl text-blue-600'></i>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Stats (counts only) -->
+    <x-overview.stat-card-group>
+        <x-overview.stat-card icon="bx-hourglass" title="Awaiting Review" :value="number_format($data['needsApproval'] ?? 0)" gradientVariant="sunset-orange" />
+        <x-overview.stat-card icon="bx-check-circle" title="Published" :value="number_format($data['published'] ?? 0)" gradientVariant="forest" />
+        <x-overview.stat-card icon="bx-edit" title="My Drafts" :value="number_format($data['myDrafts'] ?? 0)" gradientVariant="blue-sky" />
+    </x-overview.stat-card-group>
 
     <!-- Content Engagement Chart -->
     <div class="bg-white border-2 border-gray-100 rounded-xl p-6 mb-8 hover:border-gray-200 transition-colors">

@@ -1,43 +1,11 @@
 <!-- Program Coordinator Dashboard -->
 <div class="bg-gray-50 min-h-screen">
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div class="bg-white border-2 border-blue-100 rounded-xl p-6 hover:border-blue-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">My Programs</div>
-                    <div class="text-3xl font-bold text-blue-600">{{ number_format($data['myPrograms'] ?? 0) }}</div>
-                </div>
-                <div class="bg-blue-50 p-3 rounded-lg">
-                    <i class='bx bx-calendar text-2xl text-blue-600'></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white border-2 border-green-100 rounded-xl p-6 hover:border-green-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Ongoing</div>
-                    <div class="text-3xl font-bold text-green-600">{{ number_format($data['ongoing'] ?? 0) }}</div>
-                </div>
-                <div class="bg-green-50 p-3 rounded-lg">
-                    <i class='bx bx-play-circle text-2xl text-green-600'></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white border-2 border-amber-100 rounded-xl p-6 hover:border-amber-200 transition-colors">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-gray-600 text-sm font-medium mb-1">Upcoming</div>
-                    <div class="text-3xl font-bold text-amber-600">{{ number_format($data['upcoming'] ?? 0) }}</div>
-                </div>
-                <div class="bg-amber-50 p-3 rounded-lg">
-                    <i class='bx bx-calendar-plus text-2xl text-amber-600'></i>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Stats (counts only) -->
+    <x-overview.stat-card-group>
+        <x-overview.stat-card icon="bx-calendar" title="My Programs" :value="number_format($data['myPrograms'] ?? 0)" gradientVariant="brand" />
+        <x-overview.stat-card icon="bx-play-circle" title="Ongoing" :value="number_format($data['ongoing'] ?? 0)" gradientVariant="forest" />
+        <x-overview.stat-card icon="bx-calendar-plus" title="Upcoming" :value="number_format($data['upcoming'] ?? 0)" gradientVariant="amber-orange" />
+    </x-overview.stat-card-group>
 
     <!-- Main Content Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
