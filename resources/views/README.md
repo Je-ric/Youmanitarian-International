@@ -135,7 +135,7 @@ This section manages all site content, articles, and media. Both Content Manager
     -   All users can view published content.
     -   Only the creator or a Content Manager can edit or update content.
     -   Archived and rejected content is accessible in their respective tabs for reference or revision.
-    -   Create/Edit/Preview tabs in Content default based on role/ownership and content status (review mode vs edit mode).
+    -   Overview/Create-Edit/Preview tabs in Content default based on role/ownership and content status (review mode vs edit mode).
     -   The Preview tab now mirrors the public content view layout (hero, gallery with modal, engagement, sidebar) for accurate review.
     -   Create/Edit cards use professional UI components for clearer grouping (Basic Info, Editor, Media, Publishing, Features, SEO, Stats).
     -   Website content page includes likes, comments, bookmarks (feature‑flagged), and dynamic gallery modal.
