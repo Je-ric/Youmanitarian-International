@@ -20,6 +20,7 @@
         <x-overview.stat-card icon="bx-time" title="Overdue Payments" :value="number_format($data['overduePayments'] ?? 0)" gradientVariant="deep-rose" />
         <x-overview.stat-card icon="bx-check-circle" title="Donations (Confirmed)" :value="number_format($data['donationsConfirmed'] ?? 0)" gradientVariant="forest" />
         <x-overview.stat-card icon="bx-hourglass" title="Donations (Pending)" :value="number_format($data['donationsPending'] ?? 0)" gradientVariant="sunset-orange" />
+        <x-overview.stat-card icon="bx-id-card" title="Active Members" :value="number_format($data['membersActive'] ?? 0)" gradientVariant="brand" />
     </x-overview.stat-card-group>
 
     <!-- Main Content Grid -->
@@ -134,6 +135,100 @@
                     <p>No recent donations.</p>
                 </div>
             @endforelse
+        </div>
+    </div>
+
+    <!-- Members & Reminders -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+        <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+            <div class="flex items-center mb-6">
+                <div class="bg-indigo-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-group text-xl text-indigo-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Member Growth (30d)</h3>
+                    <p class="text-gray-600 text-sm">New members in last 30 days</p>
+                </div>
+            </div>
+            <div class="text-3xl font-bold text-indigo-700">{{ number_format($data['membersGrowth30d'] ?? 0) }}</div>
+        </div>
+
+        <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+            <div class="flex items-center mb-6">
+                <div class="bg-amber-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-bell text-xl text-amber-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Payment Reminders</h3>
+                    <p class="text-gray-600 text-sm">Sent • Upcoming (7d) • Due</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <div class="bg-amber-50 rounded-lg p-3 text-center">
+                    <div class="text-xs text-amber-700">Sent</div>
+                    <div class="text-xl font-bold text-amber-700">{{ number_format($data['remindersSent'] ?? 0) }}</div>
+                </div>
+                <div class="bg-blue-50 rounded-lg p-3 text-center">
+                    <div class="text-xs text-blue-700">Upcoming</div>
+                    <div class="text-xl font-bold text-blue-700">{{ number_format($data['remindersUpcoming7d'] ?? 0) }}</div>
+                </div>
+                <div class="bg-red-50 rounded-lg p-3 text-center">
+                    <div class="text-xs text-red-700">Due</div>
+                    <div class="text-xl font-bold text-red-700">{{ number_format($data['remindersDue'] ?? 0) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trends -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+        <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+            <div class="flex items-center mb-4">
+                <div class="bg-emerald-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-trending-up text-xl text-emerald-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Donations per Week</h3>
+                    <p class="text-gray-600 text-sm">Last 8 weeks</p>
+                </div>
+            </div>
+            <div class="space-y-2">
+                @forelse(($data['donationsPerWeek'] ?? []) as $row)
+                    <div class="flex items-center justify-between p-2 bg-emerald-50 rounded">
+                        <div class="text-sm text-emerald-700">Week {{ $row->yw }}</div>
+                        <div class="text-sm font-bold text-emerald-700">₱ {{ number_format($row->total ?? 0, 2) }}</div>
+                    </div>
+                @empty
+                    <div class="text-center py-6 text-gray-500">
+                        <i class='bx bx-info-circle text-2xl mb-2'></i>
+                        <p class="text-sm">No donation trend data.</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+        <div class="bg-white border-2 border-gray-100 rounded-xl p-6 hover:border-gray-200 transition-colors">
+            <div class="flex items-center mb-4">
+                <div class="bg-blue-50 p-2 rounded-lg mr-3">
+                    <i class='bx bx-line-chart text-xl text-blue-600'></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800">Membership Paid per Month</h3>
+                    <p class="text-gray-600 text-sm">This year</p>
+                </div>
+            </div>
+            <div class="space-y-2">
+                @forelse(($data['mpPerMonth'] ?? []) as $row)
+                    <div class="flex items-center justify-between p-2 bg-blue-50 rounded">
+                        <div class="text-sm text-blue-700">Month {{ $row->month }}</div>
+                        <div class="text-sm font-bold text-blue-700">₱ {{ number_format($row->total ?? 0, 2) }}</div>
+                    </div>
+                @empty
+                    <div class="text-center py-6 text-gray-500">
+                        <i class='bx bx-info-circle text-2xl mb-2'></i>
+                        <p class="text-sm">No membership trend data.</p>
+                    </div>
+                @endforelse
+            </div>
         </div>
     </div>
 </div>

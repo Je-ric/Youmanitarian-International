@@ -4,6 +4,7 @@
     <x-overview.stat-card-group>
         <x-overview.stat-card icon="bx-group" title="Joined Programs" :value="number_format($data['joinedPrograms'] ?? 0)" gradientVariant="brand" />
         <x-overview.stat-card icon="bx-time" title="Total Hours" :value="number_format($data['totalHours'] ?? 0, 2)" gradientVariant="forest" />
+        <x-overview.stat-card icon="bx-message-rounded-dots" title="Unread Chats" :value="number_format($data['chatsUnread'] ?? 0)" gradientVariant="violet" />
     </x-overview.stat-card-group>
 
     <!-- Program Lists -->
@@ -140,6 +141,37 @@
                 <i class='bx bx-calendar text-2xl text-orange-600 mb-2'></i>
                 <div class="text-gray-600 text-sm mb-1">This Month</div>
                 <div class="text-2xl font-bold text-orange-600">{{ number_format(($data['totalHours'] ?? 0), 2) }}</div>
+            </div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <div class="text-gray-700 font-semibold mb-2">Next Due Task</div>
+                @if($data['nextDueTask'] ?? null)
+                    <div class="flex items-center justify-between">
+                        <div class="text-gray-800">#{{ $data['nextDueTask']->id }}</div>
+                        <div class="text-sm text-gray-600">{{ optional($data['nextDueTask']->due_date)->format('M d, Y') }}</div>
+                    </div>
+                @else
+                    <div class="text-gray-500 text-sm">No upcoming tasks.</div>
+                @endif
+            </div>
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <div class="text-gray-700 font-semibold mb-2">Application Status</div>
+                <div class="text-sm {{ ($data['applicationStatus'] ?? 'pending') === 'approved' ? 'text-green-700' : (($data['applicationStatus'] ?? 'pending') === 'denied' ? 'text-red-700' : 'text-amber-700') }}">
+                    {{ ucfirst($data['applicationStatus'] ?? 'pending') }}
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 grid grid-cols-2 gap-4">
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                <div class="text-gray-600 text-sm mb-1">Feedback Given</div>
+                <div class="text-2xl font-bold text-green-700">{{ number_format($data['feedbackGivenCount'] ?? 0) }}</div>
+            </div>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+                <div class="text-gray-600 text-sm mb-1">Last Submitted</div>
+                <div class="text-lg font-bold text-blue-700">{{ optional($data['feedbackLastSubmitted'] ?? null)->format('M d, Y') ?? 'N/A' }}</div>
             </div>
         </div>
     </div>
