@@ -11,14 +11,16 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\WebsiteController;
+use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\DashboardController;
+// use App\Http\Controllers\ContentViewController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\HeartReactController;
-// use App\Http\Controllers\ContentViewController;
 use App\Http\Controllers\MembershipController;
+// use App\Http\Controllers\ContentRequestController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ProgramChatController;
-// use App\Http\Controllers\ContentRequestController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProgramTasksController;
 use App\Http\Controllers\ContentCommentController;
@@ -33,7 +35,6 @@ use App\Http\Controllers\MembershipReminderController;
 use App\Http\Controllers\VolunteerAttendanceController;
 use App\Http\Controllers\ContentReviewCommentController;
 use App\Http\Controllers\VolunteerApplicationController;
-use App\Http\Controllers\DashboardController;
 
 // =================================================================
 // WEBSITE ROUTES (Public - No Authentication Required)
@@ -130,7 +131,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Content reactions
     Route::post('/content/{contentId}/react', [HeartReactController::class, 'toggleReact']);
-
+    Route::post('/bookmarks/{content}/toggle', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
     // Content comments
     Route::post('/content/{contentId}/comments', [ContentCommentController::class, 'store']);
     Route::put('/content/comments/{commentId}', [ContentCommentController::class, 'update']);

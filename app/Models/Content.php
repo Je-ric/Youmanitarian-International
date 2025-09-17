@@ -59,6 +59,12 @@ class Content extends Model
         return $this->hasMany(HeartReact::class, 'content_id');
     }
 
+    public function bookmarks()
+    {
+        return $this->hasMany(HeartReact::class, 'content_id');
+    }
+
+
     public function comments()
     {
         return $this->hasMany(ContentComment::class, 'content_id')->latest();

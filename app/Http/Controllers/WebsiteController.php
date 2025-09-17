@@ -42,7 +42,7 @@ class WebsiteController extends Controller
 
     public function viewContent($slug)
     {
-        $content = Content::with('user') // ensure author/user is loaded
+        $content = Content::with(['user','heartReacts','comments']) // ensure relations are loaded
             ->where('slug', $slug)
             ->where('content_status', 'published')
             ->firstOrFail();
@@ -62,12 +62,16 @@ class WebsiteController extends Controller
                     ->limit(5)
                     ->get();
 
-        
+
 
 
         $comments = ContentComment::where('content_id', $content->id)->with('user')->latest()->get();
 
-        return view('website.view-content', compact('content', 'galleryImages', 'prevContent', 'nextContent', 'otherContents', 'comments'));
+        // Bookmark count (if table exists)
+        $bookmarkCount = $content->bookmarks()->count();
+
+
+        return view('website.view-content', compact('content', 'galleryImages', 'prevContent', 'nextContent', 'otherContents', 'comments', 'bookmarkCount'));
     }
 
     // Helper function to get proper image URL

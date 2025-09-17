@@ -123,11 +123,19 @@
                             </div>
 
                             @if ($content->enable_bookmark)
-                                <button
-                                    class="flex items-center gap-2 text-gray-600 hover:text-[#ffb51b] transition-colors duration-200">
-                                    <i class='bx bx-bookmark text-xl'></i>
-                                    <span class="font-medium text-sm">Bookmark</span>
-                                </button>
+                                @php
+                                    $userBookmarked = auth()->check() && \Illuminate\Support\Facades\DB::table('bookmarks')
+                                        ->where('content_id', $content->id)
+                                        ->where('user_id', auth()->id())
+                                        ->exists();
+                                @endphp
+                               <button id="bookmarkButton-{{ $content->id }}"
+                                class="flex items-center gap-2 text-gray-600 hover:text-[#ffb51b] transition-colors duration-200 group"
+                                onclick="toggleBookmark({{ $content->id }}, '{{ csrf_token() }}')"
+                                data-bookmarked="{{ $userBookmarked ? 'true' : 'false' }}">
+                                <i id="bookmarkIcon-{{ $content->id }}" class="bx text-xl {{ $userBookmarked ? 'bxs-bookmark text-[#ffb51b]' : 'bx-bookmark group-hover:text-[#ffb51b]' }}"></i>
+                                <span id="bookmarkCount-{{ $content->id }}" class="font-medium text-sm">{{ (int)($bookmarkCount ?? 0) }}</span>
+                            </button>
                             @endif
                         </div>
                     </div>
@@ -486,6 +494,7 @@
 @endsection
 
 <script src="{{ asset('js/toggleReact.js') }}"></script>
+<script src="{{ asset('js/toggleBookmark.js') }}"></script>
 
 <style>
     .line-clamp-2 {
