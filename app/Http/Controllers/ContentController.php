@@ -62,7 +62,29 @@ class ContentController extends Controller
         $defaultPublishingAction = 'draft';
         $isArchived = false;
 
-        return view('content.content_create', compact('reviewMode', 'defaultPublishingAction', 'isArchived'));
+        // No content yet, so overview is null
+        $overview = null;
+
+        // Preview payload (blank defaults)
+        $previewData = [
+            'title'           => '',
+            'body'            => '',
+            'content_type'    => '',
+            'image_content'   => null,
+            'is_featured'     => false,
+            'enable_likes'    => true,
+            'enable_comments' => true,
+            'enable_bookmark' => true,
+            'gallery_images'  => [],
+        ];
+
+        return view('content.content_create', compact(
+            'reviewMode',
+            'defaultPublishingAction',
+            'isArchived',
+            'overview',
+            'previewData'
+        ));
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════
@@ -96,7 +118,86 @@ class ContentController extends Controller
         $defaultPublishingAction = $this->computeDefaultPublishingAction($content);
         $isArchived = $content->content_status === 'archived';
 
-        return view('content.content_create', compact('content', 'reviewMode', 'defaultPublishingAction', 'isArchived'));
+        // Build Overview metrics (moved from Blade)
+        $totalViews  = (int)($content->views ?? 0);
+        $viewsLast7  = null;
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('content_view_logs')) {
+                $viewsLast7 = \Illuminate\Support\Facades\DB::table('content_view_logs')
+                    ->where('content_id', $content->id)
+                    ->where('created_at', '>=', \Carbon\Carbon::now()->subDays(7))
+                    ->count();
+            }
+        } catch (\Throwable $e) {
+            $viewsLast7 = null;
+        }
+
+        $likesTotal  = \App\Models\HeartReact::where('content_id', $content->id)->count();
+        $likesLast7  = \App\Models\HeartReact::where('content_id', $content->id)
+                        ->where('created_at', '>=', \Carbon\Carbon::now()->subDays(7))
+                        ->count();
+
+        $commentsTotal = \App\Models\ContentComment::where('content_id', $content->id)->count();
+        $commentsLast7 = \App\Models\ContentComment::where('content_id', $content->id)
+                        ->where('created_at', '>=', \Carbon\Carbon::now()->subDays(7))
+                        ->count();
+
+        // $bookmarksTotal = null;
+        // $bookmarksLast7 = null;
+        // try {
+        //     if (class_exists('App\\Models\\ContentBookmark')) {
+        //         $bookmarksTotal = \App\Models\ContentBookmark::where('content_id', $content->id)->count();
+        //         $bookmarksLast7 = \App\Models\ContentBookmark::where('content_id', $content->id)
+        //             ->where('created_at', '>=', \Carbon\Carbon::now()->subDays(7))
+        //             ->count();
+        //     } elseif (\Illuminate\Support\Facades\Schema::hasTable('content_bookmarks')) {
+        //         $bookmarksTotal = \Illuminate\Support\Facades\DB::table('content_bookmarks')
+        //             ->where('content_id', $content->id)->count();
+        //         $bookmarksLast7 = \Illuminate\Support\Facades\DB::table('content_bookmarks')
+        //             ->where('content_id', $content->id)
+        //             ->where('created_at', '>=', \Carbon\Carbon::now()->subDays(7))
+        //             ->count();
+        //     }
+        // } catch (\Throwable $e) {
+        //     $bookmarksTotal = null;
+        //     $bookmarksLast7 = null;
+        // }
+
+        $overview = [
+            'totalViews'     => $totalViews,
+            'viewsLast7'     => $viewsLast7,
+            'likesTotal'     => $likesTotal,
+            'likesLast7'     => $likesLast7,
+            'commentsTotal'  => $commentsTotal,
+            'commentsLast7'  => $commentsLast7,
+            // 'bookmarksTotal' => $bookmarksTotal,
+            // 'bookmarksLast7' => $bookmarksLast7,
+            'status'         => $content->content_status ?? 'draft',
+            'approval'       => $content->approval_status ?? 'draft',
+            'publishedAt'    => $content->published_at,
+        ];
+
+        // Preview payload (from content)
+        $previewData = [
+            'title'           => $content->title ?? '',
+            'body'            => $content->body ?? '',
+            'content_type'    => $content->content_type ?? '',
+            'image_content'   => $content->image_content ?? null,
+            'is_featured'     => (bool)($content->is_featured ?? false),
+            'enable_likes'    => (bool)($content->enable_likes ?? true),
+            'enable_comments' => (bool)($content->enable_comments ?? true),
+            'enable_bookmark' => (bool)($content->enable_bookmark ?? true),
+            'gallery_images'  => optional($content->images)->pluck('image_path')->toArray() ?? [],
+        ];
+
+        return view('content.content_create', compact(
+            'content',
+            'reviewMode',
+            'defaultPublishingAction',
+            'isArchived',
+            'overview',
+            'previewData'
+        ));
     }
 
     // ═══════════════════════════════════════════════════════════════════════════════

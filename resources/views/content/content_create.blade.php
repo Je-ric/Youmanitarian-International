@@ -107,13 +107,30 @@
     </x-page-header>
 
 
-    <x-navigation-layout.tabs-modern :tabs="$reviewMode
-        ? [['id' => 'preview', 'label' => 'Preview', 'icon' => 'bx-show']]
-        : [
-            ['id' => 'edit', 'label' => 'Edit', 'icon' => 'bx-edit'],
-            ['id' => 'preview', 'label' => 'Preview', 'icon' => 'bx-show'],
-        ]" default-tab="{{ $reviewMode ? 'preview' : 'edit' }}"
+    @php
+        $tabs = $reviewMode
+            ? [
+                ['id' => 'preview', 'label' => 'Preview', 'icon' => 'bx-show'],
+            ]
+            : [
+                ['id' => 'edit', 'label' => 'Edit', 'icon' => 'bx-edit'],
+                ['id' => 'preview', 'label' => 'Preview', 'icon' => 'bx-show'],
+            ];
+
+        // Always offer Overview when a content entity exists (per-content analytics)
+        if (isset($content)) {
+            array_unshift($tabs, ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-grid-alt']);
+        }
+    @endphp
+
+    <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="{{ isset($content) ? 'overview' : ($reviewMode ? 'preview' : 'edit') }}"
         :preserve-state="true" class="mb-6">
+
+        @if (isset($content))
+        <x-slot name="slot_overview">
+            @include('content.partials.contentOverview', ['overview' => $overview, 'content' => $content])
+        </x-slot>
+        @endif
 
         <x-slot name="slot_edit">
             @if (!$reviewMode)
@@ -370,21 +387,18 @@
 
         <x-slot name="slot_preview">
             @include('content.partials.preview', [
-                'title' => old('title', $content->title ?? ''),
-                'body' => old('body', $content->body ?? ''),
-                'content_type' => old('content_type', $content->content_type ?? ''),
-                'image_content' => isset($content) && $content->image_content ? $content->image_content : null,
-                'is_featured' => old('is_featured', $content->is_featured ?? false),
-                'enable_likes' => old('enable_likes', $content->enable_likes ?? true),
-                'enable_comments' => old('enable_comments', $content->enable_comments ?? true),
-                'enable_bookmark' => old('enable_bookmark', $content->enable_bookmark ?? true),
-                'gallery_images' =>
-                    isset($content) && $content->images ? $content->images->pluck('image_path')->toArray() : [],
-                'content' => $content ?? null,
-                'reviewMode' => $reviewMode,
+                'title'           => $previewData['title'],
+                'body'            => $previewData['body'],
+                'content_type'    => $previewData['content_type'],
+                'image_content'   => $previewData['image_content'],
+                'is_featured'     => $previewData['is_featured'],
+                'enable_likes'    => $previewData['enable_likes'],
+                'enable_comments' => $previewData['enable_comments'],
+                'enable_bookmark' => $previewData['enable_bookmark'],
+                'gallery_images'  => $previewData['gallery_images'],
+                'content'         => $content ?? null,
+                'reviewMode'      => $reviewMode,
             ])
-
-            {{-- @include('content.partials.contentReviewComments') --}}
         </x-slot>
     </x-navigation-layout.tabs-modern>
 
