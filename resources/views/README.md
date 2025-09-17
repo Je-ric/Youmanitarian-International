@@ -1,4 +1,4 @@
-# Programs & Volunteers Management System
+# Youmanitarian International Management System
 
 This documentation covers the views for managing humanitarian programs, volunteers, members, roles, and finances in the YouManitarian International platform, located in `resources/views/programs`, `resources/views/programs_volunteers`, `resources/views/volunteers`, `resources/views/member`, `resources/views/roles`, and `resources/views/finance`.
 
@@ -135,7 +135,7 @@ This section manages all site content, articles, and media. Both Content Manager
     -   All users can view published content.
     -   Only the creator or a Content Manager can edit or update content.
     -   Archived and rejected content is accessible in their respective tabs for reference or revision.
-    -   Create/Edit/Preview tabs in Content default based on role/ownership and content status (review mode vs edit mode).
+    -   Overview/Create-Edit/Preview tabs in Content default based on role/ownership and content status (review mode vs edit mode).
     -   The Preview tab now mirrors the public content view layout (hero, gallery with modal, engagement, sidebar) for accurate review.
     -   Create/Edit cards use professional UI components for clearer grouping (Basic Info, Editor, Media, Publishing, Features, SEO, Stats).
     -   Website content page includes likes, comments, bookmarks (feature‑flagged), and dynamic gallery modal.
@@ -226,3 +226,43 @@ This section manages all financial operations including donations and membership
 
 -   All Photos are stored in `storage/uploads/` with safe filenames; previous photos are cleaned up on update.
  -   Tabs across list pages (Programs, Content, Finance, Members, Volunteers) preserve the active tab across pagination via `?tab=` query params.
+
+
+
+
+Describing the benefit and purpose of each user role in the Youmanitarian International system:
+
+## Roles & Their Benefits
+
+### 1. Admin
+**Benefit:** Full system access and control. Admins can manage users, assign roles, and oversee all operations.  
+**Purpose:** Ensure the smooth and secure running of the entire platform.
+
+### 2. Content Manager
+**Benefit:** Can create, edit, archive, and publish content across the platform, including program updates and announcements.  
+**Purpose:** Keep information up-to-date, relevant, and engaging for users and the public.
+
+### 3. Program Coordinator
+**Benefit:** Manages and coordinates specific programs, including volunteer assignments and activity tracking.  
+**Purpose:** Oversee the execution and success of programs and ensure volunteers are effectively involved.
+
+### 4. Financial Coordinator
+**Benefit:** Handles financial records, donations, and membership payments. Can view and manage financial reports.  
+**Purpose:** Maintain financial transparency and accountability for all donation and payment flows.
+
+### 5. Member
+**Benefit:** Enjoys organizational privileges, such as participating in internal discussions, voting, and contributing to decision-making.  
+**Purpose:** Support the organization’s mission with privileges beyond volunteering, often involving more responsibility or voting rights.
+
+### 6. Volunteer
+**Benefit:** Base role for all approved users wishing to participate in activities and programs. Volunteers can join programs and contribute to projects.  
+**Purpose:** Be the backbone of humanitarian work by getting directly involved in campaigns and community efforts. Every active user receives this role by default after approval.
+
+---
+
+**Role Assignment Notes:**
+- Users can have multiple roles.
+- The Volunteer role is required for all active users and cannot be removed (except by Admin).
+- Changes to roles only take effect after they are saved.
+
+This structure ensures flexibility, security, and engagement across different levels of the organization.
