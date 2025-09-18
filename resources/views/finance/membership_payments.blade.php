@@ -22,11 +22,41 @@
         </x-slot:slot_overview>
 
         <x-slot:slot_full_pledge>
+            <x-search-form
+                :search="$search"
+                :sortBy="$sortBy"
+                :sortOrder="$sortOrder"
+                :showSortOptions="true"
+                :showYear="true"
+                :year="$year"
+                :yearOptions="$yearOptions"
+                :sortOptions="['name' => 'Name', 'created_at' => 'Date Joined']"
+            />
             @include('finance.partials.paymentsTable', ['members' => $fullPledgeMembers, 'tab' => 'full_pledge'])
+
+            {{-- In pagination sections append year --}}
+            {{ $fullPledgeMembers->appends([
+                'tab'=>'full_pledge','search'=>$search,'sort_by'=>$sortBy,'sort_order'=>$sortOrder,'year'=>$year
+            ])->links() }}
         </x-slot>
 
         <x-slot:slot_honorary>
+            <x-search-form
+                :search="$search"
+                :sortBy="$sortBy"
+                :sortOrder="$sortOrder"
+                :showSortOptions="true"
+                :showYear="true"
+                :year="$year"
+                :yearOptions="$yearOptions"
+                :sortOptions="['name' => 'Name', 'created_at' => 'Date Joined']"
+            />
             @include('finance.partials.paymentsTable', ['members' => $honoraryMembers, 'tab' => 'honorary'])
+
+            {{-- In pagination sections append year --}}
+            {{ $honoraryMembers->appends([
+                'tab'=>'honorary','search'=>$search,'sort_by'=>$sortBy,'sort_order'=>$sortOrder,'year'=>$year
+            ])->links() }}
         </x-slot>
     </x-navigation-layout.tabs-modern>
 @endsection

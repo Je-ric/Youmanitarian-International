@@ -31,21 +31,27 @@ class ProgramController extends Controller
         // Get the page number for the current tab
         $currentTab = $request->get('tab', 'all');
         $page       = $request->get('page', 1);
+        $search     = $request->get('search');
+        $sortBy     = $request->get('sort_by', 'date');
+        $sortOrder  = $request->get('sort_order', 'desc');
 
-        $allPrograms    = $this->getProgramsQuery()->paginate(10, ['*'], 'page', $currentTab === 'all' ? $page : 1);
-        $joinedPrograms = $this->getJoinedPrograms($user, $currentTab, $page);
-        $myPrograms     = $this->getMyPrograms($user, $currentTab, $page);
+        $allPrograms    = $this->getProgramsQuery($search, $sortBy, $sortOrder)->paginate(10, ['*'], 'page', $currentTab === 'all' ? $page : 1);
+        $joinedPrograms = $this->getJoinedPrograms($user, $currentTab, $page, $search, $sortBy, $sortOrder);
+        $myPrograms     = $this->getMyPrograms($user, $currentTab, $page, $search, $sortBy, $sortOrder);
 
         // Ensure pagination links keep the active tab in the query string
-        $allPrograms->appends(['tab' => 'all']);
-        $joinedPrograms->appends(['tab' => 'joined']);
-        $myPrograms->appends(['tab' => 'my']);
+        $allPrograms->appends(['tab' => 'all', 'search' => $search, 'sort_by' => $sortBy, 'sort_order' => $sortOrder]);
+        $joinedPrograms->appends(['tab' => 'joined', 'search' => $search, 'sort_by' => $sortBy, 'sort_order' => $sortOrder]);
+        $myPrograms->appends(['tab' => 'my', 'search' => $search, 'sort_by' => $sortBy, 'sort_order' => $sortOrder]);
 
         return view('programs.index',
         compact('allPrograms',
                     'joinedPrograms',
                                 'myPrograms',
-                                'currentTab'));
+                                'currentTab',
+                                'search',
+                                'sortBy',
+                                'sortOrder'));
     }
 
     // programs/show.blade.php (main)
@@ -190,35 +196,51 @@ class ProgramController extends Controller
         }
     }
 
-    private function getProgramsQuery()
+    private function getProgramsQuery($search = null, $sortBy = 'date', $sortOrder = 'desc')
     {
-        return Program::orderBy('date', 'desc');
+        $query = Program::query();
+
+        if ($search) {
+            $query->where('title', 'like', "%{$search}%");
+        }
+
+        return $query->orderBy($sortBy, $sortOrder);
     }
 
-    private function getJoinedPrograms($user, $currentTab, $page)
+    private function getJoinedPrograms($user, $currentTab, $page, $search = null, $sortBy = 'date', $sortOrder = 'desc')
     {
         // if user is a volunteer and has a volunteer record
         // get all programs na sinalihan ng volunteer
         if ($user->hasRole('Volunteer') && $user->volunteer) {
-            return Program::whereHas('volunteers', function ($query) use ($user) {
+            $query = Program::whereHas('volunteers', function ($query) use ($user) {
                 $query->where('volunteers.id', $user->volunteer->id) // volunteer id from the user
                     ->where('program_volunteers.status', 'approved');
-            })->orderBy('date', 'desc')->paginate(10, ['*'], 'page', $currentTab === 'joined' ? $page : 1);
+            });
+
+            if ($search) {
+                $query->where('title', 'like', "%{$search}%");
+            }
+
+            return $query->orderBy($sortBy, $sortOrder)->paginate(10, ['*'], 'page', $currentTab === 'joined' ? $page : 1);
         }
 
         return Program::where('id', 0)->paginate(10, ['*'], 'page', $currentTab === 'joined' ? $page : 1);
     }
 
-    private function getMyPrograms($user, $currentTab, $page)
+    private function getMyPrograms($user, $currentTab, $page, $search = null, $sortBy = 'date', $sortOrder = 'desc')
     {
         // since coordinator and admin lang yung may access sa create program
         // dinidisplay lang lahat ng programs na ginawa niya
         // pwede siguro lagyan ng auth check? pero nakatago naman sa blade yung myPrograms na tab kaya no need
 
         if ($user->hasRole('Program Coordinator') || $user->hasRole('Admin')) {
-            return Program::where('created_by', $user->id)
-                ->orderBy('date', 'desc')
-                ->paginate(10, ['*'], 'page', $currentTab === 'my' ? $page : 1);
+            $query = Program::where('created_by', $user->id);
+
+            if ($search) {
+                $query->where('title', 'like', "%{$search}%");
+            }
+
+            return $query->orderBy($sortBy, $sortOrder)->paginate(10, ['*'], 'page', $currentTab === 'my' ? $page : 1);
         }
 
         return Program::where('id', 0)->paginate(10, ['*'], 'page', $currentTab === 'my' ? $page : 1);

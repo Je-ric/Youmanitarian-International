@@ -32,6 +32,13 @@
             </x-slot>
 
             <x-slot:slot_applications>
+                <x-search-form
+                    :search="$search"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showSortOptions="true"
+                    :sortOptions="['created_at' => 'Date Applied', 'name' => 'Name']"
+                />
                 @if($applications->isEmpty())
                     <x-empty-state
                         icon="bx bx-user-plus"
@@ -94,6 +101,13 @@
             </x-slot>
 
             <x-slot:slot_denied>
+                <x-search-form
+                    :search="$search"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showSortOptions="true"
+                    :sortOptions="['created_at' => 'Date Applied', 'name' => 'Name']"
+                />
                 @if($deniedApplications->isEmpty())
                     <x-empty-state
                         icon="bx bx-x-circle"
@@ -145,6 +159,13 @@
             </x-slot>
 
             <x-slot:slot_approved>
+                <x-search-form
+                    :search="$search"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showSortOptions="true"
+                    :sortOptions="['created_at' => 'Date Joined', 'name' => 'Name']"
+                />
                 @if($approvedVolunteers->isEmpty())
                     <x-empty-state
                         icon="bx bx-check-circle"

@@ -17,55 +17,101 @@ class MembershipController extends Controller
     // finance/membership_payments.blade.php (main)
     public function index(Request $request)
     {
-        // Get the current tab from the request
+        // Year filter (2023-2030)
+        $year = (int)$request->get('year', now()->year);
+        if ($year < 2023 || $year > 2030) {
+            $year = now()->year;
+        }
+
         $currentTab = $request->get('tab', 'overview');
+        $search     = $request->get('search');
+        $sortBy     = $request->get('sort_by', 'name');
+        $sortOrder  = $request->get('sort_order', 'asc');
+        $page       = $request->get('page', 1);
 
-        // Get the page number for the current tab
-        $page = $request->get('page', 1);
+        // Full Pledge
+        $fullPledgeQuery = Member::with(['user','payments' => function($q) use ($year) {
+                $q->where('payment_year', $year);
+            }])
+            ->where('membership_status','active')
+            ->where('membership_type','full_pledge');
 
-        $fullPledgeMembers = Member::with(['user', 'payments' => function($query) {
-            $query->where('payment_year', now()->year);
-        }])
-        ->where('membership_status', 'active')
-        ->where('membership_type', 'full_pledge')
-        ->orderBy('created_at', 'desc')
-        ->paginate(10, ['*'], 'full_pledge_page', $currentTab === 'full_pledge' ? $page : 1);
+        // Honorary
+        $honoraryQuery = Member::with(['user','payments' => function($q) use ($year) {
+                $q->where('payment_year', $year);
+            }])
+            ->where('membership_status','active')
+            ->where('membership_type','honorary');
 
-        $honoraryMembers = Member::with(['user', 'payments' => function($query) {
-            $query->where('payment_year', now()->year);
-        }])
-        ->where('membership_status', 'active')
-        ->where('membership_type', 'honorary')
-        ->orderBy('created_at', 'desc')
-        ->paginate(10, ['*'], 'honorary_page', $currentTab === 'honorary' ? $page : 1);
+        if ($search) {
+            $fullPledgeQuery->whereHas('user', fn($q)=>$q->where('name','like',"%{$search}%"));
+            $honoraryQuery->whereHas('user', fn($q)=>$q->where('name','like',"%{$search}%"));
+        }
 
-        $totalMembers = Member::count();
-        $activeMembers = Member::where('membership_status', 'active')->count();
-        $totalPayments = MembershipPayment::count();
-        $totalMembershipRevenue = MembershipPayment::where('payment_status', 'paid')->sum('amount');
-        $overduePayments = MembershipPayment::where('payment_status', 'overdue')->count();
+        if (in_array($sortBy, ['name','email'])) {
+            $fullPledgeQuery->join('users','members.user_id','=','users.id')
+                ->orderBy("users.$sortBy",$sortOrder)
+                ->select('members.*');
+            $honoraryQuery->join('users','members.user_id','=','users.id')
+                ->orderBy("users.$sortBy",$sortOrder)
+                ->select('members.*');
+        } else {
+            $fullPledgeQuery->orderBy($sortBy,$sortOrder);
+            $honoraryQuery->orderBy($sortBy,$sortOrder);
+        }
 
+        $fullPledgeMembers = $fullPledgeQuery
+            ->paginate(10, ['*'], 'full_pledge_page', $currentTab === 'full_pledge' ? $page : 1);
+        $honoraryMembers = $honoraryQuery
+            ->paginate(10, ['*'], 'honorary_page', $currentTab === 'honorary' ? $page : 1);
+
+        // Append params (include year)
+        $fullPledgeMembers->appends([
+            'tab'=>'full_pledge','search'=>$search,'sort_by'=>$sortBy,'sort_order'=>$sortOrder,'year'=>$year
+        ]);
+        $honoraryMembers->appends([
+            'tab'=>'honorary','search'=>$search,'sort_by'=>$sortBy,'sort_order'=>$sortOrder,'year'=>$year
+        ]);
+
+        // Metrics (scoped to selected year)
+        $totalMembers            = Member::count();
+        $activeMembers           = Member::where('membership_status','active')->count();
+        $totalPayments           = MembershipPayment::where('payment_year',$year)->count();
+        $totalMembershipRevenue  = MembershipPayment::where('payment_year',$year)
+            ->where('payment_status','paid')->sum('amount');
+        $overduePayments         = MembershipPayment::where('payment_year',$year)
+            ->where('payment_status','overdue')->count();
+
+        // Quarterly breakdown for selected year
         $paymentStatusByQuarter = [];
-        $quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
-        $statuses = ['paid', 'pending', 'overdue'];
-
-        foreach ($quarters as $quarter) {
-            $paymentStatusByQuarter[$quarter] = [];
-            foreach ($statuses as $status) {
-                $paymentStatusByQuarter[$quarter][$status] = MembershipPayment::where('payment_period', $quarter)
-                    ->where('payment_year', now()->year)
-                    ->where('payment_status', $status)
+        $quarters = ['Q1','Q2','Q3','Q4'];
+        $statuses = ['paid','pending','overdue'];
+        foreach ($quarters as $qtr) {
+            foreach ($statuses as $st) {
+                $paymentStatusByQuarter[$qtr][$st] = MembershipPayment::where('payment_period',$qtr)
+                    ->where('payment_year',$year)
+                    ->where('payment_status',$st)
                     ->count();
             }
         }
 
-        return view('finance.membership_payments',
-        compact('fullPledgeMembers',
-        'honoraryMembers',
-        'totalMembers',
-        'activeMembers',
-        'totalPayments',
-        'paymentStatusByQuarter', 'totalMembershipRevenue', 'overduePayments'));
+        $yearOptions = range(2023,2030);
+
+        return view('finance.membership_payments', compact(
+            'fullPledgeMembers',
+            'honoraryMembers',
+            'totalMembers',
+            'activeMembers',
+            'totalPayments',
+            'paymentStatusByQuarter',
+            'totalMembershipRevenue',
+            'overduePayments',
+            'search',
+            'sortBy',
+            'sortOrder',
+            'year',
+            'yearOptions'
+        ));
     }
 
     private function getDueDate($quarter)

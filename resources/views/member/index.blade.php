@@ -22,14 +22,35 @@
         </x-slot:slot_overview>
 
         <x-slot:slot_full_pledge>
+            <x-search-form
+                :search="$search"
+                :sortBy="$sortBy"
+                :sortOrder="$sortOrder"
+                :showSortOptions="true"
+                :sortOptions="['start_date' => 'Start Date', 'name' => 'Name']"
+            />
             @include('member.partials.membersTable', ['members' => $fullPledgeMembers, 'tab' => 'full_pledge'])
         </x-slot>
 
         <x-slot:slot_honorary>
+            <x-search-form
+                :search="$search"
+                :sortBy="$sortBy"
+                :sortOrder="$sortOrder"
+                :showSortOptions="true"
+                :sortOptions="['start_date' => 'Start Date', 'name' => 'Name']"
+            />
             @include('member.partials.membersTable', ['members' => $honoraryMembers, 'tab' => 'honorary'])
         </x-slot>
 
         <x-slot:slot_pending>
+            <x-search-form
+                :search="$search"
+                :sortBy="$sortBy"
+                :sortOrder="$sortOrder"
+                :showSortOptions="true"
+                :sortOptions="['start_date' => 'Start Date', 'name' => 'Name']"
+            />
             @include('member.partials.membersTable', ['members' => $pendingMembers, 'tab' => 'pending'])
         </x-slot>
     </x-navigation-layout.tabs-modern>

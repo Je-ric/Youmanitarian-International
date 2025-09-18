@@ -18,42 +18,112 @@ class ContentController extends Controller
 {
 
     // content/index.blade.php (main)
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        $myContent = Content::where('created_by', $user->id)->latest()->paginate(5, ['*'], 'myContent');
-        $publishedContent = Content::where('content_status', 'published')->latest()->paginate(5, ['*'], 'publishedContent');
-        $archived = Content::where('content_status', 'archived')->latest()->paginate(5, ['*'], 'archived');
+        $search = $request->get('search');
+        $dateFilter = $request->get('date_filter');
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+
+        // Build base queries
+        $myContentQuery = Content::where('created_by', $user->id);
+        $publishedContentQuery = Content::where('content_status', 'published');
+        $archivedQuery = Content::where('content_status', 'archived');
+
+        // Apply search filter
+        if ($search) {
+            $myContentQuery->where('title', 'like', "%{$search}%");
+            $publishedContentQuery->where('title', 'like', "%{$search}%");
+            $archivedQuery->where('title', 'like', "%{$search}%");
+        }
+
+        // Apply date filter
+        if ($dateFilter) {
+            $date = Carbon::parse($dateFilter);
+            $myContentQuery->whereDate('created_at', $date);
+            $publishedContentQuery->whereDate('created_at', $date);
+            $archivedQuery->whereDate('created_at', $date);
+        }
+
+        // Apply sorting
+        $myContentQuery->orderBy($sortBy, $sortOrder);
+        $publishedContentQuery->orderBy($sortBy, $sortOrder);
+        $archivedQuery->orderBy($sortBy, $sortOrder);
+
+        $myContent = $myContentQuery->paginate(5, ['*'], 'myContent');
+        $publishedContent = $publishedContentQuery->paginate(5, ['*'], 'publishedContent');
+        $archived = $archivedQuery->paginate(5, ['*'], 'archived');
 
         $needsRevision = null;
         if ($user->hasRole('Program Coordinator')) {
-            $needsRevision = Content::where('created_by', $user->id)
-                ->where('approval_status', 'needs_revision')
-                ->latest()->paginate(5, ['*'], 'needsRevision');
+            $needsRevisionQuery = Content::where('created_by', $user->id)
+                ->where('approval_status', 'needs_revision');
+
+            if ($search) {
+                $needsRevisionQuery->where('title', 'like', "%{$search}%");
+            }
+            if ($dateFilter) {
+                $date = Carbon::parse($dateFilter);
+                $needsRevisionQuery->whereDate('created_at', $date);
+            }
+
+            $needsRevision = $needsRevisionQuery->orderBy($sortBy, $sortOrder)->paginate(5, ['*'], 'needsRevision');
         }
 
         $needsApproval = null;
         if ($user->hasRole('Content Manager')) {
-            $needsApproval = Content::whereIn('approval_status', ['submitted', 'pending'])
-                ->latest()->paginate(5, ['*'], 'needsApproval');
+            $needsApprovalQuery = Content::whereIn('approval_status', ['submitted', 'pending']);
+
+            if ($search) {
+                $needsApprovalQuery->where('title', 'like', "%{$search}%");
+            }
+            if ($dateFilter) {
+                $date = Carbon::parse($dateFilter);
+                $needsApprovalQuery->whereDate('created_at', $date);
+            }
+
+            $needsApproval = $needsApprovalQuery->orderBy($sortBy, $sortOrder)->paginate(5, ['*'], 'needsApproval');
         }
 
         $submitted = null;
         if ($user->hasRole('Program Coordinator')) {
-            $submitted = Content::where('created_by', $user->id)
-                ->whereIn('approval_status', ['submitted', 'pending'])
-                ->latest()->paginate(5, ['*'], 'submitted');
+            $submittedQuery = Content::where('created_by', $user->id)
+                ->whereIn('approval_status', ['submitted', 'pending']);
+
+            if ($search) {
+                $submittedQuery->where('title', 'like', "%{$search}%");
+            }
+            if ($dateFilter) {
+                $date = Carbon::parse($dateFilter);
+                $submittedQuery->whereDate('created_at', $date);
+            }
+
+            $submitted = $submittedQuery->orderBy($sortBy, $sortOrder)->paginate(5, ['*'], 'submitted');
         }
         if (!isset($submitted)) {
             $submitted = null;
         }
+
+        // Preserve search parameters in pagination links
+        $myContent->appends($request->query());
+        $publishedContent->appends($request->query());
+        $archived->appends($request->query());
+        if ($needsRevision) $needsRevision->appends($request->query());
+        if ($needsApproval) $needsApproval->appends($request->query());
+        if ($submitted) $submitted->appends($request->query());
+
         return view('content.index',
             compact('myContent',
                     'publishedContent',
                     'archived',
                     'needsApproval',
                     'needsRevision',
-                    'submitted')
+                    'submitted',
+                    'search',
+                    'dateFilter',
+                    'sortBy',
+                    'sortOrder')
         );
     }
 

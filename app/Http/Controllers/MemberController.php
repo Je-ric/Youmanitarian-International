@@ -24,35 +24,66 @@ class MemberController extends Controller
     public function index(Request $request)
     {
         $tab = $request->input('tab', 'overview');
+        $search = $request->get('search');
+        $sortBy = $request->get('sort_by', 'start_date');
+        $sortOrder = $request->get('sort_order', 'desc');
 
         // Get the page number for the current tab
         $page = $request->get('page', 1);
 
-        $members = Member::with(['user', 'volunteer'])
-            ->latest()
-            ->paginate(10, ['*'], 'overview_page', $tab === 'overview' ? $page : 1);
-
-        $fullPledgeMembers = Member::with(['user', 'volunteer'])
+        // Build base queries
+        $membersQuery = Member::with(['user', 'volunteer']);
+        $fullPledgeQuery = Member::with(['user', 'volunteer'])
             ->where('membership_type', 'full_pledge')
-            // ->where('membership_status', 'active')
-            ->whereIn('membership_status', ['active', 'inactive'])
-            ->latest()
-            ->paginate(10, ['*'], 'full_pledge_page', $tab === 'full_pledge' ? $page : 1);
-
-        // dd($fullPledgeMembers);
-        // dd($fullPledgeMembers->pluck('invitation_status'));
-
-        $honoraryMembers = Member::with(['user', 'volunteer'])
+            ->whereIn('membership_status', ['active', 'inactive']);
+        $honoraryQuery = Member::with(['user', 'volunteer'])
             ->where('membership_type', 'honorary')
-            // ->where('membership_status', 'active')
-            ->whereIn('membership_status', ['active', 'inactive'])
-            ->latest()
-            ->paginate(10, ['*'], 'honorary_page', $tab === 'honorary' ? $page : 1);
+            ->whereIn('membership_status', ['active', 'inactive']);
+        $pendingQuery = Member::with(['user', 'volunteer'])
+            ->where('invitation_status', 'pending');
 
-        $pendingMembers = Member::with(['user', 'volunteer'])
-            ->where('invitation_status', 'pending')
-            ->latest()
-            ->paginate(10, ['*'], 'pending_page', $tab === 'pending' ? $page : 1);
+        // Apply search filter
+        if ($search) {
+            $membersQuery->whereHas('user', function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            });
+
+            $fullPledgeQuery->whereHas('user', function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            });
+
+            $honoraryQuery->whereHas('user', function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            });
+
+            $pendingQuery->whereHas('user', function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply sorting
+        if ($sortBy === 'name') {
+            $membersQuery->join('users', 'members.user_id', '=', 'users.id')->orderBy('users.name', $sortOrder);
+            $fullPledgeQuery->join('users', 'members.user_id', '=', 'users.id')->orderBy('users.name', $sortOrder);
+            $honoraryQuery->join('users', 'members.user_id', '=', 'users.id')->orderBy('users.name', $sortOrder);
+            $pendingQuery->join('users', 'members.user_id', '=', 'users.id')->orderBy('users.name', $sortOrder);
+        } else {
+            $membersQuery->orderBy($sortBy, $sortOrder);
+            $fullPledgeQuery->orderBy($sortBy, $sortOrder);
+            $honoraryQuery->orderBy($sortBy, $sortOrder);
+            $pendingQuery->orderBy($sortBy, $sortOrder);
+        }
+
+        $members = $membersQuery->paginate(10, ['*'], 'overview_page', $tab === 'overview' ? $page : 1);
+        $fullPledgeMembers = $fullPledgeQuery->paginate(10, ['*'], 'full_pledge_page', $tab === 'full_pledge' ? $page : 1);
+        $honoraryMembers = $honoraryQuery->paginate(10, ['*'], 'honorary_page', $tab === 'honorary' ? $page : 1);
+        $pendingMembers = $pendingQuery->paginate(10, ['*'], 'pending_page', $tab === 'pending' ? $page : 1);
+
+        // Preserve search parameters in pagination links
+        $members->appends(['tab' => 'overview', 'search' => $search, 'sort_by' => $sortBy, 'sort_order' => $sortOrder]);
+        $fullPledgeMembers->appends(['tab' => 'full_pledge', 'search' => $search, 'sort_by' => $sortBy, 'sort_order' => $sortOrder]);
+        $honoraryMembers->appends(['tab' => 'honorary', 'search' => $search, 'sort_by' => $sortBy, 'sort_order' => $sortOrder]);
+        $pendingMembers->appends(['tab' => 'pending', 'search' => $search, 'sort_by' => $sortBy, 'sort_order' => $sortOrder]);
 
         $totalMembersCount = Member::count();
         $activeMembersCount = Member::where('membership_status', 'active')->count();
@@ -90,7 +121,10 @@ class MemberController extends Controller
             'honoraryMembersCount',
             'users',
             'volunteers',
-            'tab'
+            'tab',
+            'search',
+            'sortBy',
+            'sortOrder'
         ));
     }
 

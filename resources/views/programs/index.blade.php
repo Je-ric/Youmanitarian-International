@@ -32,6 +32,13 @@
         <x-navigation-layout.tabs-modern :tabs="$tabs" default-tab="all">
             <x-slot:slot_all>
                 <div id="slot_all">
+                    <x-search-form
+                        :search="$search"
+                        :sortBy="$sortBy"
+                        :sortOrder="$sortOrder"
+                        :showSortOptions="true"
+                        :sortOptions="['date' => 'Date', 'title' => 'Title', 'created_at' => 'Date Created']"
+                    />
                     @include('programs.partials.programsTable', ['programs' => $allPrograms, 'tab' => 'all'])
                 </div>
             </x-slot>
@@ -39,6 +46,13 @@
             @if(Auth::user()->hasRole('Volunteer'))
                 <x-slot:slot_joined>
                     <div id="slot_joined">
+                        <x-search-form
+                            :search="$search"
+                            :sortBy="$sortBy"
+                            :sortOrder="$sortOrder"
+                            :showSortOptions="true"
+                            :sortOptions="['date' => 'Date', 'title' => 'Title', 'created_at' => 'Date Created']"
+                        />
                         @include('programs.partials.programsTable', ['programs' => $joinedPrograms, 'tab' => 'joined'])
                     </div>
                 </x-slot>
@@ -47,6 +61,13 @@
             @if(Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Admin'))
                 <x-slot:slot_my>
                     <div id="slot_my">
+                        <x-search-form
+                            :search="$search"
+                            :sortBy="$sortBy"
+                            :sortOrder="$sortOrder"
+                            :showSortOptions="true"
+                            :sortOptions="['date' => 'Date', 'title' => 'Title', 'created_at' => 'Date Created']"
+                        />
                         @include('programs.partials.programsTable', ['programs' => $myPrograms, 'tab' => 'my'])
                     </div>
                 </x-slot>

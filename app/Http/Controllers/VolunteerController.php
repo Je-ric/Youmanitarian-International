@@ -17,21 +17,51 @@ class VolunteerController extends Controller
     {
         // Get the current tab from the request
         $currentTab = $request->get('tab', 'applications');
+        $search = $request->get('search');
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'asc'); // Default to earliest first
 
         // Get the page number for the current tab
         $page = $request->get('page', 1);
 
-        $applications = Volunteer::with('user')
-            ->where('application_status', 'pending')
-            ->paginate(10, ['*'], 'page', $currentTab === 'applications' ? $page : 1);
+        // Build queries with search and sorting
+        $applicationsQuery = Volunteer::with('user')
+            ->where('application_status', 'pending');
 
-        $deniedApplications = Volunteer::with('user')
-            ->where('application_status', 'denied')
-            ->paginate(10, ['*'], 'page', $currentTab === 'denied' ? $page : 1);
+        $deniedQuery = Volunteer::with('user')
+            ->where('application_status', 'denied');
 
-        $approvedVolunteers = Volunteer::with('user')
-            ->where('application_status', 'approved')
-            ->paginate(10, ['*'], 'page', $currentTab === 'approved' ? $page : 1);
+        $approvedQuery = Volunteer::with('user')
+            ->where('application_status', 'approved');
+
+        // Apply search filter
+        if ($search) {
+            $applicationsQuery->whereHas('user', function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            });
+
+            $deniedQuery->whereHas('user', function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            });
+
+            $approvedQuery->whereHas('user', function($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply sorting
+        $applicationsQuery->orderBy($sortBy, $sortOrder);
+        $deniedQuery->orderBy($sortBy, $sortOrder);
+        $approvedQuery->orderBy($sortBy, $sortOrder);
+
+        $applications = $applicationsQuery->paginate(10, ['*'], 'page', $currentTab === 'applications' ? $page : 1);
+        $deniedApplications = $deniedQuery->paginate(10, ['*'], 'page', $currentTab === 'denied' ? $page : 1);
+        $approvedVolunteers = $approvedQuery->paginate(10, ['*'], 'page', $currentTab === 'approved' ? $page : 1);
+
+        // Preserve search parameters in pagination links
+        $applications->appends(['tab' => 'applications', 'search' => $search, 'sort_by' => $sortBy, 'sort_order' => $sortOrder]);
+        $deniedApplications->appends(['tab' => 'denied', 'search' => $search, 'sort_by' => $sortBy, 'sort_order' => $sortOrder]);
+        $approvedVolunteers->appends(['tab' => 'approved', 'search' => $search, 'sort_by' => $sortBy, 'sort_order' => $sortOrder]);
 
         $total = $approvedVolunteers->count() + $deniedApplications->count();
         $approvalRate = $total > 0 ? round(($approvedVolunteers->count() / $total) * 100) : 0;
@@ -47,7 +77,10 @@ class VolunteerController extends Controller
                 'deniedApplications',
                 'approvedVolunteers',
                 'approvalRate',
-                'recentActivities'
+                'recentActivities',
+                'search',
+                'sortBy',
+                'sortOrder'
             )
         );
     }

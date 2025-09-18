@@ -43,6 +43,15 @@
                 type="info"
                 message="This tab lists only the content you created. Drafts are editable; published items are read-only unless updated."
             />
+            <x-search-form
+                :search="$search"
+                :dateFilter="$dateFilter"
+                :sortBy="$sortBy"
+                :sortOrder="$sortOrder"
+                :showDateFilter="true"
+                :showSortOptions="true"
+                :sortOptions="['created_at' => 'Date Created', 'updated_at' => 'Date Updated', 'title' => 'Title']"
+            />
             @include('content.partials.contentTable', ['contents' => $myContent, 'tab' => 'my'])
         </x-slot>
 
@@ -50,6 +59,15 @@
             <x-feedback-status.alert
                 type="neutral"
                 message="All published content visible to users. Editing creates an updated version if workflow requires review."
+            />
+            <x-search-form
+                :search="$search"
+                :dateFilter="$dateFilter"
+                :sortBy="$sortBy"
+                :sortOrder="$sortOrder"
+                :showDateFilter="true"
+                :showSortOptions="true"
+                :sortOptions="['created_at' => 'Date Created', 'updated_at' => 'Date Updated', 'title' => 'Title']"
             />
             @include('content.partials.contentTable', ['contents' => $publishedContent, 'tab' => 'published'])
         </x-slot>
@@ -59,6 +77,15 @@
                 <x-feedback-status.alert
                     type="warning"
                     message="Archived content is hidden from public views. You can restore it by editing and republishing."
+                />
+                <x-search-form
+                    :search="$search"
+                    :dateFilter="$dateFilter"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showDateFilter="true"
+                    :showSortOptions="true"
+                    :sortOptions="['created_at' => 'Date Created', 'updated_at' => 'Date Updated', 'title' => 'Title']"
                 />
                 @include('content.partials.contentTable', ['contents' => $archived, 'tab' => 'archived'])
             </x-slot>
@@ -70,6 +97,15 @@
                     type="info"
                     message="Submitted items are waiting for a Content Manager to review. You can still edit before approval."
                 />
+                <x-search-form
+                    :search="$search"
+                    :dateFilter="$dateFilter"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showDateFilter="true"
+                    :showSortOptions="true"
+                    :sortOptions="['created_at' => 'Date Created', 'updated_at' => 'Date Updated', 'title' => 'Title']"
+                />
                 @include('content.partials.contentTable', ['contents' => $submitted, 'tab' => 'submitted'])
             </x-slot>
 
@@ -77,6 +113,15 @@
                 <x-feedback-status.alert
                     type="warning"
                     message="These items were sent back for revision. Update them and resubmit for approval."
+                />
+                <x-search-form
+                    :search="$search"
+                    :dateFilter="$dateFilter"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showDateFilter="true"
+                    :showSortOptions="true"
+                    :sortOptions="['created_at' => 'Date Created', 'updated_at' => 'Date Updated', 'title' => 'Title']"
                 />
                 @include('content.partials.contentTable', ['contents' => $needsRevision, 'tab' => 'needs_revision'])
             </x-slot>
@@ -87,6 +132,15 @@
                 <x-feedback-status.alert
                     type="info"
                     message="Queue of content awaiting your approval. Approve, request revision, or reject."
+                />
+                <x-search-form
+                    :search="$search"
+                    :dateFilter="$dateFilter"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showDateFilter="true"
+                    :showSortOptions="true"
+                    :sortOptions="['created_at' => 'Date Created', 'updated_at' => 'Date Updated', 'title' => 'Title']"
                 />
                 @include('content.partials.contentTable', ['contents' => $needsApproval, 'tab' => 'needs_approval'])
             </x-slot>

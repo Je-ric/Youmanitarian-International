@@ -31,6 +31,13 @@
             </x-slot>
 
             <x-slot:slot_volunteer>
+                <x-search-form
+                    :search="$search"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showSortOptions="true"
+                    :sortOptions="['name' => 'Name']"
+                />
                 @include('roles.partials.usersTable', ['users' => $volunteerUsersPaginated,
                 'roleName' => 'Volunteer',
                 'roleType' => 'Volunteer',
@@ -39,6 +46,13 @@
             </x-slot>
 
             <x-slot:slot_admin>
+                <x-search-form
+                    :search="$search"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showSortOptions="true"
+                    :sortOptions="['name' => 'Name']"
+                />
                 @include('roles.partials.usersTable', ['users' => $adminUsersPaginated,
                 'roleName' => 'Admin',
                 'roleType' => 'Admin',
@@ -47,6 +61,13 @@
             </x-slot>
 
             <x-slot:slot_program_coordinator>
+                <x-search-form
+                    :search="$search"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showSortOptions="true"
+                    :sortOptions="['name' => 'Name']"
+                />
                 @include('roles.partials.usersTable', ['users' => $programCoordinatorUsersPaginated,
                 'roleName' => 'Program Coordinator',
                 'roleType' => 'Program Coordinator',
@@ -55,6 +76,13 @@
             </x-slot>
 
             <x-slot:slot_financial_coordinator>
+                <x-search-form
+                    :search="$search"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showSortOptions="true"
+                    :sortOptions="['name' => 'Name']"
+                />
                 @include('roles.partials.usersTable', ['users' => $financialCoordinatorUsersPaginated,
                 'roleName' => 'Financial Coordinator',
                 'roleType' => 'Financial Coordinator',
@@ -63,6 +91,13 @@
             </x-slot>
 
             <x-slot:slot_content_manager>
+                <x-search-form
+                    :search="$search"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showSortOptions="true"
+                    :sortOptions="['name' => 'Name']"
+                />
                 @include('roles.partials.usersTable', ['users' => $contentManagerUsersPaginated,
                 'roleName' => 'Content Manager',
                 'roleType' => 'Content Manager',
@@ -79,6 +114,13 @@
             </x-slot> --}}
 
             <x-slot:slot_no_roles>
+                <x-search-form
+                    :search="$search"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showSortOptions="true"
+                    :sortOptions="['name' => 'Name']"
+                />
                 @include('roles.partials.usersTable', [
                     'users' => $usersWithoutRoles,
                     'roleName' => 'No Role',

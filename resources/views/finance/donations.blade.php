@@ -20,7 +20,8 @@
     @php
         $tabs = [
             ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-line-chart'],
-            ['id' => 'donations', 'label' => 'Donations', 'icon' => 'bx-heart']
+            ['id' => 'pending', 'label' => 'Pending Donations', 'icon' => 'bx-time'],
+            ['id' => 'confirmed', 'label' => 'Confirmed Donations', 'icon' => 'bx-check-circle']
         ];
     @endphp
 
@@ -29,8 +30,25 @@
             @include('finance.partials.donationOverview')
             </x-slot>
 
-            <x-slot:slot_donations>
-
+            <x-slot:slot_pending>
+                <x-search-form
+                    :search="$search"
+                    :dateFrom="$dateFrom"
+                    :dateTo="$dateTo"
+                    :paymentMethod="$paymentMethod"
+                    :showDateRange="true"
+                    :showPaymentMethod="true"
+                    :showSortOptions="true"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :sortOptions="['donation_date' => 'Donation Date', 'name' => 'Donor Name']"
+                    :paymentMethods="[
+                        'Cash' => 'Cash',
+                        'Bank Transfer' => 'Bank Transfer',
+                        'Credit Card' => 'Credit Card',
+                        'PayPal' => 'PayPal'
+                    ]"
+                />
                 <x-table.table containerClass="overflow-x-auto" tableClass="min-w-full">
                     <x-table.thead>
                         <x-table.tr :hover="false">
@@ -43,7 +61,7 @@
                         </x-table.tr>
                     </x-table.thead>
                     <x-table.tbody>
-                        @forelse($donations as $donation)
+                        @forelse($pendingDonations as $donation)
                             <x-table.tr>
                                 <x-table.td>
                                     <div class="text-sm font-medium text-gray-900">{{ $donation->donor_name }}</div>
@@ -113,10 +131,107 @@
                 </x-table.table>
 
                 <div class="px-6 py-4 border-t border-gray-200">
-                    {{-- {{ $donations->links() }} --}}
-                    {{ $donations->appends(['tab' => 'donations'])->links() }}
+                    {{ $pendingDonations->appends(['tab' => 'pending', 'search' => $search, 'date_from' => $dateFrom, 'date_to' => $dateTo, 'payment_method' => $paymentMethod])->links() }}
                 </div>
-                </x-slot>
+            </x-slot>
+
+            <x-slot:slot_confirmed>
+                <x-search-form
+                    :search="$search"
+                    :dateFrom="$dateFrom"
+                    :dateTo="$dateTo"
+                    :paymentMethod="$paymentMethod"
+                    :showDateRange="true"
+                    :showPaymentMethod="true"
+                    :showSortOptions="true"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :sortOptions="['donation_date' => 'Donation Date', 'name' => 'Donor Name']"
+                    :paymentMethods="[
+                        'Cash' => 'Cash',
+                        'Bank Transfer' => 'Bank Transfer',
+                        'Credit Card' => 'Credit Card',
+                        'PayPal' => 'PayPal',
+                        'Check' => 'Check'
+                    ]"
+                />
+                <x-table.table containerClass="overflow-x-auto" tableClass="min-w-full">
+                    <x-table.thead>
+                        <x-table.tr :hover="false">
+                            <x-table.th>Donor</x-table.th>
+                            <x-table.th>Amount</x-table.th>
+                            <x-table.th>Date</x-table.th>
+                            <x-table.th>Payment Method</x-table.th>
+                            <x-table.th>Status</x-table.th>
+                            <x-table.th>Actions</x-table.th>
+                        </x-table.tr>
+                    </x-table.thead>
+                    <x-table.tbody>
+                        @forelse($confirmedDonations as $donation)
+                            <x-table.tr>
+                                <x-table.td>
+                                    <div class="text-sm font-medium text-gray-900">{{ $donation->donor_name }}</div>
+                                    <div class="text-sm text-gray-500">{{ $donation->donor_email }}</div>
+                                </x-table.td>
+                                <x-table.td>
+                                    <div class="text-sm text-gray-900">₱{{ number_format($donation->amount, 2) }}</div>
+                                </x-table.td>
+                                <x-table.td>
+                                    <div class="text-sm text-gray-900">{{ $donation->donation_date->format('M d, Y') }}</div>
+                                </x-table.td>
+                                <x-table.td>
+                                    <div class="text-sm text-gray-900">{{ $donation->payment_method }}</div>
+                                </x-table.td>
+                                <x-table.td>
+                                    <span
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                                        {{ $donation->status === 'Confirmed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                        {{ $donation->status }}
+                                    </span>
+                                </x-table.td>
+                                <x-table.td>
+                                    <div class="flex items-center gap-2">
+                                        <x-button variant="table-action-view"
+                                            onclick="document.getElementById('viewDonationModal-{{ $donation->id }}').showModal()">
+                                            <i class='bx bx-dots-horizontal-rounded'></i>
+                                        </x-button>
+                                        <div class="flex space-x-2">
+                                            <a href="{{ route('finance.donations.download', ['donation' => $donation->id, 'format' => 'pdf']) }}"
+                                               class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors duration-200"
+                                               title="Download Donation as PDF">
+                                                <i class='bx bx-download mr-1'></i>
+                                                PDF
+                                            </a>
+
+                                            <!-- CSV Download -->
+                                            <a href="{{ route('finance.donations.download', ['donation' => $donation->id, 'format' => 'csv']) }}"
+                                               class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-600 bg-green-100 rounded-md hover:bg-green-200 transition-colors duration-200"
+                                               title="Download Donation as CSV">
+                                                <i class='bx bx-download mr-1'></i>
+                                                CSV
+                                            </a>
+                                        </div>
+                                    </div>
+                                </x-table.td>
+                            </x-table.tr>
+                        @empty
+                            <x-table.tr>
+                                <x-table.td colspan="6">
+                                    <x-empty-state
+                                        icon="bx bx-donate-heart"
+                                        title="No Confirmed Donations Found"
+                                        description="There are no confirmed donations to display."
+                                    />
+                                </x-table.td>
+                            </x-table.tr>
+                        @endforelse
+                    </x-table.tbody>
+                </x-table.table>
+
+                <div class="px-6 py-4 border-t border-gray-200">
+                    {{ $confirmedDonations->appends(['tab' => 'confirmed', 'search' => $search, 'date_from' => $dateFrom, 'date_to' => $dateTo, 'payment_method' => $paymentMethod])->links() }}
+                </div>
+            </x-slot>
     </x-navigation-layout.tabs-modern>
 
     @include('finance.modals.addDonationModal', [
@@ -124,16 +239,21 @@
         'modalId' => 'addDonationModal'
         ])
 
-    @foreach($donations as $donation)
+    @foreach($pendingDonations as $donation)
         @include('finance.modals.addDonationModal', [
             'modalId' => 'viewDonationModal-' . $donation->id,
             'donation' => $donation
         ])
-        @if($donation->status === 'Pending')
-            @include('finance.modals.confirmDonationModal', [
-                'donation' => $donation
-            ])
-        @endif
+        @include('finance.modals.confirmDonationModal', [
+            'donation' => $donation
+        ])
+    @endforeach
+
+    @foreach($confirmedDonations as $donation)
+        @include('finance.modals.addDonationModal', [
+            'modalId' => 'viewDonationModal-' . $donation->id,
+            'donation' => $donation
+        ])
     @endforeach
 
     {{-- Download Options Modal --}}

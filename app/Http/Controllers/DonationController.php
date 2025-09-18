@@ -14,20 +14,90 @@ use Illuminate\Support\Facades\Response;
 class DonationController extends Controller
 {
     // finance/donations.blade.php (main)
-    public function index()
+    public function index(Request $request)
     {
+        $tab = $request->input('tab', 'pending');
+        $search = $request->get('search');
+        $dateFrom = $request->get('date_from');
+        $dateTo = $request->get('date_to');
+        $paymentMethod = $request->get('payment_method');
+        $page = $request->get('page', 1);
+        $sortBy = $request->get('sort_by', 'donation_date'); // only donation_date | name
+        $sortOrder = $request->get('sort_order', 'desc');
+
+        // Build queries for pending and confirmed donations
+        $pendingQuery = Donation::where('status', 'Pending');
+        $confirmedQuery = Donation::where('status', 'Confirmed');
+
+        // Apply search filter
+        if ($search) {
+            $pendingQuery->where(function($query) use ($search) {
+                $query->where('donor_name', 'like', "%{$search}%")
+                      ->orWhere('donor_email', 'like', "%{$search}%")
+                      ->orWhere('notes', 'like', "%{$search}%");
+            });
+
+            $confirmedQuery->where(function($query) use ($search) {
+                $query->where('donor_name', 'like', "%{$search}%")
+                      ->orWhere('donor_email', 'like', "%{$search}%")
+                      ->orWhere('notes', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply date range filter
+        if ($dateFrom) {
+            $pendingQuery->whereDate('donation_date', '>=', $dateFrom);
+            $confirmedQuery->whereDate('donation_date', '>=', $dateFrom);
+        }
+        if ($dateTo) {
+            $pendingQuery->whereDate('donation_date', '<=', $dateTo);
+            $confirmedQuery->whereDate('donation_date', '<=', $dateTo);
+        }
+
+        // Apply payment method filter
+        if ($paymentMethod) {
+            $pendingQuery->where('payment_method', $paymentMethod);
+            $confirmedQuery->where('payment_method', $paymentMethod);
+        }
+
+        // Apply sorting (only donor_name or donation_date)
+        if ($sortBy === 'name') {
+            // Handle NULL names last
+            $pendingQuery->orderByRaw('donor_name IS NULL')->orderBy('donor_name', $sortOrder);
+            $confirmedQuery->orderByRaw('donor_name IS NULL')->orderBy('donor_name', $sortOrder);
+        } else {
+            $pendingQuery->orderBy('donation_date', $sortOrder);
+            $confirmedQuery->orderBy('donation_date', $sortOrder);
+        }
+
+        // Paginate results
+        $pendingDonations = $pendingQuery->paginate(10, ['*'], 'pending_page', $tab === 'pending' ? $page : 1);
+        $confirmedDonations = $confirmedQuery->paginate(10, ['*'], 'confirmed_page', $tab === 'confirmed' ? $page : 1);
+
+        // Preserve search parameters in pagination links
+        $pendingDonations->appends(['tab' => 'pending', 'search' => $search, 'date_from' => $dateFrom, 'date_to' => $dateTo, 'payment_method' => $paymentMethod]);
+        $confirmedDonations->appends(['tab' => 'confirmed', 'search' => $search, 'date_from' => $dateFrom, 'date_to' => $dateTo, 'payment_method' => $paymentMethod]);
+
+        // Calculate totals
         $totalConfirmedDonations = Donation::where('status', 'Confirmed')->sum('amount');
-        $confirmedDonations = Donation::where('status', 'Confirmed')->count();
+        $confirmedCount = Donation::where('status', 'Confirmed')->count();
         $totalPendingDonations = Donation::where('status', 'Pending')->sum('amount');
-        $pendingDonations = Donation::where('status', 'Pending')->count();
-        $donations = Donation::latest()->paginate(10);
+        $pendingCount = Donation::where('status', 'Pending')->count();
 
         return view('finance.donations', compact(
             'totalConfirmedDonations',
-            'confirmedDonations',
+            'confirmedCount',
             'totalPendingDonations',
+            'pendingCount',
             'pendingDonations',
-            'donations'
+            'confirmedDonations',
+            'tab',
+            'search',
+            'dateFrom',
+            'dateTo',
+            'paymentMethod',
+            'sortBy',
+            'sortOrder'
         ));
     }
 

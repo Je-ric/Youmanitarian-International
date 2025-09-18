@@ -11,10 +11,20 @@ use App\Notifications\UserRolesUpdated;
 
 class RoleController extends Controller
 {
-    public function gotoRolesList()
+    public function gotoRolesList(Request $request)
     {
+        $search = $request->get('search', '');
+        $sortBy = $request->get('sort_by', 'name');
+        $sortOrder = $request->get('sort_order', 'asc');
         $allUsers = User::with('roles')->get(); // function to get all users with their roles
         $roles = Role::all(); // get all roles
+
+        // Apply search filter if provided
+        if ($search) {
+            $allUsers = $allUsers->filter(function($user) use ($search) {
+                return stripos($user->name, $search) !== false;
+            });
+        }
 
         // Get users for each role
         // filter() to return only users with the role, inshort kinukuha lang yung users na may specific role
@@ -25,6 +35,14 @@ class RoleController extends Controller
         $financialCoordinatorUsers = $allUsers->filter(fn($user) => $user->hasRole('Financial Coordinator'));
         $contentManagerUsers = $allUsers->filter(fn($user) => $user->hasRole('Content Manager'));
         $memberUsers = $allUsers->filter(fn($user) => $user->hasRole('Member'));
+
+        // Sort all user collections alphabetically by name
+        $volunteerUsers = $volunteerUsers->sortBy('name');
+        $adminUsers = $adminUsers->sortBy('name');
+        $programCoordinatorUsers = $programCoordinatorUsers->sortBy('name');
+        $financialCoordinatorUsers = $financialCoordinatorUsers->sortBy('name');
+        $contentManagerUsers = $contentManagerUsers->sortBy('name');
+        $memberUsers = $memberUsers->sortBy('name');
 
         $perPage = 10;
 
@@ -124,7 +142,10 @@ class RoleController extends Controller
             'programCoordinatorUsersPaginated',
             'financialCoordinatorUsersPaginated',
             'contentManagerUsersPaginated',
-            'memberUsersPaginated'
+            'memberUsersPaginated',
+            'search',
+            'sortBy',
+            'sortOrder'
         ));
     }
 
