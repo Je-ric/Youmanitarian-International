@@ -1,5 +1,5 @@
 @php
-    $currentYear = now()->year;
+    $currentYear = $year ?? now()->year;
     $paymentMethods = [
         'cash' => 'Cash',
         'bank_transfer' => 'Bank Transfer',
@@ -23,8 +23,8 @@
                         <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">
                             {{ $quarter }} {{ $year }} Payment
                         </h3>
-                        <x-feedback-status.status-indicator 
-                            :status="$status === 'paid' ? 'success' : ($status === 'overdue' ? 'danger' : 'warning')" 
+                        <x-feedback-status.status-indicator
+                            :status="$status === 'paid' ? 'success' : ($status === 'overdue' ? 'danger' : 'warning')"
                             :label="ucfirst($status)"
                         />
                     </div>
@@ -42,10 +42,10 @@
             <input type="hidden" name="payment_period" value="{{ $quarter }}">
             <input type="hidden" name="payment_year" value="{{ $year }}">
             {{-- <input type="hidden" name="payment_date" value="{{ now()->format('Y-m-d H:i:s') }}"> --}}
-            
+
             <x-modal.body>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                    
+
                     {{-- Left Column --}}
                     <div class="space-y-4">
                         {{-- Amount --}}
@@ -71,12 +71,12 @@
                                             Amount
                                         </x-slot>
                                     </x-form.input>
-                                    
+
                                     {{-- Quick Amount Checkbox --}}
                                     <div class="flex items-center space-x-2">
-                                        <x-form.checkbox 
-                                            id="quick_amount-{{ $modalId }}" 
-                                            name="quick_amount" 
+                                        <x-form.checkbox
+                                            id="quick_amount-{{ $modalId }}"
+                                            name="quick_amount"
                                             value="500.00"
                                             onchange="document.getElementById('amount-{{ $modalId }}').value = this.checked ? this.value : ''"
                                         />
@@ -196,7 +196,7 @@
                 {{-- Receipt/Proof Section --}}
                 <div>
                     <x-form.label for="receipt" variant="receipt">Receipt</x-form.label>
-                    
+
                     @if($payment && $payment->receipt_url && $status !== 'pending')
                         @php
                             $extension = pathinfo($payment->receipt_url, PATHINFO_EXTENSION);
@@ -210,7 +210,7 @@
                                         <i class='bx bx-fullscreen mr-1'></i> View Full Size
                                     </a>
                                 </div>
-                    
+
                         </div>
                     @else
                         <x-form.input-upload name="receipt" :id="'receipt-'.$modalId" accept="image/*,.pdf" required>

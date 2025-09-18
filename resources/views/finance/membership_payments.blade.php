@@ -32,7 +32,7 @@
                 :yearOptions="$yearOptions"
                 :sortOptions="['name' => 'Name', 'created_at' => 'Date Joined']"
             />
-            @include('finance.partials.paymentsTable', ['members' => $fullPledgeMembers, 'tab' => 'full_pledge'])
+            @include('finance.partials.paymentsTable', ['members' => $fullPledgeMembers, 'tab' => 'full_pledge', 'year' => $year])
 
             {{-- In pagination sections append year --}}
             {{ $fullPledgeMembers->appends([
@@ -51,7 +51,7 @@
                 :yearOptions="$yearOptions"
                 :sortOptions="['name' => 'Name', 'created_at' => 'Date Joined']"
             />
-            @include('finance.partials.paymentsTable', ['members' => $honoraryMembers, 'tab' => 'honorary'])
+            @include('finance.partials.paymentsTable', ['members' => $honoraryMembers, 'tab' => 'honorary', 'year' => $year])
 
             {{-- In pagination sections append year --}}
             {{ $honoraryMembers->appends([

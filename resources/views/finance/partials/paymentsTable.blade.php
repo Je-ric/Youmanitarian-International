@@ -22,7 +22,7 @@
                 <div class="text-sm text-gray-900">{{ ucfirst($member->membership_type) }}</div>
                 </x-table.td>
             @php
-                $currentYear = now()->year;
+                $currentYear = $year ?? now()->year;
                 $startYear = $member->start_date ? $member->start_date->year : null;
                 $startQuarter = $member->start_date ? ceil($member->start_date->month / 3) : null;
             @endphp
@@ -117,6 +117,6 @@
     @endforelse
     </x-table.tbody>
 </x-table.table>
-<div class="px-6 py-4 border-t border-gray-200">
+{{-- <div class="px-6 py-4 border-t border-gray-200">
     {{ $members->appends(['tab' => $tab])->links() }}
-</div>
+</div> --}}
