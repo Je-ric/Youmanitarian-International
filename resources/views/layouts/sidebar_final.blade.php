@@ -290,6 +290,12 @@
                         <span>Website</span>
                     </a>
 
+                    <a href="{{ route('consultation-hours.browse') }}"
+                        class="flex items-center space-x-3 p-3 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
+                        <i class="fas fa-clock w-5 text-center"></i>
+                        <span>Consultations</span>
+                    </a>
+
                     <a href="{{ route('consultation-chats.index') }}"
                         class="flex items-center space-x-3 p-3 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
                         <i class="fas fa-comments w-5 text-center"></i>
@@ -358,8 +364,8 @@
 
                             <a href="{{ route('website.index') }}"
                                 class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Website</a>
-                            <a href="{{ route('weather-forecast.index') }}"
-                                class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Weather</a>
+                            <a href="{{ route('consultation-hours.browse') }}"
+                                class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultations</a>
                             <a href="{{ route('consultation-hours.index') }}"
                                 class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation Hours</a>
                             <a href="{{ route('consultation-chats.index') }}"

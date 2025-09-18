@@ -115,6 +115,9 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
         return view('components.showcase');
     })->name('components.showcase');
 
+    // Consultation Hours - browse (available to all authenticated users)
+    Route::get('/consultation/hours', [ConsultationHourController::class, 'browse'])->name('consultation-hours.browse');
+
     // =================================================================
     // NOTIFICATIONS GROUP
     // =================================================================

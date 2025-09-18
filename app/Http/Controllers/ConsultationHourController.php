@@ -8,6 +8,23 @@ use Illuminate\Support\Facades\Auth;
 
 class ConsultationHourController extends Controller
 {
+    // for all auth
+    public function browse(Request $request)
+    {
+        $q = trim((string) $request->get('q', ''));
+
+        $hours = ConsultationHour::with(['professional:id,name,profile_pic'])
+            ->where('status', 'active')
+            ->when($q !== '', function ($query) use ($q) {
+                $query->where('specialization', 'like', "%{$q}%");
+            })
+            ->orderByRaw("FIELD(day, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday')")
+            ->orderBy('start_time')
+            ->paginate(12)
+            ->appends(['q' => $q]);
+
+        return view('consultation.browseHours', compact('hours', 'q'));
+    }
     public function index(Request $request)
     {
         $consultationHours = ConsultationHour::where('user_id', Auth::id())->get();
