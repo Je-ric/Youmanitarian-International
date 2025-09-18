@@ -9,11 +9,13 @@
 
     <div class="py-10 px-6 space-y-6">
         <!-- Search Form -->
-        <form method="GET" action="{{ route('consultation-hours.browse') }}" class="flex items-center gap-2">
-            <input type="text" name="q" value="{{ $q }}" placeholder="Search specialization..."
-                class="input input-bordered w-full max-w-sm" />
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
+        <x-search-form
+            :search="request('search', $q)"
+            :showSortOptions="false"
+            searchPlaceholder="Search by specialization"
+            searchLabel="Specialization"
+            searchLabelVariant="task"
+        />
 
         @if ($hours->isEmpty())
             <x-empty-state

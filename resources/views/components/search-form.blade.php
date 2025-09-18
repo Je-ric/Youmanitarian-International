@@ -160,6 +160,10 @@
     'showYear' => false,
     'year' => now()->year,
     'yearOptions' => range(2023,2030),
+    // New: customization for search label and placeholder
+    'searchPlaceholder' => 'Search...',
+    'searchLabel' => 'Search',
+    'searchLabelVariant' => null,
 ])
 
 <!-- Redesigned with compact layout, Boxicons, and dashboard-consistent styling -->
@@ -169,15 +173,13 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 items-end">
             <!-- Search Input -->
             <div class="lg:col-span-4">
-                <label for="search" class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
-                    <i class='bx bx-search text-sm mr-1'></i>Search
-                </label>
+                <x-form.label for="search" :variant="$searchLabelVariant">{{ $searchLabel }}</x-form.label>
                 <div class="relative">
                     <input type="text"
                            id="search"
                            name="search"
                            value="{{ $search }}"
-                           placeholder="Search by name or title"
+                           placeholder="{{ $searchPlaceholder }}"
                            class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all duration-200">
                     <i class='bx bx-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400'></i>
                 </div>

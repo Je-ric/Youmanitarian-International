@@ -11,7 +11,8 @@ class ConsultationHourController extends Controller
     // for all auth
     public function browse(Request $request)
     {
-        $q = trim((string) $request->get('q', ''));
+        // harmonize with <x-search-form>: accept either 'q' or 'search'
+        $q = trim((string) ($request->get('search', $request->get('q', ''))));
 
         $hours = ConsultationHour::with(['professional:id,name,profile_pic'])
             ->where('status', 'active')
@@ -21,7 +22,7 @@ class ConsultationHourController extends Controller
             ->orderByRaw("FIELD(day, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday')")
             ->orderBy('start_time')
             ->paginate(12)
-            ->appends(['q' => $q]);
+            ->appends(['search' => $q]);
 
         return view('consultation.browseHours', compact('hours', 'q'));
     }
