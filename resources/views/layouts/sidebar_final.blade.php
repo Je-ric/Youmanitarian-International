@@ -110,53 +110,57 @@
                 @endif
 
 
-               @if (Auth::user()->hasRole('Admin') ||
-     Auth::user()->hasRole('Program Coordinator') ||
-     Auth::user()->hasRole('Volunteer'))
-    <div class="mb-4">
-        <h3 class="flex items-center text-sm font-medium text-primary mb-2">
-            <span class="sidebar-content">Programs</span>
-            <span class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
-        </h3>
-        <ul class="space-y-1">
+                @if (Auth::user()->hasRole('Admin') ||
+                        Auth::user()->hasRole('Program Coordinator') ||
+                        Auth::user()->hasRole('Volunteer'))
+                    <div class="mb-4">
+                        <h3 class="flex items-center text-sm font-medium text-primary mb-2">
+                            <span class="sidebar-content">Programs</span>
+                            <span
+                                class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+                        </h3>
+                        <ul class="space-y-1">
 
-            {{-- Programs → Admin, Program Coordinator, Volunteer --}}
-            <li>
-                <a href="{{ route('programs.index') }}"
-                    class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('programs.*') ? 'active' : '' }}"
-                    data-tooltip="Programs">
-                    <i class="bx bx-calendar w-5 text-center flex-shrink-0 text-primary"></i>
-                    <span class="ml-3 sidebar-content text-sm">Programs</span>
-                </a>
-            </li>
+                            {{-- Programs → Admin, Program Coordinator, Volunteer --}}
+                            <li>
+                                <a href="{{ route('programs.index') }}"
+                                    class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('programs.*') ? 'active' : '' }}"
+                                    data-tooltip="Programs">
+                                    <i class="bx bx-calendar w-5 text-center flex-shrink-0 text-primary"></i>
+                                    <span class="ml-3 sidebar-content text-sm">Programs</span>
+                                </a>
+                            </li>
 
-            {{-- Program Chats → Admin, Program Coordinator, Volunteer --}}
-            @if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Volunteer'))
-                <li>
-                    <a href="{{ route('program.chats.index', ['program' => request()->route('program')]) }}"
-                        class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('program.chats.*') ? 'active' : '' }}"
-                        data-tooltip="Program Chats">
-                        <i class="bx bx-message-square-dots w-5 text-center flex-shrink-0 text-primary"></i>
-                        <span class="ml-3 sidebar-content text-sm">Program Chats</span>
-                    </a>
-                </li>
-            @endif
+                            {{-- Program Chats → Admin, Program Coordinator, Volunteer --}}
+                            @if (Auth::user()->hasRole('Admin') ||
+                                    Auth::user()->hasRole('Program Coordinator') ||
+                                    Auth::user()->hasRole('Volunteer'))
+                                <li>
+                                    <a href="{{ route('program.chats.index', ['program' => request()->route('program')]) }}"
+                                        class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('program.chats.*') ? 'active' : '' }}"
+                                        data-tooltip="Program Chats">
+                                        <i
+                                            class="bx bx-message-square-dots w-5 text-center flex-shrink-0 text-primary"></i>
+                                        <span class="ml-3 sidebar-content text-sm">Program Chats</span>
+                                    </a>
+                                </li>
+                            @endif
 
-            {{-- Program Requests → Admin, Program Coordinator --}}
-            @if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator'))
-                <li>
-                    <a href="{{ route('program_requests.index') }}"
-                        class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('program_requests.*') ? 'active' : '' }}"
-                        data-tooltip="Program Requests">
-                        <i class="bx bx-bulb w-5 text-center flex-shrink-0 text-primary"></i>
-                        <span class="ml-3 sidebar-content text-sm">Program Requests</span>
-                    </a>
-                </li>
-            @endif
+                            {{-- Program Requests → Admin, Program Coordinator --}}
+                            @if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator'))
+                                <li>
+                                    <a href="{{ route('program_requests.index') }}"
+                                        class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('program_requests.*') ? 'active' : '' }}"
+                                        data-tooltip="Program Requests">
+                                        <i class="bx bx-bulb w-5 text-center flex-shrink-0 text-primary"></i>
+                                        <span class="ml-3 sidebar-content text-sm">Program Requests</span>
+                                    </a>
+                                </li>
+                            @endif
 
-        </ul>
-    </div>
-@endif
+                        </ul>
+                    </div>
+                @endif
 
 
                 {{-- User Management Section --}}
@@ -233,31 +237,27 @@
                     </div>
                 @endif
 
-                {{-- <div class="mb-4">
-                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
+                <div class="mb-4">
+                    {{-- <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Settings</span>
                         <span
                             class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
-                    </h3>
+                    </h3> --}}
                     <ul class="space-y-1">
                         <li>
-                            <a href="#"
-                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item"
+                            <h1 class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item"
                                 data-tooltip="Settings">
-                                <i class="bx bx-cog w-5 text-center flex-shrink-0 text-primary"></i>
-                                <span class="ml-3 sidebar-content text-sm">Settings</span>
-                            </a>
+                                <span class="ml-3 sidebar-content text-sm"></span>
+                            </h1>
                         </li>
                         <li>
-                            <a href="#"
-                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item"
+                            <h1 class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item"
                                 data-tooltip="Help & Support">
-                                <i class="bx bx-help-circle w-5 text-center flex-shrink-0 text-primary"></i>
-                                <span class="ml-3 sidebar-content text-sm">Help & Support</span>
-                            </a>
+                                <span class="ml-3 sidebar-content text-sm"></span>
+                                </a>
                         </li>
                     </ul>
-                </div> --}}
+                </div>
             </div>
         </div>
 
@@ -322,17 +322,18 @@
                         <span>Consultation Chats</span>
                     </a>
 
-                    <a href="{{ route('consultation-hours.index') }}"
-                        class="flex items-center space-x-3 p-3 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
-                        <i class="fas fa-clock w-5 text-center"></i>
-                        <span>Consultation Hours</span>
-                    </a>
-
-                    <a href="{{ route('program_requests.index') }}"
+                    @if (Auth::user()->hasRole('Volunteer'))
+                        <a href="{{ route('consultation-hours.index') }}"
+                            class="flex items-center space-x-3 p-3 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
+                            <i class="fas fa-clock w-5 text-center"></i>
+                            <span>Consultation Hours</span>
+                        </a>
+                    @endif
+                    {{-- <a href="{{ route('program_requests.index') }}"
                         class="flex items-center space-x-3 p-3 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200">
                         <i class='bx bx-bulb w-5 text-center'></i>
                         <span>Program Requests</span>
-                    </a>
+                    </a> --}}
                 </div>
 
                 <!-- Notifications -->
@@ -387,9 +388,11 @@
                                 class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Website</a>
                             <a href="{{ route('consultation-hours.browse') }}"
                                 class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultations</a>
-                            <a href="{{ route('consultation-hours.index') }}"
-                                class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation
-                                Hours</a>
+                            @if (Auth::user()->hasRole('Volunteer'))
+                                <a href="{{ route('consultation-hours.index') }}"
+                                    class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation
+                                    Hours</a>
+                            @endif
                             <a href="{{ route('consultation-chats.index') }}"
                                 class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation
                                 Chats</a>
