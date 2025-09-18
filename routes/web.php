@@ -231,12 +231,6 @@ Route::middleware(['auth', 'role:Volunteer'])->group(function () {
     // VOLUNTEER FEEDBACK
     Route::post('/programs/{program}/feedback/volunteer', [ProgramFeedbackController::class, 'submitVolunteerFeedback'])->name('programs.feedback.submit');
 
-    // Route::get('/members/invitation/{member}/accept', [MemberController::class, 'acceptInvitation'])
-    // ->name('member.invitation.accept')
-    // ->middleware('signed');
-    // Route::get('/members/invitation/{member}/decline', [MemberController::class, 'declineInvitation'])
-    // ->name('member.invitation.decline')
-    // ->middleware('signed');
 
     Route::get('/members/invitation/{member}', [MemberController::class,'showInvitation'])
         ->name('member.invitation.show');
@@ -256,10 +250,10 @@ Route::middleware(['auth', 'role:Volunteer'])->group(function () {
 // CLEAN, consistent routes (thread view separate from list)
 Route::middleware('auth')->group(function () {
     Route::get('/consultation-chats', [ConsultationChatsController::class, 'index'])
-        ->name('consultation-chats.index');              // list only (no selected thread)
+        ->name('consultation-chats.index');
 
     Route::get('/consultation-chats/threads/{thread}', [ConsultationChatsController::class, 'show'])
-        ->name('consultation-chats.thread.show');        // list + selected thread
+        ->name('consultation-chats.thread.show');
 
     Route::post('/consultation-chats/threads/{thread}/messages', [ConsultationChatsController::class, 'storeMessage'])
         ->name('consultation-chats.thread.message.store');

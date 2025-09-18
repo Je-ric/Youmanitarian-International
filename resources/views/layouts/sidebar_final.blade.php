@@ -35,13 +35,13 @@
 
     <!-- Left Sidebar Overlay -->
     <div id="sidebarOverlay"
-         class="fixed inset-0 top-16 bg-black bg-opacity-50 z-40 lg:hidden hidden transition-opacity duration-300"
-         aria-hidden="true"></div>
+        class="fixed inset-0 top-16 bg-black bg-opacity-50 z-40 lg:hidden hidden transition-opacity duration-300"
+        aria-hidden="true"></div>
 
     <!-- Right Sidebar Overlay for mobile navbar content -->
     <div id="rightSidebarOverlay"
-         class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden transition-opacity duration-300"
-         aria-hidden="true"></div>
+        class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden transition-opacity duration-300"
+        aria-hidden="true"></div>
 
     <!-- Left Sidebar -->
     <aside id="sidebar"
@@ -76,90 +76,110 @@
                 </div>
 
                 {{-- Content Management Section (Content Manager Role) --}}
-                @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Content Manager') || Auth::user()->hasRole('Program Coordinator'))
-                <div class="mb-4">
-                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
-                        <span class="sidebar-content">Content</span>
-                        <span
-                            class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
-                    </h3>
-                    <ul class="space-y-1">
-                        <li>
-                            <a href="{{ route('content.index') }}"
-                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('content.index') ? 'active' : '' }}"
-                                data-tooltip="Contents">
-                                <i class="bx bxs-file-doc w-5 text-center flex-shrink-0 text-primary"></i>
-                                <span class="ml-3 sidebar-content text-sm">Contents</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('content.teamMembers.index') }}"
-                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('content.teamMembers.*') ? 'active' : '' }}"
-                                data-tooltip="Team Members">
-                                <i class="bx bx-user-pin w-5 text-center flex-shrink-0 text-primary"></i>
-                                <span class="ml-3 sidebar-content text-sm">Team Members</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                @if (Auth::user()->hasRole('Admin') ||
+                        Auth::user()->hasRole('Content Manager') ||
+                        Auth::user()->hasRole('Program Coordinator'))
+                    <div class="mb-4">
+                        <h3 class="flex items-center text-sm font-medium text-primary mb-2">
+                            <span class="sidebar-content">Content</span>
+                            <span
+                                class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+                        </h3>
+                        <ul class="space-y-1">
+                            <li>
+                                <a href="{{ route('content.index') }}"
+                                    class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('content.index') ? 'active' : '' }}"
+                                    data-tooltip="Contents">
+                                    <i class="bx bxs-file-doc w-5 text-center flex-shrink-0 text-primary"></i>
+                                    <span class="ml-3 sidebar-content text-sm">Contents</span>
+                                </a>
+                            </li>
+
+                            @if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Content Manager'))
+                                <li>
+                                    <a href="{{ route('content.teamMembers.index') }}"
+                                        class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('content.teamMembers.*') ? 'active' : '' }}"
+                                        data-tooltip="Team Members">
+                                        <i class="bx bx-user-pin w-5 text-center flex-shrink-0 text-primary"></i>
+                                        <span class="ml-3 sidebar-content text-sm">Team Members</span>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
                 @endif
 
-                @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Volunteer'))
-                <div class="mb-4">
-                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
-                        <span class="sidebar-content">Programs</span>
-                        <span
-                            class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
-                    </h3>
-                    <ul class="space-y-1">
-                        <li>
-                            <a href="{{ route('programs.index') }}"
-                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('programs.*') ? 'active' : '' }}"
-                                data-tooltip="Programs">
-                                <i class="bx bx-calendar w-5 text-center flex-shrink-0 text-primary"></i>
-                                <span class="ml-3 sidebar-content text-sm">Programs</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('program.chats.index', ['program' => request()->route('program')]) }}"
-                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('program.chats.*') ? 'active' : '' }}"
-                                data-tooltip="Program Chats">
-                                <i class="bx bx-message-square-dots w-5 text-center flex-shrink-0 text-primary"></i>
-                                <span class="ml-3 sidebar-content text-sm">Program Chats</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('program_requests.index') }}"
-                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('program_requests.*') ? 'active' : '' }}"
-                                data-tooltip="Program Requests">
-                                <i class="bx bx-bulb w-5 text-center flex-shrink-0 text-primary"></i>
-                                <span class="ml-3 sidebar-content text-sm">Program Requests</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                @endif
+
+               @if (Auth::user()->hasRole('Admin') ||
+     Auth::user()->hasRole('Program Coordinator') ||
+     Auth::user()->hasRole('Volunteer'))
+    <div class="mb-4">
+        <h3 class="flex items-center text-sm font-medium text-primary mb-2">
+            <span class="sidebar-content">Programs</span>
+            <span class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+        </h3>
+        <ul class="space-y-1">
+
+            {{-- Programs → Admin, Program Coordinator, Volunteer --}}
+            <li>
+                <a href="{{ route('programs.index') }}"
+                    class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('programs.*') ? 'active' : '' }}"
+                    data-tooltip="Programs">
+                    <i class="bx bx-calendar w-5 text-center flex-shrink-0 text-primary"></i>
+                    <span class="ml-3 sidebar-content text-sm">Programs</span>
+                </a>
+            </li>
+
+            {{-- Program Chats → Admin, Program Coordinator, Volunteer --}}
+            @if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator') || Auth::user()->hasRole('Volunteer'))
+                <li>
+                    <a href="{{ route('program.chats.index', ['program' => request()->route('program')]) }}"
+                        class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('program.chats.*') ? 'active' : '' }}"
+                        data-tooltip="Program Chats">
+                        <i class="bx bx-message-square-dots w-5 text-center flex-shrink-0 text-primary"></i>
+                        <span class="ml-3 sidebar-content text-sm">Program Chats</span>
+                    </a>
+                </li>
+            @endif
+
+            {{-- Program Requests → Admin, Program Coordinator --}}
+            @if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator'))
+                <li>
+                    <a href="{{ route('program_requests.index') }}"
+                        class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('program_requests.*') ? 'active' : '' }}"
+                        data-tooltip="Program Requests">
+                        <i class="bx bx-bulb w-5 text-center flex-shrink-0 text-primary"></i>
+                        <span class="ml-3 sidebar-content text-sm">Program Requests</span>
+                    </a>
+                </li>
+            @endif
+
+        </ul>
+    </div>
+@endif
+
 
                 {{-- User Management Section --}}
                 <div class="mb-4">
-                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
-                        <span class="sidebar-content">User</span>
-                        <span
-                            class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
-                    </h3>
-                    <ul class="space-y-1">
-                        {{-- Volunteers (Program Coordinator Role) --}}
-                        @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator'))
-                        <li>
-                            <a href="{{ route('volunteers.index') }}"
-                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('volunteers.*') ? 'active' : '' }}"
-                                data-tooltip="Volunteers">
-                                <i class="bx bx-group w-5 text-center flex-shrink-0 text-primary"></i>
-                                <span class="ml-3 sidebar-content text-sm">Volunteers</span>
-                            </a>
-                        </li>
-                        @endif
-                        @if(Auth::user()->hasRole('Admin'))
+                    @if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Program Coordinator'))
+                        <h3 class="flex items-center text-sm font-medium text-primary mb-2">
+                            <span class="sidebar-content">User</span>
+                            <span
+                                class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+                        </h3>
+                        <ul class="space-y-1">
+                            {{-- Volunteers (Program Coordinator Role) --}}
+
+                            <li>
+                                <a href="{{ route('volunteers.index') }}"
+                                    class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('volunteers.*') ? 'active' : '' }}"
+                                    data-tooltip="Volunteers">
+                                    <i class="bx bx-group w-5 text-center flex-shrink-0 text-primary"></i>
+                                    <span class="ml-3 sidebar-content text-sm">Volunteers</span>
+                                </a>
+                            </li>
+                    @endif
+                    @if (Auth::user()->hasRole('Admin'))
                         <li>
                             <a href="{{ route('members.index') }}"
                                 class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item"
@@ -168,10 +188,10 @@
                                 <span class="ml-3 sidebar-content text-sm">Members</span>
                             </a>
                         </li>
-                        @endif
+                    @endif
 
-                        {{-- Role Management (Admin Role) --}}
-                        @if(Auth::user()->hasRole('Admin'))
+                    {{-- Role Management (Admin Role) --}}
+                    @if (Auth::user()->hasRole('Admin'))
                         <li>
                             <a href="{{ route('roles.index') }}"
                                 class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('roles.*') ? 'active' : '' }}"
@@ -180,40 +200,40 @@
                                 <span class="ml-3 sidebar-content text-sm">Assign Roles</span>
                             </a>
                         </li>
-                        @endif
+                    @endif
                     </ul>
                 </div>
 
                 {{-- Financial Section (Financial Coordinator Role) --}}
-                @if(Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Financial Coordinator'))
-                <div class="mb-4">
-                    <h3 class="flex items-center text-sm font-medium text-primary mb-2">
-                        <span class="sidebar-content">Financial</span>
-                        <span
-                            class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
-                    </h3>
-                    <ul class="space-y-1">
-                        <li>
-                            <a href="{{ route('finance.index') }}"
-                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('finance.index') ? 'active' : '' }}"
-                                data-tooltip="Donations">
-                                <i class="bx bx-heart w-5 text-center flex-shrink-0 text-primary"></i>
-                                <span class="ml-3 sidebar-content text-sm">Donations</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('finance.membership.payments') }}"
-                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('finance.membership.payments*') ? 'active' : '' }}"
-                                data-tooltip="Membership Payments">
-                                <i class="bx bx-credit-card w-5 text-center flex-shrink-0 text-primary"></i>
-                                <span class="ml-3 sidebar-content text-sm">Membership</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                @if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Financial Coordinator'))
+                    <div class="mb-4">
+                        <h3 class="flex items-center text-sm font-medium text-primary mb-2">
+                            <span class="sidebar-content">Financial</span>
+                            <span
+                                class="flex-grow border-t border-gray-200 ml-3 sidebar-content sidebar-content-line"></span>
+                        </h3>
+                        <ul class="space-y-1">
+                            <li>
+                                <a href="{{ route('finance.index') }}"
+                                    class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('finance.index') ? 'active' : '' }}"
+                                    data-tooltip="Donations">
+                                    <i class="bx bx-heart w-5 text-center flex-shrink-0 text-primary"></i>
+                                    <span class="ml-3 sidebar-content text-sm">Donations</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('finance.membership.payments') }}"
+                                    class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('finance.membership.payments*') ? 'active' : '' }}"
+                                    data-tooltip="Membership Payments">
+                                    <i class="bx bx-credit-card w-5 text-center flex-shrink-0 text-primary"></i>
+                                    <span class="ml-3 sidebar-content text-sm">Membership</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 @endif
 
-                <div class="mb-4">
+                {{-- <div class="mb-4">
                     <h3 class="flex items-center text-sm font-medium text-primary mb-2">
                         <span class="sidebar-content">Settings</span>
                         <span
@@ -237,7 +257,7 @@
                             </a>
                         </li>
                     </ul>
-                </div>
+                </div> --}}
             </div>
         </div>
 
@@ -323,8 +343,9 @@
                             <i class="fas fa-bell w-5 text-center"></i>
                             <span>Notifications</span>
                         </div>
-                        @if(Auth::check() && Auth::user()->unreadNotifications->count() > 0)
-                            <span class="h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                        @if (Auth::check() && Auth::user()->unreadNotifications->count() > 0)
+                            <span
+                                class="h-5 w-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                                 {{ Auth::user()->unreadNotifications->count() }}
                             </span>
                         @endif
@@ -336,7 +357,7 @@
 
     <!-- Top Navbar -->
     <nav id="navbar"
-     class="bg-white border-b border-gray-200 fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out overflow-x-hidden">
+        class="bg-white border-b border-gray-200 fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out overflow-x-hidden">
         <div class="navbar-container w-full mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ease-in-out">
             <div class="flex justify-between items-center h-16 w-full">
                 <div class="flex items-center space-x-4">
@@ -367,9 +388,11 @@
                             <a href="{{ route('consultation-hours.browse') }}"
                                 class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultations</a>
                             <a href="{{ route('consultation-hours.index') }}"
-                                class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation Hours</a>
+                                class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation
+                                Hours</a>
                             <a href="{{ route('consultation-chats.index') }}"
-                                class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation Chats</a>
+                                class="text-gray-600 hover:text-primary transition-all duration-200 text-sm">Consultation
+                                Chats</a>
                         </div>
                     </div>
                 </div>
@@ -381,7 +404,7 @@
                         <a href="{{ route('notifications.index') }}"
                             class="p-2 text-gray-600 hover:text-primary hover:bg-gray-100 rounded-lg transition-all duration-200 relative">
                             <i class="fas fa-bell text-lg"></i>
-                            @if(Auth::check() && Auth::user()->unreadNotifications->count() > 0)
+                            @if (Auth::check() && Auth::user()->unreadNotifications->count() > 0)
                                 <span
                                     class="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                                     {{ Auth::user()->unreadNotifications->count() }}
@@ -427,7 +450,7 @@
     @stack('scripts')
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.getElementById('sidebar');
             const rightSidebar = document.getElementById('rightSidebar');
             const overlay = document.getElementById('sidebarOverlay');
@@ -438,50 +461,52 @@
             const hamburger = document.getElementById('hamburgerIcon');
             const closeIcon = document.getElementById('closeIcon');
 
-            function openSidebar(){
+            function openSidebar() {
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
-                requestAnimationFrame(()=>overlay.classList.remove('opacity-0'));
+                requestAnimationFrame(() => overlay.classList.remove('opacity-0'));
                 hamburger.classList.add('hidden');
                 closeIcon.classList.remove('hidden');
             }
-            function closeSidebar(){
+
+            function closeSidebar() {
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('opacity-0');
-                setTimeout(()=>overlay.classList.add('hidden'),150);
+                setTimeout(() => overlay.classList.add('hidden'), 150);
                 closeIcon.classList.add('hidden');
                 hamburger.classList.remove('hidden');
             }
 
-            function openRightSidebar(){
+            function openRightSidebar() {
                 rightSidebar.classList.remove('translate-x-full');
                 rightOverlay.classList.remove('hidden');
-                requestAnimationFrame(()=>rightOverlay.classList.remove('opacity-0'));
+                requestAnimationFrame(() => rightOverlay.classList.remove('opacity-0'));
                 document.body.style.overflow = 'hidden';
             }
-            function closeRightSidebar(){
+
+            function closeRightSidebar() {
                 rightSidebar.classList.add('translate-x-full');
                 rightOverlay.classList.add('opacity-0');
-                setTimeout(()=>rightOverlay.classList.add('hidden'),150);
+                setTimeout(() => rightOverlay.classList.add('hidden'), 150);
                 document.body.style.overflow = '';
             }
 
-            if(toggleBtn){
-                toggleBtn.addEventListener('click', ()=>{
-                    if(sidebar.classList.contains('-translate-x-full')) openSidebar();
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    if (sidebar.classList.contains('-translate-x-full')) openSidebar();
                     else closeSidebar();
                 });
             }
-            if(rightToggleBtn){
+            if (rightToggleBtn) {
                 rightToggleBtn.addEventListener('click', openRightSidebar);
             }
-            if(rightCloseBtn){
+            if (rightCloseBtn) {
                 rightCloseBtn.addEventListener('click', closeRightSidebar);
             }
-            if(overlay){
+            if (overlay) {
                 overlay.addEventListener('click', closeSidebar);
             }
-            if(rightOverlay){
+            if (rightOverlay) {
                 rightOverlay.addEventListener('click', closeRightSidebar);
             }
 
@@ -520,14 +545,14 @@
 
             init() {
                 this.sidebarToggle.addEventListener('click', () => this.handleToggle());
-                if(this.rightSidebarToggle) {
+                if (this.rightSidebarToggle) {
                     this.rightSidebarToggle.addEventListener('click', () => this.openRightMobile());
                 }
-                if(this.rightSidebarClose) {
+                if (this.rightSidebarClose) {
                     this.rightSidebarClose.addEventListener('click', () => this.closeRightMobile());
                 }
                 this.overlay.addEventListener('click', () => this.closeMobile());
-                if(this.rightOverlay) {
+                if (this.rightOverlay) {
                     this.rightOverlay.addEventListener('click', () => this.closeRightMobile());
                 }
                 window.addEventListener('resize', () => this.handleResize());
@@ -650,7 +675,8 @@
                 sidebarItems.forEach(item => {
                     item.addEventListener('mouseenter', (e) => {
                         if (this.isCollapsed && this.isDesktop) {
-                            this.showTooltip(e.target.closest('.sidebar-item'), e.target.closest('.sidebar-item').getAttribute('data-tooltip'));
+                            this.showTooltip(e.target.closest('.sidebar-item'), e.target.closest(
+                                '.sidebar-item').getAttribute('data-tooltip'));
                         }
                     });
 
