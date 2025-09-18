@@ -22,9 +22,9 @@ class Volunteer extends Model
         // return $this->belongsToMany(Program::class, 'program_volunteers')->withPivot('status')->withTimestamps();
 
         // return $this->belongsToMany(Program::class, 'program_volunteers', 'volunteer_id', 'program_id')
-        // ->withPivot('status')->withTimestamps(); 
+        // ->withPivot('status')->withTimestamps();
         return $this->belongsToMany(Program::class, 'program_volunteers', 'volunteer_id', 'program_id')
-        ->withPivot('status')->withTimestamps(); 
+        ->withPivot('status')->withTimestamps();
     }
 
     public function application()
@@ -46,7 +46,7 @@ class Volunteer extends Model
     {
         return $this->hasMany(TaskAssignment::class);
     }
-    
+
     public function feedbacks()
     {
         return $this->hasMany(ProgramFeedback::class);
@@ -60,19 +60,20 @@ class Volunteer extends Model
 
     public function updateTotalHours()
     {
+        // Sum all recorded hours regardless of approval status
         $totalHours = $this->attendanceLogs()
-            ->where('approval_status', 'approved')
+        // ->where('approval_status', 'approved')
             ->sum('hours_logged');
-        
+
         $this->update(['total_hours' => $totalHours]);
-        
+
         return $totalHours;
     }
 
     public function getCalculatedTotalHoursAttribute()
     {
         return $this->attendanceLogs()
-            ->where('approval_status', 'approved')
+        // ->where('approval_status', 'approved')
             ->sum('hours_logged');
     }
 }
