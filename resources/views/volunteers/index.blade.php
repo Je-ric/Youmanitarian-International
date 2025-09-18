@@ -179,6 +179,7 @@
                                 <x-table.th class="w-10 text-center">#</x-table.th>
                                 <x-table.th>Name</x-table.th>
                                 <x-table.th>Email</x-table.th>
+                                <x-table.th class="text-right">Total Hours</x-table.th>
                                 <x-table.th>Joined At</x-table.th>
                                 <x-table.th>Actions</x-table.th>
                             </x-table.tr>
@@ -189,6 +190,7 @@
                                     <x-table.td class="w-10 text-center text-gray-500">{{ $loop->iteration + ($approvedVolunteers->currentPage() - 1) * $approvedVolunteers->perPage() }}</x-table.td>
                                     <x-table.td class="font-bold text-gray-800">{{ $volunteer->user->name ?? 'N/A' }}</x-table.td>
                                     <x-table.td>{{ $volunteer->user->email ?? 'N/A' }}</x-table.td>
+                                    <x-table.td class="text-right font-semibold">{{ number_format($volunteer->calculated_total_hours, 2) }}</x-table.td>
                                     <x-table.td>{{ $volunteer->created_at->format('M d, Y') }}</x-table.td>
                                     <x-table.td>
                                             <div class="flex flex-wrap gap-2">
