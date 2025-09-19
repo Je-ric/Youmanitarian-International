@@ -94,17 +94,6 @@
                                     <span class="ml-3 sidebar-content text-sm">Contents</span>
                                 </a>
                             </li>
-
-                            @if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Content Manager'))
-                                <li>
-                                    <a href="{{ route('content.teamMembers.index') }}"
-                                        class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('content.teamMembers.*') ? 'active' : '' }}"
-                                        data-tooltip="Team Members">
-                                        <i class="bx bx-user-pin w-5 text-center flex-shrink-0 text-primary"></i>
-                                        <span class="ml-3 sidebar-content text-sm">Team Members</span>
-                                    </a>
-                                </li>
-                            @endif
                         </ul>
                     </div>
                 @endif
@@ -202,6 +191,17 @@
                                 data-tooltip="Assign Roles">
                                 <i class="bx bx-user-plus w-5 text-center flex-shrink-0 text-primary"></i>
                                 <span class="ml-3 sidebar-content text-sm">Assign Roles</span>
+                            </a>
+                        </li>
+                    @endif
+
+                    @if (Auth::user()->hasRole('Admin') || Auth::user()->hasRole('Content Manager'))
+                        <li>
+                            <a href="{{ route('content.teamMembers.index') }}"
+                                class="sidebar-link flex items-center py-2 px-3 rounded-lg transition-all duration-200 group sidebar-item {{ request()->routeIs('content.teamMembers.*') ? 'active' : '' }}"
+                                data-tooltip="Team Members">
+                                <i class="bx bx-user-pin w-5 text-center flex-shrink-0 text-primary"></i>
+                                <span class="ml-3 sidebar-content text-sm">Team Members</span>
                             </a>
                         </li>
                     @endif
