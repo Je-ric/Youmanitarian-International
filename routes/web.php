@@ -278,7 +278,9 @@ Route::middleware(['auth', 'role:Financial Coordinator'])->group(function () {
     // Donations
     Route::get('/finance/donations', [DonationController::class, 'index'])->name('finance.index');
     Route::post('/finance/donations', [DonationController::class, 'store'])->name('finance.donations.store');
-    Route::patch('/finance/donations/{donation}/status', [DonationController::class, 'updateDonationStatus'])->name('finance.donations.status');
+    Route::patch('/finance/donations/{donation}/confirm', [DonationController::class, 'confirmDonation'])->name('finance.donations.confirm');
+    Route::patch('/finance/donations/{donation}/reject', [DonationController::class, 'rejectDonation'])->name('finance.donations.reject');
+    
     Route::get('/finance/donations/{donation}/download', [DonationController::class, 'downloadSpecificDonation'])->name('finance.donations.download');
     Route::get('/finance/donations/download/all', [DonationController::class, 'downloadAllDonations'])->name('finance.donations.download.all');
 

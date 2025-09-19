@@ -28,6 +28,7 @@ class DonationController extends Controller
         // Build queries for pending and confirmed donations
         $pendingQuery = Donation::where('status', 'Pending');
         $confirmedQuery = Donation::where('status', 'Confirmed');
+        $rejectedQuery = Donation::where('status', 'Rejected');
 
         // Apply search filter
         if ($search) {
@@ -42,22 +43,31 @@ class DonationController extends Controller
                       ->orWhere('donor_email', 'like', "%{$search}%")
                       ->orWhere('notes', 'like', "%{$search}%");
             });
+
+            $rejectedQuery->where(function($query) use ($search) {
+                $query->where('donor_name', 'like', "%{$search}%")
+                      ->orWhere('donor_email', 'like', "%{$search}%")
+                      ->orWhere('notes', 'like', "%{$search}%");
+            });
         }
 
         // Apply date range filter
         if ($dateFrom) {
             $pendingQuery->whereDate('donation_date', '>=', $dateFrom);
             $confirmedQuery->whereDate('donation_date', '>=', $dateFrom);
+            $rejectedQuery->whereDate('donation_date', '>=', $dateFrom);
         }
         if ($dateTo) {
             $pendingQuery->whereDate('donation_date', '<=', $dateTo);
             $confirmedQuery->whereDate('donation_date', '<=', $dateTo);
+            $rejectedQuery->whereDate('donation_date', '<=', $dateTo);
         }
 
         // Apply payment method filter
         if ($paymentMethod) {
             $pendingQuery->where('payment_method', $paymentMethod);
             $confirmedQuery->where('payment_method', $paymentMethod);
+            $rejectedQuery->where('payment_method', $paymentMethod);
         }
 
         // Apply sorting (only donor_name or donation_date)
@@ -65,24 +75,29 @@ class DonationController extends Controller
             // Handle NULL names last
             $pendingQuery->orderByRaw('donor_name IS NULL')->orderBy('donor_name', $sortOrder);
             $confirmedQuery->orderByRaw('donor_name IS NULL')->orderBy('donor_name', $sortOrder);
+            $rejectedQuery->orderByRaw('donor_name IS NULL')->orderBy('donor_name', $sortOrder);
         } else {
             $pendingQuery->orderBy('donation_date', $sortOrder);
             $confirmedQuery->orderBy('donation_date', $sortOrder);
+            $rejectedQuery->orderBy('donation_date', $sortOrder);
         }
 
         // Paginate results
         $pendingDonations = $pendingQuery->paginate(10, ['*'], 'pending_page', $tab === 'pending' ? $page : 1);
         $confirmedDonations = $confirmedQuery->paginate(10, ['*'], 'confirmed_page', $tab === 'confirmed' ? $page : 1);
-
+        $rejectedDonations = $rejectedQuery->paginate(10, ['*'], 'rejected_page', $tab === 'rejected' ? $page : 1);
         // Preserve search parameters in pagination links
         $pendingDonations->appends(['tab' => 'pending', 'search' => $search, 'date_from' => $dateFrom, 'date_to' => $dateTo, 'payment_method' => $paymentMethod]);
         $confirmedDonations->appends(['tab' => 'confirmed', 'search' => $search, 'date_from' => $dateFrom, 'date_to' => $dateTo, 'payment_method' => $paymentMethod]);
+        $rejectedDonations->appends(['tab' => 'rejected', 'search' => $search, 'date_from' => $dateFrom, 'date_to' => $dateTo, 'payment_method' => $paymentMethod]);
 
         // Calculate totals
         $totalConfirmedDonations = Donation::where('status', 'Confirmed')->sum('amount');
         $confirmedCount = Donation::where('status', 'Confirmed')->count();
         $totalPendingDonations = Donation::where('status', 'Pending')->sum('amount');
         $pendingCount = Donation::where('status', 'Pending')->count();
+        // $totalRejectedDonations = Donation::where('status', 'Rejected')->sum('amount');
+        // $rejectedCount = Donation::where('status', 'Rejected')->count();
 
         return view('finance.donations', compact(
             'totalConfirmedDonations',
@@ -91,6 +106,7 @@ class DonationController extends Controller
             'pendingCount',
             'pendingDonations',
             'confirmedDonations',
+            'rejectedDonations',
             'tab',
             'search',
             'dateFrom',
@@ -102,7 +118,7 @@ class DonationController extends Controller
     }
 
     // finance/donations.blade.php (main)
-    public function updateDonationStatus(Donation $donation)
+    public function confirmDonation(Donation $donation)
     {
         // Still undecided kung magdadagdag pa ng status na Decline? Rejected? Cancelled?
         // Ang purpose lang naman kase pag confirm is indicator na talagang nareceived na yung donation.
@@ -117,6 +133,20 @@ class DonationController extends Controller
             'type' => 'success',
         ]);
     }
+
+    public function rejectDonation(Donation $donation)
+    {
+        $donation->update([
+            'status' => 'Rejected',
+            'recorded_by' => Auth::id(),
+        ]);
+
+        return redirect()->back()->with('toast', [
+            'message' => 'Donation has been rejected.',
+            'type' => 'error',
+        ]);
+    }
+
 
     // ╔═══════════════════════════════════════════════════════════════════════╗
     //  Store Donation

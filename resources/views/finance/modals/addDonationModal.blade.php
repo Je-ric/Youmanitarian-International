@@ -132,7 +132,10 @@
                     <div class="flex items-center justify-between mb-1">
                         <x-form.label for="status" class="mb-0" variant="status">Status</x-form.label>
                         @if($isView)
-                            <x-feedback-status.status-indicator :status="$donation->status === 'Confirmed' ? 'completed' : 'pending'" />
+                            <x-feedback-status.status-indicator
+                                :status="$donation->status === 'Confirmed' ? 'completed' : ($donation->status === 'Rejected' ? 'danger' : 'pending')"
+                                :label="$donation->status"
+                            />
                         @else
                             <x-feedback-status.status-indicator status="pending" />
                         @endif
@@ -140,12 +143,36 @@
                     @if($isView)
                         <x-feedback-status.alert
                             variant="flexible"
-                            :message="$donation->status === 'Confirmed' ? 'Donation has been confirmed and verified as received.' : 'Donation is pending confirmation and verification.'"
-                            :bgColor="$donation->status === 'Confirmed' ? 'bg-green-50' : 'bg-yellow-50'"
-                            :textColor="$donation->status === 'Confirmed' ? 'text-green-700' : 'text-yellow-700'"
-                            :borderColor="$donation->status === 'Confirmed' ? 'border-green-200' : 'border-yellow-200'"
-                            :iconColor="$donation->status === 'Confirmed' ? 'text-green-500' : 'text-yellow-500'"
-                            :icon="$donation->status === 'Confirmed' ? 'bx bx-check-circle' : 'bx bx-time'"
+                            :message="($donation->status === 'Confirmed')
+                                ? 'Donation has been confirmed and verified as received.'
+                                : (($donation->status === 'Rejected')
+                                    ? 'Donation has been rejected and will not be counted as received.'
+                                    : 'Donation is pending confirmation and verification.')"
+                            :bgColor="($donation->status === 'Confirmed')
+                                ? 'bg-green-50'
+                                : (($donation->status === 'Rejected')
+                                    ? 'bg-red-50'
+                                    : 'bg-yellow-50')"
+                            :textColor="($donation->status === 'Confirmed')
+                                ? 'text-green-700'
+                                : (($donation->status === 'Rejected')
+                                    ? 'text-red-700'
+                                    : 'text-yellow-700')"
+                            :borderColor="($donation->status === 'Confirmed')
+                                ? 'border-green-200'
+                                : (($donation->status === 'Rejected')
+                                    ? 'border-red-200'
+                                    : 'border-yellow-200')"
+                            :iconColor="($donation->status === 'Confirmed')
+                                ? 'text-green-500'
+                                : (($donation->status === 'Rejected')
+                                    ? 'text-red-500'
+                                    : 'text-yellow-500')"
+                            :icon="($donation->status === 'Confirmed')
+                                ? 'bx bx-check-circle'
+                                : (($donation->status === 'Rejected')
+                                    ? 'bx bx-x-circle'
+                                    : 'bx bx-time')"
                         />
                     @else
                         <x-feedback-status.alert

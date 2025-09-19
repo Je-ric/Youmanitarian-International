@@ -5,7 +5,7 @@
                 <x-table.tr :hover="false">
                     <x-table.th class="w-10 text-center">#</x-table.th>
                     <x-table.th>User</x-table.th>
-                    <x-table.th>All Roles</x-table.th>
+                    {{-- <x-table.th>All Roles</x-table.th> --}}
                     <x-table.th>Actions</x-table.th>
                 </x-table.tr>
             </x-table.thead>
@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                         </x-table.td>
-                        <x-table.td>
+                        {{-- <x-table.td>
                             <div class="flex flex-wrap gap-2">
                                 @forelse($user->roles as $role)
                                     @php
@@ -55,7 +55,7 @@
                                     <span class="text-gray-500 text-sm">No roles assigned</span>
                                 @endforelse
                             </div>
-                        </x-table.td>
+                        </x-table.td> --}}
                         <x-table.td>
                             <x-button href="{{ route('volunteers.volunteer-details', $user->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
                                 <i class='bx bx-dots-horizontal-rounded'></i>
