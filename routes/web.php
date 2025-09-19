@@ -129,9 +129,8 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
         ->name('notifications.show_payment_reminder');
 
     // ADD THIS (invitation show route)
-    Route::get('/notifications/invitation/{notification}', [NotificationController::class, 'showInvitation'])
-        ->name('notifications.invitation.show');
-
+    Route::get('/notifications/invitation/{notification}', [NotificationController::class, 'showInvitation'])->name('notifications.invitation.show');
+    
     // Content reactions
     Route::post('/content/{contentId}/react', [HeartReactController::class, 'toggleReact']);
     Route::post('/content/{contentId}/toggle', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
@@ -231,15 +230,9 @@ Route::middleware(['auth', 'role:Volunteer'])->group(function () {
     // VOLUNTEER FEEDBACK
     Route::post('/programs/{program}/feedback/volunteer', [ProgramFeedbackController::class, 'submitVolunteerFeedback'])->name('programs.feedback.submit');
 
-
-    Route::get('/members/invitation/{member}', [MemberController::class,'showInvitation'])
-        ->name('member.invitation.show');
-
-    Route::post('/members/invitation/{member}/accept', [MemberController::class,'acceptInvitation'])
-        ->name('member.invitation.accept');
-
-    Route::post('/members/invitation/{member}/decline', [MemberController::class,'declineInvitation'])
-        ->name('member.invitation.decline');
+    Route::get('members/invitation/{member}', [MemberController::class, 'showInvitation'])->name('member.invitation.show');
+    Route::post('/members/invitation/{member}/accept', [MemberController::class,'acceptInvitation'])->name('member.invitation.accept');
+    Route::post('/members/invitation/{member}/decline', [MemberController::class,'declineInvitation'])->name('member.invitation.decline');
 
     Route::resource('consultation-hours', ConsultationHourController::class)->only([
             'index','store','update','destroy','edit'
@@ -280,7 +273,7 @@ Route::middleware(['auth', 'role:Financial Coordinator'])->group(function () {
     Route::post('/finance/donations', [DonationController::class, 'store'])->name('finance.donations.store');
     Route::patch('/finance/donations/{donation}/confirm', [DonationController::class, 'confirmDonation'])->name('finance.donations.confirm');
     Route::patch('/finance/donations/{donation}/reject', [DonationController::class, 'rejectDonation'])->name('finance.donations.reject');
-    
+
     Route::get('/finance/donations/{donation}/download', [DonationController::class, 'downloadSpecificDonation'])->name('finance.donations.download');
     Route::get('/finance/donations/download/all', [DonationController::class, 'downloadAllDonations'])->name('finance.donations.download.all');
 
@@ -316,7 +309,6 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::patch('/members/{member}/status', [MemberController::class, 'updateStatus'])->name('members.status');
     Route::post('/members/invite/{volunteer}', [MemberController::class, 'invite'])->name('members.invite');
     Route::post('/members/{member}/resend-invitation', [MemberController::class, 'resendInvitation'])->name('members.resend-invitation');
-    Route::get('members/invitation/{member}', [MemberController::class, 'showInvitation'])->name('member.invitation.show');
 
 });
 

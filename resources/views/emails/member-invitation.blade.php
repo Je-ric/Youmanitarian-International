@@ -79,12 +79,12 @@
         <div class="header">
             <h1>Welcome to YouManitarian International!</h1>
         </div>
-        
+
         <div class="content">
             <p>Dear {{ $member->user->name ?? 'Valued Member' }},</p>
-            
+
             <p>We are pleased to invite you to become a member of YouManitarian International. Your dedication and contributions to our cause have been remarkable, and we believe you would be a valuable addition to our community.</p>
-            
+
             <p>As a member, you will have access to:</p>
             <ul>
                 <li>Exclusive events and programs</li>
@@ -92,10 +92,10 @@
                 <li>Priority access to volunteer opportunities</li>
                 <li>And much more!</li>
             </ul>
-            
+
             <p>Please click one of the buttons below to respond to this invitation:</p>
-            
-            <div style="text-align: center;">
+            <h1>Proceed to the Youmanitarian International website to accept your invitation in notification.</h1>
+            {{-- <div style="text-align: center;">
                 <a href="{{ $acceptUrl }}" class="button">Accept Invitation</a>
                 <a href="{{ $declineUrl }}" class="button decline">Decline Invitation</a>
             </div>
@@ -104,13 +104,13 @@
                 If the buttons above don't work, you can copy and paste these links into your browser:<br>
                 Accept: {{ $acceptUrl }}<br>
                 Decline: {{ $declineUrl }}
-            </p>
+            </p> --}}
         </div>
-        
-        <div class="footer">
+
+        {{-- <div class="footer">
             <p>This invitation will expire in 7 days.</p>
             <p>If you have any questions, please contact our support team.</p>
-        </div>
+        </div> --}}
     </div>
 </body>
-</html> 
+</html>
