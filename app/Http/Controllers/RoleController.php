@@ -16,15 +16,18 @@ class RoleController extends Controller
         $search = $request->get('search', '');
         $sortBy = $request->get('sort_by', 'name');
         $sortOrder = $request->get('sort_order', 'asc');
-        $allUsers = User::with('roles')->get(); // function to get all users with their roles
-        $roles = Role::all(); // get all roles
+        $allUsers = User::with('roles')->get();
+        $roles = Role::all();
 
-        // Apply search filter if provided
         if ($search) {
             $allUsers = $allUsers->filter(function($user) use ($search) {
                 return stripos($user->name, $search) !== false;
             });
         }
+
+        $allUsers = $allUsers->sortBy(function($user) use ($sortBy) {
+            return strtolower($user->$sortBy);
+        }, SORT_REGULAR, $sortOrder === 'desc');
 
         // Get users for each role
         // filter() to return only users with the role, inshort kinukuha lang yung users na may specific role
@@ -36,6 +39,7 @@ class RoleController extends Controller
         $contentManagerUsers = $allUsers->filter(fn($user) => $user->hasRole('Content Manager'));
         $memberUsers = $allUsers->filter(fn($user) => $user->hasRole('Member'));
 
+
         // Sort all user collections alphabetically by name
         $volunteerUsers = $volunteerUsers->sortBy('name');
         $adminUsers = $adminUsers->sortBy('name');
@@ -43,6 +47,7 @@ class RoleController extends Controller
         $financialCoordinatorUsers = $financialCoordinatorUsers->sortBy('name');
         $contentManagerUsers = $contentManagerUsers->sortBy('name');
         $memberUsers = $memberUsers->sortBy('name');
+        $allUsers = $allUsers->sortBy('name');
 
         $perPage = 10;
 
@@ -60,6 +65,8 @@ class RoleController extends Controller
         $contentManagerCurrentPage = request()->get('content_manager_page', 1);
         $memberCurrentPage = request()->get('member_page', 1);
         $noRoleCurrentPage = request()->get('no_role_page', 1);
+        $allUsersPage = $request->get('all_users_page', 1);
+
 
         // Example:
         // Total volunteers: 50
@@ -68,13 +75,18 @@ class RoleController extends Controller
         // Current page: 2 (show the 11-20)
         // Current page: 3 (show the 21-30)
         // URL: http://127.0.0.1:8000/roles/list?tab=Volunteer&volunteer_page=2
+        // nagagamit din yung counts sa overview
 
         $volunteerUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
             $volunteerUsers->forPage($volunteerCurrentPage, $perPage),
             $volunteerUsers->count(),
             $perPage,
             $volunteerCurrentPage,
-            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'volunteer_page']
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+                'pageName' => 'volunteer_page'
+            ]
         );
 
         $adminUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
@@ -82,7 +94,11 @@ class RoleController extends Controller
             $adminUsers->count(),
             $perPage,
             $adminCurrentPage,
-            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'admin_page']
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+                'pageName' => 'admin_page'
+                ]
         );
 
         $programCoordinatorUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
@@ -90,7 +106,11 @@ class RoleController extends Controller
             $programCoordinatorUsers->count(),
             $perPage,
             $programCoordinatorCurrentPage,
-            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'program_coordinator_page']
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+                'pageName' => 'program_coordinator_page'
+            ]
         );
 
         $financialCoordinatorUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
@@ -98,7 +118,11 @@ class RoleController extends Controller
             $financialCoordinatorUsers->count(),
             $perPage,
             $financialCoordinatorCurrentPage,
-            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'financial_coordinator_page']
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+                'pageName' => 'financial_coordinator_page'
+                ]
         );
 
         $contentManagerUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
@@ -106,7 +130,11 @@ class RoleController extends Controller
             $contentManagerUsers->count(),
             $perPage,
             $contentManagerCurrentPage,
-            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'content_manager_page']
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+                'pageName' => 'content_manager_page'
+                ]
         );
 
         $memberUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
@@ -114,7 +142,11 @@ class RoleController extends Controller
             $memberUsers->count(),
             $perPage,
             $memberCurrentPage,
-            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'member_page']
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+                'pageName' => 'member_page'
+                ]
         );
 
         // get all users na walang roles
@@ -124,7 +156,23 @@ class RoleController extends Controller
             $usersWithoutRolesCollection->count(),
             $perPage,
             $noRoleCurrentPage,
-            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'no_role_page']
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+                'pageName' => 'no_role_page'
+                ]
+        );
+
+        $allUsersPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+            $allUsers->forPage($allUsersPage, $perPage),
+            $allUsers->count(),
+            $perPage,
+            $allUsersPage,
+            [
+                'path' => $request->url(),
+                'query' => $request->query(),
+                'pageName' => 'all_users_page'
+                ]
         );
 
         return view('roles.index', compact(
@@ -143,6 +191,7 @@ class RoleController extends Controller
             'financialCoordinatorUsersPaginated',
             'contentManagerUsersPaginated',
             'memberUsersPaginated',
+            'allUsersPaginated',
             'search',
             'sortBy',
             'sortOrder'
@@ -221,6 +270,20 @@ class RoleController extends Controller
             $addedRoleIds = array_diff($selectedRoleIds, $currentRoleIds);
             $removedRoleIds = array_diff($currentRoleIds, $selectedRoleIds);
 
+            $adminRole = Role::where('role_name', 'Admin')->first();
+            $maxAdmins = 3;
+
+            if (in_array($adminRole->id, $addedRoleIds)) {
+                $currentAdminCount = User::whereHas('roles', fn($q) => $q->where('role_name', 'Admin'))->count();
+
+                if ($currentAdminCount >= $maxAdmins) {
+                    DB::rollBack();
+                    return redirect()->back()->with('toast', [
+                        'message' => "You cannot assign more than {$maxAdmins} Admins.",
+                        'type' => 'error'
+                    ]);
+                }
+            }
             // if theress no changes or theres no additional checkbox, walang mangyayare
             // if theres changes, then proceed
             if (!empty($addedRoleIds) || !empty($removedRoleIds)) {

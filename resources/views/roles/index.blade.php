@@ -10,13 +10,13 @@
         @php
             $tabs = [
                 ['id' => 'overview', 'label' => 'Overview', 'icon' => 'bx-stats'],
-                ['id' => 'volunteer', 'label' => 'Volunteers (' . $volunteerUsers->count() . ')', 'icon' => 'bx-user'],
+                ['id' => 'all_users', 'label' => 'All Users (' . $allUsers->count() . ')', 'icon' => 'bx-group'],
                 ['id' => 'admin', 'label' => 'Admins (' . $adminUsers->count() . ')', 'icon' => 'bx-crown'],
-                ['id' => 'program_coordinator', 'label' => 'Program Coordinators (' . $programCoordinatorUsers->count() . ')', 'icon' => 'bx-calendar-event'],
-                ['id' => 'financial_coordinator', 'label' => 'Financial Coordinators (' . $financialCoordinatorUsers->count() . ')', 'icon' => 'bx-wallet'],
-                ['id' => 'content_manager', 'label' => 'Content Managers (' . $contentManagerUsers->count() . ')', 'icon' => 'bx-edit-alt'],
-                // ['id' => 'member', 'label' => 'Members (' . $memberUsers->count() . ')', 'icon' => 'bx-group'],
-                ['id' => 'no_roles', 'label' => 'No Roles (' . $usersWithoutRoles->count() . ')', 'icon' => 'bx-user-x'],
+                ['id' => 'content_manager', 'label' => 'Content (' . $contentManagerUsers->count() . ')', 'icon' => 'bx-edit-alt'],
+                ['id' => 'program_coordinator', 'label' => 'Program (' . $programCoordinatorUsers->count() . ')', 'icon' => 'bx-calendar-event'],
+                ['id' => 'financial_coordinator', 'label' => 'Finance (' . $financialCoordinatorUsers->count() . ')', 'icon' => 'bx-wallet'],
+                ['id' => 'volunteer', 'label' => 'Volunteers (' . $volunteerUsers->count() . ')', 'icon' => 'bx-user'],
+                // ['id' => 'no_roles', 'label' => 'No Roles (' . $usersWithoutRoles->count() . ')', 'icon' => 'bx-user-x'],
             ];
 
             $currentTab = request()->query('tab', 'overview'); // fallback to overview
@@ -28,6 +28,26 @@
         >
             <x-slot:slot_overview>
                 @include('roles.partials.rolesOverview')
+            </x-slot>
+
+            <x-slot:slot_all_users>
+                <x-search-form
+                    :search="$search"
+                    :sortBy="$sortBy"
+                    :sortOrder="$sortOrder"
+                    :showSortOptions="true"
+                    :sortOptions="['name' => 'Name']"
+                    searchPlaceholder="Search by name"
+                    searchLabel="Name"
+                />
+                @include('roles.partials.usersTable', [
+                    'users' => $allUsersPaginated, 
+                    'roleName' => 'User',
+                    'roleType' => 'all',
+                    'pageName' => 'all_users_page',
+                    'roles' => $roles,
+                    'showRoles' => true
+                ])
             </x-slot>
 
             <x-slot:slot_volunteer>
@@ -113,7 +133,7 @@
                 'roles' => $roles])
             </x-slot> --}}
 
-            <x-slot:slot_no_roles>
+            {{-- <x-slot:slot_no_roles>
                 <x-search-form
                     :search="$search"
                     :sortBy="$sortBy"
@@ -128,6 +148,6 @@
                     'pageName' => 'no_role_page',
                     'roles' => $roles
                 ])
-            </x-slot>
+            </x-slot> --}}
         </x-navigation-layout.tabs-modern>
 @endsection

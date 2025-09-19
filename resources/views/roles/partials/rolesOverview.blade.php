@@ -13,7 +13,8 @@
         <x-overview.stat-card
             icon="bx-shield-quarter"
             title="Total Roles"
-            :value="$roles->count()"
+            :value="6"
+            {{-- :value="$roles->count()" --}}
             bgColor="bg-green-100"
             iconColor="text-green-500"
             gradientVariant="emerald-teal"
@@ -22,7 +23,6 @@
             icon="bx-user-plus"
             title="Users Without Roles"
             :value="$usersWithoutRoles->count()"
-            href="{{ route('roles.index', ['tab' => 'no_roles']) }}"
             bgColor="bg-yellow-100"
             iconColor="text-yellow-500"
             gradientVariant="amber-orange"
@@ -68,6 +68,5 @@
             @endforeach
         </div>
     </x-overview.card>
-</div> 
+</div>
 
-   
