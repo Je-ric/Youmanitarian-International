@@ -38,13 +38,14 @@
                             ->where('payment_period', $quarter)
                             ->where('payment_year', $currentYear)
                             ->first();
-                        $status = $payment ? $payment->payment_status : app(App\Http\Controllers\MembershipController::class)->determinePaymentStatus($quarter, $payment);
-                        // Icon and color mapping
+                        $status = app(App\Http\Controllers\MembershipController::class)
+                            ->determinePaymentStatus($quarter, $payment, $currentYear);
+                        // styling
                         if (!$shouldShowPayment) {
                             $icon = 'bx-lock';
                             $bg = 'bg-gray-300';
                             $iconColor = 'text-white';
-                        } else if ($payment) {
+                        } else if ($payment) { // may record
                             if ($status === 'paid') {
                                 $icon = 'bx-check-circle';
                                 $bg = 'bg-green-500';
@@ -59,9 +60,16 @@
                                 $iconColor = 'text-white';
                             }
                         } else {
-                            $icon = 'bx-time';
-                            $bg = 'bg-yellow-400';
-                            $iconColor = 'text-white';
+                            // check status even no record
+                            if ($status === 'overdue') {
+                                $icon = 'bx-error';
+                                $bg = 'bg-red-500';
+                                $iconColor = 'text-white';
+                            } else {
+                                $icon = 'bx-time';
+                                $bg = 'bg-yellow-400';
+                                $iconColor = 'text-white';
+                            }
                         }
                     @endphp
                     @if($shouldShowPayment)

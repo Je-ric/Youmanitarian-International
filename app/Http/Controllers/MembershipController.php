@@ -134,16 +134,28 @@ class MembershipController extends Controller
     // finance/membership_payments.blade.php (main)
     public function determinePaymentStatus($quarter, $payment)
     {
-        if (!$payment) {
-            return 'pending';
+        // if (!$payment) {
+        //     return 'pending';
+        // }
+        // //
+        // if ($payment->payment_status === 'paid') {
+        //     return 'paid';
+        // }
+        // // if not paid, check if it's overdue
+        // $dueDate = $this->getDueDate($quarter, $payment->payment_year);
+        // return now()->isAfter($dueDate) ? 'overdue' : 'pending';
+
+        if ($payment) {
+            if ($payment->payment_status === 'paid') {
+                return 'paid';
+            }
+            $dueDate = $this->getDueDate($quarter, $payment->payment_year);
+            return now()->isAfter($dueDate) ? 'overdue' : 'pending';
+        } else {
+            // No payment record: check if overdue
+            $dueDate = $this->getDueDate($quarter, $year ?? now()->year);
+            return now()->isAfter($dueDate) ? 'overdue' : 'pending';
         }
-        //
-        if ($payment->payment_status === 'paid') {
-            return 'paid';
-        }
-        // if not paid, check if it's overdue
-        $dueDate = $this->getDueDate($quarter, $payment->payment_year);
-        return now()->isAfter($dueDate) ? 'overdue' : 'pending';
     }
 
     // finance/modals/addPaymentModal.blade.php (partial)
