@@ -4,7 +4,7 @@
     <div class="min-h-screen bg-gradient-to-br from-gray-50 to-[#1A2235]/5 py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div class="text-center mb-12">
+            <div class="text-center mb-8">
                 <x-section-title first="Get in" second="Touch" />
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                     Have questions about our programs? Want to partner with us?
@@ -12,23 +12,21 @@
                 </p>
             </div>
 
-            <div class="flex justify-center mb-8">
-                <div class="space-y-2 text-center">
-                    <p class="flex items-center justify-center gap-2 text-gray-700">
-                        <i class='bx bx-envelope text-[#FFB51B] text-xl'></i>
-                        youmanitarian@email.org
-                    </p>
-
-                    <p class="flex items-center justify-center gap-2 text-gray-700">
-                        <i class='bx bx-phone text-[#FFB51B] text-xl'></i>
-                        0917-000-1111
-                    </p>
-                </div>
-            </div>
-
-
             <div class="flex justify-center">
                 <div class="p-8 w-full max-w-3xl">
+
+                    <div class="space-y-2 text-left mb-8">
+                        <p class="flex items-center justify-start gap-2 text-gray-700">
+                            <i class='bx bx-envelope text-[#FFB51B] text-xl'></i>
+                            youmanitarian@email.org
+                        </p>
+
+                        <p class="flex items-center justify-start gap-2 text-gray-700">
+                            <i class='bx bx-phone text-[#FFB51B] text-xl'></i>
+                            0917-000-1111
+                        </p>
+                    </div>
+
                     <h2 class="text-2xl font-bold text-[#1A2235] mb-6">Send us a Message</h2>
 
                     <form action="{{ route('contact.store') }}" method="POST" class="space-y-6">
