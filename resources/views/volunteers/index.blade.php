@@ -6,18 +6,11 @@
     title="Volunteers"
     desc="Manage volunteer applications and volunteers.">
     <div class="flex items-center gap-2">
-        <a href="{{ route('reports.volunteers', ['format' => 'csv']) }}"
-           class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-green-700 bg-green-100 rounded hover:bg-green-200">
-            <i class='bx bx-table'></i> Export All (CSV)
-        </a>
-        <a href="{{ route('reports.volunteers', ['format' => 'pdf']) }}"
-           class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-100 rounded hover:bg-red-200">
-            <i class='bx bx-file'></i> Export All (PDF)
-        </a>
+        <button onclick="document.getElementById('volunteerDownloadModal').showModal()" class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-blue-700 bg-blue-100 rounded hover:bg-blue-200">
+            <i class='bx bx-download'></i> Export Volunteers
+        </button>
     </div>
 </x-page-header>
-
-
 
         @php
             $tabs = [
@@ -241,4 +234,68 @@
 
     <style>
     </style>
+
+    @include('finance.partials.downloadModal', [
+        'modalId' => 'volunteerDownloadModal',
+        'title' => 'Export Volunteers',
+        'description' => 'Choose your preferred format and filter for downloading volunteer records.',
+        'options' => [
+            [
+                'url' => route('reports.volunteers', ['format' => 'csv']),
+                'icon' => 'bx bx-table',
+                'color' => 'text-green-600',
+                'title' => 'CSV - All Volunteers',
+                'description' => 'Export all volunteers in spreadsheet format'
+            ],
+            [
+                'url' => route('reports.volunteers', ['format' => 'pdf']),
+                'icon' => 'bx bx-file-pdf',
+                'color' => 'text-red-600',
+                'title' => 'PDF - All Volunteers',
+                'description' => 'Export all volunteers in professional report format'
+            ],
+            [
+                'url' => route('reports.volunteers', ['format' => 'csv', 'status' => 'approved']),
+                'icon' => 'bx bx-table',
+                'color' => 'text-green-600',
+                'title' => 'CSV - Approved Only',
+                'description' => 'Export only approved volunteers'
+            ],
+            [
+                'url' => route('reports.volunteers', ['format' => 'pdf', 'status' => 'approved']),
+                'icon' => 'bx bx-file-pdf',
+                'color' => 'text-red-600',
+                'title' => 'PDF - Approved Only',
+                'description' => 'Export only approved volunteers'
+            ],
+            [
+                'url' => route('reports.volunteers', ['format' => 'csv', 'status' => 'denied']),
+                'icon' => 'bx bx-table',
+                'color' => 'text-green-600',
+                'title' => 'CSV - Denied Only',
+                'description' => 'Export only denied volunteers'
+            ],
+            [
+                'url' => route('reports.volunteers', ['format' => 'pdf', 'status' => 'denied']),
+                'icon' => 'bx bx-file-pdf',
+                'color' => 'text-red-600',
+                'title' => 'PDF - Denied Only',
+                'description' => 'Export only denied volunteers'
+            ],
+            [
+                'url' => route('reports.volunteers', ['format' => 'csv', 'status' => 'pending']),
+                'icon' => 'bx bx-table',
+                'color' => 'text-green-600',
+                'title' => 'CSV - Pending Only',
+                'description' => 'Export only pending volunteers'
+            ],
+            [
+                'url' => route('reports.volunteers', ['format' => 'pdf', 'status' => 'pending']),
+                'icon' => 'bx bx-file-pdf',
+                'color' => 'text-red-600',
+                'title' => 'PDF - Pending Only',
+                'description' => 'Export only pending volunteers'
+            ]
+        ]
+    ])
 @endsection

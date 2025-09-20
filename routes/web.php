@@ -283,10 +283,10 @@ Route::middleware(['auth', 'role:Financial Coordinator'])->group(function () {
 
     // Members & Roles & Volunteers reports (admin or fc as needed)
     Route::get('/reports/users-with-roles', [ReportsController::class, 'usersWithRoles'])->name('reports.users.roles');
+    Route::get('/reports/users/{user}/details', [ReportsController::class, 'userDetails'])->name('reports.user.details');
     Route::get('/reports/members', [ReportsController::class, 'members'])->name('reports.members');
     Route::get('/reports/members/{member}', [ReportsController::class, 'member'])->name('reports.member');
     Route::get('/reports/volunteers', [ReportsController::class, 'volunteers'])->name('reports.volunteers');
-    Route::get('/reports/volunteers/{volunteer}', [ReportsController::class, 'volunteers'])->name('reports.volunteers.show');
 
     // Membership payments
     Route::get('/finance/membership/payments', [MembershipController::class, 'index'])->name('finance.membership.payments');

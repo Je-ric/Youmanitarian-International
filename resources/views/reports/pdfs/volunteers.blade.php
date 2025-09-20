@@ -9,17 +9,24 @@
     </style>
 </head>
 <body>
-    <h1>Volunteers</h1>
+    <h1>Volunteers Report</h1>
     <p>Generated: {{ $generated_at }}</p>
+    @if($status)
+        <p>Filter: {{ ucfirst($status) }} volunteers only</p>
+    @else
+        <p>All volunteers</p>
+    @endif
     <table>
-        <thead><tr><th>ID</th><th>Name</th><th>Application Status</th><th>Joined At</th></tr></thead>
+        <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Application Status</th><th>Total Hours</th><th>Joined Date</th></tr></thead>
         <tbody>
         @foreach ($volunteers as $v)
             <tr>
                 <td>{{ $v->id }}</td>
-                <td>{{ optional($v->user)->name }}</td>
+                <td>{{ optional($v->user)->name ?? 'N/A' }}</td>
+                <td>{{ optional($v->user)->email ?? 'N/A' }}</td>
                 <td>{{ $v->application_status }}</td>
-                <td>{{ $v->joined_at }}</td>
+                <td>{{ $v->total_hours ?? 0 }}</td>
+                <td>{{ $v->created_at->format('Y-m-d') }}</td>
             </tr>
         @endforeach
         </tbody>

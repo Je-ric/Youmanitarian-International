@@ -6,14 +6,9 @@
         title="Role Management"
         desc="Manage user roles and permissions">
         <div class="flex items-center gap-2">
-            <a href="{{ route('reports.users.roles', ['format' => 'csv']) }}"
-               class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-green-700 bg-green-100 rounded hover:bg-green-200">
-                <i class='bx bx-table'></i> Export Users+Roles (CSV)
-            </a>
-            <a href="{{ route('reports.users.roles', ['format' => 'pdf']) }}"
-               class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-100 rounded hover:bg-red-200">
-                <i class='bx bx-file'></i> Export Users+Roles (PDF)
-            </a>
+            <button onclick="document.getElementById('usersRolesDownloadModal').showModal()" class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-blue-700 bg-blue-100 rounded hover:bg-blue-200">
+                <i class='bx bx-download'></i> Export Users with Roles
+            </button>
         </div>
     </x-page-header>
 
@@ -160,4 +155,26 @@
                 ])
             </x-slot> --}}
         </x-navigation-layout.tabs-modern>
+
+    @include('finance.partials.downloadModal', [
+        'modalId' => 'usersRolesDownloadModal',
+        'title' => 'Export Users with Roles',
+        'description' => 'Choose your preferred format for downloading user and role information.',
+        'options' => [
+            [
+                'url' => route('reports.users.roles', ['format' => 'csv']),
+                'icon' => 'bx bx-table',
+                'color' => 'text-green-600',
+                'title' => 'CSV Format',
+                'description' => 'Spreadsheet format with user details and roles'
+            ],
+            [
+                'url' => route('reports.users.roles', ['format' => 'pdf']),
+                'icon' => 'bx bx-file-pdf',
+                'color' => 'text-red-600',
+                'title' => 'PDF Format',
+                'description' => 'Professional report format for printing'
+            ]
+        ]
+    ])
 @endsection

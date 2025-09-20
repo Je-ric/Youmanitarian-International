@@ -15,16 +15,25 @@
     <h2>{{ $program->title }}</h2>
     <p>Date: {{ $program->date }} | {{ $program->start_time }} - {{ $program->end_time }}</p>
     <p>Location: {{ $program->location }}</p>
+    <p>Description: {{ $program->description }}</p>
+    <p>Created By: {{ $program->creator->name ?? 'Unknown' }}</p>
+
 
     <h2>Volunteers</h2>
     <table>
-        <thead><tr><th>ID</th><th>Name</th><th>Status</th></tr></thead>
+        <thead><tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Name</th>
+            {{-- <th>Status</th> --}}
+        </tr></thead>
         <tbody>
         @foreach ($volunteers as $v)
             <tr>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ $v->id }}</td>
                 <td>{{ optional($v->user)->name }}</td>
-                <td>{{ $v->pivot->status ?? '' }}</td>
+                {{-- <td>{{ $v->pivot->status ?? '' }}</td> --}}
             </tr>
         @endforeach
         </tbody>
@@ -32,7 +41,14 @@
 
     <h2>Attendances</h2>
     <table>
-        <thead><tr><th>ID</th><th>Volunteer</th><th>Clock In</th><th>Clock Out</th><th>Hours</th><th>Status</th></tr></thead>
+        <thead><tr>
+            <th>ID</th>
+            <th>Volunteer</th>
+            <th>Clock In</th>
+            <th>Clock Out</th>
+            <th>Hours</th>
+            <th>Status</th>
+        </tr></thead>
         <tbody>
         @foreach ($attendances as $a)
             <tr>

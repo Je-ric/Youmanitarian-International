@@ -43,10 +43,10 @@ class VolunteerApplicationStatusUpdated extends Notification implements ShouldQu
     public function toArray($notifiable)
     {
         $title = $this->status === 'approved' ? 'Application Approved!' : 'Application Status Update';
-        $message = $this->status === 'approved' 
+        $message = $this->status === 'approved'
             ? 'Congratulations! Your volunteer application has been approved. You can now join programs.'
-            : 'Your volunteer application has been denied. Please contact an administrator for more information.';
-        
+            : 'Your volunteer application has been denied. You can reapply and provide additional information.';
+
         return [
             'title' => $title,
             'type' => 'volunteer_application',
@@ -54,4 +54,4 @@ class VolunteerApplicationStatusUpdated extends Notification implements ShouldQu
             'action_url' => $this->status === 'approved' ? route('programs.index') : route('dashboard'),
         ];
     }
-} 
+}

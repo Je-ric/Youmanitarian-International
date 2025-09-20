@@ -11,7 +11,19 @@
 <body>
     <h1>All Donations</h1>
     <p>Generated: {{ $generated_at }}</p>
-    <p>Total Amount: {{ number_format((float)($total_amount ?? 0), 2) }} | Total Count: {{ $total_count }}</p>
+
+    <h2>Summary</h2>
+    <table>
+        <tr><td><strong>Total Donations:</strong></td><td>{{ $summary['total_count'] }}</td></tr>
+        <tr><td><strong>Total Amount:</strong></td><td>{{ number_format($summary['total_amount'], 2) }}</td></tr>
+    </table>
+
+    <h3>By Status:</h3>
+    <table>
+        <tr><td><strong>Confirmed:</strong></td><td>{{ $summary['confirmed']['count'] }} donations - {{ number_format($summary['confirmed']['amount'], 2) }}</td></tr>
+        <tr><td><strong>Pending:</strong></td><td>{{ $summary['pending']['count'] }} donations - {{ number_format($summary['pending']['amount'], 2) }}</td></tr>
+        <tr><td><strong>Rejected:</strong></td><td>{{ $summary['rejected']['count'] }} donations - {{ number_format($summary['rejected']['amount'], 2) }}</td></tr>
+    </table>
     <table>
         <thead>
             <tr>

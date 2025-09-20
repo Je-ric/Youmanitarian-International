@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
-use Barryvdh\DomPDF\Facade\Pdf;
-use App\Models\Program;
-use App\Models\Volunteer;
-use App\Models\VolunteerAttendance;
-use App\Models\ProgramTask;
-use App\Models\ProgramFeedback;
-use App\Models\User;
 use App\Models\Role;
+use App\Models\User;
 use App\Models\Member;
+use App\Models\Program;
 use App\Models\Donation;
+use App\Models\Volunteer;
+use App\Models\ProgramTask;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\ProgramFeedback;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\MembershipPayment;
+use Illuminate\Support\Facades\DB;
+use App\Models\VolunteerAttendance;
+use Illuminate\Support\Facades\Response;
 
 class ReportsController extends Controller
 {
@@ -40,19 +41,19 @@ class ReportsController extends Controller
             ->get();
 
         if ($format === 'pdf') {
+            $filename = 'program_report_' . Str::slug($program->title) . '.pdf';
             $pdf = Pdf::loadView('reports.pdfs.program', [
                 'program' => $program,
                 'volunteers' => $volunteers,
                 'attendances' => $attendances,
                 'tasks' => $tasks,
                 'feedback' => $feedback,
-                'generated_at' => now()->format('F j, Y h:i A')
+                'generated_at' => now()->format('F j, Y \a\t g:i A')
             ]);
-            $filename = 'program_report_' . $program->id . '.pdf';
             return $pdf->download($filename);
         }
 
-        $filename = 'program_report_' . $program->id . '.csv';
+        $filename = 'program_report_' . Str::slug($program->title) . '.csv';
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
@@ -61,6 +62,8 @@ class ReportsController extends Controller
             $out = fopen('php://output', 'w');
             fputcsv($out, ['Program Report']);
             fputcsv($out, ['Title', $program->title]);
+            fputcsv($out, ['Description', $program->description]);
+            fputcsv($out, ['Created By', $program->creator->name ?? 'Unknown']);
             fputcsv($out, ['Date', $program->date]);
             fputcsv($out, ['Start Time', $program->start_time]);
             fputcsv($out, ['End Time', $program->end_time]);
@@ -117,12 +120,12 @@ class ReportsController extends Controller
     public function usersWithRoles(Request $request)
     {
         $format = $request->get('format', 'csv');
-        $users = User::with('roles')->orderBy('name')->get();
+        $users = User::with(['roles', 'volunteer', 'member'])->orderBy('name')->get();
 
         if ($format === 'pdf') {
             $pdf = Pdf::loadView('reports.pdfs.users_roles', [
                 'users' => $users,
-                'generated_at' => now()->format('F j, Y h:i A')
+                'generated_at' => now()->format('F j, Y \a\t g:i A')
             ]);
             return $pdf->download('users_with_roles.pdf');
         }
@@ -133,11 +136,76 @@ class ReportsController extends Controller
         ];
         $callback = function () use ($users) {
             $out = fopen('php://output', 'w');
-            fputcsv($out, ['User ID', 'Name', 'Email', 'Roles']);
+            fputcsv($out, ['User ID', 'Name', 'Email', 'Roles', 'Volunteer Status', 'Member Type', 'Created At']);
             foreach ($users as $u) {
                 $roles = $u->roles->pluck('role_name')->implode(', ');
-                fputcsv($out, [$u->id, $u->name, $u->email, $roles ?: 'No roles']);
+                $volunteerStatus = $u->volunteer ? $u->volunteer->application_status : 'Not a volunteer';
+                $memberType = $u->member ? $u->member->membership_type : 'Not a member';
+                fputcsv($out, [
+                    $u->id,
+                    $u->name,
+                    $u->email,
+                    $roles ?: 'No roles',
+                    $volunteerStatus,
+                    $memberType,
+                    $u->created_at->format('M j, Y g:i A')
+                ]);
             }
+            fclose($out);
+        };
+        return Response::stream($callback, 200, $headers);
+    }
+
+    // Export individual user details (admin only)
+    public function userDetails(Request $request, User $user)
+    {
+        $format = $request->get('format', 'pdf');
+        $user->load(['roles', 'volunteer.user', 'member.user']);
+
+        if ($format === 'pdf') {
+            $pdf = Pdf::loadView('reports.pdfs.user_details', [
+                'user' => $user,
+                'generated_at' => now()->format('F j, Y \a\t g:i A')
+            ]);
+            return $pdf->download('user_details_' . $user->id . '.pdf');
+        }
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="user_details_' . $user->id . '.csv"',
+        ];
+        $callback = function () use ($user) {
+            $out = fopen('php://output', 'w');
+            fputcsv($out, ['User Details']);
+            fputcsv($out, ['ID', $user->id]);
+            fputcsv($out, ['Name', $user->name]);
+            fputcsv($out, ['Email', $user->email]);
+            fputcsv($out, ['Created At', $user->created_at->format('M j, Y g:i A')]);
+            fputcsv($out, []);
+
+            fputcsv($out, ['Roles']);
+            fputcsv($out, ['Role Name']);
+            foreach ($user->roles as $role) {
+                fputcsv($out, [$role->role_name]);
+            }
+            fputcsv($out, []);
+
+            if ($user->volunteer) {
+                fputcsv($out, ['Volunteer Details']);
+                fputcsv($out, ['Application Status', $user->volunteer->application_status]);
+                fputcsv($out, ['Total Hours', $user->volunteer->total_hours ?? 0]);
+                fputcsv($out, ['Joined At', $user->volunteer->created_at->format('M j, Y g:i A')]);
+                fputcsv($out, []);
+            }
+
+            if ($user->member) {
+                fputcsv($out, ['Member Details']);
+                fputcsv($out, ['Membership Type', $user->member->membership_type]);
+                fputcsv($out, ['Membership Status', $user->member->membership_status]);
+                fputcsv($out, ['Start Date', $user->member->start_date]);
+                fputcsv($out, []);
+            }
+
             fclose($out);
         };
         return Response::stream($callback, 200, $headers);
@@ -148,94 +216,112 @@ class ReportsController extends Controller
     {
         $format = $request->get('format', 'csv');
         $type = $request->get('type'); // null|full_pledge|honorary
-        $query = Member::with('user')->orderBy('start_date', 'desc');
-        if (in_array($type, ['full_pledge', 'honorary'])) {
-            $query->where('membership_type', $type);
-        }
-        $members = $query->get();
 
         if ($format === 'pdf') {
+            $query = Member::with('user')->orderBy('start_date', 'desc');
+            if (in_array($type, ['full_pledge', 'honorary'])) {
+                $query->where('membership_type', $type);
+            }
+            $members = $query->get();
+
             $pdf = Pdf::loadView('reports.pdfs.members', [
                 'members' => $members,
                 'type' => $type,
-                'generated_at' => now()->format('F j, Y h:i A')
+                'generated_at' => now()->format('F j, Y \a\t g:i A')
             ]);
             $name = 'members' . ($type ? '_' . $type : '') . '.pdf';
             return $pdf->download($name);
         }
 
-        $filename = 'members' . ($type ? '_' . $type : '') . '.csv';
+        // For CSV, always include both types in one file
+        $fullPledgeMembers = Member::with('user')->where('membership_type', 'full_pledge')->orderBy('start_date', 'desc')->get();
+        $honoraryMembers = Member::with('user')->where('membership_type', 'honorary')->orderBy('start_date', 'desc')->get();
+
+        $filename = 'all_members.csv';
         $headers = [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ];
-        $callback = function () use ($members) {
+        $callback = function () use ($fullPledgeMembers, $honoraryMembers) {
             $out = fopen('php://output', 'w');
-            fputcsv($out, ['Member ID', 'Name', 'Type', 'Status', 'Start Date']);
-            foreach ($members as $m) {
-                fputcsv($out, [$m->id, optional($m->user)->name, $m->membership_type, $m->membership_status, $m->start_date]);
+
+            // Full-pledge members section
+            fputcsv($out, ['FULL-PLEDGE MEMBERS']);
+            fputcsv($out, ['Member ID', 'Name', 'Email', 'Type', 'Status', 'Start Date', 'Created At']);
+            foreach ($fullPledgeMembers as $m) {
+                fputcsv($out, [
+                    $m->id,
+                    optional($m->user)->name ?? 'N/A',
+                    optional($m->user)->email ?? 'N/A',
+                    $m->membership_type,
+                    $m->membership_status,
+                    $m->start_date,
+                    $m->created_at->format('M j, Y g:i A')
+                ]);
             }
+            fputcsv($out, []); // Empty row
+
+            // Honorary members section
+            fputcsv($out, ['HONORARY MEMBERS']);
+            fputcsv($out, ['Member ID', 'Name', 'Email', 'Type', 'Status', 'Start Date', 'Created At']);
+            foreach ($honoraryMembers as $m) {
+                fputcsv($out, [
+                    $m->id,
+                    optional($m->user)->name ?? 'N/A',
+                    optional($m->user)->email ?? 'N/A',
+                    $m->membership_type,
+                    $m->membership_status,
+                    $m->start_date,
+                    $m->created_at->format('M j, Y g:i A')
+                ]);
+            }
+
             fclose($out);
         };
         return Response::stream($callback, 200, $headers);
     }
 
-    // Export Volunteer details (specific) or all
-    public function volunteers(Request $request, Volunteer $volunteer = null)
+    // Export all volunteers with filtering options
+    public function volunteers(Request $request)
     {
         $format = $request->get('format', 'csv');
-        if ($volunteer) {
-            $volunteer->load(['user', 'programs', 'attendanceLogs.program', 'member', 'application']);
-            if ($format === 'pdf') {
-                $pdf = Pdf::loadView('reports.pdfs.volunteer', [
-                    'volunteer' => $volunteer,
-                    'generated_at' => now()->format('F j, Y h:i A')
-                ]);
-                $name = 'volunteer_' . $volunteer->id . '.pdf';
-                return $pdf->download($name);
-            }
-            $headers = [
-                'Content-Type' => 'text/csv',
-                'Content-Disposition' => 'attachment; filename="volunteer_' . $volunteer->id . '.csv"',
-            ];
-            $callback = function () use ($volunteer) {
-                $out = fopen('php://output', 'w');
-                fputcsv($out, ['Volunteer Detail']);
-                fputcsv($out, ['Name', optional($volunteer->user)->name]);
-                fputcsv($out, ['Application Status', $volunteer->application_status]);
-                fputcsv($out, ['Joined At', $volunteer->joined_at]);
-                fputcsv($out, []);
-                fputcsv($out, ['Programs']);
-                fputcsv($out, ['Program ID', 'Title']);
-                foreach ($volunteer->programs as $p) { fputcsv($out, [$p->id, $p->title]); }
-                fputcsv($out, []);
-                fputcsv($out, ['Attendance Logs']);
-                fputcsv($out, ['Program', 'Clock In', 'Clock Out', 'Hours', 'Status']);
-                foreach ($volunteer->attendanceLogs as $log) {
-                    fputcsv($out, [optional($log->program)->title, $log->clock_in, $log->clock_out, $log->hours_logged, $log->approval_status]);
-                }
-                fclose($out);
-            };
-            return Response::stream($callback, 200, $headers);
+        $status = $request->get('status'); // approved, denied, pending, or null for all
+
+        $query = Volunteer::with('user');
+
+        if ($status) {
+            $query->where('application_status', $status);
         }
 
-        $vols = Volunteer::with('user')->orderBy('created_at', 'desc')->get();
+        $volunteers = $query->orderBy('created_at', 'desc')->get();
+
         if ($format === 'pdf') {
             $pdf = Pdf::loadView('reports.pdfs.volunteers', [
-                'volunteers' => $vols,
-                'generated_at' => now()->format('F j, Y h:i A')
+                'volunteers' => $volunteers,
+                'status' => $status,
+                'generated_at' => now()->format('F j, Y \a\t g:i A')
             ]);
-            return $pdf->download('volunteers.pdf');
+            $filename = 'volunteers' . ($status ? '_' . $status : '') . '_' . now()->format('Y-m-d') . '.pdf';
+            return $pdf->download($filename);
         }
+
+        $filename = 'volunteers' . ($status ? '_' . $status : '') . '_' . now()->format('Y-m-d') . '.csv';
         $headers = [
             'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="volunteers.csv"',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ];
-        $callback = function () use ($vols) {
+        $callback = function () use ($volunteers) {
             $out = fopen('php://output', 'w');
-            fputcsv($out, ['Volunteer ID', 'Name', 'Application Status', 'Joined At']);
-            foreach ($vols as $v) {
-                fputcsv($out, [$v->id, optional($v->user)->name, $v->application_status, $v->joined_at]);
+            fputcsv($out, ['Volunteer ID', 'Name', 'Email', 'Application Status', 'Total Hours', 'Joined Date']);
+            foreach ($volunteers as $v) {
+                fputcsv($out, [
+                    $v->id,
+                    optional($v->user)->name ?? 'N/A',
+                    optional($v->user)->email ?? 'N/A',
+                    $v->application_status,
+                    $v->total_hours ?? 0,
+                    $v->created_at->format('Y-m-d')
+                ]);
             }
             fclose($out);
         };
@@ -289,13 +375,30 @@ class ReportsController extends Controller
         $format = $request->get('format', 'csv');
         $donations = $this->getFilteredDonations();
 
+        // Calculate summary statistics
+        $summary = [
+            'total_amount' => $donations->sum('amount'),
+            'total_count' => $donations->count(),
+            'confirmed' => [
+                'count' => $donations->where('status', 'Confirmed')->count(),
+                'amount' => $donations->where('status', 'Confirmed')->sum('amount')
+            ],
+            'pending' => [
+                'count' => $donations->where('status', 'Pending')->count(),
+                'amount' => $donations->where('status', 'Pending')->sum('amount')
+            ],
+            'rejected' => [
+                'count' => $donations->where('status', 'Rejected')->count(),
+                'amount' => $donations->where('status', 'Rejected')->sum('amount')
+            ]
+        ];
+
         if ($format === 'pdf') {
             $pdf = Pdf::loadView('reports.pdfs.donations', [
                 'donations' => $donations,
+                'summary' => $summary,
                 'organization' => 'Youmanitarian International',
-                'generated_at' => now()->format('F j, Y h:i A'),
-                'total_amount' => $donations->sum('amount'),
-                'total_count' => $donations->count(),
+                'generated_at' => now()->format('F j, Y \a\t g:i A'),
             ]);
             $filename = 'all_donations_' . now()->format('Y-m-d_H-i-s') . '.pdf';
             return $pdf->download($filename);
@@ -306,9 +409,23 @@ class ReportsController extends Controller
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ];
-        $callback = function () use ($donations) {
+        $callback = function () use ($donations, $summary) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['ID','Donor Name','Donor Email','Amount','Payment Method','Donation Date','Status','Anonymous','Notes','Recorded By','Confirmed At','Created At']);
+
+            // Summary section
+            fputcsv($file, ['DONATION SUMMARY']);
+            fputcsv($file, ['Total Donations', $summary['total_count']]);
+            fputcsv($file, ['Total Amount', number_format($summary['total_amount'], 2)]);
+            fputcsv($file, []);
+            fputcsv($file, ['By Status:']);
+            fputcsv($file, ['Confirmed', 'Count: ' . $summary['confirmed']['count'], 'Amount: ' . number_format($summary['confirmed']['amount'], 2)]);
+            fputcsv($file, ['Pending', 'Count: ' . $summary['pending']['count'], 'Amount: ' . number_format($summary['pending']['amount'], 2)]);
+            fputcsv($file, ['Rejected', 'Count: ' . $summary['rejected']['count'], 'Amount: ' . number_format($summary['rejected']['amount'], 2)]);
+            fputcsv($file, []);
+
+            // Detailed data
+            fputcsv($file, ['DONATION DETAILS']);
+            fputcsv($file, ['ID','Donor Name','Donor Email','Amount','Payment Method','Donation Date','Status','Anonymous','Notes','Recorded By','Confirmed At','Created At','Receipt URL']);
             foreach ($donations as $d) {
                 fputcsv($file, [
                     $d->id,
@@ -316,13 +433,14 @@ class ReportsController extends Controller
                     $d->donor_email ?? 'N/A',
                     number_format((float)($d->amount ?? 0), 2),
                     $d->payment_method,
-                    $d->donation_date->format('Y-m-d'),
+                    $d->donation_date->format('M j, Y'),
                     $d->status,
                     $d->is_anonymous ? 'Yes' : 'No',
                     $d->notes ?? 'N/A',
                     optional($d->recorder)->name ?? 'Unknown',
-                    $d->confirmed_at ? $d->confirmed_at->format('Y-m-d H:i:s') : 'N/A',
-                    $d->created_at->format('Y-m-d H:i:s'),
+                    $d->confirmed_at ? $d->confirmed_at->format('M j, Y g:i A') : 'N/A',
+                    $d->created_at->format('M j, Y g:i A'),
+                    $d->receipt_url ? url(\Illuminate\Support\Facades\Storage::url($d->receipt_url)) : 'N/A'
                 ]);
             }
             fclose($file);
@@ -412,7 +530,7 @@ class ReportsController extends Controller
         ];
         $callback = function () use ($payments) {
             $f = fopen('php://output', 'w');
-            fputcsv($f, ['ID','Member','Type','Period','Year','Amount','Status','Payment Date','Method','Recorded By','Notes']);
+            fputcsv($f, ['ID','Member','Type','Period','Year','Amount','Status','Payment Date','Method','Recorded By','Notes','Receipt URL']);
             foreach ($payments as $p) {
                 fputcsv($f, [
                     $p->id,
@@ -426,6 +544,7 @@ class ReportsController extends Controller
                     $p->payment_method,
                     optional($p->recorder)->name,
                     $p->notes,
+                    $p->receipt_url ? url(\Illuminate\Support\Facades\Storage::url($p->receipt_url)) : 'N/A'
                 ]);
             }
             fclose($f);

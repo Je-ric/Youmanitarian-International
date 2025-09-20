@@ -304,7 +304,7 @@
     @endforeach
 
     {{-- Download Options Modal --}}
-    <x-modal.dialog id="downloadOptionsModal" maxWidth="max-w-md" width="w-11/12">
+    {{-- <x-modal.dialog id="downloadOptionsModal" maxWidth="max-w-md" width="w-11/12">
         <x-modal.header>
             <div>
                 <h3 class="text-xl font-bold text-[#1a2235]">
@@ -347,5 +347,5 @@
         <x-modal.footer>
             <x-modal.close-button modalId="downloadOptionsModal" text="Cancel" variant="cancel" />
         </x-modal.footer>
-    </x-modal.dialog>
+    </x-modal.dialog> --}}
 @endsection
