@@ -46,20 +46,6 @@ class ContactController extends Controller
         return view('contact.index', compact('inquiries'));
     }
 
-    public function show(ContactInquiry $contactInquiry)
-    {
-        // Mark as read if it's new
-        if ($contactInquiry->status === ContactInquiry::STATUS_NEW) {
-            $contactInquiry->update(['status' => ContactInquiry::STATUS_READ]);
-        }
-
-        if (request()->ajax()) {
-            return view('contact.show', compact('contactInquiry'))->render();
-        }
-
-        return view('contact.show', compact('contactInquiry'));
-    }
-
     public function updateStatus(Request $request, ContactInquiry $contactInquiry)
     {
         $validated = $request->validate([

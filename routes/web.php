@@ -345,9 +345,8 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::post('/members/invite/{volunteer}', [MemberController::class, 'invite'])->name('members.invite');
     Route::post('/members/{member}/resend-invitation', [MemberController::class, 'resendInvitation'])->name('members.resend-invitation');
 
-    // Contact Inquiries Management
+    // Contact Inquiries Management (Admin Only)
     Route::get('/admin/contact-inquiries', [ContactController::class, 'adminIndex'])->name('admin.contact-inquiries.index');
-    Route::get('/admin/contact-inquiries/{contactInquiry}', [ContactController::class, 'show'])->name('admin.contact-inquiries.show');
     Route::patch('/admin/contact-inquiries/{contactInquiry}/status', [ContactController::class, 'updateStatus'])->name('admin.contact-inquiries.update-status');
     Route::delete('/admin/contact-inquiries/{contactInquiry}', [ContactController::class, 'destroy'])->name('admin.contact-inquiries.destroy');
 

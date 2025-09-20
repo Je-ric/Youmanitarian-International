@@ -71,7 +71,7 @@
                     </div>
 
                     <div class="flex items-center space-x-2 ml-4">
-                        <x-button onclick="openInquiryModal({{ $inquiry->id }})" variant="table-action-view">
+                        <x-button onclick="document.getElementById('inquiryModal-{{ $inquiry->id }}').showModal()" variant="table-action-view">
                             <i class='bx bx-show'></i>
                             View
                         </x-button>
@@ -113,7 +113,6 @@
         @endforelse
     </div>
 
-    <!-- Pagination -->
     @if($inquiries->hasPages())
         <div class="flex justify-center">
             {{ $inquiries->links() }}
@@ -121,44 +120,11 @@
     @endif
 </div>
 
-<!-- Inquiry Detail Modal -->
-<x-modal.dialog
-    id="inquiryModal"
-    maxWidth="2xl:max-w-4xl xl:max-w-3xl lg:max-w-2xl md:max-w-xl sm:max-w-lg max-w-md"
-    width="w-full"
-    maxHeight="max-h-[90vh]">
-
-    <x-modal.header>
-        <h2 class="text-lg sm:text-xl font-bold text-[#1a2235] flex items-center gap-2">
-            <i class='bx bx-message-dots text-[#ffb51b] text-2xl'></i>
-            <span class="leading-tight">Contact Inquiry Details</span>
-        </h2>
-    </x-modal.header>
-
-    <x-modal.body>
-        <div id="inquiryContent">
-            <!-- Content will be loaded here -->
-        </div>
-    </x-modal.body>
-
-    <x-modal.footer align="end">
-        <x-modal.close-button :modalId="'inquiryModal'" text="Close" />
-    </x-modal.footer>
-</x-modal.dialog>
+@foreach($inquiries as $inquiry)
+    @include('contact.modals.inquiryModal', ['contactInquiry' => $inquiry])
+@endforeach
 
 <script>
-function openInquiryModal(inquiryId) {
-    fetch(`/admin/contact-inquiries/${inquiryId}`)
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('inquiryContent').innerHTML = html;
-            document.getElementById('inquiryModal').showModal();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
 function updateStatus(inquiryId, status) {
     if (confirm('Are you sure you want to update the status?')) {
         fetch(`/admin/contact-inquiries/${inquiryId}/status`, {
