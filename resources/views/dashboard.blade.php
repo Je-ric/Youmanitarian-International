@@ -17,7 +17,7 @@
                 ['id' => 'content_manager', 'label' => 'Content Managers', 'icon' => 'bx-edit-alt'],
             ];
 
-            $currentTab = request()->query('tab', 'overview'); // fallback to overview
+            $currentTab = request()->query('tab', 'overview'); 
         @endphp
 <x-navigation-layout.tabs-modern :tabs="$tabs" :default-tab="$currentTab">
     @if(Auth::user()->hasRole('Admin'))

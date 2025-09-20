@@ -39,36 +39,29 @@
                             ->where('payment_year', $currentYear)
                             ->first();
                         $status = app(App\Http\Controllers\MembershipController::class)
-                            ->determinePaymentStatus($quarter, $payment, $currentYear);
+                            ->determinePaymentStatus($quarter, $payment); // , $currentYear
                         // styling
                         if (!$shouldShowPayment) {
                             $icon = 'bx-lock';
                             $bg = 'bg-gray-300';
                             $iconColor = 'text-white';
-                        } else if ($payment) { // may record
-                            if ($status === 'paid') {
-                                $icon = 'bx-check-circle';
-                                $bg = 'bg-green-500';
-                                $iconColor = 'text-white';
-                            } else if ($status === 'overdue') {
-                                $icon = 'bx-error';
-                                $bg = 'bg-red-500';
-                                $iconColor = 'text-white';
-                            } else {
-                                $icon = 'bx-time';
-                                $bg = 'bg-yellow-400';
-                                $iconColor = 'text-white';
-                            }
                         } else {
-                            // check status even no record
-                            if ($status === 'overdue') {
-                                $icon = 'bx-error';
-                                $bg = 'bg-red-500';
-                                $iconColor = 'text-white';
-                            } else {
-                                $icon = 'bx-time';
-                                $bg = 'bg-yellow-400';
-                                $iconColor = 'text-white';
+                            switch ($status) {
+                                case 'paid':
+                                    $icon = 'bx-check-circle';
+                                    $bg = 'bg-green-500';
+                                    $iconColor = 'text-white';
+                                    break;
+                                case 'overdue':
+                                    $icon = 'bx-error';
+                                    $bg = 'bg-red-500';
+                                    $iconColor = 'text-white';
+                                    break;
+                                default: // pending
+                                    $icon = 'bx-time';
+                                    $bg = 'bg-yellow-400';
+                                    $iconColor = 'text-white';
+                                    break;
                             }
                         }
                     @endphp

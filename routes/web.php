@@ -51,6 +51,22 @@ Route::get('/donate', [WebsiteController::class, 'donate'])->name('website.donat
 Route::get('/weather-forecast', [WebsiteController::class, 'forecast'])->name('weather-forecast.index');
 Route::get('/chatbot', [WebsiteController::class, 'chatbot'])->name('chatbot.index');
 
+
+// Forgot password
+Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+
+// Reset password
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+
+// Change password (must be logged in)
+Route::get('/change-password', [AuthController::class, 'showChangePassword'])
+    ->middleware('auth')->name('password.change');
+Route::post('/change-password', [AuthController::class, 'changePassword'])
+    ->middleware('auth');
+
+    
 // Guest feedback (no auth required)
 Route::post('/programs/{program}/feedback/guest', [ProgramFeedbackController::class, 'submitGuestFeedback'])
     ->name('programs.feedback.guest.submit');
@@ -71,11 +87,10 @@ Route::delete('program_requests/{programRequest}', [ProgramRequestsController::c
 Route::get('program_requests', [ProgramRequestsController::class, 'index'])
     ->name('program_requests.index');
 
-    // Public routes
+
 Route::get('team-members', [TeamMemberController::class, 'index'])->name('content.teamMembers.index');
 Route::get('team-members/{team_member}', [TeamMemberController::class, 'show'])->name('content.teamMembers.show');
 
-// Back-compat alias: old name -> redirect to index
 Route::get('content/team-members', fn () => redirect()->route('content.teamMembers.index'))->name('content.team-members');
 
 // Admin-only routes

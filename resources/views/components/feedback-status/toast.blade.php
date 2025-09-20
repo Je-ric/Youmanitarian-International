@@ -47,7 +47,7 @@
         x-transition:leave="transition ease-in duration-300 transform opacity-100 translate-y-0"
         x-transition:leave-start="opacity-100 translate-x-0"
         x-transition:leave-end="opacity-0 translate-x-5"
-        class="fixed top-5 right-5 z-50 p-4 rounded-lg shadow-xl backdrop-blur-sm border flex items-center space-x-3 max-w-xs sm:max-w-sm md:max-w-md {{ $toast['container'] }}">
+        class="fixed top-5 right-5 z-[9999] p-4 rounded-lg shadow-xl backdrop-blur-sm border flex items-center space-x-3 max-w-xs sm:max-w-sm md:max-w-md {{ $toast['container'] }}">
     
     <span class="w-10 h-10 flex items-center justify-center rounded-full {{ $toast['icon_bg'] }}">
         <i class="bx {{ $toast['icon'] }} text-white text-xl"></i> 
