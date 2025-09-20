@@ -4,7 +4,6 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-[#1A2235]/5 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <!-- Header Section -->
         <div class="text-center mb-12">
             <h1 class="text-4xl md:text-5xl font-bold text-[#1A2235] mb-4">
                 Get in <span class="text-[#FFB51B]">Touch</span>
@@ -17,7 +16,6 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
 
-            <!-- Contact Form -->
             <div class="bg-white rounded-2xl shadow-lg p-8">
                 <h2 class="text-2xl font-bold text-[#1A2235] mb-6">Send us a Message</h2>
 
@@ -96,91 +94,7 @@
                 </form>
             </div>
 
-            <!-- Contact Information -->
-            <div class="space-y-8">
-
-                <!-- Contact Details -->
-                <div class="bg-white rounded-2xl shadow-lg p-8">
-                    <h2 class="text-2xl font-bold text-[#1A2235] mb-6">Contact Information</h2>
-
-                    <div class="space-y-6">
-                        <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-[#FFB51B] rounded-xl flex items-center justify-center flex-shrink-0">
-                                <i class='bx bx-envelope text-white text-xl'></i>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900">Email</h3>
-                                <p class="text-gray-600">info@youmanitarian.org</p>
-                                <p class="text-gray-600">support@youmanitarian.org</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-[#FFB51B] rounded-xl flex items-center justify-center flex-shrink-0">
-                                <i class='bx bx-phone text-white text-xl'></i>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900">Phone</h3>
-                                <p class="text-gray-600">+63 912 345 6789</p>
-                                <p class="text-gray-600">+63 2 1234 5678</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-[#FFB51B] rounded-xl flex items-center justify-center flex-shrink-0">
-                                <i class='bx bx-map text-white text-xl'></i>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900">Address</h3>
-                                <p class="text-gray-600">123 Community Street</p>
-                                <p class="text-gray-600">Nueva Ecija, Philippines 3100</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-[#FFB51B] rounded-xl flex items-center justify-center flex-shrink-0">
-                                <i class='bx bx-time text-white text-xl'></i>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900">Office Hours</h3>
-                                <p class="text-gray-600">Monday - Friday: 9:00 AM - 5:00 PM</p>
-                                <p class="text-gray-600">Saturday: 9:00 AM - 12:00 PM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Links -->
-                <div class="bg-gradient-to-br from-[#1A2235] to-[#1A2235]/90 rounded-2xl shadow-lg p-8 text-white">
-                    <h2 class="text-2xl font-bold mb-6">Quick Links</h2>
-
-                    <div class="space-y-4">
-                        <a href="{{ route('website.programs') }}"
-                           class="flex items-center space-x-3 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-colors duration-200">
-                            <i class='bx bx-calendar-event text-[#FFB51B] text-xl'></i>
-                            <span>View Our Programs</span>
-                        </a>
-
-                        <a href="{{ route('website.about') }}"
-                           class="flex items-center space-x-3 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-colors duration-200">
-                            <i class='bx bx-info-circle text-[#FFB51B] text-xl'></i>
-                            <span>About Us</span>
-                        </a>
-
-                        <a href="{{ route('website.donate') }}"
-                           class="flex items-center space-x-3 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-colors duration-200">
-                            <i class='bx bx-heart text-[#FFB51B] text-xl'></i>
-                            <span>Donate Today</span>
-                        </a>
-
-                        <a href="{{ route('website.team') }}"
-                           class="flex items-center space-x-3 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-colors duration-200">
-                            <i class='bx bx-group text-[#FFB51B] text-xl'></i>
-                            <span>Meet the Team</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>
