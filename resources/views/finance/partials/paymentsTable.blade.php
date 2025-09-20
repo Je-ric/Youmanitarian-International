@@ -97,6 +97,14 @@
                             <i class='bx bx-bell'></i>
                             <span>Remind</span>
                         </button>
+
+
+                        <a href="{{ route('reports.member', ['member' => $member->id, 'format' => 'pdf']) }}"
+                           class="flex items-center gap-1 text-red-600 hover:underline bg-transparent p-0 border-0 focus:outline-none"
+                           title="Download Member Report (PDF)">
+                            <i class='bx bx-file'></i>
+                            <span>PDF</span>
+                        </a>
                     </div>
                 </x-table.td>
             </x-table.tr>

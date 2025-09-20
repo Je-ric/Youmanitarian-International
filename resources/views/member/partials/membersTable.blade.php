@@ -44,6 +44,16 @@
                         <x-button href="{{ route('volunteers.volunteer-details', $member->id) }}" variant="table-action-view" class="tooltip" data-tip="View Details">
                             <i class='bx bx-dots-horizontal-rounded'></i>
                         </x-button>
+                        <a href="{{ route('reports.member', ['member' => $member->id, 'format' => 'pdf', 'preview' => 1]) }}" target="_blank"
+                           class="inline-flex items-center justify-center rounded-md px-2 py-1 bg-red-100 text-red-700 text-xs"
+                           title="Preview Member Report (PDF)">
+                            <i class='bx bx-file'></i>
+                        </a>
+                        <a href="{{ route('reports.member', ['member' => $member->id, 'format' => 'pdf']) }}"
+                           class="inline-flex items-center justify-center rounded-md px-2 py-1 bg-red-100 text-red-700 text-xs"
+                           title="Download Member Report (PDF)">
+                            <i class='bx bx-download'></i>
+                        </a>
                         @if($member->invitation_status === 'pending')
                             <form action="{{ route('members.resend-invitation', $member) }}" method="POST" class="inline">
                                 @csrf

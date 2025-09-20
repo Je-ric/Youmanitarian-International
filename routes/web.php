@@ -35,6 +35,7 @@ use App\Http\Controllers\MembershipReminderController;
 use App\Http\Controllers\VolunteerAttendanceController;
 use App\Http\Controllers\ContentReviewCommentController;
 use App\Http\Controllers\VolunteerApplicationController;
+use App\Http\Controllers\ReportsController;
 
 // =================================================================
 // WEBSITE ROUTES (Public - No Authentication Required)
@@ -130,7 +131,7 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 
     // ADD THIS (invitation show route)
     Route::get('/notifications/invitation/{notification}', [NotificationController::class, 'showInvitation'])->name('notifications.invitation.show');
-    
+
     // Content reactions
     Route::post('/content/{contentId}/react', [HeartReactController::class, 'toggleReact']);
     Route::post('/content/{contentId}/toggle', [BookmarkController::class, 'toggle'])->name('bookmarks.toggle');
@@ -174,6 +175,8 @@ Route::middleware(['auth', 'role:Program Coordinator'])->group(function () {
     // Route::delete('/programs/{program}', [ProgramController::class, 'deleteProgram'])->name('programs.destroy');
 
     Route::delete('/programs/{program}', [ProgramController::class, 'destroy'])->name('programs.destroy');
+    // Program reports (CSV/PDF)
+    Route::get('/programs/{program}/report', [ReportsController::class, 'programReport'])->name('programs.report');
     // for component title sa program update
     Route::get('/programs/{program}/component', function (\App\Models\Program $program) {
         return view('programs_volunteers.partials.programDetails', compact('program'))->render();
@@ -274,11 +277,22 @@ Route::middleware(['auth', 'role:Financial Coordinator'])->group(function () {
     Route::patch('/finance/donations/{donation}/confirm', [DonationController::class, 'confirmDonation'])->name('finance.donations.confirm');
     Route::patch('/finance/donations/{donation}/reject', [DonationController::class, 'rejectDonation'])->name('finance.donations.reject');
 
-    Route::get('/finance/donations/{donation}/download', [DonationController::class, 'downloadSpecificDonation'])->name('finance.donations.download');
-    Route::get('/finance/donations/download/all', [DonationController::class, 'downloadAllDonations'])->name('finance.donations.download.all');
+    // Donations export via ReportsController
+    Route::get('/finance/donations/{donation}/download', [ReportsController::class, 'donation'])->name('finance.donations.download');
+    Route::get('/finance/donations/download/all', [ReportsController::class, 'donations'])->name('finance.donations.download.all');
+
+    // Members & Roles & Volunteers reports (admin or fc as needed)
+    Route::get('/reports/users-with-roles', [ReportsController::class, 'usersWithRoles'])->name('reports.users.roles');
+    Route::get('/reports/members', [ReportsController::class, 'members'])->name('reports.members');
+    Route::get('/reports/members/{member}', [ReportsController::class, 'member'])->name('reports.member');
+    Route::get('/reports/volunteers', [ReportsController::class, 'volunteers'])->name('reports.volunteers');
+    Route::get('/reports/volunteers/{volunteer}', [ReportsController::class, 'volunteers'])->name('reports.volunteers.show');
 
     // Membership payments
     Route::get('/finance/membership/payments', [MembershipController::class, 'index'])->name('finance.membership.payments');
+    // Membership payments exports via ReportsController
+    Route::get('/finance/membership/payments/{payment}/download', [ReportsController::class, 'membershipPayment'])->name('finance.membership.payment.download');
+    Route::get('/finance/membership/payments/download/all', [ReportsController::class, 'membershipPayments'])->name('finance.membership.payments.download.all');
     Route::post('/finance/membership/payments', [MembershipController::class, 'store'])->name('finance.membership.payments.store');
     Route::patch('/finance/membership/payments/{payment}/status', [MembershipController::class, 'updateStatus'])->name('finance.membership.payments.status');
 

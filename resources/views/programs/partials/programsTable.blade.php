@@ -81,6 +81,13 @@
                                     aria-label="Delete {{ $program->title }}">
                                     <i class='bx bx-trash'></i>
                                 </x-button>
+
+                                <!-- Export Program PDF -->
+                                <a href="{{ route('programs.report', ['program' => $program->id, 'format' => 'pdf']) }}"
+                                   class="inline-flex items-center justify-center rounded-md px-2 py-1 bg-red-100 text-red-700 text-xs"
+                                   title="Download Program Report (PDF)">
+                                    <i class='bx bx-download'></i>
+                                </a>
                             @endif
                         @endif
                     </x-table.td>

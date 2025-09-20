@@ -5,7 +5,16 @@
     icon="bx-calendar-event"
     title="Volunteers"
     desc="Manage volunteer applications and volunteers.">
-
+    <div class="flex items-center gap-2">
+        <a href="{{ route('reports.volunteers', ['format' => 'csv']) }}"
+           class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-green-700 bg-green-100 rounded hover:bg-green-200">
+            <i class='bx bx-table'></i> Export All (CSV)
+        </a>
+        <a href="{{ route('reports.volunteers', ['format' => 'pdf']) }}"
+           class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-100 rounded hover:bg-red-200">
+            <i class='bx bx-file'></i> Export All (PDF)
+        </a>
+    </div>
 </x-page-header>
 
 

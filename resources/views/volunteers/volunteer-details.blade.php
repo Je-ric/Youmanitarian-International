@@ -5,6 +5,16 @@
         icon="bx-user"
         title="Volunteer Details"
         desc="Complete information about {{ $volunteer->user->name }}">
+        <div class="flex items-center gap-2">
+            <a href="{{ route('reports.volunteers.show', ['volunteer' => $volunteer->id, 'format' => 'csv']) }}"
+               class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-green-700 bg-green-100 rounded hover:bg-green-200">
+                <i class='bx bx-table'></i> CSV
+            </a>
+            <a href="{{ route('reports.volunteers.show', ['volunteer' => $volunteer->id, 'format' => 'pdf']) }}"
+               class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-100 rounded hover:bg-red-200">
+                <i class='bx bx-file'></i> PDF
+            </a>
+        </div>
     </x-page-header>
 
     <div x-data="{

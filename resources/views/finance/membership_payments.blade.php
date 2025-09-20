@@ -6,6 +6,16 @@
         title="Membership Payments"
         desc="Track and manage membership payments for all members.
         This section provides an overview of payment statuses for each quarter, total revenue, and allows for recording new payments.">
+        <div class="flex items-center gap-2">
+            <a href="{{ route('finance.membership.payments.download.all', ['format' => 'csv']) }}"
+               class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-green-700 bg-green-100 rounded hover:bg-green-200">
+                <i class='bx bx-table'></i> Export All (CSV)
+            </a>
+            <a href="{{ route('finance.membership.payments.download.all', ['format' => 'pdf']) }}"
+               class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-700 bg-red-100 rounded hover:bg-red-200">
+                <i class='bx bx-file-pdf'></i> Export All (PDF)
+            </a>
+        </div>
     </x-page-header>
 
     @php
