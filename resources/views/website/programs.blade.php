@@ -2,14 +2,12 @@
 
 @section('content')
     <section class="relative w-full min-h-screen flex items-center">
-        <!-- Background image -->
+
         <img src="{{ asset('assets/images/bg/program-bg.jpg') }}" alt="Join Youmanitarian International"
             class="absolute inset-0 w-full h-full object-cover">
 
-        <!-- Gradient overlay (dark left -> transparent right) -->
         <div class="absolute inset-0 bg-gradient-to-r from-[#1a2235]/80 via-[#1a2235]/50 to-transparent"></div>
 
-        <!-- Content -->
         <div class="relative z-10 max-w-3xl px-6 md:px-12 lg:px-24 text-white">
             <p class="text-base md:text-lg lg:text-xl font-normal tracking-wide uppercase">
                 Grow Without Limits
@@ -31,7 +29,7 @@
     </section>
 
 
-
+{{-- ===================================================================================== --}}
     <section class="max-w-7xl w-full mx-auto bg-[#1A2235] rounded-2xl py-4 my-3 px-6">
         <div class="container mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             <div>
@@ -54,7 +52,7 @@
     </section>
 
 
-
+{{-- ===================================================================================== --}}
     <section class="relative max-w-5xl mx-auto py-8 sm:py-10">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -122,7 +120,7 @@
     </section>
 
 
-
+{{-- ===================================================================================== --}}
     <section class="py-16 bg-[#1A2235] my-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
@@ -219,7 +217,7 @@
 
 
 
-
+{{-- ===================================================================================== --}}
     <div class="bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
         <div class="max-w-7xl mx-auto px-0 sm:px-0 lg:px-0">
             <x-section-title first="Our" second="Programs" />
@@ -371,7 +369,7 @@
         </div>
     </div>
 
-
+{{-- ===================================================================================== --}}
     <section class="py-16 bg-[#1A2235]">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -439,6 +437,7 @@
         </div>
     </section>
 
+    {{-- ===================================================================================== --}}
     <div class="py-10">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <x-section-title first="Submit" second="Program Request" mb="false" />

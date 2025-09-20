@@ -3,28 +3,24 @@
 @section('content')
     @if ($content->image_content)
         <div class="relative w-full h-[80vh] sm:h-[90vh] lg:h-[100vh] flex items-center justify-center overflow-hidden">
-            <!-- Background image with blur -->
+
             <div class="absolute inset-0 w-full h-full overflow-hidden">
                 <img src="{{ Storage::url($content->image_content) }}" alt="Content Image"
                     class="w-full h-full object-cover filter blur-sm">
             </div>
 
-            <!-- Semi-transparent overlay -->
             <div class="absolute inset-0 bg-[#1a2235] bg-opacity-80 backdrop-blur-sm"></div>
 
-            <!-- Centered title + date -->
             <div class="relative z-10 text-center px-6 sm:px-12">
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#ffb51b] leading-tight">
                     {{ $content->title }}
                 </h1>
 
-                <!-- Date below the title -->
                 <div class="mt-2 text-white text-sm sm:text-base">
                     <i class='bx bx-calendar mr-1'></i> {{ $content->created_at->format('F j, Y') }}
                 </div>
             </div>
 
-            <!-- Bottom overlay: badges (right) + author & views (left) -->
             <div class="absolute bottom-6 left-6 flex flex-col gap-2 text-white text-sm sm:text-base">
                 <div class="flex items-center gap-2">
                     <i class='bx bx-user'></i>
@@ -46,22 +42,18 @@
     @endif
 
 
-
-    <!-- Main content: white background -->
     <div class="flex flex-col xl:flex-row gap-6 lg:gap-8 bg-white px-10 py-4">
 
         <article class="xl:w-2/3">
             <div class="overflow-hidden">
-                <!-- Article Content -->
+
                 <div class="sm:px-8 lg:px-16 pt-10 pb-6 sm:pb-8">
                     <div class="prose prose-lg max-w-none text-gray-800 leading-relaxed">
                         {!! $content->body !!}
                     </div>
                 </div>
 
-                <!-- Gallery Section -->
                 @if ($content->image_content)
-                    <!-- Featured Poster Image -->
                     <div class="px-6 sm:px-8 lg:px-10 pb-6 sm:pb-8">
                         <img src="{{ Storage::url($content->image_content) }}" alt="Featured Image"
                             class="w-full h-auto max-h-[80vh] object-contain rounded-md shadow-lg">
@@ -93,7 +85,6 @@
                     </div>
                 @endif
 
-                <!-- Engagement Section -->
                 @if ($content->enable_likes || $content->enable_comments || $content->enable_bookmark)
                     <div class="px-6 sm:px-8 lg:px-10 py-6 border-t border-gray-200 bg-gray-50">
                         <div class="flex flex-wrap items-center justify-between gap-4">
@@ -124,29 +115,31 @@
 
                             @if ($content->enable_bookmark)
                                 @php
-                                    $userBookmarked = auth()->check() && \Illuminate\Support\Facades\DB::table('bookmarks')
-                                        ->where('content_id', $content->id)
-                                        ->where('user_id', auth()->id())
-                                        ->exists();
+                                    $userBookmarked =
+                                        auth()->check() &&
+                                        \Illuminate\Support\Facades\DB::table('bookmarks')
+                                            ->where('content_id', $content->id)
+                                            ->where('user_id', auth()->id())
+                                            ->exists();
                                 @endphp
-                               <button id="bookmarkButton-{{ $content->id }}"
-                                class="flex items-center gap-2 text-gray-600 hover:text-[#ffb51b] transition-colors duration-200 group"
-                                onclick="toggleBookmark({{ $content->id }}, '{{ csrf_token() }}')"
-                                data-bookmarked="{{ $userBookmarked ? 'true' : 'false' }}">
-                                <i id="bookmarkIcon-{{ $content->id }}" class="bx text-xl {{ $userBookmarked ? 'bxs-bookmark text-[#ffb51b]' : 'bx-bookmark group-hover:text-[#ffb51b]' }}"></i>
-                                <span id="bookmarkCount-{{ $content->id }}" class="font-medium text-sm">{{ (int)($bookmarkCount ?? 0) }}</span>
-                            </button>
+                                <button id="bookmarkButton-{{ $content->id }}"
+                                    class="flex items-center gap-2 text-gray-600 hover:text-[#ffb51b] transition-colors duration-200 group"
+                                    onclick="toggleBookmark({{ $content->id }}, '{{ csrf_token() }}')"
+                                    data-bookmarked="{{ $userBookmarked ? 'true' : 'false' }}">
+                                    <i id="bookmarkIcon-{{ $content->id }}"
+                                        class="bx text-xl {{ $userBookmarked ? 'bxs-bookmark text-[#ffb51b]' : 'bx-bookmark group-hover:text-[#ffb51b]' }}"></i>
+                                    <span id="bookmarkCount-{{ $content->id }}"
+                                        class="font-medium text-sm">{{ (int) ($bookmarkCount ?? 0) }}</span>
+                                </button>
                             @endif
                         </div>
                     </div>
                 @endif
 
-                <!-- Comments Section -->
                 @if ($content->enable_comments)
                     @include('website.partials.comment', ['content' => $content])
                 @endif
 
-                <!-- Navigation -->
                 <div class="px-6 sm:px-8 lg:px-10 py-6 border-t border-gray-200 bg-gray-50">
                     <div class="flex flex-col sm:flex-row justify-between gap-4">
                         @if ($prevContent)
@@ -169,7 +162,6 @@
             </div>
         </article>
 
-        <!-- Sidebar -->
         <aside class="xl:w-1/3">
             <div class="bg-white border border-gray-200 sticky top-6 max-h-[calc(100vh-3rem)] overflow-hidden">
                 <div class="p-6 border-b border-gray-200">
@@ -230,7 +222,6 @@
     </div>
     {{-- </div> --}}
 
-    <!-- Image Preview Modal -->
     <div id="imageModal" class="fixed inset-0 items-center justify-center bg-black bg-opacity-90 hidden z-50 p-4">
         <button onclick="closeImageModal()"
             class="absolute top-4 right-4 text-white text-2xl sm:text-3xl hover:text-[#ffb51b] transition-colors z-10 w-10 h-10 flex items-center justify-center bg-black bg-opacity-50">

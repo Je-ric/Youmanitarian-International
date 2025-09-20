@@ -74,16 +74,14 @@
 
 
 
-
+{{-- ===================================================================================== --}}
     <section class="relative w-full min-h-screen flex items-center">
-        <!-- Background image -->
+
         <img src="{{ asset('assets/images/bg/index.jpg') }}" alt="Join Youmanitarian International"
             class="absolute inset-0 w-full h-full object-cover">
 
-        <!-- Gradient overlay (dark left -> transparent right) -->
         <div class="absolute inset-0 bg-gradient-to-r from-[#1a2235]/80 via-[#1a2235]/50 to-transparent"></div>
 
-        <!-- Content -->
         <div class="relative z-10 max-w-3xl px-6 md:px-12 lg:px-24 text-white">
             <div class="max-w-5xl">
                 <p class="text-2xl md:text-3xl lg:text-4xl font-normal mb-4">Be one of us!</p>
@@ -96,7 +94,6 @@
                 </p>
             </div>
 
-            <!-- Button using your x-button component -->
             <div class="mt-8">
                 <x-button href="{{ route('login') }}" variant="primary-outline">
                     Become a Volunteer
@@ -107,9 +104,5 @@
             </div>
         </div>
     </section>
-
-
-
-
 
 @endsection

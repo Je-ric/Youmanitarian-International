@@ -131,10 +131,31 @@
                         </x-button>
                     @endif
 
-                    <x-button onclick="deleteInquiry({{ $contactInquiry->id }})" variant="danger">
-                        <i class='bx bx-trash'></i>
-                        Delete
-                    </x-button>
+                    <x-dropdown-button>
+                        <button onclick="updateStatus({{ $contactInquiry->id }}, 'read')"
+                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                            <i class='bx bx-check mr-2 text-green-500'></i>Mark as Read
+                        </button>
+                        <button onclick="updateStatus({{ $contactInquiry->id }}, 'responded')"
+                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                            <i class='bx bx-message-check mr-2 text-blue-500'></i>Mark as Responded
+                        </button>
+                        <a href="mailto:{{ $contactInquiry->email }}?subject=Re: {{ $contactInquiry->subject ?? 'Your Inquiry' }}"
+                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                            <i class='bx bx-envelope mr-2 text-purple-500'></i>Reply via Email
+                        </a>
+                        @if ($contactInquiry->phone)
+                            <a href="tel:{{ $contactInquiry->phone }}"
+                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                                <i class='bx bx-phone mr-2 text-green-500'></i>Call
+                            </a>
+                        @endif
+                        <hr class="my-1">
+                        <button onclick="deleteInquiry({{ $contactInquiry->id }})"
+                            class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center">
+                            <i class='bx bx-trash mr-2'></i>Delete
+                        </button>
+                    </x-dropdown-button>
                 </div>
             </div>
         </div>

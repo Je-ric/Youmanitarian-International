@@ -75,31 +75,21 @@
                                 <span class="hidden sm:inline ml-1">View</span>
                             </x-button>
 
-                            <div class="relative" x-data="{ open: false }">
-                                <button @click="open = !open"
-                                        class="bg-gray-100 hover:bg-gray-200 border-2 border-gray-300 hover:border-[#FFB51B] text-gray-700 px-3 py-2 rounded-lg text-sm transition-all duration-200">
-                                    <i class='bx bx-dots-vertical'></i>
+                            <x-dropdown-button>
+                                <button onclick="updateStatus({{ $inquiry->id }}, 'read')"
+                                        class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                                    <i class='bx bx-check mr-2 text-green-500'></i>Mark as Read
                                 </button>
-
-                                <div x-show="open" @click.away="open = false"
-                                     class="absolute right-0 mt-2 w-48 bg-white rounded-lg border-2 border-gray-200 z-10">
-                                    <div class="py-1">
-                                        <button onclick="updateStatus({{ $inquiry->id }}, 'read')"
-                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-                                            <i class='bx bx-check mr-2 text-green-500'></i>Mark as Read
-                                        </button>
-                                        <button onclick="updateStatus({{ $inquiry->id }}, 'responded')"
-                                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-                                            <i class='bx bx-message-check mr-2 text-blue-500'></i>Mark as Responded
-                                        </button>
-                                        <hr class="my-1">
-                                        <button onclick="deleteInquiry({{ $inquiry->id }})"
-                                                class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center">
-                                            <i class='bx bx-trash mr-2'></i>Delete
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                                <button onclick="updateStatus({{ $inquiry->id }}, 'responded')"
+                                        class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                                    <i class='bx bx-message-check mr-2 text-blue-500'></i>Mark as Responded
+                                </button>
+                                <hr class="my-1">
+                                <button onclick="deleteInquiry({{ $inquiry->id }})"
+                                        class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center">
+                                    <i class='bx bx-trash mr-2'></i>Delete
+                                </button>
+                            </x-dropdown-button>
                         </div>
                     </div>
                 </div>

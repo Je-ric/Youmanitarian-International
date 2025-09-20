@@ -13,7 +13,7 @@
         </div>
     </div>
 
-
+    {{-- ===================================================================================== --}}
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto text-center">
             <div class="inline-flex items-center justify-center w-2 h-2 bg-[#FFB51B] rounded-full mb-4 mt-10"></div>
@@ -70,7 +70,8 @@
             </div>
     </section>
 
-    <hr class="bg-[#1a2235] h-8 w-full my-8"></hr>
+    <hr class="bg-[#1a2235] h-8 w-full my-8">
+    </hr>{{-- ===================================================================================== --}}
 
     <blockquote
         class="relative border-l-4 border-[#FFB51B] pl-6 sm:pl-8 md:pl-10 italic text-md sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-gray-700 leading-relaxed max-w-5xl mx-auto">
@@ -86,7 +87,7 @@
 
     <hr class="bg-[#1a2235] h-8 w-full my-8">
     </hr>
-
+    {{-- ===================================================================================== --}}
 
     <style>
         .split-border {
@@ -113,7 +114,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach ($executives as $executive)
                     <div class="split-border shadow p-3 flex items-center gap-6">
-                        {{-- Photo --}}
+                    
                         @if ($executive->photo_url)
                             <img class="w-32 h-32 object-cover flex-shrink-0 rounded-lg"
                                 src="{{ asset('storage/' . $executive->photo_url) }}" alt="{{ $executive->name }}">
@@ -125,7 +126,6 @@
                             </div>
                         @endif
 
-                        {{-- Info --}}
                         <div class="flex-1 text-left">
                             <h3 class="text-md font-semibold text-[#1a2235]">{{ $executive->name }}</h3>
                             <p class="text-xs text-[#e6a318]">{{ $executive->position }}</p>
@@ -134,7 +134,6 @@
                                 <p class="mt-2 text-gray-600 text-sm leading-relaxed">{{ $executive->bio }}</p>
                             @endif
 
-                            {{-- Unified Social Icons (matched style, same visual size) --}}
                             <div class="mt-3 flex items-center gap-3">
                                 @if ($executive->facebook_url)
                                     <a href="{{ $executive->facebook_url }}" target="_blank" rel="noopener"
@@ -166,15 +165,13 @@
     </section>
 
 
-    <hr class="bg-[#1a2235] h-8 w-full my-8">
-    </hr>
+    <hr class="bg-[#1a2235] h-8 w-full my-8"></hr>{{-- ===================================================================================== --}}
 
 
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {{-- Members Section --}}
+
         @if ($members->isNotEmpty())
-            <!-- Section Header -->
             <div class="text-center mb-12">
                 <div class="inline-flex items-center justify-center w-2 h-2 bg-[#FFB51B] rounded-full mb-4 mt-6"></div>
                 <h2 class="text-3xl font-bold text-[#1a2235] mb-2">Team Members</h2>
@@ -184,14 +181,12 @@
                 </p>
             </div>
 
-            <!-- Responsive Grid: 4 per row on lg -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
                 @foreach ($members as $member)
                     <div
                         class="bg-white border border-t-4 border-t-[#FFB51B] outline outline-2 outline-gray-200
                         p-6 flex flex-col items-center hover:outline-[#1a2235] hover:border-t-[#1a2235] transition-all duration-300">
 
-                        <!-- Image Section (circle photo) -->
                         <div class="flex justify-center">
                             @if ($member->photo_url)
                                 <img class="w-28 h-28 rounded-full object-cover border-2 border-[#FFB51B] hover:border-[#1a2235] transition-all duration-300 shadow-sm"
@@ -206,7 +201,6 @@
                             @endif
                         </div>
 
-                        <!-- Content Section -->
                         <div class="flex-1 flex flex-col justify-center gap-4 text-center mt-6">
                             <div class="space-y-1">
                                 <h3 class="text-lg font-bold text-[#1a2235]">{{ $member->name }}</h3>
@@ -219,7 +213,6 @@
                                 </p>
                             @endif
 
-                            <!-- Social Links -->
                             <div class="flex justify-center gap-3 mt-4">
                                 @if ($member->facebook_url)
                                     <a href="{{ $member->facebook_url }}" target="_blank" rel="noopener"
@@ -253,13 +246,13 @@
 
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {{-- Developers Section --}}
+
         @if ($developers->isNotEmpty())
             <x-section-title first="Our" second="Developers" />x-
             <div class="space-y-8">
                 @foreach ($developers as $dev)
                     <div class="bg-white rounded-xl shadow p-6 flex items-center space-x-6 hover:shadow-lg transition">
-                        {{-- Photo --}}
+
                         @if ($dev->photo_url)
                             <img class="w-24 h-24 object-cover rounded-lg shadow-md"
                                 src="{{ asset('storage/' . $dev->photo_url) }}" alt="{{ $dev->name }}">
@@ -271,7 +264,6 @@
                             </div>
                         @endif
 
-                        {{-- Info --}}
                         <div class="flex-1">
                             <h3 class="text-lg font-bold text-[#1a2235]">{{ $dev->name }}</h3>
                             <p class="text-sm text-[#e6a318]">{{ $dev->position }}</p>
@@ -279,7 +271,6 @@
                                 <p class="mt-2 text-gray-600 text-sm">{{ $dev->bio }}</p>
                             @endif
 
-                            {{-- Social --}}
                             <div class="mt-3 flex space-x-4 text-gray-500 text-xl">
                                 @if ($dev->facebook_url)
                                     <a href="{{ $dev->facebook_url }}" target="_blank" class="hover:text-blue-600">
@@ -302,9 +293,9 @@
                 @endforeach
             </div>
         @endif
-
     </section>
 
+    {{-- ===================================================================================== --}}
 
     <section class="relative bg-cover bg-center py-20 mt-12"
         style="background-image: url('{{ asset('assets/images/bg/volunteer.jpg') }}');">

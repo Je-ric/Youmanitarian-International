@@ -2,14 +2,12 @@
 
 @section('content')
     <section class="relative w-full min-h-screen flex items-center">
-        <!-- Background image -->
+
         <img src="{{ asset('assets/images/bg/donate-bg.jpg') }}" alt="Support Youmanitarian International"
             class="absolute inset-0 w-full h-full object-cover">
 
-        <!-- Gradient overlay (dark top -> transparent bottom) -->
         <div class="absolute inset-0 bg-[#1a2235] bg-opacity-60 backdrop-blur-sm"></div>
 
-        <!-- Content -->
         <div class="relative z-10 max-w-3xl px-6 md:px-12 lg:px-24 text-white">
             <p class="text-base md:text-lg lg:text-xl font-normal tracking-wide uppercase">
                 Give Hope, Change Lives
@@ -50,29 +48,22 @@
                 impact.
             </p>
         </div>
-
-
     </section>
 
-
-
-
+{{-- ===================================================================================== --}}
 
     <section class="relative w-full flex items-center py-16">
-        <!-- Background image -->
+
         <img src="{{ asset('assets/images/bg/donate-bg.jpg') }}" alt="Support Youmanitarian International"
             class="absolute inset-0 w-full h-full object-cover">
 
-        <!-- Gradient overlay (dark top -> transparent bottom) -->
         <div class="absolute inset-0 bg-[#1a2235] bg-opacity-70 backdrop-blur-sm"></div>
 
-        <!-- Content -->
         <div class="relative z-10 max-w-6xl mx-auto px-6 md:px-12 lg:px-24 text-white">
 
             <x-section-title first="How Can" second="You Help?" firstColor="#FFFFFF" />
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-                <!-- Make a Donation -->
                 <div class="flex flex-col items-center justify-between h-full">
                     <div class="flex flex-col items-center">
                         <div class="w-20 h-20 rounded-full bg-[#FFB51B]/20 flex items-center justify-center mb-4">
@@ -87,7 +78,6 @@
                     </div>
                 </div>
 
-                <!-- Become A Volunteer -->
                 <div class="flex flex-col items-center justify-between h-full">
                     <div class="flex flex-col items-center">
                         <div class="w-20 h-20 rounded-full bg-[#FFB51B]/20 flex items-center justify-center mb-4">
@@ -103,7 +93,6 @@
                     </div>
                 </div>
 
-                <!-- Partner With Us -->
                 <div class="flex flex-col items-center justify-between h-full">
                     <div class="flex flex-col items-center">
                         <div class="w-20 h-20 rounded-full bg-[#FFB51B]/20 flex items-center justify-center mb-4">
@@ -121,13 +110,10 @@
                 </div>
             </div>
 
-
         </div>
     </section>
 
-
-
-    <!-- Donation Methods -->
+{{-- ===================================================================================== --}}
     <div class="py-16 px-6 md:px-16 lg:px-32">
         <x-section-title first="Ways to" second="Donate" mb="false" />
 
@@ -135,11 +121,10 @@
             Your support helps us continue our programs. Choose a method below and make a secure donation.
         </p>
 
-        <!-- Banks Section -->
         <div class="mb-12">
             <h3 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Bank Transfers</h3>
             <div class="flex flex-col md:flex-row justify-center items-start gap-8">
-                <!-- BDO -->
+
                 <div class="flex flex-col items-center text-center md:text-left gap-2">
                     <img src="{{ asset('assets/images/bg/donate-bdo.png') }}" alt="BDO Logo"
                         class="w-24 h-24 object-contain mb-2">
@@ -150,7 +135,6 @@
                     </div>
                 </div>
 
-                <!-- BPI -->
                 <div class="flex flex-col items-center text-center md:text-left gap-2">
                     <img src="{{ asset('assets/images/bg/donate-bpi.png') }}" alt="BPI Logo"
                         class="w-24 h-24 object-contain mb-2">
@@ -161,7 +145,6 @@
                     </div>
                 </div>
 
-                <!-- Metrobank -->
                 <div class="flex flex-col items-center text-center md:text-left gap-2">
                     <img src="{{ asset('assets/images/bg/donate-metrobank.png') }}" alt="Metrobank Logo"
                         class="w-24 h-24 object-contain mb-2">
@@ -175,11 +158,10 @@
         </div>
 
 
-        <!-- E-Wallet Section -->
         <div class="mb-12 text-center">
             <h3 class="text-2xl font-semibold text-gray-800 mb-6">E-Wallets</h3>
             <div class="flex flex-col md:flex-row justify-center items-center gap-12">
-                <!-- GCash -->
+
                 <div class="flex flex-col items-center">
                     <img src="{{ asset('assets/images/bg/donate-gcash.png') }}" alt="GCash Logo"
                         class="w-24 h-24 object-contain mb-2">
@@ -187,7 +169,6 @@
                     <img src="{{ asset('assets/images/bg/QR-1.png') }}" alt="GCash QR" class="w-32 h-32 object-contain">
                 </div>
 
-                <!-- PayPal / PayMaya -->
                 <div class="flex flex-col items-center">
                     <img src="{{ asset('assets/images/bg/donate-paypal.png') }}" alt="PayPal Logo"
                         class="w-24 h-24 object-contain mb-2">
@@ -197,7 +178,6 @@
             </div>
         </div>
 
-        <!-- Instruction & Button -->
         <div class="text-center space-y-6 md:space-y-8 max-w-3xl mx-auto mb-10">
             <p class="text-gray-700 text-lg md:text-xl leading-relaxed">
                 After making your donation, please fill out the form below to help us track your contribution.
@@ -209,7 +189,6 @@
             </x-button>
         </div>
 
-        <!-- Disclaimer / Note -->
         <x-feedback-status.alert variant="flexible" icon="bx bx-info-circle" bgColor="bg-yellow-50"
             borderColor="border-yellow-300" textColor="text-yellow-800" iconColor="text-yellow-600"
             :message="'<strong>Note:</strong> This website does not process donations directly.
@@ -217,16 +196,14 @@
             <br><span class=&quot;block mt-2 text-sm text-gray-600&quot;>A treasurer or finance facilitator will confirm
             receipt of your donation and provide acknowledgment if needed.</span>'" />
 
-        <!-- Offline/Onsite Donations Card -->
         <x-overview.card title="Offline / Onsite Donations" icon="bx-map" variant="minimal" class="max-w-4xl mx-auto">
             <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
-                <!-- Icon for desktop -->
+
                 <div
                     class="flex-shrink-0 hidden md:flex items-center justify-center w-16 h-16 rounded-full bg-[#FFB51B]/20">
                     <i class='bx bx-store-alt text-4xl text-[#FFB51B]'></i>
                 </div>
 
-                <!-- Donation Details -->
                 <div class="text-gray-700 space-y-3 md:space-y-2">
                     <p class="text-base md:text-lg leading-relaxed">
                         You may bring donations directly to our office or partner locations. We welcome both monetary and
@@ -241,12 +218,9 @@
                 </div>
             </div>
         </x-overview.card>
-
-
     </div>
 
-
-    <!-- 4. FAQ -->
+    {{-- ===================================================================================== --}}
     <section class="py-16 bg-[#1A2235]">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 

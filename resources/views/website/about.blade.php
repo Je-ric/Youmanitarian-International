@@ -25,16 +25,12 @@
     </div>
 
     {{-- ===================================================================================== --}}
-    <!-- ABOUT US -->
     <section class="py-14 md:py-20 bg-gray-50">
         <div class="mx-auto max-w-6xl px-6 lg:px-8">
-            <!-- About Us Header -->
 
             <x-section-title textAlign="left" first="About" second="Us" />
 
-            <!-- About Us Content -->
             <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <!-- Text -->
                 <div class="flex flex-col justify-center space-y-6 text-black leading-relaxed text-justify">
                     <p>
                         <strong class="text-[#FFB51B]">Youmanitarian Service Organization Internation, Inc.</strong> or
@@ -56,7 +52,6 @@
                     </p>
                 </div>
 
-                <!-- Image -->
                 <div class="flex justify-center md:justify-end">
                     <img src="{{ asset('assets/images/logo/YI.jpg') }}" alt="Youmanitarian Logo"
                         class="w-64 md:w-80 lg:w-[25rem] h-auto rounded-full object-cover border-4 border-[var(--accent-color)]" />
@@ -65,56 +60,55 @@
         </div>
     </section>
 
-    <!-- Vision and Mission -->
+    {{-- ===================================================================================== --}}
     <section class="py-16 md:py-20 bg-[#1a2235]">
         <div class="mx-auto max-w-6xl px-6 lg:px-8">
 
-        <x-section-title first="Who" second="We Are" firstColor="#FFFFFF" />
+            <x-section-title first="Who" second="We Are" firstColor="#FFFFFF" />
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-            <!-- Mission -->
-            <div class="flex flex-col">
-                <img src="{{ asset('assets/images/bg/mission.jpg') }}"
-                     alt="Mission of Youmanitarian International"
-                     class="w-full max-w-160 h-72 md:h-80 lg:h-88 object-cover mb-6 rounded-lg" />
+                <div class="flex flex-col">
+                    <img src="{{ asset('assets/images/bg/mission.jpg') }}" alt="Mission of Youmanitarian International"
+                        class="w-full max-w-160 h-72 md:h-80 lg:h-88 object-cover mb-6 rounded-lg" />
 
-                <h2 class="flex items-center gap-2 text-2xl font-bold text-[#FFB51B] mb-4">
-                    <i class='bx bx-target-lock text-3xl'></i>
-                    Mission
-                </h2>
-                <p class="text-white leading-relaxed">
-                    Transform the lives of marginalized and underprivileged people, and youth sector through education,
-                    inclusive development and exchange, civic and social endeavours in the spirit of volunteerism and goodwill,
-                    encourage peace and promote understanding to make a substantial change through sustainable development programs.
-                </p>
-            </div>
+                    <h2 class="flex items-center gap-2 text-2xl font-bold text-[#FFB51B] mb-4">
+                        <i class='bx bx-target-lock text-3xl'></i>
+                        Mission
+                    </h2>
+                    <p class="text-white leading-relaxed">
+                        Transform the lives of marginalized and underprivileged people, and youth sector through education,
+                        inclusive development and exchange, civic and social endeavours in the spirit of volunteerism and
+                        goodwill,
+                        encourage peace and promote understanding to make a substantial change through sustainable
+                        development programs.
+                    </p>
+                </div>
 
-            <!-- Vision -->
-            <div class="flex flex-col">
-                <img src="{{ asset('assets/images/bg/vision.jpg') }}"
-                     alt="Vision of Youmanitarian International"
-                     class="w-full max-w-160 h-72 md:h-80 lg:h-88 object-cover mb-6 rounded-lg" />
+                <div class="flex flex-col">
+                    <img src="{{ asset('assets/images/bg/vision.jpg') }}" alt="Vision of Youmanitarian International"
+                        class="w-full max-w-160 h-72 md:h-80 lg:h-88 object-cover mb-6 rounded-lg" />
 
-                <h2 class="flex items-center gap-2 text-2xl font-bold text-[#FFB51B] mb-4">
-                    <i class='bx bx-show text-3xl'></i>
-                    Vision
-                </h2>
-                <p class="text-white leading-relaxed">
-                    Youmanitarian International as one of the progressive organizations working through harmony
-                    with other stakeholders in creating more sustainable communities by tapping the resources within.
-                </p>
+                    <h2 class="flex items-center gap-2 text-2xl font-bold text-[#FFB51B] mb-4">
+                        <i class='bx bx-show text-3xl'></i>
+                        Vision
+                    </h2>
+                    <p class="text-white leading-relaxed">
+                        Youmanitarian International as one of the progressive organizations working through harmony
+                        with other stakeholders in creating more sustainable communities by tapping the resources within.
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
     </section>
 
 
+    {{-- ===================================================================================== --}}
     <section class="py-16 bg-white">
         <div class="mx-auto max-w-6xl px-6 lg:px-8">
 
             <x-section-title first="Our" second="Purpose" />
-            <!-- General Purpose -->
+
             <div class="mt-8 flex items-start gap-4">
                 <i class='bx bx-info-circle text-3xl text-[var(--accent-color)] mt-1'></i>
                 <p class="text-gray-800 leading-relaxed">
@@ -124,7 +118,6 @@
                 </p>
             </div>
 
-            <!-- Specific Purposes -->
             <div class="mt-8 space-y-6">
                 <p class="text-gray-800 font-semibold">SPECIFIC:</p>
                 <ul class="list-decimal pl-6 space-y-3 text-gray-800 leading-relaxed">
@@ -151,10 +144,11 @@
         </div>
     </section>
 
+    {{-- ===================================================================================== --}}
     <section class="py-20 bg-[#1a2235]">
         <div class="mx-auto max-w-6xl px-6 lg:px-10">
             <div class="grid lg:grid-cols-2 gap-x-20 gap-y-20 items-center">
-                <!-- IMAGE -->
+
                 <div class="flex flex-col items-center lg:order-2 space-y-4">
 
                     <x-section-title first="The" second="Logo" firstColor="#FFFFFF" />
@@ -162,9 +156,8 @@
                         class="w-80 h-80 md:w-[30rem] md:h-[30rem] rounded-full ring ring-gray-300 object-cover translate-y-6 motion-safe:animate-fadeIn motion-safe:delay-100 shadow-2xl" />
                 </div>
 
-                <!-- TEXT BLOCK -->
                 <div class="space-y-10 text-gray-100">
-                    <!-- LEFT -->
+
                     <div class="flex flex-col justify-center space-y-6 motion-safe:animate-fadeIn motion-safe:delay-200">
                         <div class="flex items-start gap-4">
                             <i class="bx bx-star text-3xl text-[var(--accent-color)]"></i>
@@ -191,7 +184,6 @@
 
                     <div class="w-full h-px bg-gray-600"></div>
 
-                    <!-- RIGHT  -->
                     <div class="space-y-6 translate-x-4 motion-safe:animate-fadeIn motion-safe:delay-[300ms]">
                         <div class="flex items-start gap-4">
                             <i class="bx bx-infinite text-3xl text-[var(--accent-color)]"></i>
@@ -227,13 +219,11 @@
 
     <section class="py-20 bg-white">
         <div class="mx-auto max-w-6xl px-6 lg:px-8">
-            <!-- Section Header -->
+
             <x-section-title first="Our" second="Services" />
 
-            <!-- Services Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
 
-                <!-- Service Card -->
                 <div
                     class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
                     <i class='bx bx-news text-5xl text-[var(--primary-color)] mb-4'></i>
@@ -244,7 +234,6 @@
                     </p>
                 </div>
 
-                <!-- Service Card -->
                 <div
                     class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
                     <i class='bx bx-group text-5xl text-[var(--primary-color)] mb-4'></i>
@@ -255,7 +244,6 @@
                     </p>
                 </div>
 
-                <!-- Service Card -->
                 <div
                     class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
                     <i class='bx bx-credit-card text-5xl text-[var(--primary-color)] mb-4'></i>
@@ -266,7 +254,6 @@
                     </p>
                 </div>
 
-                <!-- Service Card -->
                 <div
                     class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
                     <i class='bx bx-bell text-5xl text-[var(--primary-color)] mb-4'></i>
@@ -277,7 +264,6 @@
                     </p>
                 </div>
 
-                <!-- Service Card -->
                 <div
                     class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
                     <i class='bx bx-shield text-5xl text-[var(--primary-color)] mb-4'></i>
@@ -288,7 +274,6 @@
                     </p>
                 </div>
 
-                <!-- Service Card -->
                 <div
                     class="flex flex-col items-center text-center p-8 rounded-xl border border-gray-200 hover:border-[var(--accent-color)] transition-all duration-300">
                     <i class='bx bx-analyse text-5xl text-[var(--primary-color)] mb-4'></i>

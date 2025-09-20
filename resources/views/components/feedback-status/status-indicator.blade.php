@@ -30,7 +30,7 @@ $variant = [
     'needs_revision' => 'bg-orange-100 text-orange-700',
     'submitted' => 'bg-blue-100 text-blue-700',
     // draft - pending
-    // Role-based 
+    // Role-based
     'volunteer' => 'bg-blue-600 text-white',
     'admin' => 'bg-purple-700 text-white',
     'program-coordinator' => 'bg-green-700 text-white',
@@ -42,6 +42,10 @@ $variant = [
     'not_verified' => 'bg-red-100 text-red-800',
     'connected' => 'bg-blue-100 text-blue-800',
     'not_connected' => 'bg-gray-100 text-gray-600',
+    // Contact Inquiry Statuses
+    'new' => 'bg-blue-100 text-blue-700',
+    'read' => 'bg-yellow-100 text-yellow-700',
+    'responded' => 'bg-green-100 text-green-700',
 ];
 
 $icons = [
@@ -84,6 +88,10 @@ $icons = [
     'not_verified' => 'bx bx-x-circle',
     'connected' => 'bx bxl-google',
     'not_connected' => 'bx bx-x',
+    // Contact Inquiry Status icons
+    'new' => 'bx bx-message-dots',
+    'read' => 'bx bx-check',
+    'responded' => 'bx bx-message-check',
 ];
 
 $style = $variant[$status] ?? 'bg-gray-300 text-black';
