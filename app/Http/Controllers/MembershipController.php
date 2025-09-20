@@ -114,7 +114,7 @@ class MembershipController extends Controller
         ));
     }
 
-    private function getDueDate($quarter)
+    private function getDueDate($quarter, $year = null)
     {
         // - Each quarter is represented as 'Q1', 'Q2', 'Q3', or 'Q4'.
         // - The due date for a quarter is set to the last day of that quarter.
@@ -123,11 +123,11 @@ class MembershipController extends Controller
         //     Q3 (Jul-Sep): due date is Sep 30
         //     Q4 (Oct-Dec): due date is Dec 31
         // - This ensures that for any given quarter, the payment is expected by the end of that quarter.
-        $currentYear = now()->year;
+        $year = $year ?? now()->year;
         $quarterNumber = (int) substr($quarter, 1);
 
         // Set due date to the last day of the quarter
-        return Carbon::create($currentYear, $quarterNumber * 3, 1)
+        return Carbon::create($year, $quarterNumber * 3, 1)
             ->endOfMonth();
     }
 
@@ -142,7 +142,7 @@ class MembershipController extends Controller
             return 'paid';
         }
         // if not paid, check if it's overdue
-        $dueDate = $this->getDueDate($quarter);
+        $dueDate = $this->getDueDate($quarter, $payment->payment_year);
         return now()->isAfter($dueDate) ? 'overdue' : 'pending';
     }
 

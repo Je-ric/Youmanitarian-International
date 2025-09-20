@@ -156,7 +156,7 @@
             </x-slot> --}}
         </x-navigation-layout.tabs-modern>
 
-    @include('finance.partials.downloadModal', [
+    @include('reports.modals.downloadModal', [
         'modalId' => 'usersRolesDownloadModal',
         'title' => 'Export Users with Roles',
         'description' => 'Choose your preferred format for downloading user and role information.',

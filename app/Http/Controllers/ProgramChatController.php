@@ -117,25 +117,23 @@ class ProgramChatController extends Controller
 
     private function getProgramParticipants(Program $program)
     {
-        // Get volunteers
         $volunteers = $program->volunteers()
             ->where('program_volunteers.status', 'approved')
             ->with([
                 'user:id,name,profile_pic',
                 'user.consultationHours' => function ($query) {
                     $query->where('status', 'active')
-                          ->orderBy('day')
-                          ->orderBy('start_time');
+                            ->orderBy('day')
+                            ->orderBy('start_time');
                 }
             ])
             ->get();
 
-        // Get coordinator (created_by)
         $coordinator = \App\Models\User::with(['consultationHours' => function ($query) {
             $query->where('status', 'active')
-                  ->orderBy('day')
-                  ->orderBy('start_time');
-        }])->find($program->created_by);
+                    ->orderBy('day')
+                    ->orderBy('start_time');
+        }])->find($program->created_by); 
 
         // Create a pseudo volunteer object for coordinator if not in volunteers
         $isCoordinatorInVolunteers = $volunteers->contains(function ($v) use ($coordinator) {
@@ -143,10 +141,15 @@ class ProgramChatController extends Controller
         });
 
         if (!$isCoordinatorInVolunteers && $coordinator) {
-            $coordinatorVolunteer = new \stdClass();
-            $coordinatorVolunteer->user = $coordinator;
-            $coordinatorVolunteer->status = 'coordinator';
-            $volunteers->prepend($coordinatorVolunteer);
+            // $coordinatorVolunteer = new \stdClass();
+            // $coordinatorVolunteer->user = $coordinator;
+            // $coordinatorVolunteer->status = 'coordinator';
+            // $volunteers->prepend($coordinatorVolunteer);
+            $coordinatorVolunteer = (object) [ // Create a mock volunteer object para sa pc
+                'user' => $coordinator,
+                'status' => 'coordinator'
+            ];
+            $volunteers = $volunteers->prepend($coordinatorVolunteer);
         }
 
         return $volunteers;

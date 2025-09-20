@@ -298,6 +298,7 @@ Route::middleware(['auth', 'role:Financial Coordinator'])->group(function () {
 
     // Membership payment reminders
     Route::post('/finance/membership/reminders', [MembershipReminderController::class, 'store'])->name('finance.membership.reminders.store');
+    Route::get('/finance/membership/reminders/payment-options/{member}', [MembershipReminderController::class, 'getPaymentOptions'])->name('finance.membership.reminders.payment-options');
 
     // Membership payment modals
     Route::get('/finance/membership/payments/{member}/{quarter}/{year}/modal', [MembershipController::class, 'showAddPaymentModal'])

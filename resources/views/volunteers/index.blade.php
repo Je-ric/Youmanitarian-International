@@ -235,7 +235,7 @@
     <style>
     </style>
 
-    @include('finance.partials.downloadModal', [
+    @include('reports.modals.downloadModal', [
         'modalId' => 'volunteerDownloadModal',
         'title' => 'Export Volunteers',
         'description' => 'Choose your preferred format and filter for downloading volunteer records.',

@@ -60,7 +60,7 @@
         </x-slot>
     </x-navigation-layout.tabs-modern>
 
-    @include('finance.partials.downloadModal', [
+    @include('reports.modals.downloadModal', [
         'modalId' => 'memberDownloadModal',
         'title' => 'Export Members',
         'description' => 'Choose your preferred format for downloading member records.',
