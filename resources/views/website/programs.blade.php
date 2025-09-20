@@ -29,7 +29,7 @@
     </section>
 
 
-{{-- ===================================================================================== --}}
+    {{-- ===================================================================================== --}}
     <section class="max-w-7xl w-full mx-auto bg-[#1A2235] rounded-2xl py-4 my-3 px-6">
         <div class="container mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             <div>
@@ -52,7 +52,7 @@
     </section>
 
 
-{{-- ===================================================================================== --}}
+    {{-- ===================================================================================== --}}
     <section class="relative max-w-5xl mx-auto py-8 sm:py-10">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -120,7 +120,7 @@
     </section>
 
 
-{{-- ===================================================================================== --}}
+    {{-- ===================================================================================== --}}
     <section class="py-16 bg-[#1A2235] my-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
@@ -217,7 +217,7 @@
 
 
 
-{{-- ===================================================================================== --}}
+    {{-- ===================================================================================== --}}
     <div class="bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4">
         <div class="max-w-7xl mx-auto px-0 sm:px-0 lg:px-0">
             <x-section-title first="Our" second="Programs" />
@@ -369,7 +369,7 @@
         </div>
     </div>
 
-{{-- ===================================================================================== --}}
+    {{-- ===================================================================================== --}}
     <section class="py-16 bg-[#1A2235]">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -470,7 +470,8 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                         <x-form.label for="email" variant="email">Email Address</x-form.label>
-                        <x-form.input name="email" id="email" type="email" placeholder="your.email@example.com" />
+                        <x-form.input name="email" id="email" type="email"
+                            placeholder="your.email@example.com" />
                     </div>
 
                     <div>
@@ -514,4 +515,43 @@
             </form>
         </div>
     </div>
+
+    {{-- ===================================================================================== --}}
+
+    <section class="relative bg-cover bg-center py-20 mt-12"
+        style="background-image: url('{{ asset('assets/images/bg/volunteer.jpg') }}');">
+
+        <div class="absolute inset-0 bg-[#1a2235] bg-opacity-70 backdrop-blur-sm"></div>
+
+        <div class="relative z-10 px-6 max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-14 items-center text-center md:text-left">
+
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                        Consult <span class="text-[#FFB51B]">Our Professionals</span>
+                    </h2>
+                    <p class="text-white text-xl mb-4">
+                        Need expert advice? Youmanitarian International connects you with professionals in various
+                        specializations—health, agriculture, education, mental wellness, and more.
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-white text-base mb-6">
+                        Our consultation platform allows you to browse available experts, view their schedules, and chat
+                        directly for guidance and support.
+                    </p>
+                    <p class="text-white text-base mb-8">
+                        Whether you’re seeking personal development, career advice, or community project support, our
+                        network of dedicated professionals is here to help you grow and succeed.
+                    </p>
+                    <x-button href="{{ route('consultation-hours.browse') }}" variant="primary-outline">
+                        Browse Professionals
+                        <i class="bx bx-right-arrow-alt ml-2 text-xl"></i>
+                    </x-button>
+                </div>
+
+            </div>
+        </div>
+    </section>
 @endsection
