@@ -71,11 +71,10 @@
                     </div>
 
                     <div class="flex items-center space-x-2 ml-4">
-                        <button onclick="openInquiryModal({{ $inquiry->id }})"
-                                class="bg-[#1A2235] hover:bg-[#1A2235]/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200">
-                            <i class='bx bx-show mr-1'></i>
+                        <x-button onclick="openInquiryModal({{ $inquiry->id }})" variant="table-action-view">
+                            <i class='bx bx-show'></i>
                             View
-                        </button>
+                        </x-button>
 
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open"
@@ -87,16 +86,16 @@
                                  class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-10">
                                 <div class="py-1">
                                     <button onclick="updateStatus({{ $inquiry->id }}, 'read')"
-                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
                                         <i class='bx bx-check mr-2'></i>Mark as Read
                                     </button>
                                     <button onclick="updateStatus({{ $inquiry->id }}, 'responded')"
-                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
                                         <i class='bx bx-message-check mr-2'></i>Mark as Responded
                                     </button>
                                     <hr class="my-1">
                                     <button onclick="deleteInquiry({{ $inquiry->id }})"
-                                            class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                            class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center">
                                         <i class='bx bx-trash mr-2'></i>Delete
                                     </button>
                                 </div>
@@ -123,42 +122,41 @@
 </div>
 
 <!-- Inquiry Detail Modal -->
-<div id="inquiryModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-    <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="p-6">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-semibold text-gray-900">Contact Inquiry Details</h3>
-                    <button onclick="closeInquiryModal()"
-                            class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
-                        <i class='bx bx-x text-2xl'></i>
-                    </button>
-                </div>
+<x-modal.dialog
+    id="inquiryModal"
+    maxWidth="2xl:max-w-4xl xl:max-w-3xl lg:max-w-2xl md:max-w-xl sm:max-w-lg max-w-md"
+    width="w-full"
+    maxHeight="max-h-[90vh]">
 
-                <div id="inquiryContent">
-                    <!-- Content will be loaded here -->
-                </div>
-            </div>
+    <x-modal.header>
+        <h2 class="text-lg sm:text-xl font-bold text-[#1a2235] flex items-center gap-2">
+            <i class='bx bx-message-dots text-[#ffb51b] text-2xl'></i>
+            <span class="leading-tight">Contact Inquiry Details</span>
+        </h2>
+    </x-modal.header>
+
+    <x-modal.body>
+        <div id="inquiryContent">
+            <!-- Content will be loaded here -->
         </div>
-    </div>
-</div>
+    </x-modal.body>
+
+    <x-modal.footer align="end">
+        <x-modal.close-button :modalId="'inquiryModal'" text="Close" />
+    </x-modal.footer>
+</x-modal.dialog>
 
 <script>
 function openInquiryModal(inquiryId) {
-    // Fetch inquiry details and populate modal
     fetch(`/admin/contact-inquiries/${inquiryId}`)
         .then(response => response.text())
         .then(html => {
             document.getElementById('inquiryContent').innerHTML = html;
-            document.getElementById('inquiryModal').classList.remove('hidden');
+            document.getElementById('inquiryModal').showModal();
         })
         .catch(error => {
             console.error('Error:', error);
         });
-}
-
-function closeInquiryModal() {
-    document.getElementById('inquiryModal').classList.add('hidden');
 }
 
 function updateStatus(inquiryId, status) {

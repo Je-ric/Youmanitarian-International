@@ -43,7 +43,7 @@ class ContactController extends Controller
     public function adminIndex()
     {
         $inquiries = ContactInquiry::latest()->paginate(15);
-        return view('admin.contact-inquiries.index', compact('inquiries'));
+        return view('contact.index', compact('inquiries'));
     }
 
     public function show(ContactInquiry $contactInquiry)
@@ -54,10 +54,10 @@ class ContactController extends Controller
         }
 
         if (request()->ajax()) {
-            return view('admin.contact-inquiries.show', compact('contactInquiry'))->render();
+            return view('contact.show', compact('contactInquiry'))->render();
         }
 
-        return view('admin.contact-inquiries.show', compact('contactInquiry'));
+        return view('contact.show', compact('contactInquiry'));
     }
 
     public function updateStatus(Request $request, ContactInquiry $contactInquiry)
