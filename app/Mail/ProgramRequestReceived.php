@@ -40,7 +40,7 @@ class ProgramRequestReceived extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.program_requests.received',
+            markdown: 'emails.program_requests.received',
         );
     }
 

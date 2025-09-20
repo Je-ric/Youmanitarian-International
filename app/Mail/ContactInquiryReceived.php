@@ -40,7 +40,7 @@ class ContactInquiryReceived extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.contact.received',
+            markdown: 'emails.contact.received',
         );
     }
 

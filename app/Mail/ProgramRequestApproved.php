@@ -39,7 +39,7 @@ class ProgramRequestApproved extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.program_requests.approved',
+            markdown: 'emails.program_requests.approved',
         );
     }
 
