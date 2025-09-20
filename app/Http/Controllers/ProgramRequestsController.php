@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProgramRequest;
+// use Mail;
 use Illuminate\Http\Request;
+use App\Models\ProgramRequest;
+use App\Mail\ProgramRequestApproved;
+use App\Mail\ProgramRequestReceived;
+use Illuminate\Support\Facades\Mail;
 
 class ProgramRequestsController extends Controller
 {
@@ -23,18 +27,28 @@ class ProgramRequestsController extends Controller
         $validated = $request->validate([
             'name'            => 'required|string|max:255',
             'title'           => 'required|string|max:255',
+            'email'          => 'nullable|email|max:255',
+            'contact_number' => 'nullable|string|max:255',
             'description'     => 'required|string',
             'target_audience' => 'required|string|max:255',
             'location'        => 'required|string|max:255',
             'proposed_date'   => 'nullable|date',
+            // 'status'          => 'required|in:pending,approved,rejected',
         ]);
 
-        ProgramRequest::create($validated);
+        $programRequest = ProgramRequest::create($validated);
+
+        // Send thank you email if email is provided
+        if ($programRequest->email) {
+            Mail::to($programRequest->email)->send(
+                new ProgramRequestReceived($programRequest)
+            );
+        }
 
         return redirect()
             ->route('website.programs')   // changed from website.program
             ->with('toast', [
-                'message' => 'Program request submitted.',
+                'message' => 'Program request submitted. Thank you for your submission!',
                 'type'    => 'success'
             ]);
     }
@@ -76,4 +90,29 @@ class ProgramRequestsController extends Controller
                 'type'    => 'success'
             ]);
     }
+
+    public function update(Request $request, ProgramRequest $programRequest)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:pending,approved,rejected',
+        ]);
+
+        $oldStatus = $programRequest->status;
+
+        $programRequest->update($validated);
+
+        // If status changed to approved and email exists, send email
+        if ($validated['status'] === 'approved' && $oldStatus !== 'approved' && $programRequest->email) {
+            Mail::to($programRequest->email)->send(
+                new ProgramRequestApproved($programRequest)
+            );
+        }
+
+        return redirect()->route('program_requests.index')
+                        ->with('toast', [
+                            'message' => 'Program request updated successfully.',
+                            'type' => 'success'
+                        ]);
+    }
+
 }

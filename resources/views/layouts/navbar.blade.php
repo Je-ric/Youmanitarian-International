@@ -61,6 +61,11 @@
                     {{ request()->routeIs('website.donate') ? 'text-[#ffb51b] font-bold' : '' }}">
                     Donate Today
                 </a>
+                <a href="{{ route('website.contact') }}"
+                    class="text-primary-custom hover:text-accent-custom transition-colors duration-300
+                    {{ request()->routeIs('website.contact') ? 'text-[#ffb51b] font-bold' : '' }}">
+                    Contact Us
+                </a>
 
                 @if (Auth::check())
                     <a href="{{ url('/dashboard') }}"
@@ -85,6 +90,7 @@
                         <a href="{{ route('website.about') }}" class="text-gray-600 hover:text-[#ffb51b]">About Us</a>
                         <a href="{{ route('website.team') }}" class="text-gray-600 hover:text-[#ffb51b]">Meet the Team</a>
                         <a href="{{ route('website.donate') }}" class="text-gray-600 hover:text-[#ffb51b]">Donate Today</a>
+                        <a href="{{ route('website.contact') }}" class="text-gray-600 hover:text-[#ffb51b]">Contact Us</a>
 
                         @if (Auth::check())
                             <a href="{{ url('/dashboard') }}" class="btn bg-[#101529] text-white border-[#101529] hover:bg-[#1a2235]">Dashboard</a>

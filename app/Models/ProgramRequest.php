@@ -12,9 +12,12 @@ class ProgramRequest extends Model
     protected $fillable = [
         'name',
         'title',
+        'email',
+        'contact_number',
         'description',
         'target_audience',
         'location',
         'proposed_date',
+        'status',
     ];
 }

@@ -1,14 +1,14 @@
 <div class="space-y-6">
-    
+
     <div class="relative bg-gradient-to-br from-white via-slate-50 to-gray-50 rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-        
+
         <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#ffb51b]/10 to-[#1a2235]/5 rounded-full -translate-y-16 translate-x-16"></div>
         <div class="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#1a2235]/5 to-[#ffb51b]/10 rounded-full translate-y-12 -translate-x-12"></div>
-        
+
         <div class="relative p-6 sm:p-8">
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-                    
+
                     <div class="relative">
                         @php
                             $userModel = $volunteer->user;
@@ -50,28 +50,28 @@
                             </form>
                         @endif
                     </div>
-                    
-                    
+
+
                     <div class="space-y-2">
                         <h1 class="text-2xl sm:text-3xl font-bold text-[#1a2235] tracking-tight">{{ $volunteer->user->name }}</h1>
                         <p class="text-gray-600 text-sm sm:text-base">{{ $volunteer->user->email }}</p>
                     </div>
                 </div>
-                
-                
+
+
                 <div class="flex flex-col items-start sm:items-end gap-3">
-                    
-                    <x-feedback-status.status-indicator 
-                        :status="$volunteer->application_status" 
+
+                    <x-feedback-status.status-indicator
+                        :status="$volunteer->application_status"
                         :label="ucfirst($volunteer->application_status)" />
-                    
-                
+
+
                     <div class="flex gap-4 text-center">
                         <div class="text-center">
                             <div class="text-lg sm:text-xl font-bold text-[#1a2235]">{{ $volunteer->calculated_total_hours }}</div>
                             <div class="text-xs text-gray-500">Hours</div>
                         </div>
-                        {{-- what if pc? 
+                        {{-- what if pc?
                             --}}
                         <div class="text-center">
                             <div class="text-lg sm:text-xl font-bold text-[#1a2235]">{{ $volunteer->attendanceLogs->count() }}</div>
@@ -84,22 +84,22 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
+
         {{-- User Information --}}
         <x-overview.card title="User Information" icon="bx-user-circle" variant="default">
             <div class="space-y-4">
                 <div class="grid grid-cols-1 gap-4">
-                    
+
                     <div class="flex justify-between items-center py-3 border-b border-gray-100">
                         <span class="font-medium text-gray-700 text-sm">Full Name</span>
                         <span class="text-gray-900 font-medium">{{ $volunteer->user->name }}</span>
                     </div>
-                    
+
                     <div class="flex justify-between items-center py-3 border-b border-gray-100">
                         <span class="font-medium text-gray-700 text-sm">Email Address</span>
                         <span class="text-gray-900 text-sm">{{ $volunteer->user->email }}</span>
                     </div>
-                    
+
                     <div class="flex justify-between items-center py-3 border-b border-gray-100">
                         <span class="font-medium text-gray-700 text-sm">Email Verified</span>
                         <span class="text-sm">
@@ -110,12 +110,12 @@
                             @endif
                         </span>
                     </div>
-                    
+
                     <div class="flex justify-between items-center py-3 border-b border-gray-100">
                         <span class="font-medium text-gray-700 text-sm">Account Created</span>
                         <span class="text-gray-900 text-sm">{{ $volunteer->user->created_at->format('M d, Y') }}</span>
                     </div>
-                    
+
                     <div class="flex justify-between items-center py-3 border-b border-gray-100">
                         <span class="font-medium text-gray-700 text-sm">Google Account</span>
                         <span class="text-sm">
@@ -126,6 +126,18 @@
                             @endif
                         </span>
                     </div>
+
+                    {{-- Change Password Link - Only for non-Google users --}}
+                    @if(!$volunteer->user->google_id && Auth::id() === $volunteer->user->id)
+                        <div class="flex justify-between items-center py-3">
+                            <span class="font-medium text-gray-700 text-sm">Password</span>
+                            <a href="{{ route('password.change') }}"
+                               class="inline-flex items-center text-[#FFB51B] hover:text-[#FFB51B]/80 font-medium text-sm transition-colors duration-200">
+                                <i class='bx bx-key mr-1'></i>
+                                Change Password
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
         </x-overview.card>
@@ -134,19 +146,19 @@
         <x-overview.card title="Volunteer Information" icon="bx-heart" variant="gradient">
             <div class="space-y-4">
                 <div class="grid grid-cols-1 gap-4">
-                    
+
                     <div class="flex justify-between items-center py-3 border-b border-gray-100">
                         <span class="font-medium text-gray-700 text-sm">Application Status</span>
-                        <x-feedback-status.status-indicator 
-                            :status="$volunteer->application_status" 
+                        <x-feedback-status.status-indicator
+                            :status="$volunteer->application_status"
                             :label="ucfirst($volunteer->application_status)" />
                     </div>
-                    
+
                     <div class="flex justify-between items-center py-3 border-b border-gray-100">
                         <span class="font-medium text-gray-700 text-sm">Total Hours</span>
                         <span class="text-gray-900 font-bold text-lg">{{ $volunteer->calculated_total_hours }}h</span>
                     </div>
-                    
+
                     <div class="flex justify-between items-center py-3 border-b border-gray-100">
                         <span class="font-medium text-gray-700 text-sm">Joined Date</span>
                         <span class="text-gray-900 text-sm">
@@ -157,12 +169,12 @@
                             @endif
                         </span>
                     </div>
-                    
+
                     <div class="flex justify-between items-center py-3 border-b border-gray-100">
                         <span class="font-medium text-gray-700 text-sm">Volunteer Since</span>
                         <span class="text-gray-900 text-sm">{{ $volunteer->created_at->format('M d, Y') }}</span>
                     </div>
-                    
+
                     <div class="flex justify-between items-center py-3">
                         <span class="font-medium text-gray-700 text-sm">User Roles</span>
                         <div class="flex flex-wrap gap-2">
@@ -179,8 +191,8 @@
                                             default => 'role'
                                         };
                                     @endphp
-                                    <x-feedback-status.status-indicator 
-                                        :label="$role->role_name" 
+                                    <x-feedback-status.status-indicator
+                                        :label="$role->role_name"
                                         :status="$variant" />
                                 @endforeach
                             @else
@@ -198,27 +210,27 @@
         <x-overview.card title="Member Information" icon="bx-crown" variant="bordered">
             <div class="p-6">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    
+
                     <div class="space-y-4">
-                        
+
                         <div class="flex justify-between items-center py-3 border-b border-gray-100">
                             <span class="font-medium text-gray-700 text-sm">Membership Type</span>
-                            <x-feedback-status.status-indicator 
-                                :status="$volunteer->member->membership_type === 'full_pledge' ? 'success' : 'info'" 
+                            <x-feedback-status.status-indicator
+                                :status="$volunteer->member->membership_type === 'full_pledge' ? 'success' : 'info'"
                                 :label="ucwords(str_replace('_', ' ', $volunteer->member->membership_type))" />
                         </div>
-                        
+
                         <div class="flex justify-between items-center py-3 border-b border-gray-100">
                             <span class="font-medium text-gray-700 text-sm">Membership Status</span>
-                            <x-feedback-status.status-indicator 
-                                :status="$volunteer->member->membership_status" 
+                            <x-feedback-status.status-indicator
+                                :status="$volunteer->member->membership_status"
                                 :label="ucfirst($volunteer->member->membership_status)" />
                         </div>
-                        
+
                         <div class="flex justify-between items-center py-3 border-b border-gray-100">
                             <span class="font-medium text-gray-700 text-sm">Invitation Status</span>
-                            <x-feedback-status.status-indicator 
-                                :status="$volunteer->member->invitation_status" 
+                            <x-feedback-status.status-indicator
+                                :status="$volunteer->member->invitation_status"
                                 :label="ucfirst($volunteer->member->invitation_status)" />
                         </div>
                     </div>
@@ -268,7 +280,7 @@
                             Payment Summary
                         </h3>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            
+
                             <div class="bg-gradient-to-br from-emerald-50 to-green-50 p-4 rounded-xl border border-emerald-200">
                                 <div class="flex items-center justify-between">
                                     <div>

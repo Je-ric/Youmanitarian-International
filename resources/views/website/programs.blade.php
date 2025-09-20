@@ -468,6 +468,18 @@
                     </div>
                 </div>
 
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <x-form.label for="email" variant="email">Email Address</x-form.label>
+                        <x-form.input name="email" id="email" type="email" placeholder="your.email@example.com" />
+                    </div>
+
+                    <div>
+                        <x-form.label for="contact_number" variant="phone">Contact Number</x-form.label>
+                        <x-form.input name="contact_number" id="contact_number" placeholder="+63 912 345 6789" />
+                    </div>
+                </div>
+
                 <div>
                     <x-form.textarea name="description" label="Description" required
                         placeholder="Briefly describe the program objectives and activities..." />

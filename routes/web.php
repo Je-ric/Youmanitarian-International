@@ -14,6 +14,7 @@ use App\Http\Controllers\WebsiteController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ContactController;
 // use App\Http\Controllers\ContentViewController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\HeartReactController;
@@ -51,6 +52,10 @@ Route::get('/donate', [WebsiteController::class, 'donate'])->name('website.donat
 Route::get('/weather-forecast', [WebsiteController::class, 'forecast'])->name('weather-forecast.index');
 Route::get('/chatbot', [WebsiteController::class, 'chatbot'])->name('chatbot.index');
 
+// Contact Us
+Route::get('/contact', [ContactController::class, 'index'])->name('website.contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
 
 // Forgot password
 Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
@@ -66,7 +71,7 @@ Route::get('/change-password', [AuthController::class, 'showChangePassword'])
 Route::post('/change-password', [AuthController::class, 'changePassword'])
     ->middleware('auth');
 
-    
+
 // Guest feedback (no auth required)
 Route::post('/programs/{program}/feedback/guest', [ProgramFeedbackController::class, 'submitGuestFeedback'])
     ->name('programs.feedback.guest.submit');
@@ -77,15 +82,15 @@ Route::post('/donations', [DonationController::class, 'store'])
     ->withoutMiddleware(['auth', 'verified']);
 
 
-Route::post('/programs', [ProgramRequestsController::class, 'store'])
+Route::post('/program-requests', [ProgramRequestsController::class, 'store'])
     ->name('program_requests.store');
 
 Route::get('/program_requests', [ProgramRequestsController::class, 'index'])
     ->name('program_requests.index');
+Route::patch('/program_requests/{programRequest}', [ProgramRequestsController::class, 'update'])
+    ->name('program_requests.update');
 Route::delete('program_requests/{programRequest}', [ProgramRequestsController::class, 'destroy'])
     ->name('program_requests.destroy');
-Route::get('program_requests', [ProgramRequestsController::class, 'index'])
-    ->name('program_requests.index');
 
 
 Route::get('team-members', [TeamMemberController::class, 'index'])->name('content.teamMembers.index');
@@ -339,6 +344,12 @@ Route::middleware(['auth', 'role:Admin'])->group(function () {
     Route::patch('/members/{member}/status', [MemberController::class, 'updateStatus'])->name('members.status');
     Route::post('/members/invite/{volunteer}', [MemberController::class, 'invite'])->name('members.invite');
     Route::post('/members/{member}/resend-invitation', [MemberController::class, 'resendInvitation'])->name('members.resend-invitation');
+
+    // Contact Inquiries Management
+    Route::get('/admin/contact-inquiries', [ContactController::class, 'adminIndex'])->name('admin.contact-inquiries.index');
+    Route::get('/admin/contact-inquiries/{contactInquiry}', [ContactController::class, 'show'])->name('admin.contact-inquiries.show');
+    Route::patch('/admin/contact-inquiries/{contactInquiry}/status', [ContactController::class, 'updateStatus'])->name('admin.contact-inquiries.update-status');
+    Route::delete('/admin/contact-inquiries/{contactInquiry}', [ContactController::class, 'destroy'])->name('admin.contact-inquiries.destroy');
 
 });
 
